@@ -15,20 +15,14 @@
 						"refresh": 3
 					}
 				},
-				"health": {
-					"consequences":[],
-					"conditions":[],
-					"stress":[]
-				},
-				"conditions":[],
+				"tracks":[],
 				"aspects":[],
 				"skills":[],
 				"stunts":[],
 				"extras":{
 					"value":""
 				}
-			},
-			"aspects":[]
+			}
 		},
 		"ModularFate": {
 			"templates": ["common"],

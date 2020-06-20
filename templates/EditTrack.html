@@ -1,0 +1,103 @@
+<form>
+    <div align = "left"><h2>Editing tracks in the {{category}} category</h2></div>
+    <div><select id="track_select" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+        <option>New Track</option>
+        {{#each tracks}}
+            <option>{{this.name}}</option>
+        {{/each}}
+    </select></div>
+    <table style="width:1000px" cellspacing ="4" cellpadding="4">
+        <tr>
+            <td width="100">
+                Name:
+            </td>
+            <td>
+                <input type="text" id ="edit_track_name" style="background: white; color: black; font-family:Arial;"></input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Description:
+            </td>
+            <td>
+                <textarea rows ="2" id ="edit_track_description" style="background: white; color: black; font-family:Arial;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Universal?<p/><p/>
+            <td>
+                <input type="checkbox" id="edit_track_universal" checked></input>True if all characters get this from character creation (or can get it from a skill rating)<br/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Unique?
+            </td>
+            <td>
+                <input type="checkbox" id="edit_track_unique" checked></input>True if a character can only have one copy of this track. 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Recovery Type:
+            </td>
+            <td>
+                <select id="edit_track_recovery_type" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+                    <option>Fleeting</option>
+                    <option>Sticky</option>
+                    <option>Lasting</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Aspect:
+            </td>
+            <td>
+                <select id="edit_track_aspect" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+                    <option>No</option>
+                    <option>Name as aspect</option>
+                    <option>Defined when marked</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                When is this marked?
+            </td>
+            <td>
+                <textarea rows ="2" id ="edit_track_when_marked" style="background: white; color: black; font-family:Arial;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                How does this recover?
+            </td>
+            <td>
+                <textarea rows ="2" id ="edit_track_when_recovers" style="background: white; color: black; font-family:Arial;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Boxes:
+            </td>
+            <td>
+                <input type="number" id="edit_track_boxes" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> How many boxes does this track have? Use 0 for Fate Core consequences.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Harm:
+            </td>
+            <td>
+                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> How much harm can this track absorb? Use for Consequences, In Peril, etc.
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" id="save_track" style="width:200px; height:50px">Save</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" disabled>Edit Linked Skills</button><button type="button" style ="width:30px; height:30px" id="delete_track" i icon class="fas fa-trash"></button>
+            </td>
+        </tr>
+    </table>
+</form>

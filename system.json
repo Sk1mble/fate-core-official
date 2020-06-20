@@ -1,16 +1,17 @@
 {
-	"name": "modularFate",
+	"name": "ModularFate",
 	"title": "Modular Fate Core",
 	"description": "A new implementation of Fate Core designed in a modular way to support skills, extras, approaches, conditions, standard stress, and 1-point stress.",
 	"version": "0.1",
 	"author": "Richard Bellingham",
+	"esmodules": ["ModularFate.js"],
 	"scripts": [
-					"modularFate.js",
 					"./scripts/ModularFateConstants.js",
-					"./scripts/manageSkills.js",
-					"./scripts/manageAspects.js"
+					"./scripts/ManageSkills.js",
+					"./scripts/ManageAspects.js",
+					"./scripts/ManageTracks.js"
 				],
-	"styles": ["modularFate.css"],
+	"styles": ["ModularFate.css"],
 	"packs": [],
 	"gridDistance": 1,
 	"gridUnits": "",

@@ -67,4 +67,23 @@ class ModularFateConstants {
     static getFateCondensedAspects(){
         return [{"name":"High Concept","description":"Your high concept is a broad description of the character, covering the vital bits. It’s how you would open your pitch for the character when telling a friend about them."},{"name":"Trouble","description":"Next is your character’s trouble—something that makes your character’s life more complicated. It could be a personal weakness, family entanglements, or other obligations. Pick something you’ll enjoy roleplaying!"},{"name":"Relationship","description":"Your relationship describes a connection with another PC. They may already know one another, or have just met.\n\nGood relationship aspects should introduce or hint at conflict, or at least an imbalance that gives the relationship a little momentum. This doesn’t mean they are openly antagonistic, but they shouldn’t be all roses either.\n\nIf you wish, you can wait to write down relationship aspects until everyone has more or less completed their characters."},{"name":"Free Aspect 1","description":"You can make your character’s last two aspects anything you want—there are no restrictions beyond the obligation to fit the setting. Choose anything which you think will make your character more interesting, more fun to play, or better connected to the world they occupy."},{"name":"Free Aspect 2","description":"You can make your character’s last two aspects anything you want—there are no restrictions beyond the obligation to fit the setting. Choose anything which you think will make your character more interesting, more fun to play, or better connected to the world they occupy."}]
     }
+
+    static getInput(prompt){        
+        return new Promise(resolve => {
+            new Dialog({
+                title: prompt,
+                content: '<div align="center"><input id="dialog_box" style="width:375px"></input></div>',
+                buttons: {
+                    ok: {
+                        label: "OK",
+                        callback: () => {
+                            resolve(document.getElementById("dialog_box").value)
+                        }
+                    }
+                },
+                default:"ok"
+            }).render(true);
+        });
+    }
 }
+//(async() => {console.log(await ModularFateConstants.getInput("Testing a dialog"));})();

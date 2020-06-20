@@ -1,0 +1,31 @@
+<form>
+<table>
+    <tr>
+        <td>
+            Linked Skills:
+        </td>
+        <td>
+            <select id="linked_skills" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+                {{#each track.linked_skills}}
+                    <option>
+                        Skill: {{this.linked_skill}}, Rank: {{this.rank}}, Boxes: {{this.boxes}}, Enables: {{this.enables}}
+                    </option>
+                {{/each}}
+            </select><button type="button" id="delete_linked_skill" style="width:30px; height:30px" i icon class="fas fa-minus"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Add Linked Skill:
+        </td>
+        <td>
+            <select id="skill_list" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+                {{#each skills}}
+                    <option>{{this.name}}</option>
+                {{/each}}
+            </select>
+            Rank: <input type="number" id="skill_rank" value="0" style="background: white; color: black; font-family:Arial; width: 100px; height: 25px"/> Adds Boxes: <input type = number id="added_boxes" value="0" style="background: white; color: black; font-family:Arial; width: 100px; height: 25px"/> Enables?: <input type="checkbox" id="edit_enables"/><button type="button" id="add_linked_skill" style="height:30px; width:30px" i icon class="fas fa-plus"></button>
+        </td>
+    </tr>
+</table>
+</form>
