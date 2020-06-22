@@ -12,7 +12,7 @@ Hooks.once('init', async function () {
     });
     //Initialise the setting if it is currently empty.
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","skills"))){
-        game.settings.set("ModularFate","skills",[]);
+        game.settings.set("ModularFate","skills",{});
     }
 
         //Register a setting for the game's current skill total
@@ -21,12 +21,31 @@ Hooks.once('init', async function () {
             hint: "This is the current skill total for characters in this world.",
             scope: "world",
             config: true,
-            type: Number
+            type: Number,
+            restricted:true
         });
         //Initialise if not yet set
         if (isNaN(game.settings.get("ModularFate","skillTotal"))){
             game.settings.set("ModularFate","skillTotal",20);
         }
+
+    game.settings.register("ModularFate","enforceColumn", {
+        name: "Enforce Column?",
+        hint: "Should the player skill editor enforce a skill column?",
+        scope:"world",
+        config:true,
+        type: Boolean,
+        restricted:true
+    })
+
+    game.settings.register("ModularFate","enforceSkillTotal", {
+        name: "Enforce skill total?",
+        hint: "Should the player skill editor ensure points spent are under the game's skill total??",
+        scope:"world",
+        config:true,
+        type: Boolean,
+        restricted:true
+    })
 
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.
     game.settings.register("ModularFate", "defaultSkills", {
@@ -46,20 +65,30 @@ Hooks.once('init', async function () {
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
-                    game.settings.set("ModularFate","skills",ModularFateConstants.getFateCoreDefaultSkills());
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","skills",ModularFateConstants.getFateCoreDefaultSkills());
+                    }
                 }
                 if (value=="clearAll"){
-                    game.settings.set("ModularFate","skills",[]);
+                    if (game.user.isGM) {
+                        game.settings.set("ModularFate","skills",{});
+                    }
                 }
                 if (value=="fateCondensed"){
-                    game.settings.set("ModularFate","skills",ModularFateConstants.getFateCondensedDefaultSkills());
+                    if (game.user.isGM){ 
+                        game.settings.set("ModularFate","skills",ModularFateConstants.getFateCondensedDefaultSkills());
+                    }
                 }
                 if (value=="accelerated"){
-                    game.settings.set("ModularFate","skills",ModularFateConstants.getFateAcceleratedDefaultSkills());
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","skills",ModularFateConstants.getFateAcceleratedDefaultSkills());
+                    }
                 }
                 //This menu only does something when changed, so set back to 'nothing' to avoid
                 //confusing or worrying the GM next time they open this menu.
-                game.settings.set("ModularFate","defaultSkills","nothing");
+                if (game.user.isGM){ 
+                    game.settings.set("ModularFate","defaultSkills","nothing");
+                }
             }
     });
 
@@ -79,6 +108,9 @@ class SkillSetup extends FormApplication{
             super(...args);
     }
 
+    _updateObject(){
+    }
+
     //Set up the default options for instances of this class
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
@@ -87,7 +119,7 @@ class SkillSetup extends FormApplication{
         options.width = "auto";
         options.height = "auto";
         options.title = `Setup Skills for world ${game.world.title}`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "SkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
         return options;
@@ -99,7 +131,7 @@ class SkillSetup extends FormApplication{
            skills:this.skills
         }
         return templateData;
-      }
+    }
     
       //Here are the action listeners
       activateListeners(html) {
@@ -124,12 +156,9 @@ class SkillSetup extends FormApplication{
         //Launch the EditSkill FormApplication.
         let skills = game.settings.get("ModularFate","skills");
         let slb = html.find("select[id='skillListBox']")[0].value;
-        for (let i = 0; i< skills.length; i++){
-            if (skills[i].name==slb){
-                let e = new EditSkill(skills[i]);
-                e.render(true);       
-            }
-        }
+        let sk = skills[slb]
+        let e = new EditSkill(sk);
+        e.render(true);
     }
     async _onDeleteButton(event,html){
         //Code to delete the selected skill
@@ -138,18 +167,10 @@ class SkillSetup extends FormApplication{
         
         //Find that skill in the list of skills
         let skills=game.settings.get("ModularFate","skills");
-        var index=undefined;
-        for (let i = 0;i<skills.length; i++){
-            if (skills[i].name === slb){
-                index = i;
-            }
-        }
-        //Use splice to cut that skill out of the list of skills
-        if (index != undefined){
-            skills.splice(index,1);
-            //Set the game settings for skills as appropriate.
+        if (skills[slb] != undefined){
+            delete skills[slb];
             await game.settings.set("ModularFate","skills",skills);
-            this.render(true); 
+            this.render(true);
         }
     }
     async _onAddButton(event,html){
@@ -202,16 +223,13 @@ class EditSkill extends FormApplication{
         if (name == undefined || name ==""){
             ui.notifications.error("You cannot have a skill with a blank name.")
         } else {
-
-            for (let i =0; i< skills.length; i++){
-                if (skills[i].name == name){
-                    skills[i]=newSkill;
-                    existing = true;
-                }
-            } 
+            if (skills[name] != undefined){
+                skills[name]=newSkill;
+                existing = true;
+            }
         }
         if (!existing){            
-            skills.push(newSkill);
+            skills[name]=newSkill;
         }
         await game.settings.set("ModularFate","skills",skills);
         this.close();

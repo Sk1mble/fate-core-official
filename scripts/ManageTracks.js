@@ -21,7 +21,7 @@ Hooks.once('init',async function(){
 
     //Initialise the settings if they are currently empty.
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","tracks"))){
-        game.settings.set("ModularFate","tracks",[]);
+        game.settings.set("ModularFate","tracks",{});
     }
 
     //Initialise the settings if they are currently empty.
@@ -37,6 +37,51 @@ Hooks.once('init',async function(){
         type: TrackSetup,   // A FormApplication subclass which should be created
         restricted: true                   // Restrict this submenu to gamemaster only?
       });
+
+     // Register a setting for replacing the existing track list with one of the pre-defined default sets.
+     game.settings.register("ModularFate", "defaultTracks", {
+        name: "Replace Or Clear All World Tracks?",
+        hint: "Pick a track set with which to override the world's current tracks. CANNOT BE UNDONE.",
+        scope: "world",     // This specifies a client-stored setting
+        config: true,        // This specifies that the setting appears in the configuration view
+        type: String,
+        restricted:true,
+        choices: {           // If choices are defined, the resulting setting will be a select menu
+            "nothing":"No",
+            "fateCore":"Yes - Fate Core Defaults",
+            "fateCondensed":"Yes - Fate Condensed Defaults",
+            "accelerated":"Yes - Fate Accelerated Defaults",
+            "clearAll":"Yes - Clear All tracks"
+        },
+        default: "nothing",        // The default value for the setting
+        onChange: value => { // A callback function which triggers when the setting is changed
+                if (value == "fateCore"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getFateCoreTracks());
+                    }
+                }
+                if (value=="clearAll"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",{});
+                    }
+                }
+                if (value=="fateCondensed"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getFateCondensedTracks());
+                    }
+                }
+                if (value=="accelerated"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getFateAcceleratedTracks());
+                    }
+                }
+                //This menu only does something when changed, so set back to 'nothing' to avoid
+                //confusing or worrying the GM next time they open this menu.
+                if (game.user.isGM){
+                    game.settings.set("ModularFate","defaultTracks","nothing");
+                }
+            }
+    });
 });
 
 class EditLinkedSkills extends FormApplication {
@@ -59,7 +104,7 @@ class EditLinkedSkills extends FormApplication {
         options.width = "1000";
         options.height = "auto";
         options.title = `Linked Skill Editor`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "EditLinkedSkills"; // CSS id if you want to override default behaviors
         options.resizable = true;
         return options;
@@ -80,19 +125,14 @@ class EditLinkedSkills extends FormApplication {
         let track = this.track;
         let tracks = game.settings.get("ModularFate","tracks");
         let linked_skills = track.linked_skills;
+    
         for (let i = 0; i< linked_skills.length; i++){
             let toCheck = `Skill: ${linked_skills[i].linked_skill}, Rank: ${linked_skills[i].rank}, Boxes: ${linked_skills[i].boxes}, Enables: ${linked_skills[i].enables}`;
             if(toCheck == toDelete){
                 linked_skills.splice(i,1);
             }
         }
-        tracks.forEach(t => {
-            if (t.name.toUpperCase()==this.track.name.toUpperCase);
-            let index = tracks.indexOf(t);
-            if (index != undefined){
-                tracks[index]=this.track;             
-            }
-        })
+        tracks[this.track.name]=this.track;
         await game.settings.set("ModularFate","tracks",tracks);
         this.render(true);
     }
@@ -115,14 +155,7 @@ class EditLinkedSkills extends FormApplication {
                 }
             )
             let tracks=game.settings.get("ModularFate","tracks");
-            let index = undefined;
-            tracks.forEach(t => {
-                if (t.name.toUpperCase()==this.track.name.toUpperCase);
-                let index = tracks.indexOf(t);
-                if (index != undefined){
-                    tracks[index]=this.track;             
-                }
-            })
+            tracks[this.track.name] = this.track
             await game.settings.set("ModularFate","tracks",tracks);
             this.render(true);
     }
@@ -138,11 +171,12 @@ class EditTracks extends FormApplication {
 
     getData(){
         let tracks_of_category = [];
-        this.tracks.forEach(track =>{
-            if (track.category == this.category){
-                tracks_of_category.push(track);
+        console.log(this.tracks);
+        for (let t in this.tracks){
+            if (this.tracks[t].category == this.category){
+                tracks_of_category.push(this.tracks[t]);
             }
-        })
+        }
         const templateData = {
             category:this.category,
             tracks:tracks_of_category, 
@@ -157,7 +191,7 @@ class EditTracks extends FormApplication {
         options.width = "1000";
         options.height = "auto";
         options.title = `Track Editor`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "EditTrack"; // CSS id if you want to override default behaviors
         options.resizable = true;
         return options;
@@ -169,9 +203,11 @@ class EditTracks extends FormApplication {
         const track_select = html.find("select[id='track_select']");
         const edit_linked_skillsButton = html.find("button[id='edit_linked_skills']");
         const deleteTrackButton = html.find("button[id='delete_track']");
+        const edit_track_name=html.find("input[id='edit_track_name']");
         
         saveTrackButton.on("click", event => this._onSaveTrackButton(event, html));
         track_select.on("click", event => this._track_selectClick(event, html));
+        edit_track_name.on("change", event => this._edit_track_name_change(event, html));
         edit_linked_skillsButton.on("click", event => this._edit_linked_skillsButtonClick(event,html));
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
   
@@ -180,18 +216,25 @@ class EditTracks extends FormApplication {
         })
     }
     //Here are the event listener functions.
+    async _edit_track_name_change(event, html){
+        let name = event.target.value;
+        let track = this.tracks[name];
+        if (track == undefined){
+            document.getElementById("edit_linked_skills").disabled=true;
+        } else {
+            document.getElementById("edit_linked_skills").disabled=false;
+        }
+    }
 
     async _onDeleteTrackButton(event,html){
         let name = document.getElementById("track_select").value;
-        let toDelete = this.tracks.find(t => t.name.toUpperCase() == name.toUpperCase());
-        var toSplice = this.tracks.indexOf(toDelete);
-        if (toSplice != -1){
-            this.tracks.splice(toSplice,1);
-            await game.settings.set("ModularFate","tracks",this.tracks);
-            this.render(true)
-        }
-        else {
+        try {
+                delete this.tracks[name];
+                await game.settings.set("ModularFate","tracks",this.tracks);
+                this.render(true);
+        } catch {
             ui.notifications.error("Can't delete that.")
+            this.render(true)
         }
     }
     async _edit_linked_skillsButtonClick(event, html){
@@ -200,9 +243,9 @@ class EditTracks extends FormApplication {
             ui.notifications.error("Please select a track before trying to add a linked skill.");
         }
         else {
-            let track = this.tracks.find(track=> track.name.toUpperCase()==name.toUpperCase());
+            let track=this.tracks[name];
             let linked_skill_editor = new EditLinkedSkills(track);
-           linked_skill_editor.render(true);
+            linked_skill_editor.render(true);
         }
     }
 
@@ -216,7 +259,7 @@ class EditTracks extends FormApplication {
             document.getElementById("edit_linked_skills").disabled=true;
             
         } else {
-            let track = this.tracks.find(track=> track.name.toUpperCase()==name.toUpperCase());
+            let track=this.tracks[name];
             document.getElementById("edit_track_name").value=track.name;
             document.getElementById("edit_track_description").value=track.description;
             document.getElementById("edit_track_universal").checked=track.universal;
@@ -247,7 +290,8 @@ class EditTracks extends FormApplication {
         if (name == ""){
             ui.notifications.error("Name cannot be blank");
         }
-        this.tracks.forEach(track =>{
+        
+        for (let track in this.tracks){
             if (track.name==name){
                 //Logic for overwriting an existing track
                 existing = true;
@@ -261,7 +305,7 @@ class EditTracks extends FormApplication {
                 track.boxes=boxes;
                 track.harm_can_absorb=harm;
             }
-        })
+        }
         if (!existing){
             let newTrack = {
                 "name":name,
@@ -276,7 +320,7 @@ class EditTracks extends FormApplication {
                 "boxes":boxes,
                 "harm_can_absorb":harm
             }
-            this.tracks.push(newTrack);
+            this.tracks[name]=newTrack;
         }
         await game.settings.set("ModularFate","tracks",this.tracks);
         this.render(true);
@@ -377,22 +421,3 @@ class TrackSetup extends FormApplication{
         }
     }
 }
-/* Track setup data structure
-basic description
-recovery_type //fleeting, sticky, lasting. Consequences are all Lasting as they require a recovery action, but we don't need to overly concern ourselves with the difference between sticky and lasting.
-aspect:(no|name_as_aspect|defined_when_marked)
-when_marked_details //text that describes when and how this track is marked and what happens. If no aspect but a boost for the GM, describe that here.
-recovery_conditions //text that describes how this track enters recovery and what happens
-default_number_of_boxes -- technically consequences have one box that can absorb multiple stress as below. Do we use one box, or 0 boxes and count as marked when the aspect is filled?
-harm_can_absorb (for the OG consequences and conditions like Wounded, which can absorb 4 stress), but don't have stress boxes
-universal (boolean - true means all characters get this Track when initialised)
-stress is just a specific type of fleeting condition. Clear stress becomes 'clear all fleeting tracks'.
-linked_skill[{name:name, rank:number, boxes:number_of_boxes_added, enabled:true}] //use enabled if a certain skill level 'turns on' this consequence.
-one_only //boolean - if true, a character can only have one track of this type. This is for situations like Wounded, where a character can have multiple of them if they buy them with refresh etc.
-if aspect: = define_when_marked and default_number_of_boxes = 0, just display an aspect box rather than a checkbox for this track.
-
-We'll use a prepareTracks function on rendering a character sheet to ensure its tracks are currently up to date with regard to the world settings.
-
-When in use, tracks have boxes rather than default_number_of_boxes, and also have a notes field for things like tracking who Indebted is to, etc.
-Combat tracks are shown on a specific section of the character sheet.
-*/

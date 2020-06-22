@@ -9,7 +9,8 @@
 					"./scripts/ModularFateConstants.js",
 					"./scripts/ManageSkills.js",
 					"./scripts/ManageAspects.js",
-					"./scripts/ManageTracks.js"
+					"./scripts/ManageTracks.js",
+					"./scripts/EditPlayerSkills.js"
 				],
 	"styles": ["ModularFate.css"],
 	"packs": [],

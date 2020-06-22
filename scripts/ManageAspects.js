@@ -12,7 +12,7 @@ Hooks.once('init', async function () {
     });
     //Initialise the setting if it is currently empty.
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","aspects"))){
-        game.settings.set("ModularFate","aspects",[]);
+        game.settings.set("ModularFate","aspects",{});
     }
 
     // Register the menu to setup the world's aspect list.
@@ -42,20 +42,30 @@ Hooks.once('init', async function () {
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
-                    game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCoreAspects());
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCoreAspects());
+                    }
                 }
                 if (value == "fateCondensed"){
-                    game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCondensedAspects());
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCondensedAspects());
+                    }
                 }
                 if (value=="clearAll"){
-                    game.settings.set("ModularFate","aspects",[]);
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","aspects",{});
+                    }
                 }
                 if (value=="accelerated"){
-                    game.settings.set("ModularFate","aspects",ModularFateConstants.getFateAcceleratedAspects());
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","aspects",ModularFateConstants.getFateAcceleratedAspects());
+                    }
                 }
                 //This menu only does something when changed, so set back to 'nothing' to avoid
                 //confusing or worrying the GM next time they open this menu.
-                game.settings.set("ModularFate","defaultAspects","nothing");
+                if (game.user.isGM){
+                    game.settings.set("ModularFate","defaultAspects","nothing");
+                }
             }
     });
 });
@@ -108,15 +118,12 @@ class AspectSetup extends FormApplication{
     //Here are the event listener functions.
     async _onEditButton(event,html){
         //Launch the EditAspect FormApplication.
-        let aspects = game.settings.get("ModularFate","aspects");
+        let aspects = game.settings.get("ModularFate","aspects");       
         let aspect = html.find("select[id='aspectListBox']")[0].value;
-        for (let i = 0; i< aspects.length; i++){
-            if (aspects[i].name==aspect){
-                let e = new EditAspect(aspects[i]);
-                e.render(true);       
-            }
-        }
+        let e = new EditAspect(aspects[aspect]);
+        e.render(true);
     }
+
     async _onDeleteButton(event,html){
         //Code to delete the selected aspect
         //First, get the name of the aspect from the HTML element aspectListBox
@@ -124,18 +131,10 @@ class AspectSetup extends FormApplication{
         
         //Find that aspect in the list of aspects
         let aspects=game.settings.get("ModularFate","aspects");
-        var index=undefined;
-        for (let i = 0;i<aspects.length; i++){
-            if (aspects[i].name === aspect){
-                index = i;
-            }
-        }
-        //Use splice to cut that aspect out of the list of aspects
-        if (index != undefined){
-            aspects.splice(index,1);
-            //Set the game settings for aspects as appropriate.
+        if (aspects[aspect] != undefined){
+            delete aspects[aspect];
             await game.settings.set("ModularFate","aspects",aspects);
-            this.render(true); 
+            this.render(true);
         }
     }
     async _onAddButton(event,html){
@@ -177,15 +176,13 @@ class EditAspect extends FormApplication{
         if (name == undefined || name ==""){
             ui.notifications.error("You cannot have an aspect with a blank name.")
         } else {
-            for (let i =0; i< aspects.length; i++){
-                if (aspects[i].name == name){
-                    aspects[i]=newAspect;
-                    existing = true;
-                }
-            } 
+            if (aspects[name] != undefined){
+                aspects[name] = newAspect;
+                existing = true;
+            }
         }
         if (!existing){            
-            aspects.push(newAspect);
+            aspects[name]=newAspect;
         }
         await game.settings.set("ModularFate","aspects",aspects);
         this.close();
@@ -199,7 +196,7 @@ class EditAspect extends FormApplication{
         options.width = "1000";
         options.height = "auto";
         options.title = `Aspect Editor`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "EditAspect"; // CSS id if you want to override default behaviors
         options.resizable = true;
         return options;
