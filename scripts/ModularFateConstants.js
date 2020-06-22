@@ -2,6 +2,8 @@ class ModularFateConstants {
 
     static getFateLadder(){
         return  {
+                    "rank_10":"",
+                    "rank_9":"",
                     "rank_8":"Legendary",
                     "rank_7":"Epic",
                     "rank_6":"Fantastic",
@@ -16,8 +18,7 @@ class ModularFateConstants {
     }
 
     static getAdjective(r){
-        const ladder = this.getFateLadder();
-        console.log(ladder)
+        const ladder = this.getFateLadder()
         return (ladder[`rank_${r}`])
     }
 

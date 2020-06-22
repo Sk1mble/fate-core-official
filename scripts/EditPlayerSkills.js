@@ -9,6 +9,7 @@ class EditPlayerSkills extends FormApplication{
                     this.options.title=`Character skill editor for ${this.object.name}`
                 }
                 this.firstRun=true;
+                this.player_skills=duplicate(this.object.data.data.skills);
     }
 
     //Set up the default options for instances of this class
@@ -30,8 +31,7 @@ class EditPlayerSkills extends FormApplication{
     // It is called when you call this.submit();
 
     async _updateObject(event, formData){
-        let player_skills=this.object.data.data.skills;
-        console.log(player_skills);
+        this.player_skills=duplicate(this.object.data.data.skills);
         //Check if this is a player
         //Check if the player is currently allowed to save
         let isPlayer = this.object.isPC;
@@ -39,28 +39,25 @@ class EditPlayerSkills extends FormApplication{
         for (let skill in formData){ //This goes through every field in the JSON object.
             let skill_name = skill.split("_")[0];
             let rank = parseInt(formData[skill]);//We can lookup JSON keys with a variable using square brackets
-            let player_skill = player_skills[skill_name];//Find the player skill entry matching this item
+            let player_skill = this.player_skills[skill_name];//Find the player skill entry matching this item
             player_skill.rank = rank;//Set it to this value.
         }
-        var canSave = await this.checkSkills(player_skills);
+        var canSave = await this.checkSkills(this.player_skills);
         if (!game.user.isGM && isPlayer && !canSave){
             ui.notifications.error("Unable to save because this character violates skill cap or skill column enforcement.")
         } else {
-            //An update isn't triggered on changing a token's array data with this form.
-            //However, it is detecting a difference if the array length is different.
-            //Therefore, we push a dummy array with one fewer elements to force an update, then push the actual update.
             if (this.object.isToken){
-                await this.object.update({"data.skills":[]});
-                await this.object.update({"data.skills":player_skills});
+                //await this.object.update({"data.skills":[]});
+                await this.object.update({"data.skills":this.player_skills});
             } else {
-                await this.object.update({"data.skills":[]});
-                await this.object.update({"data.skills":player_skills}); 
+                //await this.object.update({"data.skills":[]});
+                await this.object.update({"data.skills":this.player_skills}); 
             }
             ui.notifications.info("Character skills saved.")   
         }
     }
 
-    async checkSkills(player_skills){
+    async checkSkills(){
         var playerCanSave = true;
         //Check to see what skills the character has compared to the global skill list
         var skill_list = game.settings.get("ModularFate","skills");
@@ -72,7 +69,7 @@ class EditPlayerSkills extends FormApplication{
 
         for (let w in skill_list){
             let w_skill = skill_list[w];
-            if (player_skills[w]!=undefined){
+            if (this.player_skills[w]!=undefined){
             } else {
                 skills_to_add.push(w_skill);
             }
@@ -82,10 +79,10 @@ class EditPlayerSkills extends FormApplication{
             //Add any skills from the global list that they don't have at rank 0.
             skills_to_add.forEach(skill => {
                 skill.rank=0;
-                player_skills[skill.name]=skill;
+                this.player_skills[skill.name]=skill;
             })
-            await this.object.update({"data.skills":[]});
-            await this.object.update({"data.skills":player_skills});
+            //await this.object.update({"data.skills":[]});
+            await this.object.update({"data.skills":this.player_skills});
             let added_skill_notification = `<div>Added these skills from the skill list that were missing from this character:<p></p>`
             for (let i = 0; i<skills_to_add.length; i++){
                 added_skill_notification +=`<li>${skills_to_add[i].name}</li>`
@@ -96,10 +93,10 @@ class EditPlayerSkills extends FormApplication{
 
         //Check to see if the player has any skills that aren't in the global list. If they do, offer to delete those skills.
 
-        for (let p in player_skills){
+        for (let p in this.player_skills){
             if (skill_list[p] != undefined){     
             }else {
-                skills_to_delete.push(player_skills[p]);
+                skills_to_delete.push(this.player_skills[p]);
             }
         } 
 
@@ -113,11 +110,10 @@ class EditPlayerSkills extends FormApplication{
             let del = await ModularFateConstants.awaitYesNoDialog("Detected extraneous skills",delete_skills_query);
             if (del == "yes"){
                 for (let i = 0; i < skills_to_delete.length; i++){
-                    delete player_skills[skills_to_delete[i].name];
+                    delete this.player_skills[skills_to_delete[i].name];
                 }
-                console.log(player_skills);
-                await this.object.update({"data.skills":[]});
-                await this.object.update({"data.skills":player_skills});
+                //await this.object.update({"data.skills":[]});
+                await this.object.update({"data.skills":this.player_skills});
             }
         }
         
@@ -127,8 +123,8 @@ class EditPlayerSkills extends FormApplication{
             let skillColumnViolated = false;
             let ranks = [0,0,0,0,0,0,0,0,0,0,0];
 
-            for (let sk in player_skills){
-                ranks[player_skills[sk].rank]++
+            for (let sk in this.player_skills){
+                ranks[this.player_skills[sk].rank]++
             }
 
             //0=11 & 10; 1=10&9; 2=9&8; 3=8&7; 4=7&6; 5=6&5; 6=5&4; 7=4&3; 8=3&2; 9=2&1
@@ -165,8 +161,8 @@ class EditPlayerSkills extends FormApplication{
             let skill_total = game.settings.get("ModularFate","skillTotal");
             let player_total = 0;
 
-            for (let sk in player_skills){
-                player_total+=player_skills[sk].rank;
+            for (let sk in this.player_skills){
+                player_total+=this.player_skills[sk].rank;
             }
 
             if (player_total > skill_total){
@@ -185,14 +181,19 @@ class EditPlayerSkills extends FormApplication{
     }
 //The function that returns the data model for this window. In this case, we need the character's sheet data/and the skill list.
     async getData(){
-        this.sheetData=this.object.data.data;
         if (this.firstRun){
-            await this.checkSkills(this.object.data.data.skills);
+            await this.checkSkills();
             this.firstRun=false;
         }
+        let presentation_skills=[];
+        for (let x in this.player_skills){
+            presentation_skills.push({"name":x,"rank":this.player_skills[x].rank});
+        }
+        presentation_skills.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
+
         const templateData = {
             skill_list:game.settings.get("ModularFate","skills"),
-            character_skills:this.sheetData.skills,
+            character_skills:presentation_skills
          }
         return templateData;
     }
@@ -212,8 +213,7 @@ class EditPlayerSkills extends FormApplication{
 
     async _onSkillButton(event,html){
         let name = event.target.id;
-        let player_skills = this.object.data.skills;
-        let skill = player_skills.find(sk => {return sk.name == name});
+        let skill = this.player_skills[name];
         ModularFateConstants.awaitOKDialog("Skill Details",`
                                             <table cellspacing ="4" cellpadding="4" border="1">
                                                 <h2>${skill.name}</h2>
