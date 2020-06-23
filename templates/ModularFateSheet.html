@@ -1,4 +1,26 @@
-<form>
-<img src="{{actor.img}}"></img><p></p><h1>{{actor.name}}</h1>
-<button type="button" id="edit_player_skills" i icon class="fas fa-cogs" style="width:100px; height:50px"> Skills </button>
+<form style="background: white; width:1000px">
+    <table style="background:white; border:0">
+        <tr>
+            <td style="vertical-align:top; width:110px">
+                <img width="100" height="auto" style="border:0" id="avatar" data-edit="img" src="{{actor.img}}"></img>
+            </td>
+            <td style="vertical-align:top; align-self:auto">
+                <h1><input type="text" name="name" value="{{actor.name}}" style="border:0; color:black; background:white"></h1>
+            </td>
+        </tr>
+        {{#each data.skills}}
+        <tr>
+            <td>
+                <li>{{this.name}} </li>
+            </td>
+            <td>
+                {{this.rank}}   ({{lookup ../ladder this.rank}})
+            </td>
+        </tr>
+        {{/each}}
+        <tr>
+            <td colspan="2">
+                <button type="button" id="edit_player_skills" i icon class="fas fa-cogs" style="width:auto; height:50px"> Skills </button></td>
+        </tr>
+    </table>
 </form>

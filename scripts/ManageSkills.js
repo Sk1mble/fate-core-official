@@ -198,6 +198,26 @@ class EditSkill extends FormApplication{
             }
         }
 
+        async _updateObject(event, f) {
+            console.log(f)
+            let skills=game.settings.get("ModularFate","skills");
+            let newSkill = {"name":f.name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
+            var existing = false;
+            //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
+            if (f.name == undefined || f.name ==""){
+                ui.notifications.error("You cannot have a skill with a blank name.")
+            } else {
+                if (skills[f.name] != undefined){
+                    skills[f.name]=newSkill;
+                    existing = true;
+                }
+            }
+            if (!existing){            
+                skills[f.name]=newSkill;
+            }
+            await game.settings.set("ModularFate","skills",skills);
+        }
+
     //Here are the action listeners
     activateListeners(html) {
         super.activateListeners(html);
@@ -207,32 +227,7 @@ class EditSkill extends FormApplication{
         
     //Here are the event listener functions.
     async _onSaveButton(event,html){
-        //Get the name of the skill and the other attributes
-        let name = html.find("input[id='edit_skill_name']")[0].value;
-        let description = html.find("textarea[id='edit_skill_description']")[0].value;
-        let overcome = html.find("textarea[id='edit_skill_overcome']")[0].value;
-        let caa = html.find("textarea[id='edit_skill_caa']")[0].value;
-        let attack = html.find("textarea[id='edit_skill_attack']")[0].value;
-        let defend = html.find("textarea[id='edit_skill_defend']")[0].value;
-        let pc = html.find("input[id='edit_pc']")[0].checked;
-        let skills=game.settings.get("ModularFate","skills");
-        let newSkill = {"name":name, "description":description,"overcome":overcome,"caa":caa, "attack":attack,"defend":defend,"pc":pc};
-
-        var existing = false;
-        //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
-        if (name == undefined || name ==""){
-            ui.notifications.error("You cannot have a skill with a blank name.")
-        } else {
-            if (skills[name] != undefined){
-                skills[name]=newSkill;
-                existing = true;
-            }
-        }
-        if (!existing){            
-            skills[name]=newSkill;
-        }
-        await game.settings.set("ModularFate","skills",skills);
-        this.close();
+        this.submit();
     }    
 
     static get defaultOptions() {

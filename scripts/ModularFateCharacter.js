@@ -2,6 +2,7 @@ export class ModularFateCharacter extends ActorSheet {
 
     static get defaultOptions() {
         const options = super.defaultOptions;
+        options.width="1000"
         return options;
     }
 
@@ -29,6 +30,9 @@ export class ModularFateCharacter extends ActorSheet {
   
     getData() {
         const sheetData = super.getData();
+        sheetData.skills = sheetData.data.skills;
+        sheetData.ladder = ModularFateConstants.getFateLadder();
+        sheetData.gameSkillPoints = game.settings.get("ModularFate","skillTotal")
         return sheetData;
     }
 }

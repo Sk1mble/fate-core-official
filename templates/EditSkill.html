@@ -5,7 +5,7 @@
                 Skill:
             </td>
             <td>
-                <input type="text" id ="edit_skill_name" style="background: white; color: black; font-family:Arial;" value="{{skill.name}}"></input>
+                <input type="text" id ="edit_skill_name" name="name" style="background: white; color: black; font-family:Arial;" value="{{skill.name}}"></input>
             </td>
         </tr>
         <tr>
@@ -13,7 +13,7 @@
                 Description:
             </td>
             <td>
-                <textarea id="edit_skill_description" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.description}}</textarea>
+                <textarea name="description" id="edit_skill_description" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.description}}</textarea>
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 Overcome:
             </td>
             <td>
-                <textarea id="edit_skill_overcome" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.overcome}}</textarea>
+                <textarea name="overcome" id="edit_skill_overcome" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.overcome}}</textarea>
             </td>   
         </tr>
         <tr>
@@ -29,7 +29,7 @@
                 Create an Advantage:
             </td>
             <td>
-                <textarea id="edit_skill_caa" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.caa}}</textarea>
+                <textarea name="caa" id="edit_skill_caa" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.caa}}</textarea>
             </td>   
         </tr>
         <tr>
@@ -37,7 +37,7 @@
                 Attack:
             </td>
             <td>
-                <textarea id="edit_skill_attack" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.attack}}</textarea>
+                <textarea name="attack" id="edit_skill_attack" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.attack}}</textarea>
             </td>   
         </tr>
         <tr>
@@ -45,7 +45,7 @@
                 Defend:
             </td>
             <td>
-                <textarea id="edit_skill_defend" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.defend}}</textarea>
+                <textarea name="defend" id="edit_skill_defend" rows="6" style="background: white; color: black; font-family:Arial;">{{skill.defend}}</textarea>
             </td>   
         </tr>
         <tr>
@@ -54,7 +54,7 @@
             </td>
             <td>
                 {{#if skill.pc}}
-                <input type="checkbox" id="edit_pc" checked></input>
+                <input name="pc" type="checkbox" id="edit_pc" checked></input>
                 {{else}}
                 <input type="checkbox" id="edit_pc"></input>
                 {{/if}}
