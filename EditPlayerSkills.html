@@ -1,0 +1,19 @@
+<form class="editable" onsubmit="event.preventDefault();">
+    <table>
+        <tbody>
+            {{#each character_skills}}
+                <tr>
+                    <td>
+                        <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="width:50px; height:25px;"></input>
+                    </td>
+                    <td>
+                        <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button" style="text-align:left">{{this.name}}</button>
+                    </td>
+                </tr>
+            {{/each}}
+            <tr>                
+                <td colspan="2"><button type="button" id="save_player_skills" style="width:100px; height:30px" tabindex="-1">Save</button><button type="button" id="sort" i icon class="fas fa-sort" title="Toggle sort by name/sort by rank." style="width:30px; height:30px" tabindex="-1"></button><button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="width:30px; height:30px" tabindex="-1" title="Manually edit player skills (GM only)"></button></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
