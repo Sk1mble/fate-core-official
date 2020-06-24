@@ -47,10 +47,13 @@ class EditPlayerSkills extends FormApplication{
         if (!game.user.isGM && isPlayer && !canSave){
             ui.notifications.error("Unable to save because this character violates skill cap or skill column enforcement.")
         } else {
-            console.log(this.player_skills)
             if (this.object.isToken){
+                //This next line actually forces the whole set of skills to actorData rather than just a diff with the original actor.
+                //Remember this formulation! I'll need it for updating the tracks and aspects of tokens as well.
+                await this.object.token.update({["actorData.data.skills"]: this.player_skills});
                 await this.object.update({"data.skills":this.player_skills});
                 this.player_skills=duplicate(this.object.data.data.skills);
+                console.log(player_skills);
             } else {
                 await this.object.update({"data.skills":this.player_skills}); 
                 this.player_skills=duplicate(this.object.data.data.skills);
@@ -335,7 +338,7 @@ class EditGMSkills extends FormApplication{
                         cannotDelete.push(this.player_skills[s])
                     } else {
                         let token_skills = duplicate(this.object.token.data.actorData.data.skills); //This is the synthetic actor's skill list.
-                        if (token_skills[s]!= undefined && actor_skills[s]==undefined){
+                        if (token_skills[s] != undefined && actor_skills[s]==undefined){
                             canDelete.push(this.player_skills[s]);
                         }
                         else {
