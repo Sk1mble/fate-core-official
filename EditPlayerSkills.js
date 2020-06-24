@@ -11,6 +11,7 @@ class EditPlayerSkills extends FormApplication{
                 this.firstRun=true;
                 this.player_skills=duplicate(this.object.data.data.skills);
                 this.sortByRank = true;
+                this.temp_presentation_skills=[];
     }
 
     //Set up the default options for instances of this class
@@ -50,7 +51,7 @@ class EditPlayerSkills extends FormApplication{
             if (this.object.isToken){
                 //This next line actually forces the whole set of skills to actorData rather than just a diff with the original actor.
                 //Remember this formulation! I'll need it for updating the tracks and aspects of tokens as well.
-                await this.object.token.update({["actorData.data.skills"]:this.player_skills});
+                await this.object.token.update({["actorData.data.skills"]:this.player_skills}); //I tried the this.object.token.actor.update method, but it stored a diff rather than entirely overrode actorData.
                 //await this.object.update({"data.skills":this.player_skills}); //This is redundant because data just resolves to actorData for a token, this will diff and cause the token to update with the original.
                 this.player_skills=duplicate(this.object.token.data.actorData.data.skills);
             } else {
@@ -177,15 +178,15 @@ class EditPlayerSkills extends FormApplication{
             this.firstRun=false;
         }
         let presentation_skills=[];
-        for (let x in this.player_skills){
-            presentation_skills.push({"name":x,"rank":this.player_skills[x].rank});
-        }
-        if (this.sortByRank){//sort by rank
-            presentation_skills.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
-        } else { //sort by name
-            presentation_skills.sort((a, b) => b.name - a.name);
-        }
 
+        if (this.temp_presentation_skills.length > 0){
+            presentation_skills=duplicate(this.temp_presentation_skills);
+            this.temp_presentation_skills=[];
+        } else {
+            for (let x in this.player_skills){
+                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank});
+            }
+        }
         const templateData = {
             skill_list:game.settings.get("ModularFate","skills"),
             character_skills:presentation_skills
@@ -210,8 +211,25 @@ class EditPlayerSkills extends FormApplication{
         });    
     }
     async _onSortButton(event, html){
+        this.temp_presentation_skills=[];
+        let tps = [];
+        let inputs = html.find("input[type='number']");
+        
+        for (let i = 0 ; i < inputs.length; i++){ 
+            let skill_name = inputs[i].id.split("_")[0];
+            let rank = parseInt(inputs[i].value);
+            tps.push({"name":skill_name,"rank":rank})
+        }
+        if (this.sortByRank){
+            tps.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
+        } else { //sort by name
+            console.log("sort by name");
+            tps.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);//This actually properly sorts by name; case sensitive.
+        }
+        this.temp_presentation_skills = tps;
+        await this.render(false);
         this.sortByRank=!this.sortByRank;
-        this.render(false);
+        
     }
 
     async _onEditButton (event, html){
