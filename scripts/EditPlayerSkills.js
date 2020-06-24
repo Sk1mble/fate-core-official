@@ -60,9 +60,10 @@ class EditPlayerSkills extends FormApplication{
     }
 
     async checkSkills(p){
-        if (!this.object.isToken){
             let p_skills=duplicate(p);
             var playerCanSave = true;
+            let skillColumnViolated = false;
+            let skillTotalViolated = false;
             
             //Check to see what skills the character has compared to the global skill list
             var skill_list = game.settings.get("ModularFate","skills");
@@ -71,8 +72,7 @@ class EditPlayerSkills extends FormApplication{
             let numskills = Object.keys(p_skills).length
             if (numskills == 0){
                     let skills_to_add = [];
-                    let columnViolated = false;
-                    let skillTotalViolated = false;
+
                     for (let w in skill_list){
                         let w_skill = skill_list[w];
                         if (p_skills[w]!=undefined){
@@ -104,7 +104,7 @@ class EditPlayerSkills extends FormApplication{
             //If the setting is on to enforce columns, make sure skills are valid for column format.
             if (game.settings.get("ModularFate","enforceColumn")){
                 let actor= this.object;
-                let skillColumnViolated = false;
+                skillColumnViolated = false;
                 let ranks = [0,0,0,0,0,0,0,0,0,0,0];
 
                 for (let sk in p_skills){
@@ -162,7 +162,6 @@ class EditPlayerSkills extends FormApplication{
                 }
             }
             return (playerCanSave);
-        }
     }
 //The function that returns the data model for this window. In this case, we need the character's sheet data/and the skill list.
     async getData(){
@@ -440,7 +439,7 @@ class EditGMSkills extends FormApplication{
             if (ps.adhoc){
                 ad_hoc.push(ps)
             }
-            if (world_skills[s]==undefined){
+            if (world_skills[s]==undefined && !ps.adhoc){
                 orphaned.push(ps);
             }
         }
