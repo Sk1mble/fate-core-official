@@ -63,67 +63,41 @@ class EditPlayerSkills extends FormApplication{
         if (!this.object.isToken){
             let p_skills=duplicate(p);
             var playerCanSave = true;
+            
             //Check to see what skills the character has compared to the global skill list
             var skill_list = game.settings.get("ModularFate","skills");
-
-            let skills_to_add = [];
-            let skills_to_delete = [];
-            let columnViolated = false;
-            let skillTotalViolated = false;
-            for (let w in skill_list){
-                let w_skill = skill_list[w];
-                if (p_skills[w]!=undefined){
-                } else {
-                    if(w_skill.pc){
-                        skills_to_add.push(w_skill);
+            // This is the number of skills the character has currently.
+            //We only need to add any skills if this is currently 0 AND if the linked actor's skills are currently at 0.
+            let numskills = Object.keys(p_skills).length
+            if (numskills == 0){
+                    let skills_to_add = [];
+                    let columnViolated = false;
+                    let skillTotalViolated = false;
+                    for (let w in skill_list){
+                        let w_skill = skill_list[w];
+                        if (p_skills[w]!=undefined){
+                        } else {
+                            if(w_skill.pc){
+                                skills_to_add.push(w_skill);
+                            }
+                        }
                     }
-                }
-            }
 
-            if (skills_to_add.length >0){
-                //Add any skills from the global list that they don't have at rank 0.
-                skills_to_add.forEach(skill => {
-                    skill.rank=0;
-                    p_skills[skill.name]=skill;
-                })
+                    if (skills_to_add.length >0){
+                        //Add any skills from the global list that they don't have at rank 0.
+                        skills_to_add.forEach(skill => {
+                            skill.rank=0;
+                            p_skills[skill.name]=skill;
+                        })
 
-                await this.object.update({"data.skills":p_skills});
-                this.player_skills=duplicate(p_skills);
-                let added_skill_notification = `<div>Added these skills from the skill list that were missing from this character:<p></p>`
-                for (let i = 0; i<skills_to_add.length; i++){
-                    added_skill_notification +=`<li>${skills_to_add[i].name}</li>`
-                }
-                added_skill_notification += "</div>";
-                await ModularFateConstants.awaitOKDialog("Detected missing skills",added_skill_notification)
-            }
-
-            //Check to see if the player has any skills that aren't in the global list. If they do, offer to delete those skills.
-
-            for (let p in p_skills){
-                if (skill_list[p] != undefined && !skill_list[p].adhoc){     
-                }else {
-                    skills_to_delete.push(p_skills[p]);
-                }
-            } 
-
-            if (skills_to_delete.length >0){
-                let delete_skills_query = `<div>The following skills are on this character but not in the skill list:<p></p>`
-                for (let i = 0; i<skills_to_delete.length; i++){
-                    delete_skills_query+=`<li>${skills_to_delete[i].name}</li>`
-                }
-                delete_skills_query+="<p></p>Click YES to delete these skills, or NO to keep them. This message will appear every time the skill editor is opened unless these skills are added to the skill list by the GM.</div>";
-                if (this.object.isToken){
-                    delete_skills_query+="<p>Because this is a token actor, the skills won't stay deleted on refreshing until you delete them from the actor this token represents.</p>";
-                }
-                let del = await ModularFateConstants.awaitYesNoDialog("Detected extraneous skills",delete_skills_query);
-                if (del == "yes"){
-                    for (let i = 0; i < skills_to_delete.length; i++){
-                        let s = `-=${skills_to_delete[i].name}`
-                        delete p_skills[skills_to_delete[i].name];
-                        await this.object.update({"data.skills": {[`${s}`]:null}})
+                    await this.object.update({"data.skills":p_skills});
+                    this.player_skills=duplicate(p_skills);
+                    let added_skill_notification = `<div>Initialised the character with these skills from the skill list:<p></p>`
+                    for (let i = 0; i<skills_to_add.length; i++){
+                        added_skill_notification +=`<li>${skills_to_add[i].name}</li>`
                     }
-                    //await this.object.update({"data.skills":p_skills});
-                    this.player_skills=duplicate(p_skills);;
+                    added_skill_notification += "</div>";
+                    await ModularFateConstants.awaitOKDialog("Detected missing skills",added_skill_notification)
                 }
             }
             
@@ -311,7 +285,6 @@ class EditGMSkills extends FormApplication{
                 this.options.title=`GM skill editor for ${this.object.name}`
             }
             this.player_skills=duplicate(this.object.data.data.skills);
-            console.log(this.player_skills);
     }
 
     //Set up the default options for instances of this class
@@ -328,21 +301,158 @@ class EditGMSkills extends FormApplication{
         return options;
     }
 
+     //Here are the action listeners
+     activateListeners(html) {
+        super.activateListeners(html);
+        const add_ad_hoc = html.find("button[id='add_ah_button']");
+        add_ad_hoc.on("click", event => this._adHocButton(event, html));
+        const confirm = html.find("button[id='add_remove_button']")
+        confirm.on("click", event => this._confirm(event, html));
+        
+        Hooks.on("renderModularFateCharacter",(app, html, data)=> {
+            this.render(false);
+        });    
+    }
+    async _confirm(event,html){
+        let canDelete = [];
+        let cannotDelete = [];
+        let actor=undefined;
+        for (let s in this.player_skills){
+            let cbox = html.find(`input[id='${s}']`)[0];
+            if (cbox != undefined && !cbox.checked){
+                // This skill needs to be deleted from the list.
+                //THIS WON'T WORK FOR TOKEN ACTORS unless you also delete the skill from the 
+                //real actor being represented by the token actor. So let's go ahead and give the user an option for that. =)
+                //The thought of having to implement a similar system for aspects and tracks fills me with dread.
+                if (this.object.isToken){
+                    let actor_id = this.object.id;
+                    game.actors.entities.forEach(a => {
+                        if (a.id == actor_id){
+                            actor = a;
+                        }
+                    })
+                    let actor_skills=duplicate(actor.data.data.skills);
+                    if (this.object.token.actor.token.data.actorData.data == undefined){
+                        cannotDelete.push(this.player_skills[s])
+                    } else {
+                        let token_skills = duplicate(this.object.token.data.actorData.data.skills); //This is the synthetic actor's skill list.
+                        if (token_skills[s]!= undefined && actor_skills[s]==undefined){
+                            canDelete.push(this.player_skills[s]);
+                        }
+                        else {
+                            cannotDelete.push(this.player_skills[s])
+                        }
+                    }
+                } else {
+                    let sk = `-=${s}`
+                    await this.object.update({"data.skills": {[`${sk}`]:null}})
+                }
+            }
+        } 
+        if (this.object.isToken && cannotDelete.length >0) {
+            let delString = "The following skills are stored on the original actor for this token, so deleting them here won't persist. Would you like to delete them from the original actor?"
+            cannotDelete.forEach(cd => {
+                delString+=`<li>${cd.name}</li>`
+            })
+            let response= await ModularFateConstants.awaitYesNoDialog("Delete skills from original actor?", delString);
+            if (response=="yes"){
+                cannotDelete.forEach(cd=> {
+                    let sk = `-=${cd.name}`;
+                    (async ()=> {await this.object.update({"data.skills": {[`${sk}`]:null}})})();
+                    (async ()=> {await actor.update({"data.skills": {[`${sk}`]:null}})})();
+                })
+            }
+        }
+        if (this.object.isToken && canDelete.length > 0) {
+            canDelete.forEach(skill => {
+                let sk = `-=${skill.name}`;
+                async function update(object) {
+                    await object.update({"data.skills":{[`${sk}`]:null}})
+                }
+                update(this.object)
+            })
+        }
+        //Now we need to add skills that have checks and which aren't already checked.
+        let world_skills=game.settings.get("ModularFate","skills")
+        for (let w in world_skills){
+            let cbox = html.find(`input[id='${w}']`)[0];
+            if (cbox.checked){
+                if (this.player_skills[w]==undefined){
+                    let skill = world_skills[w];
+                    skill.rank=0;
+                    await this.object.update({"data.skills":{[w]:skill}})
+                }
+            }
+        }    
+        this.close();
+    }
+
+    async _adHocButton(event, html){
+        let name = html.find("input[id='ad_hoc_input']")[0].value
+        var newSkill=undefined;
+        console.log(name);
+        if (name!= undefined && name !=""){
+            newSkill= {
+                "name":name,
+                "description":"Ad-hoc Skill",
+                "pc":false,
+                "overcome":"",
+                "caa":"",
+                "attack":"",
+                "defend":"",
+                "rank":0,
+                "adhoc":true
+            }
+        }
+        if (newSkill != undefined){
+            await this.object.update({"data.skills": {[name]:newSkill}})
+            this.render(false);
+        }
+    }
+
+    _updateObject(event, html){
+    }
+
     async getData(){
         this.player_skills=duplicate(this.object.data.data.skills);
 
-        // Need to check which skills the player has, including non-pc skills and ad-hoc skills.
-        // Need to build a presentation array that includes whether it's currently on the sheet.
-        // GM checks or unchecks each box accordingly
-        // On saving, all unchecked skills are deleted.
-        // Note to self, ad-hoc skills have only a name, but we populate the other data with blanks 
-        // to avoid compatibility issues.
+        let world_skills=game.settings.get("ModularFate","skills");
+        let present = [];
+        let absent = [];
+        let non_pc_world_skills=[];
+        let ad_hoc = [];
+        let orphaned = [];
 
-
+        for (let w in world_skills){
+            let s = this.player_skills[w];
+            if (s == undefined){
+                if (!world_skills[w].pc){ 
+                    non_pc_world_skills.push(world_skills[w])
+                } else {
+                    absent.push(world_skills[w])
+                }
+            } else {
+                present.push(world_skills[w])
+            }
+        }
+        for (let s in this.player_skills){
+            let ps = this.player_skills[s];
+            if (ps.adhoc){
+                ad_hoc.push(ps)
+            }
+            if (world_skills[s]==undefined){
+                orphaned.push(ps);
+            }
+        }
 
         const templateData = {
             skill_list:game.settings.get("ModularFate","skills"),
-            character_skills:this.player_skills
+            character_skills:this.player_skills,
+            present_skills:present,
+            absent_skills:absent,
+            non_pc:non_pc_world_skills,
+            ad_hoc:ad_hoc,
+            orphaned:orphaned
          }
         return templateData;
     }

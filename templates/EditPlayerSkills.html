@@ -4,10 +4,10 @@
             {{#each character_skills}}
                 <tr>
                     <td>
-                        <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button">{{this.name}}</button>
+                        <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="width:50px; height:25px;"></input>
                     </td>
                     <td>
-                        <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="width:50px; height:25px;"></input>
+                        <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button" style="text-align:left">{{this.name}}</button>
                     </td>
                 </tr>
             {{/each}}
