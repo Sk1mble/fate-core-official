@@ -51,9 +51,9 @@ class EditPlayerSkills extends FormApplication{
                 //This next line actually forces the whole set of skills to actorData rather than just a diff with the original actor.
                 //Remember this formulation! I'll need it for updating the tracks and aspects of tokens as well.
                 await this.object.token.update({["actorData.data.skills"]: this.player_skills});
-                await this.object.update({"data.skills":this.player_skills});
-                this.player_skills=duplicate(this.object.data.data.skills);
-                console.log(player_skills);
+                //await this.object.update({"data.skills":this.player_skills});
+                this.player_skills=duplicate(this.object.token.data.actorData.data.skills);
+                console.log(this.player_skills)
             } else {
                 await this.object.update({"data.skills":this.player_skills}); 
                 this.player_skills=duplicate(this.object.data.data.skills);
