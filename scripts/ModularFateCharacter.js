@@ -23,9 +23,39 @@ export class ModularFateCharacter extends ActorSheet {
         skill_name.on("click", event => this._onSkill_name(event, html));
         const sort = html.find("button[id='sort_player_skills'")
         sort.on("click", event => this._onSortButton(event, html));
+        const aspectName = html.find("div[name='aspect']")
+        aspectName.on("dblclick", event => this._onAspectDblClick(event, html));
     }
 
     //Here are the event listener functions.
+    async _onAspectDblClick(event, html){
+        if (game.user.isGM){
+            let aspects = duplicate(this.object.data.data.aspects);
+            let aspect = aspects[event.target.id]
+            let replacement = await ModularFateConstants.getInput("What is the new name?");
+            let description = await ModularFateConstants.getInput("What is the new description?");
+
+            if (replacement != ""){
+                //Delete the existing aspect ready for replacement
+               delete aspects[aspect.name]
+               let sk = `-=${aspect.name}`
+                if (this.object.isToken){
+                    await this.object.token.update({["actorData.data.aspects"]:{[`${sk}`]:null}});
+                } else {
+                    await this.object.update({"data.aspects": {[`${sk}`]:null}})
+                }
+                aspect.name=replacement;
+                aspect.description = description;
+                aspects[replacement]=aspect;
+                if (this.object.isToken){
+                    await this.object.token.update({["actorData.data.aspects"]:aspects});
+                } else {
+                    await this.object.update({"data.aspects":aspects});
+               }
+            }
+        }
+    }
+
     async _onSkillsButton(event, html){
         //Launch the EditPlayerSkills FormApplication.
         let editor = new EditPlayerSkills(this.actor);//Passing the actor works SOO much easier.
@@ -95,6 +125,28 @@ export class ModularFateCharacter extends ActorSheet {
         paidStunts = numStunts - paidStunts;
         //TODO: Add code to count the cost of paid for extras, too.
         this.refreshSpent = paidTracks + paidStunts + paidExtras;
+        let isPlayer = this.object.isPC;
+        let error = false;
+        if (isPlayer){
+            let checkSpent = sheetData.data.details.fatePoints.refresh - this.refreshSpent;
+            let checkWorld = game.settings.get("ModularFate","refreshTotal") - sheetData.data.details.fatePoints.refresh;
+
+            let message = "This player's sheet doesn't add up: "
+            if (checkWorld < 0 ){
+                message += "Their refresh is greater than the game refresh."
+                error = true;
+            }
+            if (checkSpent < 0){
+                if (error){
+                    message += "and their spent refresh is greater than their refresh."    
+                }
+                message += "Their spent refresh is greater than their refresh."
+                error = true;
+            }
+            if (error){ 
+                ui.notifications.error(message);
+            }
+        }
         
         const unordered_skills = sheetData.data.skills;
         const ordered_skills = {}; 

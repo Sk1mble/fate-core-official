@@ -421,7 +421,7 @@ class ModularFateConstants {
         return new Promise(resolve => {
             new Dialog({
                 title: prompt,
-                content: '<div align="center"><input id="dialog_box" style="width:375px"></input></div>',
+                content: '<div align="center"><input id="dialog_box" style="width:375px" autofocus></input></div>',
                 buttons: {
                     ok: {
                         label: "OK",

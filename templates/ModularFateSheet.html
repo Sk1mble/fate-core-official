@@ -23,7 +23,7 @@
                         <input type="number" name="skillTotal" disabled style="width:75px" value="{{skillTotal}}"></input>
                     </td>
                     <td>
-                        <button type = "button" onclick="openBio(event)" style="width:50px; height:30px" title="Display Bio Page" id="bio_button" i icon class="fas fa-portrait"></button>
+                        <button type = "button" onclick="openSheet(event)" style="width:50px; height:30px" title="Display Character Sheet" id="sheet_button" i icon class="fas fa-clipboard"></button>
                     </td>
                     <td>    
                     </td>
@@ -42,7 +42,7 @@
                         <input type="number" name="gameSkillPoints" skillPoints" disabled style="width:75px" value="{{gameSkillPoints}}"></input>
                     </td>
                     <td>
-                        <button type = "button" onclick="openSheet(event)" style="width:50px; height:30px" title="Display Character Sheet" id="sheet_button" i icon class="fas fa-clipboard"></button>
+                        <button type = "button" onclick="openBio(event)" style="width:50px; height:30px" title="Display Bio Page" id="bio_button" i icon class="fas fa-portrait"></button>
                     </td>
                 </tr>
                 <tr>
@@ -101,10 +101,10 @@
     </div>
         {{#each data.aspects}}
             <div class="row">
-                <div class="column" style="float:left; width:25%; margin:auto; padding:2px; border:white solid 1px;">
-                    {{this.name}}
+                <div id="{{this.name}}" style="float:left; width:25%; margin:auto; padding:1px; border:white solid 2px;">
+                    <div name="aspect" id="{{this.name}} title="{{this.description}}">{{this.name}}</div>
                 </div>
-                <div class="column" style="float:left; width:75%; margin:auto; padding:0px; border:white solid 0px;">
+                <div class="column" style="float:left; width:75%; margin:auto; padding:1px; border:white solid 2px;">
                     <input type="text" id="{{this.name}}" style="background-color:lightsteelblue; color:black; font-family:Arial; width:375px; height:25px; padding:5" name="data.aspects.{{this.name}}.value" value="{{this.value}}"></input>
                 </div>
             </div>

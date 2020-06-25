@@ -75,6 +75,10 @@ class AspectSetup extends FormApplication{
     constructor(...args){
         super(...args);
     }
+
+    async _updateObject(event) {
+    }
+
     //Set up the default options for instances of this class
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
@@ -83,7 +87,7 @@ class AspectSetup extends FormApplication{
         options.width = "auto";
         options.height = "auto";
         options.title = `Setup character aspects for world ${game.world.title}`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "AspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
         return options;
@@ -104,11 +108,13 @@ class AspectSetup extends FormApplication{
         const deleteButton = html.find("button[id='deleteAspect']");
         const addButton = html.find("button[id='addAspect']");
         const selectBox = html.find("select[id='aspectListBox']");
+        const copyButton = html.find("button[id='copyAspect']");
 
         editButton.on("click", event => this._onEditButton(event, html));
         deleteButton.on("click", event => this._onDeleteButton(event, html));
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
+        copyButton.on("click", event => this._onCopyButton(event, html));
 
         Hooks.on('closeEditAspect',async () => {
             this.render(true);
@@ -116,6 +122,22 @@ class AspectSetup extends FormApplication{
     }
 
     //Here are the event listener functions.
+    async _onCopyButton(event,html){
+        let selectBox = html.find("select[id='aspectListBox']");
+        let name = selectBox[0].value;
+        if (name=="" || name == undefined){
+            ui.notifications.error("Select an aspect to copy first");
+        } else {
+            let aspects=await game.settings.get("ModularFate", "aspects");
+            let aspect = duplicate(aspects[name]);
+            name = aspect.name+" copy";
+            aspect.name=name;
+            aspects[name]=aspect;
+            await game.settings.set("ModularFate","aspects",aspects);
+            this.render(true);
+        }
+    }
+    
     async _onEditButton(event,html){
         //Launch the EditAspect FormApplication.
         let aspects = game.settings.get("ModularFate","aspects");       
@@ -172,6 +194,7 @@ class EditAspect extends FormApplication{
         let aspects=game.settings.get("ModularFate","aspects");
         let newAspect = {"name":name, "description":description};
         var existing = false;
+
         //First check if we already have an aspect by that name, or the aspect is blank; if so, throw an error.
         if (name == undefined || name ==""){
             ui.notifications.error("You cannot have an aspect with a blank name.")
@@ -181,7 +204,11 @@ class EditAspect extends FormApplication{
                 existing = true;
             }
         }
-        if (!existing){            
+        if (!existing){
+            if (this.aspect.name != ""){
+                //That means the name has been changed. Delete the original aspect and replace it with this one.
+                delete aspects[this.aspect.name]
+            }            
             aspects[name]=newAspect;
         }
         await game.settings.set("ModularFate","aspects",aspects);

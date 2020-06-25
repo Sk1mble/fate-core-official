@@ -136,7 +136,7 @@ class SkillSetup extends FormApplication{
     }
     //The function that returns the data model for this window. In this case, we only need the game's skill list.
     getData(){
-        this.skills=game.settings.get("ModularFate","skills");
+        this.skills=ModularFateConstants.sortByKey(game.settings.get("ModularFate","skills"))
         const templateData = {
            skills:this.skills
         }
@@ -149,13 +149,14 @@ class SkillSetup extends FormApplication{
         const editButton = html.find("button[id='editSkill']");
         const deleteButton = html.find("button[id='deleteSkill']");
         const addButton = html.find("button[id='addSkill']");
+        const copyButton = html.find("button[id='copySkill']");
         const selectBox = html.find("select[id='skillListBox']");
 
         editButton.on("click", event => this._onEditButton(event, html));
         deleteButton.on("click", event => this._onDeleteButton(event, html));
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
-
+        copyButton.on("click", event => this._onCopyButton(event, html));
         Hooks.on('closeEditSkill',async () => {
             this.render(true);
         })
@@ -179,6 +180,21 @@ class SkillSetup extends FormApplication{
         let skills=game.settings.get("ModularFate","skills");
         if (skills[slb] != undefined){
             delete skills[slb];
+            await game.settings.set("ModularFate","skills",skills);
+            this.render(true);
+        }
+    }
+    async _onCopyButton(event,html){
+        let selectBox = html.find("select[id='skillListBox']");
+        let name = selectBox[0].value;
+        if (name=="" || name == undefined){
+            ui.notifications.error("Select a skill to copy first");
+        } else {
+            let skills=await game.settings.get("ModularFate", "skills");
+            let skill = duplicate(skills[name]);
+            name = skill.name+" copy";
+            skill.name=name;
+            skills[name]=skill;
             await game.settings.set("ModularFate","skills",skills);
             this.render(true);
         }
@@ -222,7 +238,11 @@ class EditSkill extends FormApplication{
                     existing = true;
                 }
             }
-            if (!existing){            
+            if (!existing){  
+                if (this.skill.name != ""){
+                    //That means the name has been changed. Delete the original aspect and replace it with this one.
+                    delete skills[this.skill.name]
+                }                      
                 skills[f.name]=newSkill;
             }
             await game.settings.set("ModularFate","skills",skills);

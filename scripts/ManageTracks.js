@@ -204,18 +204,36 @@ class EditTracks extends FormApplication {
         const edit_linked_skillsButton = html.find("button[id='edit_linked_skills']");
         const deleteTrackButton = html.find("button[id='delete_track']");
         const edit_track_name=html.find("input[id='edit_track_name']");
+        const copy_track = html.find("button[id='copy']");
         
         saveTrackButton.on("click", event => this._onSaveTrackButton(event, html));
         track_select.on("click", event => this._track_selectClick(event, html));
         edit_track_name.on("change", event => this._edit_track_name_change(event, html));
         edit_linked_skillsButton.on("click", event => this._edit_linked_skillsButtonClick(event,html));
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
+        copy_track.on("click", event => this._onCopyTrackButton(event, html));
   
         Hooks.on('closeEditTrack',async () => {
             this.render(true);
         })
     }
     //Here are the event listener functions.
+    async _onCopyTrackButton (event, html){
+        let edit_track_name=html.find("input[id='edit_track_name']");
+        let name = edit_track_name[0].value;
+        console.log(edit_track_name[0].value)
+        if (name == "" || name == "New Track"){
+            ui.notifications.error("Select a track to copy first");
+        }
+        else {
+            let track = duplicate(this.tracks[name]);
+            track.name = track.name+" copy"
+            this.tracks[track.name]=track;
+            await game.settings.set("ModularFate","tracks",this.tracks);
+            this.render(true);
+        }
+    }
+
     async _edit_track_name_change(event, html){
         let name = event.target.value;
         let track = this.tracks[name];
@@ -260,6 +278,7 @@ class EditTracks extends FormApplication {
             
         } else {
             let track=this.tracks[name];
+            this.track=track;
             document.getElementById("edit_track_name").value=track.name;
             document.getElementById("edit_track_description").value=track.description;
             document.getElementById("edit_track_universal").checked=track.universal;
@@ -310,6 +329,9 @@ class EditTracks extends FormApplication {
             }
         }
         if (!existing){
+            if (this.track != undefined){
+                delete this.tracks[this.track.name]
+            }
             let newTrack = {
                 "name":name,
                 "category":this.category,
