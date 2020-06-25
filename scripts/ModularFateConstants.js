@@ -434,4 +434,28 @@ class ModularFateConstants {
             }).render(true);
         });
     }
+    static sortByKey(json_object){
+        let ordered_object = {}
+        let unordered_object = json_object;
+        Object.keys(unordered_object).sort().forEach(function(key) {ordered_object[key] = unordered_object[key];})
+        return ordered_object;
+    }
+
+    static sortByRank(json_object){
+        //Sort a JSON object by rank.
+        let toSort = []
+        for (let x in json_object){
+            toSort.push(json_object[x])
+        }
+        this.sort_rank(toSort);
+        return toSort;
+    }
+    //Sort an array of JSON objects by object.name
+    static async sort_name(array){
+        array.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);//This actually properly sorts by name; case sensitive.
+    }
+    //Sort an array of JSON objects by object.rank
+    static async sort_rank(array){
+        array.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
+    }
 }

@@ -1,19 +1,15 @@
-<form class="editable" onsubmit="event.preventDefault();">
-    <table>
-        <tbody>
-            {{#each character_skills}}
-                <tr>
-                    <td>
-                        <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="width:50px; height:25px;"></input>
-                    </td>
-                    <td>
-                        <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button" style="text-align:left">{{this.name}}</button>
-                    </td>
-                </tr>
-            {{/each}}
-            <tr>                
-                <td colspan="2"><button type="button" id="save_player_skills" style="width:100px; height:30px" tabindex="-1">Save</button><button type="button" id="sort" i icon class="fas fa-sort" title="Toggle sort by name/sort by rank. Save first to avoid losing changes." style="width:30px; height:30px" tabindex="-1"></button><button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="width:30px; height:30px" tabindex="-1" title="Manually edit player skills (GM only)"></button></td>
-            </tr>
-        </tbody>
-    </table>
+<form class="editable" onsubmit="event.preventDefault();" style="background: white;">
+<div style="overflow-y:scroll;">
+    {{#each character_skills}}
+    <div class="row">
+        <div class="column" style="float:left; width:20%; margin:auto; padding:3px;">
+            <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="width:50px; height:35px; text-align:left"></input>
+        </div> 
+        <div style="float:left; width:80%; margin:auto; padding:3px">
+            <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button" style="text-align:left; width:200px; height:35px; background-color: lightsteelblue;">{{this.name}}</button>
+        </div>
+        {{/each}}
+    </div>
+    <div style="float:left; margin:auto; padding: 3px"><button type="button" id="save_player_skills" style="float:left; width:50px; height:35px" tabindex="-1">Save</button><button type="button" id="sort" i icon class="fas fa-sort" title="Toggle sort by name/sort by rank." style="width:35px; height:35px" tabindex="-1"></button>{{#if isGM}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="width:35px; height:35px" tabindex="-1" title="Manually edit player skills (GM only)"></button>{{/if}}</div>
+</div>
 </form>

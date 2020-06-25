@@ -11,6 +11,8 @@ class EditPlayerSkills extends FormApplication{
                 this.firstRun=true;
                 this.player_skills=duplicate(this.object.data.data.skills);
                 this.sortByRank = true;
+                this.temp_presentation_skills=[];
+                this.sorted = false;
     }
 
     //Set up the default options for instances of this class
@@ -50,10 +52,9 @@ class EditPlayerSkills extends FormApplication{
             if (this.object.isToken){
                 //This next line actually forces the whole set of skills to actorData rather than just a diff with the original actor.
                 //Remember this formulation! I'll need it for updating the tracks and aspects of tokens as well.
-                await this.object.token.update({["actorData.data.skills"]: this.player_skills});
-                //await this.object.update({"data.skills":this.player_skills});
+                await this.object.token.update({["actorData.data.skills"]:this.player_skills}); //I tried the this.object.token.actor.update method, but it stored a diff rather than entirely overrode actorData.
+                //await this.object.update({"data.skills":this.player_skills}); //This is redundant because data just resolves to actorData for a token, this will diff and cause the token to update with the original.
                 this.player_skills=duplicate(this.object.token.data.actorData.data.skills);
-                console.log(this.player_skills)
             } else {
                 await this.object.update({"data.skills":this.player_skills}); 
                 this.player_skills=duplicate(this.object.data.data.skills);
@@ -92,8 +93,11 @@ class EditPlayerSkills extends FormApplication{
                             skill.rank=0;
                             p_skills[skill.name]=skill;
                         })
-
-                    await this.object.update({"data.skills":p_skills});
+                    if (this.object.isToken){
+                        await this.object.token.update({["actorData.data.skills"]:this.p_skills});
+                    }else {
+                        await this.object.update({"data.skills":p_skills});
+                    }
                     this.player_skills=duplicate(p_skills);
                     let added_skill_notification = `<div>Initialised the character with these skills from the skill list:<p></p>`
                     for (let i = 0; i<skills_to_add.length; i++){
@@ -117,7 +121,7 @@ class EditPlayerSkills extends FormApplication{
                 //0=11 & 10; 1=10&9; 2=9&8; 3=8&7; 4=7&6; 5=6&5; 6=5&4; 7=4&3; 8=3&2; 9=2&1
                 let columnErrors=new Array(10);
                 let columnErrorText = `<div><p/>The violations are as follows:`
-                for (let i = 11; i>0; i--){
+                for (let i = 11; i>1; i--){
                     if (ranks[i]>ranks[i-1]){
                         skillColumnViolated = true;
                         columnErrors[11-i]=true;
@@ -169,24 +173,32 @@ class EditPlayerSkills extends FormApplication{
 //The function that returns the data model for this window. In this case, we need the character's sheet data/and the skill list.
     async getData(){
         this.player_skills=duplicate(this.object.data.data.skills);
+        this.player_skills=ModularFateConstants.sortByKey(this.player_skills);
 
         if (this.firstRun){
             await this.checkSkills(this.player_skills);
             this.firstRun=false;
         }
         let presentation_skills=[];
-        for (let x in this.player_skills){
-            presentation_skills.push({"name":x,"rank":this.player_skills[x].rank});
+
+        if (this.temp_presentation_skills.length > 0){
+            presentation_skills=duplicate(this.temp_presentation_skills);
+            this.temp_presentation_skills=[];
+        } else {
+            for (let x in this.player_skills){
+                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank});
+            }
         }
-        if (this.sortByRank){//sort by rank
-            presentation_skills.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
-        } else { //sort by name
-            presentation_skills.sort((a, b) => b.name - a.name);
+        
+        if (!this.sorted){
+            this.sort_name(presentation_skills);
+            this.sorted = true;
         }
 
         const templateData = {
             skill_list:game.settings.get("ModularFate","skills"),
-            character_skills:presentation_skills
+            character_skills:presentation_skills,
+            isGM:game.user.isGM
          }
         return templateData;
     }
@@ -207,9 +219,33 @@ class EditPlayerSkills extends FormApplication{
             this.render(false);
         });    
     }
+
+    async sort_name(array){
+        array.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);//This actually properly sorts by name; case sensitive.
+    }
+
+    async sort_rank(array){
+        array.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
+    }
+
     async _onSortButton(event, html){
+        this.temp_presentation_skills=[];
+        let tps = [];
+        let inputs = html.find("input[type='number']");
+        
+        for (let i = 0 ; i < inputs.length; i++){ 
+            let skill_name = inputs[i].id.split("_")[0];
+            let rank = parseInt(inputs[i].value);
+            tps.push({"name":skill_name,"rank":rank})
+        }
+        if (this.sortByRank) {
+            this.sort_rank(tps);
+        } else {
+            this.sort_name(tps);
+        }
+        this.temp_presentation_skills = tps;
+        await this.render(false);
         this.sortByRank=!this.sortByRank;
-        this.render(false);
     }
 
     async _onEditButton (event, html){
@@ -347,7 +383,11 @@ class EditGMSkills extends FormApplication{
                     }
                 } else {
                     let sk = `-=${s}`
-                    await this.object.update({"data.skills": {[`${sk}`]:null}})
+                    if (this.object.isToken){
+                        await this.object.token.update({["actorData.data.skills"]:{[`${sk}`]:null}});
+                    } else {
+                        await this.object.update({"data.skills": {[`${sk}`]:null}})
+                    }
                 }
             }
         } 
@@ -360,7 +400,7 @@ class EditGMSkills extends FormApplication{
             if (response=="yes"){
                 cannotDelete.forEach(cd=> {
                     let sk = `-=${cd.name}`;
-                    (async ()=> {await this.object.update({"data.skills": {[`${sk}`]:null}})})();
+                    (async ()=> {await this.object.token.update({["actorData.data.skills"]:{[`${sk}`]:null}})})();
                     (async ()=> {await actor.update({"data.skills": {[`${sk}`]:null}})})();
                 })
             }
@@ -369,7 +409,11 @@ class EditGMSkills extends FormApplication{
             canDelete.forEach(skill => {
                 let sk = `-=${skill.name}`;
                 async function update(object) {
-                    await object.update({"data.skills":{[`${sk}`]:null}})
+                    if (this.object.isToken){
+                        await this.object.token.update({["actorData.data.skills"]:{[`${sk}`]:null}});
+                    } else {
+                        await object.update({"data.skills":{[`${sk}`]:null}})
+                    }
                 }
                 update(this.object)
             })
@@ -382,7 +426,11 @@ class EditGMSkills extends FormApplication{
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
                     skill.rank=0;
-                    await this.object.update({"data.skills":{[w]:skill}})
+                    if (this.object.isToken){
+                        await this.object.token.update({["actorData.data.skills"]:{[w]:skill}})
+                    } else {
+                        await this.object.update({"data.skills":{[w]:skill}})
+                    }
                 }
             }
         }    
@@ -392,7 +440,6 @@ class EditGMSkills extends FormApplication{
     async _adHocButton(event, html){
         let name = html.find("input[id='ad_hoc_input']")[0].value
         var newSkill=undefined;
-        console.log(name);
         if (name!= undefined && name !=""){
             newSkill= {
                 "name":name,
@@ -407,7 +454,11 @@ class EditGMSkills extends FormApplication{
             }
         }
         if (newSkill != undefined){
-            await this.object.update({"data.skills": {[name]:newSkill}})
+            if (this.object.isToken){
+                await this.object.token.update({["actorData.data.skills"]:{[name]:newSkill}});
+            } else {
+                await this.object.update({"data.skills": {[name]:newSkill}})    
+            }
             this.render(false);
         }
     }

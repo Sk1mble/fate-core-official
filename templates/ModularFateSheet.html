@@ -1,26 +1,139 @@
-<form style="background: white; width:1000px">
-    <table style="background:white; border:0">
+<form style="background: white; width:1000px">  
+    <table style="background-color: white; border:0px; padding:0px;">
         <tr>
-            <td style="vertical-align:top; width:110px">
+            <td style="width:100px">
                 <img width="100" height="auto" style="border:0" id="avatar" data-edit="img" src="{{actor.img}}"></img>
             </td>
-            <td style="vertical-align:top; align-self:auto">
-                <h1><input type="text" name="name" value="{{actor.name}}" style="border:0; color:black; background:white"></h1>
-            </td>
-        </tr>
-        {{#each data.skills}}
-        <tr>
-            <td>
-                <li>{{this.name}} </li>
+            <td style="width:375px">
+                <h2><input type="text" name="name" value="{{actor.name}}" style="border:0; color:black; background:white; height:50px;"></h2>
             </td>
             <td>
-                {{this.rank}}   ({{lookup ../ladder this.rank}})
+                <table style="background-color: white; border:0px; padding:2px;">
+                <tr>
+                    <td>
+                        <b>Refresh: </b>
+                    </td>
+                    <td>
+                        <input type="number" name="data.details.fatePoints.refresh" style="width:75px" value="{{data.details.fatePoints.refresh}}"></input>
+                    </td>
+                    <td>
+                        <b>Skill Points: </b>
+                    </td>
+                    <td>
+                        <input type="number" name="skillTotal" disabled style="width:75px" value="{{skillTotal}}"></input>
+                    </td>
+                    <td>
+                        <button type = "button" onclick="openBio(event)" style="width:50px; height:30px" title="Display Bio Page" id="bio_button" i icon class="fas fa-portrait"></button>
+                    </td>
+                    <td>    
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Current: </b>
+                    </td>
+                    <td>
+                        <input type="number" name="data.details.fatePoints.current" style="width:75px" value="{{data.details.fatePoints.current}}"></input>
+                    </td>
+                    <td>
+                        <b>Game Skill Total: </b>
+                    </td>
+                    <td>
+                        <input type="number" name="gameSkillPoints" skillPoints" disabled style="width:75px" value="{{gameSkillPoints}}"></input>
+                    </td>
+                    <td>
+                        <button type = "button" onclick="openSheet(event)" style="width:50px; height:30px" title="Display Character Sheet" id="sheet_button" i icon class="fas fa-clipboard"></button>
+                    </td>
+                </tr>
+            </table>
             </td>
-        </tr>
-        {{/each}}
-        <tr>
-            <td colspan="2">
-                <button type="button" id="edit_player_skills" i icon class="fas fa-cogs" style="width:auto; height:50px"> Skills </button></td>
         </tr>
     </table>
+
+<div id = "sheet" class="tabcontent" style="display:block;">
+<div style="display:flex; flex-flow:row wrap">
+    <div style="overflow-y:scroll; width:400px; height:200px">      
+        <button type="button" id="edit_player_skills" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px">
+        </button>
+        <button type="button" id="sort_player_skills" i icon class="fas fa-sort" style="width:auto; height:25px; float:left; padding:5px">
+        </button>
+        <div style="width:350px"><h2>Skills</h2></div>
+        {{#if sortByRank}}
+        {{#each sorted_by_rank}}
+            <div class="row">
+                <div class="column" style="float:left; width:10%; margin:auto; padding:2px; border:white solid 2px;">{{this.rank}}</div>
+                <div class="column" style="float:left; width:30%; margin:auto; padding:2px; border:white solid 2px;">({{lookup ../ladder this.rank}})</div>
+                <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}</div>  
+            </div>
+        {{/each}}
+        {{else}}
+        {{#each ordered_skills}}
+            <div class="row">
+                <div class="column" style="float:left; width:10%; margin:auto; padding:2px; border:white solid 2x;">{{this.rank}}</div>
+                <div class="column" style="float:left; width:30%; margin:auto; padding:2px; border:white solid 2px;">({{lookup ../ladder this.rank}})</div>
+                <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:5px; border:white solid 3px;" id="{{this.name}}">{{this.name}}</div>  
+            </div>
+        {{/each}}
+        {{/if}}
+    </div>
+    <div style="overflow-y:scroll; width:550px; height:200px">
+    <div style="width:540px; float:left;">
+        {{#if GM}}
+            <button type="button" id="edit_player_aspects" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px">
+            </button>
+        {{/if}}
+    <h2>Aspects</h2>
+    </div>
+        {{#each data.aspects}}
+            <div class="row">
+                <div class="column" style="float:left; width:25%; margin:auto; padding:2px; border:white solid 1px;">
+                    {{this.name}}
+                </div>
+                <div class="column" style="float:left; width:75%; margin:auto; padding:0px; border:white solid 0px;">
+                    <input type="text" id="{{this.name}}" style="background-color:lightsteelblue; color:black; font-family:Arial; width:375px; height:25px; padding:5" name="data.aspects.{{this.name}}.value" value="{{this.value}}"></input>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+    <div style="width:540px; float:left;">
+        {{#if GM}}
+            <button type="button" id="edit_player_tracks" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px">
+            </button>
+        {{/if}}
+        <h2>Tracks</h2>
+    </div>
+</div>
+
+<script>
+    function openBio(event, name) {
+        let sheet=document.getElementById("sheet");
+        let bio=document.getElementById("bio");
+        sheet.style.display="none";
+        bio.style.display="block";
+    }
+    function openSheet(event, name){
+        let sheet=document.getElementById("sheet");
+        let bio=document.getElementById("bio");
+        sheet.style.display="block";
+        bio.style.display="none";
+    }
+</script>
+</div>
+
+<div id="bio" class="tabcontent" style="display:none;">
+<div>
+    <div style="width:20%">
+        <h1>Description:</h1>
+    </div>
+    <div style="width:80%">
+        <textarea rows="10" name="data.details.description.value" style="background-color:lightsteelblue; color:black; font-family:Arial;">{{data.details.description.value}}</textarea>
+    </div>
+    <div style="width:20%">
+        <h1>Biography:</h1>
+    </div>
+    <div style="width:80%">
+        <textarea rows="10" name="data.details.biography.value" style="background-color:lightsteelblue; color:black; font-family:Arial;">{{data.details.biography.value}}</textarea>
+    </div>
+</div>
+</div>
 </form>
