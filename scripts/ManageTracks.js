@@ -271,6 +271,7 @@ class EditTracks extends FormApplication {
             document.getElementById("edit_track_boxes").value=track.boxes;
             document.getElementById("edit_track_harm").value=track.harm_can_absorb;
             document.getElementById("edit_linked_skills").disabled=false;
+            document.getElementById("edit_track_paid").checked=track.paid;
         }
     }
 
@@ -285,6 +286,7 @@ class EditTracks extends FormApplication {
         let when_recovers = document.getElementById("edit_track_when_recovers").value;
         let boxes = parseInt(document.getElementById("edit_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_track_harm").value);
+        let paid = document.getElementById("edit_track_paid").checked;
 
         let existing = false;
         if (name == ""){
@@ -304,6 +306,7 @@ class EditTracks extends FormApplication {
                 track.recovery_conditions = when_recovers;
                 track.boxes=boxes;
                 track.harm_can_absorb=harm;
+                track.paid = paid;
             }
         }
         if (!existing){
@@ -318,7 +321,8 @@ class EditTracks extends FormApplication {
                 "when_marked":when_marked,
                 "recovery_conditions":when_recovers,
                 "boxes":boxes,
-                "harm_can_absorb":harm
+                "harm_can_absorb":harm,
+                "paid":paid
             }
             this.tracks[name]=newTrack;
         }

@@ -11,8 +11,8 @@
 						"value": ""
 					},
 					"fatePoints": {
-						"current": 3,
-						"refresh": 3
+						"current":"",
+						"refresh":""
 					}
 				},
 				"tracks":{},

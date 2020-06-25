@@ -29,6 +29,16 @@ Hooks.once('init', async function () {
             game.settings.set("ModularFate","skillTotal",20);
         }
 
+    game.settings.register("ModularFate","freeStunts", {
+        name:"Free Stunts",
+        hint:"How many free stunts do characters start with?",
+        scope:"world",
+        config:true,
+        type:Number,
+        restricted:true,
+        default:3
+    })
+
     game.settings.register("ModularFate","enforceColumn", {
         name: "Enforce Column?",
         hint: "Should the player skill editor enforce a skill column?",
