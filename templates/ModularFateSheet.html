@@ -1,10 +1,10 @@
-<form style="background: white; width:1000px">  
+<form style="background: white; width:850px">  
     <table style="background-color: white; border:0px; padding:0px;">
         <tr>
             <td style="width:100px">
                 <img width="100" height="auto" style="border:0" id="avatar" data-edit="img" src="{{actor.img}}"></img>
             </td>
-            <td style="width:375px">
+            <td style="width:275px">
                 <h2><input type="text" name="name" value="{{actor.name}}" style="border:0; color:black; background:white; height:50px;"></h2>
             </td>
             <td>
@@ -65,59 +65,94 @@
         </tr>
     </table>
 
-<div id = "sheet" class="tabcontent" style="display:block;">
-<div style="display:flex; flex-flow:row wrap">
-    <div style="overflow-y:scroll; width:400px; height:200px">      
-        <button type="button" id="edit_player_skills" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px">
-        </button>
-        <button type="button" id="sort_player_skills" i icon class="fas fa-sort" style="width:auto; height:25px; float:left; padding:5px">
-        </button>
-        <div style="width:350px"><h2>Skills</h2></div>
-        {{#if sortByRank}}
-        {{#each sorted_by_rank}}
-            <div class="row">
-                <div class="column" style="float:left; width:10%; margin:auto; padding:2px; border:white solid 2px;">{{this.rank}}</div>
-                <div class="column" style="float:left; width:30%; margin:auto; padding:2px; border:white solid 2px;">({{lookup ../ladder this.rank}})</div>
-                <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}</div>  
-            </div>
-        {{/each}}
-        {{else}}
-        {{#each ordered_skills}}
-            <div class="row">
-                <div class="column" style="float:left; width:10%; margin:auto; padding:2px; border:white solid 2x;">{{this.rank}}</div>
-                <div class="column" style="float:left; width:30%; margin:auto; padding:2px; border:white solid 2px;">({{lookup ../ladder this.rank}})</div>
-                <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:5px; border:white solid 3px;" id="{{this.name}}">{{this.name}}</div>  
-            </div>
-        {{/each}}
-        {{/if}}
-    </div>
-    <div style="overflow-y:scroll; width:550px; height:200px">
-    <div style="width:540px; float:left;">
-        {{#if GM}}
-            <button type="button" id="edit_player_aspects" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px">
-            </button>
-        {{/if}}
-    <h2>Aspects</h2>
-    </div>
-        {{#each data.aspects}}
-            <div class="row">
-                <div id="{{this.name}}" style="float:left; width:25%; margin:auto; padding:1px; border:white solid 2px;">
-                    <div name="aspect" id="{{this.name}} title="{{this.description}}">{{this.name}}</div>
+<div name = "character_sheet">
+    <div id = "sheet" class="tabcontent" style="display:block;">
+        <div style="display:flex; flex-flow:row wrap" name = "skills_aspects">
+            <div name="skills_block">
+                <button type="button" id="edit_player_skills" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px"></button>
+                <button type="button" id="sort_player_skills" i icon class="fas fa-sort" style="width:auto; height:25px; float:left; padding:5px"></button>
+                <div name = "skills_header" style="width:350px"><h2>Skills</h2></div>
+                <div name = "skills_body" style="overflow-y:scroll; width:400px; height:250px">
+                {{#if sortByRank}}
+                {{#each sorted_by_rank}}
+                    <div class = "row">
+                        <div class="column" style="float:left; width:10%; margin:auto; padding:0px; border:white solid 1px;">{{this.rank}}</div>
+                        <div class="column" style="float:left; width:30%; margin:auto; padding:0px; border:white solid 1px;">({{lookup ../ladder this.rank}})</div>
+                        <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}</div>
+                    </div>
+                {{/each}}
+                {{else}}
+                {{#each ordered_skills}}    
+                <div class="row">
+                    <div class="column" style="float:left; width:10%; margin:auto; padding:0px; border:white solid 1px;">{{this.rank}}</div>
+                    <div class="column" style="float:left; width:30%; margin:auto; padding:0px; border:white solid 1px;">({{lookup ../ladder this.rank}})</div>
+                    <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}</div>
                 </div>
-                <div class="column" style="float:left; width:75%; margin:auto; padding:1px; border:white solid 2px;">
-                    <input type="text" id="{{this.name}}" style="background-color:lightsteelblue; color:black; font-family:Arial; width:375px; height:25px; padding:5" name="data.aspects.{{this.name}}.value" value="{{this.value}}"></input>
-                </div>
-            </div>
-        {{/each}}
-    </div>
-    <div style="width:540px; float:left;">
-        {{#if GM}}
-            <button type="button" id="edit_player_tracks" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px">
-            </button>
-        {{/if}}
-        <h2>Tracks</h2>
-    </div>
-</div>
+                {{/each}}
+                {{/if}}
+            </div><!--End of skills body-->
+        </div><!--end of skills block-->
+        <div name = "aspects_block" style="float:left">
+            <div name = "aspects_header" style="width:350px"><h2>Aspects</h2></div>
+            <div name = "aspects_body" style="overflow-y:scroll; width:400px; height:250px">
+                {{#each data.aspects}}
+                <div class="row">
+                    <div name="aspect" style="float:left, width 25%; margin:auto; padding:1px; border:white solid 2px" font-family:Arial; title="{{this.description}}">
+                            <div id="{{this.name}}"" name="{{this.name}}">{{this.name}}</div>
+                            <input type="text" style="background-color: lightsteelblue"{{this.name}}" name="data.aspects.{{this.name}}.value" value="{{this.value}}"></input>
+                        </div>
+                </div><!--End of a row-->
+                {{/each}}
+            </div><!--End of aspects body-->
+        </div><!--End of aspects block-->
+    </div><!--end of skills_aspects-->
+
+    <!--------------------Begin tracks and stunts section-->
+    <div style="display:flex; flex-flow:row wrap" name = "tracks_stunts"><!--Begin tracks & stunts section-->
+        <div name = "tracks block"><!--Begin the tracks block-->
+            <div name="tracks_header" style="width:350px">{{#if GM}}<button type="button" id="edit_player_tracks" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px"></button>{{/if}}<h2>Tracks</h2></div>
+            <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:250px">
+                <table>
+                    {{#each tracks}}{{#if this.enabled}}
+                    <tr>
+                        <td>
+                            {{this.name}}
+                        </td>
+                        <td>
+                            {{#each this.box_values}}
+                            {{#if this}}<button type="button" name = "box" id="{{../name}}_{{@index}}_false" i icon class="fas fa-check" style="width:25px; height:25px; float:left; padding:5px"></button>{{else}}                          
+                            <button type="button" name="box" id="{{../name}}_{{@index}}_true" style="width:25px; height:25px; float:left; padding:5px"></button>{{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}{{/if}}{{/each}}
+                </table>
+            </div><!--end of tracks body-->
+        </div><!--End of tracks block-->
+        <div name="stunts_block" style="float:left"> <!--Begin the stunts block-->
+            <div name = "stunts_header" style="width:350px">{{#if GM}}<button type="button" id="edit_player_stunts" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px"></button>{{/if}}<h2>Stunts</h2></div>
+            <div name = "stunts_body" style="overflow-y:scroll; width:400px; height:250px">
+            </div><!--End of stunt body-->
+        </div><!-- end of Stunts block-->
+    </div><!--end of Tracks and stunts section-->
+</div> <!--End of sheet tab-->
+
+<div id="bio" class="tabcontent" style="display:none;">
+    <div>
+        <div style="width:20%">
+            <h1>Description:</h1>
+        </div>
+        <div style="width:80%">
+            <textarea rows="10" name="data.details.description.value" style="background-color:lightsteelblue; color:black; font-family:Arial;">{{data.details.description.value}}</textarea>
+        </div>
+        <div style="width:20%">
+            <h1>Biography:</h1>
+        </div>
+        <div style="width:80%">
+            <textarea rows="10" name="data.details.biography.value" style="background-color:lightsteelblue; color:black; font-family:Arial;">{{data.details.biography.value}}</textarea>
+        </div>
+    </div><!--end of bio block-->
+    </div><!--End of bio tab-->
+</div><!--end of character sheet-->
 
 <script>
     function openBio(event, name) {
@@ -133,22 +168,4 @@
         bio.style.display="none";
     }
 </script>
-</div>
-
-<div id="bio" class="tabcontent" style="display:none;">
-<div>
-    <div style="width:20%">
-        <h1>Description:</h1>
-    </div>
-    <div style="width:80%">
-        <textarea rows="10" name="data.details.description.value" style="background-color:lightsteelblue; color:black; font-family:Arial;">{{data.details.description.value}}</textarea>
-    </div>
-    <div style="width:20%">
-        <h1>Biography:</h1>
-    </div>
-    <div style="width:80%">
-        <textarea rows="10" name="data.details.biography.value" style="background-color:lightsteelblue; color:black; font-family:Arial;">{{data.details.biography.value}}</textarea>
-    </div>
-</div>
-</div>
 </form>
