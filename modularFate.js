@@ -18,19 +18,38 @@ import { FAECharacterSheet } from "./module/actor/FaeSheet.js";
 import { CondensedCharacterSheet } from "./module/actor/CondensedSheet.js";
 import { ItemSheetFATE } from "./module/item/ItemSheet.js";
 import { ExtraSheet } from "./module/item/ExtraSheet.js";
+import { ModularFateCharacter} from "./module/actor/ModularFateCharacter.js"
 */
 /* -------------------------------- */
 /*	System initialization			*/
 /* -------------------------------- */
 
-var style = `style="background: white; color: black; font-family:Arial;"`
-var inboxStyle= `style="background: white; color: black; font-family:Arial; width: 100px; height:50px;"`
+import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
 
 Hooks.once('init', async function () {
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     console.log(`Initializing Modular Fate`);
+    Actors.unregisterSheet('core', ActorSheet);
+    Actors.registerSheet("ModularFate", ModularFateCharacter, { types: ["ModularFate"], makeDefault: true });
+
+    //Register a setting for the game's current Refresh total
+    game.settings.register("ModularFate", "refreshTotal", {
+        name: "Refresh Total",
+        hint: "This is the current Refresh total for characters in this world.",
+        scope: "world",
+        config: true,
+        type: Number
+    });
+    //Initialise if not yet set
+    if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
+            game.settings.set("ModularFate","refreshTotal",3);
+    }
+
+    //Register a setting for the game's Issues?
 
     /*
+
+    //register a setting for the game's current refresh
     CONFIG.FATE = FATE;
     await preloadHandlebarsTemplates();
     // Register Actor sheets

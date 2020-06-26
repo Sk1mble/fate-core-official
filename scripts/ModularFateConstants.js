@@ -434,6 +434,24 @@ class ModularFateConstants {
             }).render(true);
         });
     }
+
+    static updateText(prompt, textToUpdate){
+    return new Promise(resolve => {
+        new Dialog({
+            title: prompt, 
+            content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:Arial; width:400px; background-color:lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
+            buttons: {
+                ok: {
+                    label: "Save",
+                    callback: () => {
+                        resolve(document.getElementById("get_text_box").value)
+                    }
+                }
+            },
+        }).render(true);
+    });
+    }
+
     static sortByKey(json_object){
         let ordered_object = {}
         let unordered_object = json_object;
