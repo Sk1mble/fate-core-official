@@ -49,16 +49,7 @@ class EditPlayerSkills extends FormApplication{
         if (!game.user.isGM && isPlayer && !canSave){
             ui.notifications.error("Unable to save because this character violates skill cap or skill column enforcement.")
         } else {
-            if (this.object.isToken){
-                //This next line actually forces the whole set of skills to actorData rather than just a diff with the original actor.
-                //Remember this formulation! I'll need it for updating the tracks and aspects of tokens as well.
-                await this.object.token.update({["actorData.data.skills"]:this.player_skills}); //I tried the this.object.token.actor.update method, but it stored a diff rather than entirely overrode actorData.
-                //await this.object.update({"data.skills":this.player_skills}); //This is redundant because data just resolves to actorData for a token, this will diff and cause the token to update with the original.
-                this.player_skills=duplicate(this.object.token.data.actorData.data.skills);
-            } else {
-                await this.object.update({"data.skills":this.player_skills}); 
-                this.player_skills=duplicate(this.object.data.data.skills);
-            }
+            await this.object.update({"data.skills":this.player_skills}); 
             ui.notifications.info("Character skills saved.")   
         }
     }
@@ -93,18 +84,9 @@ class EditPlayerSkills extends FormApplication{
                             skill.rank=0;
                             p_skills[skill.name]=skill;
                         })
-                    if (this.object.isToken){
-                        await this.object.token.update({["actorData.data.skills"]:this.p_skills});
-                    }else {
                         await this.object.update({"data.skills":p_skills});
-                    }
+            
                     this.player_skills=duplicate(p_skills);
-                    let added_skill_notification = `<div>Initialised the character with these skills from the skill list:<p></p>`
-                    for (let i = 0; i<skills_to_add.length; i++){
-                        added_skill_notification +=`<li>${skills_to_add[i].name}</li>`
-                    }
-                    added_skill_notification += "</div>";
-                    await ModularFateConstants.awaitOKDialog("Detected missing skills",added_skill_notification)
                 }
             }
             
@@ -383,11 +365,7 @@ class EditGMSkills extends FormApplication{
                     }
                 } else {
                     let sk = `-=${s}`
-                    if (this.object.isToken){
-                        await this.object.token.update({["actorData.data.skills"]:{[`${sk}`]:null}});
-                    } else {
-                        await this.object.update({"data.skills": {[`${sk}`]:null}})
-                    }
+                    await this.object.update({"data.skills": {[`${sk}`]:null}})
                 }
             }
         } 
@@ -426,11 +404,7 @@ class EditGMSkills extends FormApplication{
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
                     skill.rank=0;
-                    if (this.object.isToken){
-                        await this.object.token.update({["actorData.data.skills"]:{[w]:skill}})
-                    } else {
-                        await this.object.update({"data.skills":{[w]:skill}})
-                    }
+                    await this.object.update({"data.skills":{[w]:skill}})
                 }
             }
         }    
@@ -454,11 +428,7 @@ class EditGMSkills extends FormApplication{
             }
         }
         if (newSkill != undefined){
-            if (this.object.isToken){
-                await this.object.token.update({["actorData.data.skills"]:{[name]:newSkill}});
-            } else {
-                await this.object.update({"data.skills": {[name]:newSkill}})    
-            }
+            await this.object.update({"data.skills": {[name]:newSkill}})  
             this.render(false);
         }
     }
