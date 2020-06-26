@@ -23,7 +23,7 @@ class EditPlayerSkills extends FormApplication{
         options.width = "auto";
         options.height = "auto";
         options.title = `Character Skill Editor`;
-        options.closeOnSubmit = false;
+        options.closeOnSubmit = true;
         options.id = "PlayerSkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;
         return options;

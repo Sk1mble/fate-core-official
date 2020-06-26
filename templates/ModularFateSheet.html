@@ -66,13 +66,11 @@
     </table>
 
 <div name = "character_sheet">
-    <div id = "sheet" class="tabcontent" style="display:block;">
+    <div id = "sheet" class="tabcontent" style="display:block; font-size:small">
         <div style="display:flex; flex-flow:row wrap" name = "skills_aspects">
-            <div name="skills_block">
-                <button type="button" id="edit_player_skills" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px"></button>
-                <button type="button" id="sort_player_skills" i icon class="fas fa-sort" style="width:auto; height:25px; float:left; padding:5px"></button>
-                <div name = "skills_header" style="width:350px"><h2>Skills</h2></div>
-                <div name = "skills_body" style="overflow-y:scroll; width:400px; height:250px">
+            <div name="skills_block" title="Click a skill to roll it; right click anywhere here to toggle sorting by rank and sorting by name; double click on the skill ranks to open the skills editor">
+                <div name = "skills_header" style="width:350px"><b>Skills</b></div>
+                <div name = "skills_body" style="overflow-y:scroll; width:400px; height:250px; border:lightsteelblue; border-width:2px; border-style:solid">
                 {{#if sortByRank}}
                 {{#each sorted_by_rank}}
                     <div class = "row">
@@ -92,9 +90,9 @@
                 {{/if}}
             </div><!--End of skills body-->
         </div><!--end of skills block-->
-        <div name = "aspects_block" style="float:left">
-            <div name = "aspects_header" style="width:350px"><h2>Aspects</h2></div>
-            <div name = "aspects_body" style="overflow-y:scroll; width:400px; height:250px">
+        <div name = "aspects_block" style="float:left" title="Double-click on an aspect name to change the name and description">
+            <div name = "aspects_header" style="width:350px"><b>Aspects</b></div>
+            <div name = "aspects_body" style="overflow-y:scroll; width:400px; height:250px; border:lightsteelblue; border-width:2px; border-style:solid">
                 {{#each data.aspects}}
                 <div class="row">
                     <div name="aspect" style="float:left, width 25%; margin:auto; padding:1px; border:white solid 2px" font-family:Arial; title="{{this.description}}">
@@ -109,28 +107,30 @@
 
     <!--------------------Begin tracks and stunts section-->
     <div style="display:flex; flex-flow:row wrap" name = "tracks_stunts"><!--Begin tracks & stunts section-->
-        <div name = "tracks block"><!--Begin the tracks block-->
-            <div name="tracks_header" style="width:350px">{{#if GM}}<button type="button" id="edit_player_tracks" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px"></button>{{/if}}<h2>Tracks</h2></div>
-            <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:250px">
-                <table>
+        <div name = "tracks_block" {{#if GM}}title="Double-click to open the Tracks Editor"{{/if}}><!--Begin the tracks block-->
+            <div name="tracks_header" style="width:350px"><b>Tracks</b></div>
+            <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:auto; max-height:500; border:lightsteelblue; border-width:2px; border-style:solid">
+                <table style="background-color:white; border:0px; padding:10px;">
                     {{#each tracks}}{{#if this.enabled}}
                     <tr>
                         <td>
-                            {{this.name}}
+                            <div style ="font-size:small">{{this.name}}</div>
                         </td>
                         <td>
                             {{#each this.box_values}}
                             {{#if this}}<button type="button" name = "box" id="{{../name}}_{{@index}}_false" i icon class="fas fa-check" style="width:25px; height:25px; float:left; padding:5px"></button>{{else}}                          
                             <button type="button" name="box" id="{{../name}}_{{@index}}_true" style="width:25px; height:25px; float:left; padding:5px"></button>{{/if}}
+                            {{/each}}
+                            {{#if this.aspect.when_marked}}<input type="text" style="font-size:small; width:250px; height:25px; float:left; padding:5px; color:black; background-color: lightsteelblue; font-family:Arial;" name = "data.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"></input>{{/if}}
                         </td>
                     </tr>
-                    {{/each}}{{/if}}{{/each}}
+                    {{/if}}{{/each}}
                 </table>
             </div><!--end of tracks body-->
         </div><!--End of tracks block-->
-        <div name="stunts_block" style="float:left"> <!--Begin the stunts block-->
-            <div name = "stunts_header" style="width:350px">{{#if GM}}<button type="button" id="edit_player_stunts" i icon class="fas fa-cogs" style="width:auto; height:25px; float:left; padding:5px"></button>{{/if}}<h2>Stunts</h2></div>
-            <div name = "stunts_body" style="overflow-y:scroll; width:400px; height:250px">
+        <div name="stunts_block" style="float:left" {{#if GM}}title="Double-click to open the Tracks Editor"{{/if}}> <!--Begin the stunts block-->
+            <div name = "stunts_header" style="width:350px"><b>Stunts</b></div>
+            <div name = "stunts_body" style="overflow-y:scroll; width:400px; height:auto; max-height:500;"; border:lightsteelblue; border-width:2px; border-style:solid>
             </div><!--End of stunt body-->
         </div><!-- end of Stunts block-->
     </div><!--end of Tracks and stunts section-->

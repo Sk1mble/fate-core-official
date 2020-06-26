@@ -18,18 +18,48 @@ export class ModularFateCharacter extends ActorSheet {
     activateListeners(html) {
         super.activateListeners(html);
         const skillsButton = html.find("button[id='edit_player_skills']");;
-        skillsButton.on("click", event => this._onSkillsButton(event, html));
+        //skillsButton.on("click", event => this._onSkillsButton(event, html));
         const skill_name=html.find("div[name='skill']");
         skill_name.on("click", event => this._onSkill_name(event, html));
-        const sort = html.find("button[id='sort_player_skills'")
-        sort.on("click", event => this._onSortButton(event, html));
+        //const sort = html.find("button[id='sort_player_skills'")
+        //sort.on("click", event => this._onSortButton(event, html));
         const aspectName = html.find("div[name='aspect']")
         aspectName.on("dblclick", event => this._onAspectDblClick(event, html));
         const box = html.find("button[name='box']");
         box.on("click", event => this._on_click_box(event, html));
+        const skills_block = html.find("div[name='skills_block']");
+        skills_block.on("dblclick", event => this._onSkillsButton(event, html));
+        skills_block.on("contextmenu", event => this._onSortButton(event, html));
+
+        const tracks_block = html.find("div[name='tracks_block']");
+        const stunts_block = html.find("div[name='stunts_block']");
+        tracks_block.on("dblclick", event => this._onTracks_dblclick(event, html));
+        stunts_block.on("dblclick", event => this._onStunts_dblclick(event, html))
+
+        Hooks.on('closeEditPlayerTracks',async () => {
+            this.updateTracks();
+            this.render(false);
+        })
+
+        Hooks.on('closeEditPlayerSkills',async () => {
+            this.updateTracks();
+            this.render(false);
+        })
     }
 
     //Here are the event listener functions.
+    async _onTracks_dblclick(event, html){
+        if (game.user.isGM){
+            console.log("Tracks double clicked")
+        }
+
+    }
+    async _onStunts_dblclick(event, html){
+        if (game.user.isGM){
+            console.log("Stunts double clicked")
+        }
+    }
+
     async _on_click_box(event, html){
         let id = event.target.id;
         let parts = id.split("_");
@@ -51,7 +81,7 @@ export class ModularFateCharacter extends ActorSheet {
             await this.object.token.update({["actorData.data.tracks"]:tracks})
         } else {
             //await this.object.update({["data.tracks"]:[]})
-            await this.object.update({["data.tracks"]:[tracks]})
+            await this.object.update({["data.tracks"]:tracks})
         }
     }
 
@@ -82,11 +112,12 @@ export class ModularFateCharacter extends ActorSheet {
             }
         }
     }
-
     async _onSkillsButton(event, html){
+        this.dblclickinprogress = true;
         //Launch the EditPlayerSkills FormApplication.
         let editor = new EditPlayerSkills(this.actor);//Passing the actor works SOO much easier.
         editor.render(true);
+        this.dblclickinprogress = false;
     }
     async _onSortButton(){
         if (this.sortByRank == undefined){
@@ -97,6 +128,9 @@ export class ModularFateCharacter extends ActorSheet {
     }
 
     async _onSkill_name(event, html){
+        if (this.dblclickinprogress){
+            return
+        }
         let r = new Roll(`4dF + ${this.object.data.data.skills[event.target.id].rank}`);
         let roll = r.roll();
 
@@ -135,33 +169,8 @@ export class ModularFateCharacter extends ActorSheet {
             }
         }
 
-        //Logic to set up tracks
-        /* We want to add all universal tracks, but split them by category.
-        //Sort into a different presentation array for each category.
-
-        //name
-        //description
-        //universal (b)
-        unique (b)
-        if not unique will need to configure how more can be added from the Track configurator; default is to add one of each at character creation.
-        
-        if aspect need an aspect box
-        if aspect when taken and boxes need an input box and aspect boxes.
-        Add a Notes field to show in the track manager and as a tooltip.
-        
-        when marked/how recover as tool tips and visible in the track manager
-
-        harm should also be a tool tip.
-
-        render a number of boxes equal to boxes BUT also need to check linked skills
-        for each linked skill
-            check player's skills to see if has values high enough
-            add boxes accordingly
-                this part needs to happen in getData as skills can change.
-                   To initialise, then, we just need to set up with the default number of boxes, add a Notes field, add an Aspect field.
-        */
-
         //Step 0.5 check to see if the character already has tracks on it.
+        
         if (Object.keys(this.object.data.data.tracks).length==0){
             //Step one, get the list of universal aspects.
             let world_tracks = duplicate(game.settings.get("ModularFate","tracks"));
@@ -181,9 +190,20 @@ export class ModularFateCharacter extends ActorSheet {
 
                 //If this box is an aspect when marked, it needs an aspect.name data field.
                 if (track.aspect == "Defined when marked"){
-                    track.aspect_name="";
+                    track.aspect = {};
+                    track.aspect.name="";
+                    track.aspect.when_marked = true;
+                    track.aspect.as_name = false;
                 }
-                //Initialise the box array for this track
+                console.log(track)
+                if (track.aspect == "Aspect as name"){
+                    track.aspect = {};
+                    track.aspect.name="";
+                    track.aspect.when_marked = true;
+                    track.aspect.as_name = false;
+                }
+                
+                //Initialise the box array for this track 
                 if (track.boxes > 0){
                     let box_values = [];
                     for (let i = 0; i < track.boxes; i++){
@@ -200,6 +220,75 @@ export class ModularFateCharacter extends ActorSheet {
             } 
         }
         this.render(false);
+    }
+
+    async updateTracks(){
+        let tracks = duplicate(this.object.data.data.tracks);
+        //TODO: Work out correct number of boxes to render for each track and store that. This will be stored as an array of booleans attached to each stress track.
+        let categories = game.settings.get("ModularFate","track_categories");
+        //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
+        for (let t in tracks){
+            let track = tracks[t];
+
+            if (track.universal){
+                track.enabled = true;       
+            }
+
+            // Check for linked skills and enable/add boxes as necessary.
+            if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(this.object.data.data.skills).length >0 ){
+                let skills = this.object.data.data.skills;
+                let linked_skills = tracks[t].linked_skills;
+                let box_mod = 0;
+                for (let i=0; i< linked_skills.length; i++){
+                    let l_skill = linked_skills[i].linked_skill;
+                    let l_skill_rank = linked_skills[i].rank;
+                    let l_boxes = linked_skills[i].boxes;
+                    let l_enables = linked_skills[i].enables;
+
+                    //Get the value of the player's skill
+                    
+                    let skill_rank = this.object.data.data.skills[l_skill].rank;
+                    //If this is 'enables' and the skill is too low, disable.
+                    if (l_enables && skill_rank < l_skill_rank){
+                        track.enabled = false;
+                    }
+                    
+                    //If this adds boxes and the skill is high enough, add boxes if not already present.
+                    //Telling if the boxes are already present is the hard part.
+                    //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
+                    //or subract them at the end of our run through the linked skills.
+
+                    if (l_boxes > 0 && skill_rank >= l_skill_rank){
+                        box_mod += l_boxes;
+                    }
+                } //End of linked_skill iteration
+                //Now to add or subtract the boxes
+
+                //Only if this track works with boxes, though
+                if (track.boxes > 0 || track.box_values != undefined){
+                    //If boxes + box_mod is greater than box_values.length add boxes
+                    let toModify = track.boxes + box_mod - track.box_values.length;
+                    if (toModify > 0){
+                        for (let i = 0; i< toModify; i++){
+                            track.box_values.push(false);
+                        }
+                    }
+                    //If boxes + box_mod is less than box_values.length subtract boxes.
+                    if (toModify < 0){
+                        for (let i = toModify; i<0; i++){
+                                track.box_values.pop();
+                        }
+                    }
+                }   
+            }
+        }
+        // We're ready to save the boxes to the character sheet (gulp)
+        console.log(this.object.isToken)
+        if (this.object.isToken){
+            await this.object.token.update({["actorData.data.tracks"]:tracks});
+        } else {
+            await this.object.update({"data.tracks":tracks})    
+        } 
     }
   
     async getData() {
@@ -243,72 +332,6 @@ export class ModularFateCharacter extends ActorSheet {
                 ui.notifications.error(message);
             }
         }
-
-        //TODO: Work out correct number of boxes to render for each track and store that. This will be stored as an array of booleans attached to each stress track.
-        let categories = game.settings.get("ModularFate","track_categories");
-        //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
-        for (let t in tracks){
-            let track = tracks[t];
-    
-             if (track.universal){
-                 track.enabled = true;       
-             }
-
-            // Check for linked skills and enable/add boxes as necessary.
-            if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(this.object.data.data.skills).length >0 ){
-                let skills = this.object.data.data.skills;
-                let linked_skills = tracks[t].linked_skills;
-                let box_mod = 0;
-                for (let i=0; i< linked_skills.length; i++){
-                    let l_skill = linked_skills[i].linked_skill;
-                    let l_skill_rank = linked_skills[i].rank;
-                    let l_boxes = linked_skills[i].boxes;
-                    let l_enables = linked_skills[i].enables;
-
-                    //Get the value of the player's skill
-                    
-                    let skill_rank = this.object.data.data.skills[l_skill].rank;
-                    //If this is 'enables' and the skill is too low, disable.
-                    if (l_enables && skill_rank < l_skill_rank){
-                        track.enabled = false;
-                    }
-                    
-                    //If this adds boxes and the skill is high enough, add boxes if not already present.
-                    //Telling if the boxes are already present is the hard part.
-                    //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
-                    //or subract them at the end of our run through the linked skills.
-
-                    if (l_boxes > 0 && skill_rank >= l_skill_rank){
-                        box_mod += l_boxes;
-                    }
-                } //End of linked_skill iteration
-                //Now to add or subtract the boxes
-
-                //Only if this track works with boxes, though
-                if (track.boxes > 0 || track.box_values != undefined){
-                    //If boxes + box_mod is greater than box_values.length add boxes
-                    let toModify = track.boxes + box_mod - track.box_values.length;
-                    if (toModify > 0){
-                        for (let i = 0; i< toModify; i++){
-                            track.box_values.push(false);
-                        }
-                    }
-                    //If boxes + box_mod is less than box_values.length subtract boxes.
-                    if (toModify < 0){
-                        for (let i = toModify; i>0; i--){
-                                track.box_values.pop();
-                        }
-                    }
-                }   
-            }
-        }
-         //We're ready to save the boxes to the character sheet (gulp)
-         if (this.object.isToken){
-            await this.object.token.update({["actorData.data.tracks"]:tracks});
-        } else {
-            await this.object.update({"data.tracks":tracks})    
-        } 
-
         const unordered_skills = sheetData.data.skills;
         const ordered_skills = {}; 
         let sorted_by_rank = ModularFateConstants.sortByRank(unordered_skills);

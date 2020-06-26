@@ -171,7 +171,6 @@ class EditTracks extends FormApplication {
 
     getData(){
         let tracks_of_category = [];
-        console.log(this.tracks);
         for (let t in this.tracks){
             if (this.tracks[t].category == this.category){
                 tracks_of_category.push(this.tracks[t]);
