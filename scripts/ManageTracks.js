@@ -306,13 +306,14 @@ class EditTracks extends FormApplication {
         let harm = parseInt(document.getElementById("edit_track_harm").value);
         let paid = document.getElementById("edit_track_paid").checked;
         let linked_skills; 
-
         let existing = false;
+
         if (name == ""){
             ui.notifications.error("Name cannot be blank");
         }
         
-        for (let track in this.tracks){
+        for (let t in this.tracks){
+           let track = this.tracks[t];
             if (track.name==name){
                 //Logic for overwriting an existing track
                 existing = true;
@@ -330,7 +331,9 @@ class EditTracks extends FormApplication {
         }
         if (!existing){
             if (this.track != undefined){
-                linked_skills = duplicate(this.track.linked_skills);
+                if (this.track.linked_skills != undefined){
+                    linked_skills = duplicate(this.track.linked_skills);
+                }
                 delete this.tracks[this.track.name]
             }
             let newTrack = {
@@ -353,7 +356,6 @@ class EditTracks extends FormApplication {
         await game.settings.set("ModularFate","tracks",this.tracks);
         this.render(true);
     }
-
 }
 
 //TrackSetup: The class called from the options to view and edit conditions etc.

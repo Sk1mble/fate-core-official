@@ -7,18 +7,28 @@
             {{/each}}
             </select>
     <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:250px; border:lightsteelblue; border-width:2px; border-style:solid"><!--Begin body-->
+        <table border = "0" style="background-color: white;">
         {{#each tracks_by_category}}
             {{#each this}}
+            <tr>
                 {{#if (eq ../../cat @../key)}}
-                    <p title ="{{this.description}}"></b><input type ="checkbox" id="{{this.name}}"
+                <td title ="{{this.description}}">
+                    <input type ="checkbox" id="{{this.name}}"
                         title="{{this.description}}" 
                         {{checked this.present}}
                             {{#if this.universal}}
                                 {{#if ../../GM}}{{else}}disabled{{/if}}
-                            {{/if}}></input>{{this.name}}</p>
+                            {{/if}}></input></td>
+                            <td title="{{this.description}}" name="nameField"}>{{this.name}}{{#if this.unique}}{{else}} <input type="number" min="1" value="1" id="{{this.name}}_number" title="Number of copies to add" style="color:black; background-color:lightsteelblue; font-family:Arial; width:40px;">{{/if}}</td>
+                            <td>
+                                <button type="button" id="move_up" i icon class="fas fa-sort-up" style="width:25px; height:25px; background-color: lightsteelblue; color:black"></button>
+                                <button type="button" id="move_down" i icon class="fas fa-sort-down" style="width:25px; height:25px; background-color: lightsteelblue; color:black"></button>
+                            </td>
                 {{/if}}
+                </tr>
             {{/each}}
         {{/each}}
+    </table>
     </div><!--End body-->
     <div id="buttons" style="width:400px">
         <button type="button" id="save">Add checked tracks and remove unchecked tracks</button>
