@@ -1,6 +1,11 @@
 //This script is for establishing the world settings in relation to conditions,
 //stress and consequences.
 
+Hooks.on('closeEditTrack',async () => {
+    console.log("ManageTracks Hook Activated")
+    this.render(true);
+})
+
 Hooks.once('init',async function(){
     console.log("Initializing ManageTracks");
     //Let's initialise the settings at the system level.
@@ -400,10 +405,6 @@ class TrackSetup extends FormApplication{
         addCategoryButton.on("click", event => this._onAddCategoryButton(event, html));
         editTracksButton.on("click", event => this._onEditTracksButton(event, html));
         selectBox.on("dblclick", event => this._onEditTracksButton(event,html));
-
-        Hooks.on('closeEditTrack',async () => {
-            this.render(true);
-        })
     }
     
     //Here are the event listener functions.

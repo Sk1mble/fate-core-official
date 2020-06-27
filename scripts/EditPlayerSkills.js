@@ -13,6 +13,10 @@ class EditPlayerSkills extends FormApplication{
                 this.sortByRank = true;
                 this.temp_presentation_skills=[];
                 this.sorted = false;
+
+                Hooks.on("renderModularFateCharacter",(app, html, data)=> {
+                    this.render(false);
+                });  
     }
 
     //Set up the default options for instances of this class
@@ -195,11 +199,7 @@ class EditPlayerSkills extends FormApplication{
         const sortButton = html.find("button[id='sort']");
         sortButton.on("click", event => this._onSortButton(event, html));
         const editButton = html.find("button[id='edit_p_skills']");
-        editButton.on("click", event => this._onEditButton(event, html));
-
-        Hooks.on("renderModularFateCharacter",(app, html, data)=> {
-            this.render(false);
-        });    
+        editButton.on("click", event => this._onEditButton(event, html));  
     }
 
     async sort_name(array){
@@ -328,10 +328,6 @@ class EditGMSkills extends FormApplication{
         add_ad_hoc.on("click", event => this._adHocButton(event, html));
         const confirm = html.find("button[id='add_remove_button']")
         confirm.on("click", event => this._confirm(event, html));
-        
-        Hooks.on("renderModularFateCharacter",(app, html, data)=> {
-            this.render(false);
-        });    
     }
     async _confirm(event,html){
         let canDelete = [];

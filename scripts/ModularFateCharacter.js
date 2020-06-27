@@ -14,6 +14,18 @@ export class ModularFateCharacter extends ActorSheet {
         return 'systems/ModularFate/templates/ModularFateSheet.html';
     }
 
+    constructor (...args){
+        super(...args);
+        this.first_run = true;
+        Hooks.on("closeEditPlayerSkills", (app, html, data)=> {
+            this.initialise();
+        })
+        
+        Hooks.on("closeEditPlayerTracks",(app, html, data)=> {
+            this.initialise();
+        }); 
+    }
+
     //Here are the action listeners
     activateListeners(html) {
         super.activateListeners(html);
@@ -44,6 +56,7 @@ export class ModularFateCharacter extends ActorSheet {
 
         stunts_button.on("click", event => this._onStunts_dblclick(event, html));
     }
+
     async _on_track_name_click(event, html) {
         // Launch a simple application that returns us some nicely formatted text.
         let tracks = duplicate(this.object.data.data.tracks);
@@ -83,7 +96,6 @@ export class ModularFateCharacter extends ActorSheet {
         editor.render(true);
     }
     async _onTracks_dblclick(event, html) {
-        console.log("Tracks button clicked");
         //Launch the EditPlayerTracks FormApplication.
         let editor = new EditPlayerTracks(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
@@ -267,7 +279,10 @@ export class ModularFateCharacter extends ActorSheet {
         }
     }
     async getData() {
-        this.initialise();
+        if (this.first_run){
+            this.initialise();
+            this.first_run = false;
+        }
         this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         this.freeStunts = game.settings.get("ModularFate", "freeStunts");
         const sheetData = super.getData();

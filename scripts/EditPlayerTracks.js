@@ -9,6 +9,10 @@ class EditPlayerTracks extends FormApplication {
         }
         this.selected_category = "";
         this.tracks_by_category = undefined;
+
+        Hooks.on("renderModularFateCharacter",(app, html, data)=> {
+            this.render(false);
+        });   
     } //End constructor
 
     static get defaultOptions(){
@@ -45,10 +49,6 @@ class EditPlayerTracks extends FormApplication {
         const ad_hoc = html.find("button[id='ad_hoc']");
         const checkboxes = html.find("input[type='checkbox']");
         const numberbox = html.find("input[type='number']");
-        
-        Hooks.on("renderModularFateCharacter",(app, html, data)=> {
-            this.render(false);
-        });   
     } //End activateListeners
 
     // Here are the action functions
