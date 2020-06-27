@@ -26,7 +26,7 @@ Hooks.once('init',async function(){
 
     //Initialise the settings if they are currently empty.
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","track_categories"))){
-        game.settings.set("ModularFate","track_categories",["Combat","Other"]);
+        game.settings.set("ModularFate","track_categories",{Combat:"Combat",Other:"Other"});
     }
 
     // Register the menu to setup the world's conditions etc.
@@ -408,32 +408,34 @@ class TrackSetup extends FormApplication{
         let category = await ModularFateConstants.getInput("Choose the Category Name");
         let track_categories = game.settings.get("ModularFate","track_categories");
         var duplicate = false;
-        track_categories.forEach(cat =>{
-            if (cat.toUpperCase() == category.toUpperCase()){
+
+        for (let cat in track_categories){
+            if (track_categories[cat].toUpperCase == category.toUpperCase()){
                 ui.notifications.error("Can't create duplicate category.")
                 duplicate = true;
             }
-        })
-        if (!duplicate && category != "" && category != undefined){
-            track_categories.push(category);
+            if (!duplicate && category != "" && category != undefined){
+                track_categories[category]=category;
+            }
+            await game.settings.set("ModularFate","track_categories",track_categories);
+            this.render(true);
         }
-        await game.settings.set("ModularFate","track_categories",track_categories);
-        this.render(true);
     }
 
     async _onDeleteCategoryButton(event,html){
         let track_categories = game.settings.get("ModularFate","track_categories");
         let category  = document.getElementById("track_categories_select").value;
-        console.log(category);
-        for (let i = 0; i<track_categories.length; i++){
-            if (track_categories[i].toUpperCase()==category.toUpperCase()){
-                if (track_categories[i]=="Combat" || track_categories[i]=="Other"){
+
+        for (let cat in track_categories){
+            if (track_categories[cat].toUpperCase() == category.toUpperCase()){
+                if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
                     ui.notifications.error(`Can't delete the ${category} category as it's needed by the system.`)
                 } else {
-                    track_categories.splice(i,1);                    
+                    delete track_categories[cat];
                 }
-            }
-        }       
+            } 
+        }
+    
         await game.settings.set("ModularFate","track_categories",track_categories);
         this.render(true);
     }

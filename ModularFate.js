@@ -26,7 +26,24 @@ import { ModularFateCharacter} from "./module/actor/ModularFateCharacter.js"
 
 import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
 
+Hooks.once('ready', async function () {
+    if (game.settings.get("ModularFate","run_once") == false){
+        if (game.user.isGM){
+            ModularFateConstants.awaitOKDialog("Welcome to the Modular Fate System!","Welcome! Head on over to the System options in Foundry's Settings menu to get everything set up. Use the options to pre-load default skills, aspects, and tracks from Core, Condensed or Accelerated and then customise them, or you can start completely from scratch - it's up to you!<p/>Any character created will be initialised using those settings, so it's best not to create any characters until you've finished setting up your game.<p/> Have fun!",500,250);
+            game.settings.set("ModularFate","run_once", true);
+        }
+    }
+})
+
 Hooks.once('init', async function () {
+    game.settings.register("ModularFate", "run_once", {
+        name: "Run Once?",
+        hint:"Pops up a brief tutorial message on first load of a world with this system",
+        scope:"world",
+        config:"false",
+        type: Boolean
+    })
+
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     console.log(`Initializing Modular Fate`);
     Actors.unregisterSheet('core', ActorSheet);

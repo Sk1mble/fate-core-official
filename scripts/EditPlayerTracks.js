@@ -43,10 +43,27 @@ class EditPlayerTracks extends FormApplication {
     } //End activateListeners
 
     async getData(){
+        //We need the list of track categories
+        //We will use a dropdown list of categories in the editor to select which tracks are displayed
+        //There will also be a 'universal' category that shows all universal tracks regardless of category.
+        let world_track_categories = JSON.stringify(duplicate(game.settings.get("ModularFate","track_categories")));
+        world_track_categories.universal="";
+        console.log(world_track_categories)
+        
+        //Let's get a working copy of this actor's track information. We will work with this throughout and only 
+        //save it to the actor when we're finished.
+        this.tracks = duplicate(this.object.data.data.tracks);
+        
+        for (let t in this.tracks) {
+
+        }
+
 
         //TemplateData is returned to the form for use with HandleBars.
         const templateData = {
-            
+                world_track_categories:world_track_categories
+                
+
         }
         return templateData;
     } //End getData

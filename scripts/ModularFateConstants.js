@@ -365,16 +365,16 @@ class ModularFateConstants {
         }
     }
 
-    static awaitOKDialog(prompt, content, width){
+    static awaitOKDialog(prompt, content, width, height){
         if (width === undefined){
-            width = 500;
+            width = 1000;
+            height = 250;
         }
         
         return new Promise(resolve => {
             new Dialog({
                 title: prompt,
                 content: content,
-                width:1000,
                 buttons: {
                     ok: {
                         label: "OK",
@@ -388,6 +388,7 @@ class ModularFateConstants {
             },
             {
                 width:width,
+                height:height,
             }).render(true);
         })
     }
