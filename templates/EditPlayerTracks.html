@@ -1,8 +1,31 @@
-<form class="editable" onsubmit="event.preventDefault();">
+<form class="editable" onsubmit="event.preventDefault();" style="background-color:white; color:black">
     <div id = "header">
-        {{#each world_track_categories}}{{this}}{{/each}}
+        Filter: <select id = "select_box" style="background-color: lightsteelblue; color:black; font-family:Arial">
+            <option selected disabled value="Choose a category">Choose a category</option>
+            {{#each tracks_by_category}}
+            <option>{{@key}}</option>
+            {{/each}}
+            </select>
+    <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:250px; border:lightsteelblue; border-width:2px; border-style:solid"><!--Begin body-->
+        {{#each tracks_by_category}}
+            {{#each this}}
+                {{#if (eq ../../cat @../key)}}
+                    <p title ="{{this.description}}"></b><input type ="checkbox" id="{{this.name}}"
+                        title="{{this.description}}" 
+                        {{checked this.present}}
+                            {{#if this.universal}}
+                                {{#if ../../GM}}{{else}}disabled{{/if}}
+                            {{/if}}></input>{{this.name}}</p>
+                {{/if}}
+            {{/each}}
+        {{/each}}
+    </div><!--End body-->
+    <div id="buttons" style="width:400px">
+        <button type="button" id="save">Add checked tracks and remove unchecked tracks</button>
+        {{#if GM}}<button type="button" id="ad_hoc">Add an ad-hoc track to this character</button>{{/if}}
+    </div><!--End buttons div-->
     </div><!--End of header DIV-->
     <div>
-        
+        {{select_box.value}}
     </div>
 </form>

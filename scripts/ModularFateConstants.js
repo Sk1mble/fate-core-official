@@ -367,8 +367,10 @@ class ModularFateConstants {
 
     static awaitOKDialog(prompt, content, width, height){
         if (width === undefined){
-            width = 1000;
-            height = 250;
+            width = "500";
+        }
+        if (height === undefined){
+            height = "auto";
         }
         
         return new Promise(resolve => {
@@ -476,5 +478,34 @@ class ModularFateConstants {
     //Sort an array of JSON objects by object.rank
     static async sort_rank(array){
         array.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
+    }
+
+    static moveKey (object, key, numPlaces){
+        //If numPlaces is positive, we move down, if negative, up. Currently only planning to allow moving up/down by one place at a time, but options are nice and it's the same basic function.
+
+        let current_object = object;
+        let end_object = {};
+        let key_to_move = key;
+        let keys = Object.keys(current_object);
+
+        let currentIndex = keys.indexOf(key);
+        let newIndex = currentIndex + numPlaces;
+        if (newIndex <0){
+            newIndex = 0;
+        }
+        if (newIndex > keys.length){
+            newIndex = keys.length;
+        }
+
+        let tempKey = keys.splice(currentIndex,1);
+        keys.splice(newIndex, 0, tempKey[0]);
+
+        //Now we iterate through the array and copy the keys to the new object, before assigning the old object to the new object to finish the job.
+
+        keys.forEach(key => {
+            end_object[key] = current_object[key]
+        })
+        
+        return end_object;
     }
 }

@@ -305,7 +305,7 @@ class EditTracks extends FormApplication {
         let boxes = parseInt(document.getElementById("edit_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_track_harm").value);
         let paid = document.getElementById("edit_track_paid").checked;
-        let linked_skills = duplicate(this.track.linked_skills);
+        let linked_skills; 
 
         let existing = false;
         if (name == ""){
@@ -330,6 +330,7 @@ class EditTracks extends FormApplication {
         }
         if (!existing){
             if (this.track != undefined){
+                linked_skills = duplicate(this.track.linked_skills);
                 delete this.tracks[this.track.name]
             }
             let newTrack = {
