@@ -310,51 +310,51 @@ class EditTracks extends FormApplication {
 
         if (name == ""){
             ui.notifications.error("Name cannot be blank");
-        }
-        
-        for (let t in this.tracks){
-           let track = this.tracks[t];
-            if (track.name==name){
-                //Logic for overwriting an existing track
-                existing = true;
-                track.description = description;
-                track.universal = universal;
-                track.unique = unique;
-                track.recovery_type = recovery_type;
-                track.aspect = aspect;
-                track.when_marked = when_marked;
-                track.recovery_conditions = when_recovers;
-                track.boxes=boxes;
-                track.harm_can_absorb=harm;
-                track.paid = paid;
-            }
-        }
-        if (!existing){
-            if (this.track != undefined){
-                if (this.track.linked_skills != undefined){
-                    linked_skills = duplicate(this.track.linked_skills);
+        } else {
+            for (let t in this.tracks){
+            let track = this.tracks[t];
+                if (track.name==name){
+                    //Logic for overwriting an existing track
+                    existing = true;
+                    track.description = description;
+                    track.universal = universal;
+                    track.unique = unique;
+                    track.recovery_type = recovery_type;
+                    track.aspect = aspect;
+                    track.when_marked = when_marked;
+                    track.recovery_conditions = when_recovers;
+                    track.boxes=boxes;
+                    track.harm_can_absorb=harm;
+                    track.paid = paid;
                 }
-                delete this.tracks[this.track.name]
             }
-            let newTrack = {
-                "name":name,
-                "category":this.category,
-                "description":description,
-                "universal":universal,
-                "unique":unique,
-                "recovery_type":recovery_type,
-                "aspect":aspect,
-                "when_marked":when_marked,
-                "recovery_conditions":when_recovers,
-                "boxes":boxes,
-                "harm_can_absorb":harm,
-                "paid":paid,
-                "linked_skills":linked_skills
+            if (!existing){
+                if (this.track != undefined){
+                    if (this.track.linked_skills != undefined){
+                        linked_skills = duplicate(this.track.linked_skills);
+                    }
+                    delete this.tracks[this.track.name]
+                }
+                let newTrack = {
+                    "name":name,
+                    "category":this.category,
+                    "description":description,
+                    "universal":universal,
+                    "unique":unique,
+                    "recovery_type":recovery_type,
+                    "aspect":aspect,
+                    "when_marked":when_marked,
+                    "recovery_conditions":when_recovers,
+                    "boxes":boxes,
+                    "harm_can_absorb":harm,
+                    "paid":paid,
+                    "linked_skills":linked_skills
+                }
+                this.tracks[name]=newTrack;
             }
-            this.tracks[name]=newTrack;
+            await game.settings.set("ModularFate","tracks",this.tracks);
+            this.render(true);
         }
-        await game.settings.set("ModularFate","tracks",this.tracks);
-        this.render(true);
     }
 }
 

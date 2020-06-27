@@ -19,7 +19,7 @@
                             {{#if this.universal}}
                                 {{#if ../../GM}}{{else}}disabled{{/if}}
                             {{/if}}></input></td>
-                            <td title="{{this.description}}" name="nameField"}>{{this.name}}{{#if this.unique}}{{else}} <input type="number" min="1" value="1" id="{{this.name}}_number" title="Number of copies to add" style="color:black; background-color:lightsteelblue; font-family:Arial; width:40px;">{{/if}}</td>
+                            <td title="{{this.description}}" name="nameField"} id="{{this.name}}_nameField">{{this.name}}{{#if this.unique}}{{else}} <input type="number" min="1" value="1" id="{{this.name}}_number" title="Number of copies to add" style="color:black; background-color:lightsteelblue; font-family:Arial; width:40px;">{{/if}}</td>
                             <td>
                                 <button type="button" id="move_up" i icon class="fas fa-sort-up" style="width:25px; height:25px; background-color: lightsteelblue; color:black"></button>
                                 <button type="button" id="move_down" i icon class="fas fa-sort-down" style="width:25px; height:25px; background-color: lightsteelblue; color:black"></button>
