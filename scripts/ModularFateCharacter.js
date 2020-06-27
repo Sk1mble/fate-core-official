@@ -201,71 +201,69 @@ export class ModularFateCharacter extends ActorSheet {
                 }
             }
             working_data.data.tracks = tracks_to_write;
+        }
+        let tracks = working_data.data.tracks;
+        
+        let categories = game.settings.get("ModularFate", "track_categories");
+        //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
+        for (let t in tracks) {
+            let track = tracks[t];
 
-            let tracks = working_data.data.tracks;
+            if (track.universal) {
+                track.enabled = true;
+            }
 
-            let categories = game.settings.get("ModularFate", "track_categories");
-            //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
-            for (let t in tracks) {
-                let track = tracks[t];
+            // Check for linked skills and enable/add boxes as necessary.
+            if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(working_data.data.skills).length > 0) {
+                let skills = working_data.data.skills;
+                let linked_skills = tracks[t].linked_skills;
+                let box_mod = 0;
+                for (let i = 0; i < linked_skills.length; i++) {
+                    let l_skill = linked_skills[i].linked_skill;
+                    let l_skill_rank = linked_skills[i].rank;
+                    let l_boxes = linked_skills[i].boxes;
+                    let l_enables = linked_skills[i].enables;
 
-                if (track.universal) {
-                    track.enabled = true;
-                }
+                    //Get the value of the player's skill
 
-                // Check for linked skills and enable/add boxes as necessary.
-                if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(working_data.data.skills).length > 0) {
-                    let skills = working_data.data.skills;
-                    let linked_skills = tracks[t].linked_skills;
-                    let box_mod = 0;
-                    for (let i = 0; i < linked_skills.length; i++) {
-                        let l_skill = linked_skills[i].linked_skill;
-                        let l_skill_rank = linked_skills[i].rank;
-                        let l_boxes = linked_skills[i].boxes;
-                        let l_enables = linked_skills[i].enables;
+                    let skill_rank = working_data.data.skills[l_skill].rank;
+                    //If this is 'enables' and the skill is too low, disable.
+                    if (l_enables && skill_rank < l_skill_rank) {
+                        track.enabled = false;
+                    }
 
-                        //Get the value of the player's skill
+                    //If this adds boxes and the skill is high enough, add boxes if not already present.
+                    //Telling if the boxes are already present is the hard part.
+                    //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
+                    //or subract them at the end of our run through the linked skills.
+                     if (l_boxes > 0 && skill_rank >= l_skill_rank) {
+                        box_mod += l_boxes;
+                     }
+                } //End of linked_skill iteration
+                //Now to add or subtract the boxes
 
-                        let skill_rank = working_data.data.skills[l_skill].rank;
-                        //If this is 'enables' and the skill is too low, disable.
-                        if (l_enables && skill_rank < l_skill_rank) {
-                            track.enabled = false;
+                //Only if this track works with boxes, though
+                if (track.boxes > 0 || track.box_values != undefined) {
+                    //If boxes + box_mod is greater than box_values.length add boxes
+                    let toModify = track.boxes + box_mod - track.box_values.length;
+                    if (toModify > 0) {
+                        for (let i = 0; i < toModify; i++) {
+                            track.box_values.push(false);
                         }
-
-                        //If this adds boxes and the skill is high enough, add boxes if not already present.
-                        //Telling if the boxes are already present is the hard part.
-                        //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
-                        //or subract them at the end of our run through the linked skills.
-
-                        if (l_boxes > 0 && skill_rank >= l_skill_rank) {
-                            box_mod += l_boxes;
-                        }
-                    } //End of linked_skill iteration
-                    //Now to add or subtract the boxes
-
-                    //Only if this track works with boxes, though
-                    if (track.boxes > 0 || track.box_values != undefined) {
-                        //If boxes + box_mod is greater than box_values.length add boxes
-                        let toModify = track.boxes + box_mod - track.box_values.length;
-                        if (toModify > 0) {
-                            for (let i = 0; i < toModify; i++) {
-                                track.box_values.push(false);
-                            }
-                        }
-                        //If boxes + box_mod is less than box_values.length subtract boxes.
-                        if (toModify < 0) {
-                            for (let i = toModify; i < 0; i++) {
-                                track.box_values.pop();
-                            }
+                    }
+                    //If boxes + box_mod is less than box_values.length subtract boxes.
+                    if (toModify < 0) {
+                        for (let i = toModify; i < 0; i++) {
+                            track.box_values.pop();
                         }
                     }
                 }
             }
-            await this.actor.update(working_data)
-            if (this.newCharacter) {
-                let e = new EditPlayerSkills(this.actor);
-                e.render(true);
-            }
+        }
+        await this.actor.update(working_data)
+        if (this.newCharacter) {
+            let e = new EditPlayerSkills(this.actor);
+            e.render(true);
         }
     }
     async getData() {
