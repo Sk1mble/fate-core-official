@@ -1,0 +1,25 @@
+<div class="data data-extra">
+	<div class="basic">
+		<label for="permissions">{{ localize "FATE.Item.Permissions" }}</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.permissions">
+			{{{data.permissions}}}
+		</div>
+		<label for="costs">{{ localize "FATE.Item.Costs" }}</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.costs">
+			{{{data.costs}}}
+		</div>
+	</div>
+
+	<div class="actions">
+		<h2 for="actions">{{ localize "FATE.Item.Actions" }}</h2>
+
+		<div class="actions-list">
+			{{#each actions as |action type|}}
+			<div class="action-header"><i class="fi fi-{{type}}"></i> {{action.label}}</div>
+			<div class="property-textarea" contenteditable="true" data-edit="data.actions.{{type}}">
+				{{{action.value}}}
+			</div>
+			{{/each}}
+		</div>
+	</div>
+</div>

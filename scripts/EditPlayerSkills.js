@@ -339,31 +339,10 @@ class EditGMSkills extends FormApplication{
             if (cbox != undefined && !cbox.checked){
                 // This skill needs to be deleted from the list.
                 //THIS WON'T WORK FOR TOKEN ACTORS unless you also delete the skill from the 
-                //real actor being represented by the token actor. So let's go ahead and give the user an option for that. =)
-                //The thought of having to implement a similar system for aspects and tracks fills me with dread.
-                if (this.object.isToken){
-                    let actor_id = this.object.id;
-                    game.actors.entities.forEach(a => {
-                        if (a.id == actor_id){
-                            actor = a;
-                        }
-                    })
-                    let actor_skills=duplicate(actor.data.data.skills);
-                    if (this.object.token.actor.token.data.actorData.data == undefined){
-                        cannotDelete.push(this.player_skills[s])
-                    } else {
-                        let token_skills = duplicate(this.object.token.data.actorData.data.skills); //This is the synthetic actor's skill list.
-                        if (token_skills[s] != undefined && actor_skills[s]==undefined){
-                            canDelete.push(this.player_skills[s]);
-                        }
-                        else {
-                            cannotDelete.push(this.player_skills[s])
-                        }
-                    }
-                } else {
-                    let sk = `-=${s}`
-                    await this.object.update({"data.skills": {[`${sk}`]:null}})
-                }
+                //real actor being represented by the token actor. This is just the way Foundry works
+                //with synthetic actors. 
+                let sk = `-=${s}`
+                await this.object.update({"data.skills": {[`${sk}`]:null}})
             }
         } 
         if (this.object.isToken && cannotDelete.length >0) {

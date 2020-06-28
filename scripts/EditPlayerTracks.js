@@ -196,7 +196,6 @@ class EditPlayerTracks extends FormApplication {
                         newTrack.description= html.find("input[id='description']")[0].value;
                         newTrack.universal= false; 
                         newTrack.unique = html.find("input[id='unique']")[0].checked;
-                        console.log(JSON.stringify(newTrack))
                         newTrack.aspect = {};
                         newTrack.aspect.name = "";
                         newTrack.enabled=true;
@@ -205,9 +204,7 @@ class EditPlayerTracks extends FormApplication {
                         newTrack.recovery_type = html.find("select[id='recovery_type']")[0].value;
                         newTrack.harm_can_absorb=parseInt(html.find("input[id='harm']")[0].value);
                         newTrack.aspect.when_marked = html.find("input[id='aspect_when_marked']")[0].checked;
-                        console.log(JSON.stringify(newTrack))
                         newTrack.aspect.as_name = html.find("input[id='aspect_as_name']")[0].checked;
-                        console.log(JSON.stringify(newTrack))
                         newTrack.boxes = parseInt(html.find("input[id='boxes']")[0].value);
                         let box_values = []
                         for (let i = 0; i < newTrack.boxes; i++){
@@ -230,9 +227,7 @@ class EditPlayerTracks extends FormApplication {
     }
     
     async _numChange (event, html){
-        console.log(event.target);
         let name = event.target.id.split("_")[0]
-        console.log(name);
         this.tracks_by_category[this.selected_category][name].number = parseInt(event.target.value);
     }
 
@@ -241,7 +236,6 @@ class EditPlayerTracks extends FormApplication {
         this.tracks_by_category[this.selected_category][name].toCopy=event.target.checked;
         //The copy/don't copy checkbox overrides this; we only needed the present checkbox when we initialised.
         delete this.tracks_by_category[this.selected_category][name].present;
-        console.log(this.tracks_by_category[this.selected_category][name])
     }
 
     async _save(event, html){
@@ -272,21 +266,20 @@ class EditPlayerTracks extends FormApplication {
                     //To manage this, we'll set a 'parent' attribute on copies that gives the name of the original track.
 
                     if (number > 1){
-                        let numCopies = 0;
+                        let numCopies = 1;
                         for (let t in this.tracks){
-                            if (this.tracks[t].parent==t){
+                            if ( this.tracks[t].parent==t){
                                 numCopies ++;
                             }
                         }
                         //Copy from the input array rather than the current array as this is a new track.
+    
                         if (numCopies < number){
                             for (let i = 0; i < number - numCopies; i++){
                                 let dupeTrack = duplicate(input[t]);
                                 dupeTrack.parent = t;
-                                if (number ==1){
-                                } else {
-                                    dupeTrack.name = dupeTrack.name+" "+number
-                                }
+                                let name = dupeTrack.name;
+                                dupeTrack.name = dupeTrack.name+" "+(i+2)
                                 this.prepareTrack(dupeTrack);
                                 output[dupeTrack.name]=dupeTrack;
                             }
@@ -299,11 +292,11 @@ class EditPlayerTracks extends FormApplication {
                     let numCopies = 0;
                     //Copy from the input array rather than the current array as this is a new track.
                     if (numCopies < number){
-                        console.log(number + " " +numCopies)
                         for (let i = 0; i< number - numCopies; i++){
                             let dupeTrack = duplicate(input[t]);
                             dupeTrack.parent = t;
-                            if (number ==1){
+                            if ( i == 0) {
+
                             } else {
                                 dupeTrack.name = dupeTrack.name+" "+(i+1)
                             }
@@ -321,9 +314,9 @@ class EditPlayerTracks extends FormApplication {
             }
         }
 
-        //I think we're ready to write the track out to the player...
         await this.object.update({"data.tracks":[]}) //This is needed to make the game see a change in order of keys as a difference.
         await this.object.update({"data.tracks":output}); 
+
         ui.notifications.info("Character track changes saved.")   
         //Initialise the actor sheet; this will automatically set up the boxes etc on tracks.
         this.tracks_by_category=undefined;
@@ -436,7 +429,9 @@ class EditPlayerTracks extends FormApplication {
     async prepareTrack(track){
         delete track.toCopy;
         delete track.present;
-        delete track.number;
+        if (track.parent == undefined){
+            delete track.number;
+        }
         track.enabled = true;
         track.notes = "";
 

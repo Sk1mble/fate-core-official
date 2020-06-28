@@ -46,6 +46,7 @@
 			"templates": ["baseItem"],
 			"permissions": "",
 			"costs": "",
+			"boxes":"",
 			"actions": {
 				"overcome": "",
 				"create": "",

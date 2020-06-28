@@ -1,0 +1,29 @@
+<form class="{{cssClass}}" autocomplete="off">
+	<header class="sheet-header">
+		<h1>
+			<label for="name">{{type}}</label>
+			<input name="name" type="text" value="{{item.name}}" placeholder="Name">
+		</h1>
+	</header>
+
+	<article class="sheet-content">
+		<nav class="sheet-navigation tabs">
+			<a class="item" data-tab="description">{{ localize "FATE.Sheet.Description" }}</a>
+			{{#if hasDetails}}
+			<a class="item" data-tab="details">{{ localize "FATE.Sheet.Details" }}</a>
+			{{/if}}
+		</nav>
+
+		<div class="sheet-body">
+			<section class="tab item-description" data-tab="description">
+				{{editor content=data.description.value target="data.description.value" button=true owner=owner editable=editable}}
+			</section>
+
+			{{#if hasDetails}}
+			<section class="tab item-details" data-tab="details">
+				{{> (dataTemplate)}}
+			</section>
+			{{/if}}
+		</div>
+	</article>
+</form>
