@@ -13,10 +13,10 @@ class EditPlayerSkills extends FormApplication{
                 this.sortByRank = true;
                 this.temp_presentation_skills=[];
                 this.sorted = false;
+    }
 
-                Hooks.on("renderModularFateCharacter",(app, html, data)=> {
-                    this.render(false);
-                });  
+    setSheet (ActorSheet){
+        this.sheet = ActorSheet;
     }
 
     //Set up the default options for instances of this class
@@ -55,6 +55,7 @@ class EditPlayerSkills extends FormApplication{
         } else {
             await this.object.update({"data.skills":this.player_skills}); 
             ui.notifications.info("Character skills saved.")   
+            this.sheet.initialise();
         }
     }
 

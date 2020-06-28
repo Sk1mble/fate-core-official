@@ -1,6 +1,7 @@
 class EditPlayerTracks extends FormApplication {
     constructor(...args){
         super(...args);
+        console.log(arguments)
         //This is a good place to set up some variables at the top level so we can access them with this.
         if (this.object.isToken) {
             this.options.title=`Character track editor for [Token] ${this.object.name}`
@@ -9,10 +10,6 @@ class EditPlayerTracks extends FormApplication {
         }
         this.selected_category = "";
         this.tracks_by_category = undefined;
-
-        Hooks.on("renderModularFateCharacter",(app, html, data)=> {
-            this.render(false);
-        });   
     } //End constructor
 
     static get defaultOptions(){
@@ -31,6 +28,10 @@ class EditPlayerTracks extends FormApplication {
         // This returns all the forms fields with names as a JSON object with their values. 
         // It is required for a FormApplication.
         // It is called when you call this.submit();
+    }
+
+    setSheet (ActorSheet){
+        this.sheet = ActorSheet;
     }
 
     activateListeners(html) {
@@ -55,6 +56,8 @@ class EditPlayerTracks extends FormApplication {
 
     async _save(event, html){
         // Step 1, 
+
+        this.sheet.initialise();
     }
 
     async _on_sb_change(event, html){
@@ -162,7 +165,6 @@ class EditPlayerTracks extends FormApplication {
     }
         
     async getData(){
-        console.log(this.selected_category);
         let world_tracks = duplicate(game.settings.get("ModularFate","tracks"))
         //We need the list of track categories
         //We will use a dropdown list of categories in the editor to select which tracks are displayed

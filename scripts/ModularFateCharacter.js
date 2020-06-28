@@ -17,13 +17,7 @@ export class ModularFateCharacter extends ActorSheet {
     constructor (...args){
         super(...args);
         this.first_run = true;
-        Hooks.on("closeEditPlayerSkills", (app, html, data)=> {
-            this.initialise();
-        })
-        
-        Hooks.on("closeEditPlayerTracks",(app, html, data)=> {
-            this.initialise();
-        }); 
+        this.helpers=[];
     }
 
     //Here are the action listeners
@@ -55,6 +49,17 @@ export class ModularFateCharacter extends ActorSheet {
         tracks_button.on("click", event => this._onTracks_dblclick(event, html));
 
         stunts_button.on("click", event => this._onStunts_dblclick(event, html));
+    }
+
+    renderHelpers(){
+        this.helpers.forEach(helper=>{
+            if (helper.rendered == false){
+                this.helpers.splice(this.helpers.indexOf(helper),1)
+            } else {
+                helper.render(false);
+            }
+        })
+        console.log(this.helpers);
     }
 
     async _on_track_name_click(event, html) {
@@ -94,11 +99,15 @@ export class ModularFateCharacter extends ActorSheet {
         //Launch the EditPlayerStunts FormApplication.
         let editor = new EditPlayerStunts(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
+        editor.setSheet(this);
+        this.helpers.push(editor);
     }
     async _onTracks_dblclick(event, html) {
         //Launch the EditPlayerTracks FormApplication.
         let editor = new EditPlayerTracks(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
+        editor.setSheet(this);
+        this.helpers.push(editor);
     }
 
     async _onAspectDblClick(event, html) {
@@ -130,6 +139,8 @@ export class ModularFateCharacter extends ActorSheet {
         //Launch the EditPlayerSkills FormApplication.
         let editor = new EditPlayerSkills(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
+        editor.setSheet(this);
+        this.helpers.push(editor);
     }
     async _onSortButton() {
         if (this.sortByRank == undefined) {
@@ -276,6 +287,8 @@ export class ModularFateCharacter extends ActorSheet {
         if (this.newCharacter) {
             let e = new EditPlayerSkills(this.actor);
             e.render(true);
+            e.setSheet(this);
+            this.helpers.push(e);
         }
     }
     async getData() {

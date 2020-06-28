@@ -1,4 +1,4 @@
-class ModularFateConstants {
+class ModularFateConstants { 
 
     static getFateLadder(){
         return  {
@@ -177,6 +177,7 @@ class ModularFateConstants {
             }
         }
     }
+    
     
     static getFateCoreDefaultSkills(){
         
@@ -508,4 +509,8 @@ class ModularFateConstants {
         
         return end_object;
     }
-}
+} 
+
+Hooks.on("renderModularFateCharacter",(app, html, data)=> {
+    app.renderHelpers();
+});
