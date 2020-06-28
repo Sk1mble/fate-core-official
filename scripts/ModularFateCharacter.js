@@ -59,7 +59,6 @@ export class ModularFateCharacter extends ActorSheet {
                 helper.render(false);
             }
         })
-        console.log(this.helpers);
     }
 
     async _on_track_name_click(event, html) {
@@ -248,10 +247,12 @@ export class ModularFateCharacter extends ActorSheet {
                     let l_enables = linked_skills[i].enables;
 
                     //Get the value of the player's skill
+                    if (working_data.data.skills[l_skill] == undefined){
 
-                    let skill_rank = working_data.data.skills[l_skill].rank;
-                    //If this is 'enables' and the skill is too low, disable.
-                    if (l_enables && skill_rank < l_skill_rank) {
+                    }else {
+                        let skill_rank = working_data.data.skills[l_skill].rank;
+                        //If this is 'enables' and the skill is too low, disable.
+                        if (l_enables && skill_rank < l_skill_rank) {
                         track.enabled = false;
                     }
 
@@ -259,9 +260,10 @@ export class ModularFateCharacter extends ActorSheet {
                     //Telling if the boxes are already present is the hard part.
                     //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
                     //or subract them at the end of our run through the linked skills.
-                     if (l_boxes > 0 && skill_rank >= l_skill_rank) {
-                        box_mod += l_boxes;
-                     }
+                        if (l_boxes > 0 && skill_rank >= l_skill_rank) {
+                            box_mod += l_boxes;
+                        }
+                    }
                 } //End of linked_skill iteration
                 //Now to add or subtract the boxes
 
@@ -364,7 +366,7 @@ export class ModularFateCharacter extends ActorSheet {
         let track_categories = game.settings.get("ModularFate", "track_categories");
         sheetData.track_categories = track_categories;
         sheetData.tracks = this.object.data.data.tracks;
-
+        this.renderHelpers();
         return sheetData;
     }
 }

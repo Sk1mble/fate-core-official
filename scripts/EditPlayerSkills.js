@@ -384,11 +384,7 @@ class EditGMSkills extends FormApplication{
             canDelete.forEach(skill => {
                 let sk = `-=${skill.name}`;
                 async function update(object) {
-                    if (this.object.isToken){
-                        await this.object.token.update({["actorData.data.skills"]:{[`${sk}`]:null}});
-                    } else {
                         await object.update({"data.skills":{[`${sk}`]:null}})
-                    }
                 }
                 update(this.object)
             })

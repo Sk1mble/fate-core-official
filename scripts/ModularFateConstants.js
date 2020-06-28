@@ -510,7 +510,3 @@ class ModularFateConstants {
         return end_object;
     }
 } 
-
-Hooks.on("renderModularFateCharacter",(app, html, data)=> {
-    app.renderHelpers();
-});
