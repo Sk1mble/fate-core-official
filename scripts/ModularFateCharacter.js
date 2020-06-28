@@ -3,6 +3,7 @@ export class ModularFateCharacter extends ActorSheet {
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.width = "860"
+        options.height = "900"
         return options;
     }
 
@@ -167,6 +168,7 @@ export class ModularFateCharacter extends ActorSheet {
 
         if (working_data.data.details.fatePoints.refresh == "") {
             this.newCharacter = true;
+            console.log("Setting refresh");
             working_data.data.details.fatePoints.refresh = refresh;
             working_data.data.details.fatePoints.current = refresh;
         }
@@ -287,10 +289,12 @@ export class ModularFateCharacter extends ActorSheet {
         }
         await this.actor.update(working_data)
         if (this.newCharacter) {
+            console.log("Initialising new character!")
             let e = new EditPlayerSkills(this.actor);
             e.render(true);
             e.setSheet(this);
             this.helpers.push(e);
+            this.newCharacter = false;
         }
     }
     async getData() {

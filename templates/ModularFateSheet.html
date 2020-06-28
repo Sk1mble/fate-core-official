@@ -110,14 +110,14 @@
     <div style="display:flex; flex-flow:row wrap" name = "tracks_stunts"><!--Begin tracks & stunts section-->
         <div name = "tracks_block"><!--Begin the tracks block-->
             <div name="tracks_header" style="width:350px"><b>Tracks</b><div title="Open the Track Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_tracks" i icon class="fas fa-cogs"></div></div>
-            <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:auto; max-height:500; border:lightsteelblue; border-width:2px; border-style:solid">
+            <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:450px; border:lightsteelblue; border-width:2px; border-style:solid">
                 <table style="background-color:white; border:0px; padding:10px;">
                     {{#each tracks}}{{#if this.enabled}}
                     <tr>
-                        <td>
+                        <td style="padding-bottom:10px; width:110px">
                             <div name="track_name" title="Click here to edit the track notes for {{this.name}}">{{this.name}}</div>
                         </td>
-                        <td>
+                        <td style="padding-bottom:10px">
                             {{#each this.box_values}}
                             {{#if this}}<button type="button" name = "box" id="{{../name}}_{{@index}}_false" i icon class="fas fa-times" style="width:25px; height:25px; float:left; padding:5px"></button>{{else}}                          
                             <button type="button" name="box" id="{{../name}}_{{@index}}_true" style="width:25px; height:25px; float:left; padding:5px"></button>{{/if}}
@@ -155,11 +155,9 @@
     <div><!--Begin Extras block-->
         <div name = "Extras header" style="width:20%"><h1>Extras:</h1></div>
         <div name = "extras_body" style="overflow-y:scroll; width:400px; height:auto; border:lightsteelblue; border-width:2px; border-style:solid">
-            Hello World
+           
+        </div><!--End of Extras Body block-->
          </div><!--End of Extras block-->   
-        </div><!--End of Extras block-->
-    </div>
-
     </div><!--End of bio tab-->
 </div><!--end of character sheet-->
 

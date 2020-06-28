@@ -21,11 +21,9 @@ export class ItemSheetFATE extends ItemSheet {
     getData() {
         const data = super.getData();
         data.type = this.item.type.toLowerCase();
-        data.hasDetails = [extra].includes(data.type);
-        data.dataTemplate = () => `systems/fate/templates/items/${data.type}-data.html`;
+        data.dataTemplate = () => `systems/ModularFate/templates/extra-data.html`;
         return data;
     }
-    
     activateListeners(html) {
         super.activateListeners(html);
     }

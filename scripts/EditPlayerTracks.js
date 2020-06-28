@@ -257,9 +257,8 @@ class EditPlayerTracks extends FormApplication {
         for (let t in input)
         {    
             let number = input[t].number;
-
             if (this.tracks[t]!=undefined){ //If this exists in the player's current track list
-                if (input[t].toCopy == true || input[t].present == true) { //If the track is selected in the editor
+                if (input[t].toCopy == true  || input[t].present == true) { //If the track is selected in the editor)
                     this.tracks[t].enabled=true;
                     output[t]=this.tracks[t]; //Write this track to the output object.
                     //If this is non-unique and the number >1, we need to add more copies if there aren't already enough copies.
@@ -307,9 +306,9 @@ class EditPlayerTracks extends FormApplication {
                 } else {
                     if (input[t].toCopy){
                         input[t].enabled=true;
+                        this.prepareTrack(input[t]);
+                        output[t]=input[t];
                     }
-                    this.prepareTrack(input[t]);
-                    output[t]=input[t];
                 }
             }
         }
@@ -427,12 +426,17 @@ class EditPlayerTracks extends FormApplication {
     }
 
     async prepareTrack(track){
+        
+        if (track.toCopy){
+            track.enabled = true;
+        }
+
         delete track.toCopy;
         delete track.present;
         if (track.parent == undefined){
             delete track.number;
         }
-        track.enabled = true;
+        
         track.notes = "";
 
         //If this box is an aspect when marked, it needs an aspect.name data field.
@@ -480,8 +484,8 @@ class EditPlayerTracks extends FormApplication {
             
             for (let t in this.tracks) {
                 let track = duplicate(this.tracks[t]);
-                track["present"]=true;
-                track["number"]=1;
+                track.present=true;
+                track.number=1;
                 this.tracks_by_category[this.tracks[t].category][t]=track;
             }
 

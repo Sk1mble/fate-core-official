@@ -25,6 +25,7 @@ import { ModularFateCharacter} from "./module/actor/ModularFateCharacter.js"
 /* -------------------------------- */
 
 import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
+import { ExtraSheet } from "./scripts/ExtraSheet.js";
 
 Hooks.once('ready', async function () {
     if (game.settings.get("ModularFate","run_once") == false){
@@ -48,6 +49,8 @@ Hooks.once('init', async function () {
     console.log(`Initializing Modular Fate`);
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet("ModularFate", ModularFateCharacter, { types: ["ModularFate"], makeDefault: true });
+    // Register Item sheets
+    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
 
     //Register a setting for the game's current Refresh total
     game.settings.register("ModularFate", "refreshTotal", {
