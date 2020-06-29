@@ -40,8 +40,6 @@
 			"templates": ["baseItem"],
 			"permissions": "",
 			"costs": "",
-			"boxes":"",
-			"box_values":[],
 			"refresh":"",
 			"actions": {
 				"overcome": "",

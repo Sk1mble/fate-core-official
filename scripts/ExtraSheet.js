@@ -1,18 +1,24 @@
 export class ExtraSheet extends ItemSheet {
-    getData() {
+    async getData() {
         const data = super.getData();
         data.type = this.item.type.toLowerCase();
         data.dataTemplate = () => `systems/ModularFate/templates/ExtraSheet.html`;
-
-        console.log(data.actor);
-        if (data.data.box_values == undefined){
-            //data.actor.updateEmbeddedEntity()
+        if (data.data.box_values == undefined || data.data.box_values.length == 0){
+           //data.box_values = [false,false,false,false,false,false,false,false,false,false];
         }
-        console.log(this.object.actor);
-        //console.log(data.data.box_values.length);
 
+        let idata = duplicate(data)
+        idata.data.box_values = [false,false,false];
+        let i = new Item(data);
+
+        
+        //await i.update({"data.box_values":[]})
+        i.update({ "data.data.box_values": "helloworld" })
+        console.log(i);
+        //console.log(data.data.box_values.length);
         return data;
     }
+    
 
     get template (){
         return 'systems/ModularFate/templates/ExtraSheet.html';
