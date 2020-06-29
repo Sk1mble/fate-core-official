@@ -1,0 +1,49 @@
+<form class="contenteditable">
+<div class="data data-extra">
+	<div class="basic" style="background:white">
+		<label for="name">Name</label>
+		<div class="property-textarea" contenteditable="true" data-edit="name" style="background-color: lightsteelblue;">
+			{{this.entity.name}}
+		</div>
+		<label for="permissions">Permissions</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.permissions" style="background-color: lightsteelblue;">
+			{{data.permissions}}
+		</div>
+		<label for="costs">Costs:</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.costs"style="background-color: lightsteelblue;">
+			{{{data.costs}}}
+		</div>
+		<label for="refresh">Refresh Cost:</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.refresh" style="background-color: lightsteelblue;">
+			{{{data.refresh}}}
+		</div>
+		<label for="description">Description:</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.description.value" style="background-color: lightsteelblue;">
+			{{{data.description.value}}}
+		</div>
+		<label for="overcome" style="Font-family:Fate Core; font-size:x-large;"">O</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.actions.overcome" style="background-color: lightsteelblue;">
+			{{{data.actions.overcome}}}
+		</div>
+		<label for="create" style="Font-family:Fate Core; font-size:x-large;"">C</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.actions.create" style="background-color: lightsteelblue;">
+			{{{data.actions.create}}}
+		</div>
+		<label for="attack" style="Font-family:Fate Core; font-size:x-large;"">A</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.actions.attack" style="background-color: lightsteelblue;">
+			{{{data.actions.attack}}}
+		</div>
+		<label for="defend" style="Font-family:Fate Core; font-size:x-large;"">D</label>
+		<div class="property-textarea" contenteditable="true" data-edit="data.actions.defend" style="background-color: lightsteelblue;">
+			{{{data.actions.defend}}}
+		</div>
+		<label for="boxes">Track Boxes:</label>
+		<div id="boxes_div" class="property-textarea" contenteditable="true" data-edit="data.boxes" style="background-color: lightsteelblue;">
+			{{{data.boxes}}}
+		</div>
+		<label for="box_values">Track Boxes:</label>
+		<div>Boxes go here</div>
+		</div>
+	</div>
+</div>
+</form>

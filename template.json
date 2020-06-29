@@ -18,18 +18,12 @@
 				"tracks":{},
 				"aspects":{},
 				"skills":{},
-				"stunts":{},
-				"extras":{
-					"value":""
-				}
+				"stunts":{}
 			}
 		},
 		"ModularFate": {
 			"templates": ["common"],
 			"details": {
-				"extras": {
-					"value": ""
-				}
 			}
 		}
 	},
@@ -47,6 +41,8 @@
 			"permissions": "",
 			"costs": "",
 			"boxes":"",
+			"box_values":[],
+			"refresh":"",
 			"actions": {
 				"overcome": "",
 				"create": "",

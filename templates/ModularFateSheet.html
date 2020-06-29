@@ -23,7 +23,7 @@
                         <input type="number" name="skillTotal" disabled style="width:75px" value="{{skillTotal}}"></input>
                     </td>
                     <td>
-                        <button type = "button" onclick="openSheet(event)" style="width:50px; height:30px" title="Display Character Sheet" id="sheet_button" i icon class="fas fa-clipboard"></button>
+                        <button type = "button" onclick="openSheet(event)" style="width:50px; height:30px" title="Display Character Sheet" id="{{actor.name}}_sheet" i icon class="fas fa-clipboard"></button>
                     </td>
                     <td>    
                     </td>
@@ -42,7 +42,7 @@
                         <input type="number" name="gameSkillPoints" skillPoints" disabled style="width:75px" value="{{gameSkillPoints}}"></input>
                     </td>
                     <td>
-                        <button type = "button" onclick="openBio(event)" style="width:50px; height:30px" title="Display Bio Page" id="bio_button" i icon class="fas fa-portrait"></button>
+                        <button type = "button" onclick="openBio(event)" style="width:50px; height:30px" title="Display Bio Page" id="{{actor.name}}_bio" i icon class="fas fa-portrait"></button>
                     </td>
                 </tr>
                 <tr>
@@ -66,7 +66,7 @@
     </table>
 
 <div name = "character_sheet">
-    <div id = "sheet" class="tabcontent" style="display:block; font-size:small">
+    <div id = "{{actor.name}}_sheet_div" class="tabcontent" style="display:block; font-size:small">
         <div style="display:flex; flex-flow:row wrap" name = "skills_aspects">
             <div name="skills_block">
                 <div name = "skills_header" style="width:400px"><b>Skills</b>
@@ -127,7 +127,7 @@
                     </tr>
                     {{/if}}{{/each}}
                 </table>
-                <img src = "systems/ModularFate/assets/pbf_light.svg" style="height:75px; width:auto; border:none;"/>
+                <img src = "systems/ModularFate/assets/pbf.svg" style="height:75px; width:auto; border:none;"/>
             </div><!--end of tracks body-->
         </div><!--End of tracks block-->
         <!-------BEGIN THE STUNTS SECTION, UNLEASH THE HOUNDS-->
@@ -154,7 +154,7 @@
     </div><!--end of Tracks and stunts section-->
 </div> <!--End of sheet tab-->
 
-<div id="bio" class="tabcontent" style="display:none;">
+<div id="{{actor.name}}_bio_div" class="tabcontent" style="display:none;">
     <div>
         <div style="width:20%">
             <h1>Description:</h1>
@@ -215,15 +215,17 @@
 </div><!--end of character sheet-->
 
 <script>
-    function openBio(event, name) {
-        let sheet=document.getElementById("sheet");
-        let bio=document.getElementById("bio");
+    function openBio(event) {
+        let name = event.target.id.split("_")[0];
+        let sheet=document.getElementById(`${name}_sheet_div`);
+        let bio=document.getElementById(`${name}_bio_div`);
         sheet.style.display="none";
         bio.style.display="block";
     }
-    function openSheet(event, name){
-        let sheet=document.getElementById("sheet");
-        let bio=document.getElementById("bio");
+    function openSheet(event){
+        let name = event.target.id.split("_")[0];
+        let sheet=document.getElementById(`${name}_sheet_div`);
+        let bio=document.getElementById(`${name}_bio_div`);
         sheet.style.display="block";
         bio.style.display="none";
     }
