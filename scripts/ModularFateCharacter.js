@@ -41,6 +41,11 @@ export class ModularFateCharacter extends ActorSheet {
         const track_name = html.find("div[name='track_name']");
         track_name.on("click", event => this._on_track_name_click(event, html));
 
+        const delete_stunt = html.find("button[name='delete_stunt']");
+        delete_stunt.on("click", event => this._onDelete(event,html));
+        const edit_stunt = html.find("button[name='edit_stunt']")
+        edit_stunt.on("click", event => this._onEdit (event,html));
+
         const tracks_button = html.find("div[name='edit_player_tracks']"); // Tracks, tracks, check
         const stunts_button = html.find("div[name='edit_player_stunts']");
         const tracks_block = html.find("div[name='tracks_block']");
@@ -49,8 +54,20 @@ export class ModularFateCharacter extends ActorSheet {
         stunts_block.on("dblclick", event => this._onStunts_dblclick(event, html))
         stunts_button.on("click", event => this._onStunts_dblclick(event, html));
         tracks_button.on("click", event => this._onTracks_dblclick(event, html));
+    }
 
-        stunts_button.on("click", event => this._onStunts_dblclick(event, html));
+    async _onDelete(event, html){
+        let name = event.target.id.split("_")[0];
+        await this.object.update({"data.stunts":{[`-=${name}`]:null}});
+    }
+
+    async _onEdit (event, html){
+        let name=event.target.id.split("_")[0];
+
+        let editor = new EditPlayerStunts(this.actor, this.object.data.data.stunts[name]);
+        editor.render(true);
+        editor.setSheet(this);
+        this.helpers.push(editor);
     }
 
     renderHelpers(){
@@ -98,7 +115,18 @@ export class ModularFateCharacter extends ActorSheet {
     async _onStunts_dblclick(event, html) {
         console.log("stunts button clicked")
         //Launch the EditPlayerStunts FormApplication.
-        let editor = new EditPlayerStunts(this.actor); //Passing the actor works SOO much easier.
+        let stunt = {
+            "name":"New Stunt",
+            "linked_skill":"None",
+            "description":"",
+            "refresh_cost":1,
+            "overcome":false,
+            "caa":false,
+            "attack":false,
+            "defend":false,
+            "plusTwo":false
+        }
+        let editor = new EditPlayerStunts(this.actor, stunt);
         editor.render(true);
         editor.setSheet(this);
         this.helpers.push(editor);
@@ -332,13 +360,22 @@ export class ModularFateCharacter extends ActorSheet {
         let paidStunts = 0;
         let paidExtras = 0;
 
+        //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value
+
         let tracks = duplicate(sheetData.data.tracks);
         for (let track in tracks) {
             if (tracks[track].paid) {
                 paidTracks++;
             }
         }
-        paidStunts = numStunts - paidStunts;
+        
+        let stunts = this.object.data.data.stunts;
+        for (let s in stunts){
+            paidStunts += parseInt(stunts[s].refresh_cost);
+        }
+        
+        paidStunts -= this.freeStunts;
+
         //TODO: Add code to count the cost of paid for extras, too.
         this.refreshSpent = paidTracks + paidStunts + paidExtras;
         let isPlayer = this.object.isPC;
@@ -392,6 +429,7 @@ export class ModularFateCharacter extends ActorSheet {
         let track_categories = game.settings.get("ModularFate", "track_categories");
         sheetData.track_categories = track_categories;
         sheetData.tracks = this.object.data.data.tracks;
+        sheetData.stunts = this.object.data.data.stunts;
         this.renderHelpers();
         return sheetData;
     }
