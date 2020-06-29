@@ -172,6 +172,43 @@
     <div><!--Begin Extras block-->
         <div name = "Extras header" style="width:20%"><h1>Extras:</h1></div>
         <div name = "extras_body" style="overflow-y:scroll; width:400px; height:auto; border:lightsteelblue; border-width:2px; border-style:solid">
+                
+
+
+
+            <section class="extras item-list">
+                <div class="header">
+                    <div class="item-controls">
+                        <a class="item-control item-create" title="Create Extra" data-type="Extra"><i class="fas fa-plus"></i>
+                            Add</a>
+                    </div>
+                </div>
+                <ul class="item-list-content stunts-list">
+                    {{#each items as |extra k|}}
+                    <li class="item stunt-list-item" data-item-id="{{extra._id}}">
+                        {{#if ../owner}}
+                        <div class="item-name item-control item-edit">
+                            <h4>{{extra.name}}</h4>
+                        </div>
+                        <div class="item-controls">
+                            <a class="item-control item-delete" title="Delete Extra"><i class="fas fa-trash"></i></a>
+                        </div>
+                        {{else}}
+                        <div class="item-name">
+                            <h4>{{extra.name}}</h4>
+                        </div>
+                        {{/if}}
+                    </li>
+                    {{/each}}
+                </ul>
+            </section>
+
+
+
+
+
+
+
         </div><!--End of Extras Body block-->
          </div><!--End of Extras block-->   
     </div><!--End of bio tab-->
