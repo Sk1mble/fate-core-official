@@ -347,6 +347,24 @@ export class ModularFateCharacter extends ActorSheet {
             this.newCharacter = false;
         }
     }
+
+    async clearFleeting(){
+        //This is a convenience method which clears all fleeting Tracks.
+        let tracks = duplicate(this.object.data.data.tracks);
+        
+        for (let t in tracks){
+            let track = tracks[t];
+            if (track.recovery_type == "Fleeting"){
+                for (let i = 0; i < track.box_values.length; i++){
+                    track.box_values[i] = false;
+                }
+                if (track.aspect.name != undefined){
+                    track.aspect.name = "";
+                }
+            }
+        }
+    }
+
     async getData() {
         if (this.first_run){
             this.initialise();
@@ -368,7 +386,12 @@ export class ModularFateCharacter extends ActorSheet {
                 paidTracks++;
             }
         }
-        
+
+        this.object.items.entries.forEach(item => {
+            console.log(item.data.data.refresh)
+                paidExtras += parseInt(item.data.data.refresh);
+        })
+
         let stunts = this.object.data.data.stunts;
         for (let s in stunts){
             paidStunts += parseInt(stunts[s].refresh_cost);
@@ -376,7 +399,6 @@ export class ModularFateCharacter extends ActorSheet {
         
         paidStunts -= this.freeStunts;
 
-        //TODO: Add code to count the cost of paid for extras, too.
         this.refreshSpent = paidTracks + paidStunts + paidExtras;
         let isPlayer = this.object.isPC;
         let error = false;
