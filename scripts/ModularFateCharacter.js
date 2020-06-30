@@ -34,46 +34,48 @@ export class ModularFateCharacter extends ActorSheet {
 
     //Here are the action listeners
     activateListeners(html) {
+        if (this.actor.owner){
+            const skillsButton = html.find("div[name='edit_player_skills']");;
+            skillsButton.on("click", event => this._onSkillsButton(event, html));
+            const skill_name = html.find("div[name='skill']");
+            skill_name.on("click", event => this._onSkill_name(event, html));
+            const sort = html.find("div[name='sort_player_skills'")
+            sort.on("click", event => this._onSortButton(event, html));
+            const aspectName = html.find("div[name='aspect']")
+            aspectName.on("dblclick", event => this._onAspectDblClick(event, html));
+            aspectName.on("contextmenu", event => this._onAspectRightClick(event, html));
+            const box = html.find("button[name='box']");
+            box.on("click", event => this._on_click_box(event, html));
+            const skills_block = html.find("div[name='skills_block']");
+            skills_block.on("dblclick", event => this._onSkillsButton(event, html));
+            skills_block.on("contextmenu", event => this._onSortButton(event, html));
+            const track_name = html.find("div[name='track_name']");
+            track_name.on("click", event => this._on_track_name_click(event, html));
+
+            const delete_stunt = html.find("button[name='delete_stunt']");
+            delete_stunt.on("click", event => this._onDelete(event,html));
+            const edit_stunt = html.find("button[name='edit_stunt']")
+            edit_stunt.on("click", event => this._onEdit (event,html));
+
+            const tracks_button = html.find("div[name='edit_player_tracks']"); // Tracks, tracks, check
+            const stunts_button = html.find("div[name='edit_player_stunts']");
+
+            const extras_button = html.find("div[name='add_player_extra']");
+            const extras_edit = html.find ("button[name='edit_extra']");
+            const extras_delete = html.find("button[name='delete_extra']");
+
+            extras_button.on("click", event => this._on_extras_click(event, html));
+            extras_edit.on("click", event => this._on_extras_edit_click(event, html));
+            extras_delete.on("click", event => this._on_extras_delete(event, html));
+
+            const tracks_block = html.find("div[name='tracks_block']");
+            const stunts_block = html.find("div[name='stunts_block']");
+            tracks_block.on("dblclick", event => this._onTracks_dblclick(event, html));
+            stunts_block.on("dblclick", event => this._onStunts_dblclick(event, html))
+            stunts_button.on("click", event => this._onStunts_dblclick(event, html));
+            tracks_button.on("click", event => this._onTracks_dblclick(event, html));
+        }
         super.activateListeners(html);
-        const skillsButton = html.find("div[name='edit_player_skills']");;
-        skillsButton.on("click", event => this._onSkillsButton(event, html));
-        const skill_name = html.find("div[name='skill']");
-        skill_name.on("click", event => this._onSkill_name(event, html));
-        const sort = html.find("div[name='sort_player_skills'")
-        sort.on("click", event => this._onSortButton(event, html));
-        const aspectName = html.find("div[name='aspect']")
-        aspectName.on("dblclick", event => this._onAspectDblClick(event, html));
-        aspectName.on("contextmenu", event => this._onAspectRightClick(event, html));
-        const box = html.find("button[name='box']");
-        box.on("click", event => this._on_click_box(event, html));
-        const skills_block = html.find("div[name='skills_block']");
-        skills_block.on("dblclick", event => this._onSkillsButton(event, html));
-        skills_block.on("contextmenu", event => this._onSortButton(event, html));
-        const track_name = html.find("div[name='track_name']");
-        track_name.on("click", event => this._on_track_name_click(event, html));
-
-        const delete_stunt = html.find("button[name='delete_stunt']");
-        delete_stunt.on("click", event => this._onDelete(event,html));
-        const edit_stunt = html.find("button[name='edit_stunt']")
-        edit_stunt.on("click", event => this._onEdit (event,html));
-
-        const tracks_button = html.find("div[name='edit_player_tracks']"); // Tracks, tracks, check
-        const stunts_button = html.find("div[name='edit_player_stunts']");
-
-        const extras_button = html.find("div[name='add_player_extra']");
-        const extras_edit = html.find ("button[name='edit_extra']");
-        const extras_delete = html.find("button[name='delete_extra']");
-
-        extras_button.on("click", event => this._on_extras_click(event, html));
-        extras_edit.on("click", event => this._on_extras_edit_click(event, html));
-        extras_delete.on("click", event => this._on_extras_delete(event, html));
-
-        const tracks_block = html.find("div[name='tracks_block']");
-        const stunts_block = html.find("div[name='stunts_block']");
-        tracks_block.on("dblclick", event => this._onTracks_dblclick(event, html));
-        stunts_block.on("dblclick", event => this._onStunts_dblclick(event, html))
-        stunts_button.on("click", event => this._onStunts_dblclick(event, html));
-        tracks_button.on("click", event => this._onTracks_dblclick(event, html));
     }
 
     async _on_extras_click(event, html){
