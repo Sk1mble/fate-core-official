@@ -27,7 +27,7 @@ class EditPlayerSkills extends FormApplication{
         options.width = "auto";
         options.height = "auto";
         options.title = `Character Skill Editor`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "PlayerSkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;
         return options;
@@ -56,6 +56,7 @@ class EditPlayerSkills extends FormApplication{
             await this.object.update({"data.skills":this.player_skills}); 
             ui.notifications.info("Character skills saved.")   
             this.sheet.initialise();
+            this.close();
         }
     }
 

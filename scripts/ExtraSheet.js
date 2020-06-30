@@ -6,16 +6,6 @@ export class ExtraSheet extends ItemSheet {
         if (data.data.box_values == undefined || data.data.box_values.length == 0){
            //data.box_values = [false,false,false,false,false,false,false,false,false,false];
         }
-
-        let idata = duplicate(data)
-        idata.data.box_values = [false,false,false];
-        let i = new Item(data);
-
-        
-        //await i.update({"data.box_values":[]})
-        i.update({ "data.data.box_values": "helloworld" })
-        console.log(i);
-        //console.log(data.data.box_values.length);
         return data;
     }
     

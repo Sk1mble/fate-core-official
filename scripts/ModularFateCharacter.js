@@ -1,9 +1,20 @@
+import { ExtraSheet } from "./ExtraSheet.js";
+
 export class ModularFateCharacter extends ActorSheet {
 
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.width = "860"
         options.height = "900"
+        mergeObject(options, {
+            tabs: [
+                {
+                    navSelector: '.foo',
+                    contentSelector: '.sheet-body',
+                    initial: 'sheet',
+                },
+            ],
+        });
         return options;
     }
 
@@ -48,12 +59,39 @@ export class ModularFateCharacter extends ActorSheet {
 
         const tracks_button = html.find("div[name='edit_player_tracks']"); // Tracks, tracks, check
         const stunts_button = html.find("div[name='edit_player_stunts']");
+
+        const extras_button = html.find("div[name='add_player_extra']");
+        const extras_edit = html.find ("button[name='edit_extra']");
+        const extras_delete = html.find("button[name='delete_extra']");
+
+        extras_button.on("click", event => this._on_extras_click(event, html));
+        extras_edit.on("click", event => this._on_extras_edit_click(event, html));
+        extras_delete.on("click", event => this._on_extras_delete(event, html));
+
         const tracks_block = html.find("div[name='tracks_block']");
         const stunts_block = html.find("div[name='stunts_block']");
         tracks_block.on("dblclick", event => this._onTracks_dblclick(event, html));
         stunts_block.on("dblclick", event => this._onStunts_dblclick(event, html))
         stunts_button.on("click", event => this._onStunts_dblclick(event, html));
         tracks_button.on("click", event => this._onTracks_dblclick(event, html));
+    }
+
+    async _on_extras_click(event, html){
+        const data = {
+            "name": "New Extra", 
+            "type": "Extra"
+        };
+        const created = await this.actor.createEmbeddedEntity("OwnedItem", data);
+    }
+    async _on_extras_edit_click(event, html){
+        let items = this.object.items;
+        let item = items.get(event.target.id);
+        let e = new ExtraSheet(item);
+        await e.render(true);
+    }
+    async _on_extras_delete(event, html){
+        await this.actor.deleteOwnedItem(event.target.id);
+        //const deleted = await x.deleteEmbeddedEntity("OwnedItem", event.target.id);
     }
 
     async _onDelete(event, html){
@@ -113,7 +151,6 @@ export class ModularFateCharacter extends ActorSheet {
     }
 
     async _onStunts_dblclick(event, html) {
-        console.log("stunts button clicked")
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
             "name":"New Stunt",
@@ -218,7 +255,6 @@ export class ModularFateCharacter extends ActorSheet {
 
         if (working_data.data.details.fatePoints.refresh == "") {
             this.newCharacter = true;
-            console.log("Setting refresh");
             working_data.data.details.fatePoints.refresh = refresh;
             working_data.data.details.fatePoints.current = refresh;
         }
@@ -348,23 +384,6 @@ export class ModularFateCharacter extends ActorSheet {
         }
     }
 
-    async clearFleeting(){
-        //This is a convenience method which clears all fleeting Tracks.
-        let tracks = duplicate(this.object.data.data.tracks);
-        
-        for (let t in tracks){
-            let track = tracks[t];
-            if (track.recovery_type == "Fleeting"){
-                for (let i = 0; i < track.box_values.length; i++){
-                    track.box_values[i] = false;
-                }
-                if (track.aspect.name != undefined){
-                    track.aspect.name = "";
-                }
-            }
-        }
-    }
-
     async getData() {
         if (this.first_run){
             this.initialise();
@@ -388,7 +407,6 @@ export class ModularFateCharacter extends ActorSheet {
         }
 
         this.object.items.entries.forEach(item => {
-            console.log(item.data.data.refresh)
                 paidExtras += parseInt(item.data.data.refresh);
         })
 
@@ -433,6 +451,7 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.ordered_skills = ordered_skills;
         sheetData.sorted_by_rank = sorted_by_rank;
         sheetData.gameRefresh = game.settings.get("ModularFate", "refreshTotal");
+        sheetData.item=this.object.items;
 
         let skillTotal = 0;
         for (let s in ordered_skills) {

@@ -3,27 +3,28 @@
     <div name = "stunt_body" style="overflow-y:scroll; width:700px; height:auto; border:lightsteelblue; border-width:2px; border-style:solid"><!--Begin body-->
         <table style="background-color: white; border:none; width:690px">    
             <tr>
-                <td width="120">Name: </td>
-                <td><input style="background-color: lightsteelblue; color:black; font-family:Arial; width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
+                <td width="120">Name:</td>
+                <td colspan="2"><input style="background-color: lightsteelblue; color:black; font-family:Arial; width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
             </tr>
             <tr>
                 <td>Linked Skill:</td>                
-                <td><select style="background-color: lightsteelblue; color:black; font-family:Arial" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>None</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
+                <td colspan ="2"><select style="background-color: lightsteelblue; color:black; font-family:Arial" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>None</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
                 <input type="checkbox" name="plusTwo" {{checked stunt.plusTwo}}></input>+2?</td>
             </tr>
             <tr>
                 <td>Description:</td>
-                <td><textarea name="description" style="background-color: lightsteelblue; color:black; font-family:Arial" rows = "5">{{stunt.description}}</textarea></td>
+                <td colspan="2"><textarea name="description" style="background-color: lightsteelblue; color:black; width:500px; font-family:Arial" rows = "5">{{stunt.description}}</textarea></td>
             </tr>
             <tr>
                 <td>Refresh Cost:</td>
-                <td>    <input type="number" min="0" name="refresh_cost" style="height:30px; width:50px" value="{{stunt.refresh_cost}}"></input>
-                            <td style="width:20px"><input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large" title="Overcome">O</b></td>
-                            <td style="width:20px"><input type="checkbox" name="caa" {{checked stunt.caa}} ><b <b style="font-family:Fate Core; font-size:xx-large" title="Create an Advantage">C</b></input></td>
-                            <td style="width:20px"><input type="checkbox" name="attack" {{checked stunt.attack}}></input><b style="font-family:Fate Core; font-size:xx-large" title="Attack">A</b></td>
-                            <td style="width:20px"><input type="checkbox" name="defend" {{checked stunt.defend}}></input><b style="font-family:Fate Core; font-size:xx-large" title="Defend">D</b></td>
-                        </td>
-                </tr>
+                <td><input type="number" min="0" name="refresh_cost" style="height:30px; width:50px" value="{{stunt.refresh_cost}}"></input></td>
+                <td>     
+                    <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="Overcome">O</b>
+                    <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="Create an Advantage">C</b></input>
+                    <input type="checkbox" name="attack" {{checked stunt.attack}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="Attack">A</b>
+                    <input type="checkbox" name="defend" {{checked stunt.defend}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="Defend">D</b>                   
+                </td>
+            </tr>
         </table>
     </div><!--End body-->
     <div id="buttons" style="width:400px">
