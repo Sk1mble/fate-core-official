@@ -1,6 +1,15 @@
-class FateUtilities extends Application {
-static async clearFleeting(object){
-        this.object = object;
+class FateUtilities {
+
+constructor(){
+}
+
+addApp(type, app){
+    console.log(this.apps);
+    this.apps[type].push(app);
+}
+
+async clearFleeting(object){
+    this.object = object;
 
         //This is a convenience method which clears all fleeting Tracks.
         let tracks = duplicate(this.object.data.data.tracks);
@@ -21,3 +30,5 @@ static async clearFleeting(object){
         })
     }
 }
+
+

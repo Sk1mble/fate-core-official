@@ -115,7 +115,7 @@ class AspectSetup extends FormApplication{
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
         copyButton.on("click", event => this._onCopyButton(event, html));
-
+        //TODO: Move this HOOK
         Hooks.on('closeEditAspect',async () => {
             this.render(true);
         })

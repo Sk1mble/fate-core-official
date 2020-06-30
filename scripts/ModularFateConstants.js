@@ -482,7 +482,7 @@ class ModularFateConstants {
     }
 
     static moveKey (object, key, numPlaces){
-        //If numPlaces is positive, we move down, if negative, up. Currently only planning to allow moving up/down by one place at a time, but options are nice and it's the same basic function.
+        //If numPlaces is positive, we move down, if negative, up. 
 
         let current_object = object;
         let end_object = {};

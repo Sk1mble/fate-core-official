@@ -36,6 +36,32 @@ Hooks.once('ready', async function () {
     }
 })
 
+Hooks.on('updateToken', (scene, token, data) => {
+    if (data.actorData != undefined){
+        game.system.apps["actor"].forEach(a=> {
+            a.renderMe(token._id, data);
+        })
+    }
+})
+
+Hooks.on('updateActor', (actor, data) => {
+    game.system.apps["actor"].forEach(a=> {
+        a.renderMe(actor.id, data);
+    })
+})
+
+Hooks.on('renderCombatTracker', (tracker, change, data) => {
+    game.system.apps["combat"].forEach(a=> {
+        a.renderMe(change);
+    })
+})
+
+Hooks.on('updateScene', (tracker, change, data) => {
+    game.system.apps["combat"].forEach(a=> {
+        a.renderMe(change);
+    })
+})
+
 Hooks.once('init', async function () {
     game.settings.register("ModularFate", "run_once", {
         name: "Run Once?",
@@ -44,6 +70,12 @@ Hooks.once('init', async function () {
         config:false,
         type: Boolean
     })
+
+    game.system.apps= {
+        actor:[],
+        combat:[],
+        scene:[]
+    }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     console.log(`Initializing Modular Fate`);
@@ -64,48 +96,6 @@ Hooks.once('init', async function () {
     if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
             game.settings.set("ModularFate","refreshTotal",3);
     }
-
+    
     //Register a setting for the game's Issues?
-
-    /*
-
-    //register a setting for the game's current refresh
-    CONFIG.FATE = FATE;
-    await preloadHandlebarsTemplates();
-    // Register Actor sheets
-
-    Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet('Fate', CoreCharacterSheet, {
-        types: ['Core'],
-        makeDefault: true,
-    });
-    Actors.registerSheet('Fate', FAECharacterSheet, {
-        types: ['Accelerated'],
-    });
-    Actors.registerSheet('Fate', CondensedCharacterSheet, {
-        types: ['Condensed'],
-    });
-    // Register Item sheets
-    Items.unregisterSheet('core', ItemSheet);
-    Items.registerSheet('fate', ItemSheetFATE, {
-        types: ['Stunt', 'Skill'],
-        makeDefault: true,
-    });
-    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
-    */
 });
-
-/* -------------------------------- */
-/*	Everything else					*/
-/*	(TODO: Move somewhere safer)	*/
-/* -------------------------------- */
-// Adds a simple Handlebars "for loop" block helper
-/*Handlebars.registerHelper('for', function (times, block) {
-    var accum = '';
-    for (let i = 0; i < times; i++) {
-        block.data.index = i;
-        block.data.num = i + 1;
-        accum += block.fn(i);
-    }
-    return accum;
-});*/

@@ -11,7 +11,7 @@ class EditPlayerStunts extends FormApplication {
         } else {
             this.options.title=`Stunt editor for ${this.object.name}`
         }
-       
+        game.system.apps["actor"].push(this);
     } //End constructor
 
     static get defaultOptions(){
@@ -72,9 +72,48 @@ class EditPlayerStunts extends FormApplication {
         await this.object.update({"data.stunts":{[name]:stunt}})
     }
 
+    renderMe(id,data){
+        if (this.object.isToken){
+            if (this.actor.token.data._id == id){
+               let name = this.stunt.name;
+                try {
+                    if (data.actorData.data.stunts[name]!=undefined){
+                        this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
+                        ui.notifications.error("Someone else just edited this stunt.")
+                        this.render(false);
+                    }
+                }
+                catch {
+
+                }
+            }
+        }
+        else {
+            if (this.actor.id == id){
+                let name = this.stunt.name;
+                try {
+                    console.log(data)
+                    if (data.data.stunts[name]!=undefined){
+                        this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
+                        ui.notifications.error("Someone else just edited this stunt.")
+                        this.render(false);
+                    }
+                }
+                catch {
+
+                }
+            }
+        }       
+    }
+
+    close(){
+        game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
+        super.close();
+    }
+
     setSheet (ActorSheet){
         this.sheet = ActorSheet;
-    } //We will call render functions when change data here, and the sheet will tell us when to render as well.
+    } 
 
     async getData(){
         let data={}
@@ -82,4 +121,4 @@ class EditPlayerStunts extends FormApplication {
         data.skills=this.actor.data.data.skills;
         return data
     } //End getData
-} //End EditPlayerTracks
+} //End EditPlayerStunts

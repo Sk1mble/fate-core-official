@@ -29,7 +29,6 @@ export class ModularFateCharacter extends ActorSheet {
     constructor (...args){
         super(...args);
         this.first_run = true;
-        this.helpers=[];
     }
 
     //Here are the action listeners
@@ -107,17 +106,6 @@ export class ModularFateCharacter extends ActorSheet {
         let editor = new EditPlayerStunts(this.actor, this.object.data.data.stunts[name]);
         editor.render(true);
         editor.setSheet(this);
-        this.helpers.push(editor);
-    }
-
-    renderHelpers(){
-        this.helpers.forEach(helper=>{
-            if (helper.rendered == false){
-                this.helpers.splice(this.helpers.indexOf(helper),1)
-            } else {
-                helper.render(false);
-            }
-        })
     }
 
     async _on_track_name_click(event, html) {
@@ -168,14 +156,12 @@ export class ModularFateCharacter extends ActorSheet {
         let editor = new EditPlayerStunts(this.actor, stunt);
         editor.render(true);
         editor.setSheet(this);
-        this.helpers.push(editor);
     }
     async _onTracks_dblclick(event, html) {
         //Launch the EditPlayerTracks FormApplication.
         let editor = new EditPlayerTracks(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
-        this.helpers.push(editor);
     }
 
     async _onAspectRightClick(event, html) {
@@ -229,7 +215,6 @@ export class ModularFateCharacter extends ActorSheet {
         let editor = new EditPlayerSkills(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
-        this.helpers.push(editor);
     }
     async _onSortButton() {
         if (this.sortByRank == undefined) {
@@ -381,7 +366,6 @@ export class ModularFateCharacter extends ActorSheet {
             let e = new EditPlayerSkills(this.actor);
             e.render(true);
             e.setSheet(this);
-            this.helpers.push(e);
             this.newCharacter = false;
         }
     }
@@ -473,7 +457,6 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.track_categories = track_categories;
         sheetData.tracks = this.object.data.data.tracks;
         sheetData.stunts = this.object.data.data.stunts;
-        this.renderHelpers();
         return sheetData;
     }
 }

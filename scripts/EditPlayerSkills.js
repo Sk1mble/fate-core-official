@@ -13,10 +13,26 @@ class EditPlayerSkills extends FormApplication{
                 this.sortByRank = true;
                 this.temp_presentation_skills=[];
                 this.sorted = false;
+                game.system.apps["actor"].push(this);
     }
 
     setSheet (ActorSheet){
         this.sheet = ActorSheet;
+    }
+
+    //This function is called when an actor update is called.
+    renderMe(id){
+        if (this.object.isToken){
+            if (this.object.token.id == id){
+                this.render(false);
+            }
+        }
+
+        else {
+            if (this.object._id == id){
+                this.render(false);
+            }
+        }       
     }
 
     //Set up the default options for instances of this class
@@ -58,6 +74,11 @@ class EditPlayerSkills extends FormApplication{
             this.sheet.initialise();
             this.close();
         }
+    }
+
+    close(){
+        game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
+        super.close();
     }
 
     async checkSkills(p){

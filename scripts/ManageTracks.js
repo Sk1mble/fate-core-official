@@ -217,6 +217,7 @@ class EditTracks extends FormApplication {
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
         copy_track.on("click", event => this._onCopyTrackButton(event, html));
   
+        //TODO: refactor to remove this hook
         Hooks.on('closeEditTrack',async () => {
             this.render(true);
         })

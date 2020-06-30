@@ -157,6 +157,8 @@ class SkillSetup extends FormApplication{
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
         copyButton.on("click", event => this._onCopyButton(event, html));
+        
+        //TODO: Move this HOOk (Or link the editor to the thing that calls the editor so this is unnecessary)
         Hooks.on('closeEditSkill',async () => {
             this.render(true);
         })

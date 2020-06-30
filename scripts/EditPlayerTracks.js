@@ -17,6 +17,7 @@ class EditPlayerTracks extends FormApplication {
         }
         this.selected_category = "";
         this.tracks_by_category = undefined;
+        game.system.apps["actor"].push(this);
     } //End constructor
 
     static get defaultOptions(){
@@ -39,6 +40,32 @@ class EditPlayerTracks extends FormApplication {
 
     setSheet (ActorSheet){
         this.sheet = ActorSheet;
+    }
+
+    renderMe(id, data){
+        if (this.object.isToken){
+            if (this.object.token.id == id){
+                if (data.actorData.data.tracks != undefined)
+                    this.tracks_by_cateogry=undefined;
+                    ui.notifications.error("Someone just edited the tracks on this character; closing to prevent data conflicts")
+                    this.close();
+            }
+        }
+
+        else {
+            console.log(data)
+            if (this.object._id == id){
+                if (data.data.tracks != undefined)
+                    this.tracks_by_cateogry=undefined;
+                    ui.notifications.error("Someone just edited the tracks on this character; closing to prevent data conflicts")
+                    this.close();  
+            }
+        }       
+    }
+
+    close(){
+        game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
+        super.close();
     }
 
     activateListeners(html) {
