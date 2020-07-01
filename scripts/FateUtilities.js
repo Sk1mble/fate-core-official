@@ -3,11 +3,6 @@ class FateUtilities {
 constructor(){
 }
 
-addApp(type, app){
-    console.log(this.apps);
-    this.apps[type].push(app);
-}
-
 async clearFleeting(object){
     this.object = object;
 
@@ -17,6 +12,7 @@ async clearFleeting(object){
         for (let t in tracks){
             let track = tracks[t];
             if (track.recovery_type == "Fleeting"){
+                console.log(data);
                 for (let i = 0; i < track.box_values.length; i++){
                     track.box_values[i] = false;
                 }

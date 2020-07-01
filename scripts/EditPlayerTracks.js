@@ -42,23 +42,20 @@ class EditPlayerTracks extends FormApplication {
         this.sheet = ActorSheet;
     }
 
-    renderMe(id, data){
+    async renderMe(id, data){
         if (this.object.isToken){
             if (this.object.token.id == id){
                 if (data.actorData.data.tracks != undefined)
-                    this.tracks_by_cateogry=undefined;
-                    ui.notifications.error("Someone just edited the tracks on this character; closing to prevent data conflicts")
-                    this.close();
+                    this.tracks_by_category=undefined;                   
+                    await this.render(false);
             }
         }
 
         else {
-            console.log(data)
             if (this.object._id == id){
                 if (data.data.tracks != undefined)
-                    this.tracks_by_cateogry=undefined;
-                    ui.notifications.error("Someone just edited the tracks on this character; closing to prevent data conflicts")
-                    this.close();  
+                    this.tracks_by_category=undefined;
+                    await this.render(false);  
             }
         }       
     }
@@ -510,6 +507,7 @@ class EditPlayerTracks extends FormApplication {
             //First we add all the tracks on the player to the relevant categories in world tracks DONE
             
             for (let t in this.tracks) {
+                console.log(this.tracks);
                 let track = duplicate(this.tracks[t]);
                 track.present=true;
                 track.number=1;
