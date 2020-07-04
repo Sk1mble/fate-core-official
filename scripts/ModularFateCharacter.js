@@ -228,9 +228,12 @@ export class ModularFateCharacter extends ActorSheet {
         let r = new Roll(`4dF + ${this.object.data.data.skills[event.target.id].rank}`);
         let roll = r.roll();
 
+        let msg = ChatMessage.getSpeaker(this.object.actor)
+        msg.alias = this.object.name;
+
         roll.toMessage({
             flavor: `<h1>${event.target.id}</h1>Rolled by ${game.user.name}`,
-            speaker: ChatMessage.getSpeaker(),
+            speaker: msg
         });
     }
 

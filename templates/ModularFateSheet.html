@@ -120,7 +120,8 @@
                         </td>
                         <td style="padding-bottom:10px">
                             {{#each this.box_values}}
-                            {{#if this}}<button type="button" name = "box" id="{{../name}}_{{@index}}_false" i icon class="fas fa-times" style="width:25px; height:25px; float:left; padding:5px"></button>{{else}}                          
+                            {{#if this}}
+                            <button type="button" name = "box" id="{{../name}}_{{@index}}_false" i icon class="fas fa-times" style="width:25px; height:25px; float:left; padding:5px"></button>{{else}}                          
                             <button type="button" name="box" id="{{../name}}_{{@index}}_true" style="width:25px; height:25px; float:left; padding:5px"></button>{{/if}}
                             {{/each}}
                             {{#if this.aspect.when_marked}}<input type="text" style="font-size:small; width:250px; height:25px; float:left; padding:5px; color:black; background-color: lightsteelblue; font-family:Arial;" name = "data.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"></input>{{/if}}
@@ -192,21 +193,4 @@
          </div><!--End of Extras block-->   
         </div><!--End of bio tab-->
 </section>
-
-<script>
-    function openBio(event) {
-        let name = event.target.id.split("_")[0];
-        let sheet=document.getElementById(`${name}_sheet_div`);
-        let bio=document.getElementById(`${name}_bio_div`);
-        sheet.style.display="none";
-        bio.style.display="block";
-    }
-    function openSheet(event){
-        let name = event.target.id.split("_")[0];
-        let sheet=document.getElementById(`${name}_sheet_div`);
-        let bio=document.getElementById(`${name}_bio_div`);
-        sheet.style.display="block";
-        bio.style.display="none";
-    }
-</script>
 </form>

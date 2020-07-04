@@ -37,7 +37,7 @@ Hooks.once('ready', async function () {
 })
 
 Hooks.on('updateToken', (scene, token, data) => {
-    if (data.actorData != undefined){
+    if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined){
         game.system.apps["actor"].forEach(a=> {
             a.renderMe(token._id, data);
         })
@@ -50,15 +50,39 @@ Hooks.on('updateActor', (actor, data) => {
     })
 })
 
-Hooks.on('renderCombatTracker', (tracker, change, data) => {
+Hooks.on('renderCombatTracker', () => {
     game.system.apps["combat"].forEach(a=> {
-        a.renderMe(change);
+        a.renderMe("renderCombatTracker");
+    })
+})
+Hooks.on('updateCombat', (...args) => {
+    let ags = args;
+    game.system.apps["combat"].forEach(a=> {
+        a.renderMe(ags);
     })
 })
 
-Hooks.on('updateScene', (tracker, change, data) => {
+Hooks.on('deleteCombat', (...args) => {
     game.system.apps["combat"].forEach(a=> {
-        a.renderMe(change);
+        a.renderMe("deleteCombat");
+    })
+})
+
+Hooks.on('deleteToken', (...args) => {
+    game.system.apps["actor"].forEach(a=> {
+        a.renderMe("deleteToken");
+    })
+})
+
+Hooks.on('createToken', (...args) => {
+    game.system.apps["actor"].forEach(a=> {
+        a.renderMe("createToken");
+    })
+})
+
+Hooks.on('updateScene', (scene, data) => {
+    game.system.apps["combat"].forEach(a=> {
+        a.renderMe(scene, data);
     })
 })
 

@@ -71,7 +71,7 @@ class EditPlayerSkills extends FormApplication{
         } else {
             await this.object.update({"data.skills":this.player_skills}); 
             ui.notifications.info("Character skills saved.")   
-            this.sheet.initialise();
+            await this.sheet.initialise();
             this.close();
         }
     }

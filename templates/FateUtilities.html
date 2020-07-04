@@ -1,0 +1,158 @@
+<form style="background-color:white">
+<nav class="navigation foo">
+    <a class="item" data-tab="aspects"><b title="Aspects & Fate Points" i icon class="fas fa-theater-masks" style="font-size:x-large; padding: 25px; float:left; background-color:gainsboro"></b></a>
+    <a class="item" data-tab="tracks"><b title="Character Tracks" i icon class="fas fa-user-injured" style="font-size:x-large; padding:25px; background-color:beige"></b></a>
+    <a class="item" data-tab="scene"><b title="Scene Notes & Situation Aspects" i icon class="fas fa-book" style="font-size:x-large; padding:25px; float:left; background-color:palegoldenrod"></b></a>                
+</nav>
+<table style="border:none;">
+<tr>
+    <td style="vertical-align:top">
+        <section class="utilities-body">
+
+            <!----------------------BEGIN Aspects Tab-->
+            <div name = "aspects" class="tab aspects" data-tab="aspects" style="background-color:gainsboro; overflow-y:scroll; height:650px">
+                <table style="font-size:small">
+                    {{#each all_tokens}}
+                    <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
+                        <td>
+                            <img src="{{this.data.img}}" style="width:40px; height:40px"/>
+                        </td>
+                        <td>
+                            {{this.name}}<br>
+                            {{#if this.owner}}
+                            <select id="{{this.id}}_selectSkill">
+                                <option disabled="disabled" selected="selected">Pick a skill</option>
+                                {{#each this.actor.data.data.skills}}
+                                <option>{{this.name}} ({{this.rank}})</option>
+                                {{/each}}
+                            </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
+                            {{/if}}
+                        </td>
+                        <td>
+                                <table border="0" style="font-size:small">
+                                    {{#each this.actor.data.data.aspects}}
+                                    <tr>
+                                        <td><b>{{this.name}}</b>: 
+                                        </td>
+                                        <td>
+                                            {{this.value}}
+                                        </td>
+                                    </tr>    
+                            {{/each}}
+                        </table>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </table>
+            </div><!--End Aspects tab--------------------------------------->
+            
+            <!--------BEGIN Tracks tab-->
+            <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:beige;">
+                Category: 
+                <select id = "category_select">
+                    <option disabled="disabled" selected="selected">Combat</option>
+                    {{#each categories}}
+                    <option>{{this}}</option>
+                    {{/each}}
+                </select> <button type="button" style="width:150px; height:50px" id="clear_fleeting">Clear All Fleeting</button>
+                <div style="background-color:beige; overflow-y:scroll; height:650px">
+                {{#each all_tokens}}
+                <table style="border:1px; padding:10px;">
+                    <tr>
+                        <td width = "300px">
+                            <b>{{this.name}}</b>
+                        </td>
+                    </tr>
+                {{#each this.actor.data.data.tracks}}
+                {{#if (eq ../../category this.category)}}{{#if this.enabled}}
+                <tr>
+                    <td>
+                        <div name="track_name" id="{{../this.id}}"" title="Click here to edit the track notes for {{this.name}}">{{this.name}}</div>
+                    </td>
+                    <td>
+                        {{#each this.box_values}}
+                        {{#if this}}
+                        <button type="button" name="box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" i icon class="fas fa-times" style="width:25px; height:25px; float:left; padding:5px" {{#if ../../../GM}}{{else}}disabled="disabled"{{/if}}></button>{{else}}                          
+                        <button type="button" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="width:25px; height:25px; float:left; padding:5px"></button>{{/if}}
+                            {{/each}}<!--end box_values each-->
+                            {{#if this.aspect.when_marked}}<input type="text" name="track_aspect" id="{{../this.id}}_{{this.name}}" style="font-size:small; width:250px; height:25px; float:left; padding:5px; color:black; background-color: white; font-family:Arial;" value ="{{this.aspect.name}}" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}></input>{{/if}}
+                    </td>
+                </tr>
+                {{/if}}
+                {{/if}}<!--end-->
+                {{/each}}<!--end all_tracks each-->
+                </table>
+                {{/each}}<!--ENd all_tokens each-->
+            </div><!--//End Tracks body-->
+        </div><!--End tracks tab-------------------------------->
+
+            <!----------------------------------------------------------------------BEGIN SCENE TAB-->
+            <div name = "scene" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:scroll; height:600px">
+                    <h1>Situation Aspects</h1>
+                    {{#if GM}}Aspect: <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black"></input>
+                    Free invokes: <input type="number" id="free_invokes" style="width:50px; background-color:white; color:black"></input>{{/if}}
+                    {{#if GM}}<button type="button" id="add_sit_aspect" style="width:25px; height:25px;"i icon class="fas fa-plus"></button>{{/if}}
+                    <div style="overflow-y:scroll; height:200px">
+                    <table style="border:none;">
+                        {{#each situation_aspects}}
+                            <tr>
+                                <td width = "300px">
+                                    {{this.name}}
+                                </td>
+                                <td>
+                                    <input type="number" id="free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}style="width:50px; background-color:white; color:black" value="{{this.free_invokes}}"></input>
+                                    {{#if ../GM}}<button type="button" name="del_sit_aspect" id="delete_{{this.name}}" style="width:25px; height:25px" i icon class="fas fa-trash"></button>{{/if}}
+                                </td>
+                            </tr> 
+
+                        {{/each}}
+                    </table>
+                    </div>
+                    <h1>Scene Notes</h1>
+                    <div style="overflow-y:scroll; height:200px">
+                        <div contenteditable="true" {{#if GM}}{{else}}disabled = "disabled"{{/if}} id="scene_notes" style="border-color:darkgray; border-style:solid; border-width:2px">{{log this}}{{{this.notes}}}</div>
+                    </div>                
+                    {{#if GM}}<button type="button" id="save_notes" style="width:50px; height:50px">Save</button>{{/if}}
+            </div><!--End Scene tab---------------------------------------------------->
+            <!----------------------------------------------------------------------END SCENE TAB-->
+
+        </section>
+    </td>
+    {{#if conflict}}
+    <td width="32%">
+        <h2>Action Tracker</h2>
+        {{#if conflict}}
+        <h3>Exchange: {{exchange}}</h3>
+        <div class="Action Tracker" style="overflow-y:scroll; height:600px">
+            {{else}}No conflict detected.
+            {{/if}}
+            <table style="border:none; background-color:white">
+            {{#each combat_tokens}} {{#if this.hasActed}} {{else}}
+            <tr>    
+                <td>
+                    <button type="button" class="popcorn" id="{{this.id}}"" style="height:50px; width:50px; background: url({{this.data.img}}); background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
+                </td>
+                <td>
+                    {{this.name}}
+                </td>
+            </tr>
+            {{/if}}
+            {{/each}}
+            {{#if GM}}
+            <tr>
+                <td>
+                    <button type="button" style="width:50px; height:25px; float:left" id="next_exchange" title="Next Exchange" i icon class="fas fa-forward"></button>                    
+                    <button type="button" style="width:50px; height:25px; float:left" id="timed_event" title="Timed Event" i icon class="fas fa-clock"></button>                    
+                </td>
+                <td>
+                    <button type="button" style="width:50px; height:25px; float:right" id="end_conflict" title="End Conflict" i icon class="fas fa-trash"></button>
+                </td>
+            </tr>
+            {{/if}}
+            </table>                
+        </div><!--End action tracker body-->
+    </td>
+    {{/if}}
+</tr>
+</table>
+</form>
