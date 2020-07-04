@@ -80,9 +80,10 @@ Hooks.on('createToken', (...args) => {
     })
 })
 
-Hooks.on('updateScene', (scene, data) => {
+Hooks.on('updateScene', (...args) => {
+    let ags = args;
     game.system.apps["combat"].forEach(a=> {
-        a.renderMe(scene, data);
+        a.renderMe(args);
     })
 })
 

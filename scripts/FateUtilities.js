@@ -59,7 +59,7 @@ async scene_notes_edit(event,html){
     this.editingSceneNotes = true;
     let notes = html.find("div[id='scene_notes']")[0].innerHTML
     await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
-    this.editingSceneNotes = false;
+    setTimeout(function(){this.editingSceneNotes = false},500);
 }
 
 async _free_i_button(event,html){
@@ -300,7 +300,9 @@ async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
     try {
-        if (args[1].flags.ModularFate.sceneNotes == undefined || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes.
+        console.log(args)
+        console.log(this.id);
+        if (args[0][1].flags.ModularFate.sceneNotes == undefined || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes.
             this.render(false)
     }
     } catch (error){
