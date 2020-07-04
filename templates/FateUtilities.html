@@ -54,7 +54,7 @@
                     {{#each categories}}
                     <option>{{this}}</option>
                     {{/each}}
-                </select> <button type="button" style="width:150px; height:50px" id="clear_fleeting">Clear All Fleeting</button>
+                </select> {{#if ../GM}}<button type="button" style="width:150px; height:50px" id="clear_fleeting">Clear All Fleeting</button>{{/if}}
                 <div style="background-color:beige; overflow-y:scroll; height:650px">
                 {{#each all_tokens}}
                 <table style="border:1px; padding:10px;">
@@ -73,7 +73,7 @@
                         {{#each this.box_values}}
                         {{#if this}}
                         <button type="button" name="box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" i icon class="fas fa-times" style="width:25px; height:25px; float:left; padding:5px" {{#if ../../../GM}}{{else}}disabled="disabled"{{/if}}></button>{{else}}                          
-                        <button type="button" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="width:25px; height:25px; float:left; padding:5px"></button>{{/if}}
+                        <button type="button" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="width:25px; height:25px; float:left; padding:5px" {{#if ../../../GM}}{{else}}disabled="disabled"{{/if}}></button>{{/if}}
                             {{/each}}<!--end box_values each-->
                             {{#if this.aspect.when_marked}}<input type="text" name="track_aspect" id="{{../this.id}}_{{this.name}}" style="font-size:small; width:250px; height:25px; float:left; padding:5px; color:black; background-color: white; font-family:Arial;" value ="{{this.aspect.name}}" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}></input>{{/if}}
                     </td>

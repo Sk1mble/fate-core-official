@@ -86,7 +86,6 @@ async _add_sit_aspect(event, html){
 
 async _saveNotes(event, html){
     let notes = html.find("div[id='scene_notes']")[0].innerHTML
-    console.log(notes);
     await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
 }
 
@@ -108,7 +107,6 @@ async _roll(event,html){
     let r = new Roll(`4dF + ${rank}`);
         let roll = r.roll();
         let name = game.user.name
-        console.log(token)
 
         roll.toMessage({
             flavor: `<h1>${skill}</h1>Rolled by ${name}`,
@@ -143,7 +141,6 @@ async _on_click_box(event, html) {
     if (checked == "false") {
         checked = false
     }
-    console.log(checked)
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
     let tracks = duplicate(token.actor.data.data.tracks);
     let track = tracks[name]
@@ -158,13 +155,11 @@ async _on_track_name_click(event, html) {
     // Launch a simple application that returns us some nicely formatted text.
     //First, get the token
     let token_id = event.target.id;
-    console.log(token_id)
     let token = canvas.tokens.placeables.find(t => t.id==token_id);
     let tracks = duplicate(token.actor.data.data.tracks);
     let track = tracks[event.target.innerHTML]
     let notes = track.notes;
     let text = await ModularFateConstants.updateText("Track Notes", notes);
-    console.log(token)
     await token.actor.update({
         [`data.tracks.${event.target.innerHTML}.notes`]: text
     })
@@ -294,8 +289,6 @@ async getData(){
 async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
-    console.log(args)
-
     try {
         this.render(false)
     } catch {
@@ -375,7 +368,6 @@ class TimedEvent extends Application {
                     <td>Pending Event</td>
                 </tr>`
                 pendingEvents.forEach(event => {
-                    //console.log(event);
                     if (event.complete === false){
                         peText+=`<tr><td>${event.round}</td><td>${event.event}</td></tr>`
                     }
@@ -412,7 +404,6 @@ class TimedEvent extends Application {
                                                                                         }
                                                                                 ])
                                                                                 timedEvents=game.combat.getFlag("TimedEvent","timedEvents");
-                                                                                //console.log(timedEvents);
                             } else {
                                 timedEvents.push({   
                                                     "round":`${document.getElementById("eventExchange").value}`,
@@ -444,7 +435,6 @@ Hooks.on('renderCombatTracker', () => {
         for (let i = 0; i<pendingEvents.length;i++){
             var event = pendingEvents[i];
             if (r==event.round && event.complete != true){
-                //console.log("Match");
                 var dp = {
                     "title": "Timed Event",
                     "content": `<h2>Timed event for round ${event.round}:</h2><p></p>
