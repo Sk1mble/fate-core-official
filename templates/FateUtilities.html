@@ -109,9 +109,8 @@
                     </div>
                     <h1>Scene Notes</h1>
                     <div style="overflow-y:scroll; height:200px">
-                        <div contenteditable="true" {{#if GM}}{{else}}disabled = "disabled"{{/if}} id="scene_notes" style="border-color:darkgray; border-style:solid; border-width:2px">{{log this}}{{{this.notes}}}</div>
+                        <div {{#if GM}}contenteditable="true"{{else}}{{/if}} id="scene_notes" style="border-color:darkgray; border-style:solid; border-width:2px">{{{this.notes}}}</div>
                     </div>                
-                    {{#if GM}}<button type="button" id="save_notes" style="width:50px; height:50px">Save</button>{{/if}}
             </div><!--End Scene tab---------------------------------------------------->
             <!----------------------------------------------------------------------END SCENE TAB-->
 

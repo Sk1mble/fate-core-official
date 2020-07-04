@@ -6,6 +6,7 @@ constructor(){
     game.system.apps["combat"].push(this);
     game.system.apps["scene"].push(this); //Maybe? If we want to store scene notes, aspects, etc.
     this.category="Combat";
+    this.editingSceneNotes = false;
 }
 
 activateListeners(html) {
@@ -49,6 +50,16 @@ activateListeners(html) {
 
     const free_i = html.find("input[name='free_i']");
     free_i.on("change", event => this._free_i_button(event, html));
+
+    const scene_notes = html.find("div[id='scene_notes']");
+    scene_notes.on("input", event => this.scene_notes_edit(event, html));
+}
+
+async scene_notes_edit(event,html){
+    this.editingSceneNotes = true;
+    let notes = html.find("div[id='scene_notes']")[0].innerHTML
+    await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.editingSceneNotes = false;
 }
 
 async _free_i_button(event,html){
@@ -85,8 +96,7 @@ async _add_sit_aspect(event, html){
 }
 
 async _saveNotes(event, html){
-    let notes = html.find("div[id='scene_notes']")[0].innerHTML
-    await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.editingSceneNotes=false;
 }
 
 async _clear_fleeting(event, html){
@@ -290,8 +300,11 @@ async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
     try {
-        this.render(false)
-    } catch {
+        if (args[1].flags.ModularFate.sceneNotes == undefined || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes.
+            this.render(false)
+    }
+    } catch (error){
+        console.log(error)
     }
 }
 
