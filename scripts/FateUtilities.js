@@ -35,10 +35,6 @@ activateListeners(html) {
     const roll = html.find("button[name='roll']");
     roll.on("click", event => this._roll(event,html));
 
-    const saveNotes = html.find("button[id='save_notes']");
-    saveNotes.on("click", event => this._saveNotes(event, html));
-    
-
     const clear_fleeting = html.find("button[id='clear_fleeting']");
     clear_fleeting.on("click", event => this._clear_fleeting(event,html));
 
@@ -53,18 +49,21 @@ activateListeners(html) {
 
     const scene_notes = html.find("div[id='scene_notes']");
     scene_notes.on("input", event => this.scene_notes_edit(event, html));
+    scene_notes.on("focusout", event => this.editingSceneNotes = false);
+
+    const nav = html.find("nav[class='navigation foo']");
+    nav.on("click", event => this.render(false));
 }
 
 async scene_notes_edit(event,html){
     this.editingSceneNotes = true;
     let notes = html.find("div[id='scene_notes']")[0].innerHTML
     await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
-    setTimeout(function(){this.editingSceneNotes = false},500);
 }
 
 async _free_i_button(event,html){
     let name=event.target.id.split("_")[0];
-    let value=html.find("input[name='free_i']")[0].value
+    let value=html.find(`input[id='${name}_free_invokes']`)[0].value
     let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"))
     let aspect = situation_aspects[situation_aspects.findIndex(sit => sit.name == name)];
     aspect.free_invokes = value;
@@ -300,13 +299,13 @@ async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
     try {
-        console.log(args)
-        console.log(this.id);
-        if (args[0][1].flags.ModularFate.sceneNotes == undefined || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes.
+        //console.log(args)
+        if ((args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined) || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes. This will prevent rendering of other elements if they happen simultaneously with editing the notes, too, but I don't think that's a problem.
             this.render(false)
     }
     } catch (error){
         console.log(error)
+        this.render(false);
     }
 }
 
