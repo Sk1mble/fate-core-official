@@ -46,7 +46,18 @@ activateListeners(html) {
 
     const del_sit_aspect = html.find("button[name='del_sit_aspect']");
     del_sit_aspect.on("click", event => this._del_sit_aspect(event, html));
-    
+
+    const free_i = html.find("input[name='free_i']");
+    free_i.on("change", event => this._free_i_button(event, html));
+}
+
+async _free_i_button(event,html){
+    let name=event.target.id.split("_")[0];
+    let value=html.find("input[name='free_i']")[0].value
+    let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"))
+    let aspect = situation_aspects[situation_aspects.findIndex(sit => sit.name == name)];
+    aspect.free_invokes = value;
+    await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
 }
 
 async _del_sit_aspect(event, html){

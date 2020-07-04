@@ -91,7 +91,7 @@
                     <h1>Situation Aspects</h1>
                     {{#if GM}}Aspect: <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black"></input>
                     Free invokes: <input type="number" id="free_invokes" style="width:50px; background-color:white; color:black"></input>{{/if}}
-                    {{#if GM}}<button type="button" id="add_sit_aspect" style="width:25px; height:25px;"i icon class="fas fa-plus"></button>{{/if}}
+                    {{#if GM}}<button type="button" id="add_sit_aspect" style="width:30px; height:30px;"i icon class="fas fa-plus"></button>{{/if}}
                     <div style="overflow-y:scroll; height:200px">
                     <table style="border:none;">
                         {{#each situation_aspects}}
@@ -100,11 +100,10 @@
                                     {{this.name}}
                                 </td>
                                 <td>
-                                    <input type="number" id="free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}style="width:50px; background-color:white; color:black" value="{{this.free_invokes}}"></input>
+                                    <input type="number" name="free_i" id="{{this.name}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}style="width:50px; background-color:white; color:black" value="{{this.free_invokes}}"></input>
                                     {{#if ../GM}}<button type="button" name="del_sit_aspect" id="delete_{{this.name}}" style="width:25px; height:25px" i icon class="fas fa-trash"></button>{{/if}}
                                 </td>
                             </tr> 
-
                         {{/each}}
                     </table>
                     </div>
