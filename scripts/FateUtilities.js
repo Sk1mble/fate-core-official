@@ -454,9 +454,15 @@ function viewFatePoints(){
                 if (user.active){
                         if (!user.isGM){
                             actor = users[i].character;
-                            image = actor.data.img;
-                            name=actor.name;
-                            fp = actor.data.data.details.points.current;
+                            try {
+                                image = actor.data.img;
+                                name=actor.name;
+                                fp = actor.data.data.details.points.current;
+                            }
+                            catch {
+                                ui.notifications.error("Problem getting actor and fate points for "+users[i]+". Do they have a character assigned to them?")
+                            }
+                            
                         } else {
                             fp = user.getFlag("FateAddon","gmfatepoints");
                             if (fp == undefined || fp == null){
