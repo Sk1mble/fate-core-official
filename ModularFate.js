@@ -221,6 +221,12 @@ Hooks.on('updateToken', (scene, token, data) => {
     }
 })
 
+Hooks.on('updateUser',(...args) =>{
+        game.system.apps["user"].forEach (a=> {
+            a.renderMe("updateUser");
+        })
+})
+
 Hooks.on('updateActor', (actor, data) => {
     game.system.apps["actor"].forEach(a=> {
         a.renderMe(actor.id, data);
@@ -276,7 +282,8 @@ Hooks.once('init', async function () {
     game.system.apps= {
         actor:[],
         combat:[],
-        scene:[]
+        scene:[],
+        user:[]
     }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
