@@ -106,6 +106,7 @@ async _saveNotes(event, html){
 }
 
 async _clear_fleeting(event, html){
+    console.log("clearing")
     let tokens = canvas.tokens.placeables;
     for (let i = 0; i<tokens.length; i++){
         await this.clearFleeting(tokens[i].actor)
