@@ -213,7 +213,7 @@ async _nextButton(event, html){
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
         options.template = "systems/ModularFate/templates/FateUtilities.html"; 
-        options.width="800"
+        options.width="1000"
         options.height="auto";
         options.title = `Fate Utilities`;
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
