@@ -310,7 +310,6 @@ async renderMe(...args){
     try {
         //console.log(args)
         if ((args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined) || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes. This will prevent rendering of other elements if they happen simultaneously with editing the notes, too, but I don't think that's a problem.
-            let d = document.getElementById('fu_tracks_tab');
             await this.render(false)
     }
     } catch (error){
