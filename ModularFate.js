@@ -227,6 +227,12 @@ Hooks.on('updateUser',(...args) =>{
         })
 })
 
+Hooks.on('renderPlayerList',(...args) =>{
+    game.system.apps["user"].forEach (a=> {
+        a.renderMe("updateUser");
+    })
+})
+
 Hooks.on('updateActor', (actor, data) => {
     game.system.apps["actor"].forEach(a=> {
         a.renderMe(actor.id, data);

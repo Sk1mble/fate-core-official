@@ -412,6 +412,12 @@ function viewFatePoints(){
             return content;
         }
 
+        renderMe(string){
+            if (string == "updateUser" || string == "renderPlayerList"){
+                this.render(false)
+            }
+        }
+
         // This method gets the fate points for each player and the GM and outputs it to the window in a way that the GM can edit.
         prepareFatePoints(){
             let users = game.users.entries;
@@ -430,6 +436,7 @@ function viewFatePoints(){
 
             //if (user.isgm) - then get fate points from the user.getFlag("FateAddon","gmfatepoints"). If that's undefined, set to 0 and write back out to the GM's flag.
             //Otherwise, get the user's character's fate points.
+        
             
             for (let i=0;i<users.length;i++){
                 let user = users[i];
