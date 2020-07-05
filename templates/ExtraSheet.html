@@ -1,42 +1,25 @@
 <form class="contenteditable">
 <div class="data data-extra">
 	<div class="basic" style="background:white">
-		<label for="name">Name</label>
-		<div class="property-textarea" contenteditable="true" data-edit="name" style="background-color: lightsteelblue;">
-			{{{this.entity.name}}}
-		</div>
-		<label for="permissions">Permissions</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.permissions" style="background-color: lightsteelblue;">
-			{{{data.permissions}}}
-		</div>
+		<label for="name">Name:</label>
+		<textarea rows="2" name="name" style="background-color: lightsteelblue; font-family:Montserrat;">{{this.entity.name}}</textarea>
+		<label for="permissions">Permissions:</label>
+		<textarea rows="2" name="data.permissions" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.permissions}}</textarea>
 		<label for="costs">Costs:</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.costs"style="background-color: lightsteelblue;">
-			{{{data.costs}}}
-		</div>
+		<textarea rows="2" name="data.costs" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.costs}}</textarea>
 		<label for="refresh">Refresh Cost:</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.refresh" style="background-color: lightsteelblue;">
-			{{{data.refresh}}}
-		</div>
+		<input type="number" min="0" data-edit="data.refresh" style="background-color: lightsteelblue; font-family:Montserrat" value="{{data.refresh}}"">
+		</input>
 		<label for="description">Description:</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.description.value" style="background-color: lightsteelblue;">
-			{{{data.description.value}}}
-		</div>
+		<textarea rows="2" name="data.description.value" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.description.value}}</textarea>
 		<label for="overcome" style="Font-family:Fate Core; font-size:x-large;"">O</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.actions.overcome" style="background-color: lightsteelblue;">
-			{{{data.actions.overcome}}}
-		</div>
+		<textarea rows="2" name="data.actions.overcome" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.overcome}}</textarea>
 		<label for="create" style="Font-family:Fate Core; font-size:x-large;"">C</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.actions.create" style="background-color: lightsteelblue;">
-			{{{data.actions.create}}}
-		</div>
+		<textarea rows="2" name="data.actions.create" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.create}}</textarea>
 		<label for="attack" style="Font-family:Fate Core; font-size:x-large;"">A</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.actions.attack" style="background-color: lightsteelblue;">
-			{{{data.actions.attack}}}
-		</div>
+		<textarea rows="2" name="data.actions.attack" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.attack}}</textarea>
 		<label for="defend" style="Font-family:Fate Core; font-size:x-large;"">D</label>
-		<div class="property-textarea" contenteditable="true" data-edit="data.actions.defend" style="background-color: lightsteelblue;">
-			{{{data.actions.defend}}}
-		</div>
+		<textarea rows="2" name="data.actions.defend" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.defend}}</textarea>
 	</div>
 </div>
 </form>
