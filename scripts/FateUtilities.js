@@ -226,6 +226,7 @@ async _nextButton(event, html){
         options.title = `Fate Utilities`;
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
+        options.scrollY=["#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab"]
 
         mergeObject(options, {
             tabs: [
@@ -309,7 +310,8 @@ async renderMe(...args){
     try {
         //console.log(args)
         if ((args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined) || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes. This will prevent rendering of other elements if they happen simultaneously with editing the notes, too, but I don't think that's a problem.
-            this.render(false)
+            let d = document.getElementById('fu_tracks_tab');
+            await this.render(false)
     }
     } catch (error){
         console.log(error)

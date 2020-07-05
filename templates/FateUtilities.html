@@ -10,7 +10,7 @@
         <section class="utilities-body">
 
             <!----------------------BEGIN Aspects Tab-->
-            <div name = "aspects" class="tab aspects" data-tab="aspects" style="background-color:gainsboro; overflow-y:scroll; max-height:850px">
+            <div name = "aspects" class="tab aspects" data-tab="aspects" id="fu_aspects_tab" style="background-color:gainsboro; overflow-y:scroll; max-height:850px">
                 <table style="font-size:small">
                     {{#each all_tokens}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
@@ -55,7 +55,7 @@
                     <option>{{this}}</option>
                     {{/each}}
                 </select> {{#if GM}}<button type="button" style="width:50px; height:auto;" id="clear_fleeting">Clear</button> all Fleeting tracks in every category{{/if}}
-                <div style="background-color:beige; overflow-y:scroll; max-height:850px">
+                <div id="fu_tracks_tab" style="background-color:beige; overflow-y:scroll; max-height:850px">
                 {{#each all_tokens}}
                 <table style="border:1px; padding:10px;">
                     <tr>
@@ -87,7 +87,7 @@
         </div><!--End tracks tab-------------------------------->
 
             <!----------------------------------------------------------------------BEGIN SCENE TAB-->
-            <div name = "scene" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:scroll; max-height:850px">
+            <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:scroll; max-height:850px">
                     <h1>Situation Aspects</h1>
                     {{#if GM}}Aspect: <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black"></input>
                     Free invokes: <input type="number" id="free_invokes" style="width:50px; background-color:white; color:black"></input>{{/if}}

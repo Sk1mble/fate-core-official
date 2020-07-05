@@ -6,6 +6,7 @@ export class ModularFateCharacter extends ActorSheet {
         const options = super.defaultOptions;
         options.width = "860"
         options.height = "900"
+        options.scrollY = ["#skills_body", "#aspects_body","#tracks_body", "#stunts_body", "#biography_body"]
         mergeObject(options, {
             tabs: [
                 {
