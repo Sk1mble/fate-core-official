@@ -46,7 +46,7 @@ class EditPlayerStunts extends FormApplication {
     } //End activateListeners
 
     async _onSaveButton(event, html){
-        this.submit();
+        await this.submit();
     }
 
     async _onAddButton(event,html){
@@ -79,7 +79,7 @@ class EditPlayerStunts extends FormApplication {
                 try {
                     if (data.actorData.data.stunts[name]!=undefined){
                         this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
-                        ui.notifications.error("Someone else just edited this stunt.")
+                        ui.notifications.info("Stunt has been edited.")
                         this.render(false);
                     }
                 }
@@ -95,7 +95,7 @@ class EditPlayerStunts extends FormApplication {
                     console.log(data)
                     if (data.data.stunts[name]!=undefined){
                         this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
-                        ui.notifications.error("Someone else just edited this stunt.")
+                        ui.notifications.info("Stunt has been edited.")
                         this.render(false);
                     }
                 }

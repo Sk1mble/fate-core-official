@@ -1,6 +1,6 @@
 {
 	"Actor": {
-		"types": ["ModularFate"],
+		"types": ["ModularFate", "Core","Accelerated"],
 		"templates": {
 			"common": {
 				"details": {
@@ -28,7 +28,7 @@
 		}
 	},
 	"Item": {
-		"types": ["Extra"],
+		"types": ["Stunt", "Skill", "Extra"],
 		"templates": {
 			"baseItem": {
 				"description": {
@@ -47,6 +47,18 @@
 				"attack": "",
 				"defend": ""
 			}
+		},
+		"Stunt": {
+			"templates": ["baseItem"]
+		},
+		"Skill": {
+			"templates": ["baseItem"],
+			"sheet": "",
+			"health": {
+				"physical": false,
+				"mental": false
+			},
+			"level": 0
 		}
 	}
 }

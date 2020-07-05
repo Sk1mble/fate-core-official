@@ -27,6 +27,86 @@ import { ModularFateCharacter} from "./module/actor/ModularFateCharacter.js"
 import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
 import { ExtraSheet } from "./scripts/ExtraSheet.js";
 
+async function importFateCharacter(actor) {
+    console.log("Original Fate Core character detected; setting them up for ModularFate")
+            let actorData = duplicate(actor.data); //We'll do all our modifications to this data and then write out a corrected version.
+            //We won't be using these
+            delete actorData.data.health;
+            delete actorData.data.details.extras;
+
+            let aspects = {}
+            console.log("Setting up aspects for " + actor.name)
+            let hc = {"name":"High Concept","description":"Your high concept is a broad description of the character, covering the vital bits. It’s how you would open your pitch for the character when telling a friend about them.","value":actorData.data.aspects.hc.value};
+            aspects["High Concept"]=hc;
+            let trouble = {"name":"Trouble","description":"Next is your character’s trouble—something that makes your character’s life more complicated. It could be a personal weakness, family entanglements, or other obligations. Pick something you’ll enjoy roleplaying!", "value":actorData.data.aspects.trouble.value}
+            aspects["Trouble"]=trouble;
+            let other1 = {"name":"Other 1","description":"A third aspect", "value":actorData.data.aspects.other.value[0]}
+            aspects["Other 1"]=other1;
+            let other2 = {"name":"Other 2","description":"A fourth aspect", "value":actorData.data.aspects.other.value[1]}
+            aspects["Other 2"]=other2;
+            let other3 = {"name":"Other 3","description":"A fifth aspect", "value":actorData.data.aspects.other.value[2]}
+            aspects["Other 3"]=other3;
+            
+            //Delete the old aspects
+            delete actorData.data.aspects;
+            actorData.data.aspects = aspects;
+
+            //This can stay blank as it will be initialised from the system's universal tracks upon first load of the character sheet.
+            let tracks = {}
+            actorData.data.tracks = tracks;
+
+            //Now set up skills, stunts, and extras from items
+            let skills = {}
+            let stunts = {}
+            let items = [];
+            let allitems = actorData.items;
+
+            for (let i = 0; i<allitems.length; i++){            
+                let item = allitems[i];
+                if (item.type=="Extra"){
+                    item.refresh=0;
+                    items.push(item);
+                }
+                if (item.type=="Skill"){
+                    let newSkill = {
+                        "name":item.name,
+                        "description":item.data.description.value,
+                        "rank":item.data.level,
+                        "attack":"",
+                        "caa":"",
+                        "overcome":"",
+                        "defend":"",
+                        "pc":true
+                    }
+                    skills[newSkill.name]=newSkill;
+                }
+                if (item.type=="Stunt"){
+                    let newStunt ={
+                        "name":item.name,
+                        "linked_skill":"",
+                        "description":item.data.description.value,
+                        "refresh_cost":1,
+                        "overcome":false,
+                        "caa":false,
+                        "attack":false,
+                        "defend":false,
+                        "plusTwo":false
+                    }
+                    stunts[newStunt.name]=newStunt;
+                }
+            }
+            actorData.data.skills=skills;
+            actorData.data.stunts=stunts
+            actorData.items=items;
+            actorData.type="ModularFate"
+            actorData.data.details.fatePoints = duplicate(actorData.data.details.points)
+            delete actorData.data.details.points;
+            console.log(actorData);
+            await actor.update({"data.aspects":"-=null"})
+            await actor.update(actorData)
+            console.log(actor)
+}
+
 Hooks.once('ready', async function () {
     if (game.settings.get("ModularFate","run_once") == false){
         if (game.user.isGM){
@@ -34,6 +114,20 @@ Hooks.once('ready', async function () {
             game.settings.set("ModularFate","run_once", true)
         }
     }
+
+    // Let us initialise the characters if they've been imported from Nick's Fate Core system.
+
+    //We need to set their Type to ModularFate -- do this last so I can check how everything is going.
+    //We need to set their skills up according to the items they have.
+    //We need to copy over their aspects.
+    //We need to copy over their biography and description
+    
+    let actors = game.actors.entries;
+    actors.forEach(actor =>{
+        if (actor.data.type == "Core" || actor.data.type=="Accelerated"){
+            importFateCharacter(actor);
+        }
+    })
 })
 
 Hooks.on('updateToken', (scene, token, data) => {
