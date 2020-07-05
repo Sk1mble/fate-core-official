@@ -506,23 +506,27 @@ class EditPlayerTracks extends FormApplication {
 
             //First we add all the tracks on the player to the relevant categories in world tracks DONE
             
-            for (let t in this.tracks) {
-                console.log(this.tracks);
-                let track = duplicate(this.tracks[t]);
-                track.present=true;
-                track.number=1;
-                this.tracks_by_category[this.tracks[t].category][t]=track;
-            }
+            try {
+                    for (let t in this.tracks) {
+                    let track = await duplicate(this.tracks[t]);
+                    track.present=true;
+                    track.number=1;
+                    this.tracks_by_category[this.tracks[t].category][t]=track;
+                    }
 
-            let player_track_keys = Object.keys(this.tracks);
-            for (let t in world_tracks){
-                let present = player_track_keys.indexOf(t);
-                world_tracks[t].number = 1;
-                if (present < 0){
-                    this.tracks_by_category[world_tracks[t].category][t]=world_tracks[t];
+                    let player_track_keys = Object.keys(this.tracks);
+                    for (let t in world_tracks){
+                        let present = player_track_keys.indexOf(t);
+                        world_tracks[t].number = 1;
+                        if (present < 0){
+                            this.tracks_by_category[world_tracks[t].category][t]=world_tracks[t];
+                        }
+                    }
+                } catch {
+                    
                 }
-            }
         }
+            
         
         //TemplateData is returned to the form for use with HandleBars.
         const templateData = {

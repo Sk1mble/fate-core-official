@@ -92,7 +92,6 @@ class EditPlayerStunts extends FormApplication {
             if (this.actor.id == id){
                 let name = this.stunt.name;
                 try {
-                    console.log(data)
                     if (data.data.stunts[name]!=undefined){
                         this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
                         ui.notifications.info("Stunt has been edited.")
