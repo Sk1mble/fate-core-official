@@ -46,6 +46,7 @@ class EditPlayerSkills extends FormApplication{
         options.closeOnSubmit = false;
         options.id = "PlayerSkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;
+        options.scrollY=["#skills_editor"]
         return options;
     }
 
