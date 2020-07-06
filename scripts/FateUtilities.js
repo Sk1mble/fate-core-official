@@ -402,7 +402,7 @@ function viewFatePoints(){
             (async ()=>{await user.setFlag("FateAddon","gmfatepoints",`${fp}`)})();
         } else {
             let actor = user.character;
-            (async ()=> {await actor.update({"data.details.points.current":`${fp}`});})();
+            (async ()=> {await actor.update({"data.details.fatePoints.current":`${fp}`});})();
         }
 
     }
