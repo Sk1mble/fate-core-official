@@ -93,7 +93,7 @@
             </div><!--End of skills body-->
         </div><!--end of skills block-->
         <div name = "aspects_block" style="float:left" title="Double-click on an aspect name to change the aspect; right click to add a new one.">
-            <div name = "aspects_header" style="width:350px"><b>Aspects</b></div>
+            <div name = "aspects_header" style="width:350px"><b>Aspects</b>{{#if GM}}<div title="Open the Aspect Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_aspects" i icon class="fas fa-cogs"></div></div>{{/if}}
             <div name = "aspects_body" id="apsects_body" style="overflow-y:scroll; width:400px; height:300px; border:lightsteelblue; border-width:2px; border-style:solid; scrollbar-width:thin">
                 {{#each data.aspects}}
                 <div class="row">

@@ -41,9 +41,10 @@ export class ModularFateCharacter extends ActorSheet {
             skill_name.on("click", event => this._onSkill_name(event, html));
             const sort = html.find("div[name='sort_player_skills'")
             sort.on("click", event => this._onSortButton(event, html));
-            const aspectName = html.find("div[name='aspect']")
-            aspectName.on("dblclick", event => this._onAspectDblClick(event, html));
-            aspectName.on("contextmenu", event => this._onAspectRightClick(event, html));
+            
+            const aspectButton = html.find("div[name='edit_player_aspects']");
+            aspectButton.on("click", event => this._onAspectClick(event, html));
+
             const box = html.find("button[name='box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
@@ -165,50 +166,10 @@ export class ModularFateCharacter extends ActorSheet {
         editor.setSheet(this);
     }
 
-    async _onAspectRightClick(event, html) {
-        ui.notifications.info("Secret found!");
+       async _onAspectClick(event, html) {
         if (game.user.isGM) {
-            let aspects = duplicate(this.object.data.data.aspects);
-            
-            let replacement = await ModularFateConstants.getInput("What is the new aspect name?");
-            let description = await ModularFateConstants.getInput("What is the new aspect description?");
-
-            if (replacement != "") {
-                //Delete the existing aspect ready for replacement
-                let aspect={};
-                aspect.name = replacement;
-                aspect.description = description;
-                aspects[replacement] = aspect;
-                await this.object.update({
-                    "data.aspects": aspects
-                });
-            }
-        }
-    }
-
-    async _onAspectDblClick(event, html) {
-        if (game.user.isGM) {
-            let aspects = duplicate(this.object.data.data.aspects);
-            let aspect = aspects[event.target.id]
-            let replacement = await ModularFateConstants.getInput("What is the replacement name?");
-            let description = await ModularFateConstants.getInput("What is the replacement description?");
-
-            if (replacement != "") {
-                //Delete the existing aspect ready for replacement
-                delete aspects[aspect.name]
-                let sk = `-=${aspect.name}`
-                await this.object.update({
-                    "data.aspects": {
-                        [`${sk}`]: null
-                    }
-                })
-                aspect.name = replacement;
-                aspect.description = description;
-                aspects[replacement] = aspect;
-                await this.object.update({
-                    "data.aspects": aspects
-                });
-            }
+            let av = new EditPlayerAspects(this.actor);
+            av.render(true);
         }
     }
     async _onSkillsButton(event, html) {

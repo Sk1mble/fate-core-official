@@ -1,0 +1,34 @@
+<form style="background-color:white">    
+    <table border="0" style="background-color:white; border:none">
+        <tr>
+            {{#each data.data.aspects}}
+            <td>
+                <label for="name">Aspect Name:</label>    
+            </td>
+            <td>
+                <input type="text" name="name_{{this.name}}" style="background-color: lightsteelblue; width:300px; font-family:Montserrat" value="{{this.name}}"><button type="button" name = "remove_aspect" id="remove_{{this.name}}" style="width:75px">Remove</button></td>
+            </input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for"description">Aspect Description:</label>
+            </td>
+            <td>
+                <textarea rows="3" name="description_{{this.name}}" style="background-color: lightsteelblue; width:500px; font-family:Montserrat">{{this.description}}
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for"value">Aspect Text:</label>
+            </td>
+            <td>
+                <textarea rows = "3" name="value_{{this.name}}" style="background-color: lightsteelblue; width:500px; font-family:Montserrat">{{this.value}}
+                </textarea>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+    <button type="button" id="save_aspects">Save</button><button type="button" name="new_aspect">Add New</button>
+</form>

@@ -13,7 +13,8 @@
 					"./scripts/EditPlayerSkills.js",
 					"./scripts/EditPlayerTracks.js",
 					"./scripts/EditPlayerStunts.js",
-					"./scripts/FateUtilities.js"
+					"./scripts/FateUtilities.js",
+					"./scripts/EditPlayerAspects.js"
 				],
 	"styles": ["ModularFate.css"],
 	"packs": [],
