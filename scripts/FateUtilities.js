@@ -413,9 +413,10 @@ function viewFatePoints(){
         }
 
         renderMe(string){
-            if (string == "updateUser" || string == "renderPlayerList"){
-                this.render(false)
-            }
+            this.render(false)
+            //if (string == "updateUser" || string == "renderPlayerList"){
+            //    this.render(false)
+            //}
         }
 
         // This method gets the fate points for each player and the GM and outputs it to the window in a way that the GM can edit.
