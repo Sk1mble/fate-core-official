@@ -453,6 +453,14 @@ function viewFatePoints(){
                 }
                 
                 if (user.active){
+                        if (user.isGM){
+                            if (user.data.avatar == "icons/svg/mystery-man.svg"){
+                                //Do nothing, keep the default hand-of-god GM avatar.
+                            } else {
+                                image = user.data.avatar
+                            }
+                        }
+
                         if (!user.isGM){
                             actor = users[i].character;
                             try {
