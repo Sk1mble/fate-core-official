@@ -46,7 +46,7 @@ class EditPlayerAspects extends FormApplication{
         options.width = "650";
         options.height = "800";
         options.title = `Character Aspect Editor`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "PlayerAspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;
         return options;
