@@ -24,9 +24,17 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _onAdd(event, html){
-        let newAspect = {"name":"New Aspect", "description":"New Aspect","value":"New Aspect"}
         let aspects = duplicate (this.object.data.data.aspects);
-        aspects["New Aspect"] = newAspect;
+        let count = 0;
+        for (let a in aspects){
+            if (a.startsWith("New Aspect")){
+                count++
+            }
+        }
+        let name = "New Aspect " + count;
+        let newAspect = {"name":name, "description":"New Aspect","value":"New Aspect"}
+       
+        aspects[newAspect.name] = newAspect;
         await this.object.update({"data.aspects":aspects})
         this.render(false);
     }
