@@ -441,7 +441,7 @@ function viewFatePoints(){
             for (let i=0;i<users.length;i++){
                 let user = users[i];
                 let actor;
-                let image = "Tokens/icons/hand-of-god.png";
+                let image = "systems/ModularFate/assets/hand-of-god.png";
                 let name = user.name;
                 let fp = 0;
                 let disabled = "";
