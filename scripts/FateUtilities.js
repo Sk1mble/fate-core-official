@@ -458,10 +458,10 @@ function viewFatePoints(){
                             try {
                                 image = actor.data.img;
                                 name=actor.name;
-                                fp = actor.data.data.details.points.current;
+                                fp = actor.data.data.details.fatePoints.current;
                             }
                             catch {
-                                ui.notifications.error("Problem getting actor and fate points for "+users[i]+". Do they have a character assigned to them?")
+                                ui.notifications.error("Problem getting actor and fate points for "+users[i].name+". Do they have a character assigned to them?")
                             }
                             
                         } else {
