@@ -5,6 +5,7 @@ constructor(){
     game.system.apps["actor"].push(this);
     game.system.apps["combat"].push(this);
     game.system.apps["scene"].push(this); //Maybe? If we want to store scene notes, aspects, etc.
+    game.system.apps["user"].push(this);
     this.category="Combat";
     this.editingSceneNotes = false;
 }
@@ -13,6 +14,7 @@ close(){
     game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
     game.system.apps["combat"].splice(game.system.apps["combat"].indexOf(this),1); 
     game.system.apps["scene"].splice(game.system.apps["scene"].indexOf(this),1); 
+    game.system.apps["user"].splice(game.system.apps["user"].indexOf(this),1); 
     super.close();
 }
 
@@ -60,6 +62,54 @@ activateListeners(html) {
 
     const nav = html.find("nav[class='navigation foo']");
     nav.on("click", event => this.render(false));
+
+    const gmfp = html.find("input[name='gmfp']");
+    gmfp.on("change", event=> this._edit_gm_points(event, html));
+
+    const playerfp = html.find("input[name='player_fps']");
+    playerfp.on("change", event=> this._edit_player_points(event, html));
+
+    const refresh_fate_points = html.find("button[id='refresh_fate_points']");
+    refresh_fate_points.on("click", event => this.refresh_fate_points(event, html));    
+}
+
+async refresh_fate_points(event, html){
+    let tokens = canvas.tokens.placeables;
+    console.log(tokens);
+    for (let i = 0; i < tokens.length; i++){
+        let token = tokens[i];
+        if (!token.actor.isPC){
+            continue;
+        }
+        let current = parseInt(token.actor.data.data.details.fatePoints.current);
+        let refresh = parseInt(token.actor.data.data.details.fatePoints.refresh);
+
+        if (current < refresh){
+            current = refresh;
+        }
+        await token.actor.update({
+            ["data.details.fatePoints.current"]: current
+        })
+    }
+}
+
+async _edit_player_points(event, html){
+    let id = event.target.id;
+    let parts = id.split("_");
+    let t_id = parts[0]
+    console.log(t_id)
+    let token = canvas.tokens.placeables.find(t => t.id==t_id);
+    let fps = parseInt(event.target.value);
+
+    await token.actor.update({
+        ["data.details.fatePoints.current"]: fps
+    })
+}
+
+async _edit_gm_points(event, html){
+    let user = game.users.entries.find(user => user.id == event.target.id);
+    let fp = parseInt(event.target.value)
+    await user.setFlag("ModularFate","gmfatepoints",fp);
 }
 
 async scene_notes_edit(event,html){
@@ -298,6 +348,16 @@ async getData(){
 
     data.all_tokens = all_tokens;
     data.GM=game.user.isGM;
+    
+    let GMUsers={};
+    game.users.entries.forEach(user => {
+        if (user.isGM){
+            GMUsers[user.name]=user;
+            GMUsers[user.name]["fatepoints"]=user.getFlag("ModularFate","gmfatepoints")
+        }
+    })
+    data.GMUsers = GMUsers;
+
     data.category=this.category;
  
     data.categories = game.settings.get("ModularFate","track_categories")
@@ -353,156 +413,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
                     button:true
                 });
             }
-            if (hud){
-                hud.tools.push({
-                    name:"ViewFatePoints",
-                    title:"View a summary of Fate Points for all players (and the GM)",
-                    icon:"fas fa-coins",
-                    onClick: ()=> {viewFatePoints();},
-                    button:true
-                });
-            }
 })
-
-function viewFatePoints(){
-    console.log("viewFatePoints called")
-
-    const delay = 200;
-
-    class FatePointViewer extends Application {
-        
-        constructor(options){ 
-            super(options);
-            game.system.apps["user"].push(this);
-            game.system.apps["actor"].push(this);
-        }
-        activateListeners(html) {
-            super.activateListeners(html);
-            const fpInput = html.find("input[type='number']")
-
-            fpInput.on("change", event => this._onfpupdate(event, html));
-        }
-        
-        close(){
-            game.system.apps["user"].splice(game.system.apps["user"].indexOf(this),1); 
-            game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
-            super.close();
-        }
-        
-        renderMe(){
-            this.render(false);
-        }
-          
-    async _onfpupdate(event, html){
-        let userId = event.target.id;
-        let user = game.users.find(u => u.id==userId);
-        var fp = event.target.value;
-        
-        if (user.isGM){
-            (async ()=>{await user.setFlag("FateAddon","gmfatepoints",`${fp}`)})();
-        } else {
-            let actor = user.character;
-            (async ()=> {await actor.update({"data.details.fatePoints.current":`${fp}`});})();
-        }
-
-    }
-
-        getData (){
-            let content={content:`${this.prepareFatePoints()}`}
-            return content;
-        }
-
-        renderMe(string){
-            this.render(false)
-            //if (string == "updateUser" || string == "renderPlayerList"){
-            //    this.render(false)
-            //}
-        }
-
-        // This method gets the fate points for each player and the GM and outputs it to the window in a way that the GM can edit.
-        prepareFatePoints(){
-            let users = game.users.entries;
-            let buttons= {}
-            let actor;            
-            // Set up the table parameters
-            var table=`<table border="1" cellspacing="0" cellpadding="4" style="width: auto;">`;
-
-            // Set up the appearance of the table header
-            let rows=[`<tr><td style="background: black; color: white;">Portrait</td><td style="background: black; color: white;">Character</td><td style="background: black; color: white;">Fate Points</td>`];
-            
-            //This is where we get the FP information for each actor.
-            //The GM's fate points will be stored on the GM user.
-
-            //Now we just need to set up the action listener, which will fire on onchange
-
-            //if (user.isgm) - then get fate points from the user.getFlag("FateAddon","gmfatepoints"). If that's undefined, set to 0 and write back out to the GM's flag.
-            //Otherwise, get the user's character's fate points.
-        
-            
-            for (let i=0;i<users.length;i++){
-                let user = users[i];
-                let actor;
-                let image = "systems/ModularFate/assets/hand-of-god.png";
-                let name = user.name;
-                let fp = 0;
-                let disabled = "";
-
-                //We only want to display fate points for logged in users.
-                if (!game.user.isGM){
-                    disabled = "disabled";
-                }
-                
-                if (user.active){
-                        if (user.isGM){
-                            if (user.data.avatar == "icons/svg/mystery-man.svg"){
-                                //Do nothing, keep the default hand-of-god GM avatar.
-                            } else {
-                                image = user.data.avatar
-                            }
-                        }
-
-                        if (!user.isGM){
-                            actor = users[i].character;
-                            try {
-                                image = actor.data.img;
-                                name=actor.name;
-                                fp = actor.data.data.details.fatePoints.current;
-                            }
-                            catch {
-                                ui.notifications.error("Problem getting actor and fate points for "+users[i].name+". Do they have a character assigned to them?")
-                            }
-                            
-                        } else {
-                            fp = user.getFlag("FateAddon","gmfatepoints");
-                            if (fp == undefined || fp == null){
-                                fp = 0;
-                                user.setFlag("FateAddon","gmfatepoints",0);
-                            }
-                        }                   
-                        rows.push(`<tr><td><img src="${image}" width="50" height="50"></td><td>${name}</td><td><input type="number" id="${user.id}" value="${fp}" ${disabled}></input></td></tr>`);
-                }
-            }
-            var myContents= table;
-            rows.forEach(row=> {
-                myContents+=row;
-            })
-            myContents += `</table>`;
-
-            return myContents;    
-        }
-    }
-    let opt=Dialog.defaultOptions;
-    opt.resizable=true;
-    opt.title="View Fate Points";
-    opt.width="auto";
-    opt.height="auto";
-    opt.minimizable=true;
-
-    var viewer;
-    console.log("About to try and render fpviewer")
-    viewer = new FatePointViewer(opt);
-    viewer.render(true);
-}
 
 class TimedEvent extends Application {
 
