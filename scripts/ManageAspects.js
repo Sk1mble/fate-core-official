@@ -179,6 +179,10 @@ class EditAspect extends FormApplication{
             }
         }
 
+        _updateObject(){
+
+        }
+
     //Here are the action listeners
     activateListeners(html) {
         super.activateListeners(html);
@@ -223,7 +227,7 @@ class EditAspect extends FormApplication{
         options.width = "1000";
         options.height = "auto";
         options.title = `Aspect Editor`;
-        options.closeOnSubmit = false;
+        options.closeOnSubmit = true;
         options.id = "EditAspect"; // CSS id if you want to override default behaviors
         options.resizable = true;
         return options;

@@ -13,7 +13,12 @@ export class ExtraSheet extends ItemSheet {
     get template (){
         return 'systems/ModularFate/templates/ExtraSheet.html';
     }
+
     activateListeners(html){
+    }
+
+    _updateObject(event, formData){
+        super._updateObject(event, formData);
     }
 
     async _on_boxes_change(html, event){

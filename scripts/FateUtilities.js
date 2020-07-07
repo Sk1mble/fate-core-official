@@ -75,7 +75,6 @@ activateListeners(html) {
 
 async refresh_fate_points(event, html){
     let tokens = canvas.tokens.placeables;
-    console.log(tokens);
     for (let i = 0; i < tokens.length; i++){
         let token = tokens[i];
         if (!token.actor.isPC){

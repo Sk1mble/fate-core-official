@@ -377,7 +377,7 @@ class TrackSetup extends FormApplication{
         options.width = "auto";
         options.height = "auto";
         options.title = `Track Category Setup for world ${game.world.title}`;
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.id = "TrackSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
         return options;
