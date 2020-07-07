@@ -55,7 +55,7 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _onRemove(event, html){
-        console.log("Removing")
+        //console.log("Removing")
         let name = event.target.id.split("_")[1];
         await this.object.update({"data.aspects": {[`-=${name}`]:null}})
         this.render(false);
@@ -81,7 +81,7 @@ class EditPlayerAspects extends FormApplication{
 
     async _updateObject(event, formData){
         let aspects = {}
-        console.log(formData)
+        //console.log(formData)
         for (let i in formData){
             let working = i.split("_");
             let name = working[0];
@@ -94,15 +94,15 @@ class EditPlayerAspects extends FormApplication{
                 var newName = formData[i].trim()
             }
             if (name == "description") {
-                console.log(newName)
-                console.log(aspects[newName])
+                //console.log(newName)
+                //console.log(aspects[newName])
                 aspects[newName].description=formData[i].trim();
             }
             if (name == "value"){
                 aspects[newName].value=formData[i].trim();
             }
             if (name == "delete"){
-                console.log(formData[i])
+                //console.log(formData[i])
                 delete aspects[newName]
             }
         }
