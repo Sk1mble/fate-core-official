@@ -370,6 +370,10 @@ export class ModularFateCharacter extends ActorSheet {
         paidStunts -= this.freeStunts;
 
         this.refreshSpent = paidTracks + paidStunts + paidExtras;
+        sheetData.paidTracks = paidTracks;
+        sheetData.paidStunts = paidStunts;
+        sheetData.paidExtras = paidExtras;
+        sheetData.freeStunts = this.freeStunts;
         let isPlayer = this.object.isPC;
         let error = false;
         if (isPlayer) {
