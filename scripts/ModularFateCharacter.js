@@ -94,7 +94,7 @@ export class ModularFateCharacter extends ActorSheet {
             let currentDesc = desc.innerHTML;
             let savedDesc = this.object.data.data.details.description.value;
             if (currentDesc != savedDesc){
-                await this.object.update({"data.details.description.value":currentBio})
+                await this.object.update({"data.details.description.value":currentDesc})
             }
         }
         super.render(...args);
