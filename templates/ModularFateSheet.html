@@ -165,17 +165,13 @@
             <b>Description:</b>
         </div>
         <div style="width:700px">
-            <div>{{editor content=data.details.description.value
-		            target="data.details.description.value" button=true owner=owner
-		            editable=editable}}</div>
+            <div class="property-textarea" id="{{this.actor._id}}_description" contenteditable="true" data-edit="data.details.description.value" name="data.details.description.value" style="min-height:50px; background-color:lightsteelblue">{{{data.details.description.value}}}</div><p/>
         </div>
         <div style="width:700px">
             <b>Biography:</b>
         </div>
         <div style="width:700px">
-            <div>{{editor content=data.details.biography.value
-		            target="data.details.biography.value" button=true owner=owner
-		            editable=editable}}</div>
+            <div class="property-textarea" id="{{this.actor._id}}_biography" contenteditable="true" data-edit="data.details.biography.value" name="data.details.biography.value" style="min-height:50px; background-color:lightsteelblue">{{{data.details.biography.value}}}</div></p>
         </div>
     </div><!--end of bio block-->
 

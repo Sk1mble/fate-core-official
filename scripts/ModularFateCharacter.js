@@ -79,6 +79,27 @@ export class ModularFateCharacter extends ActorSheet {
         super.activateListeners(html);
     }
 
+    async render(...args){
+        let bio = document.getElementById(`${this.object.id}_biography`)
+        if (bio != null){
+            let currentBio = bio.innerHTML;
+            let savedBio = this.object.data.data.details.biography.value;
+            if (currentBio != savedBio){
+                await this.object.update({"data.details.biography.value":currentBio})
+            }
+        }
+        
+        let desc = document.getElementById(`${this.object.id}_description`)
+        if (bio != null){
+            let currentDesc = desc.innerHTML;
+            let savedDesc = this.object.data.data.details.description.value;
+            if (currentDesc != savedDesc){
+                await this.object.update({"data.details.description.value":currentBio})
+            }
+        }
+        super.render(...args);
+    }
+
     async _on_extras_click(event, html){
         const data = {
             "name": "New Extra", 
