@@ -40,7 +40,7 @@
                                 {{/each}}
                             </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
                             {{/if}}
-                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:35px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
+                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:60px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
                         </td>
                         <td>
                                 <table style="border:none; font-size:small; padding:2px">
