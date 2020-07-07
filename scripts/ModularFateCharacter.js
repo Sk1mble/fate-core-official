@@ -30,6 +30,7 @@ export class ModularFateCharacter extends ActorSheet {
     constructor (...args){
         super(...args);
         this.first_run = true;
+        this.editing = false;
     }
 
     //Here are the action listeners
@@ -75,29 +76,34 @@ export class ModularFateCharacter extends ActorSheet {
             stunts_block.on("dblclick", event => this._onStunts_dblclick(event, html))
             stunts_button.on("click", event => this._onStunts_dblclick(event, html));
             tracks_button.on("click", event => this._onTracks_dblclick(event, html));
+
+            const bio = html.find(`div[id='${this.object.id}_biography']`)
+            bio.on("input",event => this._onBioInput(event, html));
+            const desc = html.find(`div[id='${this.object.id}_description']`)
+            desc.on("input",event => this._onDescInput(event, html));
         }
         super.activateListeners(html);
     }
 
-    async render(...args){
-        let bio = document.getElementById(`${this.object.id}_biography`)
-        if (bio != null){
-            let currentBio = bio.innerHTML;
-            let savedBio = this.object.data.data.details.biography.value;
-            if (currentBio != savedBio){
-                await this.object.update({"data.details.biography.value":currentBio})
-            }
+    async _onBioInput(event, html){
+        this.editing = true;
+        let bio = event.target.innerHTML;
+        await this.object.update({"data.details.biography.value":bio})
+        this.editing = false;
+    }
+
+    async _onDescInput(event, html){
+        this.editing = true;
+        let desc = event.target.innerHTML;
+        await this.object.update({"data.details.description.value":desc})
+        this.editing = false;
+    }
+
+    async render (...args){
+
+        if (this.editing == false){
+            super.render(...args);
         }
-        
-        let desc = document.getElementById(`${this.object.id}_description`)
-        if (bio != null){
-            let currentDesc = desc.innerHTML;
-            let savedDesc = this.object.data.data.details.description.value;
-            if (currentDesc != savedDesc){
-                await this.object.update({"data.details.description.value":currentDesc})
-            }
-        }
-        super.render(...args);
     }
 
     async _on_extras_click(event, html){

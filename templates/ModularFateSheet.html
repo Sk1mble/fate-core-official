@@ -1,4 +1,4 @@
-<form style="background: white; width:850px" onsubmit="event.preventDefault();">  
+<form class="contenteditable" style="background: white; width:850px">  
     <table style="background-color: white; border:0px; padding:0px;">
         <tr>
             <td style="width:100px">
@@ -165,7 +165,7 @@
             <b>Description:</b>
         </div>
         <div style="width:700px">
-            <div class="property-textarea" id="{{this.actor._id}}_description" contenteditable="true" data-edit="data.details.description.value" name="data.details.description.value" style="min-height:50px; background-color:lightsteelblue">{{{data.details.description.value}}}</div><p/>
+            <div class="property-textarea" id="{{this.actor._id}}_description" contenteditable="true" name="data.details.description.value" data-edit="data.details.description.value" style="min-height:50px; background-color:lightsteelblue">{{{data.details.description.value}}}</div><p/>
         </div>
         <div style="width:700px">
             <b>Biography:</b>
