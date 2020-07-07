@@ -14,9 +14,6 @@ export class ExtraSheet extends ItemSheet {
         return 'systems/ModularFate/templates/ExtraSheet.html';
     }
 
-    activateListeners(html){
-    }
-
     _updateObject(event, formData){
         super._updateObject(event, formData);
     }
