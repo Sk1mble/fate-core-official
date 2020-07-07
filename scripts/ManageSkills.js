@@ -116,6 +116,7 @@ Hooks.once('init', async function () {
 class SkillSetup extends FormApplication{
     constructor(...args){
             super(...args);
+            game.system.skillSetup = this;
     }
 
     _updateObject(){
@@ -157,11 +158,6 @@ class SkillSetup extends FormApplication{
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
         copyButton.on("click", event => this._onCopyButton(event, html));
-        
-        //TODO: Move this HOOk (Or link the editor to the thing that calls the editor so this is unnecessary)
-        Hooks.on('closeEditSkill',async () => {
-            this.render(true);
-        })
     }
     
     //Here are the event listener functions.
@@ -281,3 +277,7 @@ class EditSkill extends FormApplication{
         return templateData;
         }
 }
+
+Hooks.on('closeEditSkill',async () => {
+    game.system.skillSetup.render(true);
+})

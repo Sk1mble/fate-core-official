@@ -74,6 +74,7 @@ Hooks.once('init', async function () {
 class AspectSetup extends FormApplication{
     constructor(...args){
         super(...args);
+        game.system.manageAspects = this;
     }
 
     async _updateObject(event) {
@@ -115,10 +116,6 @@ class AspectSetup extends FormApplication{
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
         copyButton.on("click", event => this._onCopyButton(event, html));
-        //TODO: Move this HOOK
-        Hooks.on('closeEditAspect',async () => {
-            this.render(true);
-        })
     }
 
     //Here are the event listener functions.
@@ -239,3 +236,7 @@ class EditAspect extends FormApplication{
         return templateData;
         }
 }
+
+Hooks.on('closeEditAspect',async () => {
+    game.system.manageAspects.render(true);
+})

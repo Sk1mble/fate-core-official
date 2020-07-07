@@ -21,6 +21,21 @@ class EditPlayerAspects extends FormApplication{
 
         const addButton = html.find("button[name='new_aspect']")
         addButton.on("click", event => this._onAdd(event, html));
+
+        const up = html.find("button[name='aspect_up']");
+        const down = html.find("button[name='aspect_down']");
+        up.on("click", event => this._on_move(event, html, -1));
+        down.on("click", event => this._on_move(event, html, 1));
+    }
+
+    async _on_move(event,html, direction){
+        let aspects = duplicate(this.object.data.data.aspects);
+        let info = event.target.id.split("_");
+        let aspect = info[1]
+        aspects = ModularFateConstants.moveKey(aspects, aspect, direction)
+        await this.object.update({"data.aspects":[]})//Sorting changes won't be propagated unless we delete.
+        await this.object.update({"data.aspects":aspects})
+        this.render(false);
     }
 
     async _onAdd(event, html){

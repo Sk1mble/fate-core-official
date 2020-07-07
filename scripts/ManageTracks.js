@@ -1,11 +1,6 @@
 //This script is for establishing the world settings in relation to conditions,
 //stress and consequences.
 
-Hooks.on('closeEditTrack',async () => {
-    console.log("ManageTracks Hook Activated")
-    this.render(true);
-})
-
 Hooks.once('init',async function(){
     console.log("Initializing ManageTracks");
     //Let's initialise the settings at the system level.
@@ -216,11 +211,6 @@ class EditTracks extends FormApplication {
         edit_linked_skillsButton.on("click", event => this._edit_linked_skillsButtonClick(event,html));
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
         copy_track.on("click", event => this._onCopyTrackButton(event, html));
-  
-        //TODO: refactor to remove this hook
-        Hooks.on('closeEditTrack',async () => {
-            this.render(true);
-        })
     }
     //Here are the event listener functions.
     async _onCopyTrackButton (event, html){
@@ -368,6 +358,7 @@ class EditTracks extends FormApplication {
 class TrackSetup extends FormApplication{
     constructor(...args){
         super(...args);
+        game.system.manageTracks = this;
     }
  //Set up the default options for instances of this class
     static get defaultOptions() {
@@ -455,3 +446,7 @@ class TrackSetup extends FormApplication{
         }
     }
 }
+
+Hooks.on('closeEditTracks',async () => {
+    game.system.manageTracks.render(true);
+})
