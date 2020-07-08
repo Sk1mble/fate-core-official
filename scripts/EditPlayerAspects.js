@@ -10,6 +10,7 @@ class EditPlayerAspects extends FormApplication{
                 this.player_aspects=duplicate(this.object.data.data.aspects);
                 
                 game.system.apps["actor"].push(this);
+                this.aspects=duplicate(this.object.data.data.aspects)
     }
 
     activateListeners(html){
@@ -26,22 +27,61 @@ class EditPlayerAspects extends FormApplication{
         const down = html.find("button[name='aspect_down']");
         up.on("click", event => this._on_move(event, html, -1));
         down.on("click", event => this._on_move(event, html, 1));
+
+        const name = html.find("input[class='aspect_name']")
+        name.on("change", event => this._on_name_change(event, html));
+
+        const desc = html.find("textarea[class='aspect_description']")
+        desc.on("change", event => this._on_desc_change(event, html));
+
+        const value = html.find("textarea[class='aspect_value']")
+        value.on("change", event => this._on_value_change(event, html));
+    }
+
+    async _on_name_change(event, html){
+        console.log("Name change triggered")
+        let name = event.target.name.split("_")[1];
+        console.log(name)
+        let newName = event.target.value;
+        let newAspect = {};
+        newAspect.name = newName;
+        newAspect.description = this.aspects[name].description;
+        newAspect.value = this.aspects[name].value;
+        delete this.aspects[name]
+        this.aspects[newName]=newAspect;
+        this.render(false);
+    }
+
+    async _on_desc_change(event, html){
+        console.log(event.target.value)
+        let name = event.target.name.split("_")[1];
+        this.aspects[name].description=event.target.value;
+    }
+
+    async _on_value_change(event, html){
+        console.log("value change triggered")
+        console.log(event.target.value)
+        let name = event.target.name.split("_")[1];
+        this.aspects[name].value=event.target.value;
     }
 
     async _on_move(event,html, direction){
-        let aspects = duplicate(this.object.data.data.aspects);
         let info = event.target.id.split("_");
         let aspect = info[1]
-        aspects = ModularFateConstants.moveKey(aspects, aspect, direction)
-        await this.object.update({"data.aspects":[]})//Sorting changes won't be propagated unless we delete.
-        await this.object.update({"data.aspects":aspects})
+        this.aspects = ModularFateConstants.moveKey(this.aspects, aspect, direction)
+        this.render(false);
+    }
+
+    async _onRemove(event,html){
+        let info = event.target.id.split("_");
+        let name = info[1];
+        delete this.aspects[name];
         this.render(false);
     }
 
     async _onAdd(event, html){
-        let aspects = duplicate (this.object.data.data.aspects);
         let count = 0;
-        for (let a in aspects){
+        for (let a in this.aspects){
             if (a.startsWith("New Aspect")){
                 count++
             }
@@ -49,15 +89,7 @@ class EditPlayerAspects extends FormApplication{
         let name = "New Aspect " + count;
         let newAspect = {"name":name, "description":"New Aspect","value":"New Aspect"}
        
-        aspects[newAspect.name] = newAspect;
-        await this.object.update({"data.aspects":aspects})
-        this.render(false);
-    }
-
-    async _onRemove(event, html){
-        //console.log("Removing")
-        let name = event.target.id.split("_")[1];
-        await this.object.update({"data.aspects": {[`-=${name}`]:null}})
+        this.aspects[newAspect.name] = newAspect;
         this.render(false);
     }
 
@@ -76,38 +108,14 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async getData(){
-        return this.object;
+        return this.aspects;
     }
 
     async _updateObject(event, formData){
-        let aspects = {}
-        //console.log(formData)
-        for (let i in formData){
-            let working = i.split("_");
-            let name = working[0];
-            let value = working[1];
-            let newAspect = {}
-
-            if (name == "name"){
-                newAspect["name"]=formData[i];
-                aspects[newAspect.name]=newAspect;
-                var newName = formData[i].trim()
-            }
-            if (name == "description") {
-                //console.log(newName)
-                //console.log(aspects[newName])
-                aspects[newName].description=formData[i].trim();
-            }
-            if (name == "value"){
-                aspects[newName].value=formData[i].trim();
-            }
-            if (name == "delete"){
-                //console.log(formData[i])
-                delete aspects[newName]
-            }
-        }
+        
         await this.object.update({"data.aspects":[]})//Name changes won't be propagated unless we delete.
-        await this.object.update({"data.aspects":aspects})
+        await this.object.update({"data.aspects":this.aspects})
+        await this.render(false);
     }
 
     //This function is called when an actor update is called.
