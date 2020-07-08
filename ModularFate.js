@@ -29,9 +29,9 @@ import { ExtraSheet } from "./scripts/ExtraSheet.js";
 
 Hooks.on("preCreateActor", (data, options, userId) => {
     if (data.type =="Core" || data.type=="Accelerated"){
-        console.log("importing")
+        //console.log("importing")
         data = migrateFateCharacter(data);
-        console.log(data);
+        //console.log(data);
     }
   });
 
@@ -43,7 +43,7 @@ async function importFateCharacter(actor) {
             delete actorData.data.details.extras;
 
             let aspects = {}
-            console.log("Setting up aspects for " + actor.name)
+            //console.log("Setting up aspects for " + actor.name)
             let hc = {"name":"High Concept","description":"Your high concept is a broad description of the character, covering the vital bits. It’s how you would open your pitch for the character when telling a friend about them.","value":actorData.data.aspects.hc.value};
             aspects["High Concept"]=hc;
             let trouble = {"name":"Trouble","description":"Next is your character’s trouble—something that makes your character’s life more complicated. It could be a personal weakness, family entanglements, or other obligations. Pick something you’ll enjoy roleplaying!", "value":actorData.data.aspects.trouble.value}
@@ -109,7 +109,7 @@ async function importFateCharacter(actor) {
             actorData.type="ModularFate"
             actorData.data.details.fatePoints = duplicate(actorData.data.details.points)
             delete actorData.data.details.points;
-            console.log(actorData);
+            //console.log(actorData);
             await actor.update({"data.aspects":"-=null"})
             await actor.update(actorData)
 }
@@ -186,7 +186,7 @@ async function migrateFateCharacter(actorData) {
             actorData.type="ModularFate"
             actorData.data.details.fatePoints = duplicate(actorData.data.details.points)
             delete actorData.data.details.points;
-            console.log(actorData);
+            //console.log(actorData);
             return actorData;
 }
 

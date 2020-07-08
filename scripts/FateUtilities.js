@@ -96,7 +96,7 @@ async _edit_player_points(event, html){
     let id = event.target.id;
     let parts = id.split("_");
     let t_id = parts[0]
-    console.log(t_id)
+    //console.log(t_id)
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
     let fps = parseInt(event.target.value);
 
@@ -155,7 +155,7 @@ async _saveNotes(event, html){
 }
 
 async _clear_fleeting(event, html){
-    console.log("clearing")
+    //console.log("clearing")
     let tokens = canvas.tokens.placeables;
     for (let i = 0; i<tokens.length; i++){
         await this.clearFleeting(tokens[i].actor)
@@ -372,7 +372,7 @@ async renderMe(...args){
             await this.render(false)
     }
     } catch (error){
-        console.log(error)
+        //console.log(error)
         this.render(false);
     }
 }

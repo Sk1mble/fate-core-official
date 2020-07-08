@@ -39,9 +39,9 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _on_name_change(event, html){
-        console.log("Name change triggered")
+        //console.log("Name change triggered")
         let name = event.target.name.split("_")[1];
-        console.log(name)
+        //console.log(name)
         let newName = event.target.value;
         let newAspect = {};
         newAspect.name = newName;
@@ -53,14 +53,14 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _on_desc_change(event, html){
-        console.log(event.target.value)
+        //console.log(event.target.value)
         let name = event.target.name.split("_")[1];
         this.aspects[name].description=event.target.value;
     }
 
     async _on_value_change(event, html){
-        console.log("value change triggered")
-        console.log(event.target.value)
+        //console.log("value change triggered")
+        //console.log(event.target.value)
         let name = event.target.name.split("_")[1];
         this.aspects[name].value=event.target.value;
     }
