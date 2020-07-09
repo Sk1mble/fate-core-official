@@ -174,6 +174,28 @@ class EditPlayerTracks extends FormApplication {
                 <td>
             </tr>
             <tr>
+            <td>
+                Box Labels:
+            </td>
+            <td>
+                <select id="player_track_label_select" style="color:black; background:white;" >
+                    <option value="escalating">
+                        Escalating (1,2,3)
+                    </option>
+                    <option value="single">
+                        Single Point (1,1,1)
+                    </option>
+                    <option value="custom">
+                        Custom
+                    </option>
+                    <option selected="selected" value="none">
+                        None
+                    </option>
+                </select>
+                <input type="text" id="player_track_custom_label" maxlength="1" minlength="1" title="Enter a single character to be used as the label for all boxes in this track." style="color:black; background:white; width:50px"/>
+            </td>
+        </tr>
+            <tr>
                 <td>
                     Harm:
                 </td>
@@ -235,6 +257,15 @@ class EditPlayerTracks extends FormApplication {
                             box_values.push(false);
                         }
                         newTrack.box_values = box_values;
+                        let label = html.find("select[id='player_track_label_select']")[0].value;
+                        if (label == "custom"){
+                            let val = html.find("input[id='player_track_custom_label']")[0].value;
+                            if (val != "" && val != undefined){
+                                label = val;
+                            }
+                        }
+                        newTrack.label = label;
+
                         newTrack.toCopy=true;
                         this.tracks_by_category[newTrack.category][newTrack.name]=newTrack;
                         this.render(false);
@@ -410,6 +441,7 @@ class EditPlayerTracks extends FormApplication {
                     Aspect when marked?:<br>
                     Aspect as name?:<br>
                     Boxes:<br>
+                    Box Label:<br>
                     Harm:
                 </td>
                 <td>
@@ -417,6 +449,7 @@ class EditPlayerTracks extends FormApplication {
                     ${track.aspect.when_marked ? 'Yes':'No'}<br>
                     ${track.aspect.as_name ? 'Yes' : 'No'}<br>
                     ${track.boxes}<br>
+                    ${track.label}<br>
                     ${track.harm_can_absorb}
                 </td>
             </tr>

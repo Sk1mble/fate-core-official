@@ -1,5 +1,9 @@
 import { ExtraSheet } from "./ExtraSheet.js";
 
+Handlebars.registerHelper("add1", function(value) {
+    return value+1;
+});
+
 export class ModularFateCharacter extends ActorSheet {
 
     static get defaultOptions() {

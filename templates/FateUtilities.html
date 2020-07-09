@@ -85,9 +85,9 @@
                     </td>
                     <td>
                         {{#each this.box_values}}
-                        {{#if this}}
-                        <button type="button" name="box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" i icon class="fas fa-times" style="width:25px; height:25px; float:left; padding:5px" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}></button>{{else}}                          
-                        <button type="button" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="width:25px; height:25px; float:left; padding:5px" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}></button>{{/if}}
+                        {{#if this}}                        
+                        <button type="button" name="box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" i icon class="fas fa-times" style="width:30px; height:30px; float:left;" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}></button>{{else}}                          
+                        <button type="button" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="width:30px; height:30px; float:left; padding-bottom:5px"{{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}>{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "single")}}1{{else}}{{../label}}{{/if}}{{/if}}</button>{{/if}}
                             {{/each}}<!--end box_values each-->
                             {{#if this.aspect.when_marked}}<input type="text" name="track_aspect" id="{{../this.id}}_{{this.name}}" style="font-size:small; width:250px; height:25px; float:left; padding:5px; color:black; background-color: white; font-family:Arial;" value ="{{this.aspect.name}}"{{#if ../this.owner}}{{else}}disabled="disabled"{{/if}}></input>{{/if}}
                     </td>

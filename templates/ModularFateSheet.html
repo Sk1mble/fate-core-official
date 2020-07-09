@@ -121,8 +121,8 @@
                         <td style="padding-bottom:10px">
                             {{#each this.box_values}}
                             {{#if this}}
-                            <button type="button" name = "box" id="{{../name}}_{{@index}}_false" i icon class="fas fa-times" style="width:25px; height:25px; float:left; padding:5px"></button>{{else}}                          
-                            <button type="button" name="box" id="{{../name}}_{{@index}}_true" style="width:25px; height:25px; float:left; padding:5px"></button>{{/if}}
+                            <button type="button" name = "box" id="{{../name}}_{{@index}}_false" i icon class="fas fa-times" style="width:30px; height:30px; float:left;"></button>{{else}}                          
+                            <button type="button" name="box" id="{{../name}}_{{@index}}_true" style="width:30px; height:30px; float:left; padding-bottom:5px">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "single")}}1{{else}}{{../label}}{{/if}}{{/if}}</button>{{/if}}
                             {{/each}}
                             {{#if this.aspect.when_marked}}<input type="text" style="font-size:small; width:250px; height:25px; float:left; padding:5px; color:black; background-color: lightsteelblue; font-family:Arial;" name = "data.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"></input>{{/if}}
                         </td>

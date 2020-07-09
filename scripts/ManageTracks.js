@@ -204,6 +204,9 @@ class EditTracks extends FormApplication {
         const deleteTrackButton = html.find("button[id='delete_track']");
         const edit_track_name=html.find("input[id='edit_track_name']");
         const copy_track = html.find("button[id='copy']");
+
+        const track_label_select = html.find("select[id='track_label_select']");
+        track_label_select.on("change", event => this._on_track_label_select(event, html))
         
         saveTrackButton.on("click", event => this._onSaveTrackButton(event, html));
         track_select.on("click", event => this._track_selectClick(event, html));
@@ -213,6 +216,17 @@ class EditTracks extends FormApplication {
         copy_track.on("click", event => this._onCopyTrackButton(event, html));
     }
     //Here are the event listener functions.
+
+    async _on_track_label_select(event, html){
+        if (event.target.value == "custom"){
+            document.getElementById("track_custom_label").hidden = false
+        }
+        else {
+            document.getElementById("track_custom_label").hidden = true
+            document.getElementById("track.custom_label").value = "";
+        }
+    }
+
     async _onCopyTrackButton (event, html){
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
@@ -286,6 +300,34 @@ class EditTracks extends FormApplication {
             document.getElementById("edit_track_harm").value=track.harm_can_absorb;
             document.getElementById("edit_linked_skills").disabled=false;
             document.getElementById("edit_track_paid").checked=track.paid;
+            
+            if (track.label=="none"){
+                document.getElementById("track_label_select").value = "none";
+                document.getElementById("track_custom_label").value = "";
+                document.getElementById("track_custom_label").hidden=true;     
+            } else {
+                if (track.label=="escalating"){
+                    document.getElementById("track_label_select").value = "escalating";       
+                    document.getElementById("track_custom_label").value = "";         
+                    document.getElementById("track_custom_label").hidden=true;                                   
+                } else {
+                    if (track.label=="single"){
+                        document.getElementById("track_label_select").value = "single";
+                        document.getElementById("track_custom_label").value = "";
+                        document.getElementById("track_custom_label").hidden=true;                                   
+                    } else {
+                        if (track.label==undefined){ 
+                            document.getElementById("track_label_select").value = "none";
+                            document.getElementById("track_custom_label").value = "";     
+                            document.getElementById("track_custom_label").hidden=true;                                   
+                        } else {
+                            document.getElementById("track_label_select").value = "custom";
+                            document.getElementById("track_custom_label").value = track.label;
+                            document.getElementById("track_custom_label").hidden=false;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -301,6 +343,11 @@ class EditTracks extends FormApplication {
         let boxes = parseInt(document.getElementById("edit_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_track_harm").value);
         let paid = document.getElementById("edit_track_paid").checked;
+        let label = document.getElementById("track_label_select").value;
+        let custom_label = document.getElementById("track_custom_label").value;
+        if (label=="custom") {
+            label=custom_label;
+        }
         let linked_skills; 
         let existing = false;
 
@@ -322,6 +369,7 @@ class EditTracks extends FormApplication {
                     track.boxes=boxes;
                     track.harm_can_absorb=harm;
                     track.paid = paid;
+                    track.label = label;
                 }
             }
             if (!existing){
@@ -344,7 +392,8 @@ class EditTracks extends FormApplication {
                     "boxes":boxes,
                     "harm_can_absorb":harm,
                     "paid":paid,
-                    "linked_skills":linked_skills
+                    "linked_skills":linked_skills,
+                    "label":label
                 }
                 this.tracks[name]=newTrack;
             }
