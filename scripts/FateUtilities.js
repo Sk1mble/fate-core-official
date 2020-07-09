@@ -34,7 +34,7 @@ activateListeners(html) {
             this.render(true);
     })
     const track_name = html.find("div[name='track_name']");
-    const box = html.find("button[name='box']");
+    const box = html.find("input[name='box']");
     box.on("click", event => this._on_click_box(event, html));
     track_name.on("click", event => this._on_track_name_click(event, html));
     const track_aspect = html.find("input[name='track_aspect']");

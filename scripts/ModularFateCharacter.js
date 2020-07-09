@@ -50,7 +50,7 @@ export class ModularFateCharacter extends ActorSheet {
             const aspectButton = html.find("div[name='edit_player_aspects']");
             aspectButton.on("click", event => this._onAspectClick(event, html));
 
-            const box = html.find("button[name='box']");
+            const box = html.find("input[name='box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
             skills_block.on("dblclick", event => this._onSkillsButton(event, html));
