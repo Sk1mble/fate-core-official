@@ -262,6 +262,8 @@ class EditPlayerTracks extends FormApplication {
                             let val = html.find("input[id='player_track_custom_label']")[0].value;
                             if (val != "" && val != undefined){
                                 label = val;
+                            } else {
+                                label = "";
                             }
                         }
                         newTrack.label = label;
