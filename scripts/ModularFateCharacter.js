@@ -4,6 +4,14 @@ Handlebars.registerHelper("add1", function(value) {
     return value+1;
 });
 
+Handlebars.registerHelper("hasBoxes", function(track) {
+    if(track.box_values==undefined || track.box_values.length==0){
+        return false;
+    } else {
+        return true;
+    }
+});
+
 export class ModularFateCharacter extends ActorSheet {
 
     static get defaultOptions() {

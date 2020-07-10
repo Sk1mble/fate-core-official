@@ -311,20 +311,14 @@ class EditTracks extends FormApplication {
                     document.getElementById("track_custom_label").value = "";         
                     document.getElementById("track_custom_label").hidden=true;                                   
                 } else {
-                    if (track.label=="single"){
-                        document.getElementById("track_label_select").value = "single";
-                        document.getElementById("track_custom_label").value = "";
+                    if (track.label==undefined){ 
+                        document.getElementById("track_label_select").value = "none";
+                        document.getElementById("track_custom_label").value = "";     
                         document.getElementById("track_custom_label").hidden=true;                                   
                     } else {
-                        if (track.label==undefined){ 
-                            document.getElementById("track_label_select").value = "none";
-                            document.getElementById("track_custom_label").value = "";     
-                            document.getElementById("track_custom_label").hidden=true;                                   
-                        } else {
-                            document.getElementById("track_label_select").value = "custom";
-                            document.getElementById("track_custom_label").value = track.label;
-                            document.getElementById("track_custom_label").hidden=false;
-                        }
+                        document.getElementById("track_label_select").value = "custom";
+                        document.getElementById("track_custom_label").value = track.label;
+                        document.getElementById("track_custom_label").hidden=false;
                     }
                 }
             }

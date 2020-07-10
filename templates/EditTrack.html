@@ -103,9 +103,6 @@
                     <option value="escalating">
                         Escalating (1,2,3)
                     </option>
-                    <option value="single">
-                        Single Point (1,1,1)
-                    </option>
                     <option value="custom">
                         Custom
                     </option>
@@ -113,7 +110,7 @@
                         None
                     </option>
                 </select>
-                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="Enter a single character to be used as the label for all boxes in this track." hidden="true" style="color:black; background:white; width:50px" value="{{this.label}}"/>
+                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="Enter a single character to be used as the label for all boxes in this track." hidden="true" style="color:black; background:white; width:50px" value="{{this.label}}"/> Label overrides for this track. Leave as 'none' if 'harm' defined below.
             </td>
         </tr>
         <tr>
@@ -121,7 +118,7 @@
                 Harm:
             </td>
             <td>
-                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> How much harm can this track absorb? Use for Consequences, In Peril, etc.
+                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> How much harm can each box (or aspect, if no boxes) absorb? 
             </td>
         </tr>
         <tr>

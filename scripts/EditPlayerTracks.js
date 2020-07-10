@@ -182,9 +182,6 @@ class EditPlayerTracks extends FormApplication {
                     <option value="escalating">
                         Escalating (1,2,3)
                     </option>
-                    <option value="single">
-                        Single Point (1,1,1)
-                    </option>
                     <option value="custom">
                         Custom
                     </option>
