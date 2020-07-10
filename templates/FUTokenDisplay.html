@@ -5,7 +5,7 @@
     </td>
     <td>
         {{this.data.name}}<br>
-        {{#if this.owner}}
+        {{#if this.actor.owner}}
         <select id="{{this.id}}_selectSkill">
             <option disabled="disabled" selected="selected">Pick a skill</option>
             {{#each this.actor.data.data.skills}}
