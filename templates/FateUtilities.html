@@ -83,7 +83,7 @@
                     </tr>
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.isPC}}
-                    {{> systems/ModularFate/templates/FUTokenDisplay.html}}
+                    {{> systems/ModularFate/templates/FUTokenDisplay.html parameter=../tokenAvatar}}
                     {{/if}}
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.isPC}}{{else}}
