@@ -8,7 +8,9 @@ constructor(){
     game.system.apps["user"].push(this);
     this.category="Combat";
     this.editingSceneNotes = false;
-    this.tokenAvatar = true;
+    if (game.system.tokenAvatar == undefined){
+        game.system.tokenAvatar = true;
+    }
 }
 
 close(){
@@ -80,13 +82,13 @@ activateListeners(html) {
 async _on_avatar_click(event, html){
     let t_id = event.target.id.split("_")[0];
     let token = canvas.tokens.placeables.find(t => t.id == t_id);
-    if (this.tokenAvatar == true){
+    if (game.system.tokenAvatar == true){
         ui.notifications.info("Switching to actor avatars");
-        this.tokenAvatar = false;
+        game.system.tokenAvatar = false;
     } else {
-        if (this.tokenAvatar == false){
+        if (game.system.tokenAvatar == false){
             ui.notifications.info("Switching to token avatars");
-            this.tokenAvatar = true;
+            game.system.tokenAvatar = true;
         }
     }
     this.render(false);
@@ -379,7 +381,7 @@ async getData(){
     data.category=this.category;
  
     data.categories = game.settings.get("ModularFate","track_categories")
-    data.tokenAvatar = this.tokenAvatar;
+    data.tokenAvatar = game.system.tokenAvatar;
     return data;
 }
 

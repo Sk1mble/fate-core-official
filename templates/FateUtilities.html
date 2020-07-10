@@ -85,7 +85,7 @@
                     {{#each all_tokens}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
                         <td>
-                            {{log ../tokenAvatar}}{{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{else}}
+                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
                         </td>
                         <td>
