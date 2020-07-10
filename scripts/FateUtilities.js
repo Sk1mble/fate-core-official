@@ -8,6 +8,7 @@ constructor(){
     game.system.apps["user"].push(this);
     this.category="Combat";
     this.editingSceneNotes = false;
+    this.tokenAvatar = true;
 }
 
 close(){
@@ -71,6 +72,24 @@ activateListeners(html) {
 
     const refresh_fate_points = html.find("button[id='refresh_fate_points']");
     refresh_fate_points.on("click", event => this.refresh_fate_points(event, html));    
+
+    const avatar = html.find("img[name='avatar']");
+    avatar.on("click", event=> this._on_avatar_click(event,html));
+}
+
+async _on_avatar_click(event, html){
+    let t_id = event.target.id.split("_")[0];
+    let token = canvas.tokens.placeables.find(t => t.id == t_id);
+    if (this.tokenAvatar == true){
+        ui.notifications.info("Switching to actor avatars");
+        this.tokenAvatar = false;
+    } else {
+        if (this.tokenAvatar == false){
+            ui.notifications.info("Switching to token avatars");
+            this.tokenAvatar = true;
+        }
+    }
+    this.render(false);
 }
 
 async refresh_fate_points(event, html){
@@ -360,6 +379,7 @@ async getData(){
     data.category=this.category;
  
     data.categories = game.settings.get("ModularFate","track_categories")
+    data.tokenAvatar = this.tokenAvatar;
     return data;
 }
 
