@@ -80,18 +80,20 @@ activateListeners(html) {
 }
 
 async _on_avatar_click(event, html){
-    let t_id = event.target.id.split("_")[0];
-    let token = canvas.tokens.placeables.find(t => t.id == t_id);
-    if (game.system.tokenAvatar == true){
-        ui.notifications.info("Switching to actor avatars");
-        game.system.tokenAvatar = false;
-    } else {
-        if (game.system.tokenAvatar == false){
-            ui.notifications.info("Switching to token avatars");
-            game.system.tokenAvatar = true;
+    if (game.user.isGM){
+        let t_id = event.target.id.split("_")[0];
+        let token = canvas.tokens.placeables.find(t => t.id == t_id);
+        if (game.system.tokenAvatar == true){
+            ui.notifications.info("Switching to actor avatars");
+            game.system.tokenAvatar = false;
+        } else {
+            if (game.system.tokenAvatar == false){
+                ui.notifications.info("Switching to token avatars");
+                game.system.tokenAvatar = true;
+            }
         }
+        this.render(false);
     }
-    this.render(false);
 }
 
 async refresh_fate_points(event, html){
