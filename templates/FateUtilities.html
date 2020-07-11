@@ -67,7 +67,7 @@
         <section class="utilities-body">
 
             <!----------------------BEGIN Aspects Tab-->
-            <div name = "aspects" class="tab aspects" data-tab="aspects" id="fu_aspects_tab" style="background-color:gainsboro; overflow-y:scroll; max-height:850px">
+            <div name = "aspects" class="tab aspects" data-tab="aspects" id="fu_aspects_tab" style="background-color:gainsboro; overflow-y:scroll; max-height:800px">
                 <table style="font-size:small">
                     {{#each GMUsers}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
@@ -102,7 +102,7 @@
                     <option>{{this}}</option>
                     {{/each}}
                 </select> {{#if GM}}<button type="button" style="width:50px; height:auto;" id="clear_fleeting">Clear</button> all Fleeting tracks in every category{{/if}}
-                <div id="fu_tracks_tab" style="background-color:beige; overflow-y:scroll; max-height:850px">
+                <div id="fu_tracks_tab" style="background-color:beige; overflow-y:scroll; max-height:800px">
                 {{#each all_tokens}}
                 {{#if this.actor.isPC}}
                 <table style="border:1px; padding:10px;">
