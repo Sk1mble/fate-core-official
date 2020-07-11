@@ -135,7 +135,7 @@
                     <div class = "row">
                         <div class="column" style="float:left; width:10%; margin:auto; padding:0px; border:white solid 1px;">{{this.rank}}</div>
                         <div class="column" style="float:left; width:30%; margin:auto; padding:0px; border:white solid 1px;">({{lookup ../ladder this.rank}})</div>
-                        <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}</div>
+                        <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
                     </div>
                 {{/each}}
                 {{else}}
@@ -143,7 +143,7 @@
                 <div class="row">
                     <div class="column" style="float:left; width:10%; margin:auto; padding:0px; border:white solid 1px;">{{this.rank}}</div>
                     <div class="column" style="float:left; width:30%; margin:auto; padding:0px; border:white solid 1px;">({{lookup ../ladder this.rank}})</div>
-                    <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}</div>
+                    <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
                 </div>
                 {{/each}}
                 {{/if}}
@@ -198,10 +198,10 @@
                 <table style="background:white; color:black; border:none">
                 {{#each stunts}}
                     <tr>
-                        <td style="background-color: lightsteelblue;">{{this.name}} ({{this.linked_skill}})<button type="button" style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px" i icon class = "fas fa-trash" name="delete_stunt" id="{{this.name}}_delete"></button><button type="button" name="edit_stunt" style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px" i icon class = "fas fa-edit" id="{{this.name}}_edit"></button></td>
+                        <td style="background-color: lightsteelblue;">{{this.name}} ({{this.linked_skill}})<button type="button" style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px;" i icon class = "fas fa-trash" name="delete_stunt" id="{{this.name}}_delete"></button><button type="button" name = "stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.plusTwo}}" style="border:none; float:right; background-color:lightsteelblue; width:20px; height:20px; padding-left:15px; padding-right:30px" i icon class = "fas fa-dice""></button><button type="button" name="edit_stunt" style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px" i icon class = "fas fa-edit" id="{{this.name}}_edit"></button></td>
                     </tr>
                     <tr>
-                        <td>{{{this.description}}}</td>
+                        <td >{{{this.description}}}</td>
                     </tr>
                     <tr>
                         <td style="font-family:Fate Core; font-size:large">

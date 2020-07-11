@@ -84,17 +84,42 @@ export class ModularFateCharacter extends ActorSheet {
 
             const tracks_block = html.find("div[name='tracks_block']");
             const stunts_block = html.find("div[name='stunts_block']");
-            tracks_block.on("dblclick", event => this._onTracks_dblclick(event, html));
-            stunts_block.on("dblclick", event => this._onStunts_dblclick(event, html))
-            stunts_button.on("click", event => this._onStunts_dblclick(event, html));
-            tracks_button.on("click", event => this._onTracks_dblclick(event, html));
+
+            stunts_button.on("click", event => this._onStunts_click(event, html));
+            tracks_button.on("click", event => this._onTracks_click(event, html));
 
             const bio = html.find(`div[id='${this.object.id}_biography']`)
             bio.on("input",event => this._onBioInput(event, html));
             const desc = html.find(`div[id='${this.object.id}_description']`)
             desc.on("input",event => this._onDescInput(event, html));
+
+            const stunt_roll = html.find("button[name='stunt_name']");
+            stunt_roll.on("click", event => this._on_stunt_roll_click(event,html));
         }
         super.activateListeners(html);
+    }
+
+    async _on_stunt_roll_click(event,html){
+        let items = event.target.id.split("_");
+        let name = items[0];
+        let skill = items[1];
+        let plusTwo = items[2];
+
+        let bonus = 0;
+        if (plusTwo=="true"){
+            bonus += 2;
+        }
+
+        let r = new Roll(`4dF + ${this.object.data.data.skills[skill].rank}+${bonus}`);
+        let roll = r.roll();
+
+        let msg = ChatMessage.getSpeaker(this.object.actor)
+        msg.alias = this.object.name;
+
+        roll.toMessage({
+            flavor: `<h1>${skill}</h1>With stunt "${name}".<br> Rolled by ${game.user.name}`,
+            speaker: msg
+        });
     }
 
     async _onBioInput(event, html){
@@ -181,7 +206,7 @@ export class ModularFateCharacter extends ActorSheet {
         })
     }
 
-    async _onStunts_dblclick(event, html) {
+    async _onStunts_click(event, html) {
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
             "name":"New Stunt",
@@ -198,7 +223,7 @@ export class ModularFateCharacter extends ActorSheet {
         editor.render(true);
         editor.setSheet(this);
     }
-    async _onTracks_dblclick(event, html) {
+    async _onTracks_click(event, html) {
         //Launch the EditPlayerTracks FormApplication.
         let editor = new EditPlayerTracks(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
