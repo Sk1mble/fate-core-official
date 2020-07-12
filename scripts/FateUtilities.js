@@ -43,7 +43,6 @@ activateListeners(html) {
     const track_aspect = html.find("input[name='track_aspect']");
     track_aspect.on("change", event => this._on_aspect_change(event, html));
 
-    const select_skill = html.find("select[id='select_skill']");
     const roll = html.find("button[name='roll']");
     roll.on("click", event => this._roll(event,html));
 
@@ -119,7 +118,6 @@ async _edit_player_points(event, html){
     let id = event.target.id;
     let parts = id.split("_");
     let t_id = parts[0]
-    //console.log(t_id)
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
     let fps = parseInt(event.target.value);
 
@@ -188,17 +186,48 @@ async _clear_fleeting(event, html){
 async _roll(event,html){
     let t_id = event.target.id;
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
-    let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
-    let skill = sk.value.split("(")[0].trim();
     
+    let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
+    let skill;
+    let stunt = undefined;
+    let plusTwo = false;
+    if (sk.value.startsWith("Stunt:")){
+        try {
+            stunt = sk.value.split(":")[1].split("(")[0].trim();
+            if (sk.value.split(",").length !=1){
+                skill=sk.value.split("(")[1].split(",")[0].trim();
+            } else {
+                skill=sk.value.split("(")[1].split(")")[0].trim();
+            }
+            if (sk.value.split(",")[1].trim().startsWith("+2")){
+                plusTwo = true;
+            }
+        } catch {
+
+        }
+    } else {
+        skill = sk.value.split("(")[0].trim();
+    }
     let rank = token.actor.data.data.skills[skill].rank;
 
-    let r = new Roll(`4dF + ${rank}`);
+    let r;
+    if (plusTwo){
+        r = new Roll(`4dF + ${rank}+2`);    
+    } else {
+        r = new Roll(`4dF + ${rank}`);
+    }
         let roll = r.roll();
         let name = game.user.name
 
+        let flavour;
+        if (stunt != undefined){
+            flavour = `<h1>${skill}</h1>With stunt "${stunt}".<br>Rolled by ${name}`
+        } else {
+            flavour = `<h1>${skill}</h1>Rolled by ${name}`;
+        }
+
         roll.toMessage({
-            flavor: `<h1>${skill}</h1>Rolled by ${name}`,
+            flavor: flavour,
             speaker: ChatMessage.getSpeaker(token),
         });
 }

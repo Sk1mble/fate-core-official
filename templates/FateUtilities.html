@@ -83,11 +83,77 @@
                     </tr>
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.isPC}}
-                    {{> systems/ModularFate/templates/FUTokenDisplay.html parameter=../tokenAvatar}}
+                    <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
+                        <td>
+                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{else}}
+                            <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
+                        </td>
+                        <td>
+                            {{this.name}}<br>
+                            {{#if this.owner}}
+                            <select id="{{this.id}}_selectSkill" style="max-width:100px">
+                                <option disabled="disabled" selected="selected">Pick a skill</option>
+                                {{#each this.actor.data.data.skills}}
+                                <option>{{this.name}} ({{this.rank}})</option>
+                                {{/each}}
+                                {{#each this.actor.data.data.stunts}}
+                                <option>Stunt: {{this.name}} ({{this.linked_skill}}{{#if this.plusTwo}}, +2{{/if}})</option>
+                                {{/each}}
+                            </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
+                            {{/if}}
+                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
+                        </td>
+                        <td>
+                                <table style="border:none; font-size:small; padding:2px">
+                                    {{#each this.actor.data.data.aspects}}
+                                    <tr style="border-bottom:1px; border-bottom:groove">
+                                        <td width="150px"><b>{{this.name}}</b>: 
+                                        </td>
+                                        <td>
+                                            {{this.value}}
+                                        </td>
+                                    </tr>    
+                            {{/each}}
+                        </table>
+                        </td>
+                    </tr>
                     {{/if}}
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.isPC}}{{else}}
-                    {{> systems/ModularFate/templates/FUTokenDisplay.html}}
+                    <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
+                        <td>
+                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{else}}
+                            <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
+                        </td>
+                        <td>
+                            {{this.name}}<br>
+                            {{#if this.owner}}
+                            <select id="{{this.id}}_selectSkill" style="max-width:100px">
+                                <option disabled="disabled" selected="selected">Pick a skill</option>
+                                {{#each this.actor.data.data.skills}}
+                                <option>{{this.name}} ({{this.rank}})</option>
+                                {{/each}}
+                                {{#each this.actor.data.data.stunts}}
+                                {{#if (eq this.linked_skill "None")}}{{else}}<option>Stunt: {{this.name}} ({{this.linked_skill}}{{#if this.plusTwo}}, +2{{/if}})</option>{{/if}}
+                                {{/each}}
+                            </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
+                            {{/if}}
+                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
+                        </td>
+                        <td>
+                                <table style="border:none; font-size:small; padding:2px">
+                                    {{#each this.actor.data.data.aspects}}
+                                    <tr style="border-bottom:1px; border-bottom:groove">
+                                        <td width="150px"><b>{{this.name}}</b>: 
+                                        </td>
+                                        <td>
+                                            {{this.value}}
+                                        </td>
+                                    </tr>    
+                            {{/each}}
+                        </table>
+                        </td>
+                    </tr>e
                     {{/if}}
                     {{/each}}
                 </table>

@@ -281,11 +281,6 @@ Hooks.on('updateScene', (...args) => {
 
 Hooks.once('init', async function () {
 
-    await loadTemplates (
-                            [
-                                'systems/ModularFate/templates/FUTokenDisplay.html'
-                            ])
-
     game.settings.register("ModularFate", "run_once", {
         name: "Run Once?",
         hint:"Pops up a brief tutorial message on first load of a world with this system",
