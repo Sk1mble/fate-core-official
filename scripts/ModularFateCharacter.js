@@ -61,7 +61,6 @@ export class ModularFateCharacter extends ActorSheet {
             const box = html.find("input[name='box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
-            skills_block.on("dblclick", event => this._onSkillsButton(event, html));
             skills_block.on("contextmenu", event => this._onSortButton(event, html));
             const track_name = html.find("div[name='track_name']");
             track_name.on("click", event => this._on_track_name_click(event, html));
