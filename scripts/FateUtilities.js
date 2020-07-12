@@ -191,27 +191,20 @@ async _roll(event,html){
     let skill;
     let stunt = undefined;
     let plusTwo = false;
-    if (sk.value.startsWith("Stunt:")){
-        try {
-            stunt = sk.value.split(":")[1].split("(")[0].trim();
-            if (sk.value.split(",").length !=1){
-                skill=sk.value.split("(")[1].split(",")[0].trim();
-            } else {
-                skill=sk.value.split("(")[1].split(")")[0].trim();
-            }
-            if (sk.value.split(",")[1].trim().startsWith("+2")){
-                plusTwo = true;
-            }
-        } catch {
-
-        }
+    console.log(sk.value)
+    if (sk.value.startsWith("stunt")){
+        let items = sk.value.split("_");
+        console.log(items)
+        stunt=items[1]
+        skill = items[2]
+        plusTwo = items[3]
     } else {
         skill = sk.value.split("(")[0].trim();
     }
     let rank = token.actor.data.data.skills[skill].rank;
 
     let r;
-    if (plusTwo){
+    if (plusTwo==true || plusTwo == "true"){
         r = new Roll(`4dF + ${rank}+2`);    
     } else {
         r = new Roll(`4dF + ${rank}`);

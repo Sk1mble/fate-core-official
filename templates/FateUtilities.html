@@ -97,7 +97,7 @@
                                 <option>{{this.name}} ({{this.rank}})</option>
                                 {{/each}}
                                 {{#each this.actor.data.data.stunts}}
-                                <option>Stunt: {{this.name}} ({{this.linked_skill}}{{#if this.plusTwo}}, +2{{/if}})</option>
+                                {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.plusTwo}}">Stunt: {{this.name}} ({{this.linked_skill}}{{#if this.plusTwo}}: +2{{/if}})</option>{{/if}}
                                 {{/each}}
                             </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
                             {{/if}}
@@ -134,7 +134,7 @@
                                 <option>{{this.name}} ({{this.rank}})</option>
                                 {{/each}}
                                 {{#each this.actor.data.data.stunts}}
-                                {{#if (eq this.linked_skill "None")}}{{else}}<option>Stunt: {{this.name}} ({{this.linked_skill}}{{#if this.plusTwo}}, +2{{/if}})</option>{{/if}}
+                                {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.plusTwo}}">Stunt: {{this.name}} ({{this.linked_skill}}{{#if this.plusTwo}}: +2{{/if}})</option>{{/if}}
                                 {{/each}}
                             </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
                             {{/if}}
