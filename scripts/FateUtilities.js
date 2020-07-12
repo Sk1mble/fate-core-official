@@ -140,7 +140,7 @@ async scene_notes_edit(event,html){
 
 async _free_i_button(event,html){
     let name=event.target.id.split("_")[0];
-    let value=html.find(`input[id='${name}_free_invokes']`)[0].value
+    let value=html.find(`input[id="${name}_free_invokes"]`)[0].value
     let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"))
     let aspect = situation_aspects[situation_aspects.findIndex(sit => sit.name == name)];
     aspect.free_invokes = value;
