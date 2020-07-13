@@ -34,6 +34,7 @@ class EditPlayerStunts extends FormApplication {
         for (let t in formData){
             this.stunt[t]=formData[t];
         }
+        this.stunt.name=this.stunt.name.split(".").join("");
         await this.actor.update({"data.stunts":{[this.stunt.name]:this.stunt}})
     }
 

@@ -235,7 +235,7 @@ class EditPlayerTracks extends FormApplication {
                         //Todo: code to save goes here;
                         let newTrack = {};
                         newTrack.category=html.find("select[id='category']")[0].value;
-                        newTrack.name=html.find("input[id='name']")[0].value;
+                        newTrack.name=html.find("input[id='name']")[0].value.split(".").join("");
                         newTrack.description= html.find("input[id='description']")[0].value;
                         newTrack.universal= false; 
                         newTrack.unique = html.find("input[id='unique']")[0].checked;

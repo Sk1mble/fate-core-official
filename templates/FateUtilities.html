@@ -119,7 +119,7 @@
                     </tr>
                     {{/if}}
                     {{/each}}
-                    {{#each all_tokens}}{{#if this.actor.isPC}}{{else}}
+                    {{#each all_tokens}}{{#if this.actor.isPC}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
                         <td>
                             {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{else}}
@@ -154,6 +154,7 @@
                         </table>
                         </td>
                     </tr>
+                    {{/if}}
                     {{/if}}
                     {{/each}}
                 </table>
@@ -199,7 +200,7 @@
                 {{/if}}
                 {{/each}}<!--ENd all_tokens each-->
                 {{#each all_tokens}}
-                {{#if this.actor.isPC}}{{else}}
+                {{#if this.actor.isPC}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                 <table style="border:1px; padding:10px;">
                     <tr>
                         <td width = "300px">
@@ -225,6 +226,7 @@
                 {{/if}}<!--end-->
                 {{/each}}<!--end all_tracks each-->
                 </table>
+                {{/if}}
                 {{/if}}
                 {{/each}}<!--ENd all_tokens each-->
             </div><!--//End Tracks body-->

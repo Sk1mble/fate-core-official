@@ -44,7 +44,9 @@ class EditPlayerAspects extends FormApplication{
         //console.log(name)
         let newName = event.target.value;
         let newAspect = {};
+        newName = newName.split(".").join("");
         newAspect.name = newName;
+    
         newAspect.description = this.aspects[name].description;
         newAspect.value = this.aspects[name].value;
         delete this.aspects[name]
@@ -112,7 +114,6 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _updateObject(event, formData){
-        
         await this.object.update({"data.aspects":[]})//Name changes won't be propagated unless we delete.
         await this.object.update({"data.aspects":this.aspects})
         await this.render(false);
