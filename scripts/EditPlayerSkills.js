@@ -423,7 +423,7 @@ class EditGMSkills extends FormApplication{
             }
         }
         if (newSkill != undefined){
-            newSkill.name=newSkill.name.split(".").join("");
+            newSkill.name=newSkill.name.split(".").join("․");
             await this.object.update({"data.skills": {[newSkill.name]:newSkill}})  
             this.render(false);
         }
