@@ -224,7 +224,7 @@ class EditSkill extends FormApplication{
 
         async _updateObject(event, f) {
             let skills=game.settings.get("ModularFate","skills");
-            let newSkill = {"name":f.name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
+            let newSkill = {"name":f.name.split(".").join("․"), "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
             var existing = false;
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
             if (f.name == undefined || f.name ==""){
