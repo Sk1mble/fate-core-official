@@ -244,7 +244,7 @@ class EditTracks extends FormApplication {
     }
 
     async _edit_track_name_change(event, html){
-        let name = event.target.value;
+        let name = event.target.value.split(".").join("․");;
         let track = this.tracks[name];
         if (track == undefined){
             document.getElementById("edit_linked_skills").disabled=true;
@@ -326,7 +326,7 @@ class EditTracks extends FormApplication {
     }
 
     async _onSaveTrackButton(event,html){
-        let name = document.getElementById("edit_track_name").value;
+        let name = document.getElementById("edit_track_name").value.split(".").join("․");;
         let description = document.getElementById("edit_track_description").value;
         let universal = document.getElementById("edit_track_universal").checked;
         let unique = document.getElementById("edit_track_unique").checked;
