@@ -190,7 +190,7 @@ class EditAspect extends FormApplication{
     //Here are the event listener functions.
     async _onSaveButton(event,html){
         //Get the name and description of the aspect
-        let name = html.find("input[id='edit_aspect_name']")[0].value;
+        let name = html.find("input[id='edit_aspect_name']")[0].value.split(".").join("․");
         let description = html.find("textarea[id='edit_aspect_description']")[0].value;
         let aspects=game.settings.get("ModularFate","aspects");
         let newAspect = {"name":name, "description":description};
