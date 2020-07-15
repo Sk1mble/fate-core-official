@@ -1069,8 +1069,8 @@ button:hover {
   float:left;
   position: relative;
   padding-left: 0px;
-  margin-bottom: 5px;
-  margin-top: 5px;
+  margin-bottom: 2px;
+  margin-top: 0px;
   cursor: pointer;
   font-size: 22px;
   -webkit-user-select: none;
@@ -1094,7 +1094,7 @@ button:hover {
 
 /* On mouse-over, add a grey background color */
 .box:hover input ~ .checkmark {
-  background-color: #ccc;
+  background-color: lightsteelblue;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -1129,7 +1129,7 @@ button:hover {
 }
 
 .cs_box:hover {
-  background-color: #ccc !important;
+  background-color: lightsteelblue !important;
 }
 
 .aspect_box {
@@ -1142,12 +1142,21 @@ button:hover {
   float:left !important; 
   padding:5px !important; 
   color:black !important; 
-  background-color : white !important; 
+  background-color :white !important; 
   font-family:Montserrat !important; 
   border:none !important; 
   border-bottom: 1px solid lightsteelblue !important
 }
 
 .aspect_box:hover {
-  background-color: #ccc !important;
+  background-color: lightsteelblue !important;
+}
+
+.long_text {
+  min-height:50px !important; 
+  background-color:white !important;
+}
+
+.long_text:hover {
+  background-color: lightsteelblue !important;
 }

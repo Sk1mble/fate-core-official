@@ -14,7 +14,7 @@
                         <b>Refresh: </b>
                     </td>
                     <td>
-                        <input type="number" data-edit="data.details.fatePoints.refresh" name="data.details.fatePoints.refresh" style="width:75px" value="{{data.details.fatePoints.refresh}}"></input>
+                        <input type="number" class="cs_box" data-edit="data.details.fatePoints.refresh" name="data.details.fatePoints.refresh" style="width:75px;" value="{{data.details.fatePoints.refresh}}"></input>
                     </td>
                     <td>
                         <b>Skill Points: </b>
@@ -28,7 +28,7 @@
                         <b>Current: </b>
                     </td>
                     <td>
-                        <input type="number" name="data.details.fatePoints.current" style="width:75px" value="{{data.details.fatePoints.current}}"></input>
+                        <input type="number" class="cs_box" name="data.details.fatePoints.current" style="width:75px" value="{{data.details.fatePoints.current}}"></input>
                     </td>
                     <td>
                         <b>Game Skill Total: </b>
@@ -86,7 +86,7 @@
                 <div class="row">
                     <div class="column" style="float:left; width:10%; margin:auto; padding:0px; border:white solid 1px;">{{this.rank}}</div>
                     <div class="column" style="float:left; width:30%; margin:auto; padding:0px; border:white solid 1px;">({{lookup ../ladder this.rank}})</div>
-                    <div class="column" name="skill" style="float:left; width:60%; background-color:lightsteelblue; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
+                    <div class="column" name="skill" style="float:left; width:60%; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
                 </div>
                 {{/each}}
                 {{/if}}
@@ -141,13 +141,13 @@
                 <table style="background:white; color:black; border:none">
                 {{#each stunts}}
                     <tr>
-                        <td style="background-color: lightsteelblue;">{{this.name}} ({{this.linked_skill}})<button type="button" style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px;" i icon class = "fas fa-trash" name="delete_stunt" id="{{this.name}}_delete"></button> {{#if (eq this.linked_skill "None")}}{{else}}<button type="button" name = "stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.plusTwo}}" style="border:none; float:right; background-color:lightsteelblue; width:20px; height:20px; padding-left:15px; padding-right:30px" i icon class = "fas fa-dice""></button>{{/if}}<button type="button" name="edit_stunt" style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px" i icon class = "fas fa-edit" id="{{this.name}}_edit"></button></td>
+                        <td style="font-weight:bold; font-family:Montserrat;">{{this.name}} ({{this.linked_skill}})<button type="button" style="border:none; background:white; float:right; width:20px; height:20px;" i icon class = "fas fa-trash" name="delete_stunt" id="{{this.name}}_delete"></button> {{#if (eq this.linked_skill "None")}}{{else}}<button type="button" name = "stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.plusTwo}}" style="border:none; background:white; float:right; width:20px; height:20px; padding-left:15px; padding-right:30px" i icon class = "fas fa-dice""></button>{{/if}}<button type="button" name="edit_stunt" style="border:none; float:right; width:20px; height:20px; background:white" i icon class = "fas fa-edit" id="{{this.name}}_edit"></button></td>
                     </tr>
                     <tr>
-                        <td >{{{this.description}}}</td>
+                        <td>{{{this.description}}}</td>
                     </tr>
                     <tr>
-                        <td style="font-family:Fate Core; font-size:large">
+                        <td style="font-family:Fate Core; font-size:large; padding-bottom:20px">
                             {{#if this.overcome}}<b id="Overcome">O</b>{{/if}}{{#if this.caa}}<b id="Create An Advantage">C</b>{{/if}}{{#if this.attack}}<b id="Attack">A</b>{{/if}}{{#if this.defend}}<b id="Defend">D</b>{{/if}}
                         </td>
                     </tr>
@@ -161,31 +161,31 @@
 
 <div class="tab biography" id="biography_body" data-tab="biography">
     <div>
-        <div style="width:700px">
+        <div style="width:700px; padding-top:10px">
             <b>Description:</b>
         </div>
         <div style="width:700px">
-            <div class="property-textarea" id="{{this.actor._id}}_description" contenteditable="true" name="data.details.description.value" data-edit="data.details.description.value" style="min-height:50px; background-color:lightsteelblue">{{{data.details.description.value}}}</div><p/>
+            <div class="long_text" id="{{this.actor._id}}_description" contenteditable="true" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div><p/>
         </div>
-        <div style="width:700px">
+        <div style="width:700px; padding-top:10px">
             <b>Biography:</b>
         </div>
         <div style="width:700px">
-            <div class="property-textarea" id="{{this.actor._id}}_biography" contenteditable="true" data-edit="data.details.biography.value" name="data.details.biography.value" style="min-height:50px; background-color:lightsteelblue">{{{data.details.biography.value}}}</div></p>
+            <div class="long_text" id="{{this.actor._id}}_biography" contenteditable="true" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div></p>
         </div>
     </div><!--end of bio block-->
 
 
     <div><!--Begin Extras block-->
-        <div name = "Extras header" style="width:300px"><b>Extras:</b><div title="Add a new Extra" style="font-size:medium; padding-left:10px; padding-right:10px;" name="add_player_extra" i icon class="fas fa-plus"></div></div>
-        <div name = "extras_body" style="overflow-y:scroll; width:700px; height:auto; border:lightsteelblue; border-width:2px; border-style:solid">
+        <div name = "Extras header" style="width:300px; padding-top:10px"><b>Extras:</b><div title="Add a new Extra" style="font-size:medium; padding-left:10px; padding-right:10px;" name="add_player_extra" i icon class="fas fa-plus"></div></div>
+        <div name = "extras_body" style="overflow-y:scroll; width:700px; height:auto;"">
             <table style="background:white; color:black; border:none">
                 {{#each items}}
                     <tr>
-                        <td style="background-color: lightsteelblue;">{{{this.name}}}<button style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px" i icon class = "fas fa-trash" type="button" name="delete_extra" id="{{this._id}}"></button><button name="edit_extra" type="button" style="border:none; background-color:lightsteelblue; float:right; width:20px; height:20px" i icon class = "fas fa-edit" id="{{this._id}}"></button></td>
+                        <td style="font-weight:bold">{{{this.name}}}<button style="border:none; background-color:white; float:right; width:20px; height:20px" i icon class = "fas fa-trash" type="button" name="delete_extra" id="{{this._id}}"></button><button name="edit_extra" type="button" style="border:none; background-color:white; float:right; width:20px; height:20px" i icon class = "fas fa-edit" id="{{this._id}}"></button></td>
                     </tr>
                     <tr>
-                        <td>{{{this.data.description.value}}}</td>
+                        <td style="padding-bottom:20px">{{{this.data.description.value}}}</td>
                     </tr>
                     {{/each}}
                 </table>
