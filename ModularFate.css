@@ -1121,14 +1121,33 @@ button:hover {
 .cs_box {
   background-color:white !important;
   font-family:Montserrat !important;
-  border-style:solid !important;
-  border-color:black !important;
-  border-left:none !important;
-  border-right:none !important;
   border-top:none !important;
-  border-bottom:2px !important;
+  border-radius:0 !important;
+  border-right:none !important;
+  border-left:none !important;
+  border-bottom:1px solid lightsteelblue !important
 }
 
 .cs_box:hover {
+  background-color: #ccc !important;
+}
+
+.aspect_box {
+  font-size:small !important; 
+  width:200px !important; 
+  margin-top:5px !important; 
+  margin-bottom:5px !important; 
+  border-style:solid !important; 
+  height:25px !important; 
+  float:left !important; 
+  padding:5px !important; 
+  color:black !important; 
+  background-color : white !important; 
+  font-family:Montserrat !important; 
+  border:none !important; 
+  border-bottom: 1px solid lightsteelblue !important
+}
+
+.aspect_box:hover {
   background-color: #ccc !important;
 }
