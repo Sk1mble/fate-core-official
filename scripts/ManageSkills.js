@@ -224,14 +224,15 @@ class EditSkill extends FormApplication{
 
         async _updateObject(event, f) {
             let skills=game.settings.get("ModularFate","skills");
-            let newSkill = {"name":f.name.split(".").join("․"), "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
+            let name = f.name.split(".").join("․");
+            let newSkill = {"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
             var existing = false;
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
-            if (f.name == undefined || f.name ==""){
+            if (name == undefined || name ==""){
                 ui.notifications.error("You cannot have a skill with a blank name.")
             } else {
-                if (skills[f.name] != undefined){
-                    skills[f.name]=newSkill;
+                if (skills[name] != undefined){
+                    skills[name]=newSkill;
                     existing = true;
                 }
             }
@@ -240,7 +241,7 @@ class EditSkill extends FormApplication{
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
                     delete skills[this.skill.name]
                 }                      
-                skills[f.name]=newSkill;
+                skills[name]=newSkill;
             }
             await game.settings.set("ModularFate","skills",skills);
         }
