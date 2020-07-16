@@ -10,7 +10,7 @@
         <section class="utilities-body">
 
             <!----------------------BEGIN Aspects Tab-->
-            <div name = "aspects" class="tab aspects" data-tab="aspects" id="fu_aspects_tab" style="background-color:gainsboro; overflow-y:scroll; max-height:800px">
+            <div name = "aspects" class="tab aspects" data-tab="aspects" id="fu_aspects_tab" style="background-color:gainsboro; overflow-y:auto; max-height:800px">
                 <table style="font-size:small">
                     {{#each GMUsers}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
@@ -112,7 +112,7 @@
                     <option>{{this}}</option>
                     {{/each}}
                 </select> {{#if GM}}<button type="button" style="width:50px; height:auto;" id="clear_fleeting">Clear</button> all Fleeting tracks in every category{{/if}}
-                <div id="fu_tracks_tab" style="background-color:beige; overflow-y:scroll; max-height:800px">
+                <div id="fu_tracks_tab" style="background-color:beige; overflow-y:auto; max-height:800px">
                 {{#each all_tokens}}
                 {{#if this.actor.isPC}}
                 <table style="border:1px; padding:10px;">
@@ -176,12 +176,12 @@
         </div><!--End tracks tab-------------------------------->
 
             <!----------------------------------------------------------------------BEGIN SCENE TAB-->
-            <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:scroll; max-height:850px">
+            <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:auto; max-height:850px">
                     <h1>Situation Aspects</h1>
                     {{#if GM}}<i style="font-style:normal; font-family:Montserrat;">Aspect:</i> <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
                     <i style="font-style:normal; font-family:Montserrat;">Free invokes:</i> <input type="number" id="free_invokes" style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>{{/if}}
                     {{#if GM}}<button type="button" id="add_sit_aspect" style="width:30px; height:30px;"i icon class="fas fa-plus"></button>{{/if}}
-                    <div style="overflow-y:scroll; height:200px">
+                    <div style="overflow-y:auto; height:200px">
                     <table style="border:none;">
                         {{#each situation_aspects}}
                             <tr>
@@ -210,7 +210,7 @@
         <h2>Action Tracker</h2>
         {{#if conflict}}
         <h3>Exchange: {{exchange}}</h3>
-        <div class="Action Tracker" style="overflow-y:scroll; height:600px">
+        <div class="Action Tracker" style="overflow-y:auto; height:600px">
             {{else}}No conflict detected.
             {{/if}}
             <table style="border:none; background-color:white">
