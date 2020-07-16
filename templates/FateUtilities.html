@@ -15,23 +15,23 @@
                     {{#each GMUsers}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
                         <td>
-                            <img src="{{this.data.avatar}}" style="width:40px; height:auto"/>
+                            <img src="{{this.data.avatar}}" style="width:50px; height:auto; border:none"/>
                         </td>
-                        <td>
+                        <td style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}} (GM)
                         </td>
                         <td>
-                            <input id="{{this.id}}" name="gmfp" type="number" min="0" value="{{this.fatepoints}}" style="width:50px" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}/> Scene Fate Points{{#if ../GM}}<button type="button" id="refresh_fate_points" style="width:300px; float:right"> Refresh Player Fate Points</button>{{/if}}
+                            <input id="{{this.id}}" name="gmfp" type="number" min="0" value="{{this.fatepoints}}" style="width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}/> Scene Fate Points{{#if ../GM}}<button type="button" id="refresh_fate_points" style="width:300px; float:right;"> Refresh Player Fate Points</button>{{/if}}
                         </td>
                     </tr>
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.isPC}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
                         <td>
-                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{else}}
+                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
                         </td>
-                        <td>
+                        <td style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
                             <select id="{{this.id}}_selectSkill" style="max-width:100px">
@@ -44,10 +44,10 @@
                                 {{/each}}
                             </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
                             {{/if}}
-                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
+                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
                         </td>
                         <td>
-                                <table style="border:none; font-size:small; padding:2px">
+                                <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
                                     {{#each this.actor.data.data.aspects}}
                                     <tr style="border-bottom:1px; border-bottom:groove">
                                         <td width="150px"><b>{{this.name}}</b>: 
@@ -65,10 +65,10 @@
                     {{#each all_tokens}}{{#if this.actor.isPC}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
                         <td>
-                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{else}}
-                            <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
+                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{else}}
+                            <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{/if}}
                         </td>
-                        <td>
+                        <td style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
                             <select id="{{this.id}}_selectSkill" style="max-width:100px">
@@ -84,7 +84,7 @@
                             {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
                         </td>
                         <td>
-                                <table style="border:none; font-size:small; padding:2px">
+                                <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
                                     {{#each this.actor.data.data.aspects}}
                                     <tr style="border-bottom:1px; border-bottom:groove">
                                         <td width="150px"><b>{{this.name}}</b>: 
@@ -104,7 +104,7 @@
             </div><!--End Aspects tab--------------------------------------->
             
             <!--------BEGIN Tracks tab-->
-            <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:beige;">
+            <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:beige; font-family:Montserrat;">
                 Category: 
                 <select id = "category_select" style="padding-right:100px">
                     <option disabled="disabled" selected="selected">Combat</option>
@@ -117,7 +117,7 @@
                 {{#if this.actor.isPC}}
                 <table style="border:1px; padding:10px;">
                     <tr>
-                        <td width = "300px">
+                        <td width = "300px" style="font-family:Montserrat">
                             <b>{{this.name}}</b>
                         </td>
                     </tr>
@@ -146,7 +146,7 @@
                 {{#if this.actor.isPC}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                 <table style="border:1px; padding:10px;">
                     <tr>
-                        <td width = "300px">
+                        <td width = "300px" style="font-family:Montserrat">
                             <b>{{this.name}}</b>
                         </td>
                     </tr>
@@ -178,18 +178,18 @@
             <!----------------------------------------------------------------------BEGIN SCENE TAB-->
             <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:scroll; max-height:850px">
                     <h1>Situation Aspects</h1>
-                    {{#if GM}}Aspect: <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black"></input>
-                    Free invokes: <input type="number" id="free_invokes" style="width:50px; background-color:white; color:black"></input>{{/if}}
+                    {{#if GM}}<i style="font-style:normal; font-family:Montserrat;">Aspect:</i> <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
+                    <i style="font-style:normal; font-family:Montserrat;">Free invokes:</i> <input type="number" id="free_invokes" style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>{{/if}}
                     {{#if GM}}<button type="button" id="add_sit_aspect" style="width:30px; height:30px;"i icon class="fas fa-plus"></button>{{/if}}
                     <div style="overflow-y:scroll; height:200px">
                     <table style="border:none;">
                         {{#each situation_aspects}}
                             <tr>
-                                <td width = "300px">
+                                <td width = "300px" style="font-family:Montserrat">
                                     {{this.name}}
                                 </td>
                                 <td>
-                                    <input type="number" name="free_i" id="{{this.name}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}style="width:50px; background-color:white; color:black" value="{{this.free_invokes}}"></input>
+                                    <input type="number" name="free_i" id="{{this.name}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
                                     {{#if ../GM}}<button type="button" name="del_sit_aspect" id="delete_{{this.name}}" style="width:25px; height:25px" i icon class="fas fa-trash"></button>{{/if}}
                                 </td>
                             </tr> 
@@ -197,8 +197,8 @@
                     </table>
                     </div>
                     <h1>Scene Notes</h1>
-                    <div style="overflow-y:scroll; height:200px">
-                        <div {{#if GM}}contenteditable="true"{{else}}{{/if}} id="scene_notes" style="border-color:darkgray; border-style:solid; border-width:2px">{{{this.notes}}}</div>
+                    <div style="overflow-y:auto; height:200px; font-family:Montserrat;">
+                        <div {{#if GM}}contenteditable="true"{{else}}{{/if}} id="scene_notes" style="border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                     </div>                
             </div><!--End Scene tab---------------------------------------------------->
             <!----------------------------------------------------------------------END SCENE TAB-->
