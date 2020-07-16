@@ -289,6 +289,9 @@ Hooks.once('init', async function () {
         type: Boolean
     })
 
+    game.system.entityTypes.Item = ["Extra"];
+    game.system.entityTypes.Actor = ["ModularFate"]
+
     game.system.apps= {
         actor:[],
         combat:[],
