@@ -72,7 +72,7 @@
             <div name="skills_block">
                 <div name = "skills_header" style="width:400px"><b>Skills</b>
                     <div title="Open the Skill Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_skills" i icon class="fas fa-cog"></div><div style="font-size:medium; padding-right:10px" name="sort_player_skills" i icon class="fas fa-sort" title="Switch between sorting by rank and sorting by name"></div></div>
-                <div name = "skills_body" id="skills_body" style="overflow-y:scroll; width:400px; height:300px; padding-top:10px; scrollbar-width:thin">
+                <div name = "skills_body" id="skills_body" style="overflow-y:auto; width:400px; height:300px; padding-top:10px; scrollbar-width:thin">
                 {{#if sortByRank}}
                 {{#each sorted_by_rank}}
                     <div class = "row">
@@ -94,7 +94,7 @@
         </div><!--end of skills block-->
         <div name = "aspects_block" style="float:left; padding-left:10px">
             <div name = "aspects_header" style="width:350px"><b>Aspects</b>{{#if GM}}<div title="Open the Aspect Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_aspects" i icon class="fas fa-cog"></div>{{/if}}</div>
-            <div name = "aspects_body" id="aspects_body" style="overflow-y:scroll; width:400px; height:300px; padding-top:10px; scrollbar-width:thin">
+            <div name = "aspects_body" id="aspects_body" style="overflow-y:auto; width:400px; height:300px; padding-top:10px; scrollbar-width:thin">
                 {{#each data.aspects}}
                 <div class="row">
                     <div name="aspect" style="float:left, width 25%; margin:auto; padding:1px; font-family:Montserrat; font-weight:bold"  title="{{this.description}}">
@@ -111,7 +111,7 @@
     <div style="display:flex; flex-flow:row wrap" name = "tracks_stunts"><!--Begin tracks & stunts section-->
         <div name = "tracks_block"><!--Begin the tracks block-->
             <div name="tracks_header" style="width:350px; padding-top:10px"><b>Tracks</b><div title="Open the Track Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_tracks" i icon class="fas fa-cog"></div></div>
-            <div name = "tracks_body" id="tracks_body" style="overflow-y:scroll; width:400px; padding-top:10px; height:400px;scrollbar-width:thin">
+            <div name = "tracks_body" id="tracks_body" style="overflow-y:auto; width:400px; padding-top:10px; height:400px;scrollbar-width:thin">
                 <table style="background-color:white; border:0px; padding:10px;">
                     {{#each tracks}}{{#if this.enabled}}
                     <tr>
@@ -137,7 +137,7 @@
         <!-------BEGIN THE STUNTS SECTION, UNLEASH THE HOUNDS-->
         <div name="stunts_block" style="float:left; padding-left:10px; padding-top:10px"> <!--Begin the stunts block-->
             <div name = "stunts_header" style="width:350px"><b>Stunts</b><div title="Add a new stunt" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_stunts" i icon class="fas fa-plus"></div></div>
-            <div name = "stunts_body" id="stunts_body" style="overflow-y:scroll; width:400px; height:400px; padding-top:10px; scrollbar-width:thin">
+            <div name = "stunts_body" id="stunts_body" style="overflow-y:auto; width:400px; height:400px; padding-top:10px; scrollbar-width:thin">
                 <table style="background:white; color:black; border:none">
                 {{#each stunts}}
                     <tr>
@@ -178,7 +178,7 @@
 
     <div><!--Begin Extras block-->
         <div name = "Extras header" style="width:300px; padding-top:10px"><b>Extras:</b><div title="Add a new Extra" style="font-size:medium; padding-left:10px; padding-right:10px;" name="add_player_extra" i icon class="fas fa-plus"></div></div>
-        <div name = "extras_body" style="overflow-y:scroll; width:700px; height:auto;"">
+        <div name = "extras_body" style="overflow-y:auto; width:700px; height:auto;"">
             <table style="background:white; color:black; border:none">
                 {{#each items}}
                     <tr>
