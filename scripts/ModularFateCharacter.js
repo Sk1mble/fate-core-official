@@ -400,7 +400,7 @@ export class ModularFateCharacter extends ActorSheet {
     }
 
     async getData() {
-        if (this.first_run){
+        if (this.first_run && this.actor.owner){
             this.initialise();
             this.first_run = false;
         }
