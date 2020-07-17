@@ -353,7 +353,11 @@ SidebarDirectory.prototype._onCreate = async function(event) {
               label: `Create ${game.i18n.localize(cls.config.label)}`,
               callback: html => {
                 const form = html[0].querySelector("form");
-                mergeObject(createData, FormApplication.processForm(form));
+                  try {
+                      mergeObject(createData, FormApplication.processForm(form));   
+                  }catch {
+                      mergeObject(createData, validateForm(form));
+                  }
                 cls.create(createData, {renderSheet: true});
               }
             }
