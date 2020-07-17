@@ -7,17 +7,17 @@
                 <td colspan="2"><input style="background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom: 1px solid lightsteelblue; width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
             </tr>
             <tr>
-                <td>Linked Skill:</td>                
-                <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>None</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
+                <td style="font-family:Montserrat">Linked Skill:</td>                
+                <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat; border:1px solid lightsteelblue" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>None</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
                 <input type="checkbox" name="plusTwo" {{checked stunt.plusTwo}}></input>+2?</td>
             </tr>
             <tr>
-                <td>Description:</td>
+                <td style="font-family:Montserrat">Description:</td>
                 <td colspan="2"><textarea name="description" style="background-color:white; color:black; font-family:Montserrat; border: 1px solid lightsteelblue; width:500px;" rows = "5">{{{stunt.description}}}</textarea></td>
             </tr>
             <tr>
-                <td>Refresh Cost:</td>
-                <td><input type="number" min="0" name="refresh_cost" style="height:30px; width:50px" value="{{stunt.refresh_cost}}"></input></td>
+                <td style="font-family:Montserrat">Refresh Cost:</td>
+                <td><input type="number" min="0" name="refresh_cost" style="height:30px; width:50px; border:solid 1px lightsteelblue" value="{{stunt.refresh_cost}}"></input></td>
                 <td>     
                     <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="Overcome">O</b>
                     <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="Create an Advantage">C</b></input>
