@@ -4,16 +4,16 @@
         <table style="background-color: white; border:none; width:690px">    
             <tr>
                 <td width="120">Name:</td>
-                <td colspan="2"><input style="background-color: lightsteelblue; color:black; font-family:Arial; width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
+                <td colspan="2"><input style="background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom: 1px solid lightesteelblue; width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
             </tr>
             <tr>
                 <td>Linked Skill:</td>                
-                <td colspan ="2"><select style="background-color: lightsteelblue; color:black; font-family:Arial" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>None</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
+                <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>None</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
                 <input type="checkbox" name="plusTwo" {{checked stunt.plusTwo}}></input>+2?</td>
             </tr>
             <tr>
                 <td>Description:</td>
-                <td colspan="2"><textarea name="description" style="background-color: lightsteelblue; color:black; width:500px; font-family:Arial" rows = "5">{{{stunt.description}}}</textarea></td>
+                <td colspan="2"><textarea name="description" style="background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom: 1px solid lightesteelblue; width:500px;" rows = "5">{{{stunt.description}}}</textarea></td>
             </tr>
             <tr>
                 <td>Refresh Cost:</td>
