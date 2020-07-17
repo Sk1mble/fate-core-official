@@ -1,6 +1,6 @@
 <form class="editable" onsubmit="event.preventDefault();" style="background-color:white; color:black">
     <div id = "header">
-        Filter: <select id = "select_box" style="background-color: lightsteelblue; color:black; font-family:Arial">
+        Filter: <select id = "select_box" style="background-color: white; color:black; font-family:Montserrat">
             <option selected disabled value="Choose a category">Choose a category</option>
             {{#each tracks_by_category}}
             <option>{{@key}}</option>
@@ -20,10 +20,10 @@
                             {{#if this.universal}}
                                 {{#if ../../GM}}{{else}}disabled{{/if}}
                             {{/if}}></input></td>
-                            <td title="Right-Click for details" name="nameField"} id="{{this.name}}_nameField">{{this.name}}{{#if this.unique}}{{else}}{{#if (undefined this.parent)}}<input type="number" min="1" value="{{this.number}}" id="{{this.name}}_number" title="Number of copies this character should have" style="color:black; background-color:lightsteelblue; font-family:Arial; width:40px;">{{else}}{{/if}}{{/if}}</td>
+                            <td title="Right-Click for details" name="nameField" id="{{this.name}}_nameField" style="font-family:Montserrat">{{this.name}}{{#if this.unique}}{{else}}{{#if (undefined this.parent)}}<input type="number" min="1" value="{{this.number}}" id="{{this.name}}_number" title="Number of copies this character should have" style="color:black; background-color:white; border:1px solid lightsteelblue; font-family:Montserrat; width:40px;">{{else}}{{/if}}{{/if}}</td>
                             <td>
-                                <button type="button" name = "{{../../cat}}_{{this.name}}" id="move_up" i icon class="fas fa-sort-up" style="width:25px; height:25px; background-color: lightsteelblue; color:black"></button>
-                                <button type="button" name = "{{../../cat}}_{{this.name}}"id="move_down" i icon class="fas fa-sort-down" style="width:25px; height:25px; background-color: lightsteelblue; color:black"></button>
+                                <button type="button" name = "{{../../cat}}_{{this.name}}" id="move_up" i icon class="fas fa-sort-up" style="width:25px; height:25px; background-color: white; color:black"></button>
+                                <button type="button" name = "{{../../cat}}_{{this.name}}"id="move_down" i icon class="fas fa-sort-down" style="width:25px; height:25px; background-color: white; color:black"></button>
                             </td>
                 {{/if}}
                 </tr>
