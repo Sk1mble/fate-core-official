@@ -4,19 +4,19 @@
         <tr>
             {{#each this}}
             <td style="border-bottom:1px; border-top:groove">
-                <label for="name" style="font-family:Montserrat">Aspect Name:</label>    
+                <label for="name" style="font-family:Montserrat; font-weight:bold">Aspect Name:</label>    
             </td>
             <td style="border-bottom:1px; border-top:groove">
                 <input type="text" class="aspect_name" name="name_{{this.name}}" style="background-color: white; border-top:none; border-left:none; border-right:none; border-bottom:1px solid lightsteelblue; width:300px; font-family:Montserrat" value="{{this.name}}">
-                <button type="button" name = "remove_aspect" id="remove_{{this.name}}" style="width:75px; background-color:white">Remove</button>
-                <button type="button" name = "aspect_up" id="up_{{this.name}}" style="width:25px; background-color:white" i icon class="fas fa-sort-up"></button>
-                <button type="button" name = "aspect_down" id="down_{{this.name}}" style="width:25px; background-color:white" i icon class = "fas fa-sort-down"></button></td>
+                <button type="button" name = "aspect_up" id="up_{{this.name}}" style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-up"></button>
+                <button type="button" name = "aspect_down" id="down_{{this.name}}" style="width:25px; height:25px; background-color:white" icon class = "fas fa-sort-down"></button>
+                <button type="button" name = "remove_aspect" id="remove_{{this.name}}" style="float:right; border:none; width:25px; height:25px; background-color:white" icon class="fas fa-trash"></button></td>
             </input>
             </td>
         </tr>
         <tr>
             <td>
-                <label for"description" style="font-family:Montserrat">Aspect Description:</label>
+                <label for"description" style="font-family:Montserrat; font-weight:bold">Aspect Description:</label>
             </td>
             <td>
                 <textarea rows="2" class="aspect_description" name="description_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.description}}
@@ -25,7 +25,7 @@
         </tr>
         <tr>
             <td>
-                <label for"value" style="font-family:Montserrat">Aspect Text:</label>
+                <label for"value" style="font-family:Montserrat; font-weight:bold">Aspect Text:</label>
             </td>
             <td>
                 <textarea rows = "1" class="aspect_value" name="value_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.value}}

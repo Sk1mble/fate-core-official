@@ -6,8 +6,8 @@
             <option>{{@key}}</option>
             {{/each}}
             </select>
-    <div name = "tracks_body" style="overflow-y:scroll; width:400px; height:250px; border:lightsteelblue; border-width:2px; border-style:solid"><!--Begin body-->
-        <table border = "0" style="background-color: white;">
+    <div name = "tracks_body" style="overflow-y:auto; width:400px; height:250px; border:none"><!--Begin body-->
+        <table style="background-color: white; border:none">
         {{#each tracks_by_category}}
             {{#each this}}
             <tr>

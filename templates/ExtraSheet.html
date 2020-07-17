@@ -1,25 +1,25 @@
-<form class="contenteditable" onsubmit="event.preventDefault();">
+<form class="contenteditable" onsubmit="event.preventDefault();" style="background-color:white">
 <div class="data data-extra">
 	<div class="basic" style="background:white">
-		<label for="name">Name:</label>
-		<textarea rows="2" name="name" style="background-color: lightsteelblue; font-family:Montserrat;">{{this.entity.name}}</textarea>
-		<label for="permissions">Permissions:</label>
-		<textarea rows="2" name="data.permissions" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.permissions}}</textarea>
-		<label for="costs">Costs:</label>
-		<textarea rows="2" name="data.costs" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.costs}}</textarea>
-		<label for="refresh">Refresh Cost:</label>
-		<input type="number" name="data.refresh" min="0" style="background-color: lightsteelblue; font-family:Montserrat; width:50px" value="{{data.refresh}}"><br>
+		<label for="name" style="font-family:Montserrat; font-weight:bold">Name:</label>
+		<textarea rows="2" name="name" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{this.entity.name}}</textarea>
+		<label for="permissions" style="font-family:Montserrat; font-weight:bold">Permissions:</label>
+		<textarea rows="2" name="data.permissions" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{data.permissions}}</textarea>
+		<label for="costs" style="font-family:Montserrat; font-weight:bold">Costs:</label>
+		<textarea rows="2" name="data.costs" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{data.costs}}</textarea>
+		<label for="refresh" style="font-family:Montserrat; font-weight:bold">Refresh Cost:</label>
+		<input type="number" name="data.refresh" min="0" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat; width:50px" value="{{data.refresh}}"><p/>
 		</input>
-		<label for="description">Description:</label>
-		<textarea rows="2" name="data.description.value" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.description.value}}</textarea>
+		<label for="description" style="font-family:Montserrat; font-weight:bold">Description:</label>
+		<textarea rows="2" name="data.description.value" style="background-color: white; border: solid lightsteelblue 1px;  font-family:Montserrat;">{{data.description.value}}</textarea>
 		<label for="overcome" style="Font-family:Fate Core; font-size:x-large;"">O</label>
-		<textarea rows="2" name="data.actions.overcome" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.overcome}}</textarea>
+		<textarea rows="2" name="data.actions.overcome" style="background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.overcome}}</textarea>
 		<label for="create" style="Font-family:Fate Core; font-size:x-large;"">C</label>
-		<textarea rows="2" name="data.actions.create" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.create}}</textarea>
+		<textarea rows="2" name="data.actions.create" style="background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.create}}</textarea>
 		<label for="attack" style="Font-family:Fate Core; font-size:x-large;"">A</label>
-		<textarea rows="2" name="data.actions.attack" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.attack}}</textarea>
+		<textarea rows="2" name="data.actions.attack" style="background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.attack}}</textarea>
 		<label for="defend" style="Font-family:Fate Core; font-size:x-large;"">D</label>
-		<textarea rows="2" name="data.actions.defend" style="background-color: lightsteelblue; font-family:Montserrat;">{{data.actions.defend}}</textarea>
+		<textarea rows="2" name="data.actions.defend" style="background-color: white; border: solid lightsteelblue 1px;  font-family:Montserrat;">{{data.actions.defend}}</textarea>
 	</div>
 </div>
 </form>
