@@ -1,39 +1,39 @@
 <form class="contenteditable" onsubmit="event.preventDefault();" style="background-color:white">
 	<table style="border:none; background-color:white">
 		 <tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%">Name:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Name:</td>
 			<td style="width:75%"><textarea rows="2" name="name" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{this.entity.name}}</textarea></td>
 		 </tr>	
 		 <tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%">Permissions:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Permissions:</td>
 			<td style="width:75%"><textarea rows="2" name="data.permissions" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{data.permissions}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%">Costs:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Costs:</td>
 			<td style="width:75%"><textarea rows="2" name="data.costs" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{data.costs}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%">Refresh Cost:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Refresh Cost:</td>
 			<td style="width:75%"><input type="number" name="data.refresh" min="0" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat; width:50px" value="{{data.refresh}}">
 			</input></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%">Description:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Description:</td>
 			<td style="width:75%"><textarea rows="2" name="data.description.value" style="width:100%; background-color: white; border: solid lightsteelblue 1px;  font-family:Montserrat;">{{data.description.value}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">O</i> Overcome:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">O</i> Overcome:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.overcome" style="width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.overcome}}</textarea></td>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">C</i> Create Advantage:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">C</i> Create Advantage:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.create" style="width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.create}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">A</i> Attack:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">A</i> Attack:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.attack" style="width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.attack}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">D</i> Defend:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">D</i> Defend:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.defend" style="width:100%; background-color: white; border: solid lightsteelblue 1px;  font-family:Montserrat;">{{data.actions.defend}}</textarea></td>
 		</tr>
 		</table>

@@ -26,7 +26,7 @@ export class ExtraSheet extends ItemSheet {
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.classes = options.classes.concat(['fate', 'item']);
-        options.width = 500;
+        options.width = 850;
         options.height = "auto";
         options.resizable = true;
         options.submitOnChange = true;
