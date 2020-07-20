@@ -95,7 +95,7 @@ button:hover {
   border-radius: 0;
 }
 
-.item {
+.mf_item {
   background-color:white; 
   margin:0px; 
   font-size:x-large; 
@@ -106,7 +106,7 @@ button:hover {
   float:right;
 }
 
-.item:not(.active) {
+.mf_item:not(.active) {
   box-shadow: inset 0px -6px 15px -6px grey;
 }
 

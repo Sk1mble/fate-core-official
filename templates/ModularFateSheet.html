@@ -55,8 +55,8 @@
                     <td colspan="2"></td>
                     <td colspan="2" style="height:75px; vertical-align:bottom; background-color:lightgrey">
                     <nav class="navigation foo">
-                        <a class="item" data-tab="biography"><b title="Biography and Extras" i icon class="fas fa-portrait"></b></a>
-                        <a class="item" data-tab="sheet"><b title="Character Sheet" i icon class="fas fa-clipboard"></b></a>
+                        <a class="mf_item" data-tab="biography"><b title="Biography and Extras" i icon class="fas fa-portrait"></b></a>
+                        <a class="mf_item" data-tab="sheet"><b title="Character Sheet" i icon class="fas fa-clipboard"></b></a>
                     </nav>
                     </td>
                 </tr>
@@ -78,7 +78,7 @@
                     <div class = "row">
                         <div class="column" style="float:left; padding-left:2px; width:10%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">{{this.rank}}</div>
                         <div class="column" style="float:left; width:30%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">({{lookup ../ladder this.rank}})</div>
-                        <div class="column" name="skill" style="float:left; width:60%; padding-top:2px; margin:auto; padding-bottom:2px; border-bottom:1px solid lightsteelblue" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
+                        <div class="column" name="skill" style="float:left; width:60%; padding-top:2px; margin:auto; padding-bottom:2px; border-bottom:1px solid lightsteelblue" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right; padding-right:10px" icon class="fas fa-dice"></i></div>
                     </div>
                 {{/each}}
                 {{else}}
@@ -86,7 +86,7 @@
                 <div class="row">
                     <div class="column" style="float:left; padding-left:2px; width:10%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">{{this.rank}}</div>
                     <div class="column" style="float:left; width:30%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">({{lookup ../ladder this.rank}})</div>
-                    <div class="column" name="skill" style="float:left; width:60%; padding-top:2px; margin:auto; padding-bottom:2px; border-bottom:1px solid lightsteelblue" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
+                    <div class="column" name="skill" style="float:left; width:60%; padding-top:2px; margin:auto; padding-bottom:2px; border-bottom:1px solid lightsteelblue" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right; padding-right:10px" icon class="fas fa-dice"></i></div>
                 </div>
                 {{/each}}
                 {{/if}}
