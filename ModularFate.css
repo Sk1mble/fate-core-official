@@ -110,6 +110,40 @@ button:hover {
   box-shadow: inset 0px -6px 15px -6px grey;
 }
 
+.fu_item_1 {
+  font-size:x-large; 
+  padding: 25px; 
+  float:left; 
+  background-color:gainsboro;
+}
+
+.fu_item_2 {
+  font-size:x-large; 
+  padding: 25px; 
+  float:left; 
+  background-color:beige;
+}
+
+.fu_item_3 {
+  font-size:x-large; 
+  padding: 25px; 
+  float:left; 
+  background-color:palegoldenrod
+}
+
+
+.fu_item_1:not(.active){
+    box-shadow: inset 0px -6px 15px -6px grey;
+}
+
+.fu_item_2:not(.active){
+  box-shadow: inset 0px -6px 15px -6px grey;
+}
+
+.fu_item_3:not(.active){
+  box-shadow: inset 0px -6px 15px -6px grey;
+}
+
 /* The container */
 .box {
   display: flex-row;
