@@ -1,14 +1,14 @@
-<form class="contenteditable" style="background: white; width:850px; border:none !important">  
-    <table style="background-color: lightgrey; border:0px; padding:0px; margin-top:0px">
+<form class="contenteditable" style="background: white; width:850px; border:none !important;">  
+    <table style="background-color:lightgrey; border:none; padding:0px; margin:0px; width:852px">
         <tr>
-            <td style="width:100px">
+            <td style="width:100px;">
                 <img width="100" height="auto" style="border:0" id="avatar" data-edit="img" src="{{actor.img}}"></img>
             </td>
-            <td style="width:275px">
+            <td style="width:275px;">
                 <textarea name="name" rows="2" data-edit="name" style="font-size:xx-large; border:0; resize:none; font-family:Montserrat; font-weight:bold; color:black; text-shadow: 2px 2px 5px darkslategrey; background:lightgrey; height:auto; width:300px;">{{actor.name}}</textarea>
             </td>
             <td>
-                <table style="background-color: lightgrey; border:0px; padding:2px;">
+                <table style="background-color:lightgrey; border:0px; padding:0px; margin:0px">
                 <tr>
                     <td>
                         <b>Refresh: </b>
@@ -51,49 +51,49 @@
                         <input type="number" name="refreshSpent" disabled style="width:75px" value="{{refreshSpent}}" title="Spent on Stunts: {{paidStunts}} (the game's {{freeStunts}} free stunts have been deducted); Spent on tracks: {{paidTracks}}; Spent on Extras: {{paidExtras}}"></input>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2" style="height:75px; vertical-align:bottom; background-color:lightgrey">
+                    <nav class="navigation foo">
+                        <a class="item" data-tab="biography"><b title="Biography and Extras" i icon class="fas fa-portrait"></b></a>
+                        <a class="item" data-tab="sheet"><b title="Character Sheet" i icon class="fas fa-clipboard"></b></a>
+                    </nav>
+                    </td>
+                </tr>
             </table>
             </td>
         </tr>
     </table>
-
-<table>
-    <tr>
-        <nav class="navigation foo">
-            <a class="item" data-tab="biography"><b title="Biography and Extras" i icon class="fas fa-portrait" style="font-size:x-large; padding-right:50px; float:right;"></b></a>
-            <a class="item" data-tab="sheet"><b title="Character Sheet" i icon class="fas fa-clipboard" style="font-size:x-large; padding-right:10px; float:right;"></b></a>
-        </nav>
-    </tr>
-</table>
     
 <section class="sheet-body">
 <div name = "character_sheet" class="tab sheet" data-tab="sheet">
     <div id = "{{actor.name}}_sheet_div" class="tabcontent" style="display:block; font-size:small">
         <div style="display:flex; flex-flow:row wrap" name = "skills_aspects">
             <div name="skills_block">
-                <div name = "skills_header" style="width:400px; font-size:14pt; font-family:Montserrat"><b>Skills</b>
-                    <div title="Open the Skill Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_skills" i icon class="fas fa-cog"></div><div style="font-size:medium; padding-right:10px" name="sort_player_skills" i icon class="fas fa-sort" title="Switch between sorting by rank and sorting by name"></div></div>
+                <div name = "skills_header" style="width:400px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7"><b>Skills</b>
+                    <div title="Open the Skill Editor" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right;" name="edit_player_skills" i icon class="fas fa-cog"></div><div style="font-size:medium; padding-right:10px; padding-top:5px; float:right" name="sort_player_skills" i icon class="fas fa-sort" title="Switch between sorting by rank and sorting by name"></div></div>
                 <div name = "skills_body" id="skills_body" style="overflow-y:auto; width:400px; height:300px; padding-top:10px; scrollbar-width:thin; font-family:Montserrat">
                 {{#if sortByRank}}
                 {{#each sorted_by_rank}}
                     <div class = "row">
-                        <div class="column" style="float:left; width:10%; margin:auto; padding:0px; border:white solid 1px;">{{this.rank}}</div>
-                        <div class="column" style="float:left; width:30%; margin:auto; padding:0px; border:white solid 1px;">({{lookup ../ladder this.rank}})</div>
-                        <div class="column" name="skill" style="float:left; width:60%; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
+                        <div class="column" style="float:left; padding-left:2px; width:10%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">{{this.rank}}</div>
+                        <div class="column" style="float:left; width:30%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">({{lookup ../ladder this.rank}})</div>
+                        <div class="column" name="skill" style="float:left; width:60%; padding-top:2px; margin:auto; padding-bottom:2px; border-bottom:1px solid lightsteelblue" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
                     </div>
                 {{/each}}
                 {{else}}
                 {{#each ordered_skills}}    
                 <div class="row">
-                    <div class="column" style="float:left; width:10%; margin:auto; padding:0px; border:white solid 1px;">{{this.rank}}</div>
-                    <div class="column" style="float:left; width:30%; margin:auto; padding:0px; border:white solid 1px;">({{lookup ../ladder this.rank}})</div>
-                    <div class="column" name="skill" style="float:left; width:60%; margin:auto; padding:2px; border:white solid 2px;" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
+                    <div class="column" style="float:left; padding-left:2px; width:10%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">{{this.rank}}</div>
+                    <div class="column" style="float:left; width:30%; margin:auto; padding-top:2px; padding-bottom:2px; border-bottom:1px solid lightsteelblue">({{lookup ../ladder this.rank}})</div>
+                    <div class="column" name="skill" style="float:left; width:60%; padding-top:2px; margin:auto; padding-bottom:2px; border-bottom:1px solid lightsteelblue" id="{{this.name}}">{{this.name}}<i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i></div>
                 </div>
                 {{/each}}
                 {{/if}}
             </div><!--End of skills body-->
         </div><!--end of skills block-->
         <div name = "aspects_block" style="float:left; padding-left:10px">
-            <div name = "aspects_header" style="width:350px; font-size:14pt; font-family:Montserrat"><b>Aspects</b>{{#if GM}}<div title="Open the Aspect Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_aspects" i icon class="fas fa-cog"></div>{{/if}}</div>
+            <div name = "aspects_header" style="width:400px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7"><b>Aspects</b>{{#if GM}}<div title="Open the Aspect Editor" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="edit_player_aspects" i icon class="fas fa-cog"></div>{{/if}}</div>
             <div name = "aspects_body" id="aspects_body" style="overflow-y:auto; width:400px; height:300px; padding-top:10px; scrollbar-width:thin">
                 {{#each data.aspects}}
                 <div class="row">
@@ -110,7 +110,7 @@
     <!--------------------Begin tracks and stunts section-->
     <div style="display:flex; flex-flow:row wrap" name = "tracks_stunts"><!--Begin tracks & stunts section-->
         <div name = "tracks_block"><!--Begin the tracks block-->
-            <div name="tracks_header" style="width:350px; padding-top:10px; font-size:14pt; font-family:Montserrat"><b>Tracks</b><div title="Open the Track Editor" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_tracks" i icon class="fas fa-cog"></div></div>
+            <div name="tracks_header" style="width:400px; padding-top:10px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7"><b>Tracks</b><div title="Open the Track Editor" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="edit_player_tracks" i icon class="fas fa-cog"></div></div>
             <div name = "tracks_body" id="tracks_body" style="overflow-y:auto; width:400px; padding-top:10px; height:400px;scrollbar-width:thin">
                 <table style="background-color:white; border:0px; padding:10px;">
                     {{#each tracks}}{{#if this.enabled}}
@@ -136,7 +136,7 @@
 
         <!-------BEGIN THE STUNTS SECTION, UNLEASH THE HOUNDS-->
         <div name="stunts_block" style="float:left; padding-left:10px; padding-top:10px"> <!--Begin the stunts block-->
-            <div name = "stunts_header" style="width:350px; font-size:14pt; font-family:Montserrat"><b>Stunts</b><div title="Add a new stunt" style="font-size:medium; padding-left:10px; padding-right:10px;" name="edit_player_stunts" i icon class="fas fa-plus"></div></div>
+            <div name = "stunts_header" style="width:400px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7"><b>Stunts</b><div title="Add a new stunt" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="edit_player_stunts" i icon class="fas fa-plus"></div></div>
             <div name = "stunts_body" id="stunts_body" style="overflow-y:auto; font-family:Montserrat; width:400px; height:400px; padding-top:10px; scrollbar-width:thin">
                 <table style="background:white; color:black; border:none">
                 {{#each stunts}}
@@ -161,13 +161,13 @@
 
 <div class="tab biography" id="biography_body" data-tab="biography">
     <div>
-        <div style="width:800px; padding-top:10px; font-size:14pt; font-family:Montserrat">
+        <div style="width:800px; padding-top:10px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7">
             <b>Description:</b>
         </div>
         <div style="width:800px">
             <div class="long_text" id="{{this.actor._id}}_description" contenteditable="true" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div><p/>
         </div>
-        <div style="width:800px; padding-top:10px; font-size:14pt; font-family:Montserrat">
+        <div style="width:800px; padding-top:10px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7">
             <b>Biography:</b>
         </div>
         <div style="width:800px">
@@ -177,7 +177,7 @@
 
 
     <div><!--Begin Extras block-->
-        <div name = "Extras header" style="width:300px; padding-top:10px; font-family:Montserrat; font-size:14pt"><b>Extras:</b><div title="Add a new Extra" style="font-size:medium; padding-left:10px; padding-right:10px;" name="add_player_extra" i icon class="fas fa-plus"></div></div>
+        <div name = "Extras header" style="width:800px; padding-top:10px; font-family:Montserrat; font-size:14pt; padding-bottom:2px; border-bottom:2px solid #2273b7"><b>Extras:</b><div title="Add a new Extra" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="add_player_extra" i icon class="fas fa-plus"></div></div>
         <div name = "extras_body" style="overflow-y:auto; width:800px; height:auto;"">
             <table style="background:white; color:black; border:none">
                 {{#each items}}

@@ -95,6 +95,21 @@ button:hover {
   border-radius: 0;
 }
 
+.item {
+  background-color:white; 
+  margin:0px; 
+  font-size:x-large; 
+  padding-left:15px; 
+  padding-top:10px; 
+  padding-bottom:10px; 
+  padding-right:15px; 
+  float:right;
+}
+
+.item:not(.active) {
+  box-shadow: inset 0px -6px 15px -6px grey;
+}
+
 /* The container */
 .box {
   display: flex-row;
@@ -131,10 +146,11 @@ button:hover {
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
+  font-family:Montserrat;
   content: "X";
   position: absolute;
   top: 65%;
-  left: 60%;
+  left: 65%;
   font-weight:900;
   font-size:20px;
   display: none;
