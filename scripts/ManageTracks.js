@@ -187,7 +187,7 @@ class EditTracks extends FormApplication {
         options.template = "systems/ModularFate/templates/EditTrack.html"; 
     
         //Define the FormApplication's options
-        options.width = "1000";
+        options.width = "auto";
         options.height = "auto";
         options.title = `Track Editor`;
         options.closeOnSubmit = false;
