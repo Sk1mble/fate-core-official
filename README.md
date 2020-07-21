@@ -1,5 +1,6 @@
 # Modular Fate
 Author: Richard Bellingham, partially based on work by Nick van Oosten (NickEast)
+
 Software License: GNU GPLv3
 
 ## Content License:
