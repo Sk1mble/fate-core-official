@@ -190,39 +190,43 @@ async _roll(event,html){
     let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
     let skill;
     let stunt = undefined;
-    let plusTwo = false;
-    console.log(sk.value)
+    let bonus=0;
+
     if (sk.value.startsWith("stunt")){
         let items = sk.value.split("_");
-        console.log(items)
         stunt=items[1]
         skill = items[2]
-        plusTwo = items[3]
+        bonus = parseInt(items[3]);
     } else {
         skill = sk.value.split("(")[0].trim();
     }
     let rank = token.actor.data.data.skills[skill].rank;
 
-    let r;
-    if (plusTwo==true || plusTwo == "true"){
-        r = new Roll(`4dF + ${rank}+2`);    
+    if (event.shiftKey && !sk.value.startsWith("stunt")) {
+            let mrd = new ModifiedRollDialog (token.actor, skill);
+            mrd.render(true);
     } else {
-        r = new Roll(`4dF + ${rank}`);
-    }
-        let roll = r.roll();
-        let name = game.user.name
-
-        let flavour;
-        if (stunt != undefined){
-            flavour = `<h1>${skill}</h1>With stunt "${stunt}".<br>Rolled by ${name}`
+        let r;
+        if (bonus >0){
+            r = new Roll(`4dF + ${rank}+${bonus}`);    
         } else {
-            flavour = `<h1>${skill}</h1>Rolled by ${name}`;
+            r = new Roll(`4dF + ${rank}`);
         }
+            let roll = r.roll();
+            let name = game.user.name
 
-        roll.toMessage({
-            flavor: flavour,
-            speaker: ChatMessage.getSpeaker(token),
-        });
+            let flavour;
+            if (stunt != undefined){
+                flavour = `<h1>${skill}</h1>With stunt "${stunt}".<br>Rolled by ${name}`
+            } else {
+                flavour = `<h1>${skill}</h1>Rolled by ${name}`;
+            }
+
+            roll.toMessage({
+                flavor: flavour,
+                speaker: ChatMessage.getSpeaker(token),
+            });
+    }
 }
 
 async _on_aspect_change(event, html){

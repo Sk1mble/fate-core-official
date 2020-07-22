@@ -1,0 +1,50 @@
+<form style="background-color:white">
+    <table style="border:none; font-family:Montserrat; background-color:white;" padding="10px" spacing="10px" margin="10px">
+        <tr style="height:40px">
+            <td style="font-weight:bold; width:200px">
+                Modifier:
+            </td>
+            <td>
+                <input type="number" id="modifier" style="background-color:white; border:1px solid lightsteelblue" value="0"></input>
+            </td>
+        </tr>
+        <tr style="height:40px">
+            <td style="font-weight:bold">
+                Description:
+            </td>
+            <td>
+                <input type="text" id = "description" style="background-color:white; border-bottom:1px solid lightsteelblue; border-top:none; border-left:none; border-right:none; width:500px"></input>
+            </td>
+        </tr>
+        <tr style="height:40px">
+            <td style="font-weight:bold">
+                Add Second Skill:
+            </td>
+            <td>
+                <select id="second_skill">
+                    <option selected="selected">None</option>
+                    {{#each this.data.data.skills}}
+                    <option>{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold; vertical-align: top;">
+                Stunt(s):
+            </td>
+            <td width="300px">
+                {{#each this.data.data.stunts}}
+                {{#if (eq this.linked_skill ../activeSkill)}}
+                    <i style="font-style:normal;" title="{{this.description}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
+                {{/if}}
+                {{/each}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-top:10px">
+                <button type="button" class="modifiedRoll">Roll</button>
+            </td>
+        </tr>
+    </table>
+</form>

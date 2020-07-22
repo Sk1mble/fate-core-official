@@ -50,29 +50,6 @@ class EditPlayerStunts extends FormApplication {
         await this.submit();
     }
 
-    async _onAddButton(event,html){
-        let name=html.find("input[name='new_name']")[0].value;
-        let description = html.find("textarea[name='new_description']")[0].value;
-        let plusTwo = html.find("input[name='new_plusTwo']")[0].checked;
-        let overcome = html.find("input[name='new_overcome']")[0].checked;
-        let defend = html.find("input[name='new_defend']")[0].checked;
-        let caa = html.find("input[name='new_caa']")[0].checked;
-        let attack = html.find("input[name='new_attack']")[0].checked;
-        let linked_skill = html.find("select[name='new_linked_skill']")[0]
-
-        let stunt = {};
-        stunt.name=name;
-        stunt.description=description;
-        stunt.plusTwo=plusTwo;
-        stunt.overcome=overcome;
-        stunt.defend=defend;
-        stunt.caa=caa;
-        stunt.attack=attack;
-        stunt.linked_skill=linked_skill.value;
-        this.submit();
-        await this.object.update({"data.stunts":{[name]:stunt}})
-    }
-
     renderMe(id,data){
         if (this.object.isToken){
             if (this.actor.token.data._id == id){

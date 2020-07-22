@@ -102,12 +102,7 @@ export class ModularFateCharacter extends ActorSheet {
         let items = event.target.id.split("_");
         let name = items[0];
         let skill = items[1];
-        let plusTwo = items[2];
-
-        let bonus = 0;
-        if (plusTwo=="true"){
-            bonus += 2;
-        }
+        let bonus = parseInt(items[2]);
 
         let r = new Roll(`4dF + ${this.object.data.data.skills[skill].rank}+${bonus}`);
         let roll = r.roll();
@@ -216,7 +211,7 @@ export class ModularFateCharacter extends ActorSheet {
             "caa":false,
             "attack":false,
             "defend":false,
-            "plusTwo":false
+            "bonus":0
         }
         let editor = new EditPlayerStunts(this.actor, stunt);
         editor.render(true);
@@ -250,21 +245,29 @@ export class ModularFateCharacter extends ActorSheet {
     }
 
     async _onSkill_name(event, html) {
-        let r = new Roll(`4dF + ${this.object.data.data.skills[event.target.id].rank}`);
-        let roll = r.roll();
 
-        let msg = ChatMessage.getSpeaker(this.object.actor)
-        msg.alias = this.object.name;
+        if (event.shiftKey){
+           let mrd = new ModifiedRollDialog(this.actor, event.target.id);
+            mrd.render(true);
+        }
+        else {
+            let r = new Roll(`4dF + ${this.object.data.data.skills[event.target.id].rank}`);
+            let roll = r.roll();
 
-        roll.toMessage({
-            flavor: `<h1>${event.target.id}</h1>Rolled by ${game.user.name}`,
-            speaker: msg
-        });
+            let msg = ChatMessage.getSpeaker(this.object.actor)
+            msg.alias = this.object.name;
+
+            roll.toMessage({
+                flavor: `<h1>${event.target.id}</h1>Rolled by ${game.user.name}`,
+                speaker: msg
+            });
+        }
     }
     
     async initialise() {
 
         // Logic to set up Refresh and Current
+
         let refresh = game.settings.get("ModularFate", "refreshTotal");
         
         let working_data = duplicate(this.object.data);
@@ -273,6 +276,21 @@ export class ModularFateCharacter extends ActorSheet {
             this.newCharacter = true;
             working_data.data.details.fatePoints.refresh = refresh;
             working_data.data.details.fatePoints.current = refresh;
+        }
+
+        // Replace any plusTwo values on this character's stunts with a +2 bonus.
+        
+        for (let s in working_data.data.stunts){
+            let stunt = working_data.data.stunts[s];
+            if (stunt.plusTwo == true){
+                stunt.bonus=2;
+                stunt.plusTwo="deprecated"
+            } else {
+                stunt.plusTwo="deprecated"
+                if (stunt.bonus==undefined){
+                    stunt.bonus=0;    
+                }
+            }
         }
 
         // Logic to set up aspects if this character doesn't already have them

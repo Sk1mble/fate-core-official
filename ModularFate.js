@@ -102,7 +102,7 @@ async function importFateCharacter(actor) {
                         "caa":false,
                         "attack":false,
                         "defend":false,
-                        "plusTwo":false
+                        "bonus":0
                     }
                     stunts[newStunt.name]=newStunt;
                 }
@@ -179,7 +179,7 @@ async function migrateFateCharacter(actorData) {
                         "caa":false,
                         "attack":false,
                         "defend":false,
-                        "plusTwo":false
+                        "bonus":0
                     }
                     stunts[newStunt.name]=newStunt;
                 }

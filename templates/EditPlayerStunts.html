@@ -9,7 +9,7 @@
             <tr>
                 <td style="font-family:Montserrat">Linked Skill:</td>                
                 <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat; border:1px solid lightsteelblue" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>None</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
-                <input type="checkbox" name="plusTwo" {{checked stunt.plusTwo}}></input><i style="font-style:normal; font-family:Montserrat">+2?</i></td>
+                <i style="font-family:Montserrat; font-style:normal;">Bonus: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="color:black; background-color:white; border:solid 1px lightsteelblue"></input></td>
             </tr>
             <tr>
                 <td style="font-family:Montserrat">Description:</td>
