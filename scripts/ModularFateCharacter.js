@@ -178,7 +178,7 @@ export class ModularFateCharacter extends ActorSheet {
         let tracks = duplicate(this.object.data.data.tracks);
         let track = tracks[event.target.innerHTML]
         let notes = track.notes;
-        let text = await ModularFateConstants.updateText("Track Notes", notes);
+        let text = await ModularFateConstants.updateText("Track Notes for "+track.name +" on "+this.actor.name, notes);
         await this.object.update({
             [`data.tracks.${event.target.innerHTML}.notes`]: text
         })
