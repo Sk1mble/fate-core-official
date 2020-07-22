@@ -443,7 +443,7 @@ class ModularFateConstants {
     return new Promise(resolve => {
         new Dialog({
             title: prompt, 
-            content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:Arial; width:400px; background-color:lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
             buttons: {
                 ok: {
                     label: "Save",
