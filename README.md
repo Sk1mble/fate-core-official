@@ -126,6 +126,10 @@ The total refresh of your game. This starts at 3 in Fate Core.
 ## Character Sheet
 When you create a character, it will be initialised with a set of all PC skills at Mediocre (+0) and all Universal tracks. Its character sheet will pop open and so will its Skill Editor.
 
+The tracks, aspects, and skills allocated to a character are a local copy. If you go back in and edit the system versions of these, it will NOT change any existing characters. If you make a change to a system setting for a track, skill, or aspect that you want to be reflected on a character, just delete and re-add the relevant object and it will be updated.
+
+If you delete ALL the tracks, skills, or aspects from character, they will be re-initialised from the system's settings when you next open the character sheet (tracks and aspects), or re-open the skills editor (skills). 
+
 ### Avatar
 Click on the avatar to select an avatar picture.
 
