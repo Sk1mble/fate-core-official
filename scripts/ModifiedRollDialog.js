@@ -68,7 +68,7 @@ class ModifiedRollDialog extends Application {
 
         roll.toMessage({
             flavor: `<h1>${event.target.id}</h1>Rolled by ${game.user.name}<br>
-            Skill: ${this.skill_name} at rank ${skill_rank} (${ModularFateConstants.getFateLadder[""+skill_rank]}) <br>
+            Skill: ${this.skill_name} at rank ${skill_rank} (${ModularFateConstants.getFateLadder[skill_rank.toString()]}) <br>
             ${modifier_text}
             ${stunt_text}
             ${second_skill_text}`,
