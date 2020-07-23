@@ -292,6 +292,35 @@ export class ModularFateCharacter extends ActorSheet {
                 }
             }
         }
+        
+        let p_skills=working_data.data.skills;
+        
+        //Check to see what skills the character has compared to the global skill list
+            var skill_list = game.settings.get("ModularFate","skills");
+            // This is the number of skills the character has currently.
+            //We only need to add any skills if this is currently 0,
+            
+            if (this.newCharacter){
+                    let skills_to_add = [];
+
+                    for (let w in skill_list){
+                        let w_skill = skill_list[w];
+                        if (p_skills[w]!=undefined){
+                        } else {
+                            if(w_skill.pc){
+                                skills_to_add.push(w_skill);
+                            }
+                        }
+                    }
+
+                    if (skills_to_add.length >0){
+                        //Add any skills from the global list that they don't have at rank 0.
+                        skills_to_add.forEach(skill => {
+                            skill.rank=0;
+                            p_skills[skill.name]=skill;
+                        })
+                }
+            }
 
         // Logic to set up aspects if this character doesn't already have them
         if (this.newCharacter) {
