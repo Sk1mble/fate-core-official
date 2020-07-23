@@ -294,7 +294,7 @@ export class ModularFateCharacter extends ActorSheet {
         }
 
         // Logic to set up aspects if this character doesn't already have them
-        if (Object.keys(working_data.data.aspects) == 0) {
+        if (this.newCharacter) {
             let aspects = game.settings.get("ModularFate", "aspects");
             let player_aspects = duplicate(aspects);
             for (let a in player_aspects) {
@@ -304,7 +304,7 @@ export class ModularFateCharacter extends ActorSheet {
             working_data.data.aspects = player_aspects;
         }
 
-        if (Object.keys(working_data.data.tracks).length == 0) {
+        if (this.newCharacter) {
             //Step one, get the list of universal tracks.
             let world_tracks = duplicate(game.settings.get("ModularFate", "tracks"));
             let tracks_to_write = working_data.data.tracks;
