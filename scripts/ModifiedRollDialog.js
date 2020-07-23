@@ -81,6 +81,7 @@ class ModifiedRollDialog extends Application {
     getData (){
         this.options.title = `Modified ${this.skill_name} roll for ${this.actor.name}`
         this.actor.activeSkill=this.skill_name;
+        this.actor.ladder = ModularFateConstants.getFateLadder();
         return this.actor;
     }
 }
