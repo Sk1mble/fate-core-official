@@ -532,11 +532,6 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.sortByRank = this.sortByRank;
         sheetData.gameSkillPoints = game.settings.get("ModularFate", "skillTotal")
         sheetData.GM = game.user.isGM;
-        if (game.settings.get("ModularFate","hiddenAspects") == true){
-            if (this.actor.limited) {
-                sheetData.data.aspects={};
-            }
-        }
 
         let track_categories = game.settings.get("ModularFate", "track_categories");
         sheetData.track_categories = track_categories;
