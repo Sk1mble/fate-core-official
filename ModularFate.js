@@ -322,15 +322,6 @@ Hooks.once('init', async function () {
     if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
             game.settings.set("ModularFate","refreshTotal",3);
     }
-
-    game.settings.register("ModularFate","hiddenAspects",{
-        name: "Hidden Aspects?",
-        hint: "If True, hide aspects on characters unless viewer has better than Limited permission.",
-        scope: "world",
-        config: true,
-        default: false,
-        type: Boolean
-    })
     
     //Register a setting for the game's Issues?
 });
