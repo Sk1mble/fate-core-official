@@ -45,7 +45,9 @@ class ModifiedRollDialog extends Application {
 
         if (second_skill != "None"){
             second_skill_rank = this.actor.data.data.skills[second_skill].rank;
-            second_skill_text = `Second skill: ${second_skill} at rank ${second_skill_rank}`
+            let ladder = ModularFateConstants.getFateLadder();
+            let rs2 = ladder[`${second_skill_rank.toString()}`];
+            second_skill_text = `Second skill: ${second_skill} at rank ${second_skill_rank} (${rs2})`
             total_modifier += parseInt(second_skill_rank);
         }
 
@@ -66,9 +68,12 @@ class ModifiedRollDialog extends Application {
         let msg = ChatMessage.getSpeaker(this.actor)
         msg.alias = this.actor.name;
 
+        let ladder = ModularFateConstants.getFateLadder();
+        let rs = ladder[`${skill_rank.toString()}`];
+
         roll.toMessage({
             flavor: `<h1>${event.target.id}</h1>Rolled by ${game.user.name}<br>
-            Skill: ${this.skill_name} at rank ${skill_rank}<br>
+            Skill: ${this.skill_name} at rank ${skill_rank} (${rs})<br>
             ${modifier_text}
             ${stunt_text}
             ${second_skill_text}`,
