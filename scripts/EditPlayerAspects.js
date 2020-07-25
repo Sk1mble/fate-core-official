@@ -44,7 +44,7 @@ class EditPlayerAspects extends FormApplication{
         //console.log(name)
         let newName = event.target.value;
         let newAspect = {};
-        newName = newName.split(".").join("․");
+        newName = newName.split(".").join("․").trim();
         newAspect.name = newName;
     
         newAspect.description = this.aspects[name].description;
