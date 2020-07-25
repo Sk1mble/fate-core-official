@@ -1,3 +1,6 @@
+# Version 1.2.10
+  Bug fix: Consequences written on characters in FateUtilities weren't being stored properly. This has now been corrected.
+
 # Version 1.2.9
   1. Stunt bonus is now a number rather than a boolean for +2/no +2. This allows for stunts costing multiple refresh that give a bonus of +4, or more broad stunts that give +1, etc. Any character with a +2 stunt will have this converted to a bonus of 2 when their character sheet is opened for the first time following this update.
   2. A modified roll dialog is now available. To use it, shift-click on a skill name on the character sheet, or shift click on the dice button in Fate Utilities after selecting a skill. The modified roll dialog lets you apply a specified bonus (for example, from full defence or teamwork), one or more stunts relevant to the chosen skill, or a second skill to be added to the roll. This last feature allows ModularFate to support two-column skill implementations of Fate Core with somewhat automated rolling. Standard rolls are still available by clicking on a skill or the dice icon on a stunt.
