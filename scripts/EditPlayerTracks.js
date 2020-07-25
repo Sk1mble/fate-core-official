@@ -45,7 +45,7 @@ class EditPlayerTracks extends FormApplication {
     async renderMe(id, data){
         if (this.object.isToken){
             if (this.object.token.id == id){
-                if (data.actorData.data.tracks != undefined)
+                if (data.actorData.data != undefined && data.actorData.data.tracks != undefined)
                     this.tracks_by_category=undefined;                   
                     await this.render(false);
             }
@@ -53,7 +53,7 @@ class EditPlayerTracks extends FormApplication {
 
         else {
             if (this.object._id == id){
-                if (data.data.tracks != undefined)
+                if (data.data != undefined && data.data.tracks != undefined)
                     this.tracks_by_category=undefined;
                     await this.render(false);  
             }
