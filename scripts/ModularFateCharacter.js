@@ -16,6 +16,7 @@ export class ModularFateCharacter extends ActorSheet {
 
     static get defaultOptions() {
         const options = super.defaultOptions;
+        options.resizable=false
         options.width = "870"
         options.height = "auto"
         options.scrollY = ["#skills_body", "#aspects_body","#tracks_body", "#stunts_body", "#biography_body"]
