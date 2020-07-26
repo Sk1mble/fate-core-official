@@ -1,3 +1,7 @@
+# Version 1.2.11
+  Bug fix: Creating a track, aspect, or skill in the system menu options with a trailing space in the name caused the item to be uneditable.
+  This has now been rectified.
+
 # Version 1.2.10
   Bug fix: Consequences written on characters in FateUtilities weren't being stored properly. This has now been corrected.
 
