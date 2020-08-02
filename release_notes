@@ -1,3 +1,8 @@
+# Version 1.3.0
+  Added a utility for GMs who prefer to keep their NPCs under wraps (that is, with the players denied even Limited permissions)
+  Click on the new binoculars item in the Tokens tool bar to the left of the screen and you can select a character or token to display, player(s) to show it to, and which parts of the character you want to display.
+  Please note that this is a snapshot of the character at that time and the tracks and other data won't be updated. If the player closes this window you'll have to share it with them again using the SHow Character tool for them to get another look.
+
 # Version 1.2.11
   Bug fix: Creating a track, aspect, or skill in the system menu options with a trailing space in the name caused the item to be uneditable.
   This has now been rectified.

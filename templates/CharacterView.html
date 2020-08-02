@@ -1,0 +1,77 @@
+<form style="font-family:Montserrat">
+    <h1>{{name}}</h1>
+    {{#if (eq avatar undefined)}}{{else}}<img style="width:200px; height:auto" src = "{{avatar}}"/><p/>{{/if}}
+    {{#if (eq biography undefined)}}{{else}}<h2>Biography</h2>{{{biography.value}}}</div><p/>{{/if}}
+    {{#if (eq description undefined)}}{{else}}<h2>Description</h2>{{{description.value}}}</div><p/>{{/if}}
+    {{#if (eq aspects undefined)}}{{else}}<h2>Aspects</h2>
+    <table style="border:none; background:none">
+    {{#each aspects}}
+        <tr>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.value}}
+            </td>
+        </tr>
+    {{/each}}
+    </table><p/>
+    {{/if}}
+    {{#if (eq skills undefined)}}{{else}}
+        <h2>Skills</h2>
+        <table style="border:none; background:none; padding:10px">
+            {{#each skills}}
+            <tr>
+                <td style="width:50px">
+                    {{this.rank}}
+                </td>
+                <td>
+                    {{this.name}}
+                </td>
+            </tr>
+            {{/each}}
+        </table><p/>
+    {{/if}}
+    {{#if (eq tracks undefined)}}{{else}}
+        <h2>Tracks</h2>
+        <table style="background:none; border:none; padding:10px;">
+            {{#each tracks}}{{#if this.enabled}}
+            <tr>
+                <td style="padding-bottom:10px; width:120px">
+                    <div name="track_name" style="font-family:Montserrat" title="Click here to edit the track notes for {{this.name}}"><i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i></div>
+                </td>
+                <td style="padding-bottom:10px">
+                    {{#each this.box_values}}
+                    {{#if this}}
+                    <label class="box"><input type="checkbox" name = "box" disabled="disabled" style="opacity:0;width:25px; height:25px; float:left;" checked="checked"><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
+                    <label class="box"><input type="checkbox" name="box" disabled="disabled" style="opacity:0; width:25px; height:25px; float:left;"><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
+                    {{/each}}
+                    {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input type="text" class="aspect_box" disabled="disabled" name = "data.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{/if}}
+                </td>
+            </tr>
+            {{/if}}{{/each}}
+        </table><p/>
+    {{/if}}
+    {{#if (eq stunts undefined)}}{{else}}
+    <h2>Stunts:</h2>
+    <table style="border:none; background:none; padding:10px">
+    {{#each stunts}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.description}}</td>
+        </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+    {{#if (eq extras undefined)}}{{else}}
+    <h2>Extras:</h2>
+    <table style="border:none; background:none; padding:10px">
+    {{#each extras}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{{this.data.description.value}}}</td>
+        </tr>
+    {{/each}}
+    </table>
+    {{/if}}
+</form>

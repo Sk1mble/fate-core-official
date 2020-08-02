@@ -1,0 +1,95 @@
+<form style="font-family:Montserrat">
+    <p style="font-weight:bold">Pick a token or actor to show:</p>
+    <span style="width:25%; padding:5px">
+        Character:
+    </span>
+    <span style="width:75%; padding:5px">
+        <select id="character">
+            <option disabled="disabled">
+                Tokens
+            </option>
+            {{#each tokens}}
+                <option value = "token_{{this.id}}">
+                    {{this.name}}
+                </option>
+            {{/each}}
+            <option disabled="disabled">
+                Actors
+            </option>
+            {{#each actors}}
+                <option value = "actor_{{this.id}}">
+                    {{this.name}}
+                </option>
+            {{/each}}
+        </select>
+    </span><p/>
+    <span>
+        <p style="font-weight:bold">Pick who to show this character to:</p>
+        <button type="button" id="all_players">Select All</button><p/>
+    </span>
+    {{#each users}}
+    {{#if this.active}}
+        <span style="width:25%; padding:5px">
+            <input type="checkbox" class="player_select" id="{{this.id}}"/>
+        </span>
+        <span style="width:75%; padding:5px">
+            {{this.name}}
+        </span><p/>
+        {{/if}}
+    {{/each}}
+    <span>
+        <p style="font-weight:bold">Pick what to show:</p>
+        <button type="button" id="all_elements">Select All</button><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="avatar"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Avatar
+            </span><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="biography"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Biography
+            </span><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="description"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Description
+            </span><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="aspects"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Aspects
+            </span><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="skills"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Skills
+            </span><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="tracks"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Tracks
+            </span><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="stunts"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Stunts
+            </span><p/>
+            <span style="width:25%; padding:5px">
+                <input type="checkbox" class="element_select" id="extras"/>
+            </span>
+            <span style="width:75%; padding:5px">
+                Extras
+            </span><p/>
+    </span>
+    <span>
+        <button type="button" id="show_button">Show Now</button>
+    </span>
+</form>
