@@ -1,6 +1,6 @@
 export class ExtraSheet extends ItemSheet {
     async getData() {
-        const data = super.getData();
+        const data = await super.getData();
         data.type = this.item.type.toLowerCase();
         data.dataTemplate = () => `systems/ModularFate/templates/ExtraSheet.html`;
         if (data.data.box_values == undefined || data.data.box_values.length == 0){

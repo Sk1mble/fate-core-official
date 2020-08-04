@@ -217,68 +217,67 @@ Hooks.once('ready', async function () {
     })
 })
 
-let delay = 25;
-
 Hooks.on('updateToken', (scene, token, data) => {
     if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined){
         game.system.apps["actor"].forEach(a=> {
-            setTimeout(function(){a.renderMe(token._id, data);},delay);
+            a.renderMe(token._id, data);
         })
     }
 })
 
 Hooks.on('updateUser',(...args) =>{
         game.system.apps["user"].forEach (a=> {
-            setTimeout(function(){a.renderMe("updateUser");},delay);
+            a.renderMe("updateUser");
         })
 })
 
 Hooks.on('renderPlayerList',(...args) =>{
     game.system.apps["user"].forEach (a=> {
-        setTimeout(function(){a.renderMe("updateUser");},delay);
+        a.renderMe("updateUser");
     })
 })
 
 Hooks.on('updateActor', (actor, data) => {
     game.system.apps["actor"].forEach(a=> {
-        setTimeout(function(){a.renderMe(actor.id, data);},delay);
+        a.renderMe(actor.id, data);
     })
 })
 
 Hooks.on('renderCombatTracker', () => {
     game.system.apps["combat"].forEach(a=> {
-        setTimeout(function(){a.renderMe("renderCombatTracker");},delay);
+        a.renderMe("renderCombatTracker");
     })
 })
 Hooks.on('updateCombat', (...args) => {
     let ags = args;
     game.system.apps["combat"].forEach(a=> {
-        setTimeout(function(){a.renderMe(ags);},delay);
+        a.renderMe(ags);
     })
 })
 
 Hooks.on('deleteCombat', (...args) => {
     game.system.apps["combat"].forEach(a=> {
-        setTimeout(function(){a.renderMe("deleteCombat");},delay);
+        a.renderMe("deleteCombat");
     })
 })
 
 Hooks.on('deleteToken', (...args) => {
     game.system.apps["actor"].forEach(a=> {
-        setTimeout(function(){a.renderMe("deleteToken");},delay);
+        a.renderMe("deleteToken")
+        console.log(canvas.tokens.placeables)
     })
 })
 
 Hooks.on('createToken', (...args) => {
     game.system.apps["actor"].forEach(a=> {
-        setTimeout(function(){a.renderMe("createToken");},delay);
+        a.renderMe("createToken");
     })
 })
 
 Hooks.on('updateScene', (...args) => {
     let ags = args;
     game.system.apps["combat"].forEach(a=> {
-        setTimeout(function(){a.renderMe(args);},delay);
+        a.renderMe(args);
     })
 })
 

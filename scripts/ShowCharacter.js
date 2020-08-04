@@ -103,7 +103,7 @@ class ShowCharacter extends Application{
     }
 
     async getData(){
-        const data = super.getData();
+        const data = await super.getData();
         data.users = game.users.players;
         data.tokens = canvas.tokens.placeables;
         data.actors = game.actors.entries;

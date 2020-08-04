@@ -454,7 +454,7 @@ export class ModularFateCharacter extends ActorSheet {
         }
         this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         this.freeStunts = game.settings.get("ModularFate", "freeStunts");
-        const sheetData = super.getData();
+        const sheetData = await super.getData();
         let numStunts = Object.keys(sheetData.data.stunts).length;
         let paidTracks = 0;
         let paidStunts = 0;

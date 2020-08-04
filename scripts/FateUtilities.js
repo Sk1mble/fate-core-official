@@ -340,7 +340,7 @@ async _nextButton(event, html){
 
 async getData(){
     //Let's prepare the data for the initiative tracker here
-    const data = super.getData();
+    const data = await super.getData();
     if (game.combat==null){
         data.conflict = false;
     } else {
@@ -418,11 +418,11 @@ async renderMe(...args){
     //Scene, and Combat.
     try {
         if ((args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined) || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes. This will prevent rendering of other elements if they happen simultaneously with editing the notes, too, but I don't think that's a problem.
-            await this.render(false)
+            this.render(false)
     }
     } catch (error){
         //console.log(error)
-        await this.render(false);
+        this.render(false);
     }
 }
 
