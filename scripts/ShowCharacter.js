@@ -132,7 +132,6 @@ Hooks.once('ready', async function () {
         //description, skills, stunts, extras
         let myId=game.users.current.id;
         if (data.players.find(player => player._id == myId)!=undefined){
-            console.log("Should be launchign the viewer")
             let cv = new CharacterView(data.elements);
             cv.render(true);
         }
