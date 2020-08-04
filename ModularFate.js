@@ -279,7 +279,6 @@ Hooks.on('updateScene', (...args) => {
     let ags = args;
     game.system.apps["combat"].forEach(a=> {
         setTimeout(function(){a.renderMe(args);},delay);
-        
     })
 })
 
