@@ -372,7 +372,6 @@ class EditPlayerTracks extends FormApplication {
 
         ui.notifications.info("Character track changes saved.")   
         //Initialise the actor sheet; this will automatically set up the boxes etc on tracks.
-        //this.tracks_by_category=undefined;
         this.sheet.initialise();
         this.render(false);
     }
@@ -558,7 +557,7 @@ class EditPlayerTracks extends FormApplication {
                         }
                     }
                 } catch(error){
-                    console.log(error)
+                    //console.log(error)
                 }
         }
             
