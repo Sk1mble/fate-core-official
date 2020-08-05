@@ -1,3 +1,6 @@
+# Version 1.3.2
+  Bug fix; editing tracks was not quite working correctly.
+
 # Version 1.3.1
   Minor bug fixes; combat tracker now sizes automatically. Improved code on mass addition or deletion of tokens to avoid the need for a hard-coded timeout.
 
