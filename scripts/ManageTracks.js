@@ -279,12 +279,20 @@ class EditTracks extends FormApplication {
     async _track_selectChange(event, html){
         let name = document.getElementById("track_select").value;
         if (name=="New Track"){
+            this.track=undefined;
             document.getElementById("edit_track_name").value="";
             document.getElementById("edit_track_description").value="";
+            document.getElementById("edit_track_universal").checked=true;
+            document.getElementById("edit_track_unique").checked=true;
+            document.getElementById("edit_track_recovery_type").value="Fleeting";
+            document.getElementById("edit_track_aspect").value="No";
             document.getElementById("edit_track_when_marked").value="";
             document.getElementById("edit_track_when_recovers").value="";
-            document.getElementById("edit_linked_skills").disabled=true;
-            
+            document.getElementById("edit_track_boxes").value=0;
+            document.getElementById("edit_track_harm").value=0;
+            document.getElementById("edit_linked_skills").disabled=false;
+            document.getElementById("edit_track_paid").checked=false;
+            document.getElementById("track_label_select").value = "none";
         } else {
             let track=this.tracks[name];
             this.track=track;
