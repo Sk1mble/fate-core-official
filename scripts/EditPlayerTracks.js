@@ -367,12 +367,12 @@ class EditPlayerTracks extends FormApplication {
             }
         }
 
-        await this.object.update({"data.tracks":[]}) //This is needed to make the game see a change in order of keys as a difference.
+        await this.object.update({"data.tracks":[{"empty":"empty"}]}) //This is needed to make the game see a change in order of keys as a difference.
         await this.object.update({"data.tracks":output}); 
 
         ui.notifications.info("Character track changes saved.")   
         //Initialise the actor sheet; this will automatically set up the boxes etc on tracks.
-        this.tracks_by_category=undefined;
+        //this.tracks_by_category=undefined;
         this.sheet.initialise();
         this.render(false);
     }
@@ -520,19 +520,19 @@ class EditPlayerTracks extends FormApplication {
     }
         
     async getData(){
-        let world_tracks = duplicate(game.settings.get("ModularFate","tracks"))
+        let world_tracks = await duplicate(game.settings.get("ModularFate","tracks"))
         //We need the list of track categories
         //We will use a dropdown list of categories in the editor to select which tracks are displayed
 
         if (this.tracks_by_category == undefined){
-            this.tracks_by_category = duplicate(game.settings.get("ModularFate","track_categories"));
+            this.tracks_by_category = await duplicate(game.settings.get("ModularFate","track_categories"));
              //Initialise the values from text (used in the category editor) to JSON objects (used here)
             for (let c in this.tracks_by_category){
                 this.tracks_by_category[c]={};
             }
             
             //Let's get a working copy of this actor's track information. We will work with this throughout and only save it to the actor when we're finished.
-            this.tracks = duplicate(this.object.data.data.tracks);
+            this.tracks = await duplicate(this.object.data.data.tracks);
             
             //The ones already on the player should be ticked as they already have them.DONE
 
@@ -540,10 +540,13 @@ class EditPlayerTracks extends FormApplication {
             
             try {
                     for (let t in this.tracks) {
-                    let track = await duplicate(this.tracks[t]);
-                    track.present=true;
-                    track.number=1;
-                    this.tracks_by_category[this.tracks[t].category][t]=track;
+
+                        if (this.tracks_by_category != undefined){
+                            let track = await duplicate(this.tracks[t]);
+                            track.present=true;
+                            track.number=1;
+                            this.tracks_by_category[track.category][t]=track;
+                        }
                     }
 
                     let player_track_keys = Object.keys(this.tracks);
@@ -554,8 +557,8 @@ class EditPlayerTracks extends FormApplication {
                             this.tracks_by_category[world_tracks[t].category][t]=world_tracks[t];
                         }
                     }
-                } catch {
-                    
+                } catch(error){
+                    console.log(error)
                 }
         }
             
