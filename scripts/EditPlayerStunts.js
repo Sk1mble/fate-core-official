@@ -17,7 +17,7 @@ class EditPlayerStunts extends FormApplication {
     static get defaultOptions(){
         const options = super.defaultOptions;
         options.template = "systems/ModularFate/templates/EditPlayerStunts.html";
-        options.width = "710";
+        options.width = "auto";
         options.height = "auto";
         options.title = `Character stunt editor`;
         options.closeOnSubmit = true;
