@@ -70,6 +70,7 @@ Hooks.once('init', async function () {
             "fateCore":"Yes - Fate Core Defaults",
             "fateCondensed":"Yes - Fate Condensed Defaults",
             "accelerated":"Yes - Fate Accelerated Defaults",
+            "dfa":"Yes - Dresden Files Accelerated Defaults",
             "clearAll":"Yes - Clear All Skills"
         },
         default: "nothing",        // The default value for the setting
@@ -92,6 +93,11 @@ Hooks.once('init', async function () {
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",ModularFateConstants.getFateAcceleratedDefaultSkills());
+                    }
+                }
+                if (value=="dfa"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","skills",ModularFateConstants.getDFASkills());
                     }
                 }
                 //This menu only does something when changed, so set back to 'nothing' to avoid

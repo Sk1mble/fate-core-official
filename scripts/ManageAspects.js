@@ -37,6 +37,7 @@ Hooks.once('init', async function () {
             "fateCore":"Yes - Fate Core Aspects",
             "fateCondensed":"Yes - Fate Condensed Aspects",
             "accelerated":"Yes - Fate Accelerated Aspects",
+            "dfa":"Yes - Dresden Files Accelerated Aspects",
             "clearAll":"Yes - Clear All Aspects"
         },
         default: "nothing",        // The default value for the setting
@@ -59,6 +60,11 @@ Hooks.once('init', async function () {
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","aspects",ModularFateConstants.getFateAcceleratedAspects());
+                    }
+                }
+                if (value=="dfa"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","aspects",ModularFateConstants.getDFAAspects());
                     }
                 }
                 //This menu only does something when changed, so set back to 'nothing' to avoid

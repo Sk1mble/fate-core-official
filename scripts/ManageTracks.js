@@ -51,6 +51,7 @@ Hooks.once('init',async function(){
             "fateCore":"Yes - Fate Core Defaults",
             "fateCondensed":"Yes - Fate Condensed Defaults",
             "accelerated":"Yes - Fate Accelerated Defaults",
+            "dfa":"Yes - Dresden Files Accelerated Defaults",
             "clearAll":"Yes - Clear All tracks"
         },
         default: "nothing",        // The default value for the setting
@@ -73,6 +74,12 @@ Hooks.once('init',async function(){
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","tracks",ModularFateConstants.getFateAcceleratedTracks());
+                    }
+                }
+                if (value == "dfa"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getDFAtracks());
+                        game.settings.set("ModularFate","track_categories",ModularFateConstants.getDFATrackCategories());
                     }
                 }
                 //This menu only does something when changed, so set back to 'nothing' to avoid
