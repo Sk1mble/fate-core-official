@@ -301,7 +301,7 @@ Hooks.once('init', async function () {
     })
 
     game.settings.register("ModularFate","limited_sheet_template", {
-        name:"Default Sheet Template",
+        name:"Default Limited Sheet Template",
         hint:"Give a path to a custom template to override the standard sheet when the viewer has only Limited permission.",
         scope:"world",
         config:"true",
