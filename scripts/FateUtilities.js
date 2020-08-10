@@ -52,8 +52,15 @@ activateListeners(html) {
     const add_sit_aspect = html.find("button[id='add_sit_aspect']")
     add_sit_aspect.on("click", event => this._add_sit_aspect(event, html));
 
+    //Situation Aspect Buttons
     const del_sit_aspect = html.find("button[name='del_sit_aspect']");
     del_sit_aspect.on("click", event => this._del_sit_aspect(event, html));
+
+    const addToScene = html.find("button[name='addToScene']");
+    addToScene.on("click", event => this._addToScene(event, html));
+
+    const panToAspect = html.find("button[name='panToAspect']");
+    panToAspect.on("click", event => this._panToAspect(event, html));
 
     const free_i = html.find("input[name='free_i']");
     free_i.on("change", event => this._free_i_button(event, html));
@@ -145,6 +152,53 @@ async _free_i_button(event,html){
     let aspect = situation_aspects[situation_aspects.findIndex(sit => sit.name == name)];
     aspect.free_invokes = value;
     await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+    //ToDo: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
+}
+
+async _panToAspect(event, html){
+    let name=event.target.id.split("_")[1];
+    let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
+    
+    if (drawing != undefined) {
+        let x = drawing.data.x;
+        let y = drawing.data.y;
+        canvas.animatePan({x:x, y:y});
+    }
+}
+
+async _addToScene(event, html){
+    let name=event.target.id.split("_")[1];
+    let value=html.find(`input[id="${name}_free_invokes"]`)[0].value;
+
+    if (canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name))==undefined)
+    {
+            let text = name+" ";
+            for (let i = 0; i< value; i++){
+                text += "☐";
+            }
+
+            Drawing.create({
+                type: CONST.DRAWING_TYPES.RECTANGLE,
+                author: game.user._id,
+                x: canvas.stage.pivot._x,
+                y: canvas.stage.pivot._y,
+                width: 100+name.length*25,
+                height: 75,
+                fillType: CONST.DRAWING_FILL_TYPES.SOLID,
+                fillColor: "#FFFFFF",
+                fillAlpha: 1,
+                strokeWidth: 4,
+                strokeColor: "#000000",
+                strokeAlpha: 1,
+                text: text,
+                fontSize: 48,
+                textColor: "#000000",
+                points: []
+            });   
+    }
+    else {
+        ui.notifications.error("There's already a note for that aspect");
+    }
 }
 
 async _del_sit_aspect(event, html){
@@ -153,6 +207,12 @@ async _del_sit_aspect(event, html){
     let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate", "situation_aspects"));
     situation_aspects.splice(situation_aspects.findIndex(sit => sit.name == name),1);
     await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+
+    //If there's a note on the scene for this aspect, delete it
+    let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
+    if (drawing != undefined){
+        drawing.delete();
+    }
 }
 
 async _add_sit_aspect(event, html){

@@ -291,6 +291,15 @@ Hooks.once('init', async function () {
         type: Boolean
     })
 
+    game.settings.register("ModularFate","sheet_template", {
+        name:"Default Sheet Template",
+        hint:"Give a path to a custom character sheet template here to override the standard sheet.",
+        scope:"world",
+        config:"true",
+        type:String,
+        default:'systems/ModularFate/templates/ModularFateSheet.html'
+    })
+
     game.system.entityTypes.Item = ["Extra"];
     game.system.entityTypes.Actor = ["ModularFate"]
 

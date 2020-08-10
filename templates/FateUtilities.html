@@ -190,7 +190,11 @@
                                 </td>
                                 <td>
                                     <input type="number" name="free_i" id="{{this.name}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
-                                    {{#if ../GM}}<button type="button" name="del_sit_aspect" id="delete_{{this.name}}" style="width:25px; height:25px" i icon class="fas fa-trash"></button>{{/if}}
+                                    {{#if ../GM}}
+                                    <button type="button" name="addToScene" id="addToScene_{{this.name}}" title="Add an aspect note to the map" style="width:35px; height:35px" i icon class="fas fa-sticky-note"></button>
+                                    <button type="button" name="panToAspect" id="panToAspect_{{this.name}}" title="Pan to this aspect's map note" style="width:35px; height:35px" i icon class="fas fa-search-location"></button>
+                                    <button type="button" name="del_sit_aspect" id="delete_{{this.name}}" title="Delete aspect" style="width:35px; height:35px" i icon class="fas fa-trash"></button>
+                                    {{/if}}
                                 </td>
                             </tr> 
                         {{/each}}
