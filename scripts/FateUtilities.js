@@ -153,6 +153,19 @@ async _free_i_button(event,html){
     aspect.free_invokes = value;
     await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
     //ToDo: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
+    let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
+    if (drawing != undefined){
+        let text;
+        if (value == 1){
+            text = name+" ("+value + " free invoke)";    
+        } else {
+            text = name+" ("+value + " free invokes)";
+        }
+        drawing.update({
+            "text":text,
+             width: text.length*25
+        });
+    }
 }
 
 async _panToAspect(event, html){
@@ -172,17 +185,19 @@ async _addToScene(event, html){
 
     if (canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name))==undefined)
     {
-            let text = name+" ";
-            for (let i = 0; i< value; i++){
-                text += "☐";
-            }
+        let text;
+        if (value == 1){
+            text = name+" ("+value + " free invoke)";    
+        } else {
+            text = name+" ("+value + " free invokes)";
+        }
 
             Drawing.create({
                 type: CONST.DRAWING_TYPES.RECTANGLE,
                 author: game.user._id,
                 x: canvas.stage.pivot._x,
                 y: canvas.stage.pivot._y,
-                width: 100+name.length*25,
+                width: text.length*25,
                 height: 75,
                 fillType: CONST.DRAWING_FILL_TYPES.SOLID,
                 fillColor: "#FFFFFF",

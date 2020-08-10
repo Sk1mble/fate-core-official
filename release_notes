@@ -1,3 +1,11 @@
+# Version 1.3.5
+  Added a new feature in FateUtilities that lets you add a text note to the map for a situation aspect defined in the Aspects tab of FateUtilities.
+  The first button creates a note (which is positioned at the centre of the visible portion of the screen)
+  The second button pans to the note wherever it is, making it easier to find.
+  The third button deletes the aspect and its related note as normal.
+  The notes added with this function are drawings, so to move them or otherwise edit them you must use the Drawings layer.
+  Also added an override sheet template option so you can provide a custom character sheet for the system to use. Use this option with caution.
+
 # Version 1.3.4
   Bugfix to FateUtilities - TimedEvents had stopped working due to a scope issue
 
