@@ -491,12 +491,12 @@ class TimedEvent extends Application {
         }
         if (currentRound != "NoCombat"){
             var peText = "No Pending Events<p></p>"
-            let pendingEvents = game.combat.getFlag("TimedEvent","timedEvents");
+            let pendingEvents = game.combat.getFlag("ModularFate","timedEvents");
             if (pendingEvents != null || pendingEvents != undefined){
                 peText=
                 `<tr>
-                    <td>Round</td>
-                    <td>Pending Event</td>
+                    <td style="font-weight:bold">Round</td>
+                    <td style="font-weight:bold">Pending Event</td>
                 </tr>`
                 pendingEvents.forEach(event => {
                     if (event.complete === false){
@@ -508,10 +508,10 @@ class TimedEvent extends Application {
                 "title":"Timed Event",
                 "content":`<h1>Create a Timed Event</h1>
                             The current exchange is ${game.combat.round}.<p></p>
-                            <table>
+                            <table style="background:none; border:none">
                                 ${peText}
                             </table>
-                            <table>
+                            <table style="background:none; border:none">
                                 <tr>
                                     <td>What is your event?</td>
                                     <td><input type="text" id="eventToCreate" name="eventToCreate" style="background: white; color: black;" autofocus></input></td>
@@ -525,23 +525,23 @@ class TimedEvent extends Application {
                     "buttons":{
                         create:{label:"Create", callback:async () => {
                             //if no flags currently set, initialise
-                            var timedEvents = game.combat.getFlag("TimedEvent","timedEvents");
+                            var timedEvents = game.combat.getFlag("ModularFate","timedEvents");
                             
                             if (timedEvents ==null || timedEvents == undefined){
-                                await game.combat.setFlag("TimedEvent","timedEvents",[
+                                await game.combat.setFlag("ModularFate","timedEvents",[
                                                                                         {   "round":`${document.getElementById("eventExchange").value}`,
                                                                                             "event":`${document.getElementById("eventToCreate").value}`,
                                                                                             "complete":false
                                                                                         }
                                                                                 ])
-                                                                                timedEvents=game.combat.getFlag("TimedEvent","timedEvents");
+                                                                                timedEvents=game.combat.getFlag("ModularFate","timedEvents");
                             } else {
                                 timedEvents.push({   
                                                     "round":`${document.getElementById("eventExchange").value}`,
                                                     "event":`${document.getElementById("eventToCreate").value}`,
                                                     "complete":false
                                 });
-                                game.combat.setFlag("TimedEvent","timedEvents",timedEvents);
+                                game.combat.setFlag("ModularFate","timedEvents",timedEvents);
                                 
                                 }
 
@@ -551,8 +551,8 @@ class TimedEvent extends Application {
                     }
                 }
             let dO = Dialog.defaultOptions;
-            dO.width=400;
-            dO.height=250;
+            dO.width="auto";
+            dO.height="auto";
             dO.resizable="true"
             let d = new Dialog(dp, dO);
             d.render(true);
@@ -562,7 +562,7 @@ class TimedEvent extends Application {
 Hooks.on('renderCombatTracker', () => {
     try {
         var r = game.combat.round;
-        let pendingEvents = game.combat.getFlag("TimedEvent","timedEvents");
+        let pendingEvents = game.combat.getFlag("ModularFate","timedEvents");
         for (let i = 0; i<pendingEvents.length;i++){
             var event = pendingEvents[i];
             if (r==event.round && event.complete != true){
