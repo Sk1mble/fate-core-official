@@ -38,10 +38,16 @@ export class ModularFateCharacter extends ActorSheet {
 
     get template() {
         let template = game.settings.get("ModularFate","sheet_template");
-        if (template != undefined){
+        let limited_template = game.settings.get("ModularFate","limited_sheet_template");
+
+        if (template != undefined & !this.actor.limited){
             return template;
         } else {
-            return 'systems/ModularFate/templates/ModularFateSheet.html';
+            if (limited_template != undefined & this.actor.limited){
+                return limited_template;
+            } else {
+                return 'systems/ModularFate/templates/ModularFateSheet.html';
+            }
         }
     }
 
