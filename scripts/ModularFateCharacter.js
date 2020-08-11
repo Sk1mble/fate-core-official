@@ -106,8 +106,27 @@ export class ModularFateCharacter extends ActorSheet {
 
             const stunt_roll = html.find("button[name='stunt_name']");
             stunt_roll.on("click", event => this._on_stunt_roll_click(event,html));
+
+            const stunt_db = html.find("div[name='stunt_db']");
+            stunt_db.on("click", event => this._stunt_db_click(event, html));
+
+            const db_add = html.find("button[name='db_stunt']");
+            db_add.on("click", event => this._db_add_click(event, html));
         }
         super.activateListeners(html);
+    }
+
+    async _db_add_click(event, html){
+        let name = event.target.id.split("_")[0];
+        let db = duplicate(game.settings.get("ModularFate","stunts"));
+        db[name]=this.object.data.data.stunts[name];
+        await game.settings.set("ModularFate","stunts",db);
+        ui.notifications.info("Added "+name+" to the stunt database");
+    }
+
+    async _stunt_db_click(event, html){
+        let sd = new StuntDB(this.actor);
+        sd.render(true);
     }
 
     async _on_stunt_roll_click(event,html){

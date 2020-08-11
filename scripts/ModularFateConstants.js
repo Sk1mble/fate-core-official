@@ -497,6 +497,11 @@ class ModularFateConstants {
         array.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
     }
 
+    //Sort an array of JSON objects by a key
+    static async sort_key(array, key){
+        array.sort((a, b) => a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0);//This actually properly sorts by name; case sensitive.
+    }
+
     static moveKey (object, key, numPlaces){
         //If numPlaces is positive, we move down, if negative, up. 
 

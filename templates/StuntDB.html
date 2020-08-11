@@ -1,0 +1,43 @@
+<body>
+    <div style="max-width:1000px; max-height:800px; background-color:white; overflow-y:auto; font-family:Montserrat; font-size:10pt; padding:10px">
+    <table style="border:1px solid lightsteelblue; background:white">
+        <tr>
+            <td name="sb_name" title="Sort by name" style="width:200px; border:1px solid lightsteelblue; font-weight:bold">
+                Stunt Name
+            </td>
+            <td name="sb_skill" title="Sort by skill" style="width:100px; border:1px solid lightsteelblue; font-weight:bold">
+                Skill
+            </td>
+            <td name="sb_refresh" title="Sort by refresh cost" style="width:80px; border:1px solid lightsteelblue; font-weight:bold">
+                Refresh
+            </td>
+            <td style="width:620px; border:1px solid lightsteelblue; font-weight:bold">
+                Description
+            </td>
+            <td style="width:75px; border:1px solid lightsteelblue; font-weight:bold">
+                Actions
+            </td>
+        </tr>
+        {{#each stunts}}
+        <tr>
+            <td style="border:1px solid lightsteelblue;">
+                {{this.name}}
+            </td>
+            <td style="border:1px solid lightsteelblue;">
+                {{this.linked_skill}}
+            </td>
+            <td style="border:1px solid lightsteelblue;">
+                {{this.refresh_cost}}
+            </td>
+            <td style="border:1px solid lightsteelblue;">
+                {{{this.description}}}
+            </td>
+            <td style="border:1px solid lightsteelblue;">
+                {{#if ../actor.owner}}<button type="button" name="add_stunt" style="border:none; float:left; width:25px; height:25px; background:white;" title="Add this stunt to {{../actor.name}}'s stunts" i icon class = "fas fa-download" id="{{this.name}}_addStunt"></button>{{/if}}
+                {{#if ../gm}}<button type="button" name="del_stunt" style="border:none; float:right; width:25px; height:25px; background:white;" title="Delete this stunt from the database" i icon class = "fas fa-trash" id="{{this.name}}_deleteStunt"></button>{{/if}}
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+</body>

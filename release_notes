@@ -1,3 +1,11 @@
+# Version 1.4.0
+  Added a stunt database feature.
+  When viewing a character sheet, the GM can click on the 'upload' icon next to a character's stunt to save that stunt in the game world's stunt database.
+  Clicking on the new book icon in the stunt header will let the GM or players view the stunt database and then click the 'download' button to add a stunt from the database to the character from which the database window was launched.
+  The GM can also click on the trash icon to delete a stunt from the database.
+  If a stunt is added but already exists in the database, this will overwrite the existing copy of the stunt with the new one.
+  Once a stunt has been added to someone's character sheet, it is a local copy and changes to the database will not affect the character unless they go into the database and re-add the stunt. If they do this, the version on their sheet will be overwritten with the one from the database.
+
 # Version 1.3.5
   Added a new feature in FateUtilities that lets you add a text note to the map for a situation aspect defined in the Aspects tab of FateUtilities.
   The first button creates a note (which is positioned at the centre of the visible portion of the screen)
