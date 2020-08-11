@@ -287,7 +287,7 @@ Hooks.once('init', async function () {
         name: "Stunts Database",
         hint:"A list of approved stunts that can be added to characters",
         scope:"world",
-        config:"false",
+        config:false,
         type:Object
     })
 
