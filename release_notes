@@ -1,3 +1,7 @@
+# Version 1.4.2
+  Added a track filter on the character sheet so that the view can be restricted to a single cateogry or all tracks.
+  Modified the track filter in FateUtilities so that it gives the option of viewing all tracks or tracks in a single category.
+
 # Version 1.4.0
   Added a stunt database feature.
   When viewing a character sheet, the GM can click on the 'upload' icon next to a character's stunt to save that stunt in the game world's stunt database.

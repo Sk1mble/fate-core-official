@@ -4,6 +4,14 @@ Handlebars.registerHelper("add1", function(value) {
     return value+1;
 });
 
+Handlebars.registerHelper("category", function(category1, category2) {
+    if (category1 == "All" || category1 == category2){
+        return true;
+    } else {
+        return false;
+    }
+})
+
 Handlebars.registerHelper("hasBoxes", function(track) {
     if(track.box_values==undefined || track.box_values.length==0){
         return false;
@@ -55,6 +63,7 @@ export class ModularFateCharacter extends ActorSheet {
         super(...args);
         this.first_run = true;
         this.editing = false;
+        this.track_category="All";
     }
 
     //Here are the action listeners
@@ -112,8 +121,15 @@ export class ModularFateCharacter extends ActorSheet {
 
             const db_add = html.find("button[name='db_stunt']");
             db_add.on("click", event => this._db_add_click(event, html));
+
+            const cat_select = html.find("select[id='track_category']");
+            cat_select.on("change", event => this._cat_select_change (event, html));
         }
         super.activateListeners(html);
+    }
+
+    async _cat_select_change (event, html){
+        this.track_category = event.target.value;
     }
 
     async _db_add_click(event, html){
@@ -565,6 +581,7 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.GM = game.user.isGM;
 
         let track_categories = game.settings.get("ModularFate", "track_categories");
+        sheetData.category = this.track_category;
         sheetData.track_categories = track_categories;
         sheetData.tracks = this.object.data.data.tracks;
         sheetData.stunts = this.object.data.data.stunts;

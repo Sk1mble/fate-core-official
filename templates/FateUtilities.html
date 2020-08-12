@@ -106,10 +106,10 @@
             <!--------BEGIN Tracks tab-->
             <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:beige; font-family:Montserrat;">
                 Category: 
-                <select id = "category_select" style="padding-right:100px">
-                    <option disabled="disabled" selected="selected">Combat</option>
+                <select style="font-family:Montserrat" id = "category_select" style="padding-right:100px">
+                    <option value="All" {{#if (eq category "All")}}selected{{/if}}>All</option>
                     {{#each categories}}
-                    <option>{{this}}</option>
+                        <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
                     {{/each}}
                 </select> {{#if GM}}<button type="button" style="width:50px; height:auto;" id="clear_fleeting">Clear</button> all Fleeting tracks in every category{{/if}}
                 <div id="fu_tracks_tab" style="background-color:beige; overflow-y:auto; max-height:800px">
@@ -122,7 +122,7 @@
                         </td>
                     </tr>
                 {{#each this.actor.data.data.tracks}}
-                {{#if (eq ../../category this.category)}}{{#if this.enabled}}
+                {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
                     <td>
                         <div name="track_name" id="{{../this.id}}"" title="Click here to edit the track notes for {{this.name}}">{{this.name}}</div>

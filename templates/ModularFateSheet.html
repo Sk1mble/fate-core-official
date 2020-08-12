@@ -110,10 +110,17 @@
     <!--------------------Begin tracks and stunts section-->
     <div style="display:flex; flex-flow:row wrap" name = "tracks_stunts"><!--Begin tracks & stunts section-->
         <div name = "tracks_block"><!--Begin the tracks block-->
-            <div name="tracks_header" style="width:400px; padding-top:10px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7"><b>Tracks</b><div title="Open the Track Editor" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="edit_player_tracks" i icon class="fas fa-cog"></div></div>
+            <div name="tracks_header" style="width:400px; padding-top:10px; font-size:14pt; font-family:Montserrat; padding-bottom:2px; border-bottom:2px solid #2273b7"><b>Tracks</b>&nbsp&nbsp
+                <select style="font-family:Montserrat; background-color:white;" id="track_category">
+                    <option value="All" {{#if (eq category "All")}}selected{{/if}}>All</option>
+                    {{#each track_categories}}
+                        <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
+                    {{/each}}
+                </select>
+                <div title="Open the Track Editor" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="edit_player_tracks" i icon class="fas fa-cog"></div></div>
             <div name = "tracks_body" id="tracks_body" style="overflow-y:auto; width:400px; padding-top:10px; min-height:100px; max-height:400px;scrollbar-width:thin">
                 <table style="background-color:white; border:0px; padding:10px;">
-                    {{#each tracks}}{{#if this.enabled}}
+                    {{#each tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}}
                     <tr>
                         <td style="padding-bottom:10px; width:120px">
                             <div name="track_name" style="font-family:Montserrat" title="Click here to edit the track notes for {{this.name}}"><i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i></div>
@@ -127,7 +134,7 @@
                             {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input type="text" class="aspect_box" name = "data.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{/if}}
                         </td>
                     </tr>
-                    {{/if}}{{/each}}
+                    {{/if}}{{/if}}{{/each}}
                 </table>
                 <img src = "systems/ModularFate/assets/pbf.svg" style="height:75px; width:auto; border:none;"/>
             </div><!--end of tracks body-->

@@ -6,7 +6,7 @@ constructor(){
     game.system.apps["combat"].push(this);
     game.system.apps["scene"].push(this); //Maybe? If we want to store scene notes, aspects, etc.
     game.system.apps["user"].push(this);
-    this.category="Combat";
+    this.category="All";
     this.editingSceneNotes = false;
     if (game.system.tokenAvatar == undefined){
         game.system.tokenAvatar = true;
