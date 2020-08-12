@@ -54,6 +54,10 @@
   text-transform: uppercase;
 }
 
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: inner-spin-button;
+  }
+
 button {
   border-radius: 0;
   font-family: "Montserrat", "Arial", sans-serif;

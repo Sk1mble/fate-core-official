@@ -21,7 +21,7 @@
                             {{this.name}} (GM)
                         </td>
                         <td>
-                            <input id="{{this.id}}" name="gmfp" type="number" min="0" value="{{this.fatepoints}}" style="width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}/> Scene Fate Points{{#if ../GM}}<button type="button" id="refresh_fate_points" style="width:300px; float:right;"> Refresh Player Fate Points</button>{{/if}}
+                            <input id="{{this.id}}" name="gmfp" type="number" min="0" value="{{this.fatepoints}}" style="background-color:white; width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}/> Scene Fate Points{{#if ../GM}}<button type="button" id="refresh_fate_points" style="width:300px; float:right;"> Refresh Player Fate Points</button>{{/if}}
                         </td>
                     </tr>
                     {{/each}}
@@ -44,7 +44,7 @@
                                 {{/each}}
                             </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
                             {{/if}}
-                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
+                            {{#if this.actor.isPC}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
                         </td>
                         <td>
                                 <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
@@ -104,7 +104,7 @@
             </div><!--End Aspects tab--------------------------------------->
             
             <!--------BEGIN Tracks tab-->
-            <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:beige; font-family:Montserrat;">
+            <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:beige; font-family:Montserrat; padding-top:10px">
                 Category: 
                 <select style="font-family:Montserrat" id = "category_select" style="padding-right:100px">
                     <option value="All" {{#if (eq category "All")}}selected{{/if}}>All</option>
@@ -176,7 +176,7 @@
         </div><!--End tracks tab-------------------------------->
 
             <!----------------------------------------------------------------------BEGIN SCENE TAB-->
-            <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:auto; max-height:850px">
+            <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:auto; max-height:850px; padding-top:10px">
                     <h1>Situation Aspects</h1>
                     {{#if GM}}<i style="font-style:normal; font-family:Montserrat;">Aspect:</i> <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
                     <i style="font-style:normal; font-family:Montserrat;">Free invokes:</i> <input type="number" id="free_invokes" style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>{{/if}}
