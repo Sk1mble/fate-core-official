@@ -151,7 +151,7 @@
                         </td>
                     </tr>
                 {{#each this.actor.data.data.tracks}}
-                {{#if (eq ../../category this.category)}}{{#if this.enabled}}
+                {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
                     <td>
                         <div name="track_name" id="{{../this.id}}"" title="Click here to edit the track notes for {{this.name}}">{{this.name}}</div>
