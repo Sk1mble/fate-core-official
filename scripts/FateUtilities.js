@@ -482,8 +482,13 @@ async getData(){
     data.GMUsers = GMUsers;
 
     data.category=this.category;
- 
-    data.categories = game.settings.get("ModularFate","track_categories")
+    let categories = new Set();
+    for (let token of all_tokens){
+        for (let t in token.actor.data.data.tracks){
+            categories.add(token.actor.data.data.tracks[t].category);
+        }
+    }
+    data.categories = Array.from(categories);
     data.tokenAvatar = game.system.tokenAvatar;
     return data;
 }

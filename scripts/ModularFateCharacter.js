@@ -580,7 +580,13 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.gameSkillPoints = game.settings.get("ModularFate", "skillTotal")
         sheetData.GM = game.user.isGM;
 
-        let track_categories = game.settings.get("ModularFate", "track_categories");
+        let track_categories = this.object.data.data.tracks;
+        let cats = new Set();
+        for (let c in track_categories){
+            let cat = track_categories[c].category;
+            cats.add(cat);
+        }
+        track_categories=Array.from(cats);
         sheetData.category = this.track_category;
         sheetData.track_categories = track_categories;
         sheetData.tracks = this.object.data.data.tracks;
