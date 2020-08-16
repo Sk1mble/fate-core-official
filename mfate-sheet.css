@@ -1,0 +1,606 @@
+.sheet .window-content {
+    padding: 0;
+}
+
+.mfate-sheet {
+    display: grid;
+    grid-template-areas: "header header" "content content";
+    grid-template-rows: auto 1fr;
+    background: white;
+    width: 100%;
+    height: 100%;
+    border: none !important;
+    max-height: 100%;
+}
+
+.mfate-sheet *::-webkit-scrollbar-thumb {
+    background: #6793c5;
+    border: 1px solid #6793c5;
+}
+
+.mfate-sheet__header {
+    grid-area: header;
+}
+
+.mfate-sheet__tab--main {
+    /* display: grid;
+    grid-template-areas: "skills aspects" "skills stunts" "tracks stunts";
+    grid-template-rows: minmax(200px, 2fr) minmax(112px, 1fr) minmax(240px, 2fr);
+    grid-template-columns: 1fr 1fr; */
+    height: 100%;
+    column-gap: 6px;
+    row-gap: 6px;
+    margin: 0 6px;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.mfate-panel--skills {
+    /* grid-area: skills; */
+    /* flex: 1; */
+    max-height: 55%;
+    padding-right: 6px;
+}
+
+.mfate-panel--aspects {
+    /* grid-area: aspects; */
+    max-height: 40%;
+    padding-left: 6px;
+}
+
+.mfate-panel--tracks {
+    /* grid-area: tracks; */
+    min-height: 45%;
+    padding-right: 6px;
+}
+
+.mfate-panel--stunts {
+    /* grid-area: stunts; */
+    min-height: 60%;
+    padding-left: 6px;
+}
+
+.mfate-sheet .sheet-body {
+    flex: 1;
+    display: flex;
+    padding: 7px 0 14px;
+    min-height: 50vh;
+}
+
+.mfate-sheet .tab[data-tab].active {
+    /* display: grid; */
+    display: flex !important;
+}
+
+.sheet-body {
+    grid-area: content;
+    overflow: hidden;
+}
+
+
+/* .mfate-sheet { */
+
+
+/* display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: auto;
+    max-height: 100%;
+    min-width: 720px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background: white no-repeat url("../../../systems/ModularFate/assets/pbf.svg") bottom right;
+    background-size: 200px; */
+
+
+/* } */
+
+.mfate-sheet__header {
+    display: flex;
+    padding: 7px 7px 0;
+    /* background: lightgrey; */
+    box-shadow: inset 0px -1px 0 0 #ccc;
+}
+
+.mfate-sheet__identity-panel {
+    display: flex;
+    flex: 2;
+}
+
+.mfate-sheet__identity-avatar {
+    max-height: 100px;
+    width: auto;
+    border: 1px solid gray;
+}
+
+.mfate-sheet__identity-avatar[src="icons/svg/mystery-man.svg"] {
+    filter: invert(75%) hue-rotate(122deg);
+}
+
+.mfate-sheet__identity-name {
+    min-width: 120px;
+    border: 1px solid gray;
+    font-size: xx-large;
+    border: 0;
+    resize: none;
+    font-family: Montserrat;
+    font-weight: bold;
+    /* color: black; */
+    color: #185CAB;
+    /* text-shadow: 2px 2px 5px darkslategrey; */
+    height: auto;
+    max-height: 88px;
+    background: none;
+}
+
+.mfate-sheet__meta {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.mfate-sheet__meta-column {
+    display: table;
+    flex: 50%;
+    box-sizing: border-box;
+}
+
+.mfate-sheet__meta-item {
+    display: table-row;
+}
+
+.mfate-sheet__meta-label,
+.mfate-sheet__meta-value {
+    display: table-cell;
+    padding: 4px 6px;
+}
+
+.mfate-sheet__meta-label {
+    padding-left: 7px;
+    min-width: 100px;
+    max-width: 170px;
+}
+
+.mfate-sheet__meta-column+.mfate-sheet__meta-column .mfate-sheet__meta-label {
+    min-width: 120px;
+    max-width: 170px;
+}
+
+.mfate-sheet__meta-value {
+    width: 75px;
+    border: 1px solid gray;
+}
+
+.mfate-sheet__meta-value:hover {
+    border-color: lightsteelblue;
+}
+
+.mfate-sheet__meta-value[disabled] {
+    /* opacity: .5; */
+}
+
+.mfate-sheet__tabs {
+    flex: 1;
+}
+
+
+/* Tabs navigation */
+
+.mfate-sheet__tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.mfate-sheet__tabs-nav {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 3px;
+    /* box-shadow: inset 0px -1px 0 0 #ccc; */
+}
+
+.mfate-sheet__tabs-nav-item {}
+
+.mfate-sheet__tabs-nav-link {
+    border: 1px solid #ccc;
+    border-radius: 3px 3px 0 0;
+    margin-left: 3px;
+    background: white;
+}
+
+.mfate-sheet__tabs-nav-link:not(.active) {
+    box-shadow: inset 0px -6px 9px -6px #ccc;
+}
+
+.mfate-sheet__tabs-nav-link.active {
+    border-bottom: none;
+}
+
+.mfate-sheet__tabs-nav-icon {
+    font-size: 1.5em;
+    padding: 2px 1em 1px;
+    display: block;
+}
+
+
+/* Tabs */
+
+.mfate-sheet__tab {
+    flex: 1;
+    max-height: 70vh;
+}
+
+.mfate-sheet__tab--main {
+    /* flex: 1;
+    display: grid;
+    grid-template-areas: "skills aspects" "tracks stunts"; */
+    /* grid-template-rows: minmax(50%, 545px);
+    grid-template-columns: 1fr 1fr; */
+    /* grid-template-rows: minmax(50%, 545px) minmax(0, 1fr);
+    grid-template-columns: 1fr 1fr; */
+}
+
+.mfate-sheet__tab--secondary {
+    display: none;
+    flex-direction: column;
+    padding: 0 1em;
+}
+
+
+/*  Column */
+
+.mfate-sheet__column {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+}
+
+
+/* Panel */
+
+.mfate-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.mfate-panel__panel {
+    border: 1px solid gray;
+    display: flex;
+}
+
+.mfate-panel__header {
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 12px;
+    background: #185CAB;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    min-height: 30px;
+    margin-top: 0;
+    border-radius: 15px;
+    margin-top: 1em;
+}
+
+.mfate-panel__header-select {
+    font-family: Montserrat;
+    margin-right: 8px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+
+/* .mfate-panel__header::after {
+    content: "";
+    display: block;
+    background: #185CAB;
+    width: 100%;
+    height: 3px;
+} */
+
+
+/* .mfate-panel__header::after {
+    content: "";
+    display: block;
+    background: #185CAB;
+    position: absolute;
+    top: 0;
+    right: -20px;
+    bottom: 0;
+    left: 17px;
+    transform: skew(-40deg);
+} */
+
+.mfate-panel__body {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.mfate-panel__header-label {
+    font-size: 14pt;
+    font-family: Montserrat;
+    font-weight: bold;
+    margin: 0 .5em 0 0;
+    z-index: 1;
+    flex: 1;
+}
+
+.mfate-panel__header-button {
+    background: none;
+    border: none;
+    flex: 0;
+    font-size: medium;
+    padding-right: 8px;
+    z-index: 1;
+    color: rgba(255, 255, 255, .5);
+    cursor: pointer;
+}
+
+
+/* Skills list */
+
+.mfate-skills-list {
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: table;
+    width: 100%;
+    /* border: .5em solid transparent; */
+    /* padding: 0; */
+    padding: .5em;
+}
+
+.mfate-skills-list__item {
+    display: table-row;
+}
+
+.mfate-skills-list__number,
+.mfate-skills-list__adjective,
+.mfate-skills-list__skill-name {
+    display: table-cell;
+    border-bottom: 1px solid lightsteelblue;
+    padding: .3em .5em;
+}
+
+.mfate-skills-list__number {
+    width: 10px;
+}
+
+.mfate-skills-list__adjective {
+    width: 10px;
+}
+
+.mfate-skills-list__skill-name {
+    cursor: pointer;
+}
+
+
+/* Aspect list */
+
+.mfate-aspects-list {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 .5em;
+}
+
+.mfate-aspects-list__item {
+    list-style: none;
+    padding-bottom: .5em;
+}
+
+.mfate-aspects-list__label {
+    font-family: Montserrat;
+    font-weight: bold;
+}
+
+.mfate-aspects-list__description {
+    width: 100%;
+    overflow: hidden;
+    border: none;
+}
+
+.mfate-aspects-list__input {
+    font-size: 11px;
+    min-height:11px;
+    max-height:25px;
+}
+
+
+/* Tracks list */
+
+.mfate-tracks {
+    flex: 1;
+    overflow: auto;
+}
+
+.mfate-tracks__list {
+    display: table;
+    width: 100%;
+    padding-bottom: 1em;
+}
+
+.mfate-tracks__item {
+    display: table-row;
+    list-style: none;
+}
+
+.mfate-tracks__item+.mfate-tracks__item {
+    box-shadow: inset 0 1px lightsteelblue;
+}
+
+.mfate-tracks__item>* {
+    display: table-cell;
+}
+
+.mfate-tracks__item-label {
+    display: table-cell;
+    vertical-align: top;
+    padding: 8px 0;
+}
+
+.mfate-tracks__boxes {
+    padding-top: 8px;
+}
+
+.mfate-checkbox {
+    margin: 0;
+    display: flex-row;
+    float: left;
+    position: relative;
+    padding-left: 0px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.mfate-tracks {
+    overflow: hidden;
+    height: 100%;
+}
+
+#tracks_body {
+    padding: 0 .5em;
+    overflow-y: auto;
+}
+
+.tracks-block {
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.aspect_box.aspect_box {
+    float: none !important;
+    border: bottom 1px solid lightsteelblue, top none, left none, right, none !important;
+}
+
+
+/* Stunts */
+
+.stunts-block {
+    float: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    overflow-y: auto;
+}
+
+.mfate-stunts {}
+
+.mfate-stunts__body {
+    font-family: Montserrat;
+    scrollbar-width: thin;
+}
+
+.mfate-stunts__table {
+    background: white;
+    color: black;
+    border: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.mfate-stunts__row {
+    padding: 10px 0;
+    border-bottom: 1px solid lightsteelblue;
+}
+
+.mfate-stunts__row-header-cell {
+    font-weight: bold;
+    font-family: Montserrat;
+}
+
+.mfate-stunts__row-header-icon {
+    border: none;
+    background: white;
+    float: right;
+    width: 22px;
+    height: 22px;
+    padding: 4px;
+    margin: 0 2px;
+}
+
+.mfate-stunts__row-header-icon::before {
+    width: 22px;
+    height: 22px;
+}
+
+.mfate-stunts__row-body {
+    font-family: Montserrat;
+    font-size: 11px;
+    padding: 5px;
+}
+
+.mfate-stunts__row-footer {
+    padding: 0 5px;
+}
+
+.mfate-stunts__row-footer-cell {
+    font-family: Fate Core;
+    font-size: large;
+    /* padding-bottom: 20px; */
+}
+
+
+/* Secondary panel */
+
+.mfate-description__content,
+.mfate-biography__content,
+.mfate-extras__content {
+    margin: 10px;
+}
+
+.mfate-extras {
+    flex-direction: column;
+    flex: 1;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.mfate-extras__content {
+    overflow-y: auto;
+}
+
+.mfate-extras__content-body {
+    overflow-y: auto;
+    /* width: 800px; */
+    height: auto;
+    padding: 0 10px;
+}
+
+.fate-extras__row {
+    background: white;
+    color: black;
+    border: none;
+}
+
+.fate-extras__row-header {
+    font-weight: bold;
+    font-family: Montserrat
+}
+
+.fate-extras__row-header-button {
+    border: none;
+    background-color: white;
+    float: right;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+}
+
+.fate-extras__row-header-button::before {
+    width: 22px;
+    height: 22px;
+}
+
+.fate-extras__row-body {}
+
+.fate-extras__row-body-content {
+    padding-bottom: 20px;
+    font-family: Montserrat;
+}

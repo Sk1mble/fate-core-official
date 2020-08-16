@@ -1,3 +1,8 @@
+# Version 1.5.0
+  Added a new CSS file and default character sheet following significant work by Stargolum to refactor my inline styles etc. into something a lot more polished.
+  If you run into any problems with the new default sheet or you want to revert to the original sheet for any reason, you can use the 'default sheet' setting and point it to 
+  systems/ModularFate/templates/ModularFateSheet_legacy.html
+
 # Version 1.4.2
   Added a track filter on the character sheet so that the view can be restricted to a single cateogry or all tracks.
   Modified the track filter in FateUtilities so that it gives the option of viewing all tracks or tracks in a single category.

@@ -220,7 +220,8 @@ button:hover {
 
 .aspect_box {
   font-size:small !important; 
-  width:200px !important; 
+  min-width:100px !important;
+  max-width:200px !important; 
   margin-top:5px !important; 
   margin-bottom:5px !important; 
   border-style:solid !important; 
