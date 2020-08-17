@@ -571,8 +571,6 @@ export class ModularFateCharacter extends ActorSheet {
             skillTotal += ordered_skills[s].rank;
         }
 
-        //TODO: Functionality to separate the tracks by cateogry in the tracks window of the character sheet.
-
         sheetData.skillTotal = skillTotal;
         sheetData.refreshSpent = this.refreshSpent;
         sheetData.ladder = ModularFateConstants.getFateLadder();
