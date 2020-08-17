@@ -177,9 +177,9 @@
     border-color: lightsteelblue;
 }
 
-.mfate-sheet__meta-value[disabled] {
-    /* opacity: .5; */
-}
+/*.mfate-sheet__meta-value[disabled] {
+     opacity: .5; 
+}*/
 
 .mfate-sheet__tabs {
     flex: 1;
@@ -200,7 +200,7 @@
     /* box-shadow: inset 0px -1px 0 0 #ccc; */
 }
 
-.mfate-sheet__tabs-nav-item {}
+/*.mfate-sheet__tabs-nav-item {}*/
 
 .mfate-sheet__tabs-nav-link {
     border: 1px solid #ccc;
@@ -231,15 +231,15 @@
     max-height: 100vh;
 }
 
-.mfate-sheet__tab--main {
-    /* flex: 1;
+/*.mfate-sheet__tab--main {
+     flex: 1;
     display: grid;
     grid-template-areas: "skills aspects" "tracks stunts"; */
     /* grid-template-rows: minmax(50%, 545px);
     grid-template-columns: 1fr 1fr; */
     /* grid-template-rows: minmax(50%, 545px) minmax(0, 1fr);
-    grid-template-columns: 1fr 1fr; */
-}
+    grid-template-columns: 1fr 1fr; 
+}*/
 
 .mfate-sheet__tab--secondary {
     display: none;
@@ -489,7 +489,7 @@
     overflow-y: auto;
 }
 
-.mfate-stunts {}
+/*.mfate-stunts {}*/
 
 .mfate-stunts__body {
     font-family: Montserrat;
@@ -598,7 +598,7 @@
     height: 22px;
 }
 
-.fate-extras__row-body {}
+/*.fate-extras__row-body {}*/
 
 .fate-extras__row-body-content {
     padding-bottom: 20px;
