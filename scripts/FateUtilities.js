@@ -130,6 +130,9 @@ async _fu_roll_button(event, html){
         }
         roll.total -= oldDiceValue;
         roll.dice = r2.dice[0].values;
+        if (roll.dice == undefined){
+            roll.dice = r2.dice[0].rolls;
+        }
         roll.total += r2.total;
         roll.flavor+=`<br>Re-rolled with a free invoke`
         if (game.user.isGM){
@@ -190,6 +193,9 @@ async _fu_roll_button(event, html){
                 }
                 roll.total -= oldDiceValue;
                 roll.dice = r2.dice[0].values;
+                if (roll.dice == undefined){
+                    roll.dice = r2.dice[0].rolls;
+                }
                 roll.total += r2.total;
                 roll.flavor+=`<br>Used a Fate Point to re-roll`
                 await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
