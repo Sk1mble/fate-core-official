@@ -153,7 +153,7 @@ async _fu_roll_button(event, html){
 
         if (user.isGM){
             let fps = user.getFlag("ModularFate","gmfatepoints");
-            if (fps == 0){
+            if (fps == 0 || fps == undefined){
                 ui.notifications.error("No GM fate points available for an invoke")
             } else {
                 await user.setFlag("ModularFate","gmfatepoints",fps-1);
@@ -189,7 +189,7 @@ async _fu_roll_button(event, html){
 
         if (user.isGM){
             let fps = user.getFlag("ModularFate","gmfatepoints");
-            if (fps == 0){
+            if (fps == 0 || fps == undefined){
                 ui.notifications.error("No GM fate points available for an invoke")
             } else {
                 await user.setFlag("ModularFate","gmfatepoints",fps-1);
