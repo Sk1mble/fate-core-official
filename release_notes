@@ -1,3 +1,11 @@
+# Version 1.6.0
+  Added a new tool to FateUtilities; a roll log. This tool captures all rolls made on the actively viewed scene (caveat: for a player's roll to be captured, a GM user must be logged in)
+  The GM can clear all rolls.
+  The owner of the character that made a roll (and therefore the GM) can modify the roll with a +1 (for teamwork), +2 from a free invoke, +2 from a fate point, or a reroll from a free invoke or a fate point.
+  These changes are then logged to the roll in the FateUtilities roll viewer.
+  This utility works by capturing any 4dF roll made that goes to the chat log.
+  Because the customised roll information is stored in scene flags, the data can't be updated by players. That's why a GM has to be logged in; a socket request is sent from the player to an active GM to make the change to the roll log.
+
 # Version 1.5.0
   Added a new CSS file and default character sheet following significant work by Stargolum to refactor my inline styles etc. into something a lot more polished.
   If you run into any problems with the new default sheet or you want to revert to the original sheet for any reason, you can use the 'default sheet' setting and point it to 
