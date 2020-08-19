@@ -11,6 +11,7 @@ Hooks.once('init', async function () {
         type: Object
     });
     //Initialise the setting if it is currently empty.
+    console.log("About to initialise")
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","skills"))){
         game.settings.set("ModularFate","skills",{});
     }
@@ -75,9 +76,11 @@ Hooks.once('init', async function () {
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
+                console.log(value);
                 if (value == "fateCore"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",ModularFateConstants.getFateCoreDefaultSkills());
+                        game.settings.set("ModularFate","defaultSkills","nothing");
                     }
                 }
                 if (value=="clearAll"){
@@ -88,22 +91,20 @@ Hooks.once('init', async function () {
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
                         game.settings.set("ModularFate","skills",ModularFateConstants.getFateCondensedDefaultSkills());
+                        game.settings.set("ModularFate","defaultSkills","nothing");
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",ModularFateConstants.getFateAcceleratedDefaultSkills());
+                        game.settings.set("ModularFate","defaultSkills","nothing");
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",ModularFateConstants.getDFASkills());
+                        game.settings.set("ModularFate","defaultSkills","nothing");
                     }
-                }
-                //This menu only does something when changed, so set back to 'nothing' to avoid
-                //confusing or worrying the GM next time they open this menu.
-                if (game.user.isGM){ 
-                    game.settings.set("ModularFate","defaultSkills","nothing");
                 }
             }
     });

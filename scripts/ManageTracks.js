@@ -59,33 +59,33 @@ Hooks.once('init',async function(){
                 if (value == "fateCore"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","tracks",ModularFateConstants.getFateCoreTracks());
+                        game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","tracks",{});
+                        game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","tracks",ModularFateConstants.getFateCondensedTracks());
+                        game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","tracks",ModularFateConstants.getFateAcceleratedTracks());
+                        game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","tracks",ModularFateConstants.getDFAtracks());
                         game.settings.set("ModularFate","track_categories",ModularFateConstants.getDFATrackCategories());
+                        game.settings.set("ModularFate","defaultTracks","nothing");
                     }
-                }
-                //This menu only does something when changed, so set back to 'nothing' to avoid
-                //confusing or worrying the GM next time they open this menu.
-                if (game.user.isGM){
-                    game.settings.set("ModularFate","defaultTracks","nothing");
                 }
             }
     });

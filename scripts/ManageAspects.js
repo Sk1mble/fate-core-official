@@ -42,35 +42,36 @@ Hooks.once('init', async function () {
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
+                console.log(value);
                 if (value == "fateCore"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCoreAspects());
+                        game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
                 if (value == "fateCondensed"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCondensedAspects());
+                        game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","aspects",{});
+                        game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","aspects",ModularFateConstants.getFateAcceleratedAspects());
+                        game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","aspects",ModularFateConstants.getDFAAspects());
+                        game.settings.set("ModularFate","defaultAspects","nothing");
                     }
-                }
-                //This menu only does something when changed, so set back to 'nothing' to avoid
-                //confusing or worrying the GM next time they open this menu.
-                if (game.user.isGM){
-                    game.settings.set("ModularFate","defaultAspects","nothing");
                 }
             }
     });

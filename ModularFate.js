@@ -293,7 +293,7 @@ Hooks.once('init', async function () {
 
     //Initialise the setting if it is currently empty.
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","stunts"))){
-        game.settings.set("ModularFate","skills",{});
+        game.settings.set("ModularFate","stunts",{});
     }
 
     game.settings.register("ModularFate", "run_once", {
