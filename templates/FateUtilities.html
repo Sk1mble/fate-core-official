@@ -3,6 +3,7 @@
     <a class="item fu_item_1" data-tab="aspects"><b title="Aspects & Fate Points" i icon class="fas fa-theater-masks"></b></a>
     <a class="item fu_item_2" data-tab="tracks"><b title="Character Tracks" i icon class="fas fa-user-injured"></b></a>
     <a class="item fu_item_3" data-tab="scene"><b title="Scene Notes & Situation Aspects" i icon class="fas fa-book"></b></a>                
+    <a class="item fu_item_4" data-tab="rolls"><b title="Roll History" i icon class="fas fa-dice"></b></a>                
 </nav>
 <table style="border:none; margin:0px;">
 <tr>
@@ -206,6 +207,96 @@
                     </div>                
             </div><!--End Scene tab---------------------------------------------------->
             <!----------------------------------------------------------------------END SCENE TAB-->
+
+             <!----------------------BEGIN Roll History Tab-->
+             <div name = "rolls" class="tab rolls" data-tab="rolls" style="background-color:lightgray; font-family:Montserrat; padding-top:10px">
+                {{#if GM}}<button type="button" id="fu_clear_rolls">Clear all rolls in this scene</button>{{/if}}
+                <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:800px">
+                <table style="background:none">
+                <tr>
+                    <th style="border:1px solid black; font-weight:bold">
+                        Character
+                    </th>
+                    <th style="border:1px solid black; font-weight:bold">
+                        Description
+                    </th>
+                    <th style="border:1px solid black; font-weight:bold">
+                        Dice
+                    </th>   
+                    <th style="border:1px solid black; font-weight:bold">
+                        Total
+                    </th>
+                    <th style="border:1px solid black; font-weight:bold">
+                        Roll Actions
+                    </th>
+                </tr>
+                {{#each rolls}}
+                <tr>
+                    <td style="border:1px solid black; width:120px">
+                        {{this.speaker}}
+                    </td>
+                    <td style="border:1px solid black; border:1px solid black;">
+                        {{{this.flavor}}}
+                    </td>
+                    <td style="font-size:large; text-align:center; border:1px solid black;">
+                        {{#each this.dice}}
+                            {{#if (eq this 1)}}
+                                <i icon class="fas fa-plus-square"/>
+                            {{/if}}
+                            {{#if (eq this -1)}}
+                                <i icon class="fas fa-minus-square"/>
+                            {{/if}}
+                            {{#if (eq this 0)}}
+                                <i icon class="fas fa-square"/>
+                            {{/if}}
+                        {{/each}}
+                    </td>
+                    <td style="border:1px solid black; text-align:center">
+                        {{this.total}}
+                    </td>
+                    <td style="border:1px solid black; text-align:center">
+                        {{#if ../GM}}
+                            <table style="background:none; border:none">
+                                <tr><th>Free Actions</th>
+                                    <th>Fate Point Actions</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus1" style="width:35px; height:35px" title="Add +1 (Usually from teamwork)">+1</button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="Add +2 with a Free Invoke" i icon class="fas fa-plus"></button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="Reroll with a Free Invoke" i icon class="fas fa-dice"></button>
+                                        </td>
+                                        <td>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2fp" style="width:35px; height:35px" title="Add +2 with a Fate Point" i icon class="fas fa-plus"></button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_rerollfp" style="width:35px; height:35px" title="Reroll with a Fate Point" i icon class="fas fa-dice"></button>
+                                        </td>
+                                    </tr>
+                            </table>
+                        {{/if}}
+                        {{#if (eq this.user._id ../user._id)}}{{#if ../GM}}{{else}}
+                        <table style="background:none; border:none">
+                            <tr><th>Free Actions</th>
+                                <th>Fate Point Actions</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button type="button" name="fu_roll_button"  id="roll_{{@key}}_plus1" style="width:35px; height:35px" title="Add +1 (Usually from teamwork)">+1</button>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="Add +2 with a Free Invoke" i icon class="fas fa-plus"></button>
+                                        <button type="button" name="fu_roll_button"  id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="Reroll with a Free Invoke" i icon class="fas fa-dice"></button>
+                                    </td>
+                                    <td>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2fp" style="width:35px; height:35px" title="Add +2 with a Fate Point" i icon class="fas fa-plus"></button>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_rerollfp" style="width:35px; height:35px" title="Reroll with a Fate Point" i icon class="fas fa-dice"></button>
+                                    </td>
+                                </tr>
+                        </table>
+                        {{/if}}{{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+                </table>
+             </div><!--End rolls tab-->
+             </div><!--End rolls body-->
 
         </section>
     </td>

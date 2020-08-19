@@ -131,7 +131,7 @@ Hooks.once('ready', async function () {
         //Elements is an object containing the data to be shown, which can be: avatar, aspects, tracks, bio, 
         //description, skills, stunts, extras
         let myId=game.users.current.id;
-        if (data.players.find(player => player._id == myId)!=undefined){
+        if (data.players != undefined && data.players.find(player => player._id == myId)!=undefined){
             let cv = new CharacterView(data.elements);
             cv.render(true);
         }
