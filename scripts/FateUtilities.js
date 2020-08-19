@@ -171,7 +171,11 @@ async _fu_roll_button(event, html){
                     await char.update({"data.details.fatePoints.current":fps-1})
                     roll.total+=2;
                     roll.flavor+=`<br>Used a Fate Point to add +2 after rolling`
-                    await game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                    if (game.user.isGM){
+                        await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                    } else {
+                        await game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                    }
                 }
             } else {
                 ui.notifications.error("You're not currently controlling that character")
