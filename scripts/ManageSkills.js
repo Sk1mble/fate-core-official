@@ -11,7 +11,6 @@ Hooks.once('init', async function () {
         type: Object
     });
     //Initialise the setting if it is currently empty.
-    console.log("About to initialise")
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","skills"))){
         game.settings.set("ModularFate","skills",{});
     }

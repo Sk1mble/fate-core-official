@@ -131,7 +131,11 @@ async _fu_roll_button(event, html){
         roll.total -= oldDiceValue;
         roll.dice = r2.dice[0].values;
         if (roll.dice == undefined){
-            roll.dice = r2.dice[0].rolls;
+            let d = r2.dice[0].rolls;
+            roll.dice = [];
+            for (let i=0; i< d.length; i++){
+                roll.dice.push(d[i].roll)
+            }
         }
         roll.total += r2.total;
         roll.flavor+=`<br>Re-rolled with a free invoke`
@@ -194,7 +198,11 @@ async _fu_roll_button(event, html){
                 roll.total -= oldDiceValue;
                 roll.dice = r2.dice[0].values;
                 if (roll.dice == undefined){
-                    roll.dice = r2.dice[0].rolls;
+                    let d = r2.dice[0].rolls;
+                    roll.dice = [];
+                    for (let i=0; i< d.length; i++){
+                        roll.dice.push(d[i].roll)
+                    }
                 }
                 roll.total += r2.total;
                 roll.flavor+=`<br>Used a Fate Point to re-roll`
@@ -834,7 +842,11 @@ Hooks.on('createChatMessage', (message) => {
             let dice ="";
             let diceResult = message.roll.dice[0].values;
             if (diceResult == undefined){
-                diceResult = message.roll.dice[0].rolls;
+                let d = message.roll.dice[0].rolls;
+                diceResult = [];
+                for (let i=0; i< d.length; i++){
+                    diceResult.push(d[i].roll)
+                }
             }
             let user = message.user;
         
