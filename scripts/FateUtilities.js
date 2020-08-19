@@ -818,7 +818,7 @@ Hooks.on('renderCombatTracker', () => {
 Hooks.on('createChatMessage', (message) => {
     if (message.data.roll != undefined){
         let roll = JSON.parse(message.data.roll)
-        if (roll.formula.startsWith("4df")){
+        if (roll.formula.startsWith("4df") || roll.formula.startsWith("4dF")){
             //We're not interested in it unless it's a Fate roll.
             //If it is, we want to add this to the array of rolls in the scene's flags.
             let speaker = message.data.speaker.alias;
@@ -827,6 +827,9 @@ Hooks.on('createChatMessage', (message) => {
             let total = roll.total;
             let dice ="";
             let diceResult = message.roll.dice[0].values;
+            if (diceResult == undefined){
+                diceResult = message.roll.dice[0].rolls;
+            }
             let user = message.user;
         
             let rolls = game.scenes.viewed.getFlag("ModularFate","rolls");
