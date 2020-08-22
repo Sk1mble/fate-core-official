@@ -151,7 +151,10 @@ export class ModularFateCharacter extends ActorSheet {
         let skill = items[1];
         let bonus = parseInt(items[2]);
 
-       
+        let ladder = ModularFateConstants.getFateLadder();
+        let rank = this.object.data.data.skills[skill].rank
+        let rankS = rank.toString();
+        let rung = ladder[rankS];
 
         let r = new Roll(`4dF + ${rank}+${bonus}`);
         let roll = r.roll();
