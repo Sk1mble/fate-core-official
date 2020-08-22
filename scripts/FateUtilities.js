@@ -100,7 +100,7 @@ async _fu_roll_button(event, html){
     
     if (action == "plus1"){
         roll.total+=1;
-        roll.flavor+=`<br>Added +1 after rolling`
+        roll.flavor+=`<br>Added Bonus: +1`
         if (game.user.isGM){
             await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
         } else {
@@ -111,7 +111,7 @@ async _fu_roll_button(event, html){
 
     if (action == "plus2free"){
         roll.total+=2;
-        roll.flavor+=`<br>Used a free invoke to add +2 after rolling`
+        roll.flavor+=`<br>Free Invoke: +2`
         if (game.user.isGM){ 
             await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
         }
@@ -138,7 +138,7 @@ async _fu_roll_button(event, html){
             }
         }
         roll.total += r2.total;
-        roll.flavor+=`<br>Re-rolled with a free invoke`
+        roll.flavor+=`<br>Free Invoke: Reroll`
         if (game.user.isGM){
             await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
         } else {
@@ -158,7 +158,7 @@ async _fu_roll_button(event, html){
             } else {
                 await user.setFlag("ModularFate","gmfatepoints",fps-1);
                 roll.total+=2;
-                roll.flavor+=`<br>Used a Fate Point to add +2 after rolling`
+                roll.flavor+=`<br>Paid Invoke: +2`
                 await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
             }
         } else {
@@ -170,7 +170,7 @@ async _fu_roll_button(event, html){
                 } else {
                     await char.update({"data.details.fatePoints.current":fps-1})
                     roll.total+=2;
-                    roll.flavor+=`<br>Used a Fate Point to add +2 after rolling`
+                    roll.flavor+=`<br>Paid Invoke: +2`
                     if (game.user.isGM){
                         await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
                     } else {
@@ -209,7 +209,7 @@ async _fu_roll_button(event, html){
                     }
                 }
                 roll.total += r2.total;
-                roll.flavor+=`<br>Used a Fate Point to re-roll`
+                roll.flavor+=`<br>Paid Invoke: Reroll`
                 await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
             }
         } else {
@@ -220,7 +220,7 @@ async _fu_roll_button(event, html){
                     ui.notifications.error("No fate points available for an invoke")
                 } else {
                     await char.update({"data.details.fatePoints.current":fps-1})
-                    roll.flavor+=`<br>Used a Fate Point to re-roll`
+                    roll.flavor+=`<br>Paid Invoke: Reroll`
                     let r = new Roll ("4dF");
                     let r2 = r.roll();
                     let oldDiceValue = 0;
@@ -438,6 +438,9 @@ async _roll(event,html){
         skill = sk.value.split("(")[0].trim();
     }
     let rank = token.actor.data.data.skills[skill].rank;
+    let ladder = ModularFateConstants.getFateLadder();
+    let rankS = rank.toString();
+    let rung = ladder[rankS];
 
     if (event.shiftKey && !sk.value.startsWith("stunt")) {
             let mrd = new ModifiedRollDialog (token.actor, skill);
@@ -454,9 +457,12 @@ async _roll(event,html){
 
             let flavour;
             if (stunt != undefined){
-                flavour = `<h1>${skill}</h1>With stunt "${stunt}".<br>Rolled by ${name}`
+                flavor = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+                            Skill rank: ${rank} (${rung})<br> 
+                            Stunt: ${name} (+${bonus})`
             } else {
-                flavour = `<h1>${skill}</h1>Rolled by ${name}`;
+                flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+                            Skill rank: ${rank} (${rung})`;
             }
 
             roll.toMessage({

@@ -151,14 +151,18 @@ export class ModularFateCharacter extends ActorSheet {
         let skill = items[1];
         let bonus = parseInt(items[2]);
 
-        let r = new Roll(`4dF + ${this.object.data.data.skills[skill].rank}+${bonus}`);
+       
+
+        let r = new Roll(`4dF + ${rank}+${bonus}`);
         let roll = r.roll();
 
         let msg = ChatMessage.getSpeaker(this.object.actor)
         msg.alias = this.object.name;
 
         roll.toMessage({
-            flavor: `<h1>${skill}</h1>With stunt "${name}".<br> Rolled by ${game.user.name}`,
+            flavor: `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+            Skill rank: ${rank} (${rung})<br> 
+            Stunt: ${name} (+${bonus})`,
             speaker: msg
         });
     }
@@ -298,14 +302,20 @@ export class ModularFateCharacter extends ActorSheet {
             mrd.render(true);
         }
         else {
-            let r = new Roll(`4dF + ${this.object.data.data.skills[event.target.id].rank}`);
+            let skill = this.object.data.data.skills[event.target.id];
+            let rank = skill.rank;
+            let r = new Roll(`4dF + ${rank}`);
+            let ladder = ModularFateConstants.getFateLadder();
+            let rankS = rank.toString();
+            let rung = ladder[rankS];
             let roll = r.roll();
 
             let msg = ChatMessage.getSpeaker(this.object.actor)
             msg.alias = this.object.name;
 
             roll.toMessage({
-                flavor: `<h1>${event.target.id}</h1>Rolled by ${game.user.name}`,
+                flavor: `<h1>${skill.name}</h1>Rolled by: ${game.user.name}<br>
+                    Skill rank: ${rank} (${rung})`,
                 speaker: msg
             });
         }

@@ -70,10 +70,9 @@ class ModifiedRollDialog extends Application {
 
         let ladder = ModularFateConstants.getFateLadder();
         let rs = ladder[`${skill_rank.toString()}`];
-
         roll.toMessage({
-            flavor: `<h1>${event.target.id}</h1>Rolled by ${game.user.name}<br>
-            Skill: ${this.skill_name} at rank ${skill_rank} (${rs})<br>
+            flavor: `<h1>${this.skill_name}</h1>Rolled by: ${game.user.name}<br>
+            Skill Rank: ${skill_rank} (${rs})<br>
             ${modifier_text}
             ${stunt_text}
             ${second_skill_text}`,
