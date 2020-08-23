@@ -906,6 +906,8 @@ async function updateRolls (rolls) {
         }
         currRolls = duplicate(currRolls);
         let endRolls = mergeObject(currRolls, rolls.rolls);
-        await scene.setFlag("ModularFate","rolls",endRolls);
+        if (user.isGM){
+            await scene.setFlag("ModularFate","rolls",endRolls);
+        }
     }
 }
