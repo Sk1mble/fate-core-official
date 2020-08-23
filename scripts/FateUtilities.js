@@ -892,9 +892,11 @@ Hooks.on('createChatMessage', (message) => {
 })
 
 Hooks.once('ready', async function () {
-    game.socket.on("system.ModularFate", rolls => {
-        updateRolls(rolls);
-    })
+    if (game.user.isGM){
+        game.socket.on("system.ModularFate", rolls => {
+            updateRolls(rolls);
+        })
+    }
 })
 
 async function updateRolls (rolls) {
@@ -906,8 +908,6 @@ async function updateRolls (rolls) {
         }
         currRolls = duplicate(currRolls);
         let endRolls = mergeObject(currRolls, rolls.rolls);
-        if (user.isGM){
             await scene.setFlag("ModularFate","rolls",endRolls);
-        }
     }
 }
