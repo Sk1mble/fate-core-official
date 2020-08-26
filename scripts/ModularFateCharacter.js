@@ -4,6 +4,10 @@ Handlebars.registerHelper("add1", function(value) {
     return value+1;
 });
 
+Handlebars.registerHelper("str", function(value) {
+    return JSON.stringify(value);
+});
+
 Handlebars.registerHelper("category", function(category1, category2) {
     if (category1 == "All" || category1 == category2){
         return true;
@@ -124,8 +128,26 @@ export class ModularFateCharacter extends ActorSheet {
 
             const cat_select = html.find("select[id='track_category']");
             cat_select.on("change", event => this._cat_select_change (event, html));
+
+            const item = html.find("div[name='item_header']");
+            item.on("dragstart", event => this._on_item_drag (event, html));
+
         }
         super.activateListeners(html);
+    }
+
+    async _on_item_drag (event, html){
+        let info = event.target.id.split("_");
+        let item_id = info[1];
+        let actor_id = info[0];
+        let item = JSON.parse(event.target.getAttribute("data-item"));
+        let data = {
+            "type":"Item",
+                    "id":item_id,
+                    "actorId":actor_id,
+                    "data":item
+                }
+        await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
     }
 
     async _cat_select_change (event, html){

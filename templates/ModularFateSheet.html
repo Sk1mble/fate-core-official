@@ -275,8 +275,7 @@
                     <div class="fate-extras__content-body" name="extras_body">
                         <div class="fate-extras__row">
                             {{#each items}}
-
-                            <div class="fate-extras__row-header">
+                            <div name="item_header" draggable="true" id="{{../this.actor._id}}_{{this._id}}" data-item="{{str this}}">
                                 {{{this.name}}}
                                 <button i icon class="fas fa-trash fate-extras__row-header-button" type="button" name="delete_extra" id="{{this._id}}"></button>
                                 <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button" id="{{this._id}}"></button>
