@@ -1,3 +1,7 @@
+# Version 1.6.2
+  You can now drag and drop an Extra from the character on to a Pick Up Stix chest or another character sheet, compendium, or item list. 
+  This will remove it from the character sheet if dragged to pick up stix or another character sheet. but will NOT delete the item if dragged to a compendium or the item list.
+
 # Version 1.6.0
   Added a new tool to FateUtilities; a roll log. This tool captures all rolls made on the actively viewed scene (caveat: for a player's roll to be captured, a GM user must be logged in)
   The GM can clear all rolls.
