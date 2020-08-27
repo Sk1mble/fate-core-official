@@ -1,5 +1,9 @@
 <form class="contenteditable" onsubmit="event.preventDefault();" style="background-color:white">
-	<table style="border:none; background-color:white">
+		<table style="border:none; background-color:white">
+			<tr>
+				<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Artwork:</td>
+				<td style="width:75%"><img class="mfate-sheet__identity-avatar profile-img" width="100" height="auto" style="border:0" id="avatar" data-edit="img" src="{{this.item.img}}"></img></td>
+			 </tr>		
 		 <tr>
 			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Name:</td>
 			<td style="width:75%"><textarea rows="2" name="name" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{this.entity.name}}</textarea></td>
