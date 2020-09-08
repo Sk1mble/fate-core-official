@@ -35,7 +35,7 @@
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
-                            <select id="{{this.id}}_selectSkill" style="max-width:100px">
+                            <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
                                 <option disabled="disabled" selected="selected">Pick a skill</option>
                                 {{#each this.actor.data.data.skills}}
                                 <option>{{this.name}} ({{this.rank}})</option>
@@ -43,7 +43,7 @@
                                 {{#each this.actor.data.data.stunts}}
                                 {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">Stunt: {{this.name}} ({{this.linked_skill}} +{{this.bonus}})</option>{{/if}}
                                 {{/each}}
-                            </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
+                            </select>
                             {{/if}}
                             {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
                         </td>
@@ -72,7 +72,7 @@
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
-                            <select id="{{this.id}}_selectSkill" style="max-width:100px">
+                            <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
                                 <option disabled="disabled" selected="selected">Pick a skill</option>
                                 {{#each this.actor.data.data.skills}}
                                 <option>{{this.name}} ({{this.rank}})</option>
@@ -80,7 +80,7 @@
                                 {{#each this.actor.data.data.stunts}}
                                 {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">Stunt: {{this.name}} ({{this.linked_skill}}: +{{this.bonus}})</option>{{/if}}
                                 {{/each}}
-                            </select><button type="button" name="roll" id="{{this.id}}" style="width:30px; height:30px" i icon class = "fas fa-dice"></button>
+                            </select>
                             {{/if}}
                             {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> Fate Points{{/if}}
                         </td>

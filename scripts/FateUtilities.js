@@ -120,6 +120,72 @@ activateListeners(html) {
 
     const fu_roll_button = html.find("button[name='fu_roll_button']");
     fu_roll_button.on("click",event => this._fu_roll_button(event, html));
+
+    const select = html.find("select[class='skill_select']");
+    select.on("focus", event => {
+        this.selectingSkill = true;
+    });
+
+    select.on("change", event => this._selectRoll (event, html));
+
+    select.on("focusout", event => {
+        this.selectingSkill = false;
+        this.render(false);
+    })
+}
+
+async _selectRoll (event, html){
+    let t_id = event.target.id.split("_")[0]
+    let token = canvas.tokens.placeables.find(t => t.id==t_id);
+    
+    let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
+    let skill;
+    let stunt = undefined;
+    let bonus=0;
+
+    if (sk.value.startsWith("stunt")){
+        let items = sk.value.split("_");
+        stunt=items[1]
+        skill = items[2]
+        bonus = parseInt(items[3]);
+    } else {
+        skill = sk.value.split("(")[0].trim();
+    }
+    let rank = token.actor.data.data.skills[skill].rank;
+    let ladder = ModularFateConstants.getFateLadder();
+    let rankS = rank.toString();
+    let rung = ladder[rankS];
+
+    if (event.shiftKey && !sk.value.startsWith("stunt")) {
+            let mrd = new ModifiedRollDialog (token.actor, skill);
+            mrd.render(true);
+    } else {
+        let r;
+        if (bonus >0){
+            r = new Roll(`4dF + ${rank}+${bonus}`);    
+        } else {
+            r = new Roll(`4dF + ${rank}`);
+        }
+            let roll = r.roll();
+            let name = game.user.name
+
+            let flavour;
+            if (stunt != undefined){
+                flavor = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+                            Skill rank: ${rank} (${rung})<br> 
+                            Stunt: ${name} (+${bonus})`
+            } else {
+                flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+                            Skill rank: ${rank} (${rung})`;
+            }
+
+            roll.toMessage({
+                flavor: flavour,
+                speaker: ChatMessage.getSpeaker(token),
+            });
+    }
+    this.selectingSkill = false;
+    this.render(false);
 }
 
 async _notesFocusOut(event, html){
@@ -457,58 +523,6 @@ async _clear_fleeting(event, html){
     }
 }
 
-async _roll(event,html){
-    let t_id = event.target.id;
-    let token = canvas.tokens.placeables.find(t => t.id==t_id);
-    
-    let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
-    let skill;
-    let stunt = undefined;
-    let bonus=0;
-
-    if (sk.value.startsWith("stunt")){
-        let items = sk.value.split("_");
-        stunt=items[1]
-        skill = items[2]
-        bonus = parseInt(items[3]);
-    } else {
-        skill = sk.value.split("(")[0].trim();
-    }
-    let rank = token.actor.data.data.skills[skill].rank;
-    let ladder = ModularFateConstants.getFateLadder();
-    let rankS = rank.toString();
-    let rung = ladder[rankS];
-
-    if (event.shiftKey && !sk.value.startsWith("stunt")) {
-            let mrd = new ModifiedRollDialog (token.actor, skill);
-            mrd.render(true);
-    } else {
-        let r;
-        if (bonus >0){
-            r = new Roll(`4dF + ${rank}+${bonus}`);    
-        } else {
-            r = new Roll(`4dF + ${rank}`);
-        }
-            let roll = r.roll();
-            let name = game.user.name
-
-            let flavour;
-            if (stunt != undefined){
-                flavor = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
-                            Skill rank: ${rank} (${rung})<br> 
-                            Stunt: ${name} (+${bonus})`
-            } else {
-                flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
-                            Skill rank: ${rank} (${rung})`;
-            }
-
-            roll.toMessage({
-                flavor: flavour,
-                speaker: ChatMessage.getSpeaker(token),
-            });
-    }
-}
-
 async _on_aspect_change(event, html){
     let id = event.target.id;
     let parts = id.split("_");
@@ -707,7 +721,7 @@ async getData(){
 }
 
 async render (...args){
-    if (this.editing == false && (this.editingAspect == false || this.editingAspect == undefined)){
+    if (this.editing == false && (this.editingAspect == false || this.editingAspect == undefined) && (this.selectingSkill == false || this.selectingSkill == undefined)){
         super.render(...args);
     } else {
         this.renderBanked = true;
