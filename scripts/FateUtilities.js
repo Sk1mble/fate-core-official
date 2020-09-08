@@ -171,9 +171,9 @@ async _selectRoll (event, html){
 
             let flavour;
             if (stunt != undefined){
-                flavor = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+                flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
                             Skill rank: ${rank} (${rung})<br> 
-                            Stunt: ${name} (+${bonus})`
+                            Stunt: ${stunt} (+${bonus})`
             } else {
                 flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
                             Skill rank: ${rank} (${rung})`;
