@@ -30,8 +30,11 @@ activateListeners(html) {
         }
     });
     input.on("focusout", event => {
+        if (event.target.id == "sit_aspect"){
+            this.editingAspect = true;
+         }
         this.editing = false; 
-        if (this.renderBanked){
+        if (this.renderBanked && this.editingAspect == false){
             this.renderBanked = false;
             this.render(false);
         }
@@ -438,6 +441,8 @@ async _add_sit_aspect(event, html){
     }                                
     situation_aspects.push(situation_aspect);
     await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+    this.editingAspect = false;
+    this.render(false);
 }
 
 async _saveNotes(event, html){
@@ -702,11 +707,10 @@ async getData(){
 }
 
 async render (...args){
-    if (this.editing == false){
+    if (this.editing == false && (this.editingAspect == false || this.editingAspect == undefined)){
         super.render(...args);
     } else {
         this.renderBanked = true;
-        console.log(this.renderBanked)
     }
 }
 

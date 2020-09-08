@@ -351,6 +351,5 @@ Hooks.once('init', async function () {
     if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
             game.settings.set("ModularFate","refreshTotal",3);
     }
-    
     //Register a setting for the game's Issues?
 });
