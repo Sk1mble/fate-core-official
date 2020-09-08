@@ -25,7 +25,7 @@
 	"minimumCoreVersion": "0.7.2",
 	"compatibleCoreVersion": "0.7.2",
 	"url": "https://github.com/Sk1mble/modularFate",
-	"manifest": "https://raw.githubusercontent.com/Sk1mble/modularFate/master/system.json",
-	"download": "https://github.com/Sk1mble/modularFate/archive/master.zip",
+	"manifest": "https://raw.githubusercontent.com/Sk1mble/modularFate/0.7.2-Compatible/system.json",
+	"download": "https://github.com/Sk1mble/modularFate/archive/0.7.2-Compatible.zip",
 	"socket":true
 }
