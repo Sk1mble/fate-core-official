@@ -1,3 +1,6 @@
+# Version 1.6.3
+  This is a new branch which is compatible with Foundry 0.7.2. So far the only change is to remove the deprecated isPlayer check in favour of hasPlayerOwner.
+
 # Version 1.6.2
   You can now drag and drop an Extra from the character on to a Pick Up Stix chest or another character sheet, compendium, or item list. 
   This will remove it from the character sheet if dragged to pick up stix or another character sheet. but will NOT delete the item if dragged to a compendium or the item list.

@@ -67,7 +67,7 @@ activateListeners(html) {
 
     const scene_notes = html.find("div[id='scene_notes']");
     scene_notes.on("input", event => this.scene_notes_edit(event, html));
-    scene_notes.on("focusout", event => this.editingSceneNotes = false);
+    scene_notes.on("focusout", event => { this.editingSceneNotes = false; this.render(false)});
 
     const nav = html.find("nav[class='navigation foo']");
     nav.on("click", event => this.render(false));
