@@ -113,11 +113,11 @@ export class ModularFateCharacter extends ActorSheet {
             tracks_button.on("click", event => this._onTracks_click(event, html));
 
             const bio = html.find(`div[id='${this.object.id}_biography']`)
-            bio.on("input",event => this._onBioInput(event, html));
+            bio.on("focus",event => this._onBioInput(event, html));
             const desc = html.find(`div[id='${this.object.id}_description']`)
-            desc.on("input",event => this._onDescInput(event, html));
-            bio.on("focusout", event => this._onFocusOut(event, html));
-            desc.on("focusout", event => this._onFocusOut(event, html));
+            desc.on("focus",event => this._onDescInput(event, html));
+            bio.on("focusout", event => this._onBioFocusOut(event, html));
+            desc.on("focusout", event => this._onDescFocusOut(event, html));
 
             const stunt_roll = html.find("button[name='stunt_name']");
             stunt_roll.on("click", event => this._on_stunt_roll_click(event,html));
@@ -134,6 +134,34 @@ export class ModularFateCharacter extends ActorSheet {
             const item = html.find("div[name='item_header']");
             item.on("dragstart", event => this._on_item_drag (event, html));
 
+            const input = html.find("input");
+            const textarea = html.find("textarea");
+
+            input.on("focus", event => {
+                if (this.editing == false) {
+                    this.editing = true;
+                }
+            });
+            input.on("focusout", event => {
+                this.editing = false
+                if (this.renderBanked){
+                    this.renderBanked = false;
+                    this.render(false);
+                }
+            });
+
+            textarea.on("focus", event => {
+                if (this.editing == false) {
+                    this.editing = true;
+                }
+            });
+            textarea.on("focusout", event => {
+                this.editing = false;
+                if (this.renderBanked){
+                    this.renderBanked = false;
+                    this.render(false);
+                }
+            });
         }
         super.activateListeners(html);
     }
@@ -194,27 +222,33 @@ export class ModularFateCharacter extends ActorSheet {
         });
     }
 
-    async _onFocusOut (event, html){
+    async _onBioFocusOut (event, html){
         this.editing = false;
+        let bio = event.target.innerHTML;
+        await this.object.update({"data.details.biography.value":bio})
+        this.render(false);
+    }
+
+    async _onDescFocusOut (event, html){
+        this.editing = false;
+        let desc = event.target.innerHTML;
+        await this.object.update({"data.details.description.value":desc})
         this.render(false);
     }
 
     async _onBioInput(event, html){
         this.editing = true;
-        let bio = event.target.innerHTML;
-        await this.object.update({"data.details.biography.value":bio})
     }
 
     async _onDescInput(event, html){
         this.editing = true;
-        let desc = event.target.innerHTML;
-        await this.object.update({"data.details.description.value":desc})
     }
 
     async render (...args){
-
         if (this.editing == false){
             super.render(...args);
+        } else {
+            this.renderBanked = true;
         }
     }
 

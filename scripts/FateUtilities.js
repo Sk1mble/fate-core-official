@@ -7,7 +7,7 @@ constructor(){
     game.system.apps["scene"].push(this); //Maybe? If we want to store scene notes, aspects, etc.
     game.system.apps["user"].push(this);
     this.category="All";
-    this.editingSceneNotes = false;
+    this.editing = false;
     if (game.system.tokenAvatar == undefined){
         game.system.tokenAvatar = true;
     }
@@ -23,6 +23,34 @@ close(){
 
 activateListeners(html) {
     super.activateListeners(html);
+    const input = html.find("input");
+    input.on("focus", event => {
+        if (this.editing == false) {
+            this.editing = true;
+        }
+    });
+    input.on("focusout", event => {
+        this.editing = false; 
+        if (this.renderBanked){
+            this.renderBanked = false;
+            this.render(false);
+        }
+    });
+
+    const textarea = html.find("input");
+    textarea.on("focus", event => {
+        if (this.editing == false) {
+            this.editing = true;
+        }
+    });
+    textarea.on("focusout", event => {
+        this.editing = false; 
+        if (this.renderBanked){
+            this.renderBanked = false;
+            this.render(false);
+        }
+    });
+
     const popcornButtons = html.find("button[class='popcorn']");
     popcornButtons.on("click", event => this._onPopcornButton(event, html));
     const nextButton = html.find("button[id='next_exchange']");
@@ -66,8 +94,8 @@ activateListeners(html) {
     free_i.on("change", event => this._free_i_button(event, html));
 
     const scene_notes = html.find("div[id='scene_notes']");
-    scene_notes.on("input", event => this.scene_notes_edit(event, html));
-    scene_notes.on("focusout", event => { this.editingSceneNotes = false; this.render(false)});
+    scene_notes.on("focus", event => this.scene_notes_edit(event, html));
+    scene_notes.on("focusout", event => this._notesFocusOut(event,html));
 
     const nav = html.find("nav[class='navigation foo']");
     nav.on("click", event => this.render(false));
@@ -89,6 +117,12 @@ activateListeners(html) {
 
     const fu_roll_button = html.find("button[name='fu_roll_button']");
     fu_roll_button.on("click",event => this._fu_roll_button(event, html));
+}
+
+async _notesFocusOut(event, html){
+    let notes = html.find("div[id='scene_notes']")[0].innerHTML
+    await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.render(false);
 }
 
 async _fu_roll_button(event, html){
@@ -302,9 +336,7 @@ async _edit_gm_points(event, html){
 }
 
 async scene_notes_edit(event,html){
-    this.editingSceneNotes = true;
-    let notes = html.find("div[id='scene_notes']")[0].innerHTML
-    await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.editing = true;
 }
 
 async _free_i_button(event,html){
@@ -409,7 +441,7 @@ async _add_sit_aspect(event, html){
 }
 
 async _saveNotes(event, html){
-    this.editingSceneNotes=false;
+    this.editing=false;
 }
 
 async _clear_fleeting(event, html){
@@ -670,22 +702,18 @@ async getData(){
 }
 
 async render (...args){
-    if (this.editingSceneNotes == false){
+    if (this.editing == false){
         super.render(...args);
+    } else {
+        this.renderBanked = true;
+        console.log(this.renderBanked)
     }
 }
 
 async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
-    try {
-        if (args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined){
-            this.render(false)
-    }
-    } catch (error){
-        //console.log(error)
-        this.render(false);
-    }
+    this.render(false);
 }
 
 async clearFleeting(object){
