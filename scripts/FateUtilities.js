@@ -268,7 +268,7 @@ async refresh_fate_points(event, html){
     let tokens = canvas.tokens.placeables;
     for (let i = 0; i < tokens.length; i++){
         let token = tokens[i];
-        if (!token.actor.isPC){
+        if (!token.actor.hasPlayerOwner){
             continue;
         }
         let current = parseInt(token.actor.data.data.details.fatePoints.current);

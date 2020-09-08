@@ -58,7 +58,7 @@ class EditPlayerSkills extends FormApplication{
         //this.player_skills=duplicate(this.object.data.data.skills);
         //Check if this is a player
         //Check if the player is currently allowed to save
-        let isPlayer = this.object.isPC;
+        let isPlayer = this.object.hasPlayerOwner;
     
         for (let skill in formData){ //This goes through every field in the JSON object.
             let skill_name = skill.split("_")[0];
@@ -118,7 +118,7 @@ class EditPlayerSkills extends FormApplication{
                     if (!game.user.isGM) {
                         await ModularFateConstants.awaitOKDialog("Skill column violation detected",`<div>Your skill distribution is invalid due to not being in a column. You won't be able to save your changes until you correct this.${columnErrorText}</div>`);
                     } else {
-                        if (actor.isPC){
+                        if (actor.hasPlayerOwner){
                             await ModularFateConstants.awaitOKDialog("Skill column violation detected",`<div>This character's skill distribution is invalid due to not being in a column. The player won't be able to save any changes while this remains the case unless you turn off skill column enforcement in the system settings.</div>${columnErrorText}`);    
                         }
                     }    
@@ -141,7 +141,7 @@ class EditPlayerSkills extends FormApplication{
                     if (!game.user.isGM){
                         await ModularFateConstants.awaitOKDialog("Skill points exceed allowed total",`<div>You have ${player_total} skill points and the game's skill total is ${skill_total}. You won't be able to save your changes until you correct this.</div>`);
                     } else {
-                        if (actor.isPC){
+                        if (actor.hasPlayerOwner){
                             await ModularFateConstants.awaitOKDialog("Skill points exceed allowed total",`<div>This character has ${player_total} skill points and the game's skill total is ${skill_total}. The player won't be able to save any changes while this remains the case unless you turn off skill total enforcement in the system settings.</div>`);
                         }
                     }
@@ -323,6 +323,11 @@ class EditGMSkills extends FormApplication{
         const confirm = html.find("button[id='add_remove_button']")
         confirm.on("click", event => this._confirm(event, html));
     }
+
+    async _aws_click(event, html){
+        console.log("Clicked")
+    }
+
     async _confirm(event,html){
         let canDelete = [];
         let cannotDelete = [];
