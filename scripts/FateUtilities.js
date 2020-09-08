@@ -669,11 +669,17 @@ async getData(){
     return data;
 }
 
+async render (...args){
+    if (this.editingSceneNotes == false){
+        super.render(...args);
+    }
+}
+
 async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
     try {
-        if ((args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined) || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes. This will prevent rendering of other elements if they happen simultaneously with editing the notes, too, but I don't think that's a problem.
+        if (args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined){
             this.render(false)
     }
     } catch (error){

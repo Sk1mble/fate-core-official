@@ -116,6 +116,8 @@ export class ModularFateCharacter extends ActorSheet {
             bio.on("input",event => this._onBioInput(event, html));
             const desc = html.find(`div[id='${this.object.id}_description']`)
             desc.on("input",event => this._onDescInput(event, html));
+            bio.on("focusout", event => this._onFocusOut(event, html));
+            desc.on("focusout", event => this._onFocusOut(event, html));
 
             const stunt_roll = html.find("button[name='stunt_name']");
             stunt_roll.on("click", event => this._on_stunt_roll_click(event,html));
@@ -192,18 +194,21 @@ export class ModularFateCharacter extends ActorSheet {
         });
     }
 
+    async _onFocusOut (event, html){
+        this.editing = false;
+        this.render(false);
+    }
+
     async _onBioInput(event, html){
         this.editing = true;
         let bio = event.target.innerHTML;
         await this.object.update({"data.details.biography.value":bio})
-        this.editing = false;
     }
 
     async _onDescInput(event, html){
         this.editing = true;
         let desc = event.target.innerHTML;
         await this.object.update({"data.details.description.value":desc})
-        this.editing = false;
     }
 
     async render (...args){
