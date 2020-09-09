@@ -956,7 +956,7 @@ async function updateRolls (rolls) {
         let scene = game.scenes.entries.find(sc=> sc.id==rolls.scene._id);
         let currRolls = scene.getFlag("ModularFate","rolls");
         if (currRolls == undefined){
-            currRols = [];
+            currRolls = [];
         }
         currRolls = duplicate(currRolls);
         let endRolls = mergeObject(currRolls, rolls.rolls);
