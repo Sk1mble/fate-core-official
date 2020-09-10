@@ -426,7 +426,8 @@ async _free_i_button(event,html){
         }
         drawing.update({
             "text":text,
-             width: text.length*25
+             width: text.length*25,
+             fontFamily: "Modesto Condensed",
         });
     }
 }
@@ -469,6 +470,7 @@ async _addToScene(event, html){
                 strokeColor: "#000000",
                 strokeAlpha: 1,
                 text: text,
+                fontFamily: "Modesto Condensed",
                 fontSize: 48,
                 textColor: "#000000",
                 points: []
