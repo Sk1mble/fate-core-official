@@ -329,8 +329,7 @@ class EditGMSkills extends FormApplication{
     }
 
     async _confirm(event,html){
-        let canDelete = [];
-        let cannotDelete = [];
+
         let actor=undefined;
         for (let s in this.player_skills){
             let cbox = html.find(`input[id='${s}']`)[0];
@@ -343,29 +342,7 @@ class EditGMSkills extends FormApplication{
                 await this.object.update({"data.skills": {[`${sk}`]:null}})
             }
         } 
-        if (this.object.isToken && cannotDelete.length >0) {
-            let delString = "The following skills are stored on the original actor for this token, so deleting them here won't persist. Would you like to delete them from the original actor?"
-            cannotDelete.forEach(cd => {
-                delString+=`<li>${cd.name}</li>`
-            })
-            let response= await ModularFateConstants.awaitYesNoDialog("Delete skills from original actor?", delString);
-            if (response=="yes"){
-                cannotDelete.forEach(cd=> {
-                    let sk = `-=${cd.name}`;
-                    (async ()=> {await this.object.token.update({["actorData.data.skills"]:{[`${sk}`]:null}})})();
-                    (async ()=> {await actor.update({"data.skills": {[`${sk}`]:null}})})();
-                })
-            }
-        }
-        if (this.object.isToken && canDelete.length > 0) {
-            canDelete.forEach(skill => {
-                let sk = `-=${skill.name}`;
-                async function update(object) {
-                        await object.update({"data.skills":{[`${sk}`]:null}})
-                }
-                update(this.object)
-            })
-        }
+        
         //Now we need to add skills that have checks and which aren't already checked.
         let world_skills=game.settings.get("ModularFate","skills")
         for (let w in world_skills){
