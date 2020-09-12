@@ -369,9 +369,11 @@ async _on_avatar_click(event, html){
 
 async refresh_fate_points(event, html){
     let tokens = canvas.tokens.placeables;
+    let updates = [];
     for (let i = 0; i < tokens.length; i++){
         let token = tokens[i];
-        if (!token.actor.hasPlayerOwner){
+        console.log(token)
+        if (token.actor == null || !token.actor.hasPlayerOwner){
             continue;
         }
         let current = parseInt(token.actor.data.data.details.fatePoints.current);
@@ -380,10 +382,9 @@ async refresh_fate_points(event, html){
         if (current < refresh){
             current = refresh;
         }
-        await token.actor.update({
-            ["data.details.fatePoints.current"]: current
-        })
+        updates.push({"_id":token.actor.id,"data.details.fatePoints.current":current})
     }
+    Actor.update(updates);
 }
 
 async _edit_player_points(event, html){
