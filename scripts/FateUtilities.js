@@ -40,7 +40,7 @@ activateListeners(html) {
         }
     });
 
-    const textarea = html.find("input");
+    const textarea = html.find("textarea");
     textarea.on("focus", event => {
         if (this.editing == false) {
             this.editing = true;
@@ -427,7 +427,7 @@ async _free_i_button(event,html){
         }
         drawing.update({
             "text":text,
-             width: text.length*25,
+             width: text.length*20,
              fontFamily: "Modesto Condensed",
         });
     }
@@ -462,7 +462,7 @@ async _addToScene(event, html){
                 author: game.user._id,
                 x: canvas.stage.pivot._x,
                 y: canvas.stage.pivot._y,
-                width: text.length*25,
+                width: text.length*20,
                 height: 75,
                 fillType: CONST.DRAWING_FILL_TYPES.SOLID,
                 fillColor: "#FFFFFF",
