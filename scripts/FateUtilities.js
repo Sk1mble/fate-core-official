@@ -136,7 +136,6 @@ activateListeners(html) {
 }
 
 async _selectRoll (event, html){
-    console.log(event)
     let t_id = event.target.id.split("_")[0]
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
     
@@ -375,7 +374,6 @@ async refresh_fate_points(event, html){
     let updates = [];
     for (let i = 0; i < tokens.length; i++){
         let token = tokens[i];
-        console.log(token)
         if (token.actor == null || !token.actor.hasPlayerOwner){
             continue;
         }
@@ -522,7 +520,6 @@ async _saveNotes(event, html){
 }
 
 async _clear_fleeting(event, html){
-    //console.log("clearing")
     let tokens = canvas.tokens.placeables;
     for (let i = 0; i<tokens.length; i++){
         await this.clearFleeting(tokens[i].actor)
