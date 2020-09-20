@@ -35,7 +35,7 @@
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
-                            <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
+                            <select title="Click and select to roll a skill 'raw' or shift-click and then select a skill to roll with modifiers" class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
                                 <option disabled="disabled" selected="selected">Pick a skill</option>
                                 {{#each this.actor.data.data.skills}}
                                 <option>{{this.name}} ({{this.rank}})</option>

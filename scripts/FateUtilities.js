@@ -126,6 +126,7 @@ activateListeners(html) {
         this.selectingSkill = true;
     });
 
+    select.on("click", event => {if (event.shiftKey) {this.shift = true}})
     select.on("change", event => this._selectRoll (event, html));
 
     select.on("focusout", event => {
@@ -135,6 +136,7 @@ activateListeners(html) {
 }
 
 async _selectRoll (event, html){
+    console.log(event)
     let t_id = event.target.id.split("_")[0]
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
     
@@ -156,9 +158,10 @@ async _selectRoll (event, html){
     let rankS = rank.toString();
     let rung = ladder[rankS];
 
-    if (event.shiftKey && !sk.value.startsWith("stunt")) {
+    if (this.shift && !sk.value.startsWith("stunt")) {
             let mrd = new ModifiedRollDialog (token.actor, skill);
             mrd.render(true);
+            this.shift=false;
     } else {
         let r;
         if (bonus >0){
