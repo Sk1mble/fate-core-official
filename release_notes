@@ -1,3 +1,7 @@
+# Version 1.6.4
+  Realised that there was a bug in the handling of refresh total. The character's refresh should be game refresh minus refresh spent.
+  In addition to this I've sneaked in a few improvements to the concurrent editing of items in FateUtilities and on character sheets without making a full release.
+
 # Version 1.6.3
   This is a new branch which is compatible with Foundry 0.7.2. So far the only change is to remove the deprecated isPlayer check in favour of hasPlayerOwner.
 
