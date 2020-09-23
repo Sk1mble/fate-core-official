@@ -608,19 +608,21 @@ export class ModularFateCharacter extends ActorSheet {
         let isPlayer = this.object.hasPlayerOwner;
         let error = false;
         if (isPlayer) {
-            let checkSpent = sheetData.data.details.fatePoints.refresh - this.refreshSpent;
-            let checkWorld = game.settings.get("ModularFate", "refreshTotal") - sheetData.data.details.fatePoints.refresh;
+            // Refresh spent + refresh should = the game's refresh.
+            let checkSpent = sheetData.data.details.fatePoints.refresh + this.refreshSpent;
+            let worldRefresh = game.settings.get("ModularFate", "refreshTotal");
+            let checkWorld = worldRefresh - sheetData.data.details.fatePoints.refresh;
 
             let message = "This player's sheet doesn't add up: "
             if (checkWorld < 0) {
                 message += "Their refresh is greater than the game refresh."
                 error = true;
             }
-            if (checkSpent < 0) {
+            if (checkSpent > worldRefresh) {
                 if (error) {
-                    message += "and their spent refresh is greater than their refresh."
+                    message += "and their spent refresh plus refresh is greater than the game refresh."
                 }
-                message += "Their spent refresh is greater than their refresh."
+                message += "Their spent refresh plus refresh is greater than the game refresh."
                 error = true;
             }
             if (error) {
