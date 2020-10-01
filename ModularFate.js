@@ -322,7 +322,7 @@ Hooks.once('init', async function () {
         default:'systems/ModularFate/templates/ModularFateSheet.html'
     })
 
-    //game.system.entityTypes.Item = ["Extra"];
+    game.system.entityTypes.Item = ["Extra"];
     //game.system.entityTypes.Actor = ["ModularFate"]
 
     game.system.apps= {

@@ -193,6 +193,7 @@ async _selectRoll (event, html){
 async _notesFocusOut(event, html){
     let notes = html.find("div[id='scene_notes']")[0].innerHTML
     await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.editing = false;
     this.render(false);
 }
 
