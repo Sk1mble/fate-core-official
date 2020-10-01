@@ -35,9 +35,9 @@ Hooks.on("preCreateActor", (data, options, userId) => {
     if (data.type =="Core" || data.type=="Accelerated"){
         //console.log("importing")
         data = migrateFateCharacter(data);
-        //console.log(data);
+       //console.log(data);
     }
-  });
+});
 
 async function importFateCharacter(actor) {
     console.log("Original Fate Core character detected; setting them up for ModularFate")
@@ -322,8 +322,8 @@ Hooks.once('init', async function () {
         default:'systems/ModularFate/templates/ModularFateSheet.html'
     })
 
-    game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["ModularFate"]
+    //game.system.entityTypes.Item = ["Extra"];
+    //game.system.entityTypes.Actor = ["ModularFate"]
 
     game.system.apps= {
         actor:[],
