@@ -23,7 +23,7 @@
 	"gridDistance": 1,
 	"gridUnits": "",
 	"minimumCoreVersion": "0.7.2",
-	"compatibleCoreVersion": "0.7.3",
+	"compatibleCoreVersion": "0.7.4",
 	"url": "https://github.com/Sk1mble/modularFate",
 	"manifest": "https://raw.githubusercontent.com/Sk1mble/modularFate/0.7.3-Compatible/system.json",
 	"download": "https://github.com/Sk1mble/modularFate/archive/0.7.3-Compatible.zip",
