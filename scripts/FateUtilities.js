@@ -23,7 +23,7 @@ close(){
 
 activateListeners(html) {
     super.activateListeners(html);
-    const input = html.find("input");
+    const input = html.find('input[type="text"], input[type="number"], textarea');
     input.on("focus", event => {
         if (this.editing == false) {
             this.editing = true;
@@ -35,20 +35,6 @@ activateListeners(html) {
          }
         this.editing = false; 
         if (this.renderBanked && this.editingAspect == false){
-            this.renderBanked = false;
-            this.render(false);
-        }
-    });
-
-    const textarea = html.find("textarea");
-    textarea.on("focus", event => {
-        if (this.editing == false) {
-            this.editing = true;
-        }
-    });
-    textarea.on("focusout", event => {
-        this.editing = false; 
-        if (this.renderBanked){
             this.renderBanked = false;
             this.render(false);
         }

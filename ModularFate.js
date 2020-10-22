@@ -243,6 +243,18 @@ Hooks.on('updateActor', (actor, data) => {
     })
 })
 
+Hooks.on('updateItem', (item, data) => {
+    game.system.apps["item"].forEach(a=> {
+        a.renderMe(item.id, data);
+    })
+})
+
+Hooks.on('updateOwnedItem', (actor, item, data) => {
+    game.system.apps["item"].forEach(a=> {
+        a.renderMe(item._id, data);
+    })
+})
+
 Hooks.on('renderCombatTracker', () => {
     game.system.apps["combat"].forEach(a=> {
         a.renderMe("renderCombatTracker");
@@ -264,7 +276,6 @@ Hooks.on('deleteCombat', (...args) => {
 Hooks.on('deleteToken', (...args) => {
     game.system.apps["actor"].forEach(a=> {
         a.renderMe("deleteToken")
-        console.log(canvas.tokens.placeables)
     })
 })
 
@@ -329,7 +340,8 @@ Hooks.once('init', async function () {
         actor:[],
         combat:[],
         scene:[],
-        user:[]
+        user:[],
+        item:[]
     }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.

@@ -357,7 +357,8 @@
 
 .mfate-skills-list__number,
 .mfate-skills-list__adjective,
-.mfate-skills-list__skill-name {
+.mfate-skills-list__skill-name,
+.mfate-skills-list__skill-name_item {
     display: table-cell;
     border-bottom: 1px solid lightsteelblue;
     padding: .3em .5em;

@@ -6,10 +6,14 @@ class EditPlayerStunts extends FormApplication {
         this.stunt=duplicate(stunt);
 
         //This is a good place to set up some variables at the top level so we can access them with this.
-        if (this.actor.isToken) {
-            this.options.title=`Stunt editor for [Token] ${this.object.name}`
+        if (this.actor.type == "Extra"){
+            this.options.title=`Stunt editor for item ${this.object.name}`
         } else {
-            this.options.title=`Stunt editor for ${this.object.name}`
+            if (this.actor.isToken) {
+                this.options.title=`Stunt editor for [Token] ${this.object.name}`
+            } else {
+                this.options.title=`Stunt editor for ${this.object.name}`
+            }
         }
         game.system.apps["actor"].push(this);
     } //End constructor
@@ -95,7 +99,11 @@ class EditPlayerStunts extends FormApplication {
     async getData(){
         let data={}
         data.stunt=this.stunt;
-        data.skills=this.actor.data.data.skills;
+        if (this.actor.type=="Extra"){
+            data.skills=game.settings.get("ModularFate","skills");
+        } else {
+            data.skills=this.actor.data.data.skills;
+        }
         data.gm = game.user.isGM;
         return data
     } //End getData

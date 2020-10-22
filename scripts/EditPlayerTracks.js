@@ -10,14 +10,19 @@ class EditPlayerTracks extends FormApplication {
     constructor(...args){
         super(...args);
         //This is a good place to set up some variables at the top level so we can access them with this.
-        if (this.object.isToken) {
-            this.options.title=`Character track editor for [Token] ${this.object.name}`
+        if (this.object.type=="Extra"){
+            this.options.title=`Extra track editor for ${this.object.name}`
         } else {
-            this.options.title=`Character track editor for ${this.object.name}`
+            if (this.object.isToken) {
+                this.options.title=`Character track editor for [Token] ${this.object.name}`
+            } else {
+                this.options.title=`Character track editor for ${this.object.name}`
+            }
         }
         this.selected_category = "";
         this.tracks_by_category = undefined;
         game.system.apps["actor"].push(this);
+        game.system.apps["item"].push(this);
     } //End constructor
 
     static get defaultOptions(){
@@ -62,6 +67,7 @@ class EditPlayerTracks extends FormApplication {
 
     close(){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
+        game.system.apps["item"].splice(game.system.apps["item"].indexOf(this),1); 
         super.close();
     }
 
@@ -333,7 +339,7 @@ class EditPlayerTracks extends FormApplication {
                                 dupeTrack.parent = t;
                                 let name = dupeTrack.name;
                                 dupeTrack.name = dupeTrack.name+" "+(i+2)
-                                this.prepareTrack(dupeTrack);
+                                await this.prepareTrack(dupeTrack);
                                 output[dupeTrack.name]=dupeTrack;
                             }
                         }
@@ -347,20 +353,20 @@ class EditPlayerTracks extends FormApplication {
                     if (numCopies < number){
                         for (let i = 0; i< number - numCopies; i++){
                             let dupeTrack = duplicate(input[t]);
-                            dupeTrack.parent = t;
                             if ( i == 0) {
-
+                                
                             } else {
+                                dupeTrack.parent = t;
                                 dupeTrack.name = dupeTrack.name+" "+(i+1)
                             }
-                            this.prepareTrack(dupeTrack);
+                            await this.prepareTrack(dupeTrack);
                             output[dupeTrack.name]=dupeTrack;
                         }
                     }
                 } else {
                     if (input[t].toCopy){
                         input[t].enabled=true;
-                        this.prepareTrack(input[t]);
+                        await this.prepareTrack(input[t]);
                         output[t]=input[t];
                     }
                 }
@@ -372,7 +378,9 @@ class EditPlayerTracks extends FormApplication {
 
         ui.notifications.info("Character track changes saved.")   
         //Initialise the actor sheet; this will automatically set up the boxes etc on tracks.
-        this.sheet.initialise();
+        if (this.object.type != "Extra") {
+            this.sheet.initialise();
+        }
         this.render(false);
     }
 

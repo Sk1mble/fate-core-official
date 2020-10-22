@@ -1,3 +1,11 @@
+# Version 1.6.7
+  Added a countSkills boolean to the data type for extras. This allows us to determine in code whether to count skills on an extra towards the player's skill total, column, etc.
+
+# Version 1.6.6
+  Extras can now have stunts, skills, aspects, and tracks attached to them.
+  Players can now edit their own tracks within the constraints of the tracks set up on the system. Only the GM can add ad-hoc tracks to a character or item.
+  Mended an issue with adding multiple copies of non-unique tracks.
+
 # Version 1.6.5
   Various small fixes in respect of simultaneous editing of values on characters/in Fate Utilities and other improvements. Tested for compability with Foundry 0.7.3 (with hotfix Foundry.js applied)
   

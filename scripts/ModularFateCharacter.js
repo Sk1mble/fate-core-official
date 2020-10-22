@@ -26,6 +26,12 @@ Handlebars.registerHelper("hasBoxes", function(track) {
 
 export class ModularFateCharacter extends ActorSheet {
 
+    close(){
+        this.editing = false;
+        game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
+        super.close();
+    }
+
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.resizable=true;
@@ -134,29 +140,19 @@ export class ModularFateCharacter extends ActorSheet {
             const item = html.find("div[name='item_header']");
             item.on("dragstart", event => this._on_item_drag (event, html));
 
-            const input = html.find("input");
-            const textarea = html.find("textarea");
+            //const input = html.find("input");
+            const input = html.find('input[type="text"], input[type="number"], textarea');
 
             input.on("focus", event => {
+                
+                console.log("input focus")
                 if (this.editing == false) {
                     this.editing = true;
                 }
             });
             input.on("focusout", event => {
+                console.log("input focusout")
                 this.editing = false
-                if (this.renderBanked){
-                    this.renderBanked = false;
-                    this.render(false);
-                }
-            });
-
-            textarea.on("focus", event => {
-                if (this.editing == false) {
-                    this.editing = true;
-                }
-            });
-            textarea.on("focusout", event => {
-                this.editing = false;
                 if (this.renderBanked){
                     this.renderBanked = false;
                     this.render(false);
@@ -182,6 +178,7 @@ export class ModularFateCharacter extends ActorSheet {
 
     async _cat_select_change (event, html){
         this.track_category = event.target.value;
+        this.render(false);
     }
 
     async _db_add_click(event, html){
@@ -568,17 +565,19 @@ export class ModularFateCharacter extends ActorSheet {
     }
 
     async getData() {
+
         if (this.first_run && this.actor.owner){
             this.initialise();
             this.first_run = false;
         }
+
         this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         this.freeStunts = game.settings.get("ModularFate", "freeStunts");
         const sheetData = await super.getData();
         let numStunts = Object.keys(sheetData.data.stunts).length;
         let paidTracks = 0;
         let paidStunts = 0;
-        let paidExtras = 0;
+        let paidExtras = 0;    
 
         //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value
 
@@ -668,3 +667,134 @@ export class ModularFateCharacter extends ActorSheet {
         return sheetData;
     }
 }
+
+async function updateFromExtra(actorData, itemData) {
+    let actor = game.actors.find(a=>a.id == actorData.id);
+    let extra = itemData;
+
+        //Iterate through extras
+        //Find each aspect, skill, stunt, and track attached to each extra
+        //Add an extra data item to the data type containing the id of the original item.
+        //ToDo: Edit player track, skill, aspect, and stunt editors so they're blind to anything wiht the extra data type defined.
+        //Check to see if the thing is already on the character sheet. If it is, update with the version from the item (should take care of diffing for me and only do a database update if changed)
+        //ToDo: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_tag != undefined)
+        
+        let stunts_output = {};
+        let skills_output = {};
+        let aspects_output = {};
+        let tracks_output = {};
+
+            let extra_name = extra.name;
+            let extra_id = extra._id;
+            let extra_tag = {"extra_name":extra_name, "extra_id":extra_id};
+
+            let stunts = duplicate(extra.data.stunts);
+    
+            for (let stunt in stunts){
+                stunts[stunt].extra_tag = extra_tag;
+                stunts[stunt].name = stunts[stunt].name+=" (Extra)";
+                stunts_output[stunts[stunt].name]=stunts[stunt];
+            }
+
+            let skills = duplicate(extra.data.skills);
+            for (let skill in skills){
+                skills[skill].extra_tag = extra_tag;
+                skills[skill].name = skills[skill].name+=" (Extra)";
+                skills_output[skills[skill].name]=skills[skill];
+            }
+
+            let aspects = duplicate(extra.data.aspects);
+            for (let aspect in aspects){
+                aspects[aspect].extra_tag = extra_tag;
+                aspects[aspect].name = aspects[aspect].name+=" (Extra)";
+                aspects_output[aspects[aspect].name]=aspects[aspect];
+            }
+
+            let tracks = duplicate(extra.data.tracks);
+            for (let track in tracks){
+                tracks[track].extra_tag = extra_tag;
+                tracks[track].name = tracks[track].name+=" (Extra)";
+                tracks_output[tracks[track].name]=tracks[track];
+            }
+
+        let actor_stunts = duplicate(actor.data.data.stunts);
+        let final_stunts = mergeObject(actor_stunts, stunts_output);
+        await actor.update({"data.stunts":final_stunts});
+
+        let actor_tracks = duplicate(actor.data.data.tracks);
+        for (let track in tracks_output){
+            if (actor_tracks[track]!=undefined){
+                delete(tracks_output[track]);
+            }
+        }
+
+        //ToDo: Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character.
+        //Build into the delete code above and just call that function?
+
+        let final_tracks = mergeObject(actor_tracks, tracks_output);
+        await actor.update({"data.tracks":final_tracks});
+
+        let actor_aspects = duplicate(actor.data.data.aspects);
+        let final_aspects = mergeObject(actor_aspects, aspects_output);
+        await actor.update({"data.aspects":final_aspects});
+
+        let actor_skills = duplicate(actor.data.data.skills);
+        let final_skills = mergeObject(actor_skills, skills_output);
+        await actor.update({"data.skills":final_skills});
+
+        //Iterate through character's tracks, skills, aspects, and stunts to remove any that have an item id in their extra field which doesn't match any extra still on the character.
+        //ToDo: Change the code that counts the player's skills and checks the column etc. to ignore any skills with an extra field where the associated extra's countSkills is false.
+}
+
+
+Hooks.on('updateOwnedItem',async (actorData, itemData) => {
+    updateFromExtra(actorData,itemData);
+
+})
+
+Hooks.on('deleteOwnedItem',(actorData, itemData) => {
+    let actor = game.actors.find(a=>a.id == actorData.id);
+    //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
+   
+    let actor_stunts = duplicate(actor.data.data.stunts)
+
+    for (let stunt in actor_stunts){
+        if (actor_stunts[stunt].extra_tag.extra_id == itemData._id){
+            let st =`-=${stunt}`
+            actor.update({"data.stunts":{[`${st}`]:null}});
+        }
+    }
+
+    let actor_tracks = duplicate(actor.data.data.tracks)
+
+    for (let track in actor_tracks){
+        console.log(actor_tracks[track])
+        if (actor_tracks[track].extra_tag.extra_id == itemData._id){
+            let st =`-=${track}`
+            actor.update({"data.tracks":{[`${st}`]:null}});
+        }
+    }
+
+    let actor_skills = duplicate(actor.data.data.skills)
+
+    for (let skill in actor_skills){
+        if (actor_skills[skill].extra_tag.extra_id == itemData._id){
+            let st =`-=${skill}`
+            actor.update({"data.skill":{[`${st}`]:null}});
+        }
+    }   
+
+    let actor_aspects = duplicate(actor.data.data.aspects)
+
+    for (let aspect in actor_aspects){
+        if (actor_skills[aspect].extra_tag.extra_id == itemData._id){
+            let st =`-=${aspect}`
+            actor.update({"data.aspect":{[`${st}`]:null}});
+        }
+    } 
+
+})
+
+Hooks.on('createOwnedItem',(actorData, itemData) => {
+    updateFromExtra(actorData,itemData);
+})
