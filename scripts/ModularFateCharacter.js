@@ -672,7 +672,6 @@ async function updateFromExtra(actorData, itemData) {
     let actor = game.actors.find(a=>a.id == actorData.id);
     let extra = itemData;
 
-        //Iterate through extras
         //Find each aspect, skill, stunt, and track attached to each extra
         //Add an extra data item to the data type containing the id of the original item.
         //ToDo: Edit player track, skill, aspect, and stunt editors so they're blind to anything wiht the extra data type defined.
@@ -728,9 +727,10 @@ async function updateFromExtra(actorData, itemData) {
             }
         }
 
-        //ToDo: Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character.
-        //Build into the delete code above and just call that function?
-
+        //ToDo: Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character
+        //Find all tracks on this actor that have the item's ID in their extra_tag attribute
+        //Check to see that those tracks are also on the item's list of tracks
+        //If they aren't, delete them from the character.
         let final_tracks = mergeObject(actor_tracks, tracks_output);
         await actor.update({"data.tracks":final_tracks});
 
@@ -742,7 +742,6 @@ async function updateFromExtra(actorData, itemData) {
         let final_skills = mergeObject(actor_skills, skills_output);
         await actor.update({"data.skills":final_skills});
 
-        //Iterate through character's tracks, skills, aspects, and stunts to remove any that have an item id in their extra field which doesn't match any extra still on the character.
         //ToDo: Change the code that counts the player's skills and checks the column etc. to ignore any skills with an extra field where the associated extra's countSkills is false.
 }
 
@@ -752,47 +751,49 @@ Hooks.on('updateOwnedItem',async (actorData, itemData) => {
 
 })
 
-Hooks.on('deleteOwnedItem',(actorData, itemData) => {
+Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
     let actor = game.actors.find(a=>a.id == actorData.id);
     //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
+
+    let actor_aspects = duplicate(actor.data.data.aspects)
+
+    for (let aspect in actor_aspects){
+        let et = actor_aspects[aspect].extra_tag;
+        if (et != undefined && et.extra_id == itemData._id){
+            let st =`-=${aspect}`
+            await actor.update({"data.aspects":{[`${st}`]:null}});
+        }
+    } 
    
     let actor_stunts = duplicate(actor.data.data.stunts)
 
     for (let stunt in actor_stunts){
-        if (actor_stunts[stunt].extra_tag.extra_id == itemData._id){
+        let et = actor_stunts[stunt].extra_tag;
+        if (et != undefined && et.extra_id == itemData._id){
             let st =`-=${stunt}`
-            actor.update({"data.stunts":{[`${st}`]:null}});
+            await actor.update({"data.stunts":{[`${st}`]:null}});
         }
     }
 
     let actor_tracks = duplicate(actor.data.data.tracks)
 
     for (let track in actor_tracks){
-        console.log(actor_tracks[track])
-        if (actor_tracks[track].extra_tag.extra_id == itemData._id){
+        let et = actor_tracks[track].extra_tag;
+        if (et != undefined && et.extra_id == itemData._id){
             let st =`-=${track}`
-            actor.update({"data.tracks":{[`${st}`]:null}});
+            await actor.update({"data.tracks":{[`${st}`]:null}});
         }
     }
 
     let actor_skills = duplicate(actor.data.data.skills)
 
     for (let skill in actor_skills){
-        if (actor_skills[skill].extra_tag.extra_id == itemData._id){
+        let et = actor_skills[skill].extra_tag;
+        if (et!= undefined && et.extra_id == itemData._id){
             let st =`-=${skill}`
-            actor.update({"data.skill":{[`${st}`]:null}});
+            await actor.update({"data.skills":{[`${st}`]:null}});
         }
-    }   
-
-    let actor_aspects = duplicate(actor.data.data.aspects)
-
-    for (let aspect in actor_aspects){
-        if (actor_skills[aspect].extra_tag.extra_id == itemData._id){
-            let st =`-=${aspect}`
-            actor.update({"data.aspect":{[`${st}`]:null}});
-        }
-    } 
-
+    }  
 })
 
 Hooks.on('createOwnedItem',(actorData, itemData) => {
