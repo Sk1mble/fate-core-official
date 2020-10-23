@@ -4,7 +4,6 @@
   For example, if I add a Morph extra with an aspect "Morph Aspect 1", this will be added to my character's list of aspects.
   All objects added from Extras will be flagged with (Extra) so it's clear they aren't on your character.
   IMPORTANT: Notes/Limitations
-  * Does NOT work with token actors. The data of token actors will be synchronised with their parent actor including any objects from extras on them. If you need a token actor with separate objects, create a new linked actor.
   * You can't add more than one object with a given name from more than one extra. e.g. once I have an aspect called Morph Aspect 1 (Extra) on my sheet, I cannot add another of the same name even if the aspect text is different.
   * Skills added to your character from extras ARE NOT taken into account when calculating the number of boxes of tracks or whether a track is available to you.
     If you need a morph skill to modify a track, I suggest manually adding a track with the correct number of boxes etc. through the 'ad hoc track' option on the track and deleting the same track from the character's 'real' tracks.

@@ -758,7 +758,6 @@ async function updateFromExtra(actorData, itemData) {
 
         let actor_stunts = duplicate(actor.data.data.stunts);
         let final_stunts = mergeObject(actor_stunts, stunts_output);
-        await actor.update({"data.stunts":final_stunts});
 
         let actor_tracks = duplicate(actor.data.data.tracks);
 
@@ -800,6 +799,111 @@ async function updateFromExtra(actorData, itemData) {
     }
 }
 
+async function updateTokenFromExtra(actor, itemData) {
+
+    if (!shouldUpdate(actor)){
+        return;
+    } else {
+        let extra = itemData;
+
+        //Find each aspect, skill, stunt, and track attached to each extra
+        //Add an extra data item to the data type containing the id of the original item.
+        //Done: Edit editplayertracks to be blind to any object with the extra data type defined
+        //Done: Edit editplayerskills to be blind to any object with the extra data type defined
+        //Done: Edit editplayeraspects to be blind to any object with the extra data type defined
+        //Check to see if the thing is already on the character sheet. If it is, update with the version from the item (should take care of diffing for me and only do a database update if changed)
+        //Done: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_tag != undefined)
+        //After conversation with Fred, we decided that tracks can only use core world skills and not extra versions of them to automate modification of tracks.
+        //Anything else can be done manually.
+        
+        let stunts_output = {};
+        let skills_output = {};
+        let aspects_output = {};
+        let tracks_output = {};
+
+            let extra_name = extra.name;
+            let extra_id = extra._id;
+            let extra_tag = {"extra_name":extra_name, "extra_id":extra_id};
+
+            let stunts = duplicate(extra.data.stunts);
+    
+            for (let stunt in stunts){
+                if (!Array.isArray(stunts)){
+                    stunts[stunt].extra_tag = extra_tag;
+                    stunts[stunt].name = stunts[stunt].name+=" (Extra)";
+                    stunts_output[stunts[stunt].name]=stunts[stunt];
+                }
+            }
+
+            let skills = duplicate(extra.data.skills);
+            for (let skill in skills){
+                if (!Array.isArray(skills)){
+                    skills[skill].extra_tag = extra_tag;
+                    skills[skill].name = skills[skill].name+=" (Extra)";
+                    skills_output[skills[skill].name]=skills[skill];
+                }
+            }
+
+            let aspects = duplicate(extra.data.aspects);
+            for (let aspect in aspects){
+                if (!Array.isArray(aspects)){
+                    aspects[aspect].extra_tag = extra_tag;
+                    aspects[aspect].name = aspects[aspect].name+=" (Extra)";
+                    aspects_output[aspects[aspect].name]=aspects[aspect];
+                }
+            }
+
+            let tracks = duplicate(extra.data.tracks);
+            for (let track in tracks){
+                if (!Array.isArray(tracks)){
+                    tracks[track].extra_tag = extra_tag;
+                    tracks[track].name = tracks[track].name+=" (Extra)";
+                    tracks_output[tracks[track].name]=tracks[track];
+                }        
+            }
+
+        let actor_stunts = duplicate(actor.data.data.stunts);
+        let final_stunts = mergeObject(actor_stunts, stunts_output);
+
+        let actor_tracks = duplicate(actor.data.data.tracks);
+
+        //Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character
+        for (let t in actor_tracks){
+            let track = actor_tracks[t];
+            if (track.extra_tag != undefined && track.extra_tag.extra_id == extra_id){
+                if (tracks_output[t] == undefined){
+                    let st =`-=${t}`
+                    await actor.update({"data.tracks":{[st]:null}});
+                    actor_tracks = duplicate(actor.data.data.tracks);
+                }
+            }
+        }
+
+        for (let track in tracks_output){
+            if (actor_tracks[track]!=undefined){
+                delete(tracks_output[track]);
+            }
+        }
+
+        //Find all tracks on this actor that have the item's ID in their extra_tag attribute
+        //Check to see that those tracks are also on the item's list of tracks
+        //If they aren't, delete them from the character.
+        let final_tracks = mergeObject(actor_tracks, tracks_output);
+        
+        let actor_aspects = duplicate(actor.data.data.aspects);
+        let final_aspects = mergeObject(actor_aspects, aspects_output);
+
+        let actor_skills = duplicate(actor.data.data.skills);
+        let final_skills = mergeObject(actor_skills, skills_output);
+
+        await actor.update({
+                                "data.tracks":final_tracks,
+                                "data.aspects":final_aspects,
+                                "data.skills":final_skills,
+                                "data.stunts":final_stunts
+                            });
+    }
+}
 
 Hooks.on('updateOwnedItem',async (actorData, itemData) => {
     updateFromExtra(actorData,itemData);
@@ -859,6 +963,68 @@ Hooks.on('createOwnedItem',(actorData, itemData) => {
     updateFromExtra(actorData,itemData);
 })
 
-Hooks.on('createOwnedItem',(scene, itemData) => {
-    updateFromExtra(actorData,itemData);
+Hooks.on('updateToken',(scene, tokenData, aData) => {
+    let token = canvas.tokens.placeables.find(t => t.id == tokenData._id);
+    let actor = token.actor;
+    
+    if (aData.actorData != undefined && aData.actorData.items != undefined && aData.actorData.items[0] != undefined) {
+        for (let i = 0; i < aData.actorData.items.length; i++){
+            updateTokenFromExtra(actor, aData.actorData.items[i]);
+        }
+    }
+    else {
+        console.log(aData.actorData)
+
+        if (aData.actorData != undefined){
+
+            let items = actor.data.items;
+            if (!shouldUpdate(actor)){
+                return;
+            } else {
+                //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
+        
+                let actor_aspects = duplicate(actor.data.data.aspects)
+        
+                for (let aspect in actor_aspects){
+                    let et = actor_aspects[aspect].extra_tag;
+                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                        let st =`-=${aspect}`
+                        actor.update({"data.aspects":{[st]:null}});
+                    }
+                } 
+            
+                let actor_stunts = duplicate(actor.data.data.stunts)
+        
+                for (let stunt in actor_stunts){
+                    let et = actor_stunts[stunt].extra_tag;
+                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                        let st =`-=${stunt}`
+                        actor.update({"data.stunts":{[st]:null}});
+                    }
+                }
+        
+                let actor_tracks = duplicate(actor.data.data.tracks)
+        
+                for (let track in actor_tracks){
+                    let et = actor_tracks[track].extra_tag;
+                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                        let st =`-=${track}`
+                        actor.update({"data.tracks":{[st]:null}});
+                    }
+                }
+        
+                let actor_skills = duplicate(actor.data.data.skills)
+        
+                for (let skill in actor_skills){
+                    let et = actor_skills[skill].extra_tag;
+                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                        let st =`-=${skill}`
+                        actor.update({"data.skills":{[st]:null}});
+                    }
+                }       
+            }
+            
+
+        }
+    }
 })
