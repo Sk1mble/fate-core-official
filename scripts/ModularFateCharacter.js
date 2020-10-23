@@ -858,7 +858,3 @@ Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
 Hooks.on('createOwnedItem',(actorData, itemData) => {
     updateFromExtra(actorData,itemData);
 })
-
-Hooks.on('updateToken', (scene, actorData)=> {
-    updateTokenFromExtra (actorData);
-})
