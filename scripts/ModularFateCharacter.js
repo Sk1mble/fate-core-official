@@ -670,6 +670,10 @@ export class ModularFateCharacter extends ActorSheet {
 
 async function updateFromExtra(actorData, itemData) {
     let actor = game.actors.find(a=>a.id == actorData.id);
+
+    if (!actor.owner){
+        return;
+    }
     let extra = itemData;
 
         //Find each aspect, skill, stunt, and track attached to each extra
@@ -677,6 +681,8 @@ async function updateFromExtra(actorData, itemData) {
         //ToDo: Edit player track, skill, aspect, and stunt editors so they're blind to anything wiht the extra data type defined.
         //Check to see if the thing is already on the character sheet. If it is, update with the version from the item (should take care of diffing for me and only do a database update if changed)
         //ToDo: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_tag != undefined)
+        //ToDo: Amend the code that sets up tracks based on character skills to ignore the (Extra) in a skill name. If more than one skill matches,
+        //use the highest skill rank to determine which tracks are active and how many boxes they have.
         
         let stunts_output = {};
         let skills_output = {};
@@ -711,9 +717,12 @@ async function updateFromExtra(actorData, itemData) {
 
             let tracks = duplicate(extra.data.tracks);
             for (let track in tracks){
-                tracks[track].extra_tag = extra_tag;
-                tracks[track].name = tracks[track].name+=" (Extra)";
-                tracks_output[tracks[track].name]=tracks[track];
+                if (!Array.isArray(tracks)){
+                    tracks[track].extra_tag = extra_tag;
+                    tracks[track].name = tracks[track].name+=" (Extra)";
+                    tracks_output[tracks[track].name]=tracks[track];
+                    console.log(tracks_output)
+                }        
             }
 
         let actor_stunts = duplicate(actor.data.data.stunts);
@@ -721,26 +730,42 @@ async function updateFromExtra(actorData, itemData) {
         await actor.update({"data.stunts":final_stunts});
 
         let actor_tracks = duplicate(actor.data.data.tracks);
+
+        //Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character
+        for (let t in actor_tracks){
+            let track = actor_tracks[t];
+            if (track.extra_tag != undefined && track.extra_tag.extra_id == extra_id){
+                if (tracks_output[t] == undefined){
+                    let st =`-=${t}`
+                    await actor.update({"data.tracks":{[st]:null}});
+                    actor_tracks = duplicate(actor.data.data.tracks);
+                }
+            }
+        }
+
         for (let track in tracks_output){
             if (actor_tracks[track]!=undefined){
                 delete(tracks_output[track]);
             }
         }
 
-        //ToDo: Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character
         //Find all tracks on this actor that have the item's ID in their extra_tag attribute
         //Check to see that those tracks are also on the item's list of tracks
         //If they aren't, delete them from the character.
         let final_tracks = mergeObject(actor_tracks, tracks_output);
-        await actor.update({"data.tracks":final_tracks});
-
+        
         let actor_aspects = duplicate(actor.data.data.aspects);
         let final_aspects = mergeObject(actor_aspects, aspects_output);
-        await actor.update({"data.aspects":final_aspects});
 
         let actor_skills = duplicate(actor.data.data.skills);
         let final_skills = mergeObject(actor_skills, skills_output);
-        await actor.update({"data.skills":final_skills});
+
+        await actor.update({
+                                "data.tracks":final_tracks,
+                                "data.aspects":final_aspects,
+                                "data.skills":final_skills,
+                                "data.stunts":final_stunts
+                            });
 
         //ToDo: Change the code that counts the player's skills and checks the column etc. to ignore any skills with an extra field where the associated extra's countSkills is false.
 }
@@ -753,6 +778,10 @@ Hooks.on('updateOwnedItem',async (actorData, itemData) => {
 
 Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
     let actor = game.actors.find(a=>a.id == actorData.id);
+    if (!actor.owner){
+        return;
+    }
+
     //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
 
     let actor_aspects = duplicate(actor.data.data.aspects)
@@ -761,7 +790,7 @@ Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
         let et = actor_aspects[aspect].extra_tag;
         if (et != undefined && et.extra_id == itemData._id){
             let st =`-=${aspect}`
-            await actor.update({"data.aspects":{[`${st}`]:null}});
+            await actor.update({"data.aspects":{[st]:null}});
         }
     } 
    
@@ -771,7 +800,7 @@ Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
         let et = actor_stunts[stunt].extra_tag;
         if (et != undefined && et.extra_id == itemData._id){
             let st =`-=${stunt}`
-            await actor.update({"data.stunts":{[`${st}`]:null}});
+            await actor.update({"data.stunts":{[st]:null}});
         }
     }
 
@@ -781,7 +810,7 @@ Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
         let et = actor_tracks[track].extra_tag;
         if (et != undefined && et.extra_id == itemData._id){
             let st =`-=${track}`
-            await actor.update({"data.tracks":{[`${st}`]:null}});
+            await actor.update({"data.tracks":{[st]:null}});
         }
     }
 
@@ -791,7 +820,7 @@ Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
         let et = actor_skills[skill].extra_tag;
         if (et!= undefined && et.extra_id == itemData._id){
             let st =`-=${skill}`
-            await actor.update({"data.skills":{[`${st}`]:null}});
+            await actor.update({"data.skills":{[st]:null}});
         }
     }  
 })
