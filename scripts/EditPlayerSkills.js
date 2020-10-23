@@ -38,7 +38,6 @@ class EditPlayerSkills extends FormApplication{
             }
         }
         else {
-            console.log(this.object.id == id)
             if (this.object.id == id){
                 this.render(false);
             }
