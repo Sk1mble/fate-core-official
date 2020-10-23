@@ -643,7 +643,17 @@ export class ModularFateCharacter extends ActorSheet {
 
         let skillTotal = 0;
         for (let s in ordered_skills) {
-            skillTotal += ordered_skills[s].rank;
+            //Ignore any skills with an extra field where the associated extra's countSkills is false.
+            if (ordered_skills[s].extra_tag != undefined){
+                let extra_id = ordered_skills[s].extra_tag.extra_id;
+                let extra = this.object.items.find(item=>item._id == extra_id);
+        
+                if (extra != undefined && extra.data.data.countSkills){
+                    skillTotal += ordered_skills[s].rank;    
+                }
+            }else {
+                skillTotal += ordered_skills[s].rank;
+            }
         }
 
         sheetData.skillTotal = skillTotal;
@@ -668,21 +678,43 @@ export class ModularFateCharacter extends ActorSheet {
     }
 }
 
-async function updateFromExtra(actorData, itemData) {
-    let actor = game.actors.find(a=>a.id == actorData.id);
-
+function shouldUpdate(actor){
     if (!actor.owner){
-        return;
+        return false;
     }
-    let extra = itemData;
+
+    const permissions = actor.data.permission;
+    const activePlayers = game.users.entities
+       .filter(user => user.active)
+       .map(user => user.id);
+
+    for (let playerId in permissions) {
+        var isOwner = permissions[playerId] === CONST.ENTITY_PERMISSIONS.OWNER;
+        var isActive = activePlayers.includes(playerId);
+
+        if (isOwner && isActive) {
+            return playerId === game.user.id;
+        }
+    }
+}
+
+async function updateFromExtra(actorData, itemData) {
+
+    let actor = game.actors.find(a=>a.id == actorData.id);
+    if (!shouldUpdate(actor)){
+        return;
+    } else {
+        let extra = itemData;
 
         //Find each aspect, skill, stunt, and track attached to each extra
         //Add an extra data item to the data type containing the id of the original item.
-        //ToDo: Edit player track, skill, aspect, and stunt editors so they're blind to anything wiht the extra data type defined.
+        //Done: Edit editplayertracks to be blind to any object with the extra data type defined
+        //Done: Edit editplayerskills to be blind to any object with the extra data type defined
+        //Done: Edit editplayeraspects to be blind to any object with the extra data type defined
         //Check to see if the thing is already on the character sheet. If it is, update with the version from the item (should take care of diffing for me and only do a database update if changed)
-        //ToDo: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_tag != undefined)
-        //ToDo: Amend the code that sets up tracks based on character skills to ignore the (Extra) in a skill name. If more than one skill matches,
-        //use the highest skill rank to determine which tracks are active and how many boxes they have.
+        //Done: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_tag != undefined)
+        //After conversation with Fred, we decided that tracks can only use core world skills and not extra versions of them to automate modification of tracks.
+        //Anything else can be done manually.
         
         let stunts_output = {};
         let skills_output = {};
@@ -721,7 +753,6 @@ async function updateFromExtra(actorData, itemData) {
                     tracks[track].extra_tag = extra_tag;
                     tracks[track].name = tracks[track].name+=" (Extra)";
                     tracks_output[tracks[track].name]=tracks[track];
-                    console.log(tracks_output)
                 }        
             }
 
@@ -766,63 +797,62 @@ async function updateFromExtra(actorData, itemData) {
                                 "data.skills":final_skills,
                                 "data.stunts":final_stunts
                             });
-
-        //ToDo: Change the code that counts the player's skills and checks the column etc. to ignore any skills with an extra field where the associated extra's countSkills is false.
+    }
 }
 
 
 Hooks.on('updateOwnedItem',async (actorData, itemData) => {
     updateFromExtra(actorData,itemData);
-
 })
 
 Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
     let actor = game.actors.find(a=>a.id == actorData.id);
-    if (!actor.owner){
+    
+    if (!shouldUpdate(actor)){
         return;
+    } else {
+        //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
+
+        let actor_aspects = duplicate(actor.data.data.aspects)
+
+        for (let aspect in actor_aspects){
+            let et = actor_aspects[aspect].extra_tag;
+            if (et != undefined && et.extra_id == itemData._id){
+                let st =`-=${aspect}`
+                await actor.update({"data.aspects":{[st]:null}});
+            }
+        } 
+    
+        let actor_stunts = duplicate(actor.data.data.stunts)
+
+        for (let stunt in actor_stunts){
+            let et = actor_stunts[stunt].extra_tag;
+            if (et != undefined && et.extra_id == itemData._id){
+                let st =`-=${stunt}`
+                await actor.update({"data.stunts":{[st]:null}});
+            }
+        }
+
+        let actor_tracks = duplicate(actor.data.data.tracks)
+
+        for (let track in actor_tracks){
+            let et = actor_tracks[track].extra_tag;
+            if (et != undefined && et.extra_id == itemData._id){
+                let st =`-=${track}`
+                await actor.update({"data.tracks":{[st]:null}});
+            }
+        }
+
+        let actor_skills = duplicate(actor.data.data.skills)
+
+        for (let skill in actor_skills){
+            let et = actor_skills[skill].extra_tag;
+            if (et!= undefined && et.extra_id == itemData._id){
+                let st =`-=${skill}`
+                await actor.update({"data.skills":{[st]:null}});
+            }
+        }         
     }
-
-    //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
-
-    let actor_aspects = duplicate(actor.data.data.aspects)
-
-    for (let aspect in actor_aspects){
-        let et = actor_aspects[aspect].extra_tag;
-        if (et != undefined && et.extra_id == itemData._id){
-            let st =`-=${aspect}`
-            await actor.update({"data.aspects":{[st]:null}});
-        }
-    } 
-   
-    let actor_stunts = duplicate(actor.data.data.stunts)
-
-    for (let stunt in actor_stunts){
-        let et = actor_stunts[stunt].extra_tag;
-        if (et != undefined && et.extra_id == itemData._id){
-            let st =`-=${stunt}`
-            await actor.update({"data.stunts":{[st]:null}});
-        }
-    }
-
-    let actor_tracks = duplicate(actor.data.data.tracks)
-
-    for (let track in actor_tracks){
-        let et = actor_tracks[track].extra_tag;
-        if (et != undefined && et.extra_id == itemData._id){
-            let st =`-=${track}`
-            await actor.update({"data.tracks":{[st]:null}});
-        }
-    }
-
-    let actor_skills = duplicate(actor.data.data.skills)
-
-    for (let skill in actor_skills){
-        let et = actor_skills[skill].extra_tag;
-        if (et!= undefined && et.extra_id == itemData._id){
-            let st =`-=${skill}`
-            await actor.update({"data.skills":{[st]:null}});
-        }
-    }  
 })
 
 Hooks.on('createOwnedItem',(actorData, itemData) => {

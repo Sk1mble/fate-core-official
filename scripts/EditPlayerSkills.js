@@ -109,9 +109,18 @@ class EditPlayerSkills extends FormApplication{
                 let actor= this.object;
                 skillColumnViolated = false;
                 let ranks = [0,0,0,0,0,0,0,0,0,0,0];
-
+                //Ignore skills from extras if the countSkills setting is false.
                 for (let sk in p_skills){
-                    ranks[p_skills[sk].rank]++
+                    if (p_skills[sk].extra_tag != undefined){
+                        let extra_id = p_skills[sk].extra_tag.extra_id;
+                        let extra = this.object.items.find(item=>item._id == extra_id);
+                
+                        if (extra != undefined && extra.data.data.countSkills){
+                            ranks[p_skills[sk].rank]++    
+                        }
+                    }else {
+                        ranks[p_skills[sk].rank]++
+                    }
                 }
 
                 //0=11 & 10; 1=10&9; 2=9&8; 3=8&7; 4=7&6; 5=6&5; 6=5&4; 7=4&3; 8=3&2; 9=2&1
@@ -182,7 +191,7 @@ class EditPlayerSkills extends FormApplication{
             this.temp_presentation_skills=[];
         } else {
             for (let x in this.player_skills){
-                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank});
+                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank,"extra_tag":this.player_skills[x].extra_tag});
             }
         }
         

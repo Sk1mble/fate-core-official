@@ -6,6 +6,8 @@
         </td>
     </tr>
     {{#each present_skills}}
+    {{log this}}
+    {{#if (eq this.extra_tag undefined)}}
     <tr>
         <td style="width:100px">
             <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -14,6 +16,7 @@
             {{this.name}}
         </td>
     </tr>
+    {{else}}{{/if}}
     {{/each}}
     <tr>
             <td colspan="2">
@@ -21,6 +24,7 @@
             </td>
         </tr>
         {{#each orphaned}}
+        {{#if (eq this.extra_tag undefined)}}
         <tr>
             <td style="width:100px">
                 <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -29,6 +33,7 @@
                 {{this.name}}
             </td>
         </tr>
+        {{else}}{{/if}}
         {{/each}}
         <tr>
             <td colspan="2">

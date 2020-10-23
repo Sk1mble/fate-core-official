@@ -10,6 +10,7 @@
         <table style="background-color: white; border:none">
         {{#each tracks_by_category}}
             {{#each this}}
+            {{#if (eq this.extra_tag undefined)}}
             <tr>
                 {{#if (eq ../../cat @../key)}}
                 <td title ="{{this.description}}">
@@ -26,6 +27,7 @@
                             </td>
                 {{/if}}
                 </tr>
+                {{else}}{{/if}}
             {{/each}}
         {{/each}}
     </table>

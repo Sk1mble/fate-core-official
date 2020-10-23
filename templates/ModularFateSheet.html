@@ -203,12 +203,12 @@
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">
                                             {{this.name}} ({{this.linked_skill}})
-
+                                            {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_stunt" id="{{this.name}}_delete"></button> {{#if (eq this.linked_skill "None")}}{{else}}
                                             <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon"></button>{{/if}}
                                             <button type="button" name="edit_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon" id="{{this.name}}_edit"></button> {{#if ../GM}}
                                             <button type="button" name="db_stunt" title="Add this stunt to the stunt database" i icon class="fas fa-upload mfate-stunts__row-header-icon" id="{{this.name}}_db"></button> {{/if}}
-
+                                            {{else}}{{/if}}
                                             <!-- <button type="button" style="border:none; background:white; float:right; width:20px; height:20px;" i icon class="fas fa-trash" name="delete_stunt" id="{{this.name}}_delete"></button> {{#if (eq this.linked_skill
                                             "None")}}{{else}}
                                             <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.plusTwo}}" style="border:none; background:white; float:right; width:20px; height:20px; padding-left:15px; padding-right:30px" i icon class="fas fa-dice"></button>{{/if}}
