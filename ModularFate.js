@@ -251,6 +251,7 @@ Hooks.on('updateItem', (item, data) => {
 
 Hooks.on('updateOwnedItem', (actor, item, data) => {
     game.system.apps["item"].forEach(a=> {
+        setTimeout(function(){a.renderMe(item._id, data)},200);
         a.renderMe(item._id, data);
     })
 })

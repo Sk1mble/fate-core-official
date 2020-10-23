@@ -858,3 +858,7 @@ Hooks.on('deleteOwnedItem',async (actorData, itemData) => {
 Hooks.on('createOwnedItem',(actorData, itemData) => {
     updateFromExtra(actorData,itemData);
 })
+
+Hooks.on('createOwnedItem',(scene, itemData) => {
+    updateFromExtra(actorData,itemData);
+})

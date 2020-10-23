@@ -31,15 +31,16 @@ class EditPlayerSkills extends FormApplication{
 
     //This function is called when an actor or item update is called.
     async renderMe(id){
+
         if (this.object.isToken){
             if (this.object.token.id == id){
-                setTimeout(function(){this.render(false);},200);
+                this.render(false);
             }
         }
         else {
             console.log(this.object.id == id)
             if (this.object.id == id){
-                setTimeout(function(){this.render(false);},200);
+                this.render(false);
             }
         }       
     }
@@ -359,11 +360,6 @@ class EditGMSkills extends FormApplication{
 
     async _aws_click(event, html){
         console.log("Clicked")
-    }
-
-    close(){
-        this.skillsWindow.render(false);
-        super.close();
     }
 
     async _confirm(event,html){
