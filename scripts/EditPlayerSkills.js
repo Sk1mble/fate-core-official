@@ -22,22 +22,24 @@ class EditPlayerSkills extends FormApplication{
                 this.temp_presentation_skills=[];
                 this.sorted = false;
                 game.system.apps["actor"].push(this);
+                game.system.apps["item"].push(this);
     }
 
     setSheet (ActorSheet){
         this.sheet = ActorSheet;
     }
 
-    //This function is called when an actor update is called.
-    renderMe(id){
+    //This function is called when an actor or item update is called.
+    async renderMe(id){
         if (this.object.isToken){
             if (this.object.token.id == id){
-                this.render(false);
+                setTimeout(function(){this.render(false);},200);
             }
         }
         else {
+            console.log(this.object.id == id)
             if (this.object.id == id){
-                this.render(false);
+                setTimeout(function(){this.render(false);},200);
             }
         }       
     }
@@ -254,6 +256,7 @@ class EditPlayerSkills extends FormApplication{
         if (game.user.isGM || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
             e.render(true);
+            e.skillsWindow = this;
         }
         else {
             ui.notifications.error("Only GMs can manually edit player skills.");
@@ -356,6 +359,11 @@ class EditGMSkills extends FormApplication{
 
     async _aws_click(event, html){
         console.log("Clicked")
+    }
+
+    close(){
+        this.skillsWindow.render(false);
+        super.close();
     }
 
     async _confirm(event,html){

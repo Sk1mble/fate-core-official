@@ -245,7 +245,7 @@ Hooks.on('updateActor', (actor, data) => {
 
 Hooks.on('updateItem', (item, data) => {
     game.system.apps["item"].forEach(a=> {
-        a.renderMe(item.id, data);
+        a.renderMe(item._id, data);
     })
 })
 
