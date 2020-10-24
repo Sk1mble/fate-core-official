@@ -183,6 +183,7 @@ class EditTracks extends FormApplication {
                 tracks_of_category.push(this.tracks[t]);
             }
         }
+        
         const templateData = {
             category:this.category,
             tracks:tracks_of_category, 
@@ -495,7 +496,9 @@ class TrackSetup extends FormApplication{
     }
     
     async _onEditTracksButton(event,html){
+
         let category = html.find("select[id='track_categories_select']")[0].value;
+
         if (category !="" && category != undefined){
             let track_editor = new EditTracks(category);
             track_editor.render(true);

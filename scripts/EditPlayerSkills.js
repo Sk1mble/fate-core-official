@@ -3,33 +3,43 @@
 class EditPlayerSkills extends FormApplication{
     constructor(...args){
             super(...args);
-                if(this.object.isToken){
-                    this.options.title=`Character skill editor for [Token] ${this.object.name}`                    
+
+                if (this.object.type == "Extra"){
+                    this.options.title=`Skill editor for item ${this.object.name}`
+                    game.system.apps["item"].push(this);
                 } else {
-                    this.options.title=`Character skill editor for ${this.object.name}`
+                    if (this.object.isToken) {
+                        this.options.title=`Skill editor for [Token] ${this.object.name}`
+                    } else {
+                        this.options.title=`Skill editor for ${this.object.name}`
+                    }
                 }
-                this.firstRun=true;
+                if (this.object.type != "Extra"){
+                    this.firstRun=true;
+                }
                 this.player_skills=duplicate(this.object.data.data.skills);
                 this.sortByRank = true;
                 this.temp_presentation_skills=[];
                 this.sorted = false;
                 game.system.apps["actor"].push(this);
+                game.system.apps["item"].push(this);
     }
 
     setSheet (ActorSheet){
         this.sheet = ActorSheet;
     }
 
-    //This function is called when an actor update is called.
-    renderMe(id){
+    //This function is called when an actor or item update is called.
+    async renderMe(id){
+        console.log("Renderme called")
+
         if (this.object.isToken){
             if (this.object.token.id == id){
                 this.render(false);
             }
         }
-
         else {
-            if (this.object._id == id){
+            if (this.object.id == id){
                 this.render(false);
             }
         }       
@@ -58,7 +68,7 @@ class EditPlayerSkills extends FormApplication{
         //this.player_skills=duplicate(this.object.data.data.skills);
         //Check if this is a player
         //Check if the player is currently allowed to save
-        let isPlayer = this.object.isPC;
+        //OVerride these settings if the skill is being saved on an extra.
     
         for (let skill in formData){ //This goes through every field in the JSON object.
             let skill_name = skill.split("_")[0];
@@ -66,19 +76,28 @@ class EditPlayerSkills extends FormApplication{
             let player_skill = this.player_skills[skill_name];//Find the player skill entry matching this item
             player_skill.rank = rank;//Set it to this value.
         }
-        var canSave = await this.checkSkills(this.player_skills);
-        if (!game.user.isGM && isPlayer && !canSave){
-            ui.notifications.error("Unable to save because this character violates skill cap or skill column enforcement.")
-        } else {
+
+        if (this.object.type=="Extra"){
             await this.object.update({"data.skills":this.player_skills}); 
-            ui.notifications.info("Character skills saved.")   
-            await this.sheet.initialise();
+            ui.notifications.info("Extra's skills saved.");   
             this.close();
+        } else {
+            let isPlayer = this.object.hasPlayerOwner;
+            var canSave = await this.checkSkills(this.player_skills);
+            if (!game.user.isGM && isPlayer && !canSave){
+                ui.notifications.error("Unable to save because this character violates skill cap or skill column enforcement.")
+            } else {
+                await this.object.update({"data.skills":this.player_skills}); 
+                ui.notifications.info("Character skills saved.")   
+                await this.sheet.initialise();
+                this.close();
+            }
         }
     }
 
     close(){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
+        game.system.apps["item"].splice(game.system.apps["item"].indexOf(this),1); 
         super.close();
     }
 
@@ -93,9 +112,18 @@ class EditPlayerSkills extends FormApplication{
                 let actor= this.object;
                 skillColumnViolated = false;
                 let ranks = [0,0,0,0,0,0,0,0,0,0,0];
-
+                //Ignore skills from extras if the countSkills setting is false.
                 for (let sk in p_skills){
-                    ranks[p_skills[sk].rank]++
+                    if (p_skills[sk].extra_tag != undefined){
+                        let extra_id = p_skills[sk].extra_tag.extra_id;
+                        let extra = this.object.items.find(item=>item._id == extra_id);
+                
+                        if (extra != undefined && extra.data.data.countSkills){
+                            ranks[p_skills[sk].rank]++    
+                        }
+                    }else {
+                        ranks[p_skills[sk].rank]++
+                    }
                 }
 
                 //0=11 & 10; 1=10&9; 2=9&8; 3=8&7; 4=7&6; 5=6&5; 6=5&4; 7=4&3; 8=3&2; 9=2&1
@@ -118,7 +146,7 @@ class EditPlayerSkills extends FormApplication{
                     if (!game.user.isGM) {
                         await ModularFateConstants.awaitOKDialog("Skill column violation detected",`<div>Your skill distribution is invalid due to not being in a column. You won't be able to save your changes until you correct this.${columnErrorText}</div>`);
                     } else {
-                        if (actor.isPC){
+                        if (actor.hasPlayerOwner){
                             await ModularFateConstants.awaitOKDialog("Skill column violation detected",`<div>This character's skill distribution is invalid due to not being in a column. The player won't be able to save any changes while this remains the case unless you turn off skill column enforcement in the system settings.</div>${columnErrorText}`);    
                         }
                     }    
@@ -141,7 +169,7 @@ class EditPlayerSkills extends FormApplication{
                     if (!game.user.isGM){
                         await ModularFateConstants.awaitOKDialog("Skill points exceed allowed total",`<div>You have ${player_total} skill points and the game's skill total is ${skill_total}. You won't be able to save your changes until you correct this.</div>`);
                     } else {
-                        if (actor.isPC){
+                        if (actor.hasPlayerOwner){
                             await ModularFateConstants.awaitOKDialog("Skill points exceed allowed total",`<div>This character has ${player_total} skill points and the game's skill total is ${skill_total}. The player won't be able to save any changes while this remains the case unless you turn off skill total enforcement in the system settings.</div>`);
                         }
                     }
@@ -166,7 +194,7 @@ class EditPlayerSkills extends FormApplication{
             this.temp_presentation_skills=[];
         } else {
             for (let x in this.player_skills){
-                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank});
+                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank,"extra_tag":this.player_skills[x].extra_tag});
             }
         }
         
@@ -178,7 +206,8 @@ class EditPlayerSkills extends FormApplication{
         const templateData = {
             skill_list:game.settings.get("ModularFate","skills"),
             character_skills:presentation_skills,
-            isGM:game.user.isGM
+            isGM:game.user.isGM,
+            isExtra:this.object.type=="Extra"
          }
         return templateData;
     }
@@ -225,9 +254,10 @@ class EditPlayerSkills extends FormApplication{
     }
 
     async _onEditButton (event, html){
-        if (game.user.isGM){
+        if (game.user.isGM || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
             e.render(true);
+            e.skillsWindow = this;
         }
         else {
             ui.notifications.error("Only GMs can manually edit player skills.");
@@ -293,10 +323,14 @@ class EditGMSkills extends FormApplication{
     //Also allows the GM to add or delete any given skill from the worldlist to any character.
     constructor(actor){
         super(actor);
-            if(this.object.isToken){
-                this.options.title=`GM skill editor for [Token] ${this.object.name}`                    
+            if (this.object.type=="Extra"){ 
+                this.options.title=`Extra skill editor for ${this.object.name}`                    
             } else {
-                this.options.title=`GM skill editor for ${this.object.name}`
+                if(this.object.isToken){
+                    this.options.title=`GM skill editor for [Token] ${this.object.name}`                    
+                } else {
+                    this.options.title=`GM skill editor for ${this.object.name}`
+                }
             }
             this.player_skills=duplicate(this.object.data.data.skills);
     }
@@ -323,12 +357,16 @@ class EditGMSkills extends FormApplication{
         const confirm = html.find("button[id='add_remove_button']")
         confirm.on("click", event => this._confirm(event, html));
     }
+
+    async _aws_click(event, html){
+        console.log("Clicked")
+    }
+
     async _confirm(event,html){
-        let canDelete = [];
-        let cannotDelete = [];
+
         let actor=undefined;
         for (let s in this.player_skills){
-            let cbox = html.find(`input[id='${s}']`)[0];
+            let cbox = html.find(`input[id="${s}"]`)[0];
             if (cbox != undefined && !cbox.checked){
                 // This skill needs to be deleted from the list.
                 //THIS WON'T WORK FOR TOKEN ACTORS unless you also delete the skill from the 
@@ -338,33 +376,11 @@ class EditGMSkills extends FormApplication{
                 await this.object.update({"data.skills": {[`${sk}`]:null}})
             }
         } 
-        if (this.object.isToken && cannotDelete.length >0) {
-            let delString = "The following skills are stored on the original actor for this token, so deleting them here won't persist. Would you like to delete them from the original actor?"
-            cannotDelete.forEach(cd => {
-                delString+=`<li>${cd.name}</li>`
-            })
-            let response= await ModularFateConstants.awaitYesNoDialog("Delete skills from original actor?", delString);
-            if (response=="yes"){
-                cannotDelete.forEach(cd=> {
-                    let sk = `-=${cd.name}`;
-                    (async ()=> {await this.object.token.update({["actorData.data.skills"]:{[`${sk}`]:null}})})();
-                    (async ()=> {await actor.update({"data.skills": {[`${sk}`]:null}})})();
-                })
-            }
-        }
-        if (this.object.isToken && canDelete.length > 0) {
-            canDelete.forEach(skill => {
-                let sk = `-=${skill.name}`;
-                async function update(object) {
-                        await object.update({"data.skills":{[`${sk}`]:null}})
-                }
-                update(this.object)
-            })
-        }
+        
         //Now we need to add skills that have checks and which aren't already checked.
         let world_skills=game.settings.get("ModularFate","skills")
         for (let w in world_skills){
-            let cbox = html.find(`input[id='${w}']`)[0];
+            let cbox = html.find(`input[id="${w}"]`)[0];
             if (cbox.checked){
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
@@ -441,7 +457,7 @@ class EditGMSkills extends FormApplication{
             absent_skills:absent,
             non_pc:non_pc_world_skills,
             ad_hoc:ad_hoc,
-            orphaned:orphaned
+            orphaned:orphaned,
          }
         return templateData;
     }

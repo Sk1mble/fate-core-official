@@ -7,7 +7,7 @@ constructor(){
     game.system.apps["scene"].push(this); //Maybe? If we want to store scene notes, aspects, etc.
     game.system.apps["user"].push(this);
     this.category="All";
-    this.editingSceneNotes = false;
+    this.editing = false;
     if (game.system.tokenAvatar == undefined){
         game.system.tokenAvatar = true;
     }
@@ -23,6 +23,23 @@ close(){
 
 activateListeners(html) {
     super.activateListeners(html);
+    const input = html.find('input[type="text"], input[type="number"], textarea');
+    input.on("focus", event => {
+        if (this.editing == false) {
+            this.editing = true;
+        }
+    });
+    input.on("focusout", event => {
+        if (event.target.id == "sit_aspect"){
+            this.editingAspect = true;
+         }
+        this.editing = false; 
+        if (this.renderBanked && this.editingAspect == false){
+            this.renderBanked = false;
+            this.render(false);
+        }
+    });
+
     const popcornButtons = html.find("button[class='popcorn']");
     popcornButtons.on("click", event => this._onPopcornButton(event, html));
     const nextButton = html.find("button[id='next_exchange']");
@@ -66,8 +83,8 @@ activateListeners(html) {
     free_i.on("change", event => this._free_i_button(event, html));
 
     const scene_notes = html.find("div[id='scene_notes']");
-    scene_notes.on("input", event => this.scene_notes_edit(event, html));
-    scene_notes.on("focusout", event => this.editingSceneNotes = false);
+    scene_notes.on("focus", event => this.scene_notes_edit(event, html));
+    scene_notes.on("focusout", event => this._notesFocusOut(event,html));
 
     const nav = html.find("nav[class='navigation foo']");
     nav.on("click", event => this.render(false));
@@ -89,6 +106,81 @@ activateListeners(html) {
 
     const fu_roll_button = html.find("button[name='fu_roll_button']");
     fu_roll_button.on("click",event => this._fu_roll_button(event, html));
+
+    const select = html.find("select[class='skill_select']");
+    select.on("focus", event => {
+        this.selectingSkill = true;
+    });
+
+    select.on("click", event => {if (event.shiftKey) {this.shift = true}})
+    select.on("change", event => this._selectRoll (event, html));
+
+    select.on("focusout", event => {
+        this.selectingSkill = false;
+        this.render(false);
+    })
+}
+
+async _selectRoll (event, html){
+    let t_id = event.target.id.split("_")[0]
+    let token = canvas.tokens.placeables.find(t => t.id==t_id);
+    
+    let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
+    let skill;
+    let stunt = undefined;
+    let bonus=0;
+
+    if (sk.value.startsWith("stunt")){
+        let items = sk.value.split("_");
+        stunt=items[1]
+        skill = items[2]
+        bonus = parseInt(items[3]);
+    } else {
+        skill = sk.value.split("(")[0].trim();
+    }
+    let rank = token.actor.data.data.skills[skill].rank;
+    let ladder = ModularFateConstants.getFateLadder();
+    let rankS = rank.toString();
+    let rung = ladder[rankS];
+
+    if (this.shift && !sk.value.startsWith("stunt")) {
+            let mrd = new ModifiedRollDialog (token.actor, skill);
+            mrd.render(true);
+            this.shift=false;
+    } else {
+        let r;
+        if (bonus >0){
+            r = new Roll(`4dF + ${rank}+${bonus}`);    
+        } else {
+            r = new Roll(`4dF + ${rank}`);
+        }
+            let roll = r.roll();
+            let name = game.user.name
+
+            let flavour;
+            if (stunt != undefined){
+                flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+                            Skill rank: ${rank} (${rung})<br> 
+                            Stunt: ${stunt} (+${bonus})`
+            } else {
+                flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
+                            Skill rank: ${rank} (${rung})`;
+            }
+
+            roll.toMessage({
+                flavor: flavour,
+                speaker: ChatMessage.getSpeaker(token),
+            });
+    }
+    this.selectingSkill = false;
+    this.render(false);
+}
+
+async _notesFocusOut(event, html){
+    let notes = html.find("div[id='scene_notes']")[0].innerHTML
+    await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.editing = false;
+    this.render(false);
 }
 
 async _fu_roll_button(event, html){
@@ -266,9 +358,10 @@ async _on_avatar_click(event, html){
 
 async refresh_fate_points(event, html){
     let tokens = canvas.tokens.placeables;
+    let updates = [];
     for (let i = 0; i < tokens.length; i++){
         let token = tokens[i];
-        if (!token.actor.isPC){
+        if (token.actor == null || !token.actor.hasPlayerOwner){
             continue;
         }
         let current = parseInt(token.actor.data.data.details.fatePoints.current);
@@ -277,10 +370,9 @@ async refresh_fate_points(event, html){
         if (current < refresh){
             current = refresh;
         }
-        await token.actor.update({
-            ["data.details.fatePoints.current"]: current
-        })
+        updates.push({"_id":token.actor.id,"data.details.fatePoints.current":current})
     }
+    Actor.update(updates);
 }
 
 async _edit_player_points(event, html){
@@ -302,9 +394,7 @@ async _edit_gm_points(event, html){
 }
 
 async scene_notes_edit(event,html){
-    this.editingSceneNotes = true;
-    let notes = html.find("div[id='scene_notes']")[0].innerHTML
-    await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.editing = true;
 }
 
 async _free_i_button(event,html){
@@ -325,7 +415,8 @@ async _free_i_button(event,html){
         }
         drawing.update({
             "text":text,
-             width: text.length*25
+             width: text.length*20,
+             fontFamily: "Modesto Condensed",
         });
     }
 }
@@ -359,7 +450,7 @@ async _addToScene(event, html){
                 author: game.user._id,
                 x: canvas.stage.pivot._x,
                 y: canvas.stage.pivot._y,
-                width: text.length*25,
+                width: text.length*20,
                 height: 75,
                 fillType: CONST.DRAWING_FILL_TYPES.SOLID,
                 fillColor: "#FFFFFF",
@@ -368,6 +459,7 @@ async _addToScene(event, html){
                 strokeColor: "#000000",
                 strokeAlpha: 1,
                 text: text,
+                fontFamily: "Modesto Condensed",
                 fontSize: 48,
                 textColor: "#000000",
                 points: []
@@ -406,69 +498,18 @@ async _add_sit_aspect(event, html){
     }                                
     situation_aspects.push(situation_aspect);
     await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+    this.editingAspect = false;
+    this.render(false);
 }
 
 async _saveNotes(event, html){
-    this.editingSceneNotes=false;
+    this.editing=false;
 }
 
 async _clear_fleeting(event, html){
-    //console.log("clearing")
     let tokens = canvas.tokens.placeables;
     for (let i = 0; i<tokens.length; i++){
         await this.clearFleeting(tokens[i].actor)
-    }
-}
-
-async _roll(event,html){
-    let t_id = event.target.id;
-    let token = canvas.tokens.placeables.find(t => t.id==t_id);
-    
-    let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
-    let skill;
-    let stunt = undefined;
-    let bonus=0;
-
-    if (sk.value.startsWith("stunt")){
-        let items = sk.value.split("_");
-        stunt=items[1]
-        skill = items[2]
-        bonus = parseInt(items[3]);
-    } else {
-        skill = sk.value.split("(")[0].trim();
-    }
-    let rank = token.actor.data.data.skills[skill].rank;
-    let ladder = ModularFateConstants.getFateLadder();
-    let rankS = rank.toString();
-    let rung = ladder[rankS];
-
-    if (event.shiftKey && !sk.value.startsWith("stunt")) {
-            let mrd = new ModifiedRollDialog (token.actor, skill);
-            mrd.render(true);
-    } else {
-        let r;
-        if (bonus >0){
-            r = new Roll(`4dF + ${rank}+${bonus}`);    
-        } else {
-            r = new Roll(`4dF + ${rank}`);
-        }
-            let roll = r.roll();
-            let name = game.user.name
-
-            let flavour;
-            if (stunt != undefined){
-                flavor = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
-                            Skill rank: ${rank} (${rung})<br> 
-                            Stunt: ${name} (+${bonus})`
-            } else {
-                flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
-                            Skill rank: ${rank} (${rung})`;
-            }
-
-            roll.toMessage({
-                flavor: flavour,
-                speaker: ChatMessage.getSpeaker(token),
-            });
     }
 }
 
@@ -669,17 +710,18 @@ async getData(){
     return data;
 }
 
+async render (...args){
+    if (this.editing == false && (this.editingAspect == false || this.editingAspect == undefined) && (this.selectingSkill == false || this.selectingSkill == undefined)){
+        super.render(...args);
+    } else {
+        this.renderBanked = true;
+    }
+}
+
 async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
-    try {
-        if ((args[0][1].flags != undefined && args[0][1].flags.ModularFate.sceneNotes == undefined) || this.editingSceneNotes == false){ //Don't render if we've just changed the scene notes. This will prevent rendering of other elements if they happen simultaneously with editing the notes, too, but I don't think that's a problem.
-            this.render(false)
-    }
-    } catch (error){
-        //console.log(error)
-        this.render(false);
-    }
+    this.render(false);
 }
 
 async clearFleeting(object){
@@ -904,7 +946,7 @@ async function updateRolls (rolls) {
         let scene = game.scenes.entries.find(sc=> sc.id==rolls.scene._id);
         let currRolls = scene.getFlag("ModularFate","rolls");
         if (currRolls == undefined){
-            currRols = [];
+            currRolls = [];
         }
         currRolls = duplicate(currRolls);
         let endRolls = mergeObject(currRolls, rolls.rolls);

@@ -1,8 +1,8 @@
-<form class="contenteditable" onsubmit="event.preventDefault();" style="background-color:white">
+<form class="contenteditable" style="background-color:white; padding-right:10px; padding-left:10px">
 		<table style="border:none; background-color:white">
 			<tr>
 				<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Artwork:</td>
-				<td style="width:75%"><img class="mfate-sheet__identity-avatar profile-img" width="100" height="auto" style="border:0" id="avatar" data-edit="img" src="{{this.item.img}}"></img></td>
+				<td style="width:75%"><img class="mfate-sheet__identity-avatar profile-img" width="100" height="auto" style="border:0" id="avatar" data-edit="img" src="{{item.img}}"></img></td>
 			 </tr>		
 		 <tr>
 			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">Name:</td>
@@ -41,4 +41,110 @@
 			<td style="width:75%"><textarea rows="2" name="data.actions.defend" style="width:100%; background-color: white; border: solid lightsteelblue 1px;  font-family:Montserrat;">{{data.actions.defend}}</textarea></td>
 		</tr>
 		</table>
+
+		<!-- Here are the aspects attached to the extra.-->
+			<div class="mfate-panel__header">
+				<div class="mfate-panel__header-label">Aspects</div>
+				<div title="Open the Aspect Editor" name="edit_item_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
+			</div>
+
+			<ul class="mfate-aspects-list">
+
+				{{#each data.aspects}}
+
+				<li name="aspect" title="{{this.description}}" class="mfate-aspects-list__item">
+					<div id="{{this.name}}" name="{{this.name}}" class="mfate-aspects-list__label">{{this.name}}</div>
+					<!-- <input class="cs_box" type="text" id="{{this.name}}" name="data.aspects.{{this.name}}.value" value="{{{this.value}}}"></input> -->
+					<textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" name="data.aspects.{{this.name}}.value">{{this.value}}</textarea>
+
+				</li>
+				{{/each}}
+			</ul>
+
+		<!--Here are the skills attached to the extra.-->
+			<div class="mfate-panel__header">
+				<div class="mfate-panel__header-label">Skills</div>
+				<!-- <button class="mfate-panel__header-button">Settings</button>
+					<button class="mfate-panel__header-button">Sort</button> -->
+					Count these skills towards character skill calculations? <input name="data.countSkills" type="checkbox" id="{{this.countSkills}}" {{#if this.data.countSkills}}checked="checked"{{/if}}></input>
+				<div title="Open the Skill Editor" name="edit_item_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
+			</div>
+			<div name="skills_body" id="skills_body" class="mfate-panel__body">
+				<ul class="mfate-skills-list">
+			{{#each skills}}
+					<li class="mfate-skills-list__item">
+						<div class="mfate-skills-list__number">{{this.rank}}</div>
+						<div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
+						<div class="mfate-skills-list__skill-name_item" name="skill" id="{{this.name}}">
+							{{this.name}}
+						</div>
+					</li>
+					{{/each}}
+				</ul>
+			</div>
+
+		<!-- Here are the stunts attached to the extra.-->
+
+			<div class="mfate-panel__header" name="stunts_header">
+				<b class="mfate-panel__header-label">Stunts</b>
+				<div title="View Stunt Database" name="item_stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
+				<div class="fas fa-plus mfate-panel__header-button" title="Add a new stunt" name="edit_item_stunts" i icon></div>
+			</div>
+				<div name="stunts_body mfate-stunts__body" id="stunts_body">
+					<div class="mfate-stunts__table">
+						{{#each stunts}}
+						<div class="mfate-stunts__row">
+							<div class="mfate-stunts__row-header">
+								<div class="mfate-stunts__row-header-cell">
+									{{this.name}} ({{this.linked_skill}})
+
+									<button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_item_stunt" id="{{this.name}}_delete"></button> 
+									<button type="button" name="edit_item_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon" id="{{this.name}}_edit"></button> {{#if ../GM}}
+									<button type="button" name="item_db_stunt" title="Add this stunt to the stunt database" i icon class="fas fa-upload mfate-stunts__row-header-icon" id="{{this.name}}_db"></button> {{/if}}
+								</div>
+							</div>
+							<div class="mfate-stunts__row-body">
+								<div>{{{this.description}}}</div>
+							</div>
+							<div class="mfate-stunts__row-footer">
+								<div class="mfate-stunts__row-footer-cell">
+									{{#if this.overcome}}
+									<b id=" Overcome ">O</b> {{/if}} {{#if this.caa}}
+									<b id="Create An Advantage ">C</b> {{/if}}{{#if this.attack}}
+									<b id="Attack ">A</b>{{/if}} {{#if this.defend}}
+									<b id="Defend ">D</b>{{/if}}
+								</div>
+							</div>
+						</div>
+						{{/each}}
+					</div>
+					<!--End of stunt body-->
+				</div>
+				<!-- end of Stunts block-->	
+
+				<!--Here are the tracks attached to the extra.-->
+                            <div class="mfate-panel__header" name="tracks_header">
+                                <b class="mfate-panel__header-label">Tracks</b>
+                                <select class="mfate-panel__header-select" id="item_track_category">
+                                    <option value="All" {{#if (eq category "All")}}selected{{/if}}>All</option>
+                                    {{#each track_categories}}
+                                        <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
+                                    {{/each}}
+                                </select>
+                                <div title="Open the Track Editor" style="font-size:medium;" name="edit_item_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
+                            </div>
+                            <div name="tracks_body" id="tracks_body" style="scrollbar-width:thin">
+                                <div class="mfate-tracks__list">
+                                    {{#each tracks}}{{#if (category ../category this.category)}}
+                                    <div class="mfate-tracks__item">
+                                        <div class="mfate-tracks__item-label">
+                                            <div name="track_name" style="font-family:Montserrat" title="Click here to edit the track notes for {{this.name}}">
+                                                <i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{/if}}{{/each}}
+                                </div>
+                            </div>
+                            <!--end of tracks body-->
 </form>

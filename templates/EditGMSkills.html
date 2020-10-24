@@ -1,11 +1,12 @@
 <form class="editable" onsubmit="event.preventDefault();">
-<table>
+<table style="border:none; background:none">
     <tr>
         <td colspan="2">
             <hr><h3>World skills present on this character</h3><hr>
         </td>
     </tr>
     {{#each present_skills}}
+    {{#if (eq this.extra_tag undefined)}}
     <tr>
         <td style="width:100px">
             <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -14,6 +15,7 @@
             {{this.name}}
         </td>
     </tr>
+    {{else}}{{/if}}
     {{/each}}
     <tr>
             <td colspan="2">
@@ -21,6 +23,7 @@
             </td>
         </tr>
         {{#each orphaned}}
+        {{#if (eq this.extra_tag undefined)}}
         <tr>
             <td style="width:100px">
                 <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -29,6 +32,7 @@
                 {{this.name}}
             </td>
         </tr>
+        {{else}}{{/if}}
         {{/each}}
         <tr>
             <td colspan="2">
@@ -36,6 +40,7 @@
             </td>
         </tr>
     {{#each ad_hoc}}
+    {{#if (eq this.extra_tag undefined)}}
     <tr>
         <td style="width:100px">
             <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -44,6 +49,7 @@
             {{this.name}}
         </td>
     </tr>
+    {{else}}{{/if}}
     {{/each}}
     <tr>
         <td colspan="2">
@@ -76,7 +82,7 @@
     </tr>
     {{/each}}
 </table>
-<table>
+<table style="background:none; border:none">
     <tr>
         <td>
             Ad-hoc skill to add:
