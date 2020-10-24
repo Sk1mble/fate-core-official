@@ -40,6 +40,7 @@
             </td>
         </tr>
     {{#each ad_hoc}}
+    {{#if (eq this.extra_tag undefined)}}
     <tr>
         <td style="width:100px">
             <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -48,6 +49,7 @@
             {{this.name}}
         </td>
     </tr>
+    {{else}}{{/if}}
     {{/each}}
     <tr>
         <td colspan="2">
