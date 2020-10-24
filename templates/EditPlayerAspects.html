@@ -3,6 +3,7 @@
     <table border="0" style="background-color:white; border:none">
         <tr>
             {{#each this}}
+            {{#if (eq this.extra_tag undefined)}}
             <td style="border-bottom:1px; border-top:groove">
                 <label for="name" style="font-family:Montserrat; font-weight:bold">Aspect Name:</label>    
             </td>
@@ -32,6 +33,7 @@
                 </textarea>
             </td>
         </tr>
+        {{else}}{{/if}}
         {{/each}}
     </table>
     <button type="button" id="save_aspects">Save</button><button type="button" name="new_aspect">Add New</button>

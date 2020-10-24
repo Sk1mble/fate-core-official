@@ -10,6 +10,7 @@
         <table style="background-color: white; border:none">
         {{#each tracks_by_category}}
             {{#each this}}
+            {{#if (eq this.extra_tag undefined)}}
             <tr>
                 {{#if (eq ../../cat @../key)}}
                 <td title ="{{this.description}}">
@@ -18,7 +19,6 @@
                         {{checked this.present}}
                         {{checked this.toCopy}}
                             {{#if this.universal}}
-                                {{#if ../../GM}}{{else}}disabled{{/if}}
                             {{/if}}></input></td>
                             <td title="Right-Click for details" name="nameField" id="{{this.name}}_nameField" style="font-family:Montserrat">{{this.name}}{{#if this.unique}}{{else}}{{#if (undefined this.parent)}}&nbsp&nbsp<input type="number" min="1" value="{{this.number}}" id="{{this.name}}_number" title="Number of copies this character should have" style="color:black; background-color:white; border:1px solid lightsteelblue; font-family:Montserrat; width:40px;">{{else}}{{/if}}{{/if}}</td>
                             <td>
@@ -27,6 +27,7 @@
                             </td>
                 {{/if}}
                 </tr>
+                {{else}}{{/if}}
             {{/each}}
         {{/each}}
     </table>

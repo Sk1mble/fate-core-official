@@ -35,9 +35,9 @@ Hooks.on("preCreateActor", (data, options, userId) => {
     if (data.type =="Core" || data.type=="Accelerated"){
         //console.log("importing")
         data = migrateFateCharacter(data);
-        //console.log(data);
+       //console.log(data);
     }
-  });
+});
 
 async function importFateCharacter(actor) {
     console.log("Original Fate Core character detected; setting them up for ModularFate")
@@ -243,6 +243,19 @@ Hooks.on('updateActor', (actor, data) => {
     })
 })
 
+Hooks.on('updateItem', (item, data) => {
+    game.system.apps["item"].forEach(a=> {
+        a.renderMe(item._id, data);
+    })
+})
+
+Hooks.on('updateOwnedItem', (actor, item, data) => {
+    game.system.apps["item"].forEach(a=> {
+        setTimeout(function(){a.renderMe(item._id, data)},200);
+        a.renderMe(item._id, data);
+    })
+})
+
 Hooks.on('renderCombatTracker', () => {
     game.system.apps["combat"].forEach(a=> {
         a.renderMe("renderCombatTracker");
@@ -264,7 +277,6 @@ Hooks.on('deleteCombat', (...args) => {
 Hooks.on('deleteToken', (...args) => {
     game.system.apps["actor"].forEach(a=> {
         a.renderMe("deleteToken")
-        console.log(canvas.tokens.placeables)
     })
 })
 
@@ -329,7 +341,8 @@ Hooks.once('init', async function () {
         actor:[],
         combat:[],
         scene:[],
-        user:[]
+        user:[],
+        item:[]
     }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
@@ -351,52 +364,5 @@ Hooks.once('init', async function () {
     if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
             game.settings.set("ModularFate","refreshTotal",3);
     }
-    
     //Register a setting for the game's Issues?
 });
-
-SidebarDirectory.prototype._onCreate = async function(event) {
-        // Do not allow the creation event to bubble to other listeners
-        event.preventDefault();
-        event.stopPropagation();
-    
-        // Collect data
-        const ent = this.constructor.entity;
-        const cls = this.constructor.cls;
-        const types = game.system.entityTypes[ent];
-    
-        // Setup entity data
-        const createData = {
-          name: `New ${game.i18n.localize(cls.config.label)}`,
-          type: types[0],
-          folder: event.currentTarget.dataset.folder
-        };
-    
-        // Render the entity creation form
-        let templateData = {upper: ent, lower: ent.toLowerCase(), types: types},
-            dlg = await renderTemplate(`templates/sidebar/entity-create.html`, templateData);
-    
-        // Render the confirmation dialog window
-        new Dialog({
-          title: `Create ${createData.name}`,
-          content: dlg,
-          buttons: {
-            create: {
-              icon: '<i class="fas fa-check"></i>',
-              label: `Create ${game.i18n.localize(cls.config.label)}`,
-              callback: html => {
-                const form = html[0].querySelector("form");
-                  try {
-                      mergeObject(createData, FormApplication.processForm(form));   
-                  }catch {
-                      mergeObject(createData, validateForm(form));
-                  }
-                cls.create(createData, {renderSheet: true});
-              }
-            }
-          },
-          default: "create"
-        }).render(true);
-      }
-  
-

@@ -1,3 +1,34 @@
+# Version 1.7.1
+  Minor bug fixes.
+
+# Version 1.7.0
+  This version supports Foundry 0.7.5. 
+  When you add an extra with stunts, skills, aspects, or tracks to your character, each will be added to your own character's attributes for ease of reference.
+  For example, if I add a Morph extra with an aspect "Morph Aspect 1", this will be added to my character's list of aspects.
+  All objects added from Extras will be flagged with (Extra) so it's clear they aren't on your character.
+  IMPORTANT: Notes/Limitations
+  * You can't add more than one object with a given name from more than one extra. e.g. once I have an aspect called Morph Aspect 1 (Extra) on my sheet, I cannot add another of the same name even if the aspect text is different.
+  * Skills added to your character from extras ARE NOT taken into account when calculating the number of boxes of tracks or whether a track is available to you.
+    If you need a morph skill to modify a track, I suggest manually adding a track with the correct number of boxes etc. through the 'ad hoc track' option on the track and deleting the same track from the character's 'real' tracks.
+
+# Version 1.6.7
+  Added a countSkills boolean to the data type for extras. This allows us to determine in code whether to count skills on an extra towards the player's skill total, column, etc.
+
+# Version 1.6.6
+  Extras can now have stunts, skills, aspects, and tracks attached to them.
+  Players can now edit their own tracks within the constraints of the tracks set up on the system. Only the GM can add ad-hoc tracks to a character or item.
+  Mended an issue with adding multiple copies of non-unique tracks.
+
+# Version 1.6.5
+  Various small fixes in respect of simultaneous editing of values on characters/in Fate Utilities and other improvements. Tested for compability with Foundry 0.7.3 (with hotfix Foundry.js applied)
+  
+# Version 1.6.4
+  Realised that there was a bug in the handling of refresh total. The character's refresh should be game refresh minus refresh spent.
+  In addition to this I've sneaked in a few improvements to the concurrent editing of items in FateUtilities and on character sheets without making a full release.
+
+# Version 1.6.3
+  This is a new branch which is compatible with Foundry 0.7.2. So far the only change is to remove the deprecated isPlayer check in favour of hasPlayerOwner.
+
 # Version 1.6.2
   You can now drag and drop an Extra from the character on to a Pick Up Stix chest or another character sheet, compendium, or item list. 
   This will remove it from the character sheet if dragged to pick up stix or another character sheet. but will NOT delete the item if dragged to a compendium or the item list.

@@ -41,12 +41,17 @@
 			"permissions": "",
 			"costs": "",
 			"refresh":"",
+			"stunts":{},
+			"aspects":{},
+			"skills":{},
+			"tracks":{},
 			"actions": {
 				"overcome": "",
 				"create": "",
 				"attack": "",
 				"defend": ""
-			}
+			},
+			"countSkills": false
 		},
 		"Stunt": {
 			"templates": ["baseItem"]
