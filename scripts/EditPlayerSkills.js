@@ -31,6 +31,7 @@ class EditPlayerSkills extends FormApplication{
 
     //This function is called when an actor or item update is called.
     async renderMe(id){
+        console.log("Renderme called")
 
         if (this.object.isToken){
             if (this.object.token.id == id){
@@ -365,7 +366,7 @@ class EditGMSkills extends FormApplication{
 
         let actor=undefined;
         for (let s in this.player_skills){
-            let cbox = html.find(`input[id='${s}']`)[0];
+            let cbox = html.find(`input[id="${s}"]`)[0];
             if (cbox != undefined && !cbox.checked){
                 // This skill needs to be deleted from the list.
                 //THIS WON'T WORK FOR TOKEN ACTORS unless you also delete the skill from the 
@@ -379,7 +380,7 @@ class EditGMSkills extends FormApplication{
         //Now we need to add skills that have checks and which aren't already checked.
         let world_skills=game.settings.get("ModularFate","skills")
         for (let w in world_skills){
-            let cbox = html.find(`input[id='${w}']`)[0];
+            let cbox = html.find(`input[id="${w}"]`)[0];
             if (cbox.checked){
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
