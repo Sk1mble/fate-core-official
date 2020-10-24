@@ -1,3 +1,6 @@
+# Version 1.7.1
+  Minor bug fixes.
+
 # Version 1.7.0
   This version supports Foundry 0.7.5. 
   When you add an extra with stunts, skills, aspects, or tracks to your character, each will be added to your own character's attributes for ease of reference.
