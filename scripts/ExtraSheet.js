@@ -29,6 +29,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     activateListeners(html){
+        super.activateListeners(html);
         const delete_stunt = html.find("button[name='delete_item_stunt']");
         delete_stunt.on("click", event => this._onDelete(event,html));
         const edit_stunt = html.find("button[name='edit_item_stunt']")
