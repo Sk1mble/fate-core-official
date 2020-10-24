@@ -27,10 +27,6 @@
 	"url": "https://github.com/Sk1mble/modularFate",
 
 	"manifest": "https://raw.githubusercontent.com/Sk1mble/modularFate/master/system.json",
-<<<<<<< Updated upstream
-	"download": "https://github.com/Sk1mble/modularFate/archive/1.6.2.zip",
-=======
 	"download": "https://github.com/Sk1mble/modularFate/archive/1.7.2.zip",
->>>>>>> Stashed changes
 	"socket":true
 }
