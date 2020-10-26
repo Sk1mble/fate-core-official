@@ -166,7 +166,7 @@ class EditPlayerSkills extends FormApplication{
                         let extra = this.object.items.find(item=>item._id == extra_id);
                 
                         if (extra != undefined && extra.data.data.countSkills){
-                            ranks[p_skills[sk].rank]++    
+                            player_total+=p_skills[sk].rank;   
                         }
                     }else {
                         player_total+=p_skills[sk].rank;
