@@ -146,7 +146,8 @@ GMs, you can click the edit button at the bottom of this window to add or remove
 To add an ad-hoc skill, just type the name in the box at the bottom of the screen and click the plus button.
 
 ### Skill List
-You can right click or click the sort button to switch between sorting by rank or by name.
+You can right click a skill name to view the information entered by the GM for that skill.
+Click the sort button to switch between sorting by rank or by name.
 Click anywhere between the skill name and the dice icon to roll that skill.
 Click the cog icon to open the skill editor.
 
@@ -168,14 +169,18 @@ Click 'save' to save the stunt.
 Once saved, you can click the edit icon to edit a stunt, or the delete icon to delete it.
 
 ### Description
-In the bio tab, this is a large text area in which you can type or paste your cahracter's description, and another for their biography. These are saved as you type.
+In the bio tab, this is a large text area in which you can type or paste your character's description, and another for their biography. These are saved as you type. You can use basic rich text with ctrl-b, ctrl-i, ctr-u for bold, italic, underline.
 
 ### Extras
 Click the plus icon to add an extra, then the edit button to edit it. If the extra has a refresh cost, this is added to the character's refresh expenditure. If there's no refresh cost, be sure to enter 0 as the cost.
 
 You can delete an extra that's no longer required with the trash icon.
 
-##Fate Utilities
+If you put an extra, stunt, skill, or track on an extra it will be added to the character's list of those things when the extra is equipped. On removal or deletion of the extra, the added traits will also be deleted. 
+
+Skills on extras do not affect track boxes or enable tracks. If you need this to happen, use an ad-hoc track.
+
+## Fate Utilities
 The FU window is opened with the theatre masks icon to the left of the screen when you're viewing a scene.
 
 The first FU tab displays the GM's fate points for the scene and offers the GM a btton to refresh all fate points.
