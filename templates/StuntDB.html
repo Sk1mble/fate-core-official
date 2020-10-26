@@ -1,43 +1,47 @@
 <body>
-    <div style="max-width:1000px; max-height:800px; background-color:white; overflow-y:auto; font-family:Montserrat; font-size:10pt; padding:10px">
-    <table style="border:1px solid lightsteelblue; background:white">
-        <tr>
-            <td name="sb_name" title="Sort by name" style="width:200px; border:1px solid lightsteelblue; font-weight:bold">
+    <div style="width:1200px; max-height:50px; background-color:white; font-family:Montserrat; font-size:10pt; padding:0px; display:table">
+        <div style="display:table-row;background-color:#185CAB; color:white;">
+            <div name="sb_name" title="Sort by name" style="width:200px; border-right:1px solid lightsteelblue; font-weight:bold; float:left; padding:5px">
                 Stunt Name
-            </td>
-            <td name="sb_skill" title="Sort by skill" style="width:100px; border:1px solid lightsteelblue; font-weight:bold">
+            </div>
+            <div name="sb_skill" title="Sort by skill" style="width:100px; border-right:1px solid lightsteelblue; font-weight:bold; float:left ; padding:5px">
                 Skill
-            </td>
-            <td name="sb_refresh" title="Sort by refresh cost" style="width:80px; border:1px solid lightsteelblue; font-weight:bold">
+            </div>
+            <div name="sb_refresh" title="Sort by refresh cost" style="width:80px; border-right:1px solid lightsteelblue;  font-weight:bold; float:left ; padding:5px">
                 Refresh
-            </td>
-            <td style="width:620px; border:1px solid lightsteelblue; font-weight:bold">
+            </div>
+            <div style="width:700px; border-right:1px solid lightsteelblue; font-weight:bold; float:left; padding:5px">
                 Description
-            </td>
-            <td style="width:75px; border:1px solid lightsteelblue; font-weight:bold">
+            </div>
+            <div style="width:120px; font-weight:bold; float:left; padding:5px">
                 Actions
-            </td>
-        </tr>
+            </div>
+        </div>
+    </div>
+<div style="width:1200px; min-height:150px; max-height:850px; background-color:white; overflow-y:auto; font-family:Montserrat; font-size:10pt; padding:0px;">
+    <div style="background:white; display:table">
         {{#each stunts}}
-        <tr>
-            <td style="border:1px solid lightsteelblue;">
+        <div style="display:table-row">
+            <div style="border-right:1px solid lightsteelblue; border-bottom:1px solid lightsteelblue; width:200px; display:table-cell; padding:5px">
                 {{this.name}}
-            </td>
-            <td style="border:1px solid lightsteelblue;">
+            </div>
+            <div style="border-right:1px solid lightsteelblue; border-bottom:1px solid lightsteelblue; width:100px; display:table-cell; padding:5px">
                 {{this.linked_skill}}
-            </td>
-            <td style="border:1px solid lightsteelblue;">
+            </div>
+            <div style="border-right:1px solid lightsteelblue; border-bottom:1px solid lightsteelblue; width:80px; display:table-cell; padding:5px">
                 {{this.refresh_cost}}
-            </td>
-            <td style="border:1px solid lightsteelblue;">
+            </div>
+            <div style="border-right:1px solid lightsteelblue; border-bottom:1px solid lightsteelblue; width:700px; display:table-cell; padding:5px">
                 {{{this.description}}}
-            </td>
-            <td style="border:1px solid lightsteelblue;">
+            </div>
+            <div style="border-bottom:1px solid lightsteelblue; width:120px; display:table-cell; padding:5px">
                 {{#if ../actor.owner}}<button type="button" name="add_stunt" style="border:none; float:left; width:25px; height:25px; background:white;" title="Add this stunt to {{../actor.name}}'s stunts" i icon class = "fas fa-download" id="{{this.name}}_addStunt"></button>{{/if}}
+                <button type="button" name="export_stunt" style="border:none; float:left; width: 25px; height:25px; background:white;" title="Export this stunt as a text file" i icon class = "fas fa-file-export" id="{{this.name}}_exportStunt"></button>
                 {{#if ../gm}}<button type="button" name="del_stunt" style="border:none; float:right; width:25px; height:25px; background:white;" title="Delete this stunt from the database" i icon class = "fas fa-trash" id="{{this.name}}_deleteStunt"></button>{{/if}}
-            </td>
-        </tr>
+            </div>
+        </div>
         {{/each}}
-    </table>
+    </div>    
 </div>
+<div style="max-height:40px; padding:10px"><button type="button" id="export_stunts" style="height:30px; width:150px">Export Stunts</button><button type="button" id="import_stunts" style="height:30px; width:150px">Import Stunts</button></div>
 </body>

@@ -151,14 +151,82 @@ class StuntDB extends Application {
         addButton.on("click", event => this._onAddButton(event, html));
         const deleteButton = html.find("button[name='del_stunt']");
         deleteButton.on("click", event => this._onDeleteButton(event, html));
-        const sb_name = html.find("td[name='sb_name']");
-        const sb_skill = html.find("td[name='sb_skill']");
-        const sb_refresh = html.find("td[name='sb_refresh']");
+        const sb_name = html.find("div[name='sb_name']");
+        const sb_skill = html.find("div[name='sb_skill']");
+        const sb_refresh = html.find("div[name='sb_refresh']");
         sb_name.on("click", event => {this.sort = "name"; this.render(false)});
         sb_skill.on("click", event => {this.sort = "linked_skill"; this.render(false)});
         sb_refresh.on("click", event => {this.sort = "refresh_cost"; this.render(false)});
-        
+        const export_stunts = html.find("button[id='export_stunts']");
+        const import_stunts = html.find("button[id='import_stunts']");
+        export_stunts.on("click", event => this._onExportStunts(event, html));
+        import_stunts.on("click", event => this._onImportStunts(event, html));
+        const export_stunt = html.find("button[name='export_stunt']");
+        export_stunt.on("click", event => this._onExportStunt(event, html));
     } //End activateListeners
+
+    async _onExportStunts(event, html){
+ 
+        let stunt_text = JSON.stringify(game.settings.get("ModularFate","stunts"));
+ 
+        new Dialog({
+            title: "Copy & Paste this to save your stunts", 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);
+    }
+
+    async _onExportStunt(event, html){
+        console.log("Exporting")
+
+        let stunt = event.target.id.split("_")[0];
+
+        let stunt_text = `{"${stunt}":${JSON.stringify(game.settings.get("ModularFate","stunts")[stunt])}}`;
+ 
+        new Dialog({
+            title: "Copy & Paste this to save your stunts", 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);
+    }
+
+    async getStunts(){
+        return new Promise(resolve => {
+            new Dialog({
+                title: "Paste data here; replaces stunts of same name",
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_stunt_db"></textarea></div>`,
+                buttons: {
+                    ok: {
+                        label: "Save",
+                        callback: () => {
+                            resolve (document.getElementById("import_stunt_db").value);
+                        }
+                    }
+                },
+            }).render(true)
+        });
+    }
+
+    async _onImportStunts(event, html){
+        let text = await this.getStunts();
+        try {
+            let imported_stunts = JSON.parse(text);
+            let stuntDB = duplicate(game.settings.get("ModularFate","stunts"));
+            if (stuntDB == undefined){
+                stuntDB = {};
+            }
+            for (let stunt in imported_stunts){
+                stuntDB[stunt]=imported_stunts[stunt];
+            }
+            await game.settings.set("ModularFate","stunts", stuntDB);
+            console.log(game.settings.get("ModularFate","stunts"))
+            this.render(false);
+        } catch (e) {
+            ui.notifications.error(e);
+        }
+    }
 
     async _onAddButton(event, html){
         let stunt = game.settings.get("ModularFate","stunts")[event.target.id.split("_")[0]];
