@@ -81,7 +81,9 @@ export class ModularFateCharacter extends ActorSheet {
         if (this.actor.owner){
             const skillsButton = html.find("div[name='edit_player_skills']");;
             skillsButton.on("click", event => this._onSkillsButton(event, html));
+
             const skill_name = html.find("div[name='skill']");
+            skill_name.on("contextmenu", event=> this._onSkillR(event, html));
             skill_name.on("click", event => this._onSkill_name(event, html));
             const sort = html.find("div[name='sort_player_skills'")
             sort.on("click", event => this._onSortButton(event, html));
@@ -92,7 +94,6 @@ export class ModularFateCharacter extends ActorSheet {
             const box = html.find("input[name='box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
-            skills_block.on("contextmenu", event => this._onSortButton(event, html));
             const track_name = html.find("div[name='track_name']");
             track_name.on("click", event => this._on_track_name_click(event, html));
 
@@ -160,6 +161,55 @@ export class ModularFateCharacter extends ActorSheet {
             });
         }
         super.activateListeners(html);
+    }
+
+    async _onSkillR(event,html){
+        let name = event.target.id;
+        let skill = this.actor.data.data.skills[name];
+        ModularFateConstants.awaitOKDialog("Skill Details",`
+                                            <table cellspacing ="4" cellpadding="4" border="1">
+                                                <h2>${skill.name}</h2>
+                                                <tr>
+                                                    <td style="width:400px;">
+                                                        <b>Description:</b>
+                                                    </td>
+                                                    <td style="width:2000px;">
+                                                        ${skill.description}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <b>Overcome:</b>
+                                                    </td>
+                                                    <td>
+                                                        ${skill.overcome}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <b>Create an Advantage:</b>
+                                                    </td>
+                                                    <td>
+                                                        ${skill.caa}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <b>Attack:</b>
+                                                    </td>
+                                                    <td>
+                                                        ${skill.attack}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <b>Defend:</b>
+                                                    </td>
+                                                    <td>
+                                                        ${skill.defend}
+                                                    </td>
+                                                </tr>
+                                            </table>`,1000)
     }
 
     async _on_item_drag (event, html){

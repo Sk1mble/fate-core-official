@@ -1,3 +1,6 @@
+# Version 1.7.5
+  You can now right-click on a skill's name to bring up the description of the skill as entered by the GM.
+
 # Version 1.7.4
   You can now export individual stunts as a JSON string, or import one or more stunts as a JSON string.
   If you composit together a multiple stunt import from several individual exported stunts,, ensure that you get the brackets right; it should be: 
