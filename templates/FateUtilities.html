@@ -15,7 +15,7 @@
                 <table style="font-size:small">
                     {{#each GMUsers}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
-                        <td>
+                        <td style="padding:5px">
                             <img src="{{this.data.avatar}}" style="width:50px; height:auto; border:none"/>
                         </td>
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
@@ -28,8 +28,8 @@
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}
                     <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
-                        <td>
-                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{else}}
+                        <td style="padding:5px">
+                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none;"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
                         </td>
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
