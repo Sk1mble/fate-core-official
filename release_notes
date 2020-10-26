@@ -1,3 +1,6 @@
+# Version 1.7.6
+  Fixed a bug where extras on skills were being counted towards the skill total for skill total enforcement even if the boolean for counting the extra's skills had been set to false.
+
 # Version 1.7.5
   You can now right-click on a skill's name to bring up the description of the skill as entered by the GM.
 
