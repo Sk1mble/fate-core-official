@@ -1,3 +1,27 @@
+# Version 1.7.4
+  You can now export individual stunts as a JSON string, or import one or more stunts as a JSON string.
+  If you composit together a multiple stunt import from several individual exported stunts,, ensure that you get the brackets right; it should be: 
+  {
+      "stunt name":{stunt},
+      "stunt name":{stunt},
+      ...
+  }
+  
+  Example: I've exported two stunts, which are ready to be imported individually:
+
+  {"Natural Weapon":{"name":"Natural Weapon","linked_skill":"None","description":"See page 158 of Dresden Files Accelerated","refresh_cost":"1","overcome":false,"caa":false,"attack":true,"defend":false,"bonus":"0","plusTwo":"deprecated"}}
+  {"Superior Recovery":{"name":"Superior Recovery","linked_skill":"None","description":"See page 159 of Dresden Files Accelerated","refresh_cost":"1","overcome":false,"caa":false,"attack":false,"defend":false,"bonus":"0","plusTwo":"deprecated"}}
+
+If I want to import them both at the same time, I need to reformat them into a single object like this:
+
+{
+  "Natural Weapon":{"name":"Natural Weapon","linked_skill":"None","description":"See page 158 of Dresden Files Accelerated","refresh_cost":"1","overcome":false,"caa":false,"attack":true,"defend":false,"bonus":"0","plusTwo":"deprecated"},
+  "Superior Recovery":{"name":"Superior Recovery","linked_skill":"None","description":"See page 159 of Dresden Files Accelerated","refresh_cost":"1","overcome":false,"caa":false,"attack":false,"defend":false,"bonus":"0","plusTwo":"deprecated"}
+}
+
+
+
+
 # Version 1.7.3
   No changes to code base; the version number changes were required to get my house in order with respect to Foundry's releases.
 
