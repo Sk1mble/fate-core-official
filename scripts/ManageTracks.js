@@ -457,16 +457,70 @@ class TrackSetup extends FormApplication{
         const addCategoryButton = html.find("button[id='add_category']");
         const editTracksButton = html.find("button[id='edit_tracks']");
         const selectBox = html.find("select[id='track_categories_select']");
+        const importTracks = html.find("button[id='import_tracks']")
+        const exportTracks = html.find("button[id='export_tracks']")
 
         deleteCategoryButton.on("click", event => this._onDeleteCategoryButton(event, html));
         addCategoryButton.on("click", event => this._onAddCategoryButton(event, html));
         editTracksButton.on("click", event => this._onEditTracksButton(event, html));
         selectBox.on("dblclick", event => this._onEditTracksButton(event,html));
+        importTracks.on("click", event => this._importTracks(event,html));
+        exportTracks.on("click", event => this._exportTracks(event,html));
     }
     
     //Here are the event listener functions.
 
-    //ToDo: Add code for importing/exporting all tracks or individual tracks. For code see ManageSkills or ManageApsects
+    async _exportTracks(event, html){
+        let tracks = game.settings.get("ModularFate","tracks");
+        let tracks_text = JSON.stringify(tracks);
+     
+        new Dialog({
+            title: "Copy & Paste this to save your world tracks", 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${tracks_text}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);    
+    }
+
+    async getTracks(){
+        return new Promise(resolve => {
+            new Dialog({
+                title: "Paste data here; replaces aspects of same name",
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="itracks"></textarea></div>`,
+                buttons: {
+                    ok: {
+                        label: "Save",
+                        callback: () => {
+                            resolve (document.getElementById("itracks").value);
+                        }
+                    }
+                },
+            }).render(true)
+        });
+    }
+
+    async _importTracks(event, html){
+        let text = await this.getTracks();
+        try {
+            let imported_tracks = JSON.parse(text);
+            let tracks = duplicate(game.settings.get("ModularFate","tracks"));
+            let track_categories = duplicate (game.settings.get("ModularFate", "track_categories"));
+            if (tracks == undefined){
+                tracks = {};
+            }
+            for (let track in imported_tracks){
+                tracks[track]=imported_tracks[track];
+                let cat = imported_tracks[track].category;
+                track_categories[cat]=cat;
+            }
+            await game.settings.set("ModularFate","tracks", tracks);
+            await game.settings.set("ModularFate", "track_categories", track_categories);
+            this.render(false);
+        } catch (e) {
+            ui.notifications.error(e);
+        }
+    }
+
     async _onAddCategoryButton(event,html){
         let category = await ModularFateConstants.getInput("Choose the Category Name");
         let track_categories = game.settings.get("ModularFate","track_categories");
