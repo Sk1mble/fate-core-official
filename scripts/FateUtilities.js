@@ -471,16 +471,19 @@ async _addToScene(event, html){
 }
 
 async _del_sit_aspect(event, html){
-    let id = event.target.id;
-    name = id.split("_")[1];
-    let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate", "situation_aspects"));
-    situation_aspects.splice(situation_aspects.findIndex(sit => sit.name == name),1);
-    await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
-
-    //If there's a note on the scene for this aspect, delete it
-    let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
-    if (drawing != undefined){
-        drawing.delete();
+    let del = await ModularFateConstants.confirmDeletion();
+    if (del){
+        let id = event.target.id;
+        name = id.split("_")[1];
+        let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate", "situation_aspects"));
+        situation_aspects.splice(situation_aspects.findIndex(sit => sit.name == name),1);
+        await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+    
+        //If there's a note on the scene for this aspect, delete it
+        let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
+        if (drawing != undefined){
+            drawing.delete();
+        }
     }
 }
 
@@ -711,6 +714,8 @@ async getData(){
 }
 
 async render (...args){
+    console.log("Editing is " +this.editing)
+    console.log("EditingAspect is "+this.editingAspect)
     if (this.editing == false && (this.editingAspect == false || this.editingAspect == undefined) && (this.selectingSkill == false || this.selectingSkill == undefined)){
         super.render(...args);
     } else {

@@ -114,8 +114,11 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async _onDelete(event, html){
-        let name = event.target.id.split("_")[0];
-        await this.object.update({"data.stunts":{[`-=${name}`]:null}});
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+            let name = event.target.id.split("_")[0];
+            await this.object.update({"data.stunts":{[`-=${name}`]:null}});
+        }
     }
     
 

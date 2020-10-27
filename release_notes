@@ -1,3 +1,7 @@
+# Version 1.7.7
+  Added a per-user setting to request confirmation prior to deletion of stunts, extras, aspects, etc.
+  Fixed a bug in the code that handles adding data from extras to the character; this was not deleting data items that were removed from the extra instead of deleting the whole extra.
+
 # Version 1.7.6
   Fixed a bug where extras on skills were being counted towards the skill total for skill total enforcement even if the boolean for counting the extra's skills had been set to false.
 

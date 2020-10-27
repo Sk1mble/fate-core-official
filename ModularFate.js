@@ -365,4 +365,13 @@ Hooks.once('init', async function () {
             game.settings.set("ModularFate","refreshTotal",3);
     }
     //Register a setting for the game's Issues?
+
+    game.settings.register("ModularFate","confirmDeletion", {
+        name: "Confirm deletion of items with trashcan icons?",
+        hint:"Turn this on if you want to need to confirm every deletion of an item with its delete button",
+        scope:"user",
+        config:true,
+        type:Boolean,
+        restricted:false
+    });
 });

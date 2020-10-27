@@ -437,6 +437,20 @@ class ModularFateConstants {
         })
     }
 
+    static async confirmDeletion(){
+        let confirm = game.settings.get("ModularFate","confirmDeletion");
+        if (!confirm){
+            return true;
+        } else {
+            let del = await ModularFateConstants.awaitYesNoDialog("Are you sure you want to delete this?");
+            if (del=="yes"){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     static getInput(prompt){        
         return new Promise(resolve => {
             new Dialog({

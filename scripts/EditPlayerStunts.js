@@ -234,9 +234,12 @@ class StuntDB extends Application {
     }
 
     async _onDeleteButton(event, html){
-        let stunts = duplicate (game.settings.get("ModularFate","stunts"));
-        await delete stunts[event.target.id.split("_")[0]];
-        await game.settings.set("ModularFate","stunts",stunts);
-        await this.render(false);
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+            let stunts = duplicate (game.settings.get("ModularFate","stunts"));
+            await delete stunts[event.target.id.split("_")[0]];
+            await game.settings.set("ModularFate","stunts",stunts);
+            await this.render(false);
+        }
     }
 }

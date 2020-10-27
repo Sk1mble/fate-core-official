@@ -151,16 +151,19 @@ class AspectSetup extends FormApplication{
     }
 
     async _onDeleteButton(event,html){
-        //Code to delete the selected aspect
-        //First, get the name of the aspect from the HTML element aspectListBox
-        let aspect = html.find("select[id='aspectListBox'")[0].value;
-        
-        //Find that aspect in the list of aspects
-        let aspects=game.settings.get("ModularFate","aspects");
-        if (aspects[aspect] != undefined){
-            delete aspects[aspect];
-            await game.settings.set("ModularFate","aspects",aspects);
-            this.render(true);
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+            //Code to delete the selected aspect
+            //First, get the name of the aspect from the HTML element aspectListBox
+            let aspect = html.find("select[id='aspectListBox'")[0].value;
+            
+            //Find that aspect in the list of aspects
+            let aspects=game.settings.get("ModularFate","aspects");
+            if (aspects[aspect] != undefined){
+                delete aspects[aspect];
+                await game.settings.set("ModularFate","aspects",aspects);
+                this.render(true);
+            }
         }
     }
     async _onAddButton(event,html){

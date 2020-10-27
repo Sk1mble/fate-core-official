@@ -75,10 +75,13 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _onRemove(event,html){
-        let info = event.target.id.split("_");
-        let name = info[1];
-        delete this.aspects[name];
-        this.render(false);
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+            let info = event.target.id.split("_");
+            let name = info[1];
+            delete this.aspects[name];
+            this.render(false);
+        }
     }
 
     async _onAdd(event, html){

@@ -128,20 +128,23 @@ class EditLinkedSkills extends FormApplication {
     //Here are the event listener functions.
 
     async _onDeleteLinkedSkillButton(event, html){
-        let toDelete = document.getElementById("linked_skills").value;
-        let track = this.track;
-        let tracks = game.settings.get("ModularFate","tracks");
-        let linked_skills = track.linked_skills;
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+             let toDelete = document.getElementById("linked_skills").value;
+            let track = this.track;
+            let tracks = game.settings.get("ModularFate","tracks");
+            let linked_skills = track.linked_skills;
     
-        for (let i = 0; i< linked_skills.length; i++){
-            let toCheck = `Skill: ${linked_skills[i].linked_skill}, Rank: ${linked_skills[i].rank}, Boxes: ${linked_skills[i].boxes}, Enables: ${linked_skills[i].enables}`;
-            if(toCheck == toDelete){
-                linked_skills.splice(i,1);
+            for (let i = 0; i< linked_skills.length; i++){
+                let toCheck = `Skill: ${linked_skills[i].linked_skill}, Rank: ${linked_skills[i].rank}, Boxes: ${linked_skills[i].boxes}, Enables: ${linked_skills[i].enables}`;
+                if(toCheck == toDelete){
+                    linked_skills.splice(i,1);
+                }
             }
+            tracks[this.track.name]=this.track;
+            await game.settings.set("ModularFate","tracks",tracks);
+            this.render(true);
         }
-        tracks[this.track.name]=this.track;
-        await game.settings.set("ModularFate","tracks",tracks);
-        this.render(true);
     }
 
     async _onAddLinkedSkillButton(){
@@ -262,14 +265,17 @@ class EditTracks extends FormApplication {
     }
 
     async _onDeleteTrackButton(event,html){
-        let name = document.getElementById("track_select").value;
-        try {
-                delete this.tracks[name];
-                await game.settings.set("ModularFate","tracks",this.tracks);
-                this.render(true);
-        } catch {
-            ui.notifications.error("Can't delete that.")
-            this.render(true)
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+             let name = document.getElementById("track_select").value;
+            try {
+                    delete this.tracks[name];
+                    await game.settings.set("ModularFate","tracks",this.tracks);
+                    this.render(true);
+            } catch {
+                ui.notifications.error("Can't delete that.")
+                this.render(true)
+            }
         }
     }
     async _edit_linked_skillsButtonClick(event, html){
@@ -478,21 +484,23 @@ class TrackSetup extends FormApplication{
     }
 
     async _onDeleteCategoryButton(event,html){
-        let track_categories = game.settings.get("ModularFate","track_categories");
-        let category  = document.getElementById("track_categories_select").value;
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+                    let track_categories = game.settings.get("ModularFate","track_categories");
+                    let category  = document.getElementById("track_categories_select").value;
 
-        for (let cat in track_categories){
-            if (track_categories[cat].toUpperCase() == category.toUpperCase()){
-                if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
-                    ui.notifications.error(`Can't delete the ${category} category as it's needed by the system.`)
-                } else {
-                    delete track_categories[cat];
+                    for (let cat in track_categories){
+                        if (track_categories[cat].toUpperCase() == category.toUpperCase()){
+                        if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
+                            ui.notifications.error(`Can't delete the ${category} category as it's needed by the system.`)
+                        } else {
+                                    delete track_categories[cat];
+                                }
+                        } 
                 }
-            } 
+                await game.settings.set("ModularFate","track_categories",track_categories);
+                this.render(true);
         }
-    
-        await game.settings.set("ModularFate","track_categories",track_categories);
-        this.render(true);
     }
     
     async _onEditTracksButton(event,html){

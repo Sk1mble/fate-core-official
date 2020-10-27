@@ -176,16 +176,19 @@ class SkillSetup extends FormApplication{
         e.render(true);
     }
     async _onDeleteButton(event,html){
-        //Code to delete the selected skill
-        //First, get the name of the skill from the HTML element skillListBox
-        let slb = html.find("select[id='skillListBox'")[0].value;
-        
-        //Find that skill in the list of skills
-        let skills=game.settings.get("ModularFate","skills");
-        if (skills[slb] != undefined){
-            delete skills[slb];
-            await game.settings.set("ModularFate","skills",skills);
-            this.render(true);
+        let del = await ModularFateConstants.confirmDeletion();
+        if (del){
+            //Code to delete the selected skill
+            //First, get the name of the skill from the HTML element skillListBox
+            let slb = html.find("select[id='skillListBox'")[0].value;
+            
+            //Find that skill in the list of skills
+            let skills=game.settings.get("ModularFate","skills");
+            if (skills[slb] != undefined){
+                delete skills[slb];
+                await game.settings.set("ModularFate","skills",skills);
+                this.render(true);
+            }
         }
     }
     async _onCopyButton(event,html){
