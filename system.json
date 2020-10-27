@@ -2,7 +2,7 @@
 	"name": "ModularFate",
 	"title": "Modular Fate Core",
 	"description": "A new implementation of Fate Core designed in a modular way to support skills, extras, approaches, conditions, standard stress, and 1-point stress.",
-	"version": "1.7.7",
+	"version": "1.7.8",
 	"author": "Richard Bellingham",
 	"esmodules": ["ModularFate.js"],
 	"scripts": [
@@ -27,6 +27,6 @@
 	"url": "https://github.com/Sk1mble/modularFate",
 
 	"manifest": "https://raw.githubusercontent.com/Sk1mble/modularFate/master/system.json",
-	"download": "https://github.com/Sk1mble/modularFate/archive/v1.7.7.zip",
+	"download": "https://github.com/Sk1mble/modularFate/archive/v1.7.8.zip",
 	"socket":true
 }
