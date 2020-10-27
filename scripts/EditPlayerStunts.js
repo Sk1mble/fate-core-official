@@ -221,7 +221,6 @@ class StuntDB extends Application {
                 stuntDB[stunt]=imported_stunts[stunt];
             }
             await game.settings.set("ModularFate","stunts", stuntDB);
-            console.log(game.settings.get("ModularFate","stunts"))
             this.render(false);
         } catch (e) {
             ui.notifications.error(e);

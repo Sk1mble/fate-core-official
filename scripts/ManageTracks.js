@@ -465,6 +465,8 @@ class TrackSetup extends FormApplication{
     }
     
     //Here are the event listener functions.
+
+    //ToDo: Add code for importing/exporting all tracks or individual tracks. For code see ManageSkills or ManageApsects
     async _onAddCategoryButton(event,html){
         let category = await ModularFateConstants.getInput("Choose the Category Name");
         let track_categories = game.settings.get("ModularFate","track_categories");

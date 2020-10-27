@@ -158,15 +158,83 @@ class SkillSetup extends FormApplication{
         const addButton = html.find("button[id='addSkill']");
         const copyButton = html.find("button[id='copySkill']");
         const selectBox = html.find("select[id='skillListBox']");
+        const exportSkill = html.find("button[id='exportSkill']");
+        const importSkills = html.find("button[id='importSkills']");
+        const exportSkills = html.find("button[id='exportSkills']");
 
         editButton.on("click", event => this._onEditButton(event, html));
         deleteButton.on("click", event => this._onDeleteButton(event, html));
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
         copyButton.on("click", event => this._onCopyButton(event, html));
+        exportSkill.on("click", event => this._onExportSkill(event, html));
+        importSkills.on("click", event => this._onImportSkills(event, html));
+        exportSkills.on("click", event => this._onExportSkills(event, html));
     }
     
     //Here are the event listener functions.
+
+    async _onExportSkill(event, html){
+        let skills = game.settings.get("ModularFate","skills");
+        let slb = html.find("select[id='skillListBox']")[0].value;
+        let sk = skills[slb];
+        let skill_text = `{"${slb}":${JSON.stringify(sk)}}`
+ 
+        new Dialog({
+            title: "Copy & Paste this to save this skill", 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skill_text}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);
+    }
+
+    async _onExportSkills(event, html){
+        let skills = game.settings.get("ModularFate","skills");
+        let skills_text = JSON.stringify(skills);
+ 
+        new Dialog({
+            title: "Copy & Paste this to save your skills", 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skills_text}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);
+    }
+
+    async getSkills(){
+        return new Promise(resolve => {
+            new Dialog({
+                title: "Paste data here; replaces skills of same name",
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_skills"></textarea></div>`,
+                buttons: {
+                    ok: {
+                        label: "Save",
+                        callback: () => {
+                            resolve (document.getElementById("import_skills").value);
+                        }
+                    }
+                },
+            }).render(true)
+        });
+    }
+
+    async _onImportSkills(event, html){
+        let text = await this.getSkills();
+        try {
+            let imported_skills = JSON.parse(text);
+            let skills = duplicate(game.settings.get("ModularFate","skills"));
+            if (skills == undefined){
+                skills = {};
+            }
+            for (let skill in imported_skills){
+                skills[skill]=imported_skills[skill];
+            }
+            await game.settings.set("ModularFate","skills", skills);
+            this.render(false);
+        } catch (e) {
+            ui.notifications.error(e);
+        }
+    }
+
     async _onEditButton(event,html){
         //Launch the EditSkill FormApplication.
         let skills = game.settings.get("ModularFate","skills");

@@ -117,15 +117,84 @@ class AspectSetup extends FormApplication{
         const addButton = html.find("button[id='addAspect']");
         const selectBox = html.find("select[id='aspectListBox']");
         const copyButton = html.find("button[id='copyAspect']");
+        const exportAspect = html.find("button[id='exportAspect']");
+        const importAspects = html.find("button[id='importAspects']");
+        const exportAspects = html.find("button[id='exportAspects']");
 
         editButton.on("click", event => this._onEditButton(event, html));
         deleteButton.on("click", event => this._onDeleteButton(event, html));
         addButton.on("click", event => this._onAddButton(event, html));
         selectBox.on("dblclick", event => this._onEditButton(event, html));
         copyButton.on("click", event => this._onCopyButton(event, html));
+        exportAspect.on("click", event => this._onExportAspect(event, html));
+        importAspects.on("click", event => this._onImportAspects(event, html));
+        exportAspects.on("click", event => this._onExportAspects(event, html));
     }
 
     //Here are the event listener functions.
+
+    async _onExportAspect(event, html){
+        let aspects = game.settings.get("ModularFate","aspects");
+        let slb = html.find("select[id='aspectListBox']")[0].value;
+        let sk = aspects[slb];
+        let aspect_text = `{"${slb}":${JSON.stringify(sk)}}`
+ 
+        new Dialog({
+            title: "Copy & Paste this to save this aspect", 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${aspect_text}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);
+    }
+
+    async _onExportAspects(event, html){
+        let aspects = game.settings.get("ModularFate","aspects");
+        let aspects_text = JSON.stringify(aspects);
+ 
+        new Dialog({
+            title: "Copy & Paste this to save your world aspects", 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${aspects_text}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);
+    }
+
+    async getAspects(){
+        return new Promise(resolve => {
+            new Dialog({
+                title: "Paste data here; replaces aspects of same name",
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_aspects"></textarea></div>`,
+                buttons: {
+                    ok: {
+                        label: "Save",
+                        callback: () => {
+                            resolve (document.getElementById("import_aspects").value);
+                        }
+                    }
+                },
+            }).render(true)
+        });
+    }
+
+    async _onImportAspects(event, html){
+        let text = await this.getAspects();
+        try {
+            let imported_aspects = JSON.parse(text);
+            let aspects = duplicate(game.settings.get("ModularFate","aspects"));
+            if (aspects == undefined){
+                aspects = {};
+            }
+            for (let aspect in imported_aspects){
+                aspects[aspect]=imported_aspects[aspect];
+            }
+            await game.settings.set("ModularFate","aspects", aspects);
+            this.render(false);
+        } catch (e) {
+            ui.notifications.error(e);
+        }
+    }
+
+
     async _onCopyButton(event,html){
         let selectBox = html.find("select[id='aspectListBox']");
         let name = selectBox[0].value.trim();
