@@ -506,7 +506,7 @@ class TrackSetup extends FormApplication{
     async getTracks(){
         return new Promise(resolve => {
             new Dialog({
-                title: "Paste data here; replaces aspects of same name",
+                title: "Paste data here; replaces tracks of same name",
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="itracks"></textarea></div>`,
                 buttons: {
                     ok: {
