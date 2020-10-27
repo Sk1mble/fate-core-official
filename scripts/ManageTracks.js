@@ -215,6 +215,7 @@ class EditTracks extends FormApplication {
         const deleteTrackButton = html.find("button[id='delete_track']");
         const edit_track_name=html.find("input[id='edit_track_name']");
         const copy_track = html.find("button[id='copy']");
+        const export_track = html.find("button[id='exportTrack']");
 
         const track_label_select = html.find("select[id='track_label_select']");
         track_label_select.on("change", event => this._on_track_label_select(event, html))
@@ -225,6 +226,7 @@ class EditTracks extends FormApplication {
         edit_linked_skillsButton.on("click", event => this._edit_linked_skillsButtonClick(event,html));
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
         copy_track.on("click", event => this._onCopyTrackButton(event, html));
+        export_track.on("click", event => this._onExportTrack(event, html));
     }
     //Here are the event listener functions.
 
@@ -235,6 +237,25 @@ class EditTracks extends FormApplication {
         else {
             document.getElementById("track_custom_label").hidden = true
             document.getElementById("track.custom_label").value = "";
+        }
+    }
+
+    async _onExportTrack (event, html){
+        let edit_track_name=html.find("input[id='edit_track_name']");
+        let name = edit_track_name[0].value;
+        //console.log(edit_track_name[0].value)
+        if (name == "" || name == "New Track"){
+            ui.notifications.error("Select a track to copy first");
+        }
+        else {
+            let track = `{"${name}":${JSON.stringify(this.tracks[name])}}`;
+            new Dialog({
+                title: "Copy & Paste this to save this track", 
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${track}</textarea></div>`,
+                buttons: {
+                },
+            }).render(true);
+
         }
     }
 
