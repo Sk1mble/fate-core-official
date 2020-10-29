@@ -31,8 +31,6 @@ class EditPlayerSkills extends FormApplication{
 
     //This function is called when an actor or item update is called.
     async renderMe(id){
-        console.log("Renderme called")
-
         if (this.object.isToken){
             if (this.object.token.id == id){
                 this.render(false);
