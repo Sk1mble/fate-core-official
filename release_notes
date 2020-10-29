@@ -1,3 +1,6 @@
+# Version 1.7.9
+  Bug fixes to Extras changing character stats. Skill changes on Extras were not updated on characters due to a bug in the logic handling this.
+
 # Version 1.7.8
   Added the ability to import and export tracks, skills, and aspects from the system settings menu.
 
