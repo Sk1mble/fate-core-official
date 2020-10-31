@@ -1,3 +1,8 @@
+# Version 1.8.0
+  Made some improvements to FateUtilities. Creating a situation aspect is now done first and then free invokes added afterwards.
+  This prevents FU from locking up (i.e. stopping renders) while the number of free invokes is selected.
+  Also added ScrollY settings to the situation aspect pane and the scene notes pane so that these panes will remember their specific scroll settings when the Fate Utilities app is re-rendered.
+
 # Version 1.7.9
   Bug fixes to Extras changing character stats. Skill changes on Extras were not updated on characters due to a bug in the logic handling this.
 

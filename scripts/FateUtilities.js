@@ -31,7 +31,7 @@ activateListeners(html) {
     });
     input.on("focusout", event => {
         if (event.target.id == "sit_aspect"){
-            this.editingAspect = true;
+            //this.editingAspect = true;
          }
         this.editing = false; 
         if (this.renderBanked && this.editingAspect == false){
@@ -489,11 +489,10 @@ async _del_sit_aspect(event, html){
 
 async _add_sit_aspect(event, html){
     const sit_aspect = html.find("input[id='sit_aspect']");
-    const free_invokes = html.find("input[id='free_invokes']");
     let situation_aspects = [];
     let situation_aspect = {
                                 "name":sit_aspect[0].value,
-                                "free_invokes":free_invokes[0].value
+                                "free_invokes":0
                             };
     try {
         situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
@@ -501,7 +500,6 @@ async _add_sit_aspect(event, html){
     }                                
     situation_aspects.push(situation_aspect);
     await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
-    this.editingAspect = false;
     this.render(false);
 }
 
@@ -611,7 +609,7 @@ async _nextButton(event, html){
         options.title = `Fate Utilities`;
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
-        options.scrollY=["#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_rolls_tab"]
+        options.scrollY=["#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_rolls_tab", "#fu_aspects_pane", "#fu_scene_notes_pane"]
 
         mergeObject(options, {
             tabs: [
@@ -714,9 +712,7 @@ async getData(){
 }
 
 async render (...args){
-    console.log("Editing is " +this.editing)
-    console.log("EditingAspect is "+this.editingAspect)
-    if (this.editing == false && (this.editingAspect == false || this.editingAspect == undefined) && (this.selectingSkill == false || this.selectingSkill == undefined)){
+    if (this.editing == false && (this.selectingSkill == false || this.selectingSkill == undefined)){
         super.render(...args);
     } else {
         this.renderBanked = true;
