@@ -27,6 +27,6 @@
 	"url": "https://github.com/Sk1mble/modularFate",
 
 	"manifest": "https://raw.githubusercontent.com/Sk1mble/modularFate/master/system.json",
-	"download": "https://github.com/Sk1mble/modularFate/archive/v1.8.1.zip",
+	"download": "https://github.com/Sk1mble/modularFate/archive/v1.8.2.zip",
 	"socket":true
 }
