@@ -923,13 +923,9 @@ Hooks.on('createChatMessage', (message) => {
 
             if (game.user.isGM){
                 (async () => {await game.scenes.viewed.setFlag("ModularFate","rolls",rolls);})()            
-                let pane = document.getElementById("fu_rolls_tab")
-                pane.scrollTop=9999999999999999999999999999999;
             }
             else {
                  //Create a socket call to update the scene's roll data
-                 let pane = document.getElementById("fu_rolls_tab")
-                 pane.scrollTop=9999999999999999999999999999999;
                 game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
             }
         }
