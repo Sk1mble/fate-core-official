@@ -1,3 +1,7 @@
+# Version 1.8.1
+  The Rolls tab and the Situation Aspects tabs of Fate Utilities now automatically scroll to the bottom when a new entry is added, making it easier to keep track of them when FateUtilities is open.
+  
+
 # Version 1.8.0
   Made some improvements to FateUtilities. Creating a situation aspect is now done first and then free invokes added afterwards.
   This prevents FU from locking up (i.e. stopping renders) while the number of free invokes is selected.

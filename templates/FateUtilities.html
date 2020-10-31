@@ -187,7 +187,7 @@
                         {{#each situation_aspects}}
                             <tr>
                                 <td width = "300px" style="font-family:Montserrat">
-                                    {{this.name}}
+                                    <div name="sit_aspect">{{this.name}}</div>
                                 </td>
                                 <td>
                                     <input type="number" name="free_i" id="{{this.name}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
@@ -234,7 +234,7 @@
                 {{#each rolls}}
                 <tr>
                     <td style="border:1px solid black; width:120px">
-                        {{this.speaker}}
+                        <div name="fu_roll">{{this.speaker}}</div>
                     </td>
                     <td style="border:1px solid black; border:1px solid black;">
                         {{{this.flavor}}}

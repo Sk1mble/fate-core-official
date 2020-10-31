@@ -30,9 +30,6 @@ activateListeners(html) {
         }
     });
     input.on("focusout", event => {
-        if (event.target.id == "sit_aspect"){
-            //this.editingAspect = true;
-         }
         this.editing = false; 
         if (this.renderBanked && this.editingAspect == false){
             this.renderBanked = false;
@@ -499,6 +496,8 @@ async _add_sit_aspect(event, html){
     } catch {
     }                                
     situation_aspects.push(situation_aspect);
+    let pane = document.getElementById("fu_aspects_pane")
+    pane.scrollTop=9999999999999999999999999999999;
     await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
 }
 
@@ -924,9 +923,13 @@ Hooks.on('createChatMessage', (message) => {
 
             if (game.user.isGM){
                 (async () => {await game.scenes.viewed.setFlag("ModularFate","rolls",rolls);})()            
+                let pane = document.getElementById("fu_rolls_tab")
+                pane.scrollTop=9999999999999999999999999999999;
             }
             else {
                  //Create a socket call to update the scene's roll data
+                 let pane = document.getElementById("fu_rolls_tab")
+                 pane.scrollTop=9999999999999999999999999999999;
                 game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
             }
         }
@@ -953,3 +956,41 @@ async function updateRolls (rolls) {
             await scene.setFlag("ModularFate","rolls",endRolls);
     }
 }
+
+Hooks.on('renderFateUtilities', function(){
+    let numAspects = document.getElementsByName("sit_aspect").length;
+    if (numAspects == undefined){
+        numAspects = 0;
+    }
+    if (game.system.sit_aspects == undefined){
+        game.system.sit_aspects = numAspects;
+    }
+    
+    if (numAspects > game.system.sit_aspects){
+        let pane = document.getElementById("fu_aspects_pane")
+        pane.scrollTop=pane.scrollHeight;
+        game.system.sit_aspects = numAspects;
+    }
+    
+    if (numAspects < game.system.sit_aspects){
+        game.system.sit_aspects = numAspects;
+    }
+
+    let numRolls = document.getElementsByName("fu_roll").length;
+    if (numRolls == undefined){
+        numRolls = 0;
+    }
+    if (game.system.num_rolls == undefined){
+        game.system.num_rolls = numRolls;
+    }
+    
+    if (numRolls > game.system.num_rolls){
+        let pane = document.getElementById("fu_rolls_tab")
+        pane.scrollTop=pane.scrollHeight;
+        game.system.num_rolls = numRolls;
+    }
+    
+    if (numRolls < game.system.num_rolls){
+        game.system.num_rolls = numRolls;
+    }
+})
