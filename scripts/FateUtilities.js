@@ -29,7 +29,7 @@ activateListeners(html) {
             this.editing = true;
         }
     });
-    input.on("focusout", event => {
+    input.on("blur", event => {
         this.editing = false; 
         if (this.renderBanked && this.editingAspect == false){
             this.renderBanked = false;
@@ -176,7 +176,6 @@ async _selectRoll (event, html){
 async _notesFocusOut(event, html){
     let notes = html.find("div[id='scene_notes']")[0].innerHTML
     await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
-    this.editing = false;
     this.render(false);
 }
 

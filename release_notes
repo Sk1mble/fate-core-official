@@ -1,3 +1,8 @@
+# Version 1.8.3
+  Fixed a pernicious bug where changing a value in a numeric input box with the up and down arrows (spinner) would freeze updates of FateUtilities and the character sheet even after focusing out of them.
+  This is because the spinners don't trigger focusout events when used. 
+  Switched focusout to blur as the event type and this is now working properly in all tested cases.
+
 # Version 1.8.2
   Bugfix; deleted two now unnecessary lines of code that were causing errors.
 

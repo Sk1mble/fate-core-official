@@ -150,7 +150,7 @@ export class ModularFateCharacter extends ActorSheet {
                     this.editing = true;
                 }
             });
-            input.on("focusout", event => {
+            input.on("blur", event => {
                 this.editing = false
                 if (this.renderBanked){
                     this.renderBanked = false;
