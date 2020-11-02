@@ -45,7 +45,7 @@
                                 {{/each}}
                             </select>
                             {{/if}}
-                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> Fate Points</i>{{/if}}
+                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; font-style:normal; font-size:small; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> Fate Points</i>{{/if}}
                         </td>
                         <td>
                                 <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
@@ -82,7 +82,7 @@
                                 {{/each}}
                             </select>
                             {{/if}}
-                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> Fate Points</i>{{/if}}
+                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; font-style:normal; font-size:small" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> Fate Points</i>{{/if}}
                         </td>
                         <td>
                                 <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
