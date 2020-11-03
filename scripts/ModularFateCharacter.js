@@ -123,8 +123,8 @@ export class ModularFateCharacter extends ActorSheet {
             bio.on("focus",event => this._onBioInput(event, html));
             const desc = html.find(`div[id='${this.object.id}_description']`)
             desc.on("focus",event => this._onDescInput(event, html));
-            bio.on("focusout", event => this._onBioFocusOut(event, html));
-            desc.on("focusout", event => this._onDescFocusOut(event, html));
+            bio.on("blur", event => this._onBioFocusOut(event, html));
+            desc.on("blur", event => this._onDescFocusOut(event, html));
 
             const stunt_roll = html.find("button[name='stunt_name']");
             stunt_roll.on("click", event => this._on_stunt_roll_click(event,html));
@@ -1029,8 +1029,6 @@ Hooks.on('updateToken',(scene, tokenData, aData) => {
                     }
                 }       
             }
-            
-
         }
     }
 })
