@@ -573,7 +573,6 @@ async _onPopcornButton(event, html){
     let t_id = event.target.id;
     let token = canvas.tokens.placeables.find(token => token.id == t_id)
     token.setFlag("ModularFate","hasActed",true);
-        //this.render(false);
 }
 
 async _endButton(event, html){
