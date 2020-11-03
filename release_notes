@@ -1,3 +1,7 @@
+# Version 1.8.5
+Fate Utilities bug fixes (some of those 'awaits' I removed in 1.8.4 were still needed!)
+Added an 'already acted' list to the action tracker.
+
 # Version 1.8.4
   Further improvements to the rendering of FateUtilities; added a debounce function so that multiple successive renders won't cause repeated renders, significantly improving performance.
   Found a couple of other bugs that were preventing renders of FateUtilities as a result of focusout being used instead of blur
