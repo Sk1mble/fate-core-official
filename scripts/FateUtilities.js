@@ -626,28 +626,38 @@ async getData(){
         //Let's build a list of the tokens from canvas.tokens.placeables and feed them to the presentation layer
         let c = game.combat.combatants;
         let tokens = [];
+        let has_acted = [];
         let tokenId = undefined;
         c.forEach(comb => {
                 tokenId= comb.token._id;
                 let foundToken = undefined;
+                let hidden = false;
+                let hasActed = false;
 
                 if (tokenId != undefined){
-                foundToken = canvas.tokens.placeables.find(val => {return val.id == tokenId;})
+                    foundToken = canvas.tokens.placeables.find(val => {return val.id == tokenId;})
                 }
                 if ((comb.hidden || foundToken.data.hidden) && !game.user.isGM){
+                    hidden = true;
                 } else {
-                    let hasActed = true;
-
-                    if (foundToken != undefined){
+                }
+                if (foundToken != undefined){
                     //There is no token for this actor in the conflict; it probably means the token has been deleted from the scene. We need to ignore this actor. Easiest way to do that is to leave hasActed as true.
                         hasActed = foundToken.getFlag("ModularFate","hasActed");                       
-                    } 
-                        
-                    if (hasActed == undefined || hasActed == false){
+                    } else {
+                        hidden = true;
+                    }
+
+                    if (hasActed == undefined || hasActed == false && hidden == false){
                         tokens.push(foundToken)
                     }
-                }
+                    else {
+                        if (hasActed == true && hidden == false){
+                            has_acted.push(foundToken);
+                        }
+                    }
         })
+        data.has_acted_tokens = has_acted;
         data.combat_tokens=tokens;
         data.exchange = game.combat.round;   
     }
