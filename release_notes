@@ -1,6 +1,12 @@
+# Version 1.8.6
+  The initiative tracker in Fate Utilities will now only set all tokens on the scene as having not acted if you select "Yes" when the interface asks if you wish to delete the combat.
+  The initiative tracker now supports ending just one combat in a scene and leaving the others running without changing the 'hasacted' status of each token.
+  The 'next exchange' button now applies to the active combat only.
+  On pressing the 'next exchange' or 'end conflict' buttons, all changes are now pushed as a single update, improving efficiency.
+  
 # Version 1.8.5
-Fate Utilities bug fixes (some of those 'awaits' I removed in 1.8.4 were still needed!)
-Added an 'already acted' list to the action tracker.
+  Fate Utilities bug fixes (some of those 'awaits' I removed in 1.8.4 were still needed!)
+  Added an 'already acted' list to the action tracker.
 
 # Version 1.8.4
   Further improvements to the rendering of FateUtilities; added a debounce function so that multiple successive renders won't cause repeated renders, significantly improving performance.
