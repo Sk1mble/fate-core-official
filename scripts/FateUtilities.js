@@ -915,6 +915,7 @@ Hooks.on('renderCombatTracker', () => {
 
 Hooks.on('createChatMessage', (message) => {
     if (message.data.roll != undefined){
+        
         let roll = JSON.parse(message.data.roll)
         if (roll.formula.startsWith("4df") || roll.formula.startsWith("4dF")){
             //We're not interested in it unless it's a Fate roll.
@@ -951,7 +952,7 @@ Hooks.on('createChatMessage', (message) => {
             rolls.push(mFRoll);
 
             if (game.user.isGM){
-                (async () => {game.scenes.viewed.setFlag("ModularFate","rolls",rolls);})()            
+                game.scenes.viewed.setFlag("ModularFate","rolls",rolls);           
             }
         }
     }
