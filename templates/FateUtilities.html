@@ -313,7 +313,7 @@
             {{#each combat_tokens}} {{#if this.hasActed}} {{else}}
             <tr>    
                 <td style="width:60px">
-                    <button type="button" class="popcorn" id="{{this.id}}"" style="height:50px; width:50px; background: url({{this.data.img}}); background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
+                    <button type="button" class="popcorn" id="{{this.id}}" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
                 </td>
                 <td>
                     {{this.name}}

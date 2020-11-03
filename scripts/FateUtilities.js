@@ -31,7 +31,7 @@ activateListeners(html) {
     });
     input.on("blur", event => {
         this.editing = false; 
-        if (this.renderBanked && this.editingAspect == false){
+        if (this.renderBanked){
             this.renderBanked = false;
             this.render(false);
         }
@@ -48,7 +48,7 @@ activateListeners(html) {
     const category_select = html.find("select[id='category_select']")
     category_select.on("change", event => {
             this.category = category_select[0].value;
-            this.render(true);
+            this.render(false);
     })
     const track_name = html.find("div[name='track_name']");
     const box = html.find("input[name='box']");
@@ -81,7 +81,7 @@ activateListeners(html) {
 
     const scene_notes = html.find("div[id='scene_notes']");
     scene_notes.on("focus", event => this.scene_notes_edit(event, html));
-    scene_notes.on("focusout", event => this._notesFocusOut(event,html));
+    scene_notes.on("blur", event => this._notesFocusOut(event,html));
 
     const nav = html.find("nav[class='navigation foo']");
     nav.on("click", event => this.render(false));
@@ -112,7 +112,7 @@ activateListeners(html) {
     select.on("click", event => {if (event.shiftKey) {this.shift = true}})
     select.on("change", event => this._selectRoll (event, html));
 
-    select.on("focusout", event => {
+    select.on("blur", event => {
         this.selectingSkill = false;
         this.render(false);
     })
@@ -175,8 +175,8 @@ async _selectRoll (event, html){
 
 async _notesFocusOut(event, html){
     let notes = html.find("div[id='scene_notes']")[0].innerHTML
-    await game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
-    this.render(false);
+    game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+    this.editing=false;
 }
 
 async _fu_roll_button(event, html){
@@ -190,10 +190,10 @@ async _fu_roll_button(event, html){
         roll.total+=1;
         roll.flavor+=`<br>Added Bonus: +1`
         if (game.user.isGM){
-            await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+            game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
         } else {
             //Create a socket call to update the scene's roll data
-            await game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+            game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
         }
     }
 
@@ -201,11 +201,11 @@ async _fu_roll_button(event, html){
         roll.total+=2;
         roll.flavor+=`<br>Free Invoke: +2`
         if (game.user.isGM){ 
-            await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+            game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
         }
         else {
              //Create a socket call to update the scene's roll data
-             await game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+             game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
         }
     }
 
@@ -228,10 +228,10 @@ async _fu_roll_button(event, html){
         roll.total += r2.total;
         roll.flavor+=`<br>Free Invoke: Reroll`
         if (game.user.isGM){
-            await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+            game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
         } else {
             //Create a socket call to update the scene's roll data
-            await game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+            game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
         }
     }
 
@@ -244,10 +244,10 @@ async _fu_roll_button(event, html){
             if (fps == 0 || fps == undefined){
                 ui.notifications.error("No GM fate points available for an invoke")
             } else {
-                await user.setFlag("ModularFate","gmfatepoints",fps-1);
+                user.setFlag("ModularFate","gmfatepoints",fps-1);
                 roll.total+=2;
                 roll.flavor+=`<br>Paid Invoke: +2`
-                await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
             }
         } else {
             let char = user.character;
@@ -256,13 +256,13 @@ async _fu_roll_button(event, html){
                 if (fps == 0){
                     ui.notifications.error("No fate points available for an invoke")
                 } else {
-                    await char.update({"data.details.fatePoints.current":fps-1})
+                    char.update({"data.details.fatePoints.current":fps-1})
                     roll.total+=2;
                     roll.flavor+=`<br>Paid Invoke: +2`
                     if (game.user.isGM){
-                        await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                        game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
                     } else {
-                        await game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                        game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
                     }
                 }
             } else {
@@ -280,7 +280,7 @@ async _fu_roll_button(event, html){
             if (fps == 0 || fps == undefined){
                 ui.notifications.error("No GM fate points available for an invoke")
             } else {
-                await user.setFlag("ModularFate","gmfatepoints",fps-1);
+                user.setFlag("ModularFate","gmfatepoints",fps-1);
                 let r = new Roll ("4dF");
                 let r2 = r.roll();
                 let oldDiceValue = 0;
@@ -298,7 +298,7 @@ async _fu_roll_button(event, html){
                 }
                 roll.total += r2.total;
                 roll.flavor+=`<br>Paid Invoke: Reroll`
-                await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
             }
         } else {
             let char = user.character;
@@ -307,7 +307,7 @@ async _fu_roll_button(event, html){
                 if (fps == 0){
                     ui.notifications.error("No fate points available for an invoke")
                 } else {
-                    await char.update({"data.details.fatePoints.current":fps-1})
+                    char.update({"data.details.fatePoints.current":fps-1})
                     roll.flavor+=`<br>Paid Invoke: Reroll`
                     let r = new Roll ("4dF");
                     let r2 = r.roll();
@@ -319,9 +319,9 @@ async _fu_roll_button(event, html){
                     roll.dice = r2.dice[0].values;
                     roll.total += r2.total;
                     if (game.user.isGM){
-                        await game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                        game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
                     } else {
-                        await game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                        game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
                     }
                 }
             } else {
@@ -332,23 +332,25 @@ async _fu_roll_button(event, html){
 }
 
 async _fu_clear_rolls(event,html){
-    await game.scenes.viewed.unsetFlag("ModularFate","rolls");
+    game.scenes.viewed.unsetFlag("ModularFate","rolls");
 }
 
 async _on_avatar_click(event, html){
     if (game.user.isGM){
+        let fu_actor_avatars = game.settings.get("ModularFate","fu_actor_avatars");
         let t_id = event.target.id.split("_")[0];
         let token = canvas.tokens.placeables.find(t => t.id == t_id);
-        if (game.system.tokenAvatar == true){
+        if (!fu_actor_avatars){
             ui.notifications.info("Switching to actor avatars");
-            game.system.tokenAvatar = false;
+            await game.settings.set("ModularFate","fu_actor_avatars",true);
         } else {
-            if (game.system.tokenAvatar == false){
+            if (fu_actor_avatars){
                 ui.notifications.info("Switching to token avatars");
-                game.system.tokenAvatar = true;
+                await game.settings.set("ModularFate","fu_actor_avatars",false);
             }
         }
         this.render(false);
+        game.socket.emit("system.ModularFate",{"render":true});
     }
 }
 
@@ -378,7 +380,7 @@ async _edit_player_points(event, html){
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
     let fps = parseInt(event.target.value);
 
-    await token.actor.update({
+      token.actor.update({
         ["data.details.fatePoints.current"]: fps
     })
 }
@@ -386,7 +388,7 @@ async _edit_player_points(event, html){
 async _edit_gm_points(event, html){
     let user = game.users.entries.find(user => user.id == event.target.id);
     let fp = parseInt(event.target.value)
-    await user.setFlag("ModularFate","gmfatepoints",fp);
+    user.setFlag("ModularFate","gmfatepoints",fp);
 }
 
 async scene_notes_edit(event,html){
@@ -399,7 +401,7 @@ async _free_i_button(event,html){
     let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"))
     let aspect = situation_aspects[situation_aspects.findIndex(sit => sit.name == name)];
     aspect.free_invokes = value;
-    await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+    game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
     //ToDo: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
     let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
     if (drawing != undefined){
@@ -467,13 +469,13 @@ async _addToScene(event, html){
 }
 
 async _del_sit_aspect(event, html){
-    let del = await ModularFateConstants.confirmDeletion();
+    let del =   ModularFateConstants.confirmDeletion();
     if (del){
         let id = event.target.id;
         name = id.split("_")[1];
         let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate", "situation_aspects"));
         situation_aspects.splice(situation_aspects.findIndex(sit => sit.name == name),1);
-        await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+        game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
     
         //If there's a note on the scene for this aspect, delete it
         let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
@@ -497,7 +499,7 @@ async _add_sit_aspect(event, html){
     situation_aspects.push(situation_aspect);
     let pane = document.getElementById("fu_aspects_pane")
     pane.scrollTop=9999999999999999999999999999999;
-    await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+    game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
 }
 
 async _saveNotes(event, html){
@@ -507,7 +509,7 @@ async _saveNotes(event, html){
 async _clear_fleeting(event, html){
     let tokens = canvas.tokens.placeables;
     for (let i = 0; i<tokens.length; i++){
-        await this.clearFleeting(tokens[i].actor)
+          this.clearFleeting(tokens[i].actor)
     }
 }
 
@@ -521,7 +523,7 @@ async _on_aspect_change(event, html){
     let tracks = duplicate(token.actor.data.data.tracks);
     let track = tracks[name]
     track.aspect.name=text;
-    await token.actor.update({[`data.tracks.${name}.aspect`]:track.aspect})
+    token.actor.update({[`data.tracks.${name}.aspect`]:track.aspect})
 }
 
 async _on_click_box(event, html) {
@@ -542,7 +544,7 @@ async _on_click_box(event, html) {
     let tracks = duplicate(token.actor.data.data.tracks);
     let track = tracks[name]
     track.box_values[index] = checked;
-    await token.actor.update({
+    token.actor.update({
         ["data.tracks"]: tracks
     })
 }
@@ -556,8 +558,8 @@ async _on_track_name_click(event, html) {
     let tracks = duplicate(token.actor.data.data.tracks);
     let track = tracks[event.target.innerHTML]
     let notes = track.notes;
-    let text = await ModularFateConstants.updateText("Track Notes", notes);
-    await token.actor.update({
+    let text =   ModularFateConstants.updateText("Track Notes", notes);
+    token.actor.update({
         [`data.tracks.${event.target.innerHTML}.notes`]: text
     })
 }
@@ -570,20 +572,14 @@ async _timed_event (event, html){
 async _onPopcornButton(event, html){
     let t_id = event.target.id;
     let token = canvas.tokens.placeables.find(token => token.id == t_id)
-    await token.setFlag("ModularFate","hasActed",true)
-    await ChatMessage.create({
-        content: `${token.name} is acting now.`,
-        speaker:
-            {
-                alias: "Game: "
-            }
-        });
+    token.setFlag("ModularFate","hasActed",true);
+        //this.render(false);
 }
 
 async _endButton(event, html){
     let actors=canvas.tokens.placeables;
     for (let i=0; i<canvas.tokens.placeables.length; i++){
-        await canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false);
+        canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false);
     }
     game.combat.endCombat();
 }
@@ -591,7 +587,7 @@ async _endButton(event, html){
 async _nextButton(event, html){
     let actors=canvas.tokens.placeables;
     for (let i=0; i<canvas.tokens.placeables.length; i++){
-        await canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false)
+        canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false)
     }
     game.combat.nextRound();
 }
@@ -622,7 +618,7 @@ async _nextButton(event, html){
 
 async getData(){
     //Let's prepare the data for the initiative tracker here
-    const data = await super.getData();
+    const data =   super.getData();
     if (game.combat==null){
         data.conflict = false;
     } else {
@@ -696,7 +692,7 @@ async getData(){
         }
     }
     data.categories = Array.from(categories);
-    data.tokenAvatar = game.system.tokenAvatar;
+    data.tokenAvatar = !game.settings.get("ModularFate","fu_actor_avatars");
 
     //Let's get the list of Fate rolls made
     let rolls = game.scenes.viewed.getFlag("ModularFate","rolls");
@@ -710,7 +706,7 @@ async getData(){
 
 async render (...args){
     if (this.editing == false && (this.selectingSkill == false || this.selectingSkill == undefined)){
-        await super.render(...args);
+          super.render(...args);
     } else {
         this.renderBanked = true;
     }
@@ -719,7 +715,14 @@ async render (...args){
 async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, and Combat.
-    this.render(false);
+    //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
+    if (!this.renderPending) {
+        this.renderPending = true;
+        setTimeout(() => {
+          this.render(false);
+          this.renderPending = false;
+        }, 0);
+      }
 }
 
 async clearFleeting(object){
@@ -739,7 +742,7 @@ async clearFleeting(object){
                 }
             }
         }
-        await this.object.update({
+        this.object.update({
             ["data.tracks"]: tracks
         })
     }
@@ -824,7 +827,7 @@ class TimedEvent extends Application {
                             var timedEvents = game.combat.getFlag("ModularFate","timedEvents");
                             
                             if (timedEvents ==null || timedEvents == undefined){
-                                await game.combat.setFlag("ModularFate","timedEvents",[
+                                game.combat.setFlag("ModularFate","timedEvents",[
                                                                                         {   "round":`${document.getElementById("eventExchange").value}`,
                                                                                             "event":`${document.getElementById("eventToCreate").value}`,
                                                                                             "complete":false
@@ -921,11 +924,12 @@ Hooks.on('createChatMessage', (message) => {
             rolls.push(mFRoll);
 
             if (game.user.isGM){
-                (async () => {await game.scenes.viewed.setFlag("ModularFate","rolls",rolls);})()            
+                (async () => {game.scenes.viewed.setFlag("ModularFate","rolls",rolls);})()            
             }
             else {
                  //Create a socket call to update the scene's roll data
-                game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                 //Deprecated; unnecessary as the hook on renderChatMessage already does this on the GM's machine and therefore updates for all clients.
+                //game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
             }
         }
     }
@@ -937,6 +941,15 @@ Hooks.once('ready', async function () {
             updateRolls(rolls);
         })
     }
+
+    game.socket.on("system.ModularFate", render => {
+        if (render.render){
+            let FU = Object.values(ui.windows).find(window=>window.options.id=="FateUtilities");
+            if (FU != undefined){
+                FU.render(false);
+            }
+        }
+    })
 })
 
 async function updateRolls (rolls) {
@@ -948,7 +961,7 @@ async function updateRolls (rolls) {
         }
         currRolls = duplicate(currRolls);
         let endRolls = mergeObject(currRolls, rolls.rolls);
-            await scene.setFlag("ModularFate","rolls",endRolls);
+        scene.setFlag("ModularFate","rolls",endRolls);
     }
 }
 

@@ -303,6 +303,15 @@ Hooks.once('init', async function () {
         type:Object
     })
 
+    game.settings.register("ModularFate","fu_actor_avatars", {
+        name:"Use actor avatars instead of token avatars in Fate Utilities?",
+        hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
+        scope:"world",
+        config:false,
+        default:false,
+        type:Boolean
+    })
+
     //Initialise the setting if it is currently empty.
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","stunts"))){
         game.settings.set("ModularFate","stunts",{});

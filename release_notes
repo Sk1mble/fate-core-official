@@ -1,3 +1,13 @@
+# Version 1.8.4
+  Further improvements to the rendering of FateUtilities; added a debounce function so that multiple successive renders won't cause repeated renders, significantly improving performance.
+  Found a couple of other bugs that were preventing renders of FateUtilities as a result of focusout being used instead of blur
+  Properly implemented the option to click on avatars in Fate Utilities' Aspects view to switch between avatar image and token image.
+  This now propagates properly to connected clients.
+  Removed the chat message that was emitted on a character taking an action. In my experience this basically just spammed the chat as the GM and players are aware of who's acting either through talking with each other or by watching the characters disappearing from the combat tracker.
+  Removed a bunch of unnecessary 'await' keywords from FateUtilities that were slowing down the user experience. These are not necessary in most cases because the window re-renders on receiving hook events such as 'updateToken' which are fired once the update is complete.
+  Removed the socket request to GM upon a player making a dice roll to have it logged in the FateUtilities dice history. This is not necessary as the GM is monitoring the chatmessage hooks for dice rolls.
+  The overall effect of these changes should be a significant boost to performance when FateUtilities is open, especially if you're the GM and especially if you're using Multi-Level Tokens.
+
 # Version 1.8.3
   Fixed a pernicious bug where changing a value in a numeric input box with the up and down arrows (spinner) would freeze updates of FateUtilities and the character sheet even after focusing out of them.
   This is because the spinners don't trigger focusout events when used. 

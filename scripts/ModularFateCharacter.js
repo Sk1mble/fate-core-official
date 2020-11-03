@@ -969,7 +969,11 @@ Hooks.on('createOwnedItem',(actorData, itemData) => {
 
 Hooks.on('updateToken',(scene, tokenData, aData) => {
     let token = canvas.tokens.placeables.find(t => t.id == tokenData._id);
-    let actor = token.actor;
+    let actor = undefined;
+    
+    if (token != undefined) {
+        actor = token.actor;
+    } 
     
     if (aData.actorData != undefined && aData.actorData.items != undefined && aData.actorData.items[0] != undefined) {
         for (let i = 0; i < aData.actorData.items.length; i++){
