@@ -1,3 +1,7 @@
+# Version 1.8.7
+  FINALLY caught a bug that was preventing the action buttons from triggering a re-render in the Fate Utilities combat tracker.
+  The issue was caused by a render called on clicking between FateUtilities tabs. This was interfering with the proper render following someone having taken their action.
+  
 # Version 1.8.6
   The initiative tracker in Fate Utilities will now only set all tokens on the scene as having not acted if you select "Yes" when the interface asks if you wish to delete the combat.
   The initiative tracker now supports ending just one combat in a scene and leaving the others running without changing the 'hasacted' status of each token.

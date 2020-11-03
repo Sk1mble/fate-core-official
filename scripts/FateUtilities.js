@@ -82,9 +82,6 @@ class FateUtilities extends Application{
         scene_notes.on("focus", event => this.scene_notes_edit(event, html));
         scene_notes.on("blur", event => this._notesFocusOut(event,html));
 
-        const nav = html.find("nav[class='navigation foo']");
-        nav.on("click", event => this.render(false));
-
         const gmfp = html.find("input[name='gmfp']");
         gmfp.on("change", event=> this._edit_gm_points(event, html));
 
@@ -915,7 +912,6 @@ Hooks.on('renderCombatTracker', () => {
 
 Hooks.on('createChatMessage', (message) => {
     if (message.data.roll != undefined){
-        
         let roll = JSON.parse(message.data.roll)
         if (roll.formula.startsWith("4df") || roll.formula.startsWith("4dF")){
             //We're not interested in it unless it's a Fate roll.
@@ -934,7 +930,6 @@ Hooks.on('createChatMessage', (message) => {
                 }
             }
             let user = message.user;
-        
             let rolls = game.scenes.viewed.getFlag("ModularFate","rolls");
             if (rolls == undefined){
                 rolls = [];
