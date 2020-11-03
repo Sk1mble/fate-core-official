@@ -953,11 +953,6 @@ Hooks.on('createChatMessage', (message) => {
             if (game.user.isGM){
                 (async () => {game.scenes.viewed.setFlag("ModularFate","rolls",rolls);})()            
             }
-            else {
-                 //Create a socket call to update the scene's roll data
-                 //Deprecated; unnecessary as the hook on renderChatMessage already does this on the GM's machine and therefore updates for all clients.
-                //game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
-            }
         }
     }
 })
