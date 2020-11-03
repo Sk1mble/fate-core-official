@@ -380,7 +380,7 @@ async _edit_player_points(event, html){
     let token = canvas.tokens.placeables.find(t => t.id==t_id);
     let fps = parseInt(event.target.value);
 
-      token.actor.update({
+    token.actor.update({
         ["data.details.fatePoints.current"]: fps
     })
 }
@@ -497,8 +497,6 @@ async _add_sit_aspect(event, html){
     } catch {
     }                                
     situation_aspects.push(situation_aspect);
-    let pane = document.getElementById("fu_aspects_pane")
-    pane.scrollTop=9999999999999999999999999999999;
     game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
 }
 
@@ -572,13 +570,13 @@ async _timed_event (event, html){
 async _onPopcornButton(event, html){
     let t_id = event.target.id;
     let token = canvas.tokens.placeables.find(token => token.id == t_id)
-    token.setFlag("ModularFate","hasActed",true);
+    await token.setFlag("ModularFate","hasActed", true);
 }
 
 async _endButton(event, html){
     let actors=canvas.tokens.placeables;
     for (let i=0; i<canvas.tokens.placeables.length; i++){
-        canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false);
+        await canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false);
     }
     game.combat.endCombat();
 }
@@ -586,7 +584,7 @@ async _endButton(event, html){
 async _nextButton(event, html){
     let actors=canvas.tokens.placeables;
     for (let i=0; i<canvas.tokens.placeables.length; i++){
-        canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false)
+        await canvas.tokens.placeables[i].setFlag("ModularFate", "hasActed", false)
     }
     game.combat.nextRound();
 }
@@ -648,7 +646,7 @@ async getData(){
                         hidden = true;
                     }
 
-                    if (hasActed == undefined || hasActed == false && hidden == false){
+                    if ((hasActed == undefined || hasActed == false) && hidden == false){
                         tokens.push(foundToken)
                     }
                     else {
@@ -729,6 +727,7 @@ async renderMe(...args){
         this.renderPending = true;
         setTimeout(() => {
           this.render(false);
+          console.log("FU Rendered")
           this.renderPending = false;
         }, 0);
       }
