@@ -398,8 +398,8 @@ class FateUtilities extends Application{
         let aspect = situation_aspects[situation_aspects.findIndex(sit => sit.name == name)];
         aspect.free_invokes = value;
         game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
-        //ToDo: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
-        let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
+        //Done: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
+        let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
         if (drawing != undefined){
             let text;
             if (value == 1){
@@ -417,7 +417,7 @@ class FateUtilities extends Application{
 
     async _panToAspect(event, html){
         let name=event.target.id.split("_")[1];
-        let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
+        let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
         
         if (drawing != undefined) {
             let x = drawing.data.x;
@@ -430,7 +430,7 @@ class FateUtilities extends Application{
         let name=event.target.id.split("_")[1];
         let value=html.find(`input[id="${name}_free_invokes"]`)[0].value;
 
-        if (canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name))==undefined)
+        if (canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name))==undefined)
         {
             let text;
             if (value == 1){
@@ -474,7 +474,7 @@ class FateUtilities extends Application{
             game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
         
             //If there's a note on the scene for this aspect, delete it
-            let drawing = canvas.drawings.objects.children.find(drawing => drawing.data.text.startsWith(name));
+            let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
             if (drawing != undefined){
                 drawing.delete();
             }
@@ -567,6 +567,7 @@ class FateUtilities extends Application{
         let t_id = event.target.id;
         let token = canvas.tokens.placeables.find(token => token.id == t_id)
         await token.setFlag("ModularFate","hasActed", true);
+        //this.render(False);
     }
 
     async _endButton(event, html){

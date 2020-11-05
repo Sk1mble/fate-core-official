@@ -856,12 +856,6 @@ async function updateFromExtra(actor, itemData) {
             }
         }
 
-        for (let aspect in aspects_output){
-            if (actor_aspects[aspect]!=undefined){
-                delete(aspects_output[aspect]);
-            }
-        }
-
         let actor_skills = duplicate(actor.data.data.skills);
 
         //Ditto for orphaned skills
@@ -885,12 +879,6 @@ async function updateFromExtra(actor, itemData) {
                     await actor.update({"data.stunts":{[st]:null}});
                     actor_stunts = duplicate(actor.data.data.stunts);
                 }
-            }
-        }
-
-        for (let stunt in stunts_output){
-            if (actor_stunts[stunt]!=undefined){
-                delete(stunts_output[stunt]);
             }
         }
 

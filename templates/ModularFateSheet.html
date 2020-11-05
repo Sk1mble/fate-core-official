@@ -178,7 +178,7 @@
                         <li name="aspect" title="{{this.description}}" class="mfate-aspects-list__item">
                             <div id="{{this.name}}" name="{{this.name}}" class="mfate-aspects-list__label">{{this.name}}</div>
                             <!-- <input class="cs_box" type="text" id="{{this.name}}" name="data.aspects.{{this.name}}.value" value="{{{this.value}}}"></input> -->
-                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" name="data.aspects.{{this.name}}.value">{{this.value}}</textarea>
+                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea>
 
                         </li>
                         {{/each}}
@@ -204,8 +204,12 @@
                                         <div class="mfate-stunts__row-header-cell">
                                             {{this.name}} ({{this.linked_skill}})
                                             {{#if (eq this.extra_tag undefined)}}
-                                            <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_stunt" id="{{this.name}}_delete"></button> {{#if (eq this.linked_skill "None")}}{{else}}
-                                            <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon"></button>{{/if}}
+                                            <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_stunt" id="{{this.name}}_delete"></button> 
+                                            {{/if}}
+                                            {{#if (eq this.linked_skill "None")}}{{else}}
+                                            <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon"></button>
+                                            {{/if}}
+                                            {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" name="edit_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon" id="{{this.name}}_edit"></button> {{#if ../GM}}
                                             <button type="button" name="db_stunt" title="Add this stunt to the stunt database" i icon class="fas fa-upload mfate-stunts__row-header-icon" id="{{this.name}}_db"></button> {{/if}}
                                             {{else}}{{/if}}
