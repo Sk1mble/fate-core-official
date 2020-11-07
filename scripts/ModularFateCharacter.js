@@ -28,7 +28,6 @@ export class ModularFateCharacter extends ActorSheet {
 
     close(){
         this.editing = false;
-        game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
         super.close();
     }
 

@@ -730,7 +730,7 @@ async getData(){
 
 async render (...args){
     if (this.editing == false && (this.selectingSkill == false || this.selectingSkill == undefined)){
-          super.render(...args);
+          await super.render(...args);
     } else {
         this.renderBanked = true;
     }
