@@ -1,3 +1,6 @@
+# Version 1.9.2
+Further bugfixes; stunt editing window wasn't closing due to a change in the base code.
+
 # Version 1.8.9
   Tested for compatibility with Foundry 0.7.6
   Killed yet ANOTHER bug that was preventing FateUtilities from being re-rendered; this time the bug was caused by some old code on character sheets that was no longer needed, but which caused FateUtilities to be removed from the list of apps to render on an UpdateToken event whenever a character sheet was closed.
