@@ -12,12 +12,12 @@ class FateUtilities extends Application{
         }
     }
 
-    close(){
+    async close(){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
         game.system.apps["combat"].splice(game.system.apps["combat"].indexOf(this),1); 
         game.system.apps["scene"].splice(game.system.apps["scene"].indexOf(this),1); 
         game.system.apps["user"].splice(game.system.apps["user"].indexOf(this),1); 
-        super.close();
+        await super.close({"force":true});
     }
 
     activateListeners(html) {

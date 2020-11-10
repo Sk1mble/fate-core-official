@@ -26,9 +26,9 @@ Handlebars.registerHelper("hasBoxes", function(track) {
 
 export class ModularFateCharacter extends ActorSheet {
 
-    close(){
+    async close(){
         this.editing = false;
-        super.close();
+        await super.close({"force":true});
     }
 
     static get defaultOptions() {
