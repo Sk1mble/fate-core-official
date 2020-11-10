@@ -113,6 +113,7 @@ class StuntDB extends Application {
 
     constructor(actor){
         super();
+        game.system.apps["actor"].push(this);
         this.actor=actor;
     }
 
