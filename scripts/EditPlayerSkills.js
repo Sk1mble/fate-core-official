@@ -93,10 +93,10 @@ class EditPlayerSkills extends FormApplication{
         }
     }
 
-    async close(){
+    async close(options){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
         game.system.apps["item"].splice(game.system.apps["item"].indexOf(this),1); 
-        await super.close({"force":true});
+        await super.close(options);
     }
 
     async checkSkills(p){

@@ -12,12 +12,12 @@ class FateUtilities extends Application{
         }
     }
 
-    async close(){
+    async close(options){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
         game.system.apps["combat"].splice(game.system.apps["combat"].indexOf(this),1); 
         game.system.apps["scene"].splice(game.system.apps["scene"].indexOf(this),1); 
         game.system.apps["user"].splice(game.system.apps["user"].indexOf(this),1); 
-        await super.close({"force":true});
+        await super.close(options);
     }
 
     activateListeners(html) {
@@ -738,7 +738,7 @@ async render (...args){
 
 async renderMe(...args){
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
-    //Scene, and Combat.
+    //Scene, User, and Combat.
     //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
     if (!this.renderPending) {
         this.renderPending = true;
@@ -912,7 +912,13 @@ Hooks.on('renderCombatTracker', () => {
 })
 
 Hooks.on('createChatMessage', (message) => {
-    if (message.data.roll != undefined){
+    // We're only interested if this is a chat message with a roll in it
+    if (message.data.roll == undefined){
+        return;
+    }
+
+    // We only need to take action on this if we're the first logged-in GM.
+    if (game.users.entries.find(user => user.active && user.isGM) == game.user){
         let roll = JSON.parse(message.data.roll)
         if (roll.formula.startsWith("4df") || roll.formula.startsWith("4dF")){
             //We're not interested in it unless it's a Fate roll.
@@ -947,9 +953,7 @@ Hooks.on('createChatMessage', (message) => {
             }
             rolls.push(mFRoll);
 
-            if (game.user.isGM){
-                game.scenes.viewed.setFlag("ModularFate","rolls",rolls);           
-            }
+            game.scenes.viewed.setFlag("ModularFate","rolls",rolls);
         }
     }
 })
@@ -972,7 +976,7 @@ Hooks.once('ready', async function () {
 })
 
 async function updateRolls (rolls) {
-    if (rolls.rolls != undefined) {
+    if (rolls.rolls != undefined && game.users.entries.find(user => user.active && user.isGM) == game.user){
         let scene = game.scenes.entries.find(sc=> sc.id==rolls.scene._id);
         let currRolls = scene.getFlag("ModularFate","rolls");
         if (currRolls == undefined){

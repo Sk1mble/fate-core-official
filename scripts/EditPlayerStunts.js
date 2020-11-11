@@ -87,9 +87,9 @@ class EditPlayerStunts extends FormApplication {
         }       
     }
 
-    async close(){
+    async close(options){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
-        await super.close({"force":true});
+        await super.close(options);
     }
 
     setSheet (ActorSheet){

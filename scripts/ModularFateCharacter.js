@@ -26,9 +26,9 @@ Handlebars.registerHelper("hasBoxes", function(track) {
 
 export class ModularFateCharacter extends ActorSheet {
 
-    async close(){
+    async close(options){
         this.editing = false;
-        await super.close({"force":true});
+        await super.close(options);
     }
 
     static get defaultOptions() {
@@ -734,7 +734,6 @@ function shouldUpdate(actor){
     if (!actor.owner){
         return false;
     }
-
     const permissions = actor.data.permission;
     const activePlayers = game.users.entities
        .filter(user => user.active)

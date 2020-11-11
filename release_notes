@@ -1,5 +1,8 @@
+# Version 1.9.3
+  Efficiency improvements; prevented situation where there would be multiple updates to FateUtilities when multiple GMs are logged in, other minor improvements to the code.
+
 # Version 1.9.2
-Further bugfixes; stunt editing window wasn't closing due to a change in the base code.
+  Further bugfixes; stunt editing window wasn't closing due to a change in the base code.
 
 # Version 1.8.9
   Tested for compatibility with Foundry 0.7.6
