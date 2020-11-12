@@ -555,6 +555,7 @@ class ModularFateConstants {
         output.aspects = game.settings.get("ModularFate","aspects");
         output.freeStunts = game.settings.get("ModularFate","freeStunts");
         output.refreshTotal = game.settings.get("ModularFate","refreshTotal");
+        output.track_categories = game.settings.get("ModularFate","track_categories");
         return JSON.stringify(output);
     }
 
@@ -585,5 +586,6 @@ class ModularFateConstants {
         await game.settings.set("ModularFate","aspects",input.aspects);
         await game.settings.set("ModularFate","freeStunts",input.freeStunts);
         await game.settings.set("ModularFate","refreshTotal",input.refreshTotal);
+        await game.settings.set("ModularFate","track_categories",input.track_categories);
     }
 } 
