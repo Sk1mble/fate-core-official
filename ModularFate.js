@@ -377,11 +377,50 @@ Hooks.once('init', async function () {
     //Register a setting for the game's Issues?
 
     game.settings.register("ModularFate","confirmDeletion", {
-        name: "Confirm deletion of items with trashcan icons?",
+        name: "Confirm deletion from trash icons?",
         hint:"Turn this on if you want to need to confirm every deletion of an item with its delete button",
         scope:"user",
         config:true,
         type:Boolean,
         restricted:false
     });
+
+    game.settings.register("ModularFate","exportSettings", {
+        name: "Export world config to text?",
+        scope:"world",
+        config:true,
+        type:Boolean,
+        restricted:true,
+        default:false,
+        onChange: value => {
+            if (value == true && game.user.isGM){
+                let text = ModularFateConstants.exportSettings();
+ 
+                new Dialog({
+                    title: "Copy & Paste this to save your world configuration", 
+                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
+                    buttons: {
+                    },
+                }).render(true);
+                game.settings.set("ModularFate","exportSettings",false);
+            }
+        }
+    })
+
+    game.settings.register("ModularFate","importSettings", {
+        name: "Import world config from text?",
+        scope:"world",
+        hint:"This will overwrite all stunts, tracks, aspects, and skills with the import. To cancel if you change your mind, just close the window without clicking 'save'.",
+        config:true,
+        type:Boolean,
+        restricted:true,
+        default:false,
+        onChange: async value => {
+            if (value == true && game.user.isGM){
+                let text = await ModularFateConstants.getSettings();
+                ModularFateConstants.importSettings(text);
+                game.settings.set("ModularFate","importSettings",false);
+            }
+        }
+    })
 });

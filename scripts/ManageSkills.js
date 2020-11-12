@@ -75,7 +75,6 @@ Hooks.once('init', async function () {
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
-                console.log(value);
                 if (value == "fateCore"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",ModularFateConstants.getFateCoreDefaultSkills());

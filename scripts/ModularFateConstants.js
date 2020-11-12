@@ -544,4 +544,46 @@ class ModularFateConstants {
         
         return end_object;
     }
+
+    static exportSettings (){
+        //This function returns a text string in JSON notation containing all of the game's settings for backup or import into another world.
+        let output = {};
+        output.stunts = game.settings.get("ModularFate","stunts");
+        output.skills = game.settings.get("ModularFate","skills");
+        output.skillTotal = game.settings.get("ModularFate", "skillTotal");
+        output.tracks = game.settings.get("ModularFate","tracks");
+        output.aspects = game.settings.get("ModularFate","aspects");
+        output.freeStunts = game.settings.get("ModularFate","freeStunts");
+        output.refreshTotal = game.settings.get("ModularFate","refreshTotal");
+        return JSON.stringify(output);
+    }
+
+    static async getSettings (){
+        return new Promise(resolve => {
+            new Dialog({
+                title: "Paste data here; WILL REPLACE ALL WORLD SETTINGS",
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_settings"></textarea></div>`,
+                buttons: {
+                    ok: {
+                        label: "Save",
+                        callback: () => {
+                            resolve (document.getElementById("import_settings").value);
+                        }
+                    }
+                },
+            }).render(true)
+        });
+    }
+
+    static async importSettings (input){
+        //This function parses a text string in JSON notation containing all of the game's settings and writes those settings to System.settings.
+        input = JSON.parse(input);
+        await game.settings.set("ModularFate","stunts",input.stunts);
+        await game.settings.set("ModularFate","skills",input.skills);
+        await game.settings.set("ModularFate","skillTotal",input.skillTotal);
+        await game.settings.set("ModularFate","tracks",input.tracks);
+        await game.settings.set("ModularFate","aspects",input.aspects);
+        await game.settings.set("ModularFate","freeStunts",input.freeStunts);
+        await game.settings.set("ModularFate","refreshTotal",input.refreshTotal);
+    }
 } 
