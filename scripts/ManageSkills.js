@@ -75,7 +75,7 @@ Hooks.once('init', async function () {
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","skills",ModularFateConstants.getFateCoreDefaultSkills());
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCoreDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
                     }
                 }
@@ -86,19 +86,19 @@ Hooks.once('init', async function () {
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
-                        game.settings.set("ModularFate","skills",ModularFateConstants.getFateCondensedDefaultSkills());
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCondensedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","skills",ModularFateConstants.getFateAcceleratedDefaultSkills());
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateAcceleratedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","skills",ModularFateConstants.getDFASkills());
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
                     }
                 }
