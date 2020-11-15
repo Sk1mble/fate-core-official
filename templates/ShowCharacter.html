@@ -1,12 +1,12 @@
 <form style="font-family:Montserrat">
-    <p style="font-weight:bold">Pick a token or actor to show:</p>
+    <p style="font-weight:bold">{{localize 'ModularFate.PickATokenOrActor'}}:</p>
     <span style="width:25%; padding:5px">
-        Character:
+        {{localize 'ModularFate.Character'}}:
     </span>
     <span style="width:75%; padding:5px">
         <select id="character">
             <option disabled="disabled">
-                Tokens
+                {{localize 'ModularFate.Tokens'}}
             </option>
             {{#each tokens}}
                 <option value = "token_{{this.id}}">
@@ -14,7 +14,7 @@
                 </option>
             {{/each}}
             <option disabled="disabled">
-                Actors
+                {{localize 'ModularFate.Actors'}}
             </option>
             {{#each actors}}
                 <option value = "actor_{{this.id}}">
@@ -24,8 +24,8 @@
         </select>
     </span><p/>
     <span>
-        <p style="font-weight:bold">Pick who to show this character to:</p>
-        <button type="button" id="all_players">Select All</button><p/>
+        <p style="font-weight:bold">{{localize 'ModularFate.PickWhoToShowTo'}}:</p>
+        <button type="button" id="all_players">{{localize 'ModularFate.SelectAll'}}</button><p/>
     </span>
     {{#each users}}
     {{#if this.active}}
@@ -38,58 +38,58 @@
         {{/if}}
     {{/each}}
     <span>
-        <p style="font-weight:bold">Pick what to show:</p>
-        <button type="button" id="all_elements">Select All</button><p/>
+        <p style="font-weight:bold">{{localize 'ModularFate.PickWhatToShow'}}:</p>
+        <button type="button" id="all_elements">{{localize 'ModularFate.SelectAll'}}</button><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="avatar"/>
             </span>
             <span style="width:75%; padding:5px">
-                Avatar
+                {{localize 'ModularFate.Avatar'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="biography"/>
             </span>
             <span style="width:75%; padding:5px">
-                Biography
+                {{localize 'ModularFate.Biography'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="description"/>
             </span>
             <span style="width:75%; padding:5px">
-                Description
+                {{localize 'ModularFate.Description'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="aspects"/>
             </span>
             <span style="width:75%; padding:5px">
-                Aspects
+                {{localize 'ModularFate.Aspects'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="skills"/>
             </span>
             <span style="width:75%; padding:5px">
-                Skills
+                {{localize 'ModularFate.Skills'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="tracks"/>
             </span>
             <span style="width:75%; padding:5px">
-                Tracks
+                {{localize 'ModularFate.Tracks'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="stunts"/>
             </span>
             <span style="width:75%; padding:5px">
-                Stunts
+                {{localize 'ModularFate.Stunts'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="extras"/>
             </span>
             <span style="width:75%; padding:5px">
-                Extras
+                {{localize 'ModularFate.Extras'}}
             </span><p/>
     </span>
     <span>
-        <button type="button" id="show_button">Show Now</button>
+        <button type="button" id="show_button">{{localize 'ModularFate.ShowNow'}}</button>
     </span>
 </form>

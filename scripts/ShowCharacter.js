@@ -94,7 +94,7 @@ class ShowCharacter extends Application{
     static get defaultOptions() {
         const options = super.defaultOptions; 
         options.template= "systems/ModularFate/templates/ShowCharacter.html";
-        options.title="Show a character";
+        options.title=game.i18n.localize("ModularFate.ShowACharacter");
         options.id = ShowCharacter;
         options.width="auto";
         options.height="auto";
@@ -117,7 +117,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
             if (hud && game.user.isGM){
                 hud.tools.push({
                     name:"ShowCharacter",
-                    title:"Show chosen details of a character to player(s)",
+                    title:game.i18n.localize("ModularFate.ShowCharacterTitle"),
                     icon:"fas fa-binoculars",
                     onClick: ()=> {let sc = new ShowCharacter; sc.render(true)},
                     button:true
@@ -142,13 +142,13 @@ class CharacterView extends Application {
     constructor(elements){
         super();
         this.elements = elements;
-        this.options.title="Temporary view of "+elements.name
+        this.options.title=game.i18n.localize("ModularFate.TemporaryView")+" "+game.i18n.localize("ModularFate.of")+" "+elements.name
     }
 
     static get defaultOptions() {
         const options = super.defaultOptions; 
         options.template= "systems/ModularFate/templates/CharacterView.html";
-        options.title="Temporary view"
+        options.title=game.i18n.localize("ModularFate.TemporaryView")
         options.width="1000";
         options.height="800";
         options.resizable = false;

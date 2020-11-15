@@ -4,17 +4,17 @@ class ModularFateConstants {
         return  {
                     "10":"",
                     "9":"",
-                    "8":"Legendary",
-                    "7":"Epic",
-                    "6":"Fantastic",
-                    "5":"Superb",
-                    "4":"Great",
-                    "3":"Good",
-                    "2":"Fair",
-                    "1":"Average",
-                    "0":"Mediocre",
-                    "-1":"Poor",
-                    "-2":"Terrible",
+                    "8":game.i18n.localize("ModularFate.Legendary"),
+                    "7":game.i18n.localize("ModularFate.Epic"),
+                    "6":game.i18n.localize("ModularFate.Fantastic"),
+                    "5":game.i18n.localize("ModularFate.Superb"),
+                    "4":game.i18n.localize("ModularFate.Great"),
+                    "3":game.i18n.localize("ModularFate.Good"),
+                    "2":game.i18n.localize("ModularFate.Fair"),
+                    "1":game.i18n.localize("ModularFate.Average"),
+                    "0":game.i18n.localize("ModularFate.Mediocre"),
+                    "-1":game.i18n.localize("ModularFate.Poor"),
+                    "-2":game.i18n.localize("ModularFate.Terrible"),
                 }
     }
 
@@ -396,7 +396,7 @@ class ModularFateConstants {
                 content: content,
                 buttons: {
                     ok: {
-                        label: "OK",
+                        label: game.i18n.localize("ModularFate.OK"),
                         callback: () => {
                             resolve("OK");
                         }
@@ -419,13 +419,13 @@ class ModularFateConstants {
                 content: content,
                 buttons: {
                     yes: {
-                        label: "Yes",
+                        label: game.i18n.localize("ModularFate.Yes"),
                         callback: () => {
                             resolve("yes");
                         }
                     },
                     no: {
-                        label: "No",
+                        label: game.i18n.localize("ModularFate.No"),
                         callback: () => {
                             resolve("no");
                         }
@@ -442,7 +442,7 @@ class ModularFateConstants {
         if (!confirm){
             return true;
         } else {
-            let del = await ModularFateConstants.awaitYesNoDialog("Are you sure you want to delete this?");
+            let del = await ModularFateConstants.awaitYesNoDialog(game.i18n.localize("ModularFate.ConfirmDeletion"));
             if (del=="yes"){
                 return true;
             } else {
@@ -458,7 +458,7 @@ class ModularFateConstants {
                 content: '<div align="center"><input id="dialog_box" style="width:375px" autofocus></input></div>',
                 buttons: {
                     ok: {
-                        label: "OK",
+                        label: game.i18n.localize("ModularFate.OK"),
                         callback: () => {
                             resolve(document.getElementById("dialog_box").value)
                         }
@@ -476,7 +476,7 @@ class ModularFateConstants {
             content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
             buttons: {
                 ok: {
-                    label: "Save",
+                    label: game.i18n.localize("ModularFate.Save"),
                     callback: () => {
                         resolve(document.getElementById("get_text_box").value)
                     }
@@ -562,11 +562,11 @@ class ModularFateConstants {
     static async getSettings (){
         return new Promise(resolve => {
             new Dialog({
-                title: "Paste data here; WILL REPLACE ALL WORLD SETTINGS",
+                title: game.i18n.localize("ModularFate.PasteDataToOverwrite"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_settings"></textarea></div>`,
                 buttons: {
                     ok: {
-                        label: "Save",
+                        label: game.i18n.localize("ModularFate.Save"),
                         callback: () => {
                             resolve (document.getElementById("import_settings").value);
                         }

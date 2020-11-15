@@ -79,7 +79,7 @@ export class ExtraSheet extends ItemSheet {
         let db = duplicate(game.settings.get("ModularFate","stunts"));
         db[name]=this.object.data.data.stunts[name];
         await game.settings.set("ModularFate","stunts",db);
-        ui.notifications.info("Added "+name+" to the stunt database");
+        ui.notifications.info(`${game.i18n.localize("ModularFate.Added")} ${name} ${game.i18n.localize("ModularFate.ToTheStuntDatabase")}`);
     }
 
     async _stunt_db_click(event, html){
@@ -90,8 +90,8 @@ export class ExtraSheet extends ItemSheet {
     async _onStunts_click(event, html) {
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
-            "name":"New Stunt",
-            "linked_skill":"None",
+            "name":game.i18n.localize("ModularFate.NewStunt"),
+            "linked_skill":game.i18n.localize("ModularFate.None"),
             "description":"",
             "refresh_cost":1,
             "overcome":false,
@@ -142,7 +142,7 @@ export class ExtraSheet extends ItemSheet {
         options.height = "850";
         options.resizable = true;
         options.submitOnChange = true;
-        options.title=`Extra: ${this.name}`
+        options.title=`${game.i18n.localize("ModularFate.Extra")}: ${this.name}`
         return options;
     }
 }

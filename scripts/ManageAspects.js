@@ -17,28 +17,28 @@ Hooks.once('init', async function () {
 
     // Register the menu to setup the world's aspect list.
     game.settings.registerMenu("ModularFate","AspectSetup", {
-        name:"Setup Aspects",
-        label:"Setup",
-        hint:"Configure character aspects for this world.",
+        name:game.i18n.localize("ModularFate.SetupAspects"),
+        label:game.i18n.localize("ModularFate.Setup"),
+        hint:game.i18n.localize("ModularFate.SetupAspectsHint"),
         type:AspectSetup,
         restricted:true
     });
 
     // Register a setting for replacing the existing aspect list with one of the pre-defined default sets.
     game.settings.register("ModularFate", "defaultAspects", {
-        name: "Replace Or Clear Aspect List?",
-        hint: "Pick an aspect set with which to override the world's current aspects. CANNOT BE UNDONE.",
+        name: game.i18n.localize("ModularFate.ReplaceAspectsName"),
+        hint: game.i18n.localize("ModularFate.ReplaceAspectsHint"),
         scope: "world",     // This specifies a client-stored setting
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":"No",
-            "fateCore":"Yes - Fate Core Aspects",
-            "fateCondensed":"Yes - Fate Condensed Aspects",
-            "accelerated":"Yes - Fate Accelerated Aspects",
-            "dfa":"Yes - Dresden Files Accelerated Aspects",
-            "clearAll":"Yes - Clear All Aspects"
+            "nothing":game.i18n.localize("No"),
+            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
+            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
+            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
+            "dfa":game.i18n.localize("ModularFate.YesDFA"),
+            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
@@ -94,7 +94,7 @@ class AspectSetup extends FormApplication{
         options.template = "systems/ModularFate/templates/AspectSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `Setup character aspects for world ${game.world.title}`;
+        options.title = `${game.i18n.localize("ModularFate.SetupAspectsForWorld")} ${game.world.title}`;
         options.closeOnSubmit = false;
         options.id = "AspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -140,7 +140,7 @@ class AspectSetup extends FormApplication{
         let aspect_text = `{"${slb}":${JSON.stringify(sk)}}`
  
         new Dialog({
-            title: "Copy & Paste this to save this aspect", 
+            title: game.i18n.localize("ModularFate.CopyPasteToSaveAspect"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${aspect_text}</textarea></div>`,
             buttons: {
             },
@@ -152,7 +152,7 @@ class AspectSetup extends FormApplication{
         let aspects_text = JSON.stringify(aspects);
  
         new Dialog({
-            title: "Copy & Paste this to save your world aspects", 
+            title: game.i18n.localize("ModularFate.CopyPasteToSaveAspects"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${aspects_text}</textarea></div>`,
             buttons: {
             },
@@ -162,11 +162,11 @@ class AspectSetup extends FormApplication{
     async getAspects(){
         return new Promise(resolve => {
             new Dialog({
-                title: "Paste data here; replaces aspects of same name",
+                title: game.i18n.localize("ModularFate.PasteAspects"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_aspects"></textarea></div>`,
                 buttons: {
                     ok: {
-                        label: "Save",
+                        label: game.i18n.localize("ModularFate.Save"),
                         callback: () => {
                             resolve (document.getElementById("import_aspects").value);
                         }
@@ -199,11 +199,11 @@ class AspectSetup extends FormApplication{
         let selectBox = html.find("select[id='aspectListBox']");
         let name = selectBox[0].value.trim();
         if (name=="" || name == undefined){
-            ui.notifications.error("Select an aspect to copy first");
+            ui.notifications.error(game.i18n.localize("ModularFate.SelectAnAspectFirst"));
         } else {
             let aspects=await game.settings.get("ModularFate", "aspects");
             let aspect = duplicate(aspects[name]);
-            name = aspect.name+" copy";
+            name = aspect.name+" "+game.i18n.localize("ModularFate.copy");
             aspect.name=name;
             aspects[name]=aspect;
             await game.settings.set("ModularFate","aspects",aspects);
@@ -277,7 +277,7 @@ class EditAspect extends FormApplication{
 
         //First check if we already have an aspect by that name, or the aspect is blank; if so, throw an error.
         if (name == undefined || name ==""){
-            ui.notifications.error("You cannot have an aspect with a blank name.")
+            ui.notifications.error(game.i18n.localize("ModularFate.YouCannotHaveAnAspectWithABlankName"))
         } else {
             if (aspects[name] != undefined){
                 aspects[name] = newAspect;
@@ -302,7 +302,7 @@ class EditAspect extends FormApplication{
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";
-        options.title = `Aspect Editor`;
+        options.title = game.i18n.localize("ModularFate.AspectEditor");
         options.closeOnSubmit = true;
         options.id = "EditAspect"; // CSS id if you want to override default behaviors
         options.resizable = true;

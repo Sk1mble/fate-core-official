@@ -5,13 +5,14 @@ class EditPlayerSkills extends FormApplication{
             super(...args);
 
                 if (this.object.type == "Extra"){
-                    this.options.title=`Skill editor for item ${this.object.name}`
+                    let title = game.i18n.localize("ModularFate.SkillEditorForItem");
+                    this.options.title=`${title} ${this.object.name}`
                     game.system.apps["item"].push(this);
                 } else {
                     if (this.object.isToken) {
-                        this.options.title=`Skill editor for [Token] ${this.object.name}`
+                        this.options.title=`${game.i18n.localize("ModularFate.SkillEditorForToken")} ${this.object.name}`
                     } else {
-                        this.options.title=`Skill editor for ${this.object.name}`
+                        this.options.title=`${game.i18n.localize("ModularFate.SkillEditorFor")} ${this.object.name}`
                     }
                 }
                 if (this.object.type != "Extra"){
@@ -48,13 +49,13 @@ class EditPlayerSkills extends FormApplication{
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
         options.template = "systems/ModularFate/templates/EditPlayerSkills.html"; 
-        options.width = "auto";
         options.height = "auto";
-        options.title = `Character Skill Editor`;
-        options.closeOnSubmit = false;
+        options.title = game.i18n.localize("ModularFate.CharacterSkillEditor");
+        options.closeOnSubmit = true;
         options.id = "PlayerSkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;
-        options.scrollY=["#skills_editor"]
+        options.scrollY=["#skills_editor"];
+        options.width = "auto";  
         return options;
     }
 
@@ -77,16 +78,16 @@ class EditPlayerSkills extends FormApplication{
 
         if (this.object.type=="Extra"){
             await this.object.update({"data.skills":this.player_skills}); 
-            ui.notifications.info("Extra's skills saved.");   
+            ui.notifications.info(game.i18n.localize("ModularFate","ExtraSkillsSaved"));   
             this.close();
         } else {
             let isPlayer = this.object.hasPlayerOwner;
             var canSave = await this.checkSkills(this.player_skills);
             if (!game.user.isGM && isPlayer && !canSave){
-                ui.notifications.error("Unable to save because this character violates skill cap or skill column enforcement.")
+                ui.notifications.error(game.i18n.localize("ModularFate.UnableToSave"));
             } else {
                 await this.object.update({"data.skills":this.player_skills}); 
-                ui.notifications.info("Character skills saved.")   
+                ui.notifications.info(game.i18n.localize("ModularFate.SkillsSaved"));
                 await this.sheet.initialise();
                 this.close();
             }
@@ -126,7 +127,7 @@ class EditPlayerSkills extends FormApplication{
 
                 //0=11 & 10; 1=10&9; 2=9&8; 3=8&7; 4=7&6; 5=6&5; 6=5&4; 7=4&3; 8=3&2; 9=2&1
                 let columnErrors=new Array(10);
-                let columnErrorText = `<div><p/>The violations are as follows:`
+                let columnErrorText = `<div><p/>${game.i18n.localize('ModularFate.TheViolationsAreAsFollows')}`
                 for (let i = 11; i>1; i--){
                     if (ranks[i]>ranks[i-1]){
                         skillColumnViolated = true;
@@ -135,17 +136,17 @@ class EditPlayerSkills extends FormApplication{
                 }
                 for (let i = 0; i<columnErrors.length; i++){
                     if (columnErrors[i]){
-                        columnErrorText+=`<li>More skills at ${ModularFateConstants.getAdjective(11-i)}(+${11-i}) than at ${ModularFateConstants.getAdjective(10-i)}(+${10-i})</li>`
+                        columnErrorText+=`<li>${game.i18n.localize('ModularFate.MoreSkillsAt')} ${ModularFateConstants.getAdjective(11-i)}(+${11-i}) ${game.i18n.localize("ModularFate.ThanAt")} ${ModularFateConstants.getAdjective(10-i)}(+${10-i})</li>`
                     }
                 }
                 columnErrorText+-`</div>`;
 
                 if (skillColumnViolated){
                     if (!game.user.isGM) {
-                        await ModularFateConstants.awaitOKDialog("Skill column violation detected",`<div>Your skill distribution is invalid due to not being in a column. You won't be able to save your changes until you correct this.${columnErrorText}</div>`);
+                        await ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.ViolationDetected"),`<div>${game.i18n.localize("ModularFate.ViolationExplanation1")} ${columnErrorText}</div>`);
                     } else {
                         if (actor.hasPlayerOwner){
-                            await ModularFateConstants.awaitOKDialog("Skill column violation detected",`<div>This character's skill distribution is invalid due to not being in a column. The player won't be able to save any changes while this remains the case unless you turn off skill column enforcement in the system settings.</div>${columnErrorText}`);    
+                            await ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.ViolationDetected"),`<div>${game.i18n.localize("ModularFate.ViolationExplanation2")}</div>${columnErrorText}`);    
                         }
                     }    
                     playerCanSave=false;
@@ -174,10 +175,10 @@ class EditPlayerSkills extends FormApplication{
                 if (player_total > skill_total){
                     skillTotalViolated = true;
                     if (!game.user.isGM){
-                        await ModularFateConstants.awaitOKDialog("Skill points exceed allowed total",`<div>You have ${player_total} skill points and the game's skill total is ${skill_total}. You won't be able to save your changes until you correct this.</div>`);
+                        await ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.SkillPointsExceedAllowedTotal"),`<div>${game.i18n.localize("ModularFate.YouHave")} ${player_total} ${game.i18n.localize("ModularFate.SkillPointsAndTheGamesTotalIs")} ${skill_total}. ${game.i18n.localize("ModularFate.CannotSave1")}</div>`);
                     } else {
                         if (actor.hasPlayerOwner){
-                            await ModularFateConstants.awaitOKDialog("Skill points exceed allowed total",`<div>This character has ${player_total} skill points and the game's skill total is ${skill_total}. The player won't be able to save any changes while this remains the case unless you turn off skill total enforcement in the system settings.</div>`);
+                            await ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.SkillPointsExceedAllowedTotal"),`<div>${game.i18n.localize("ModularFate.ThisCharacterHas")} ${player_total} ${game.i18n.localize("ModularFate.SkillPointsAndTheGamesTotalIs")} ${skill_total}. ${game.i18n.localize("ModularFate.CannotSave2")}</div>`);
                         }
                     }
                     playerCanSave=false;
@@ -267,19 +268,19 @@ class EditPlayerSkills extends FormApplication{
             e.skillsWindow = this;
         }
         else {
-            ui.notifications.error("Only GMs can manually edit player skills.");
+            ui.notifications.error(game.i18n.localize("ModularFate.OnlyGMsCanManuallyEdit"));
         }
     }
 
     async _onSkillButton(event,html){
         let name = event.target.id;
         let skill = this.player_skills[name];
-        ModularFateConstants.awaitOKDialog("Skill Details",`
+        ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.SkillDetails"),`
                                             <table cellspacing ="4" cellpadding="4" border="1">
                                                 <h2>${skill.name}</h2>
                                                 <tr>
                                                     <td style="width:400px;">
-                                                        <b>Description:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Description")}:</b>
                                                     </td>
                                                     <td style="width:2000px;">
                                                         ${skill.description}
@@ -287,7 +288,7 @@ class EditPlayerSkills extends FormApplication{
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Overcome:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Overcome")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.overcome}
@@ -295,7 +296,7 @@ class EditPlayerSkills extends FormApplication{
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Create an Advantage:</b>
+                                                        <b${game.i18n.localize("ModularFate.CAA")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.caa}
@@ -303,7 +304,7 @@ class EditPlayerSkills extends FormApplication{
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Attack:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Attack")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.attack}
@@ -311,7 +312,7 @@ class EditPlayerSkills extends FormApplication{
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Defend:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Defend")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.defend}
@@ -331,12 +332,12 @@ class EditGMSkills extends FormApplication{
     constructor(actor){
         super(actor);
             if (this.object.type=="Extra"){ 
-                this.options.title=`Extra skill editor for ${this.object.name}`                    
+                this.options.title=`${game.i18n.localize("ModularFate.ExtraSkillEditor")} ${this.object.name}`                    
             } else {
                 if(this.object.isToken){
-                    this.options.title=`GM skill editor for [Token] ${this.object.name}`                    
+                    this.options.title=`${game.i18n.localize("ModularFate.TokenSkillEditor")} ${this.object.name}`                    
                 } else {
-                    this.options.title=`GM skill editor for ${this.object.name}`
+                    this.options.title=`${game.i18n.localize("ModularFate.GMSkillEditor")} ${this.object.name}`
                 }
             }
             this.player_skills=duplicate(this.object.data.data.skills);
@@ -349,7 +350,7 @@ class EditGMSkills extends FormApplication{
         options.template = "systems/ModularFate/templates/EditGMSkills.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `GM Skill Editor`;
+        options.title = game.i18n.localize("ModularFate.GMSkillEditor2");
         options.closeOnSubmit = false;
         options.id = "GMSkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -363,10 +364,6 @@ class EditGMSkills extends FormApplication{
         add_ad_hoc.on("click", event => this._adHocButton(event, html));
         const confirm = html.find("button[id='add_remove_button']")
         confirm.on("click", event => this._confirm(event, html));
-    }
-
-    async _aws_click(event, html){
-        console.log("Clicked")
     }
 
     async _confirm(event,html){
@@ -405,7 +402,7 @@ class EditGMSkills extends FormApplication{
         if (name!= undefined && name !=""){
             newSkill= {
                 "name":name,
-                "description":"Ad-hoc Skill",
+                "description":game.i18n.localize("ModularFate.AdHocSkill"),
                 "pc":false,
                 "overcome":"",
                 "caa":"",

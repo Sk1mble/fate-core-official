@@ -3,9 +3,9 @@ class EditPlayerAspects extends FormApplication{
             super(...args);
     
                 if(this.object.isToken){
-                    this.options.title=`Aspect editor for [Token] ${this.object.name}`                    
+                    this.options.title=`${game.i18n.localize("ModularFate.EditTokenAspectsTitle")} ${this.object.name}`                    
                 } else {
-                    this.options.title=`Aspect editor for ${this.object.name}`
+                    this.options.title=`${game.i18n.localize("ModularFate.EditAspectsTitle")} ${this.object.name}`
                 }
                 this.player_aspects=duplicate(this.object.data.data.aspects);
                 
@@ -39,9 +39,7 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _on_name_change(event, html){
-        //console.log("Name change triggered")
         let name = event.target.name.split("_")[1];
-        //console.log(name)
         let newName = event.target.value;
         let newAspect = {};
         newName = newName.split(".").join("․").trim();
@@ -55,14 +53,11 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _on_desc_change(event, html){
-        //console.log(event.target.value)
         let name = event.target.name.split("_")[1];
         this.aspects[name].description=event.target.value;
     }
 
     async _on_value_change(event, html){
-        //console.log("value change triggered")
-        //console.log(event.target.value)
         let name = event.target.name.split("_")[1];
         this.aspects[name].value=event.target.value;
     }
@@ -87,12 +82,12 @@ class EditPlayerAspects extends FormApplication{
     async _onAdd(event, html){
         let count = 0;
         for (let a in this.aspects){
-            if (a.startsWith("New Aspect")){
+            if (a.startsWith(game.i18n.localize("ModularFate.New_Aspect"))){
                 count++
             }
         }
-        let name = "New Aspect " + count;
-        let newAspect = {"name":name, "description":"New Aspect","value":"New Aspect"}
+        let name = game.i18n.localize("ModularFate.New_Aspect") + " "+ count;
+        let newAspect = {"name":name, "description":game.i18n.localize("ModularFate.New_Aspect"),"value":game.i18n.localize("ModularFate.New_Aspect")}
        
         this.aspects[newAspect.name] = newAspect;
         this.render(false);
@@ -105,7 +100,7 @@ class EditPlayerAspects extends FormApplication{
         options.template = "systems/ModularFate/templates/EditPlayerAspects.html"; 
         options.width = "650";
         options.height = "800";
-        options.title = `Character Aspect Editor`;
+        options.title = game.i18n.localize("ModularFate.CharacterAspectEditor");
         options.closeOnSubmit = false;
         options.id = "PlayerAspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;

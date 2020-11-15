@@ -1,7 +1,5 @@
 Hooks.once('init', async function () {
     //On init, we initialise all settings and settings menus for dealing with skills 
-    console.log(`Initializing ManageSkills`);
-
     //We will be using this setting to store the world's list of skills.
     game.settings.register("ModularFate", "skills", {
         name: "Skill list",
@@ -17,8 +15,8 @@ Hooks.once('init', async function () {
 
         //Register a setting for the game's current skill total
         game.settings.register("ModularFate", "skillTotal", {
-            name: "Skill Point Total",
-            hint: "This is the current skill total for characters in this world.",
+            name: game.i18n.localize("ModularFate.SkillPointTotal"),
+            hint: game.i18n.localize("ModularFate.SkillPointTotalHint"),
             scope: "world",
             config: true,
             type: Number,
@@ -30,8 +28,8 @@ Hooks.once('init', async function () {
         }
 
     game.settings.register("ModularFate","freeStunts", {
-        name:"Free Stunts",
-        hint:"How many free stunts do characters start with?",
+        name:game.i18n.localize("ModularFate.FreeStunts"),
+        hint:game.i18n.localize("ModularFate.FreeStuntsHint"),
         scope:"world",
         config:true,
         type:Number,
@@ -40,8 +38,8 @@ Hooks.once('init', async function () {
     })
 
     game.settings.register("ModularFate","enforceColumn", {
-        name: "Enforce Column?",
-        hint: "Should the player skill editor enforce a skill column?",
+        name: game.i18n.localize("ModularFate.EnforceColumn"),
+        hint: game.i18n.localize("ModularFate.EnforceColumnHint"),
         scope:"world",
         config:true,
         type: Boolean,
@@ -49,8 +47,8 @@ Hooks.once('init', async function () {
     })
 
     game.settings.register("ModularFate","enforceSkillTotal", {
-        name: "Enforce skill total?",
-        hint: "Should the player skill editor ensure points spent are under the game's skill total??",
+        name: game.i18n.localize("ModularFate.EnforceSkillTotal"),
+        hint: game.i18n.localize("ModularFate.EnforceSkillTotalHint"),
         scope:"world",
         config:true,
         type: Boolean,
@@ -59,19 +57,19 @@ Hooks.once('init', async function () {
 
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.
     game.settings.register("ModularFate", "defaultSkills", {
-        name: "Replace Or Clear All World Skills?",
-        hint: "Pick a skill set with which to override the world's current skills. CANNOT BE UNDONE.",
+        name: game.i18n.localize("ModularFate.ReplaceSkills"),
+        hint: game.i18n.localize("ModularFate.ReplaceSkillsHint"),
         scope: "world",     // This specifies a client-stored setting
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":"No",
-            "fateCore":"Yes - Fate Core Defaults",
-            "fateCondensed":"Yes - Fate Condensed Defaults",
-            "accelerated":"Yes - Fate Accelerated Defaults",
-            "dfa":"Yes - Dresden Files Accelerated Defaults",
-            "clearAll":"Yes - Clear All Skills"
+            "nothing":game.i18n.localize("ModularFate.No"),
+            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
+            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
+            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
+            "dfa":game.i18n.localize("ModularFate.YesDFA"),
+            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
@@ -109,9 +107,9 @@ Hooks.once('init', async function () {
 
     // Register the menu to setup the world's skill list.
     game.settings.registerMenu("ModularFate", "SkillSetup", {
-        name: "Setup Skills",
-        label: "Setup",      // The text label used in the button
-        hint: "Configure this world's skill (or Approach) list.",
+        name: game.i18n.localize("ModularFate.SetupSkills"),
+        label: game.i18n.localize("ModularFate.Setup"),      // The text label used in the button
+        hint: game.i18n.localize("ModularFate.SetupSkillsHint"),
         type: SkillSetup,   // A FormApplication subclass which should be created
         restricted: true                   // Restrict this submenu to gamemaster only?
       });
@@ -134,7 +132,7 @@ class SkillSetup extends FormApplication{
         options.template = "systems/ModularFate/templates/SkillSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `Setup Skills for world ${game.world.title}`;
+        options.title = `${game.i18n.localize("ModularFate.SetupSkillsTitle")} ${game.world.title}`;
         options.closeOnSubmit = false;
         options.id = "SkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -180,7 +178,7 @@ class SkillSetup extends FormApplication{
         let skill_text = `{"${slb}":${JSON.stringify(sk)}}`
  
         new Dialog({
-            title: "Copy & Paste this to save this skill", 
+            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveSkill"),
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skill_text}</textarea></div>`,
             buttons: {
             },
@@ -192,7 +190,7 @@ class SkillSetup extends FormApplication{
         let skills_text = JSON.stringify(skills);
  
         new Dialog({
-            title: "Copy & Paste this to save your skills", 
+            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveSkills"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skills_text}</textarea></div>`,
             buttons: {
             },
@@ -202,7 +200,7 @@ class SkillSetup extends FormApplication{
     async getSkills(){
         return new Promise(resolve => {
             new Dialog({
-                title: "Paste data here; replaces skills of same name",
+                title: game.i18n.localize("ModularFate.PasteSkills"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_skills"></textarea></div>`,
                 buttons: {
                     ok: {
@@ -262,11 +260,11 @@ class SkillSetup extends FormApplication{
         let selectBox = html.find("select[id='skillListBox']");
         let name = selectBox[0].value;
         if (name=="" || name == undefined){
-            ui.notifications.error("Select a skill to copy first");
+            ui.notifications.error(game.i18n.localize("ModularFate.SelectASkillToCopyFirst"));
         } else {
             let skills=await game.settings.get("ModularFate", "skills");
             let skill = duplicate(skills[name]);
-            name = skill.name+" copy";
+            name = skill.name+" "+game.i18n.localize("ModularFate.copy");
             skill.name=name;
             skills[name]=skill;
             await game.settings.set("ModularFate","skills",skills);
@@ -305,7 +303,7 @@ class EditSkill extends FormApplication{
             var existing = false;
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
             if (name == undefined || name ==""){
-                ui.notifications.error("You cannot have a skill with a blank name.")
+                ui.notifications.error(game.i18n.localize("ModularFate.YouCannotHaveASkillWithABlankName"))
             } else {
                 if (skills[name] != undefined){
                     skills[name]=newSkill;
@@ -341,7 +339,7 @@ class EditSkill extends FormApplication{
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";
-        options.title = `Skill Editor`;
+        options.title = game.i18n.localize("ModularFate.SkillEditor");
         options.closeOnSubmit = true;
         options.id = "EditSkill"; // CSS id if you want to override default behaviors
         options.resizable = true;

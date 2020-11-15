@@ -5,7 +5,7 @@
             {{#each this}}
             {{#if (eq this.extra_tag undefined)}}
             <td style="border-bottom:1px; border-top:groove">
-                <label for="name" style="font-family:Montserrat; font-weight:bold">Aspect Name:</label>    
+                <label for="name" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.AspectName'}}:</label>    
             </td>
             <td style="border-bottom:1px; border-top:groove">
                 <input type="text" class="aspect_name" name="name_{{this.name}}" style="background-color: white; border-top:none; border-left:none; border-right:none; border-bottom:1px solid lightsteelblue; width:300px; font-family:Montserrat" value="{{this.name}}">
@@ -17,7 +17,7 @@
         </tr>
         <tr>
             <td>
-                <label for"description" style="font-family:Montserrat; font-weight:bold">Aspect Description:</label>
+                <label for"description" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.AspectDescription'}}:</label>
             </td>
             <td>
                 <textarea rows="2" class="aspect_description" name="description_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.description}}
@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>
-                <label for"value" style="font-family:Montserrat; font-weight:bold">Aspect Text:</label>
+                <label for"value" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.AspectText'}}:</label>
             </td>
             <td>
                 <textarea rows = "1" class="aspect_value" name="value_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.value}}
@@ -36,6 +36,6 @@
         {{else}}{{/if}}
         {{/each}}
     </table>
-    <button type="button" id="save_aspects">Save</button><button type="button" name="new_aspect">Add New</button>
+    <button type="button" id="save_aspects">{{localize 'ModularFate.Save'}}</button><button type="button" name="new_aspect">{{localize 'ModularFate.NewAspect'}}</button>
 </div>
 </form>

@@ -4,7 +4,7 @@ class ModifiedRollDialog extends Application {
         options.template = "systems/ModularFate/templates/ModifiedRollDialog.html";
         options.width = "auto";
         options.height = "auto";
-        options.title = `Modified Roll`;
+        options.title = game.i18n.localize("ModularFate.ModifiedRoll");
         options.resizable = false;
         return options 
     } // End getDefaultOptions
@@ -37,17 +37,17 @@ class ModifiedRollDialog extends Application {
         total_modifier += parseInt(skill_rank);
         let modifier_text = "";
         if (modifier > 0){
-            modifier_text= `Modifier: +${modifier} (${description})<br>`
+            modifier_text= `${game.i18n.localize("ModularFate.Modifier")}: +${modifier} (${description})<br>`
         }
         if (modifier < 0){
-            modifier_text= `Modifier: -${modifier} (${description})<br>`
+            modifier_text= `${game.i18n.localize("ModularFate.Modifier")}: -${modifier} (${description})<br>`
         }
 
-        if (second_skill != "None"){
+        if (second_skill != game.i18n.localize("ModularFate.None")){
             second_skill_rank = this.actor.data.data.skills[second_skill].rank;
             let ladder = ModularFateConstants.getFateLadder();
             let rs2 = ladder[`${second_skill_rank.toString()}`];
-            second_skill_text = `Second skill: ${second_skill} at rank ${second_skill_rank} (${rs2})`
+            second_skill_text = `${game.i18n.localize("ModularFate.SecondSkill")}: ${second_skill} ${game.i18n.localize("ModularFate.atRank")} ${second_skill_rank} (${rs2})`
             total_modifier += parseInt(second_skill_rank);
         }
 
@@ -57,7 +57,7 @@ class ModifiedRollDialog extends Application {
             if (stunts[i].checked){
                 let s_name = stunts[i].id.split("_")[1]
                 let s_modifier = this.actor.data.data.stunts[s_name].bonus;
-                stunt_text += "Stunt: "+ s_name + " (+" + s_modifier + ")<br>"
+                stunt_text += +game.i18n.localize("ModularFate.Stunt")+": "+ s_name + " (+" + s_modifier + ")<br>"
                 total_modifier += parseInt(s_modifier);
             }
         }
@@ -72,7 +72,7 @@ class ModifiedRollDialog extends Application {
         let rs = ladder[`${skill_rank.toString()}`];
         roll.toMessage({
             flavor: `<h1>${this.skill_name}</h1>Rolled by: ${game.user.name}<br>
-            Skill Rank: ${skill_rank} (${rs})<br>
+            ${game.i18n.localize("ModularFate.Skill_Rank")}: ${skill_rank} (${rs})<br>
             ${modifier_text}
             ${stunt_text}
             ${second_skill_text}`,
@@ -83,7 +83,7 @@ class ModifiedRollDialog extends Application {
     }
 
     getData (){
-        this.options.title = `Modified ${this.skill_name} roll for ${this.actor.name}`
+        this.options.title = `${game.i18n.localize("ModularFate.Modified")} ${this.skill_name} ${game.i18n.localize("ModularFate.rollFor")} ${this.actor.name}`
         this.actor.activeSkill=this.skill_name;
         return this.actor;
     }

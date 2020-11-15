@@ -152,12 +152,12 @@ class FateUtilities extends Application{
 
                 let flavour;
                 if (stunt != undefined){
-                    flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
-                                Skill rank: ${rank} (${rung})<br> 
-                                Stunt: ${stunt} (+${bonus})`
+                    flavour = `<h1>${skill}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>
+                                ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})<br> 
+                                ${game.i18n.localize("ModularFate.Stunt")}: ${stunt} (+${bonus})`
                 } else {
-                    flavour = `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
-                                Skill rank: ${rank} (${rung})`;
+                    flavour = `<h1>${skill}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>
+                                ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})`;
                 }
 
                 roll.toMessage({
@@ -184,7 +184,7 @@ class FateUtilities extends Application{
         
         if (action == "plus1"){
             roll.total+=1;
-            roll.flavor+=`<br>Added Bonus: +1`
+            roll.flavor+=`<br>${game.i18n.localize("ModularFate.PlusOne")}`
             if (game.user.isGM){
                 game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
             } else {
@@ -195,7 +195,7 @@ class FateUtilities extends Application{
 
         if (action == "plus2free"){
             roll.total+=2;
-            roll.flavor+=`<br>Free Invoke: +2`
+            roll.flavor+=`<br>${game.i18n.localize("ModularFate.FreeInvoke")}`
             if (game.user.isGM){ 
                 game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
             }
@@ -222,7 +222,7 @@ class FateUtilities extends Application{
                 }
             }
             roll.total += r2.total;
-            roll.flavor+=`<br>Free Invoke: Reroll`
+            roll.flavor+=`<br>${game.i18n.localize("ModularFate.FreeInvokeReroll")}`
             if (game.user.isGM){
                 game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
             } else {
@@ -238,11 +238,11 @@ class FateUtilities extends Application{
             if (user.isGM){
                 let fps = user.getFlag("ModularFate","gmfatepoints");
                 if (fps == 0 || fps == undefined){
-                    ui.notifications.error("No GM fate points available for an invoke")
+                    ui.notifications.error(game.i18n.localize("ModularFate.NoGMFatePoints"))
                 } else {
                     user.setFlag("ModularFate","gmfatepoints",fps-1);
                     roll.total+=2;
-                    roll.flavor+=`<br>Paid Invoke: +2`
+                    roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvoke")}`
                     game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
                 }
             } else {
@@ -250,11 +250,11 @@ class FateUtilities extends Application{
                 if (char.name == roll.speaker){
                     let fps = char.data.data.details.fatePoints.current;
                     if (fps == 0){
-                        ui.notifications.error("No fate points available for an invoke")
+                        ui.notifications.error(game.i18n.localize("ModularFate.NoFatePoints"))
                     } else {
                         char.update({"data.details.fatePoints.current":fps-1})
                         roll.total+=2;
-                        roll.flavor+=`<br>Paid Invoke: +2`
+                        roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvoke")}`
                         if (game.user.isGM){
                             game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
                         } else {
@@ -262,7 +262,7 @@ class FateUtilities extends Application{
                         }
                     }
                 } else {
-                    ui.notifications.error("You're not currently controlling that character")
+                    ui.notifications.error(game.i18n.localize("ModularFate.NotControllingCharacter"));
                 }
             }
         }
@@ -274,7 +274,7 @@ class FateUtilities extends Application{
             if (user.isGM){
                 let fps = user.getFlag("ModularFate","gmfatepoints");
                 if (fps == 0 || fps == undefined){
-                    ui.notifications.error("No GM fate points available for an invoke")
+                    ui.notifications.error(game.i18n.localize("ModularFate.NoGMFatePoints"))
                 } else {
                     user.setFlag("ModularFate","gmfatepoints",fps-1);
                     let r = new Roll ("4dF");
@@ -293,7 +293,7 @@ class FateUtilities extends Application{
                         }
                     }
                     roll.total += r2.total;
-                    roll.flavor+=`<br>Paid Invoke: Reroll`
+                    roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvokeReroll")}`
                     game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
                 }
             } else {
@@ -301,10 +301,10 @@ class FateUtilities extends Application{
                 if (char.name == roll.speaker){
                     let fps = char.data.data.details.fatePoints.current;
                     if (fps == 0){
-                        ui.notifications.error("No fate points available for an invoke")
+                        ui.notifications.error(game.i18n.localize("ModularFate.NoFatePoints"))
                     } else {
                         char.update({"data.details.fatePoints.current":fps-1})
-                        roll.flavor+=`<br>Paid Invoke: Reroll`
+                        roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvokeReroll")}`
                         let r = new Roll ("4dF");
                         let r2 = r.roll();
                         let oldDiceValue = 0;
@@ -321,7 +321,7 @@ class FateUtilities extends Application{
                         }
                     }
                 } else {
-                    ui.notifications.error("You're not currently controlling that character")
+                    ui.notifications.error(game.i18n.localize("ModularFate.NotControllingCharacter"))
                 }
             }
         }
@@ -403,9 +403,9 @@ class FateUtilities extends Application{
         if (drawing != undefined){
             let text;
             if (value == 1){
-                text = name+" ("+value + " free invoke)";    
+                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
             } else {
-                text = name+" ("+value + " free invokes)";
+                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
             drawing.update({
                 "text":text,
@@ -434,9 +434,9 @@ class FateUtilities extends Application{
         {
             let text;
             if (value == 1){
-                text = name+" ("+value + " free invoke)";    
+                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
             } else {
-                text = name+" ("+value + " free invokes)";
+                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
 
                 Drawing.create({
@@ -460,7 +460,7 @@ class FateUtilities extends Application{
                 });   
         }
         else {
-            ui.notifications.error("There's already a note for that aspect");
+            ui.notifications.error(game.i18n.localize("ModularFate.AlreadyANoteForThatAspect"));
         }
     }
 
@@ -552,7 +552,8 @@ class FateUtilities extends Application{
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[event.target.innerHTML]
         let notes = track.notes;
-        let text =   ModularFateConstants.updateText("Track Notes", notes);
+        let text =  await ModularFateConstants.updateText(game.i18n.localize("ModularFate.TrackNotes"), notes);
+        console.log(text)
         token.actor.update({
             [`data.tracks.${event.target.innerHTML}.notes`]: text
         })
@@ -613,7 +614,7 @@ class FateUtilities extends Application{
         options.template = "systems/ModularFate/templates/FateUtilities.html"; 
         options.width="1000"
         options.height="auto";
-        options.title = `Fate Utilities`;
+        options.title = game.i18n.localize("ModularFate.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
         options.scrollY=["#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_rolls_tab", "#fu_aspects_pane", "#fu_scene_notes_pane"]
@@ -778,7 +779,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
             if (hud){
                 hud.tools.push({
                     name:"FateUtilities",//Completed
-                    title:"Launch Fate Utilities",
+                    title:game.i18n.localize("ModularFate.LaunchFateUtilities"),
                     icon:"fas fa-theater-masks",
                     onClick: ()=> {let fu = new FateUtilities; fu.render(true)},
                     button:true
@@ -800,12 +801,12 @@ class TimedEvent extends Application {
             currentRound = game.combat.round;
         } catch {
             var dp = {
-                "title": "Error",
-                "content": "There's no current combat for which to set an event.<p>",
+                "title": game.i18n.localize("ModularFate.Error"),
+                "content": `${game.i18n.localize("ModularFate.NoCurrentCombat")}<p>`,
                 default:"oops",
                 "buttons": {
                     oops: {
-                        label: "OK",
+                        label: game.i18n.localize("ModularFate.OK"),
                     }
                 }
             }
@@ -813,13 +814,13 @@ class TimedEvent extends Application {
             d.render(true);
         }
         if (currentRound != "NoCombat"){
-            var peText = "No Pending Events<p></p>"
+            var peText = `${game.i18n.localize("ModularFate.NoPendingEvents")}<p></p>`
             let pendingEvents = game.combat.getFlag("ModularFate","timedEvents");
             if (pendingEvents != null || pendingEvents != undefined){
                 peText=
                 `<tr>
-                    <td style="font-weight:bold">Round</td>
-                    <td style="font-weight:bold">Pending Event</td>
+                    <td style="font-weight:bold">${game.i18n.localize("ModularFate.Exchange")}</td>
+                    <td style="font-weight:bold">${game.i18n.localize("ModularFate.PendingEvent")}</td>
                 </tr>`
                 pendingEvents.forEach(event => {
                     if (event.complete === false){
@@ -828,25 +829,25 @@ class TimedEvent extends Application {
                 });
             }
             var dp = {
-                "title":"Timed Event",
-                "content":`<h1>Create a Timed Event</h1>
-                            The current exchange is ${game.combat.round}.<p></p>
+                "title":game.i18n.localize("ModularFate.TimedEvent"),
+                "content":`<h1>${game.i18n.localize("ModularFate.CreateATimedEvent")}</h1>
+                            ${game.i18n.localize("ModularFate.TheCurrentExchangeIs")} ${game.combat.round}.<p></p>
                             <table style="background:none; border:none">
                                 ${peText}
                             </table>
                             <table style="background:none; border:none">
                                 <tr>
-                                    <td>What is your event?</td>
+                                    <td>${game.i18n.localize("ModularFate.WhatIsYourEvent")}:</td>
                                     <td><input type="text" id="eventToCreate" name="eventToCreate" style="background: white; color: black;" autofocus></input></td>
                                 </tr>
                                 <tr>
-                                    <td>Trigger event on exchange:</td>
+                                    <td>${game.i18n.localize("ModularFate.TriggerEventOnExchange")}:</td>
                                     <td><input type="number" value="${game.combat.round+1}" id="eventExchange" name="eventExchange"></input></td>
                                 </tr>
                             </table>`,
                     default:"create",
                     "buttons":{
-                        create:{label:"Create", callback:async () => {
+                        create:{label:game.i18n.localize("ModularFate.Create"), callback:async () => {
                             //if no flags currently set, initialise
                             var timedEvents = game.combat.getFlag("ModularFate","timedEvents");
                             
@@ -891,13 +892,13 @@ Hooks.on('renderCombatTracker', () => {
             var event = pendingEvents[i];
             if (r==event.round && event.complete != true){
                 var dp = {
-                    "title": "Timed Event",
-                    "content": `<h2>Timed event for round ${event.round}:</h2><p></p>
+                    "title": game.i18n.localize("ModularFate.TimedEvent"),
+                    "content":`<h2>${game.i18n.localize("ModularFate.TimedEventForExchange")} ${event.round}:</h2><p></p>
                                 <h3>${event.event}</h3>`,
                     default:"oops",
                     "buttons": {
                         oops: {
-                            label: "OK",
+                            label: game.i18n.localize("ModularFate.OK"),
                         }
                     }
                 }

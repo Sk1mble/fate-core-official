@@ -7,12 +7,12 @@ class EditPlayerStunts extends FormApplication {
 
         //This is a good place to set up some variables at the top level so we can access them with this.
         if (this.actor.type == "Extra"){
-            this.options.title=`Stunt editor for item ${this.object.name}`
+            this.options.title=`${game.i18n.localize("ModularFate.ExtraStuntEditor")} ${this.object.name}`
         } else {
             if (this.actor.isToken) {
-                this.options.title=`Stunt editor for [Token] ${this.object.name}`
+                this.options.title=`${game.i18n.localize("ModularFate.TokenStuntEditor")} ${this.object.name}`
             } else {
-                this.options.title=`Stunt editor for ${this.object.name}`
+                this.options.title=`${game.i18n.localize("ModularFate.StuntEditorFor")} ${this.object.name}`
             }
         }
         game.system.apps["actor"].push(this);
@@ -23,7 +23,7 @@ class EditPlayerStunts extends FormApplication {
         options.template = "systems/ModularFate/templates/EditPlayerStunts.html";
         options.width = "auto";
         options.height = "auto";
-        options.title = `Character stunt editor`;
+        options.title = game.i18n.localize("ModularFate.CharacterStuntEditor");
         options.closeOnSubmit = true;
         options.id = "PlayerStuntSetup";
         options.resizable = true;
@@ -61,7 +61,7 @@ class EditPlayerStunts extends FormApplication {
                 try {
                     if (data.actorData.data.stunts[name]!=undefined){
                         this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
-                        ui.notifications.info("Stunt has been edited.")
+                        ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
                         this.render(false);
                     }
                 }
@@ -76,7 +76,7 @@ class EditPlayerStunts extends FormApplication {
                 try {
                     if (data.data.stunts[name]!=undefined){
                         this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
-                        ui.notifications.info("Stunt has been edited.")
+                        ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
                         this.render(false);
                     }
                 }
@@ -140,7 +140,7 @@ class StuntDB extends Application {
         options.template = "systems/ModularFate/templates/StuntDB.html";
         options.width = "auto";
         options.height = "auto";
-        options.title = `Stunt Database`
+        options.title = game.i18n.localize("ModularFate.StuntDatabase");
         options.id = "StuntDB";
         options.resizable = false;
         return options; 
@@ -171,7 +171,7 @@ class StuntDB extends Application {
         let stunt_text = JSON.stringify(game.settings.get("ModularFate","stunts"));
  
         new Dialog({
-            title: "Copy & Paste this to save your stunts", 
+            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveStunts"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
@@ -179,14 +179,12 @@ class StuntDB extends Application {
     }
 
     async _onExportStunt(event, html){
-        console.log("Exporting")
-
         let stunt = event.target.id.split("_")[0];
 
         let stunt_text = `{"${stunt}":${JSON.stringify(game.settings.get("ModularFate","stunts")[stunt])}}`;
  
         new Dialog({
-            title: "Copy & Paste this to save your stunts", 
+            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveStunt"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
@@ -196,11 +194,11 @@ class StuntDB extends Application {
     async getStunts(){
         return new Promise(resolve => {
             new Dialog({
-                title: "Paste data here; replaces stunts of same name",
+                title: game.i18n.localize("ModularFate.PasteOverStunts"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_stunt_db"></textarea></div>`,
                 buttons: {
                     ok: {
-                        label: "Save",
+                        label: game.i18n.localize("ModularFate.Save"),
                         callback: () => {
                             resolve (document.getElementById("import_stunt_db").value);
                         }

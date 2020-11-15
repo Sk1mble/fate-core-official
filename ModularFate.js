@@ -197,7 +197,7 @@ async function migrateFateCharacter(actorData) {
 Hooks.once('ready', async function () {
     if (game.settings.get("ModularFate","run_once") == false){
         if (game.user.isGM){
-            ModularFateConstants.awaitOKDialog("Welcome to the Modular Fate System!","Welcome! Head on over to the System options in Foundry's Settings menu to get everything set up. Use the options to pre-load default skills, aspects, and tracks from Core, Condensed or Accelerated and then customise them, or you can start completely from scratch - it's up to you!<p/>Any character created will be initialised using those settings, so it's best not to create any characters until you've finished setting up your game.<p/> Have fun!",500,250);
+            ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.WelcomeTitle"),game.i18n.localize("ModularFate.WelcomeText"),500,250);
             game.settings.set("ModularFate","run_once", true)
         }
     }
@@ -327,8 +327,8 @@ Hooks.once('init', async function () {
     })
 
     game.settings.register("ModularFate","sheet_template", {
-        name:"Default Sheet Template",
-        hint:"Give a path to a custom character sheet template here to override the standard sheet.",
+        name:game.i18n.localize("ModularFate.DefaultSheetTemplateName"),
+        hint:game.i18n.localize("ModularFate.DefaultSheetTemplateHint"),
         scope:"world",
         config:"true",
         type:String,
@@ -336,8 +336,8 @@ Hooks.once('init', async function () {
     })
 
     game.settings.register("ModularFate","limited_sheet_template", {
-        name:"Default Limited Sheet Template",
-        hint:"Give a path to a custom template to override the character sheet when the viewer has only Limited permission.",
+        name:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateName"),
+        hint:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateHint"),
         scope:"world",
         config:"true",
         type:String,
@@ -356,7 +356,6 @@ Hooks.once('init', async function () {
     }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
-    console.log(`Initializing Modular Fate`);
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet("ModularFate", ModularFateCharacter, { types: ["ModularFate"], makeDefault: true });
     // Register Item sheets
@@ -364,8 +363,8 @@ Hooks.once('init', async function () {
 
     //Register a setting for the game's current Refresh total
     game.settings.register("ModularFate", "refreshTotal", {
-        name: "Refresh Total",
-        hint: "This is the current Refresh total for characters in this world.",
+        name: game.i18n.localize("ModularFate.RefreshTotalName"),
+        hint: game.i18n.localize("ModularFate.RefreshTotalHint"),
         scope: "world",
         config: true,
         type: Number
@@ -377,8 +376,8 @@ Hooks.once('init', async function () {
     //Register a setting for the game's Issues?
 
     game.settings.register("ModularFate","confirmDeletion", {
-        name: "Confirm deletion from trash icons?",
-        hint:"Turn this on if you want to need to confirm every deletion of an item with its delete button",
+        name: game.i18n.localize("ModularFate.ConfirmDeletionName"),
+        hint:game.i18n.localize("ModularFate.ConfirmDeletionHint"),
         scope:"user",
         config:true,
         type:Boolean,
@@ -386,7 +385,7 @@ Hooks.once('init', async function () {
     });
 
     game.settings.register("ModularFate","exportSettings", {
-        name: "Export world config to text?",
+        name: game.i18n.localize("ModularFate.ExportSettingsName"),
         scope:"world",
         config:true,
         type:Boolean,
@@ -397,7 +396,7 @@ Hooks.once('init', async function () {
                 let text = ModularFateConstants.exportSettings();
  
                 new Dialog({
-                    title: "Copy & Paste this to save your world configuration", 
+                    title: game.i18n.localize("ModularFate.ExportSettingsDialogTitle"), 
                     content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
                     buttons: {
                     },
@@ -408,9 +407,9 @@ Hooks.once('init', async function () {
     })
 
     game.settings.register("ModularFate","importSettings", {
-        name: "Import world config from text?",
+        name: game.i18n.localize("ModularFate.ImportSettingsName"),
         scope:"world",
-        hint:"This will overwrite all stunts, tracks, aspects, and skills with the import. To cancel if you change your mind, just close the window without clicking 'save'.",
+        hint:game.i18n.localize("ModularFate.ImportSettingsHint"),
         config:true,
         type:Boolean,
         restricted:true,

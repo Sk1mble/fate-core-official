@@ -2,7 +2,7 @@
 <table style="border:none; background:none">
     <tr>
         <td colspan="2">
-            <hr><h3>World skills present on this character</h3><hr>
+            <hr><h3>{{localize 'ModularFate.WorldSkillsPresent'}}</h3><hr>
         </td>
     </tr>
     {{#each present_skills}}
@@ -19,7 +19,7 @@
     {{/each}}
     <tr>
             <td colspan="2">
-                <hr><h3>Orphaned skills on this character but not on the World</h3><hr>
+                <hr><h3>{{localize 'ModularFate.OrphanedSkills'}}</h3><hr>
             </td>
         </tr>
         {{#each orphaned}}
@@ -36,7 +36,7 @@
         {{/each}}
         <tr>
             <td colspan="2">
-                <hr><h3>Ad-hoc skills present on this character</h3><hr>
+                <hr><h3>{{localize 'ModularFate.AdHocSkills'}}</h3><hr>
             </td>
         </tr>
     {{#each ad_hoc}}
@@ -53,7 +53,7 @@
     {{/each}}
     <tr>
         <td colspan="2">
-            <hr><h3>World skills absent from this character</h3><hr>
+            <hr><h3>{{localize 'ModularFate.WorldSkillsAbsent'}}</h3><hr>
         </td>
     </tr>
     {{#each absent_skills}}
@@ -68,7 +68,7 @@
     {{/each}}
     <tr>
         <td colspan="2">
-            <hr><h3>Non-PC world skils that can be added<h3></h3><hr>
+            <hr><h3>{{localize 'ModularFate.NonPCSkills'}}<h3></h3><hr>
         </td>
     </tr>
     {{#each non_pc}}
@@ -85,7 +85,7 @@
 <table style="background:none; border:none">
     <tr>
         <td>
-            Ad-hoc skill to add:
+            {{localize 'ModularFate.AdHocSkillToAdd'}}:
         </td>
         <td>
             <input name="ad_hoc_input" id="ad_hoc_input" style="color:black; background: white; font-family:Arial; width:200px"><button style="width:30px; height:30px;"" type="button" id="add_ah_button" i icon class="fas fa-plus"></button>
@@ -94,7 +94,7 @@
     <tr>
         <td colspan="2">
             <button type="button" id="add_remove_button">
-                Add checked skills and remove unchecked skills
+                {{localize 'ModularFate.AddRemoveSkills'}}
             </button>
         </td>
     </tr>

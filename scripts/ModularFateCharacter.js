@@ -163,12 +163,12 @@ export class ModularFateCharacter extends ActorSheet {
     async _onSkillR(event,html){
         let name = event.target.id;
         let skill = this.actor.data.data.skills[name];
-        ModularFateConstants.awaitOKDialog("Skill Details",`
+        ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.SkillDetails"),`
                                             <table cellspacing ="4" cellpadding="4" border="1">
                                                 <h2>${skill.name}</h2>
                                                 <tr>
                                                     <td style="width:400px;">
-                                                        <b>Description:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Description")}:</b>
                                                     </td>
                                                     <td style="width:2000px;">
                                                         ${skill.description}
@@ -176,7 +176,7 @@ export class ModularFateCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Overcome:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Overcome")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.overcome}
@@ -184,7 +184,7 @@ export class ModularFateCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Create an Advantage:</b>
+                                                        <b>${game.i18n.localize("ModularFate.CAA")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.caa}
@@ -192,7 +192,7 @@ export class ModularFateCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Attack:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Attack")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.attack}
@@ -200,7 +200,7 @@ export class ModularFateCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>Defend:</b>
+                                                        <b>${game.i18n.localize("ModularFate.Defend")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.defend}
@@ -233,7 +233,7 @@ export class ModularFateCharacter extends ActorSheet {
         let db = duplicate(game.settings.get("ModularFate","stunts"));
         db[name]=this.object.data.data.stunts[name];
         await game.settings.set("ModularFate","stunts",db);
-        ui.notifications.info("Added "+name+" to the stunt database");
+        ui.notifications.info(game.i18n.localize("ModularFate.Added")+" "+name+" "+game.i18n.localize("ModularFate.ToTheStuntDatabase"));
     }
 
     async _stunt_db_click(event, html){
@@ -259,9 +259,9 @@ export class ModularFateCharacter extends ActorSheet {
         msg.alias = this.object.name;
 
         roll.toMessage({
-            flavor: `<h1>${skill}</h1>Rolled by: ${game.user.name}<br>
-            Skill rank: ${rank} (${rung})<br> 
-            Stunt: ${name} (+${bonus})`,
+            flavor: `<h1>${skill}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>
+            ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})<br> 
+            ${game.i18n.localize("ModularFate.Stunt")}: ${name} (+${bonus})`,
             speaker: msg
         });
     }
@@ -298,7 +298,7 @@ export class ModularFateCharacter extends ActorSheet {
 
     async _on_extras_click(event, html){
         const data = {
-            "name": "New Extra", 
+            "name": game.i18n.localize("New Extra"),
             "type": "Extra"
         };
         const created = await this.actor.createEmbeddedEntity("OwnedItem", data);
@@ -337,7 +337,7 @@ export class ModularFateCharacter extends ActorSheet {
         let tracks = duplicate(this.object.data.data.tracks);
         let track = tracks[event.target.innerHTML]
         let notes = track.notes;
-        let text = await ModularFateConstants.updateText("Track Notes for "+track.name +" on "+this.actor.name, notes);
+        let text = await ModularFateConstants.updateText( game.i18n.localize("ModularFate.TrackNotesFor")+" "+track.name +" "+game.i18n.localize("ModularFate.on")+" "+this.actor.name, notes);
         await this.object.update({
             [`data.tracks.${event.target.innerHTML}.notes`]: text
         })
@@ -367,7 +367,7 @@ export class ModularFateCharacter extends ActorSheet {
     async _onStunts_click(event, html) {
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
-            "name":"New Stunt",
+            "name":game.i18n.localize("ModularFate.NewStunt"),
             "linked_skill":"None",
             "description":"",
             "refresh_cost":1,
@@ -427,8 +427,8 @@ export class ModularFateCharacter extends ActorSheet {
             msg.alias = this.object.name;
 
             roll.toMessage({
-                flavor: `<h1>${skill.name}</h1>Rolled by: ${game.user.name}<br>
-                    Skill rank: ${rank} (${rung})`,
+                flavor: `<h1>${skill.name}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>
+                        ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})`,
                 speaker: msg
             });
         }
@@ -521,13 +521,13 @@ export class ModularFateCharacter extends ActorSheet {
                 track.notes = "";
 
                 //If this box is an aspect when marked, it needs an aspect.name data field.
-                if (track.aspect == "Defined when marked") {
+                if (track.aspect == game.i18n.localize("ModularFate.DefinedWhenMarked")) {
                     track.aspect = {};
                     track.aspect.name = "";
                     track.aspect.when_marked = true;
                     track.aspect.as_name = false;
                 }
-                if (track.aspect == "Aspect as name") {
+                if (track.aspect == game.i18n.localize("ModularFate.AspectAsName")) {
                     track.aspect = {};
                     track.aspect.name = "";
                     track.aspect.when_marked = true;
@@ -608,7 +608,6 @@ export class ModularFateCharacter extends ActorSheet {
         }
         await this.actor.update(working_data)
         if (this.newCharacter) {
-            console.log("Initialising new character!")
             let e = new EditPlayerSkills(this.actor);
             e.render(true);
             e.setSheet(this);
@@ -664,17 +663,19 @@ export class ModularFateCharacter extends ActorSheet {
             let worldRefresh = game.settings.get("ModularFate", "refreshTotal");
             let checkWorld = worldRefresh - sheetData.data.details.fatePoints.refresh;
 
-            let message = "This player's sheet doesn't add up: "
+            let message = game.i18n.localize("ModularFate.SheetDoesNotAddUp")
             if (checkWorld < 0) {
-                message += "Their refresh is greater than the game refresh."
+                message += game.i18n.localize("ModularFate.RefreshGreaterThanGameRefresh")
                 error = true;
             }
             if (checkSpent > worldRefresh) {
                 if (error) {
-                    message += "and their spent refresh plus refresh is greater than the game refresh."
+                    message += game.i18n.localize("ModularFate.AndSpentRefreshPlusRefreshGreaterThanGameRefresh")
+                } 
+                else {
+                    message += game.i18n.localize("ModularFate.SpentRefreshPlusRefreshGreaterThanGameRefresh")
+                    error = true;
                 }
-                message += "Their spent refresh plus refresh is greater than the game refresh."
-                error = true;
             }
             if (error) {
                 ui.notifications.error(message);

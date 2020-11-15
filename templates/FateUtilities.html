@@ -1,9 +1,9 @@
 <form style="background-color:white" onsubmit="event.preventDefault();">
 <nav class="navigation foo">
-    <a class="item fu_item_1" data-tab="aspects"><b title="Aspects & Fate Points" i icon class="fas fa-theater-masks"></b></a>
-    <a class="item fu_item_2" data-tab="tracks"><b title="Character Tracks" i icon class="fas fa-user-injured"></b></a>
-    <a class="item fu_item_3" data-tab="scene"><b title="Scene Notes & Situation Aspects" i icon class="fas fa-book"></b></a>                
-    <a class="item fu_item_4" data-tab="rolls"><b title="Roll History" i icon class="fas fa-dice"></b></a>                
+    <a class="item fu_item_1" data-tab="aspects"><b title="{{localize 'ModularFate.AspectsFatePoints'}}" i icon class="fas fa-theater-masks"></b></a>
+    <a class="item fu_item_2" data-tab="tracks"><b title="{{localize 'ModularFate.CharacterTracks'}}" i icon class="fas fa-user-injured"></b></a>
+    <a class="item fu_item_3" data-tab="scene"><b title="{{localize 'ModularFate.SceneNotes'}}" i icon class="fas fa-book"></b></a>                
+    <a class="item fu_item_4" data-tab="rolls"><b title="{{localize 'ModularFate.RollHistory'}}" i icon class="fas fa-dice"></b></a>                
 </nav>
 <table style="border:none; margin:0px;">
 <tr>
@@ -19,10 +19,10 @@
                             <img src="{{this.data.avatar}}" style="width:50px; height:auto; border:none"/>
                         </td>
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
-                            {{this.name}} (GM)
+                            {{this.name}} ({{localize 'ModularFate.GM'}})
                         </td>
                         <td>
-                            <input id="{{this.id}}" name="gmfp" type="number" min="0" value="{{this.fatepoints}}" style="background-color:white; width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}/> Scene Fate Points{{#if ../GM}}<button type="button" id="refresh_fate_points" style="width:300px; float:right;"> Refresh Player Fate Points</button>{{/if}}
+                            <input id="{{this.id}}" name="gmfp" type="number" min="0" value="{{this.fatepoints}}" style="background-color:white; width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}/> {{localize 'ModularFate.SceneFatePoints'}}{{#if ../GM}}<button type="button" id="refresh_fate_points" style="width:300px; float:right;"> {{localize 'ModularFate.RefreshPlayerFatePoints'}}</button>{{/if}}
                         </td>
                     </tr>
                     {{/each}}
@@ -35,17 +35,17 @@
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
-                            <select title="Click and select to roll a skill 'raw' or shift-click and then select a skill to roll with modifiers" class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
-                                <option disabled="disabled" selected="selected">Pick a skill</option>
+                            <select title="{{localize 'ModularFate.RollHelp'}}" class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
+                                <option disabled="disabled" selected="selected">{{localize 'ModularFate.PickASkill'}}</option>
                                 {{#each this.actor.data.data.skills}}
                                 <option>{{this.name}} ({{this.rank}})</option>
                                 {{/each}}
                                 {{#each this.actor.data.data.stunts}}
-                                {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">Stunt: {{this.name}} ({{this.linked_skill}} +{{this.bonus}})</option>{{/if}}
+                                {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">{{localize 'ModularFate.Stunt'}}: {{this.name}} ({{this.linked_skill}} +{{this.bonus}})</option>{{/if}}
                                 {{/each}}
                             </select>
                             {{/if}}
-                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; font-style:normal; font-size:small; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> Fate Points</i>{{/if}}
+                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; font-style:normal; font-size:small; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
                         </td>
                         <td>
                                 <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
@@ -73,16 +73,16 @@
                             {{this.name}}<br>
                             {{#if this.owner}}
                             <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
-                                <option disabled="disabled" selected="selected">Pick a skill</option>
+                                <option disabled="disabled" selected="selected">{{localize 'ModularFate.PickASkill'}}</option>
                                 {{#each this.actor.data.data.skills}}
                                 <option>{{this.name}} ({{this.rank}})</option>
                                 {{/each}}
                                 {{#each this.actor.data.data.stunts}}
-                                {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">Stunt: {{this.name}} ({{this.linked_skill}}: +{{this.bonus}})</option>{{/if}}
+                                {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">{{localize 'ModularFate.Stunt'}}: {{this.name}} ({{this.linked_skill}}: +{{this.bonus}})</option>{{/if}}
                                 {{/each}}
                             </select>
                             {{/if}}
-                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; font-style:normal; font-size:small" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> Fate Points</i>{{/if}}
+                            {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; font-style:normal; font-size:small" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
                         </td>
                         <td>
                                 <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
@@ -106,13 +106,13 @@
             
             <!--------BEGIN Tracks tab-->
             <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:beige; font-family:Montserrat; padding-top:10px">
-                Category: 
+                {{localize 'ModularFate.Category'}}: 
                 <select style="font-family:Montserrat" id = "category_select" style="padding-right:100px">
-                    <option value="All" {{#if (eq category "All")}}selected{{/if}}>All</option>
+                    <option value="{{localize 'ModularFate.All'}}" {{#if (eq category "{{localize 'ModularFate.All'}}")}}selected{{/if}}>{{localize 'ModularFate.All'}}</option>
                     {{#each categories}}
                         <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
                     {{/each}}
-                </select> {{#if GM}}<button type="button" style="width:50px; height:auto;" id="clear_fleeting">Clear</button> all Fleeting tracks in every category{{/if}}
+                </select> {{#if GM}}<button type="button" style="width:50px; height:auto;" id="clear_fleeting">{{localize 'ModularFate.Clear'}}</button> {{localize 'ModularFate.AllFleetingTracks'}}{{/if}}
                 <div id="fu_tracks_tab" style="background-color:beige; overflow-y:auto; max-height:800px">
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}
@@ -126,7 +126,7 @@
                 {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
                     <td>
-                        <div name="track_name" id="{{../this.id}}"" title="Click here to edit the track notes for {{this.name}}">{{this.name}}</div>
+                        <div name="track_name" id="{{../this.id}}"" title="{{localize 'ModularFate.ClickHereToEditTrackNotes'}} {{this.name}}">{{this.name}}</div>
                     </td>
                     <td>
                         {{#each this.box_values}}
@@ -155,7 +155,7 @@
                 {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
                     <td>
-                        <div name="track_name" id="{{../this.id}}"" title="Click here to edit the track notes for {{this.name}}">{{this.name}}</div>
+                        <div name="track_name" id="{{../this.id}}" title="{{localize 'ClickHereToEditTrackNotes'}} {{this.name}}">{{this.name}}</div>
                     </td>
                     <td>
                         {{#each this.box_values}}
@@ -178,8 +178,8 @@
 
             <!----------------------------------------------------------------------BEGIN SCENE TAB-->
             <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:palegoldenrod; overflow-y:auto; max-height:950px; padding-top:10px">
-                    <h1>Situation Aspects</h1>
-                    {{#if GM}}<i style="font-style:normal; font-family:Montserrat;">Aspect:</i> <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
+                    <h1>{{localize 'ModularFate.SituationAspects'}}</h1>
+                    {{#if GM}}<i style="font-style:normal; font-family:Montserrat;">{{localize 'ModularFate.Aspect'}}:</i> <input type="text" id="sit_aspect" style="width:300px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
                     {{/if}}
                     {{#if GM}}<button type="button" id="add_sit_aspect" style="width:30px; height:30px;"i icon class="fas fa-plus"></button>{{/if}}
                     <div style="overflow-y:auto; max-height:400px;" id="fu_aspects_pane">
@@ -192,9 +192,9 @@
                                 <td>
                                     <input type="number" name="free_i" id="{{this.name}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
                                     {{#if ../GM}}
-                                    <button type="button" name="addToScene" id="addToScene_{{this.name}}" title="Add an aspect note to the map" style="width:35px; height:35px" i icon class="fas fa-sticky-note"></button>
-                                    <button type="button" name="panToAspect" id="panToAspect_{{this.name}}" title="Pan to this aspect's map note" style="width:35px; height:35px" i icon class="fas fa-search-location"></button>
-                                    <button type="button" name="del_sit_aspect" id="delete_{{this.name}}" title="Delete aspect" style="width:35px; height:35px" i icon class="fas fa-trash"></button>
+                                    <button type="button" name="addToScene" id="addToScene_{{this.name}}" title="{{localize 'ModularFate.AddAspectToMap'}}" style="width:35px; height:35px" i icon class="fas fa-sticky-note"></button>
+                                    <button type="button" name="panToAspect" id="panToAspect_{{this.name}}" title="{{localize 'ModularFate.PanToAspect'}}" style="width:35px; height:35px" i icon class="fas fa-search-location"></button>
+                                    <button type="button" name="del_sit_aspect" id="delete_{{this.name}}" title="{{localize 'ModularFate.DeleteAspect'}}" style="width:35px; height:35px" i icon class="fas fa-trash"></button>
                                     {{/if}}
                                 </td>
                             </tr> 
@@ -202,7 +202,7 @@
                     </table>
                     
                     </div>
-                    <h1>Scene Notes</h1>
+                    <h1>{{localize 'ModularFate.SceneNotesTitle'}}</h1>
                     <div style="overflow-y:auto; max-height:300px; font-family:Montserrat;" id="fu_scene_notes_pane">
                         <div {{#if GM}}contenteditable="true"{{else}}{{/if}} id="scene_notes" style="border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                     </div>                
@@ -211,24 +211,24 @@
 
              <!----------------------BEGIN Roll History Tab-->
              <div name = "rolls" class="tab rolls" data-tab="rolls" style="background-color:lightgray; font-family:Montserrat; padding-top:10px">
-                {{#if GM}}<button type="button" id="fu_clear_rolls">Clear all rolls in this scene</button>{{/if}}
+                {{#if GM}}<button type="button" id="fu_clear_rolls">{{localize 'ModularFate.ClearAllRolls'}}</button>{{/if}}
                 <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:800px">
                 <table style="background:none">
                 <tr>
                     <th style="border:1px solid black; font-weight:bold; text-align:left">
-                        Character
+                        {{localize 'ModularFate.Character'}}
                     </th>
                     <th style="border:1px solid black; font-weight:bold; text-align:left">
-                        Description
+                        {{localize 'ModularFate.Description'}}
                     </th>
                     <th style="border:1px solid black; font-weight:bold">
-                        Dice
+                        {{localize 'ModularFate.Dice'}}
                     </th>   
                     <th style="border:1px solid black; font-weight:bold">
-                        Total
+                        {{localize 'ModularFate.Total'}}
                     </th>
                     <th style="border:1px solid black; font-weight:bold">
-                        Roll Actions
+                        {{localize 'ModularFate.RollActions'}}
                     </th>
                 </tr>
                 {{#each rolls}}
@@ -258,36 +258,36 @@
                     <td style="border:1px solid black; text-align:center">
                         {{#if ../GM}}
                             <table style="background:none; border:none">
-                                <tr><th>Free Actions</th>
-                                    <th>Fate Point Actions</th>
+                                <tr><th>{{localize 'ModularFate.FreeActions'}}</th>
+                                    <th>{{localize 'ModularFate.FatePointActions'}}</th>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus1" style="width:35px; height:35px" title="Add +1 (Usually from teamwork)">+1</button>
-                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="Add +2 with a Free Invoke" i icon class="fas fa-plus"></button>
-                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="Reroll with a Free Invoke" i icon class="fas fa-dice"></button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus1" style="width:35px; height:35px" title="{{localize 'ModularFate.PlusOneExplainer'}}">+1</button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="{{localize 'ModularFate.FreePlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="{{localize 'ModularFate.FreeRerollExplainer'}}" i icon class="fas fa-dice"></button>
                                         </td>
                                         <td>
-                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2fp" style="width:35px; height:35px" title="Add +2 with a Fate Point" i icon class="fas fa-plus"></button>
-                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_rerollfp" style="width:35px; height:35px" title="Reroll with a Fate Point" i icon class="fas fa-dice"></button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2fp" style="width:35px; height:35px" title="{{localize 'ModularFate.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
+                                            <button type="button" name="fu_roll_button" id="roll_{{@key}}_rerollfp" style="width:35px; height:35px" title="{{localize 'ModularFate.PaidRerollExplainer'}}" i icon class="fas fa-dice"></button>
                                         </td>
                                     </tr>
                             </table>
                         {{/if}}
                         {{#if (eq this.user._id ../user._id)}}{{#if ../GM}}{{else}}
                         <table style="background:none; border:none">
-                            <tr><th>Free Actions</th>
-                                <th>Fate Point Actions</th>
+                            <tr><th>{{localize 'ModularFate.FreeActions'}}</th>
+                                <th>{{localize 'ModularFate.FatePointActions'}}</th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <button type="button" name="fu_roll_button"  id="roll_{{@key}}_plus1" style="width:35px; height:35px" title="Add +1 (Usually from teamwork)">+1</button>
-                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="Add +2 with a Free Invoke" i icon class="fas fa-plus"></button>
-                                        <button type="button" name="fu_roll_button"  id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="Reroll with a Free Invoke" i icon class="fas fa-dice"></button>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus1" style="width:35px; height:35px" title="{{localize 'ModularFate.PlusOneExplainer'}}">+1</button>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="{{localize 'ModularFate.FreePlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="{{localize 'ModularFate.FreeRerollExplainer'}}" i icon class="fas fa-dice"></button>
                                     </td>
                                     <td>
-                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2fp" style="width:35px; height:35px" title="Add +2 with a Fate Point" i icon class="fas fa-plus"></button>
-                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_rerollfp" style="width:35px; height:35px" title="Reroll with a Fate Point" i icon class="fas fa-dice"></button>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2fp" style="width:35px; height:35px" title="{{localize 'ModularFate.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
+                                        <button type="button" name="fu_roll_button" id="roll_{{@key}}_rerollfp" style="width:35px; height:35px" title="{{localize 'ModularFate.PaidRerollExplainer'}}" i icon class="fas fa-dice"></button>
                                     </td>
                                 </tr>
                         </table>
@@ -303,12 +303,12 @@
     </td>
     {{#if conflict}}
     <td width="32%" style="vertical-align:top">
-        <h2 style="padding:5px">Action Tracker
+        <h2 style="padding:5px">{{localize 'ModularFate.ActionTracker'}}
         {{#if conflict}}
-         Exchange: {{exchange}}</h2>
-        <h3 style="padding-left:5px">Still To Act:</h3>
+         ({{localize 'ModularFate.Exchange'}} {{exchange}})</h2>
+        <h3 style="padding-left:5px">{{localize 'ModularFate.StillToAct'}}:</h3>
         <div class="Action Tracker" style="padding-left:5px; overflow-y:auto; height:auto">
-            {{else}}</h2>No conflict detected.
+            {{else}}</h2>{{localize 'ModularFate.NoConflictDetected'}}
             {{/if}}
             <table style="border:none; background-color:white">
             {{#each combat_tokens}}
@@ -322,7 +322,7 @@
             </tr>
             {{/each}}
             </table>
-            <h3>Already Acted:</h3>
+            <h3>{{localize 'ModularFate.AlreadyActed'}}:</h3>
             {{#each has_acted_tokens}}
             <li>{{this.name}}</li>
             {{/each}}
@@ -330,11 +330,11 @@
             {{#if GM}}
             <tr>
                 <td>
-                    <button type="button" style="width:50px; height:25px; float:left" id="next_exchange" title="Next Exchange" i icon class="fas fa-forward"></button>                    
-                    <button type="button" style="width:50px; height:25px; float:left" id="timed_event" title="Timed Event" i icon class="fas fa-clock"></button>                    
+                    <button type="button" style="width:50px; height:25px; float:left" id="next_exchange" title="{{localize 'ModularFate.NextExchange'}}" i icon class="fas fa-forward"></button>                    
+                    <button type="button" style="width:50px; height:25px; float:left" id="timed_event" title="{{localize 'ModularFate.TimedEvent'}}" i icon class="fas fa-clock"></button>                    
                 </td>
                 <td>
-                    <button type="button" style="width:50px; height:25px; float:right" id="end_conflict" title="End Conflict" i icon class="fas fa-trash"></button>
+                    <button type="button" style="width:50px; height:25px; float:right" id="end_conflict" title="{{localize 'ModularFate.EndConflict'}}" i icon class="fas fa-trash"></button>
                 </td>
             </tr>
             {{/if}}

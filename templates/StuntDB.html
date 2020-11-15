@@ -2,19 +2,19 @@
     <div style="width:1200px; max-height:50px; background-color:white; font-family:Montserrat; font-size:10pt; padding:0px; display:table">
         <div style="display:table-row;background-color:#185CAB; color:white;">
             <div name="sb_name" title="Sort by name" style="width:200px; border-right:1px solid lightsteelblue; font-weight:bold; float:left; padding:5px">
-                Stunt Name
+                {{localize 'ModularFate.StuntName'}}
             </div>
             <div name="sb_skill" title="Sort by skill" style="width:100px; border-right:1px solid lightsteelblue; font-weight:bold; float:left ; padding:5px">
-                Skill
+                {{localize 'ModularFate.Skill'}}
             </div>
             <div name="sb_refresh" title="Sort by refresh cost" style="width:80px; border-right:1px solid lightsteelblue;  font-weight:bold; float:left ; padding:5px">
-                Refresh
+                {{localize 'ModularFate.Refresh'}}
             </div>
             <div style="width:700px; border-right:1px solid lightsteelblue; font-weight:bold; float:left; padding:5px">
-                Description
+                {{localize 'ModularFate.Description'}}
             </div>
             <div style="width:120px; font-weight:bold; float:left; padding:5px">
-                Actions
+                {{localize 'ModularFate.Actions'}}
             </div>
         </div>
     </div>
@@ -35,13 +35,13 @@
                 {{{this.description}}}
             </div>
             <div style="border-bottom:1px solid lightsteelblue; width:120px; display:table-cell; padding:5px">
-                {{#if ../actor.owner}}<button type="button" name="add_stunt" style="border:none; float:left; width:25px; height:25px; background:white;" title="Add this stunt to {{../actor.name}}'s stunts" i icon class = "fas fa-download" id="{{this.name}}_addStunt"></button>{{/if}}
-                <button type="button" name="export_stunt" style="border:none; float:left; width: 25px; height:25px; background:white;" title="Export this stunt as a text file" i icon class = "fas fa-file-export" id="{{this.name}}_exportStunt"></button>
-                {{#if ../gm}}<button type="button" name="del_stunt" style="border:none; float:right; width:25px; height:25px; background:white;" title="Delete this stunt from the database" i icon class = "fas fa-trash" id="{{this.name}}_deleteStunt"></button>{{/if}}
+                {{#if ../actor.owner}}<button type="button" name="add_stunt" style="border:none; float:left; width:25px; height:25px; background:white;" title="{{localize 'ModularFate.AddStuntToActor'}} {{../actor.name}}" i icon class = "fas fa-download" id="{{this.name}}_addStunt"></button>{{/if}}
+                <button type="button" name="export_stunt" style="border:none; float:left; width: 25px; height:25px; background:white;" title="{{localize 'ModularFate.ExportStunt'}}" i icon class = "fas fa-file-export" id="{{this.name}}_exportStunt"></button>
+                {{#if ../gm}}<button type="button" name="del_stunt" style="border:none; float:right; width:25px; height:25px; background:white;" title="{{localize 'ModularFate.DeleteStunt'}}" i icon class = "fas fa-trash" id="{{this.name}}_deleteStunt"></button>{{/if}}
             </div>
         </div>
         {{/each}}
     </div>    
 </div>
-<div style="max-height:40px; padding:10px"><button type="button" id="export_stunts" style="height:30px; width:150px">Export Stunts</button><button type="button" id="import_stunts" style="height:30px; width:150px">Import Stunts</button></div>
+<div style="max-height:40px; padding:10px"><button type="button" id="export_stunts" style="height:30px; width:150px">{{localize 'ModularFate.ExportStunts'}}</button><button type="button" id="import_stunts" style="height:30px; width:150px">{{localize 'ModularFate.ImportStunts'}}</button></div>
 </body>

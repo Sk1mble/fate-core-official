@@ -2,18 +2,17 @@
 //stress and consequences.
 
 Hooks.once('init',async function(){
-    console.log("Initializing ManageTracks");
     //Let's initialise the settings at the system level.
     game.settings.register("ModularFate","tracks",{
         name:"tracks",
-        hint:"This is the list of stress tracks, conditions, and consequences for this particular world",
+        hint:game.i18n.localize("ModularFate.TrackManagerHint"),
         scope:"world",
         config:false,
         type: Object
     });
     game.settings.register("ModularFate","track_categories",{
         name:"track categories",
-        hint:"This is the list of track categories available for this world.",
+        hint:game.i18n.localize("ModularFate.TrackCategoriesHint"),
         scope:"world",
         config:false,
         type: Object
@@ -31,28 +30,28 @@ Hooks.once('init',async function(){
 
     // Register the menu to setup the world's conditions etc.
     game.settings.registerMenu("ModularFate", "TrackSetup", {
-        name: "Setup Tracks",
-        label: "Setup",      // The text label used in the button
-        hint: "Configure this world's stress, conditions, and consequences.",
+        name: game.i18n.localize("ModularFate.SetupTracks"),
+        label: game.i18n.localize("ModularFate.Setup"),      // The text label used in the button
+        hint: game.i18n.localize("ModularFate.TrackSetupHint"),
         type: TrackSetup,   // A FormApplication subclass which should be created
         restricted: true                   // Restrict this submenu to gamemaster only?
       });
 
      // Register a setting for replacing the existing track list with one of the pre-defined default sets.
      game.settings.register("ModularFate", "defaultTracks", {
-        name: "Replace Or Clear All World Tracks?",
-        hint: "Pick a track set with which to override the world's current tracks. CANNOT BE UNDONE.",
+        name: game.i18n.localize("ModularFate.ReplaceTracksName"),
+        hint: game.i18n.localize("ModularFate.ReplaceTracksName"),
         scope: "world",     // This specifies a client-stored setting
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":"No",
-            "fateCore":"Yes - Fate Core Defaults",
-            "fateCondensed":"Yes - Fate Condensed Defaults",
-            "accelerated":"Yes - Fate Accelerated Defaults",
-            "dfa":"Yes - Dresden Files Accelerated Defaults",
-            "clearAll":"Yes - Clear All tracks"
+            "nothing":game.i18n.localize("ModularFate.No"),
+            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
+            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
+            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
+            "dfa":game.i18n.localize("ModularFate.YesDFA"),
+            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
@@ -110,7 +109,7 @@ class EditLinkedSkills extends FormApplication {
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";
-        options.title = `Linked Skill Editor`;
+        options.title = game.i18n.localize("ModularFate.LinkedSkillEditor");
         options.closeOnSubmit = false;
         options.id = "EditLinkedSkills"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -143,7 +142,7 @@ class EditLinkedSkills extends FormApplication {
             }
             tracks[this.track.name]=this.track;
             await game.settings.set("ModularFate","tracks",tracks);
-            this.render(true);
+            this.render(false);
         }
     }
 
@@ -167,7 +166,7 @@ class EditLinkedSkills extends FormApplication {
             let tracks=game.settings.get("ModularFate","tracks");
             tracks[this.track.name] = this.track
             await game.settings.set("ModularFate","tracks",tracks);
-            this.render(true);
+            this.render(false);
     }
 }
 
@@ -200,7 +199,7 @@ class EditTracks extends FormApplication {
         //Define the FormApplication's options
         options.width = "auto";
         options.height = "auto";
-        options.title = `Track Editor`;
+        options.title = game.i18n.localize("ModularFate.Track Editor");
         options.closeOnSubmit = false;
         options.id = "EditTrack"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -244,13 +243,13 @@ class EditTracks extends FormApplication {
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
         //console.log(edit_track_name[0].value)
-        if (name == "" || name == "New Track"){
-            ui.notifications.error("Select a track to copy first");
+        if (name == "" || name == game.i18n.localize("ModularFate.NewTrack")){
+            ui.notifications.error(game.i18n.localize("ModularFate.SelectATrackToCopyFirst"));
         }
         else {
             let track = `{"${name}":${JSON.stringify(this.tracks[name])}}`;
             new Dialog({
-                title: "Copy & Paste this to save this track", 
+                title: game.i18n.localize("ModularFate.CopyAndPasteToSaveThisTrack"), 
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${track}</textarea></div>`,
                 buttons: {
                 },
@@ -263,15 +262,15 @@ class EditTracks extends FormApplication {
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
         //console.log(edit_track_name[0].value)
-        if (name == "" || name == "New Track"){
-            ui.notifications.error("Select a track to copy first");
+        if (name == "" || name == game.i18n.localize("ModularFate.NewTrack")){
+            ui.notifications.error(game.i18n.localize("ModularFate.SelectATrackToCopyFirst"));
         }
         else {
             let track = duplicate(this.tracks[name]);
             track.name = track.name+" copy"
             this.tracks[track.name]=track;
             await game.settings.set("ModularFate","tracks",this.tracks);
-            this.render(true);
+            this.render(false);
         }
     }
 
@@ -292,17 +291,17 @@ class EditTracks extends FormApplication {
             try {
                     delete this.tracks[name];
                     await game.settings.set("ModularFate","tracks",this.tracks);
-                    this.render(true);
+                    this.render(false);
             } catch {
-                ui.notifications.error("Can't delete that.")
-                this.render(true)
+                ui.notifications.error(game.i18n.localize("ModularFate.CannotDeleteThat"))
+                this.render(false)
             }
         }
     }
     async _edit_linked_skillsButtonClick(event, html){
         let name = document.getElementById("track_select").value;
         if (name=="New Track"){
-            ui.notifications.error("Please select a track before trying to add a linked skill.");
+            ui.notifications.error(game.i18n.localize("ModularFate.SelectTrackBeforeAddingLinkedSkill"));
         }
         else {
             let track=this.tracks[name];
@@ -313,7 +312,7 @@ class EditTracks extends FormApplication {
 
     async _track_selectChange(event, html){
         let name = document.getElementById("track_select").value;
-        if (name=="New Track"){
+        if (name==game.i18n.localize("ModularFate.NewTrack")){
             this.track=undefined;
             document.getElementById("edit_track_name").value="";
             document.getElementById("edit_track_description").value="";
@@ -435,7 +434,7 @@ class EditTracks extends FormApplication {
                 this.tracks[name]=newTrack;
             }
             await game.settings.set("ModularFate","tracks",this.tracks);
-            this.render(true);
+            this.render(false);
         }
     }
 }
@@ -453,7 +452,7 @@ class TrackSetup extends FormApplication{
         options.template = "systems/ModularFate/templates/TrackSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `Track Category Setup for world ${game.world.title}`;
+        options.title = `${game.i18n.localize("ModularFate.TrackCategorySetup")} ${game.world.title}`;
         options.closeOnSubmit = false;
         options.id = "TrackSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -496,7 +495,7 @@ class TrackSetup extends FormApplication{
         let tracks_text = JSON.stringify(tracks);
      
         new Dialog({
-            title: "Copy & Paste this to save your world tracks", 
+            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveWorldTracks"),
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${tracks_text}</textarea></div>`,
             buttons: {
             },
@@ -506,11 +505,11 @@ class TrackSetup extends FormApplication{
     async getTracks(){
         return new Promise(resolve => {
             new Dialog({
-                title: "Paste data here; replaces tracks of same name",
+                title: game.i18n.localize("ModularFate.PasteToReplaceWorldTracks"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="itracks"></textarea></div>`,
                 buttons: {
                     ok: {
-                        label: "Save",
+                        label: game.i18n.localize("Save"),
                         callback: () => {
                             resolve (document.getElementById("itracks").value);
                         }
@@ -543,20 +542,20 @@ class TrackSetup extends FormApplication{
     }
 
     async _onAddCategoryButton(event,html){
-        let category = await ModularFateConstants.getInput("Choose the Category Name");
+        let category = await ModularFateConstants.getInput(game.i18n.localize("ModularFate.ChooseCategoryName"));
         let track_categories = game.settings.get("ModularFate","track_categories");
         var duplicate = false;
 
         for (let cat in track_categories){
             if (track_categories[cat].toUpperCase == category.toUpperCase()){
-                ui.notifications.error("Can't create duplicate category.")
+                ui.notifications.error(game.i18n.localize("ModularFate.CannotCreateDuplicateCategory"));
                 duplicate = true;
             }
             if (!duplicate && category != "" && category != undefined){
                 track_categories[category]=category;
             }
             await game.settings.set("ModularFate","track_categories",track_categories);
-            this.render(true);
+            this.render(false);
         }
     }
 
@@ -569,14 +568,14 @@ class TrackSetup extends FormApplication{
                     for (let cat in track_categories){
                         if (track_categories[cat].toUpperCase() == category.toUpperCase()){
                         if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
-                            ui.notifications.error(`Can't delete the ${category} category as it's needed by the system.`)
+                            ui.notifications.error(`${game.i18n.localize("ModularFate.CannotDeleteThe")} ${category} ${game.i18n.localize("ModularFate.CategoryThatCannotDelete")}`)
                         } else {
                                     delete track_categories[cat];
                                 }
                         } 
                 }
                 await game.settings.set("ModularFate","track_categories",track_categories);
-                this.render(true);
+                this.render(false);
         }
     }
     
@@ -588,7 +587,7 @@ class TrackSetup extends FormApplication{
             let track_editor = new EditTracks(category);
             track_editor.render(true);
         } else {
-            ui.notifications.error(`Please select a category first.`)
+            ui.notifications.error(game.i18n.localize("ModularFate.PleaseSelectACategoryFirst"))
         }
     }
 }

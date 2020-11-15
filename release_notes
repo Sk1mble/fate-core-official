@@ -1,3 +1,6 @@
+# Version 1.8.6
+  Now supports localization. So far only English is supported, but the whole system has localisation strings so taht volunteers can provide translations if they wish.
+
 # Version 1.9.4 and version 1.9.5
   Added two settings to the Settings menu for GMs, allowing them to export all configuration options for the world (except enforce columns and enforce skills settings).
   This allows all tracks, skills, stunts in the stunt database, and aspects to be exported or imported by pasting the JSON for them into a text box or copying the text out of a text box.
