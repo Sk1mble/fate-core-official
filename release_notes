@@ -1,4 +1,7 @@
-# Version 1.8.6
+# Version 1.9.7
+  Data packs for default releases now embedded in language files for ease of translation.
+
+# Version 1.9.6
   Now supports localization. So far only English is supported, but the whole system has localisation strings so that volunteers can provide translations if they wish.
 
 # Version 1.9.4 and version 1.9.5
