@@ -218,7 +218,6 @@ Hooks.once('ready', async function () {
 })
 
 Hooks.on('updateToken', (scene, token, data) => {
-    console.log(data);
     if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined){
         game.system.apps["actor"].forEach(a=> {
             a.renderMe(token._id, data);
