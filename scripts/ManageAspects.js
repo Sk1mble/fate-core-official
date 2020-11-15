@@ -42,16 +42,15 @@ Hooks.once('init', async function () {
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
-                console.log(value);
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCoreAspects());
+                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCoreDefaultAspects"));
                         game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
                 if (value == "fateCondensed"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",ModularFateConstants.getFateCondensedAspects());
+                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCondensedDefaultAspects"));
                         game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
@@ -63,13 +62,13 @@ Hooks.once('init', async function () {
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",ModularFateConstants.getFateAcceleratedAspects());
+                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateAcceleratedDefaultAspects"));
                         game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",ModularFateConstants.getDFAAspects());
+                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultAspects"));
                         game.settings.set("ModularFate","defaultAspects","nothing");
                     }
                 }
