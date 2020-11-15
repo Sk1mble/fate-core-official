@@ -57,7 +57,7 @@ Hooks.once('init',async function(){
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCoreDefaultTracks"));
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getFateCoreTracks());
                         game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
@@ -69,20 +69,20 @@ Hooks.once('init',async function(){
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCondensedDefaultTracks"));
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getFateCondensedTracks());
                         game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateAcceleratedDefaultTracks"));
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getFateAcceleratedTracks());
                         game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTracks"));
-                        game.settings.set("ModularFate","track_categories",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTrackCategories"));
+                        game.settings.set("ModularFate","tracks",ModularFateConstants.getDFAtracks());
+                        game.settings.set("ModularFate","track_categories",ModularFateConstants.getDFATrackCategories());
                         game.settings.set("ModularFate","defaultTracks","nothing");
                     }
                 }
