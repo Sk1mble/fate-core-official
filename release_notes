@@ -1,3 +1,6 @@
+# Version 1.9.8
+  Fixed a bug in the localization text strings where the advanced roll was rendering 'NaN' instead of Stunt.
+
 # Version 1.9.7
   Data packs for default releases now embedded in language files for ease of translation.
 

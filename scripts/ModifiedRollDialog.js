@@ -57,7 +57,7 @@ class ModifiedRollDialog extends Application {
             if (stunts[i].checked){
                 let s_name = stunts[i].id.split("_")[1]
                 let s_modifier = this.actor.data.data.stunts[s_name].bonus;
-                stunt_text += +game.i18n.localize("ModularFate.Stunt")+": "+ s_name + " (+" + s_modifier + ")<br>"
+                stunt_text += game.i18n.localize("ModularFate.Stunt")+": "+ s_name + " (+" + s_modifier + ")<br>"
                 total_modifier += parseInt(s_modifier);
             }
         }
