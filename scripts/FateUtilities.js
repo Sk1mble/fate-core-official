@@ -687,6 +687,8 @@ async getData(){
                         }
                     }
         })
+        ModularFateConstants.sort_key(has_acted,"name");
+        ModularFateConstants.sort_key(tokens,"name");
         data.has_acted_tokens = has_acted;
         data.combat_tokens=tokens;
         data.exchange = game.combat.round;   
