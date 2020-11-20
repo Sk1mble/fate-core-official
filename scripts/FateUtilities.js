@@ -36,6 +36,9 @@ class FateUtilities extends Application{
             }
         });
 
+
+        const tokenName = html.find("td[class='tName']");
+        tokenName.on("dblclick", event => this.tokenNameChange(event, html));
         const popcornButtons = html.find("button[class='popcorn']");
         popcornButtons.on("click", event => this._onPopcornButton(event, html));
         const nextButton = html.find("button[id='next_exchange']");
@@ -112,6 +115,17 @@ class FateUtilities extends Application{
             this.selectingSkill = false;
             this.render(false);
         })
+    }
+
+    async tokenNameChange(event, html){
+        console.log(event.target.id)
+        let t_id = event.target.id.split("_")[0];
+        console.log(t_id)
+        let token = canvas.tokens.placeables.find(token => token.id==t_id);
+        if (token != undefined){
+            let name = await ModularFateConstants.updateShortText(game.i18n.localize("ModularFate.whatShouldTokenNameBe"),token.data.name);
+            await token.update({"name":name});
+        }
     }
 
     async _selectRoll (event, html){
@@ -696,7 +710,7 @@ async getData(){
     situation_aspects = duplicate(situation_aspects);
     
     data.situation_aspects = situation_aspects;
-
+    ModularFateConstants.sort_key(all_tokens, "name");
     data.all_tokens = all_tokens;
     data.GM=game.user.isGM;
     

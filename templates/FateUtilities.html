@@ -27,12 +27,12 @@
                     </tr>
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}
-                    <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
+                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{else}}}style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{/if}}>
                         <td style="padding:5px">
                             {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none;"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
                         </td>
-                        <td style="font-size:small; font-family:Montserrat; font-weight:bold">
+                        <td id="{{this.id}}_tokenNameA" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
                             <select title="{{localize 'ModularFate.RollHelp'}}" class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
@@ -64,12 +64,12 @@
                     {{/if}}
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                    <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
+                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{else}}}style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{/if}}>
                         <td>
                             {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{/if}}
                         </td>
-                        <td style="font-size:small; font-family:Montserrat; font-weight:bold">
+                        <td id="{{this.id}}_tokenNameA" title="Double click to change the name shown on this token" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
                             {{#if this.owner}}
                             <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
@@ -116,10 +116,11 @@
                 <div id="fu_tracks_tab" style="background-color:beige; overflow-y:auto; max-height:800px">
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}
-                <table style="border:1px; padding:10px;">
+                {{#if (eq this._controlled true)}} <table style="border:1px; padding:10px; background-color:lightsteelblue">{{else}}
+                    <table style="border:1px; padding:10px;">{{/if}}
                     <tr>
-                        <td width = "300px" style="font-family:Montserrat">
-                            <b>{{this.name}}</b>
+                        <td id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
+                            {{this.name}}
                         </td>
                     </tr>
                 {{#each this.actor.data.data.tracks}}
@@ -145,10 +146,11 @@
                 {{/each}}<!--ENd all_tokens each-->
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                <table style="border:1px; padding:10px;">
+                {{#if (eq this._controlled true)}} <table style="border:1px; padding:10px; background-color:lightsteelblue">{{else}}
+                <table style="border:1px; padding:10px;">{{/if}}
                     <tr>
-                        <td width = "300px" style="font-family:Montserrat">
-                            <b>{{this.name}}</b>
+                        <td id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
+                            {{this.name}}
                         </td>
                     </tr>
                 {{#each this.actor.data.data.tracks}}

@@ -127,6 +127,24 @@ class ModularFateConstants {
     });
     }
 
+    static updateShortText(prompt, textToUpdate){
+        return new Promise(resolve => {
+            new Dialog({
+                title: prompt, 
+                content: `<div style="background-color:white; color:black;"><textarea rows="1" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
+                buttons: {
+                    ok: {
+                        label: game.i18n.localize("ModularFate.Save"),
+                        callback: () => {
+                            resolve(document.getElementById("get_text_box").value)
+                        }
+                    },
+                },
+                default:"ok",
+            }).render(true);
+        });
+        }
+
     static sortByKey(json_object){
         let ordered_object = {}
         let unordered_object = json_object;

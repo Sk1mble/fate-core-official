@@ -225,6 +225,13 @@ Hooks.on('updateToken', (scene, token, data) => {
     }
 })
 
+Hooks.on('controlToken', (token) => {
+        game.system.apps["actor"].forEach (a=> {
+            a.renderMe("controlToken");
+    })
+})
+
+
 Hooks.on('updateUser',(...args) =>{
         game.system.apps["user"].forEach (a=> {
             a.renderMe("updateUser");

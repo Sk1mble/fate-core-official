@@ -686,5 +686,7 @@
     },
     "ModularFate.DresdenFilesAcceleratedDefaultTrackCategories":{
         "Combat":"Combat","Other":"Other","Clued-In Mortal":"Clued-In Mortal","Criminal":"Criminal","Law Enforcement":"Law Enforcement","Leader of the People":"Leader of the People","Medic":"Medic","Monster Hunter":"Monster Hunter","One-Percenter":"One-Percenter","Reporter":"Reporter","Magical Practitioner":"Magical Practitioner","Changeling":"Changeling","Practitioner":"Practitioner","Fae":"Fae","Erlking's Huntmaster":"Erlking's Huntmaster","Knight of a Faerie Court":"Knight of a Faerie Court","Knight of the Cross":"Knight of the Cross","Vampire":"Vampire","Werecreature":"Werecreature"
-    }    
+    },
+    "ModularFate.whatShouldTokenNameBe":"What should this token's name be?",
+    "ModularFate.DoubleClickToChangeName":"Double click to change the name shown on this token"
 }
