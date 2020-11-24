@@ -60,9 +60,15 @@ class EditPlayerStunts extends FormApplication {
                let name = this.stunt.name;
                 try {
                     if (data.actorData.data.stunts[name]!=undefined){
-                        this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
-                        ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
-                        this.render(false);
+                        if (!this.renderPending) {
+                            this.renderPending = true;
+                            setTimeout(() => {
+                                this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
+                                ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
+                                this.render(false);
+                                this.renderPending = false;
+                            }, 0);
+                        }
                     }
                 }
                 catch {
@@ -75,9 +81,16 @@ class EditPlayerStunts extends FormApplication {
                 let name = this.stunt.name;
                 try {
                     if (data.data.stunts[name]!=undefined){
-                        this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
-                        ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
-                        this.render(false);
+                        
+                        if (!this.renderPending) {
+                            this.renderPending = true;
+                            setTimeout(() => {
+                                this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
+                                ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
+                                this.render(false);
+                                this.renderPending = false;
+                            }, 0);
+                        }
                     }
                 }
                 catch {

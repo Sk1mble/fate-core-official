@@ -34,12 +34,26 @@ class EditPlayerSkills extends FormApplication{
     async renderMe(id){
         if (this.object.isToken){
             if (this.object.token.id == id){
-                this.render(false);
+                    //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
+                    if (!this.renderPending) {
+                        this.renderPending = true;
+                        setTimeout(() => {
+                        this.render(false);
+                        this.renderPending = false;
+                        }, 0);
+                    }
             }
         }
         else {
             if (this.object.id == id){
-                this.render(false);
+                    //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
+                    if (!this.renderPending) {
+                        this.renderPending = true;
+                        setTimeout(() => {
+                        this.render(false);
+                        this.renderPending = false;
+                        }, 0);
+                    }
             }
         }       
     }

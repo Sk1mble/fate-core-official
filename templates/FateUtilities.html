@@ -12,9 +12,9 @@
 
             <!----------------------BEGIN Aspects Tab-->
             <div name = "aspects" class="tab aspects" data-tab="aspects" id="fu_aspects_tab" style="background-color:gainsboro; overflow-y:auto; max-height:800px">
-                <table style="font-size:small">
+                <table style="font-size:small; border:none">
                     {{#each GMUsers}}
-                    <tr style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px">
+                    <tr style="border-top:2px black solid">
                         <td style="padding:5px">
                             <img src="{{this.data.avatar}}" style="width:50px; height:auto; border:none"/>
                         </td>
@@ -27,7 +27,7 @@
                     </tr>
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}
-                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{else}}}style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{/if}}>
+                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-top:black 2px solid"{{else}}style="border-top:black 2px solid"{{/if}}>
                         <td style="padding:5px">
                             {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none;"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
@@ -64,7 +64,7 @@
                     {{/if}}
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{else}}}style="border-bottom:black; border-bottom-style:solid; border-bottom-width:1px"{{/if}}>
+                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-top:black 2px solid"{{else}}style="border-top:black 2px solid"{{/if}}>
                         <td>
                             {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{/if}}
@@ -116,18 +116,18 @@
                 <div id="fu_tracks_tab" style="background-color:beige; overflow-y:auto; max-height:800px">
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}
-                {{#if (eq this._controlled true)}} <table style="border:1px; padding:10px; background-color:lightsteelblue">{{else}}
-                    <table style="border:1px; padding:10px;">{{/if}}
-                    <tr>
-                        <td id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
+                {{#if (eq this._controlled true)}} <table style="padding:10px; border-top:none; border-bottom:none; background-color:lightsteelblue">{{else}}
+                    <table style="padding:10px; border-top:none; border-bottom:none">{{/if}}
+                    <tr style="border-top:2px black solid">
+                        <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}
                         </td>
                     </tr>
                 {{#each this.actor.data.data.tracks}}
                 {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
-                    <td>
-                        <div name="track_name" id="{{../this.id}}"" title="{{localize 'ModularFate.ClickHereToEditTrackNotes'}} {{this.name}}">{{this.name}}</div>
+                    <td width="25%">
+                        <div name="track_name" id="{{../this.id}}" title="{{localize 'ModularFate.ClickHereToEditTrackNotes'}} {{this.name}}">{{this.name}}</div>
                     </td>
                     <td>
                         {{#each this.box_values}}
@@ -146,17 +146,17 @@
                 {{/each}}<!--ENd all_tokens each-->
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                {{#if (eq this._controlled true)}} <table style="border:1px; padding:10px; background-color:lightsteelblue">{{else}}
-                <table style="border:1px; padding:10px;">{{/if}}
-                    <tr>
-                        <td id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
+                {{#if (eq this._controlled true)}} <table style="padding:10px; border-top:none; border-bottom:none; background-color:lightsteelblue">{{else}}
+                <table style="padding:10px; border-top:none; border-bottom:none">{{/if}}
+                    <tr style="border-top:2px black solid">
+                        <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold;">
                             {{this.name}}
                         </td>
                     </tr>
                 {{#each this.actor.data.data.tracks}}
                 {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
-                    <td>
+                    <td width="25%">
                         <div name="track_name" id="{{../this.id}}" title="{{localize 'ClickHereToEditTrackNotes'}} {{this.name}}">{{this.name}}</div>
                     </td>
                     <td>
@@ -217,31 +217,31 @@
                 <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:800px">
                 <table style="background:none">
                 <tr>
-                    <th style="border:1px solid black; font-weight:bold; text-align:left">
+                    <th style="border:2px solid black; font-weight:bold; text-align:left">
                         {{localize 'ModularFate.Character'}}
                     </th>
-                    <th style="border:1px solid black; font-weight:bold; text-align:left">
+                    <th style="border:2px solid black; font-weight:bold; text-align:left">
                         {{localize 'ModularFate.Description'}}
                     </th>
-                    <th style="border:1px solid black; font-weight:bold">
+                    <th style="border:2px solid black; font-weight:bold">
                         {{localize 'ModularFate.Dice'}}
                     </th>   
-                    <th style="border:1px solid black; font-weight:bold">
+                    <th style="border:2px solid black; font-weight:bold">
                         {{localize 'ModularFate.Total'}}
                     </th>
-                    <th style="border:1px solid black; font-weight:bold">
+                    <th style="border:2px solid black; font-weight:bold">
                         {{localize 'ModularFate.RollActions'}}
                     </th>
                 </tr>
                 {{#each rolls}}
                 <tr>
-                    <td style="border:1px solid black; width:120px">
+                    <td style="border:2px solid black; width:120px">
                         <div name="fu_roll">{{this.speaker}}</div>
                     </td>
-                    <td style="border:1px solid black; border:1px solid black;">
+                    <td style="border:2px solid black;">
                         {{{this.flavor}}}
                     </td>
-                    <td style="font-size:large; text-align:center; border:1px solid black;">
+                    <td style="font-size:large; text-align:center; border:2px solid black;">
                         {{#each this.dice}}
                             {{#if (eq this 1)}}
                                 <i icon class="fas fa-plus-square"/>
@@ -254,10 +254,10 @@
                             {{/if}}
                         {{/each}}
                     </td>
-                    <td style="border:1px solid black; text-align:center">
+                    <td style="border:2px solid black; text-align:center">
                         {{this.total}}
                     </td>
-                    <td style="border:1px solid black; text-align:center">
+                    <td style="border:2px solid black; text-align:center">
                         {{#if ../GM}}
                             <table style="background:none; border:none">
                                 <tr><th>{{localize 'ModularFate.FreeActions'}}</th>

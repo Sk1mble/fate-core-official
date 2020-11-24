@@ -1,3 +1,8 @@
+# Version 2.0.0
+  Added some extra debouncing code in the RenderMe methods of the various character editors.
+  Fixed a layout bug with the stress tracks in Fate Utilities; they are now aligned left again.
+  Set borders to 2px rather than 1px for a cleaner visual separation of characters and rolls.
+
 # Version 1.9.9
   Tokens in Fate Utilities are now sorted by name. This means they are always displayed in the same order.
   Controlled tokens' track and aspect entries in Fate Utilities are now coloured blue so you can see which token is selected for the purposes of applying stress etc. to the right token.

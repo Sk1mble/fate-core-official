@@ -52,7 +52,13 @@ class EditPlayerTracks extends FormApplication {
             if (this.object.token.id == id){
                 if (data.actorData.data != undefined && data.actorData.data.tracks != undefined)
                     this.tracks_by_category=undefined;                   
-                    await this.render(false);
+                    if (!this.renderPending) {
+                        this.renderPending = true;
+                        setTimeout(() => {
+                        this.render(false);
+                        this.renderPending = false;
+                        }, 0);
+                    }
             }
         }
 
@@ -60,7 +66,13 @@ class EditPlayerTracks extends FormApplication {
             if (this.object._id == id){
                 if (data.data != undefined && data.data.tracks != undefined)
                     this.tracks_by_category=undefined;
-                    await this.render(false);  
+                    if (!this.renderPending) {
+                        this.renderPending = true;
+                        setTimeout(() => {
+                        this.render(false);
+                        this.renderPending = false;
+                        }, 0);
+                    }
             }
         }       
     }

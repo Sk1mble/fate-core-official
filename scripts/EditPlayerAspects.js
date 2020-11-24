@@ -121,13 +121,25 @@ class EditPlayerAspects extends FormApplication{
     renderMe(id){
         if (this.object.isToken){
             if (this.object.token.id == id){
-                this.render(false);
+                if (!this.renderPending) {
+                    this.renderPending = true;
+                    setTimeout(() => {
+                    this.render(false);
+                    this.renderPending = false;
+                    }, 0);
+                }
             }
         }
 
         else {
             if (this.object._id == id){
-                this.render(false);
+                if (!this.renderPending) {
+                    this.renderPending = true;
+                    setTimeout(() => {
+                    this.render(false);
+                    this.renderPending = false;
+                    }, 0);
+                }
             }
         }       
     }
