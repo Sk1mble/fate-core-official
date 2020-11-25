@@ -1,3 +1,7 @@
+# Version 2.0.1
+  Added the ability to collapse and expand the view of aspects and/or tracks in Fate Utilities to make it easier to focus on specific characters of interest at a given moment.
+  This is stored PER SESSION, so you can close and re-open Fate Utilities and the expansion settings will persist, but these will be lost upon refreshing the browser or restarting Foundry.
+
 # Version 2.0.0
   Added some extra debouncing code in the RenderMe methods of the various character editors.
   Fixed a layout bug with the stress tracks in Fate Utilities; they are now aligned left again.

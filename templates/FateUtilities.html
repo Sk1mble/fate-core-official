@@ -11,11 +11,15 @@
         <section class="utilities-body">
 
             <!----------------------BEGIN Aspects Tab-->
-            <div name = "aspects" class="tab aspects" data-tab="aspects" id="fu_aspects_tab" style="background-color:gainsboro; overflow-y:auto; max-height:800px">
-                <table style="font-size:small; border:none">
+            <div id="fu_aspects_tab" class="tab aspects" data-tab="aspects">
+                <button type="button" style="width:25px; height:25px; border:none" name="maximiseAspects" id="maximiseAllAspects" title="{{localize 'ModularFate.MaximiseAll'}}" i icon class="fas fa-expand"></button>
+                <button type="button" style="width:25px; height:25px; border:none" name="minimiseAspects" id="minimiseAllAspects" title="{{localize 'ModularFate.MinimiseAll'}}" i icon class="fas fa-compress"></button>
+            <div name = "aspects"  style="background-color:gainsboro; overflow-y:auto; max-height:800px">                
+                <table style="font-size:small; border:none;">
                     {{#each GMUsers}}
                     <tr style="border-top:2px black solid">
-                        <td style="padding:5px">
+                        <td style="width:20px"></td>
+                        <td style="padding:5px; text-align:left">
                             <img src="{{this.data.avatar}}" style="width:50px; height:auto; border:none"/>
                         </td>
                         <td style="font-size:small; font-family:Montserrat; font-weight:bold">
@@ -28,12 +32,18 @@
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}
                     <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-top:black 2px solid"{{else}}style="border-top:black 2px solid"{{/if}}>
-                        <td style="padding:5px">
-                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none;"/>{{else}}
-                            <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:40px; height:auto"/>{{/if}}
+                        <td style="width:20px; vertical-align:top">
+                            <button type="button" style="width:25px; height:25px; border:none" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand" title="{{localize 'ModularFate.Maximise'}}" {{else}}i icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{/if}}></button>
                         </td>
-                        <td id="{{this.id}}_tokenNameA" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
+                        <td style="padding:5px; text-align:left; vertical-align:top">
+                            {{#if (eq this.aspectsMaximised false)}}{{else}}
+                            {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none;"/>{{else}}
+                            <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{/if}}
+                            {{/if}}
+                        </td>
+                        <td id="{{this.id}}_tokenNameA" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="vertical-align:top; font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
+                            {{#if (eq this.aspectsMaximised false)}}{{else}}
                             {{#if this.owner}}
                             <select title="{{localize 'ModularFate.RollHelp'}}" class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
                                 <option disabled="disabled" selected="selected">{{localize 'ModularFate.PickASkill'}}</option>
@@ -46,8 +56,10 @@
                             </select>
                             {{/if}}
                             {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; font-style:normal; font-size:small; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
+                            {{/if}}
                         </td>
                         <td>
+                            {{#if (eq this.aspectsMaximised false)}}{{else}}
                                 <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
                                     {{#each this.actor.data.data.aspects}}
                                     <tr style="border-bottom:1px; border-bottom:groove">
@@ -59,18 +71,25 @@
                                     </tr>    
                             {{/each}}
                         </table>
+                        {{/if}}
                         </td>
                     </tr>
                     {{/if}}
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                     <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-top:black 2px solid"{{else}}style="border-top:black 2px solid"{{/if}}>
-                        <td>
+                        <td style="vertical-align:top; width:20px">
+                            <button type="button" style="width:25px; height:25px; border:none" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand" title="{{localize 'ModularFate.Maximise'}}" {{else}}i icon class="fas fa-compress" title="{{localize 'ModularFate.Maximise'}}"{{/if}}></button>
+                        </td>
+                        <td style="padding:5px; text-align:left; vertical-align:top">
+                            {{#if (eq this.aspectsMaximised false)}}{{else}}
                             {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{else}}
                             <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; border:none"/>{{/if}}
+                            {{/if}}
                         </td>
-                        <td id="{{this.id}}_tokenNameA" title="Double click to change the name shown on this token" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
+                        <td id="{{this.id}}_tokenNameA" title="Double click to change the name shown on this token" class="tName" style="vertical-align:top; font-size:small; font-family:Montserrat; font-weight:bold">
                             {{this.name}}<br>
+                            {{#if (eq this.aspectsMaximised false)}}{{else}}
                             {{#if this.owner}}
                             <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
                                 <option disabled="disabled" selected="selected">{{localize 'ModularFate.PickASkill'}}</option>
@@ -83,8 +102,10 @@
                             </select>
                             {{/if}}
                             {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; font-style:normal; font-size:small" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:Montserrat; font-size:small; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
+                            {{/if}}
                         </td>
                         <td>
+                            {{#if (eq this.aspectsMaximised false)}}{{else}}
                                 <table style="border:none; font-size:small; font-family:Montserrat; padding:2px">
                                     {{#each this.actor.data.data.aspects}}
                                     <tr style="border-bottom:1px; border-bottom:groove">
@@ -96,12 +117,14 @@
                                     </tr>    
                             {{/each}}
                         </table>
+                        {{/if}}
                         </td>
                     </tr>
                     {{/if}}
                     {{/if}}
                     {{/each}}
                 </table>
+                </div>
             </div><!--End Aspects tab--------------------------------------->
             
             <!--------BEGIN Tracks tab-->
@@ -113,6 +136,9 @@
                         <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
                     {{/each}}
                 </select> {{#if GM}}<button type="button" style="width:50px; height:auto;" id="clear_fleeting">{{localize 'ModularFate.Clear'}}</button> {{localize 'ModularFate.AllFleetingTracks'}}{{/if}}
+                <br>
+                <button type="button" style="width:25px; height:25px; border:none" name="maximiseTracks" id="maximiseAllTracks" title="{{localize 'ModularFate.MaximiseAll'}}" i icon class="fas fa-expand"></button>
+                <button type="button" style="width:25px; height:25px; border:none" name="minimiseTracks" id="minimiseAllTracks" title="{{localize 'ModularFate.MinimiseAll'}}" i icon class="fas fa-compress"></button>
                 <div id="fu_tracks_tab" style="background-color:beige; overflow-y:auto; max-height:800px">
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}
@@ -120,9 +146,11 @@
                     <table style="padding:10px; border-top:none; border-bottom:none">{{/if}}
                     <tr style="border-top:2px black solid">
                         <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold">
+                            <button type="button" style="width:25px; height:25px; border:none" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand" title="{{localize 'ModularFate.Maximise'}}" {{else}}i icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{/if}}></button>
                             {{this.name}}
                         </td>
                     </tr>
+                {{#if (eq this.tracksMaximised false)}}{{else}}
                 {{#each this.actor.data.data.tracks}}
                 {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
@@ -141,6 +169,7 @@
                 {{/if}}
                 {{/if}}<!--end-->
                 {{/each}}<!--end all_tracks each-->
+                {{/if}}
                 </table>
                 {{/if}}
                 {{/each}}<!--ENd all_tokens each-->
@@ -150,9 +179,11 @@
                 <table style="padding:10px; border-top:none; border-bottom:none">{{/if}}
                     <tr style="border-top:2px black solid">
                         <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:small; font-family:Montserrat; font-weight:bold;">
+                            <button type="button" style="width:25px; height:25px; border:none" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand"{{else}}i icon class="fas fa-compress"{{/if}}></button>
                             {{this.name}}
                         </td>
                     </tr>
+                {{#if (eq this.tracksMaximised false)}}{{else}}
                 {{#each this.actor.data.data.tracks}}
                 {{#if (category ../../category this.category)}}{{#if this.enabled}}
                 <tr>
@@ -171,6 +202,7 @@
                 {{/if}}
                 {{/if}}<!--end-->
                 {{/each}}<!--end all_tracks each-->
+                {{/if}} <!--end maximised test if-->
                 </table>
                 {{/if}}
                 {{/if}}

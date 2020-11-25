@@ -36,6 +36,37 @@ class FateUtilities extends Application{
             }
         });
 
+        const iseAspects = html.find("button[name='iseAspects']");
+        iseAspects.on("click", event => this.iseAspect(event, html));
+
+        const maximiseAspects = html.find("button[id='maximiseAllAspects']");
+        const minimiseAspects = html.find("button[id='minimiseAllAspects']");
+
+        maximiseAspects.on("click", event => {
+            canvas.tokens.placeables.forEach(token => token.aspectsMaximised = true);
+            this.render(false);
+        })
+
+        minimiseAspects.on("click", event => {
+            canvas.tokens.placeables.forEach(token => token.aspectsMaximised = false);
+            this.render(false);
+        })
+
+        const maximiseTracks = html.find("button[id='maximiseAllTracks']");
+        const minimiseTracks = html.find("button[id='minimiseAllTracks']");
+
+        maximiseTracks.on("click", event => {
+            canvas.tokens.placeables.forEach(token => token.tracksMaximised = true);
+            this.render(false);
+        })
+
+        minimiseTracks.on("click", event => {
+            canvas.tokens.placeables.forEach(token => token.tracksMaximised = false);
+            this.render(false);
+        })
+
+        const iseTracks = html.find("button[name='iseTracks']");
+        iseTracks.on("click", event => this.iseTrack(event, html));
 
         const tokenName = html.find("td[class='tName']");
         tokenName.on("dblclick", event => this.tokenNameChange(event, html));
@@ -115,6 +146,30 @@ class FateUtilities extends Application{
             this.selectingSkill = false;
             this.render(false);
         })
+    }
+
+    async iseAspect(event, html){
+        let token = canvas.tokens.placeables.find(token => token.id == event.target.id.split("_")[0]);
+        if (token.aspectsMaximised == true || token.aspectsMaximised == undefined){
+            token.aspectsMaximised = false;
+        }else {
+            if (token.aspectsMaximised == false){
+                token.aspectsMaximised = true;
+            }
+        }
+        await this.render(false);
+    }
+
+    async iseTrack(event, html){
+        let token = canvas.tokens.placeables.find(token => token.id == event.target.id.split("_")[0]);
+        if (token.tracksMaximised == true || token.tracksMaximised == undefined){
+            token.tracksMaximised = false;
+        }else {
+            if (token.tracksMaximised == false){
+                token.tracksMaximised = true;
+            }
+        }
+        await this.render(false);
     }
 
     async tokenNameChange(event, html){

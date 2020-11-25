@@ -1,4 +1,8 @@
 {
+    "ModularFate.Maximise":"Maximise",
+    "ModularFate.Minimise":"Minimise",
+    "ModularFate.MaximiseAll":"Maximise All",
+    "ModularFate.MinimiseAll":"Minimise All",
     "ModularFate.Aspects":"Aspects",
     "ModularFate.Edit":"Edit",
     "ModularFate.Delete":"Delete",
