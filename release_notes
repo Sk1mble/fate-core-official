@@ -1,3 +1,6 @@
+# Version 2.0.2
+  Amended the size of the column for aspect names in Fate Utilities to be a percentage rather than a fixed value so it resizes with the Fate Utilities window.
+
 # Version 2.0.1
   Added the ability to collapse and expand the view of aspects and/or tracks in Fate Utilities to make it easier to focus on specific characters of interest at a given moment.
   This is stored PER SESSION, so you can close and re-open Fate Utilities and the expansion settings will persist, but these will be lost upon refreshing the browser or restarting Foundry.
