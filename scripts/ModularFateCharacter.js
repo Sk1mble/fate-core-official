@@ -17,7 +17,12 @@ Handlebars.registerHelper("category", function(category1, category2) {
 })
 
 Handlebars.registerHelper("expanded", function (actor, item){
-    let key = actor._id + item;
+    let key;
+    if (actor == "game"){
+        key = "game"+item;
+    } else {
+        key = actor._id + item;
+    }
 
     if (game.user.expanded != undefined){
         return game.user.expanded[key]==true;

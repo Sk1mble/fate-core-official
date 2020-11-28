@@ -88,6 +88,37 @@ class FateUtilities extends Application{
             this.render(false);
         })
 
+        const expandGameAspectNotes = html.find("button[name='FUexpandGameAspect']");
+        expandGameAspectNotes.on("click", event => {
+            console.log("clicked")
+            let details = event.target.id.split("_");
+            let aspect = details[1];
+            let key = "game"+aspect;
+        
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const FUGameAspectNotes = html.find("textarea[name='FUGameAspectNotesText']");
+        FUGameAspectNotes.on("change", event => {
+            let details = event.target.id.split("_");
+            let aspectName = details[1];
+            let aspects = duplicate(game.settings.get("ModularFate", "gameAspects"));
+            let aspect = aspects.find(a => a.name == aspectName);
+            aspect.notes = event.target.value;
+            game.settings.set("ModularFate","gameAspects",aspects);
+            game.socket.emit("system.ModularFate",{"render":true});
+        });
+
+        
         const expandTrackNotes = html.find("button[name='FUexpandTrack']");
         
         expandTrackNotes.on("click", event => {
@@ -207,6 +238,75 @@ class FateUtilities extends Application{
             let actor = token.actor;
             actor.update({[`data.tracks.${track}.notes`]:event.target.value});
         });
+
+        const game_date_time = html.find(("textarea[id='game_date_time']"));
+        game_date_time.on("change", event => {
+            game.settings.set("ModularFate", "gameTime", event.target.value);
+            game.socket.emit("system.ModularFate",{"render":true});
+        })
+
+        const game_notes = html.find(("div[id='game_notes']"));
+
+        game_notes.on("focus", event => {
+            this.editing=true;
+        })
+
+        game_notes.on("blur", event => {
+            game.settings.set("ModularFate", "gameNotes", event.target.innerHTML);
+            game.socket.emit("system.ModularFate",{"render":true});
+            this.editing = false;
+        })
+
+        const add_game_aspect = html.find("button[id='add_game_aspect']")
+        add_game_aspect.on("click", event => this._add_game_aspect(event, html));
+
+        //Situation Aspect Buttons
+        const del_game_aspect = html.find("button[name='del_game_aspect']");
+        del_game_aspect.on("click", event => this._del_game_aspect(event, html));
+        //name="game_a_free_i" id="{{this.name}}_ga_free_invokes"
+        const game_a_free_i = html.find("input[name='game_a_free_i']");
+        game_a_free_i.on("change", event => this._game_a_free_i_button(event, html));
+    }
+
+    async _del_game_aspect(event, html){
+        let del =   ModularFateConstants.confirmDeletion();
+        if (del){
+            let id = event.target.id;
+            name = id.split("_")[1];
+            let game_aspects = duplicate(game.settings.get("ModularFate", "gameAspects"));
+            game_aspects.splice(game_aspects.findIndex(sit => sit.name == name),1);
+            await game.settings.set("ModularFate","gameAspects",game_aspects);
+            game.socket.emit("system.ModularFate",{"render":true});
+            this.render(false);
+        }
+    }
+
+    async _add_game_aspect(event, html){
+        const game_aspect = html.find("input[id='game_aspect']");
+        let game_aspects = [];
+        let aspect = {
+                                    "name":game_aspect[0].value,
+                                    "free_invokes":0,
+                                    "notes":""
+                                };
+        try {
+            game_aspects = duplicate(game.settings.get("ModularFate","gameAspects"));
+        } catch {
+        }                                
+        game_aspects.push(aspect);
+        await game.settings.set("ModularFate","gameAspects",game_aspects);
+        game.socket.emit("system.ModularFate",{"render":true});
+        this.render(false);
+    }
+
+    async _game_a_free_i_button(event,html){
+        let name=event.target.id.split("_")[0];
+        let value=html.find(`input[id="${name}_ga_free_invokes"]`)[0].value
+        let game_aspects = duplicate(game.settings.get("ModularFate","gameAspects"));
+        let aspect = game_aspects[game_aspects.findIndex(gam => gam.name == name)];
+        aspect.free_invokes = value;
+        await game.settings.set("ModularFate","gameAspects",game_aspects);
+        game.socket.emit("system.ModularFate",{"render":true});
     }
 
     async iseAspect(event, html){
@@ -859,6 +959,11 @@ async getData(){
     }
     data.rolls = rolls;
     data.user = game.user;
+    let aspects = game.settings.get("ModularFate","gameAspects");
+    await ModularFateConstants.sort_name(aspects);
+    data.game_aspects = aspects;
+    data.game_time = game.settings.get("ModularFate","gameTime");
+    data.game_notes = game.settings.get("ModularFate","gameNotes");
     return data;
 }
 

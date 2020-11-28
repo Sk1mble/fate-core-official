@@ -434,7 +434,7 @@ Hooks.once('init', async function () {
         config:false,
         type:String,
         restricted:true,
-        default:false,
+        default:""
     })
     
     game.settings.register("ModularFate", "gameNotes", {
@@ -443,7 +443,7 @@ Hooks.once('init', async function () {
         config:false,
         type:String,
         restricted:true,
-        default:false,
+        default:""
     })
 
     game.settings.register("ModularFate", "gameAspects", {
@@ -452,6 +452,6 @@ Hooks.once('init', async function () {
         config:false,
         type:Object,
         restricted:true,
-        default:false,
+        default:[]
     })
 });
