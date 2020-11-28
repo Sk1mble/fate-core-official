@@ -16,6 +16,16 @@ Handlebars.registerHelper("category", function(category1, category2) {
     }
 })
 
+Handlebars.registerHelper("expanded", function (actor, item){
+    let key = actor._id + item;
+
+    if (game.user.expanded != undefined){
+        return game.user.expanded[key]==true;
+    } else {
+        return false;
+    }
+});
+
 Handlebars.registerHelper("hasBoxes", function(track) {
     if(track.box_values==undefined || track.box_values.length==0){
         return false;
@@ -94,7 +104,8 @@ export class ModularFateCharacter extends ActorSheet {
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
             const track_name = html.find("div[name='track_name']");
-            track_name.on("click", event => this._on_track_name_click(event, html));
+            //Deprecated in favour of inline notes for tracks.
+            //track_name.on("click", event => this._on_track_name_click(event, html));
 
             const delete_stunt = html.find("button[name='delete_stunt']");
             delete_stunt.on("click", event => this._onDelete(event,html));
@@ -142,6 +153,91 @@ export class ModularFateCharacter extends ActorSheet {
 
             //const input = html.find("input");
             const input = html.find('input[type="text"], input[type="number"], textarea');
+
+            const expandAspect = html.find("button[name='expandAspect']");
+
+
+            expandAspect.on("click", event => {
+                let a = event.target.id.split("_")[0];
+                let aspect = this.actor.data.data.aspects[a];
+                let key = this.actor.id+aspect.name;
+        
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
+
+            const expandTrack = html.find("button[name='expandTrack']");
+
+            expandTrack.on("click", event => {
+                let t = event.target.id.split("_")[0];
+                let track = this.object.data.data.tracks[t];
+                let key = this.actor.id+track.name;
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
+
+            const expandStunt = html.find("button[name='expandStunt']");
+
+            expandStunt.on("click", event => {
+                let s = event.target.id.split("_")[0];
+                let stunt = this.object.data.data.stunts[s];
+                let key = this.actor.id+stunt.name;
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
+
+            const expandAllStunts = html.find("div[name='expandAllStunts']");
+            const compressAllStunts = html.find("div[name='compressAllStunts']")
+
+            expandAllStunts.on("click", event => {
+                let stunts = this.object.data.data.stunts;
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                for (let s in stunts){
+                    let key = this.actor.id+s;
+                    game.user.expanded[key] = true;
+                }
+                this.render(false);
+            })
+
+            compressAllStunts.on("click", event => {
+                let stunts = this.object.data.data.stunts;
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                for (let s in stunts){
+                    let key = this.actor.id+s
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
 
             input.on("focus", event => {
                 
@@ -622,6 +718,7 @@ export class ModularFateCharacter extends ActorSheet {
             this.first_run = false;
         }
 
+
         this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         this.freeStunts = game.settings.get("ModularFate", "freeStunts");
         const sheetData = await super.getData();
@@ -727,6 +824,7 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.track_categories = track_categories;
         sheetData.tracks = this.object.data.data.tracks;
         sheetData.stunts = this.object.data.data.stunts;
+
         return sheetData;
     }
 }

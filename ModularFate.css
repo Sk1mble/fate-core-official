@@ -118,45 +118,66 @@ button:hover {
   font-size:x-large; 
   padding: 25px; 
   float:left; 
-  background-color:gainsboro;
+  background-color:lightgray;
+  color:black;
 }
 
 .fu_item_2 {
   font-size:x-large; 
   padding: 25px; 
   float:left; 
-  background-color:beige;
+  background-color:lightgray;
+  color:black;
 }
 
 .fu_item_3 {
   font-size:x-large; 
   padding: 25px; 
   float:left; 
-  background-color:palegoldenrod
+  background-color:lightgray;
+  color:black;
 }
 
 .fu_item_4 {
   font-size:x-large; 
   padding: 25px; 
   float:left; 
-  background-color:lightgray
+  background-color:lightgray;
+  color:black;
+}
+
+.fu_item_5 {
+  font-size:x-large; 
+  padding: 25px; 
+  float:left; 
+  background-color:lightgray;
+  color:black;
 }
 
 
 .fu_item_1:not(.active){
-    box-shadow: inset 0px -6px 15px -6px grey;
+    box-shadow: inset 0px -6px 15px -6px black;
+    color:grey;
 }
 
 .fu_item_2:not(.active){
-  box-shadow: inset 0px -6px 15px -6px grey;
+  box-shadow: inset 0px -6px 15px -6px black;
+  color:grey;
 }
 
 .fu_item_3:not(.active){
-  box-shadow: inset 0px -6px 15px -6px grey;
+  box-shadow: inset 0px -6px 15px -6px black;
+  color:grey;
 }
 
 .fu_item_4:not(.active){
-  box-shadow: inset 0px -6px 15px -6px grey;
+  box-shadow: inset 0px -6px 15px -6px black;
+  color:grey;
+}
+
+.fu_item_5:not(.active){
+  box-shadow: inset 0px -6px 15px -6px black;
+  color:grey;
 }
 
 /* The container */

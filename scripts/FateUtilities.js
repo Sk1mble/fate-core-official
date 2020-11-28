@@ -68,6 +68,47 @@ class FateUtilities extends Application{
         const iseTracks = html.find("button[name='iseTracks']");
         iseTracks.on("click", event => this.iseTrack(event, html));
 
+        const expandAspectNotes = html.find("button[name='FUexpandAspect");
+        expandAspectNotes.on("click", event => {
+            let details = event.target.id.split("_");
+            let token_id = details[0];
+            let aspect = details[1];
+            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let key = token.actor.id+aspect;
+        
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandTrackNotes = html.find("button[name='FUexpandTrack']");
+        
+        expandTrackNotes.on("click", event => {
+            let details = event.target.id.split("_");
+            let token_id = details[0];
+            let track = details[1];
+            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let key = token.actor.id+track;
+        
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
         const tokenName = html.find("td[class='tName']");
         tokenName.on("dblclick", event => this.tokenNameChange(event, html));
         const popcornButtons = html.find("button[class='popcorn']");
@@ -86,7 +127,7 @@ class FateUtilities extends Application{
         const track_name = html.find("div[name='track_name']");
         const box = html.find("input[name='box']");
         box.on("click", event => this._on_click_box(event, html));
-        track_name.on("click", event => this._on_track_name_click(event, html));
+        //track_name.on("click", event => this._on_track_name_click(event, html));
         const track_aspect = html.find("input[name='track_aspect']");
         track_aspect.on("change", event => this._on_aspect_change(event, html));
 
@@ -146,6 +187,26 @@ class FateUtilities extends Application{
             this.selectingSkill = false;
             this.render(false);
         })
+
+        const FUAspectNotes = html.find("textarea[name ='FUAspectNotesText']");
+        FUAspectNotes.on("change", event => {
+            let details = event.target.id.split("_");
+            let token_id = details[0];
+            let aspect = details[1];
+            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let actor = token.actor;
+            actor.update({[`data.aspects.${aspect}.notes`]:event.target.value});
+        });
+
+        const FUTrackNotesText = html.find("textarea[name ='FUTrackNotesText']");
+        FUTrackNotesText.on("change", event => {
+            let details = event.target.id.split("_");
+            let token_id = details[0];
+            let track = details[1];
+            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let actor = token.actor;
+            actor.update({[`data.tracks.${track}.notes`]:event.target.value});
+        });
     }
 
     async iseAspect(event, html){
@@ -616,6 +677,7 @@ class FateUtilities extends Application{
     async _on_track_name_click(event, html) {
         // Launch a simple application that returns us some nicely formatted text.
         //First, get the token
+        console.log(event.target.id)
         let token_id = event.target.id;
         let token = canvas.tokens.placeables.find(t => t.id==token_id);
         let tracks = duplicate(token.actor.data.data.tracks);
@@ -686,7 +748,7 @@ class FateUtilities extends Application{
         options.title = game.i18n.localize("ModularFate.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
-        options.scrollY=["#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_rolls_tab", "#fu_aspects_pane", "#fu_scene_notes_pane"]
+        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_rolls_tab", "#fu_aspects_pane", "#fu_scene_notes_pane"]
 
         mergeObject(options, {
             tabs: [

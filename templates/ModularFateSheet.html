@@ -106,12 +106,13 @@
                                 <div title="{{localize 'ModularFate.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_player_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
                             </div>
                             <div name="tracks_body" id="tracks_body" style="scrollbar-width:thin">
+                                {{#each tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}} 
                                 <div class="mfate-tracks__list">
-                                    {{#each tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}}
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
-                                            <div name="track_name" style="font-family:Montserrat" title="Click here to edit the track notes for {{this.name}}">
-                                                <i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i>
+                                            <div name="track_name" style="font-family:Montserrat">
+                                                <button type="button" name="expandTrack" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></button>
+                                                <i style="font-style:normal; font-weight:bold; font-family: Montserrat; padding-left:5px">{{this.name}}</i>
                                             </div>
                                         </div>
                                         <!-- CHECKBOXES-->
@@ -148,10 +149,12 @@
                                             {{/if}}
                                         </div>
                                     </div>
-                                    {{/if}}{{/if}}{{/each}}
                                 </div>
-                            </div>
+                                {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} Notes:</div><textarea class="cs_box mfate-tracks-notes__input" type="text" name="data.tracks.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
+                                {{/if}}{{/if}}                                
+                                {{/each}}
                             <!--end of tracks body-->
+                            </div>
                         </div>
                         <!--End of tracks block-->
 
@@ -159,7 +162,7 @@
                 </div>
             </div>
             <div class="mfate-sheet__column">
-                <div class="mfate-panel mfate-panel--aspects">
+                <div id="{{this.actor.id}}_aspects" class="mfate-panel mfate-panel--aspects">
                     <div class="mfate-panel__header">
                         <div class="mfate-panel__header-label">Aspects</div>
                         {{#if GM}}
@@ -167,14 +170,14 @@
                         {{/if}}
                     </div>
 
-                    <ul class="mfate-aspects-list">
+                    <ul class="mfate-aspects-list" id="aspects_body">
 
                         {{#each data.aspects}}
 
-                        <li name="aspect" title="{{this.description}}" class="mfate-aspects-list__item">
-                            <div id="{{this.name}}" name="{{this.name}}" class="mfate-aspects-list__label">{{this.name}}</div>
-                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea>
-
+                        <li name="aspect" class="mfate-aspects-list__item">
+                            <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
+                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
+                            {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} Notes:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
                         </li>
                         {{/each}}
                     </ul>
@@ -183,21 +186,23 @@
                 <div class="mfate-panel mfate-panel--stunts">
                     <div class="mfate-panel__header" name="stunts_header">
                         <b class="mfate-panel__header-label">{{localize 'ModularFate.Stunts'}}</b>
+                        <div class="i icon fas fa-expand mfate-panel__header-button" name="expandAllStunts" title="{{localize 'ModularFate.MaximiseAll'}}"></div>
+                        <div class="i icon fas fa-compress mfate-panel__header-button" name="compressAllStunts" title="{{localize 'ModularFate.MinimiseAll'}}"></div>
                         <div title="{{localize 'ModularFate.ViewTheStuntDatabase'}}" name="stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
                         <div class="fas fa-plus mfate-panel__header-button" title="{{localize 'ModularFate.AddANewStunt'}}" name="edit_player_stunts" i icon></div>
 
                     </div>
 
-                    <div name="stunts_block" class="stunts-block">
+                    <div name="stunts_block" class="stunts-block" id="stunts_body">
                         <!--Begin the stunts block-->
-
-                        <div name="stunts_body mfate-stunts__body" id="stunts_body">
+                        <div name="stunts_body mfate-stunts__body">
                             <div class="mfate-stunts__table">
                                 {{#each stunts}}
                                 <div class="mfate-stunts__row">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">
-                                            {{this.name}} ({{this.linked_skill}})
+                                            <button type="button" name="expandStunt" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></button>
+                                            <i style="font-style:normal; padding-left:5px">{{this.name}} ({{this.linked_skill}})</i>
                                             {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_stunt" id="{{this.name}}_delete"></button> 
                                             {{/if}}
@@ -210,6 +215,7 @@
                                             {{else}}{{/if}}
                                         </div>
                                     </div>
+                                    {{#unless (expanded ../this.actor this.name)}}{{else}}
                                     <div class="mfate-stunts__row-body">
                                         <div>{{{this.description}}}</div>
                                     </div>
@@ -222,6 +228,7 @@
                                             <b id="Defend">D</b>{{/if}}
                                         </div>
                                     </div>
+                                    {{/unless}}
                                 </div>
                                 {{/each}}
                                 </table>

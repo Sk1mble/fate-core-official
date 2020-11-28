@@ -407,6 +407,11 @@
     max-height:25px;
 }
 
+.mfate-aspects-notes__input {
+    font-size: 11px;
+    min-height:75px;
+    max-height:500px;
+}
 
 /* Tracks list */
 
@@ -434,10 +439,18 @@
     display: table-cell;
 }
 
+.mfate-tracks-notes__input {
+    font-size: 11px;
+    min-height:75px;
+    max-height:500px;
+    width: 100%;
+}
+
 .mfate-tracks__item-label {
     display: table-cell;
     vertical-align: top;
     padding: 8px 0;
+    width:50%;
 }
 
 .mfate-tracks__boxes {

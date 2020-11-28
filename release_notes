@@ -1,5 +1,8 @@
 # Version 2.0.2
   Amended the size of the column for aspect names in Fate Utilities to be a percentage rather than a fixed value so it resizes with the Fate Utilities window.
+  Ditto size of the character names in the roll history tab.
+  You can now add and edit aspect notes from the character sheet and Fate Utilities.
+  You can now and and eddit track notes directly on the character sheet/Fate Utilities without a separate pop-up dialogue.
 
 # Version 2.0.1
   Added the ability to collapse and expand the view of aspects and/or tracks in Fate Utilities to make it easier to focus on specific characters of interest at a given moment.

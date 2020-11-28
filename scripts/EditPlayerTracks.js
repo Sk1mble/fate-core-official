@@ -456,7 +456,7 @@ class EditPlayerTracks extends FormApplication {
             <tr>
                 <td>
                     ${game.i18n.localize("ModularFate.AspectWhenMarked")}:<br>
-                    ${game.i18n.localize("ModularFate.NameAAspect?")}:<br>
+                    ${game.i18n.localize("ModularFate.NameAsAspect?")}:<br>
                     ${game.i18n.localize("ModularFate.Boxes")}:<br>
                     ${game.i18n.localize("ModularFate.Box_Label")}:<br>
                     ${game.i18n.localize("ModularFate.Harm")}:

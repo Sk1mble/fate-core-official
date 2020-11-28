@@ -1,4 +1,9 @@
 {
+    "ModularFate.GameTime":"Game time and date",
+    "ModularFate.GameNotes":"Game notes",
+    "ModularFate.gameAspects":"Game Aspects",
+    "ModularFate.NameAsAspect?":"Name As Aspect?",
+    "ModularFate.GameInformation":"Game Information",
     "ModularFate.Maximise":"Maximise",
     "ModularFate.Minimise":"Minimise",
     "ModularFate.MaximiseAll":"Maximise All",

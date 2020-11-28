@@ -379,7 +379,6 @@ Hooks.once('init', async function () {
     if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
             game.settings.set("ModularFate","refreshTotal",3);
     }
-    //Register a setting for the game's Issues?
 
     game.settings.register("ModularFate","confirmDeletion", {
         name: game.i18n.localize("ModularFate.ConfirmDeletionName"),
@@ -427,5 +426,32 @@ Hooks.once('init', async function () {
                 game.settings.set("ModularFate","importSettings",false);
             }
         }
+    })
+
+    game.settings.register("ModularFate", "gameTime", {
+        name: game.i18n.localize("ModularFate.GameTime"),
+        scope:"world",
+        config:false,
+        type:String,
+        restricted:true,
+        default:false,
+    })
+    
+    game.settings.register("ModularFate", "gameNotes", {
+        name: game.i18n.localize("ModularFate.GameNotes"),
+        scope:"world",
+        config:false,
+        type:String,
+        restricted:true,
+        default:false,
+    })
+
+    game.settings.register("ModularFate", "gameAspects", {
+        name: game.i18n.localize("ModularFate.GameTime"),
+        scope:"world",
+        config:false,
+        type:Object,
+        restricted:true,
+        default:false,
     })
 });
