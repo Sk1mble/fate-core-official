@@ -197,7 +197,15 @@ class FateUtilities extends Application{
         refresh_fate_points.on("click", event => this.refresh_fate_points(event, html));    
 
         const avatar = html.find("img[name='avatar']");
-        avatar.on("click", event=> this._on_avatar_click(event,html));
+        avatar.on("contextmenu", event=> this._on_avatar_click(event,html));
+        
+        avatar.on("click", event => {
+            let t_id = event.target.id.split("_")[0];
+            let token = canvas.tokens.placeables.find(t => t.id == t_id);
+            const sheet = token.actor.sheet;
+            sheet.render(true, {token: token});
+            sheet.maximize();
+        })
 
         const fu_clear_rolls = html.find("button[id='fu_clear_rolls']");
         fu_clear_rolls.on("click", event => this._fu_clear_rolls(event, html));

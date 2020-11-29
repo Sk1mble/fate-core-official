@@ -116,7 +116,7 @@
                                         <td width="25%" style="vertical-align:top"><button type="button" name="FUexpandAspect" style="width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandAspect"></button><b style="padding:5px">{{this.name}}:</b>
                                         </td>
                                         <td>
-                                            {{this.value}}:
+                                            {{this.value}}
                                             {{#if (expanded ../this.actor this.name)}}
                                             : {{localize 'ModularFate.Notes'}}<br><textarea style="background-color:white; font-size:small; font-family:Montserrat; border-top:none; border-right:none; min-height:75px; border-left:none; border-bottom:1px lightsteelblue solid" type="text" {{#if (lt ../this.actor.permission 3)}}disabled="disabled"{{else}}{{/if}} name="FUAspectNotesText" id="{{../this.id}}_{{this.name}}_FUAspectNotes">{{this.notes}}</textarea>
                                             {{else}}{{/if}}
