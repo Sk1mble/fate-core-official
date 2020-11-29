@@ -1,3 +1,6 @@
+# Version 2.0.3
+  Layout tweaks and added a couple of localisation strings.
+  
 # Version 2.0.2
   Amended the size of the column for aspect names in Fate Utilities to be a percentage rather than a fixed value so it resizes with the Fate Utilities window.
   Ditto size of the character names in the roll history tab.
