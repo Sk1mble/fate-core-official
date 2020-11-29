@@ -150,7 +150,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} Notes:</div><textarea class="cs_box mfate-tracks-notes__input" type="text" name="data.tracks.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
+                                {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-tracks-notes__input" type="text" name="data.tracks.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
                                 {{/if}}{{/if}}                                
                                 {{/each}}
                             <!--end of tracks body-->
@@ -177,7 +177,7 @@
                         <li name="aspect" class="mfate-aspects-list__item">
                             <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
-                            {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} Notes:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
+                            {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
                         </li>
                         {{/each}}
                     </ul>

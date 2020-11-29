@@ -90,7 +90,6 @@ class FateUtilities extends Application{
 
         const expandGameAspectNotes = html.find("button[name='FUexpandGameAspect']");
         expandGameAspectNotes.on("click", event => {
-            console.log("clicked")
             let details = event.target.id.split("_");
             let aspect = details[1];
             let key = "game"+aspect;

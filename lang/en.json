@@ -1,5 +1,7 @@
 {
     "ModularFate.GameTime":"Game time and date",
+    "ModularFate.Notes":"Notes",
+    "ModularFate.DateAndTimeNotes":"Date and Time Notes",
     "ModularFate.GameNotes":"Game notes",
     "ModularFate.gameAspects":"Game Aspects",
     "ModularFate.NameAsAspect?":"Name As Aspect?",
