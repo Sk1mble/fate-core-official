@@ -1,3 +1,6 @@
+# Version 2.0.5
+  Confirmed functional with 0.7.8 and incremented version number in System.json
+  
 # Version 2.0.4
   Changed behaviour of clicking on avatars in Fate Utilities. 
   Clicking on the avatar now opens the character sheet.
