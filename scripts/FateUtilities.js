@@ -23,17 +23,25 @@ class FateUtilities extends Application{
     activateListeners(html) {
         super.activateListeners(html);
         const input = html.find('input[type="text"], input[type="number"], textarea');
+
+        input.on("keyup", event => {
+            if (event.keyCode === 13 && event.target.type != "textarea") {
+                input.blur();
+            }
+        })
+
         input.on("focus", event => {
             if (this.editing == false) {
                 this.editing = true;
             }
         });
-        input.on("blur", event => {
-            this.editing = false; 
-            if (this.renderBanked){
+
+       input.on("blur", event => {
+           if (this.renderBanked){
                 this.renderBanked = false;
                 this.render(false);
             }
+            this.editing = false;
         });
 
         const iseAspects = html.find("button[name='iseAspects']");
@@ -117,7 +125,17 @@ class FateUtilities extends Application{
             game.socket.emit("system.ModularFate",{"render":true});
         });
 
-        
+        const gameAspect = html.find("input[name='game_aspect']");
+        gameAspect.on("change", event => {
+            let aspectName = event.target.id.split("_")[0];
+            let aspects = duplicate(game.settings.get("ModularFate", "gameAspects"));
+            let aspect = aspects.find(a => a.name == aspectName);
+            aspect.name = event.target.value;
+            game.settings.set("ModularFate","gameAspects",aspects);
+            game.socket.emit("system.ModularFate",{"render":true});
+        })
+
+
         const expandTrackNotes = html.find("button[name='FUexpandTrack']");
         
         expandTrackNotes.on("click", event => {
@@ -183,6 +201,9 @@ class FateUtilities extends Application{
         const free_i = html.find("input[name='free_i']");
         free_i.on("change", event => this._free_i_button(event, html));
 
+        const sit_aspect = html.find("input[name='sit_aspect']");
+        sit_aspect.on("change", event => this._sit_aspect_change(event, html));
+
         const scene_notes = html.find("div[id='scene_notes']");
         scene_notes.on("focus", event => this.scene_notes_edit(event, html));
         scene_notes.on("blur", event => this._notesFocusOut(event,html));
@@ -214,6 +235,7 @@ class FateUtilities extends Application{
         fu_roll_button.on("click",event => this._fu_roll_button(event, html));
 
         const select = html.find("select[class='skill_select']");
+
         select.on("focus", event => {
             this.selectingSkill = true;
         });
@@ -275,6 +297,15 @@ class FateUtilities extends Application{
         game_a_free_i.on("change", event => this._game_a_free_i_button(event, html));
     }
 
+    async _sit_aspect_change(event, html){
+        let index = event.target.id.split("_")[0];
+        let aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
+        let aspect = aspects[index];
+        aspect.name = event.target.value;
+        game.scenes.viewed.setFlag("ModularFate", "situation_aspects",aspects);
+        game.socket.emit("system.ModularFate",{"render":true});
+    }
+
     async _del_game_aspect(event, html){
         let del =   ModularFateConstants.confirmDeletion();
         if (del){
@@ -292,7 +323,7 @@ class FateUtilities extends Application{
         const game_aspect = html.find("input[id='game_aspect']");
         let game_aspects = [];
         let aspect = {
-                                    "name":game_aspect[0].value,
+                                    "name":"",
                                     "free_invokes":0,
                                     "notes":""
                                 };
@@ -341,9 +372,7 @@ class FateUtilities extends Application{
     }
 
     async tokenNameChange(event, html){
-        console.log(event.target.id)
         let t_id = event.target.id.split("_")[0];
-        console.log(t_id)
         let token = canvas.tokens.placeables.find(token => token.id==t_id);
         if (token != undefined){
             let name = await ModularFateConstants.updateShortText(game.i18n.localize("ModularFate.whatShouldTokenNameBe"),token.data.name);
@@ -629,10 +658,11 @@ class FateUtilities extends Application{
     }
 
     async _free_i_button(event,html){
-        let name=event.target.id.split("_")[0];
-        let value=html.find(`input[id="${name}_free_invokes"]`)[0].value
+        let index=event.target.id.split("_")[0];
+        let value=html.find(`input[id="${index}_free_invokes"]`)[0].value
         let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"))
-        let aspect = situation_aspects[situation_aspects.findIndex(sit => sit.name == name)];
+        let aspect = situation_aspects[index];
+        let name = aspect.name;
         aspect.free_invokes = value;
         game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
         //Done: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
@@ -653,7 +683,8 @@ class FateUtilities extends Application{
     }
 
     async _panToAspect(event, html){
-        let name=event.target.id.split("_")[1];
+        let index=event.target.id.split("_")[1];
+        let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
         let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
         
         if (drawing != undefined) {
@@ -664,8 +695,9 @@ class FateUtilities extends Application{
     }
 
     async _addToScene(event, html){
-        let name=event.target.id.split("_")[1];
-        let value=html.find(`input[id="${name}_free_invokes"]`)[0].value;
+        let index=event.target.id.split("_")[1];
+        let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
+        let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
 
         if (canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name))==undefined)
         {
@@ -705,9 +737,10 @@ class FateUtilities extends Application{
         let del =   ModularFateConstants.confirmDeletion();
         if (del){
             let id = event.target.id;
-            name = id.split("_")[1];
+            let index = id.split("_")[1];
             let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate", "situation_aspects"));
-            situation_aspects.splice(situation_aspects.findIndex(sit => sit.name == name),1);
+            let name = situation_aspects[index].name;
+            situation_aspects.splice(index,1);
             game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
         
             //If there's a note on the scene for this aspect, delete it
@@ -719,10 +752,9 @@ class FateUtilities extends Application{
     }
 
     async _add_sit_aspect(event, html){
-        const sit_aspect = html.find("input[id='sit_aspect']");
         let situation_aspects = [];
         let situation_aspect = {
-                                    "name":sit_aspect[0].value,
+                                    "name":"",
                                     "free_invokes":0
                                 };
         try {
@@ -784,14 +816,12 @@ class FateUtilities extends Application{
     async _on_track_name_click(event, html) {
         // Launch a simple application that returns us some nicely formatted text.
         //First, get the token
-        console.log(event.target.id)
         let token_id = event.target.id;
         let token = canvas.tokens.placeables.find(t => t.id==token_id);
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[event.target.innerHTML]
         let notes = track.notes;
         let text =  await ModularFateConstants.updateText(game.i18n.localize("ModularFate.TrackNotes"), notes);
-        console.log(text)
         token.actor.update({
             [`data.tracks.${event.target.innerHTML}.notes`]: text
         })
@@ -976,7 +1006,7 @@ async getData(){
 
 async render (...args){
     if (this.editing == false && (this.selectingSkill == false || this.selectingSkill == undefined)){
-          await super.render(...args);
+        await super.render(...args);
     } else {
         this.renderBanked = true;
     }

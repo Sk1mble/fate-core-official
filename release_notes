@@ -1,3 +1,7 @@
+# Version 2.0.6
+  Situation and Game Aspects in Fate Utilities are now editable and the workflow of creating them has been altered to solve a bug with aspects not being created due to timing of renders etc.
+  Hitting return on an input field (but not a text area or contenteditable DIV) will now save out the data and unfocus the field.
+
 # Version 2.0.5
   Confirmed functional with 0.7.8 and incremented version number in System.json
   

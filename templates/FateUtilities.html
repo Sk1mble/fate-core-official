@@ -1,4 +1,4 @@
-<form style="background-color:white" onsubmit="event.preventDefault();">
+<form id="FateUtilities" style="background-color:white" onsubmit="event.preventDefault();">
 <nav class="navigation foo">
     <a class="item fu_item_1" data-tab="aspects"><b title="{{localize 'ModularFate.AspectsFatePoints'}}" i icon class="fas fa-theater-masks"></b></a>
     <a class="item fu_item_2" data-tab="tracks"><b title="{{localize 'ModularFate.CharacterTracks'}}" i icon class="fas fa-user-injured"></b></a>
@@ -226,22 +226,20 @@
             <!----------------------------------------------------------------------BEGIN SCENE TAB-->
             <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:lightgray; overflow-y:auto; max-height:950px; padding:10px">
                     <h1>{{localize 'ModularFate.SituationAspects'}}</h1>
-                    {{#if GM}}<i style="font-style:normal; font-family:Montserrat;">{{localize 'ModularFate.Aspect'}}:</i> <input type="text" id="sit_aspect" style="width:500px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
-                    {{/if}}
-                    {{#if GM}}<button type="button" id="add_sit_aspect" style="width:30px; height:30px;"i icon class="fas fa-plus"></button>{{/if}}
+                    {{#if GM}}<button type="button" id="add_sit_aspect" style="width:200px; height:30px;">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
                     <div style="overflow-y:auto; max-height:400px;" id="fu_aspects_pane">
                     <table style="border:none;">
                         {{#each situation_aspects}}
                             <tr>
                                 <td width = "300px" style="font-family:Montserrat">
-                                    <div name="sit_aspect">{{this.name}}</div>
+                                    <div><input name="sit_aspect" type="text" value="{{this.name}}" id="{{@key}}_sit_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:250px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input></div>
                                 </td>
                                 <td>
-                                    <input type="number" name="free_i" id="{{this.name}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
+                                    <input type="number" name="free_i" id="{{@key}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:50px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
                                     {{#if ../GM}}
-                                    <button type="button" name="addToScene" id="addToScene_{{this.name}}" title="{{localize 'ModularFate.AddAspectToMap'}}" style="width:35px; height:35px" i icon class="fas fa-sticky-note"></button>
-                                    <button type="button" name="panToAspect" id="panToAspect_{{this.name}}" title="{{localize 'ModularFate.PanToAspect'}}" style="width:35px; height:35px" i icon class="fas fa-search-location"></button>
-                                    <button type="button" name="del_sit_aspect" id="delete_{{this.name}}" title="{{localize 'ModularFate.DeleteAspect'}}" style="width:35px; height:35px" i icon class="fas fa-trash"></button>
+                                    <button type="button" name="addToScene" id="addToScene_{{@key}}" title="{{localize 'ModularFate.AddAspectToMap'}}" style="width:35px; height:35px" i icon class="fas fa-sticky-note"></button>
+                                    <button type="button" name="panToAspect" id="panToAspect_{{@key}}" title="{{localize 'ModularFate.PanToAspect'}}" style="width:35px; height:35px" i icon class="fas fa-search-location"></button>
+                                    <button type="button" name="del_sit_aspect" id="delete_{{@key}}" title="{{localize 'ModularFate.DeleteAspect'}}" style="width:35px; height:35px" i icon class="fas fa-trash"></button>
                                     {{/if}}
                                 </td>
                             </tr> 
@@ -353,14 +351,13 @@
                     <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:800px;">
                         <!--Game Aspects-->
                         <h2>{{localize 'ModularFate.gameAspects'}}</h1>
-                        {{#if GM}}<i style="font-style:normal; font-family:Montserrat;">{{localize 'ModularFate.Aspect'}}:</i> <input type="text" id="game_aspect" style="width:500px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
-                        {{/if}}
-                        {{#if GM}}<button type="button" id="add_game_aspect" style="width:30px; height:30px;"i icon class="fas fa-plus"></button>{{/if}}
+                        
+                        {{#if GM}}<button type="button" id="add_game_aspect" style="width:200px; height:30px;">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
                         <table style="border:none;">
                             {{#each game_aspects}}
                                 <tr>
                                     <td width = "50%" style="font-family:Montserrat; vertical-align:top">
-                                        <button type="button" name="FUexpandGameAspect" style="vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button><i style="font-style:normal; padding:5px">{{this.name}}{{#if (expanded "game" this.name)}}: {{localize 'ModularFate.Notes'}}{{/if}}</i>
+                                        <button type="button" name="FUexpandGameAspect" style="vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button><input name="game_aspect" type="text" value="{{this.name}}" id="{{this.name}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:90%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>{{#if (expanded "game" this.name)}} <br>{{localize 'ModularFate.Notes'}}:{{/if}}</i>
                                     </td>
                                     <td>
                                         <input type="number" name="game_a_free_i" id="{{this.name}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>

@@ -257,6 +257,12 @@ export class ModularFateCharacter extends ActorSheet {
                     this.render(false);
                 }
             });
+
+            input.on("keyup", event => {
+                if (event.keyCode === 13 && event.target.type != "textarea") {
+                    input.blur();
+                }
+            })
         }
         super.activateListeners(html);
     }
