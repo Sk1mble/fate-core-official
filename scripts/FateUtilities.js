@@ -474,6 +474,9 @@ class FateUtilities extends Application{
         if (action == "reroll"){
             let r = new Roll ("4dF");
             let r2 = r.roll();
+            r2.toMessage({
+                flavor: `<h1>${game.i18n.localize("ModularFate.FreeRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
+            });
             let oldDiceValue = 0;
             for (let i = 0; i< 4; i++){
                 oldDiceValue += roll.dice[i]
@@ -545,6 +548,9 @@ class FateUtilities extends Application{
                     user.setFlag("ModularFate","gmfatepoints",fps-1);
                     let r = new Roll ("4dF");
                     let r2 = r.roll();
+                    r2.toMessage({
+                        flavor: `<h1>${game.i18n.localize("ModularFate.PaidRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
+                    });
                     let oldDiceValue = 0;
                     for (let i = 0; i< 4; i++){
                         oldDiceValue += roll.dice[i]
@@ -1189,7 +1195,7 @@ Hooks.on('renderCombatTracker', () => {
 
 Hooks.on('createChatMessage', (message) => {
     // We're only interested if this is a chat message with a roll in it
-    if (message.data.roll == undefined){
+    if (message.data.roll == undefined || message?.data?.flavor?.startsWith("<h1>Reroll")){
         return;
     }
 

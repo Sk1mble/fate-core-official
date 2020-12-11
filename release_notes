@@ -1,3 +1,6 @@
+# Version 2.0.7
+  Rerolls from Fate Utilities now make a chat message appear. This means that Dice So NIce now shows for rerolls, and also you can see the exact value of rerolls in the chat history if that's something you need.
+
 # Version 2.0.6
   Situation and Game Aspects in Fate Utilities are now editable and the workflow of creating them has been altered to solve a bug with aspects not being created due to timing of renders etc.
   Hitting return on an input field (but not a text area or contenteditable DIV) will now save out the data and unfocus the field.
