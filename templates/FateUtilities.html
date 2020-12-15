@@ -176,7 +176,7 @@
                     <td width="25%" style="vertical-align:top">
                         <button type="button" name="FUexpandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></button><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br> <span style="padding-left:27px">{{localize 'ModularFate.Notes'}}:</span>{{/if}}</div>
                     </td>
-                    <td>
+                    <td style="vertical-align:top">
                         {{#each this.box_values}}
                         {{#if this}}                        
                         <label class="box"><input type="checkbox" name = "box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
@@ -212,7 +212,7 @@
                     <td width="25%" style="vertical-align:top">
                         <button type="button" name="FUexpandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></button><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br><span style="padding-left:27px">{{localize 'ModularFate.Notes'}}:</span>{{/if}}</div>
                     </td>
-                    <td>
+                    <td style="vertical-align:top">
                         {{#each this.box_values}}
                         {{#if this}}                        
                         <label class="box"><input type="checkbox" name = "box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}} style="opacity:0;width:25px; height:25px; float:left;" checked="checked"><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
