@@ -111,7 +111,7 @@
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
                                             <div name="track_name" style="font-family:Montserrat">
-                                                <button type="button" name="expandTrack" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></button>
+                                                <button type="button" name="expandTrack" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></button>
                                                 <i style="font-style:normal; font-weight:bold; font-family: Montserrat; padding-left:5px">{{this.name}}</i>
                                             </div>
                                         </div>
@@ -150,7 +150,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-tracks-notes__input" type="text" name="data.tracks.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
+                                {{#if (expanded ../this.actor (concat this.name '_track'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-tracks-notes__input" type="text" name="data.tracks.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
                                 {{/if}}{{/if}}                                
                                 {{/each}}
                             <!--end of tracks body-->
@@ -175,9 +175,9 @@
                         {{#each data.aspects}}
 
                         <li name="aspect" class="mfate-aspects-list__item">
-                            <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
+                            <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this.name '_aspect'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
-                            {{#if (expanded ../this.actor this.name)}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
+                            {{#if (expanded ../this.actor (concat this.name '_aspect'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
                         </li>
                         {{/each}}
                     </ul>
@@ -201,7 +201,7 @@
                                 <div class="mfate-stunts__row">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">
-                                            <button type="button" name="expandStunt" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></button>
+                                            <button type="button" name="expandStunt" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this.name '_stunt'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></button>
                                             <i style="font-style:normal; padding-left:5px">{{this.name}} ({{this.linked_skill}})</i>
                                             {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_stunt" id="{{this.name}}_delete"></button> 
@@ -215,7 +215,7 @@
                                             {{else}}{{/if}}
                                         </div>
                                     </div>
-                                    {{#unless (expanded ../this.actor this.name)}}{{else}}
+                                    {{#unless (expanded ../this.actor (concat this.name '_stunt'))}}{{else}}
                                     <div class="mfate-stunts__row-body">
                                         <div>{{{this.description}}}</div>
                                     </div>

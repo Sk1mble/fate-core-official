@@ -165,7 +165,7 @@ export class ModularFateCharacter extends ActorSheet {
             expandAspect.on("click", event => {
                 let a = event.target.id.split("_")[0];
                 let aspect = this.actor.data.data.aspects[a];
-                let key = this.actor.id+aspect.name;
+                let key = this.actor.id+aspect.name+"_aspect";
         
                 if (game.user.expanded == undefined){
                     game.user.expanded = {};
@@ -184,7 +184,8 @@ export class ModularFateCharacter extends ActorSheet {
             expandTrack.on("click", event => {
                 let t = event.target.id.split("_")[0];
                 let track = this.object.data.data.tracks[t];
-                let key = this.actor.id+track.name;
+                let key = this.actor.id+track.name+"_track";
+                console.log(key);
                 if (game.user.expanded == undefined){
                     game.user.expanded = {};
                 }
@@ -202,7 +203,7 @@ export class ModularFateCharacter extends ActorSheet {
             expandStunt.on("click", event => {
                 let s = event.target.id.split("_")[0];
                 let stunt = this.object.data.data.stunts[s];
-                let key = this.actor.id+stunt.name;
+                let key = this.actor.id+stunt.name+"_stunt";
                 if (game.user.expanded == undefined){
                     game.user.expanded = {};
                 }
@@ -225,7 +226,7 @@ export class ModularFateCharacter extends ActorSheet {
                 }
 
                 for (let s in stunts){
-                    let key = this.actor.id+s;
+                    let key = this.actor.id+s+"_stunt";
                     game.user.expanded[key] = true;
                 }
                 this.render(false);
@@ -238,7 +239,7 @@ export class ModularFateCharacter extends ActorSheet {
                 }
 
                 for (let s in stunts){
-                    let key = this.actor.id+s
+                    let key = this.actor.id+s+"_stunt";
                     game.user.expanded[key] = false;
                 }
                 this.render(false);

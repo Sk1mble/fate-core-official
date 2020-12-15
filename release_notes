@@ -1,3 +1,11 @@
+# Version 2.0.8
+  Fixed error that appeared when making a change to tokens etc. when the stunt database window was open.
+  Set Aspect width to a percentage rather than a fixed value in Fate Utilities to make it easier to see the full aspect text.
+  Clicking to expand or contract a stunt, aspect or track on character sheet no longer expands/contracts an aspect, stunt or track with the same name
+  Changing the name of a situation aspect with a notecard on the scene now changes the aspect text on the notecard.
+  Layout improvements to various tables in Fate Utilities
+  Deleting a situation aspect with a blank name now doesn't delete the first drawing found (false positive searching for a picture with title containing "")
+
 # Version 2.0.7
   Rerolls from Fate Utilities now make a chat message appear. This means that Dice So NIce now shows for rerolls, and also you can see the exact value of rerolls in the chat history if that's something you need.
 

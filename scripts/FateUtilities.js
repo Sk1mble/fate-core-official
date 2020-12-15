@@ -82,7 +82,7 @@ class FateUtilities extends Application{
             let token_id = details[0];
             let aspect = details[1];
             let token = canvas.tokens.placeables.find(t => t.id == token_id);
-            let key = token.actor.id+aspect;
+            let key = token.actor.id+aspect+"_aspect";
         
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
@@ -143,7 +143,7 @@ class FateUtilities extends Application{
             let token_id = details[0];
             let track = details[1];
             let token = canvas.tokens.placeables.find(t => t.id == token_id);
-            let key = token.actor.id+track;
+            let key = token.actor.id+track+"_track";
         
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
@@ -301,7 +301,29 @@ class FateUtilities extends Application{
         let index = event.target.id.split("_")[0];
         let aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
         let aspect = aspects[index];
+
+        let drawing = undefined;
+        if (aspect.name != "") {
+            drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(aspect.name));
+        }
+        
         aspect.name = event.target.value;
+        let value = aspect.free_invokes;
+
+        if (drawing != undefined){
+            let text;
+            if (value == 1){
+                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
+            } else {
+                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
+            }
+            drawing.update({
+                "text":text,
+                width: text.length*20,
+                fontFamily: "Modesto Condensed",
+            });
+        }
+
         game.scenes.viewed.setFlag("ModularFate", "situation_aspects",aspects);
         game.socket.emit("system.ModularFate",{"render":true});
     }
@@ -310,7 +332,7 @@ class FateUtilities extends Application{
         let del =   ModularFateConstants.confirmDeletion();
         if (del){
             let id = event.target.id;
-            name = id.split("_")[1];
+            let name = id.split("_")[1];
             let game_aspects = duplicate(game.settings.get("ModularFate", "gameAspects"));
             game_aspects.splice(game_aspects.findIndex(sit => sit.name == name),1);
             await game.settings.set("ModularFate","gameAspects",game_aspects);
@@ -750,7 +772,11 @@ class FateUtilities extends Application{
             game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
         
             //If there's a note on the scene for this aspect, delete it
-            let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
+            let drawing = undefined;
+            
+            if (name !="") {
+                canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
+            }
             if (drawing != undefined){
                 drawing.delete();
             }

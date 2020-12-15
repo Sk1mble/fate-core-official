@@ -126,9 +126,8 @@ class StuntDB extends Application {
 
     constructor(actor){
         super();
-        game.system.apps["actor"].push(this);
         this.actor=actor;
-    }
+    }    
 
     async getData(){
         if (this.sort == undefined){
@@ -156,6 +155,7 @@ class StuntDB extends Application {
         options.title = game.i18n.localize("ModularFate.StuntDatabase");
         options.id = "StuntDB";
         options.resizable = false;
+        options.scrollY = ["#stunts_db"]
         return options; 
     } 
 
