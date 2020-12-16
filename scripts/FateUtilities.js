@@ -945,7 +945,7 @@ async getData(){
         let has_acted = [];
         let tokenId = undefined;
         c.forEach(comb => {
-                tokenId= comb.token._id;
+                tokenId= comb?.token?._id;
                 let foundToken = undefined;
                 let hidden = false;
                 let hasActed = false;
@@ -953,25 +953,29 @@ async getData(){
                 if (tokenId != undefined){
                     foundToken = canvas.tokens.placeables.find(val => {return val.id == tokenId;})
                 }
+
+                if (foundToken == undefined){
+                    return;
+                }
+
+                if (comb.defeated){
+                    hidden = true;
+                }
+
                 if ((comb.hidden || foundToken.data.hidden) && !game.user.isGM){
                     hidden = true;
-                } else {
-                }
-                if (foundToken != undefined){
-                    //There is no token for this actor in the conflict; it probably means the token has been deleted from the scene. We need to ignore this actor. Easiest way to do that is to leave hasActed as true.
-                        hasActed = foundToken.getFlag("ModularFate","hasActed");                       
-                    } else {
-                        hidden = true;
-                    }
+                } 
 
-                    if ((hasActed == undefined || hasActed == false) && hidden == false){
-                        tokens.push(foundToken)
+                hasActed = foundToken.getFlag("ModularFate","hasActed");                       
+                
+                if ((hasActed == undefined || hasActed == false) && hidden == false){
+                    tokens.push(foundToken)
+                }
+                else {
+                    if (hasActed == true && hidden == false){
+                        has_acted.push(foundToken);
                     }
-                    else {
-                        if (hasActed == true && hidden == false){
-                            has_acted.push(foundToken);
-                        }
-                    }
+                }
         })
         ModularFateConstants.sort_key(has_acted,"name");
         ModularFateConstants.sort_key(tokens,"name");

@@ -1,3 +1,8 @@
+# Version 2.0.9
+  Deleting a token that has been enrolled in a conflict from the scene without also deleting the combatant no longer cause Fate Utilities to stop working.
+  Combatants that have been marked as defeated in the combat tracker are no longer shown in the FU conflict tracker.
+  This doesn't work if you set the token as dead, unconscious etc. from the status effects from the token as this does NOT set the 'defeated' flag on the token.
+
 # Version 2.0.8
   Fixed error that appeared when making a change to tokens etc. when the stunt database window was open.
   Set Aspect width to a percentage rather than a fixed value in Fate Utilities to make it easier to see the full aspect text.
