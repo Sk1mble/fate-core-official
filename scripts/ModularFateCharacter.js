@@ -8,6 +8,10 @@ Handlebars.registerHelper("str", function(value) {
     return JSON.stringify(value);
 });
 
+Handlebars.registerHelper("concat", function(value1, value2){
+    return value1.concat(value2);
+});
+
 Handlebars.registerHelper("category", function(category1, category2) {
     if (category1 == "All" || category1 == category2){
         return true;

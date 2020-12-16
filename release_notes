@@ -1,3 +1,6 @@
+# Version 2.1.0
+  Bug fix; added the concat handlebars helper (this was in a module on my system so I didn't realise it wouldn't work for everybody)
+
 # Version 2.0.9
   Deleting a token that has been enrolled in a conflict from the scene without also deleting the combatant no longer cause Fate Utilities to stop working.
   Combatants that have been marked as defeated in the combat tracker are no longer shown in the FU conflict tracker.
