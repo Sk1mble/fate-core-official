@@ -189,7 +189,7 @@ export class ModularFateCharacter extends ActorSheet {
                 let t = event.target.id.split("_")[0];
                 let track = this.object.data.data.tracks[t];
                 let key = this.actor.id+track.name+"_track";
-                console.log(key);
+            
                 if (game.user.expanded == undefined){
                     game.user.expanded = {};
                 }
@@ -547,19 +547,19 @@ export class ModularFateCharacter extends ActorSheet {
     }
     
     async initialise() {
-
+        
         // Logic to set up Refresh and Current
 
         let refresh = game.settings.get("ModularFate", "refreshTotal");
         
         let working_data = duplicate(this.object.data);
 
-        if (working_data.data.details.fatePoints.refresh == "") {
+        if (working_data.data.details.fatePoints.refresh === "") {
             this.newCharacter = true;
             working_data.data.details.fatePoints.refresh = refresh;
             working_data.data.details.fatePoints.current = refresh;
         }
-
+        
         // Replace any plusTwo values on this character's stunts with a +2 bonus.
         
         for (let s in working_data.data.stunts){
@@ -614,7 +614,7 @@ export class ModularFateCharacter extends ActorSheet {
             //Now to store the aspect list to the character
             working_data.data.aspects = player_aspects;
         }
-
+        
         if (this.newCharacter) {
             //Step one, get the list of universal tracks.
             let world_tracks = duplicate(game.settings.get("ModularFate", "tracks"));
@@ -718,6 +718,7 @@ export class ModularFateCharacter extends ActorSheet {
                 }
             }
         }
+        
         await this.actor.update(working_data)
         if (this.newCharacter) {
             let e = new EditPlayerSkills(this.actor);
