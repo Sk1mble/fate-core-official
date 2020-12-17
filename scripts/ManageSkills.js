@@ -105,6 +105,32 @@ Hooks.once('init', async function () {
             }
     });
 
+    game.settings.register("ModularFate","stunts", {
+        name: "Stunts Database",
+        hint:"A list of approved stunts that can be added to characters",
+        scope:"world",
+        config:false,
+        type:Object
+    })
+
+    let skill_choices = {};
+    let skills = game.settings.get("ModularFate", "skills")
+    
+    skill_choices["None"]="None";
+    for (let skill in skills){skill_choices[skill]=skill};
+
+    game.settings.register("ModularFate","init_skill", {
+        name:"Initiative Skill",
+        hint:"This skill's rank is each character's initiative score.",
+        "scope":"world",
+        "config":true,
+        "restricted":true,
+        type:String,
+        default:"None",
+        choices:skill_choices
+    })
+
+
     // Register the menu to setup the world's skill list.
     game.settings.registerMenu("ModularFate", "SkillSetup", {
         name: game.i18n.localize("ModularFate.SetupSkills"),

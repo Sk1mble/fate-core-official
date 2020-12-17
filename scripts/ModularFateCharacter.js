@@ -1134,3 +1134,12 @@ Hooks.on('updateToken',(scene, tokenData, aData) => {
         }
     }
 })
+
+Combat.prototype._getInitiativeFormula = function (combatant) {
+    let init_skill = game.settings.get("ModularFate","init_skill");
+    if (init_skill === "None") {
+        return "0";
+    }else {
+        return combatant.actor.data.data.skills[`${init_skill}`].rank.toString();
+    }
+}

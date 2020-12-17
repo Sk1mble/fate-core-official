@@ -302,14 +302,6 @@ Hooks.on('updateScene', (...args) => {
 
 Hooks.once('init', async function () {
 
-    game.settings.register("ModularFate","stunts", {
-        name: "Stunts Database",
-        hint:"A list of approved stunts that can be added to characters",
-        scope:"world",
-        config:false,
-        type:Object
-    })
-
     game.settings.register("ModularFate","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",
         hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",

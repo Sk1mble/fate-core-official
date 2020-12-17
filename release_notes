@@ -1,5 +1,6 @@
 # Version 2.1.1
-  Bug fox; if (working_data.data.details.fatePoints.refresh == "") resolved to true when refresh set to 0, causing the system to treat new tokens created with 0 refresh as new actors, and thus initialise their character sheets on dropping the token on the board.
+  Bug fix; if (working_data.data.details.fatePoints.refresh == "") resolved to true when refresh set to 0, causing the system to treat new tokens created with 0 refresh as new actors, and thus initialise their character sheets on dropping the token on the board.
+  Added a setting for an initiative skill. If this is set, the combat tracker will set character's initiative value to the chosen skill when you 'roll' initiative.
 
 # Version 2.1.0
   Bug fix; added the concat handlebars helper (this was in a module on my system so I didn't realise it wouldn't work for everybody)
