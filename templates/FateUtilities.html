@@ -1,4 +1,4 @@
-<form id="FateUtilities" style="background-color:white" onsubmit="event.preventDefault();">
+<form id="FateUtilities" style="background-color:lightgrey" onsubmit="event.preventDefault();">
 <nav class="navigation foo">
     <a class="item fu_item_1" data-tab="aspects"><b title="{{localize 'ModularFate.AspectsFatePoints'}}" i icon class="fas fa-theater-masks"></b></a>
     <a class="item fu_item_2" data-tab="tracks"><b title="{{localize 'ModularFate.CharacterTracks'}}" i icon class="fas fa-user-injured"></b></a>
@@ -15,7 +15,7 @@
             <div id="fu_aspects_tab" class="tab aspects" data-tab="aspects" style="padding:10px">
                 <button type="button" style="width:25px; height:25px; background-color:Transparent; border:none" name="maximiseAspects" id="maximiseAllAspects" title="{{localize 'ModularFate.MaximiseAll'}}" i icon class="fas fa-expand"></button>
                 <button type="button" style="width:25px; height:25px; background-color:Transparent; border:none" name="minimiseAspects" id="minimiseAllAspects" title="{{localize 'ModularFate.MinimiseAll'}}" i icon class="fas fa-compress"></button>
-            <div id="aspects" name = "aspects"  style="background-color:lightgray; overflow-y:auto; max-height:800px">                
+            <div id="aspects" name = "aspects"  style="background-color:lightgray; overflow-y:auto; max-height:72vh">                
                 <table style="font-size:small; border:none;">
                     {{#each GMUsers}}
                     <tr style="border-top:2px black solid">
@@ -158,7 +158,7 @@
                 <br>
                 <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="maximiseTracks" id="maximiseAllTracks" title="{{localize 'ModularFate.MaximiseAll'}}" i icon class="fas fa-expand"></button>
                 <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="minimiseTracks" id="minimiseAllTracks" title="{{localize 'ModularFate.MinimiseAll'}}" i icon class="fas fa-compress"></button>
-                <div id="fu_tracks_tab" style="background-color:lightgray; overflow-y:auto; max-height:800px">
+                <div id="fu_tracks_tab" style="background-color:lightgray; overflow-y:auto; max-height:72vh">
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}
                 {{#if (eq this._controlled true)}} <table style="padding:10px; border-top:none; border-bottom:none; background-color:lightsteelblue">{{else}}
@@ -236,10 +236,10 @@
         </div><!--End tracks tab-------------------------------->
 
             <!----------------------------------------------------------------------BEGIN SCENE TAB-->
-            <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:lightgray; overflow-y:auto; max-height:950px; padding:10px">
+            <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:lightgray; overflow-y:auto; max-height:72vh; padding:10px">
                     <h1>{{localize 'ModularFate.SituationAspects'}}</h1>
                     {{#if GM}}<button type="button" id="add_sit_aspect" style="width:200px; height:30px;">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
-                    <div style="overflow-y:auto; max-height:400px;" id="fu_aspects_pane">
+                    <div style="overflow-y:auto; max-height:35vh;" id="fu_aspects_pane">
 
                         {{#each situation_aspects}}
                             <div style="font-family:Montserrat; padding-top:10px; display:flex; flex-direction:row; align-items:center">
@@ -261,7 +261,7 @@
                     
                     </div>
                     <h1>{{localize 'ModularFate.SceneNotesTitle'}}</h1>
-                    <div style="overflow-y:auto; max-height:300px; font-family:Montserrat;" id="fu_scene_notes_pane">
+                    <div style="min-height:250px;  overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane; max-height:32vh">
                         <div {{#if GM}} class="contenteditable" contenteditable="true"{{else}}{{/if}} id="scene_notes" style="padding:5px; border-left:none; min-height:250px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                     </div>                
             </div><!--End Scene tab---------------------------------------------------->
@@ -270,7 +270,7 @@
              <!----------------------BEGIN Roll History Tab-->
              <div name = "rolls" class="tab rolls" data-tab="rolls" style="background-color:lightgray; font-family:Montserrat; padding-top:10px">
                 {{#if GM}}<button type="button" id="fu_clear_rolls">{{localize 'ModularFate.ClearAllRolls'}}</button>{{/if}}
-                <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:800px">
+                <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:72vh">
                 <table style="background:none">
                 <tr>
                     <th style="border:2px solid black; font-weight:bold; text-align:left">
@@ -361,13 +361,13 @@
              <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="background-color:lightgray; font-family:Montserrat; padding:10px">
                 <h2 style="vertical-align:top">{{localize 'ModularFate.DateAndTimeNotes'}}</h1>
                 <textarea id="game_date_time" style="background-color:white; font-size:small; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid" type="text">{{this.game_time}}</textarea>
-                    <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:800px;">
+                    <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:72vh;">
                         <!--Game Aspects-->
                         <h2>{{localize 'ModularFate.gameAspects'}}</h1>
                         
                         {{#if GM}}<button type="button" id="add_game_aspect" style="width:200px; height:30px;">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
 
-                        <div>
+                        <div style="max-height:18vh; overflow-y:auto">
                             {{#each game_aspects}}
                             <div style="padding-top: 10px; font-family:Montserrat; display: flex; flex-direction: row; align-items:center">
                                 <button type="button" name="FUexpandGameAspect" style="vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button>
@@ -391,7 +391,9 @@
                         </div>
                         <!--Game notes-->
                         <h2 style="vertical-align:top">{{localize 'ModularFate.GameNotes'}}</h1>
-                            <div {{#if GM}}class="contenteditable" contenteditable="true"{{else}}{{/if}} id="game_notes" style="border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; min-height:250px; padding:5px">{{{this.game_notes}}}</div>
+                            <div style="max-height:45vh; overflow-y:auto;">
+                                <div {{#if GM}}class="contenteditable" contenteditable="true"{{else}}{{/if}} id="game_notes" style="border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; min-height:250px; padding:5px">{{{this.game_notes}}}</div>
+                            </div>
                     </div><!--End of game info tab container pane-->
              </div><!--End game information tab-->
 
