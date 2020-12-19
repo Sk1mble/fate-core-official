@@ -1085,7 +1085,7 @@ Hooks.on('updateToken',(scene, tokenData, aData) => {
     else {
         if (aData.actorData != undefined){
 
-            let items = actor.data.items;
+            let items = actor.items;
             if (!shouldUpdate(actor)){
                 return;
             } else {

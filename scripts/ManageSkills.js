@@ -120,8 +120,8 @@ Hooks.once('init', async function () {
     for (let skill in skills){skill_choices[skill]=skill};
 
     game.settings.register("ModularFate","init_skill", {
-        name:"Initiative Skill",
-        hint:"This skill's rank is each character's initiative score.",
+        name:game.i18n.localize("ModularFate.initiativeSkill"),
+        hint:game.i18n.localize("ModularFate.initiativeSetting"),
         "scope":"world",
         "config":true,
         "restricted":true,

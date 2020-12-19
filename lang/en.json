@@ -1,4 +1,6 @@
 {
+    "ModularFate.initiativeSetting":"This skill's rank is each character's initiative score. Leave on 'None' if you use Elective Action Order.",
+    "ModularFate.initiativeSkill":"Initiative Skill",
     "ModularFate.GameTime":"Game time and date",
     "ModularFate.Notes":"Notes",
     "ModularFate.DateAndTimeNotes":"Date and Time Notes",
