@@ -1,3 +1,6 @@
+# Version 2.1.4
+  Bugfix; deleting a situation aspect wasn't deleting the related note from the scene.
+
 # Version 2.1.3
   Tweaked some settings in Fate Utilities to make the size of elements relative to the viewport height.
 

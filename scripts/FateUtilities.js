@@ -773,9 +773,9 @@ class FateUtilities extends Application{
         
             //If there's a note on the scene for this aspect, delete it
             let drawing = undefined;
-            
+
             if (name !="") {
-                canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
+                drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
             }
             if (drawing != undefined){
                 drawing.delete();
