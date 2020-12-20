@@ -1,3 +1,7 @@
+# Version 2.1.5
+  Significantly improved performance when adding or deleting an extra that contains stunts, tracks, skills etc. by disabling sheet re-renders caused by updates until all additions or deletions have been processed by the database engine.
+  Further improved by making all updates happen in one chunk rather than multiple separate updates.
+
 # Version 2.1.4
   Bugfix; deleting a situation aspect wasn't deleting the related note from the scene.
 
