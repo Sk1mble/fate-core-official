@@ -383,15 +383,11 @@ class EditGMSkills extends FormApplication{
     async _confirm(event,html){
 
         let actor=undefined;
+        let updateObject = {};
         for (let s in this.player_skills){
             let cbox = html.find(`input[id="${s}"]`)[0];
             if (cbox != undefined && !cbox.checked){
-                // This skill needs to be deleted from the list.
-                //THIS WON'T WORK FOR TOKEN ACTORS unless you also delete the skill from the 
-                //real actor being represented by the token actor. This is just the way Foundry works
-                //with synthetic actors. 
-                let sk = `-=${s}`
-                await this.object.update({"data.skills": {[`${sk}`]:null}})
+                updateObject[`data.skills.-=${s}`] = null;
             }
         } 
         
@@ -403,10 +399,11 @@ class EditGMSkills extends FormApplication{
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
                     skill.rank=0;
-                    await this.object.update({"data.skills":{[w]:skill}})
+                    updateObject[`data.skills.${w}`] = skill;
                 }
             }
-        }    
+        }
+        await this.object.update(updateObject)    
         this.close();
     }
 

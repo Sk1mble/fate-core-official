@@ -1139,7 +1139,6 @@ Hooks.on('updateToken', async (scene, tokenData, aData) => {
             }
         }
     }
-    actor.sheet.updating = false;
 })
 
 Combat.prototype._getInitiativeFormula = function (combatant) {

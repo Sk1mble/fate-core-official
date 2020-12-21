@@ -1,3 +1,6 @@
+# Version 2.1.6
+  Using a trick I learned from @Moo Man (Thanks!), adding or removing a batch of skills from a character is now completed in a single update rather than one per skill.
+  
 # Version 2.1.5
   Significantly improved performance when adding or deleting an extra that contains stunts, tracks, skills etc. by disabling sheet re-renders caused by updates until all additions or deletions have been processed by the database engine.
   Further improved by making all updates happen in one chunk rather than multiple separate updates.

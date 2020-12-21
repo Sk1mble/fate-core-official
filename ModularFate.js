@@ -113,7 +113,7 @@ async function importFateCharacter(actor) {
             actorData.type="ModularFate"
             actorData.data.details.fatePoints = duplicate(actorData.data.details.points)
             delete actorData.data.details.points;
-            //console.log(actorData);
+
             await actor.update({"data.aspects":"-=null"})
             await actor.update(actorData)
 }
