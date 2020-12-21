@@ -562,10 +562,24 @@
 
 /* Secondary panel */
 
+.mfate-description {
+    min-height:20%;
+    flex:1;
+    margin-bottom: 10px;
+}
+
+.mfate-biography {
+    min-height:20%;
+    flex:1;
+    margin-bottom: 10px;
+}
+
 .mfate-description__content,
 .mfate-biography__content,
 .mfate-extras__content {
-    margin: 10px;
+    height:75%;
+    margin:10px;
+    overflow-y:auto;
 }
 
 .mfate-extras {
@@ -574,6 +588,8 @@
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
+    margin-bottom:10px;
+    min-height:20%;
 }
 
 .mfate-extras__content {
