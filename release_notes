@@ -1,3 +1,6 @@
+# Version 2.1.8
+  Moved the expand/collapse all extras buttons to the right of the bar and changed the colour of the 'add extra' plus to match the other buttons in the menu bar.
+
 # Version 2.1.7
   Adjusted the scaling of the biography etc. panel on the Modular Fate character sheet so that the biography and description tabs can be scrolled on exceeding the space allowed rather than forcing extras off the bottom of the sheet.
   Added ability to expand and collapse individual extras and all of a character's extras at once (per session setting; will be cleared on refresh)
