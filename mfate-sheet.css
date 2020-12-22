@@ -245,6 +245,7 @@
     display: none;
     flex-direction: column;
     padding: 0 1em;
+    padding: 0 6px;
 }
 
 
@@ -279,9 +280,8 @@
     position: relative;
     overflow: hidden;
     min-height: 30px;
-    margin-top: 0;
     border-radius: 15px;
-    margin-top: 1em;
+    margin-top: 10px;
 }
 
 .mfate-panel__header-select {
@@ -563,33 +563,52 @@
 /* Secondary panel */
 
 .mfate-description {
-    min-height:20%;
-    flex:1;
+    display:flex;
+    flex-direction:column;
+    flex-grow:2;
+    flex-shrink:1;
+    min-height:10%;
     margin-bottom: 10px;
 }
 
 .mfate-biography {
-    min-height:20%;
-    flex:1;
+    display:flex;
+    flex-direction:column;
+    flex-grow:2;
+    flex-shrink:1;
+    min-height:10%;
     margin-bottom: 10px;
+}
+
+.mfate-biography-collapsed {
+    height:2.5rem;
+}
+
+.mfate-description-collapsed {
+    height:2.5rem;
 }
 
 .mfate-description__content,
 .mfate-biography__content,
 .mfate-extras__content {
-    height:75%;
+    flex-grow:2;
+    flex-shrink:1;
     margin:10px;
     overflow-y:auto;
 }
 
 .mfate-extras {
     flex-direction: column;
-    flex: 1;
     overflow-y: hidden;
     display: flex;
-    flex-direction: column;
     margin-bottom:10px;
-    min-height:20%;
+    flex-grow:3;
+    flex-shrink:1;
+    min-height:10%;
+}
+
+.mfate-extras-collapsed {
+    height:2.5rem;
 }
 
 .mfate-extras__content {
@@ -633,4 +652,5 @@
 .fate-extras__row-body-content {
     padding-bottom: 20px;
     font-family: Montserrat;
+    padding-left:30px;
 }

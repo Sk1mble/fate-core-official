@@ -220,6 +220,69 @@ export class ModularFateCharacter extends ActorSheet {
                 this.render(false);
             })
 
+            const expandExtra = html.find("button[name='expandExtra']");
+
+            expandExtra.on("click", event => {
+                let e_id = event.target.id.split("_")[0];
+                let key = this.actor.id+e_id+"_extra";
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
+
+            const expandExtraPane = html.find("div[name='expandExtrasPane']");
+            expandExtraPane.on("click", event=> {
+                let key = this.actor.id + "_extras";
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
+
+            const expandBiography = html.find("div[name='expandBiography']");
+            expandBiography.on("click", event => {
+                let key = this.actor.id + "_biography";
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
+
+            const expandDescription = html.find("div[name='expandDescription']");
+            expandDescription.on("click", event => {
+                let key = this.actor.id + "_description";
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
+            })
+
+
             const expandAllStunts = html.find("div[name='expandAllStunts']");
             const compressAllStunts = html.find("div[name='compressAllStunts']")
 
@@ -246,6 +309,33 @@ export class ModularFateCharacter extends ActorSheet {
                     let key = this.actor.id+s+"_stunt";
                     game.user.expanded[key] = false;
                 }
+                this.render(false);
+            })
+
+            const expandAllExtras = html.find("div[name='expandExtras']");
+            const compressAllExtras = html.find("div[name='compressExtras']")
+
+            expandAllExtras.on("click", event => {
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                this.actor.items.entries.forEach(item => {
+                    let key = this.actor.id+item._id+"_extra";
+                    game.user.expanded[key] = true;
+                })  
+                this.render(false);
+            })
+
+            compressAllExtras.on("click", event => {
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
+
+                this.actor.items.entries.forEach(item => {
+                    let key = this.actor.id+item._id+"_extra";
+                    game.user.expanded[key] = false;
+                })
                 this.render(false);
             })
 
@@ -735,6 +825,13 @@ export class ModularFateCharacter extends ActorSheet {
             this.first_run = false;
         }
 
+        if (game.user.expanded == undefined){
+                game.user.expanded = {};
+        }
+
+        if (game.user.expanded[this.actor.id+"_biography"] == undefined) game.user.expanded[this.actor.id+"_biography"] = true;
+        if (game.user.expanded[this.actor.id+"_description"] == undefined) game.user.expanded[this.actor.id+"_description"] = true;
+        if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
 
         this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         this.freeStunts = game.settings.get("ModularFate", "freeStunts");

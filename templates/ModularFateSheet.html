@@ -243,39 +243,44 @@
         </div>
 
         <div class="tab biography mfate-sheet__tab mfate-sheet__tab--secondary" id="biography_body" data-tab="biography">
-            <div class="mfate-description">
+            <div {{#if (expanded this.actor '_description')}}class="mfate-description"{{else}}class="mfate-description-collapsed"{{/if}}>
                 <div class="mfate-panel__header">
+                    <div {{#if (expanded this.actor '_description')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'ModularFate.Minimise'}}"{{else}}title="{{localize 'ModularFate.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandDescription""></div>
                     <div class="mfate-panel__header-label">{{localize 'ModularFate.Description'}}</div>
                 </div>
-                <div class="mfate-description__content long_text" id="{{this.actor._id}}_description" contenteditable="true" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div>
+                {{#if (expanded this.actor '_description')}}<div class="mfate-description__content long_text" id="{{this.actor._id}}_description" contenteditable="true" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div>{{/if}}
 
             </div>
-            <div class="mfate-biography">
-                <div class="mfate-panel__header">
-                    <div class="mfate-panel__header-label">Biography</div>
+            <div {{#if (expanded this.actor '_biography')}}class="mfate-biography"{{else}}class="mfate-biography-collapsed"{{/if}}>
+                <div class="mfate-panel__header">                        
+                        <div {{#if (expanded this.actor '_biography')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'ModularFate.Minimise'}}" {{else}}title="{{localize 'ModularFate.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandBiography" title="{{localize 'ModularFate.Maximise'}}"></div>
+                    <div class="mfate-panel__header-label">{{localize 'ModularFate.Biography'}}</div>
                 </div>
-                <div class="mfate-biography__content long_text" id="{{this.actor._id}}_biography" contenteditable="true" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>
+                {{#if (expanded this.actor '_biography')}}<div class="mfate-biography__content long_text" id="{{this.actor._id}}_biography" contenteditable="true" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
             </div>
-            <div class="mfate-extras">
+            {{#if (expanded this.actor '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}
                 <div class="mfate-panel__header">
                     <div class="mfate-panel__header-label">
-                        Extras
-                        <div title="{{localize 'ModularFate.AddANewExtra'}}" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="add_player_extra" i icon class="fas fa-plus"></div>
+                        <div {{#if (expanded this.actor '_extras')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'ModularFate.Minimise'}}" {{else}}title="{{localize 'ModularFate.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandExtrasPane" title="{{localize 'ModularFate.Maximise'}}"></div>
+                        {{#if (expanded this.actor '_extras')}}<div class="i icon fas fa-expand mfate-panel__header-button" name="expandExtras" title="{{localize 'ModularFate.MaximiseAll'}}"></div>{{/if}}
+                        {{#if (expanded this.actor '_extras')}}<div class="i icon fas fa-compress mfate-panel__header-button" name="compressExtras" title="{{localize 'ModularFate.MinimiseAll'}}"></div>{{/if}}
+                        {{localize 'ModularFate.Extras'}}
+                        {{#if (expanded this.actor '_extras')}}<div title="{{localize 'ModularFate.AddANewExtra'}}" style="font-size:medium; padding-left:10px; padding-right:10px; padding-top:5px; float:right" name="add_player_extra" i icon class="fas fa-plus"></div>{{/if}}
                     </div>
                 </div>
+                {{#if (expanded this.actor '_extras')}}
                 <div class="mfate-extras__content">
                     <div class="fate-extras__content-body" name="extras_body">
                         <div class="fate-extras__row">
                             {{#each items}}
                             <div name="item_header" draggable="true" id="{{../this.actor._id}}_{{this._id}}" data-item="{{str this}}">
                             <div class = "fate-extras__row-header">
-                                {{{this.name}}}
+                                <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this._id '_extra'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this._id}}_expandExtra"></button>&nbsp&nbsp{{{this.name}}}
                                 <button i icon class="fas fa-trash fate-extras__row-header-button" type="button" name="delete_extra" id="{{this._id}}"></button>
                                 <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button" id="{{this._id}}"></button>
                             </div>
-
                             <div class="fate-extras__row-body">
-                                <div class="fate-extras__row-body-content">{{{this.data.description.value}}}</div>
+                                        <div class="fate-extras__row-body-content">{{#unless (expanded ../this.actor (concat this._id '_extra'))}}{{else}}{{{this.data.description.value}}}{{/unless}}</div>
                             </div>
                         </div>
                             {{/each}}
@@ -283,6 +288,7 @@
                         </div>
                     </div>
                 </div>
+                {{/if}}
                 <!--End of Extras block-->
             </div>
             <!--End of bio tab-->

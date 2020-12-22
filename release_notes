@@ -1,6 +1,11 @@
+# Version 2.1.7
+  Adjusted the scaling of the biography etc. panel on the Modular Fate character sheet so that the biography and description tabs can be scrolled on exceeding the space allowed rather than forcing extras off the bottom of the sheet.
+  Added ability to expand and collapse individual extras and all of a character's extras at once (per session setting; will be cleared on refresh)
+  Added ability to expand and collapse the biography, extra and description panels on the ModularFate character sheet.
+
 # Version 2.1.6
   Using a trick I learned from @Moo Man (Thanks!), adding or removing a batch of skills from a character is now completed in a single update rather than one per skill.
-  
+
 # Version 2.1.5
   Significantly improved performance when adding or deleting an extra that contains stunts, tracks, skills etc. by disabling sheet re-renders caused by updates until all additions or deletions have been processed by the database engine.
   Further improved by making all updates happen in one chunk rather than multiple separate updates.
