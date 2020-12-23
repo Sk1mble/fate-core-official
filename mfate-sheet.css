@@ -566,7 +566,7 @@
     flex-direction:column;
     flex-grow:1;
     flex-shrink:1;
-    min-height:10%;
+    min-height:20%;
     margin-bottom: 10px;
 }
 
@@ -575,7 +575,7 @@
     flex-direction:column;
     flex-grow:1;
     flex-shrink:1;
-    min-height:10%;
+    min-height:20%;
     margin-bottom: 10px;
 }
 
