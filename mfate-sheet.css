@@ -564,7 +564,7 @@
 .mfate-description {
     display:flex;
     flex-direction:column;
-    flex-grow:2;
+    flex-grow:1;
     flex-shrink:1;
     min-height:10%;
     margin-bottom: 10px;
@@ -573,7 +573,7 @@
 .mfate-biography {
     display:flex;
     flex-direction:column;
-    flex-grow:2;
+    flex-grow:1;
     flex-shrink:1;
     min-height:10%;
     margin-bottom: 10px;
@@ -590,7 +590,7 @@
 .mfate-description__content,
 .mfate-biography__content,
 .mfate-extras__content {
-    flex-grow:2;
+    flex-grow:1;
     flex-shrink:1;
     margin:10px;
     overflow-y:auto;
@@ -601,9 +601,9 @@
     overflow-y: hidden;
     display: flex;
     margin-bottom:10px;
-    flex-grow:3;
+    flex-grow:1;
     flex-shrink:1;
-    min-height:10%;
+    min-height:33%;
 }
 
 .mfate-extras-collapsed {
