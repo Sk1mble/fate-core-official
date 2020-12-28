@@ -1,3 +1,21 @@
+# Version 2.2.0
+  Added a new system for managing Extras as tokens, including as containers for other extras. THIS IS ALMOST CERTAINLY INCOMPATIBLE WITH the module PICK-UP STIX.
+  There is a new setting to allow or disallow players from creating item tokens (Player Thing Token Creation) - leave this set to false if you don't want players to be able to create item tokens.
+  It's necessary for a GM to be logged in for players to be able to create item tokens or for a token representing a single item to be deleted once they've taken that item.
+  This was a fairly complex feature to implement and there may be bugs, especially in multi-GM environments. Please let me know if you encounter any issues!
+
+  ##How does this work?
+  * When you drag and drop an item to the scene, the system checks to see if a Thing (a new type of actor for Modular Fate) already exists of the same name.
+  * If it does, no new Thing is created, but a new token is created based on the existing Thing.
+  * This means that if you change an item after making a Thing for it, you'll need to delete the Thing (you'll find them in the ModularFate Things folder of your actors folder) and re-create it.
+  * The tool works this way to prevent a proliferation of Thing actors every time you create a new token on a scene for an extra.
+  * Thing tokens are unlinked. That means once they're on a scene you can change them as much as you like and no change will occur to the original actor or item.
+  * When you drag an item on to a Thing actor, it will be deleted from its original container whether that is an actor or another sheet. Likewise, when you drag an extra from one owned actor to another, the item will be deleted.
+  * You can override the deletion by clicking the item, then holding shift, then dragging the item to its destination. 
+  * Thing tokens are either items or containers. If they're an item they can only hold one extra and attempts to add more will fail. GMs can change them between items and containers as long as they have only one item in them.
+  * You can create Thing actors directly (for example to create a custom container without having to create an item first) from the actor creation menu by choosing the Thing character type.  
+  * Things that represent containers can have a separate image assigned; things representing items will use the contained item's image.
+
 # Version 2.1.8
   Moved the expand/collapse all extras buttons to the right of the bar and changed the colour of the 'add extra' plus to match the other buttons in the menu bar.
 

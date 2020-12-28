@@ -596,6 +596,14 @@
     overflow-y:auto;
 }
 
+.mthing-extras__content {
+    flex-grow:1;
+    flex-shrink:2;
+    margin:10px;
+    max-height:90%;
+    overflow-y:auto;
+}
+
 .mfate-extras {
     flex-direction: column;
     overflow-y: hidden;

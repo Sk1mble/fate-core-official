@@ -416,11 +416,19 @@ export class ModularFateCharacter extends ActorSheet {
         let item_id = info[1];
         let actor_id = info[0];
         let item = JSON.parse(event.target.getAttribute("data-item"));
+        let tokenId = undefined;
+        
+        if (this.actor?.token?.data?.actorLink === false){
+            tokenId = this.actor.token.id;
+        }
+
         let data = {
             "type":"Item",
                     "id":item_id,
                     "actorId":actor_id,
-                    "data":item
+                    "data":item,
+                    "tokenId":tokenId,
+                    "scene":game.scenes.viewed
                 }
         await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
     }
@@ -507,14 +515,14 @@ export class ModularFateCharacter extends ActorSheet {
     }
     async _on_extras_edit_click(event, html){
         let items = this.object.items;
-        let item = items.get(event.target.id);
+        let item = items.get(event.target.id.split("_")[0]);
         let e = new ExtraSheet(item);
         await e.render(true);
     }
     async _on_extras_delete(event, html){
         let del = await ModularFateConstants.confirmDeletion();
         if (del){
-            await this.actor.deleteOwnedItem(event.target.id);
+            await this.actor.deleteOwnedItem(event.target.id.split("_")[0]);
         }
     }
 
@@ -1111,11 +1119,17 @@ async function updateFromExtra(actor, itemData) {
 }
 
 Hooks.on('updateOwnedItem', async (actorData, itemData) => {
-    updateFromExtra(actorData,itemData);
+    if (actorData.data.type == "ModularFate") {
+        updateFromExtra(actorData,itemData);
+    }
 })
 
 Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
     let actor = game.actors.find(a=>a.id == actorData.id);
+
+    if (actor.data.type != "ModularFate"){
+        return;
+    }
 
     if (!shouldUpdate(actor)){
         return;
@@ -1168,8 +1182,10 @@ Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
 })
 
 Hooks.on('createOwnedItem', async (actorData, itemData) => {
-    let actor = game.actors.find(a=>a.id == actorData.id);
-    updateFromExtra(actor,itemData);
+    if (actorData.data.type == "ModularFate") {
+        let actor = game.actors.find(a=>a.id == actorData.id);
+        updateFromExtra(actor,itemData);
+    }
 })
 
 Hooks.on('updateToken', async (scene, tokenData, aData) => {
@@ -1179,6 +1195,10 @@ Hooks.on('updateToken', async (scene, tokenData, aData) => {
     if (token != undefined) {
         actor = token.actor;
     } 
+
+    if (actor?.data?.type != "ModularFate"){
+        return;
+    }
     
     if (aData.actorData != undefined && aData.actorData.items != undefined && aData.actorData.items[0] != undefined) {
         for (let i = 0; i < aData.actorData.items.length; i++){

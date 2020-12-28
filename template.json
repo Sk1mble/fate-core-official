@@ -1,6 +1,6 @@
 {
 	"Actor": {
-		"types": ["ModularFate", "Core","Accelerated"],
+		"types": ["ModularFate", "Thing", "Core","Accelerated"],
 		"templates": {
 			"common": {
 				"details": {
@@ -24,6 +24,15 @@
 		"ModularFate": {
 			"templates": ["common"],
 			"details": {
+			}
+		},
+		"Thing":{
+			"container": {
+				"locked":"false",
+				"description":"",
+				"security":"0",
+				"isContainer":"false",
+				"img":"icons/svg/mystery-man.svg"
 			}
 		}
 	},

@@ -13,23 +13,14 @@
  *      developed, authored, and edited by PK Sullivan, Ed Turner, Leonard Balsera, Fred Hicks, Richard Bellingham, Robert Hanz, Ryan Macklin, 
  *      and Sophie Lagacé, and licensed for our use under the Creative Commons Attribution 3.0 Unported license (http://creativecommons.org/licenses/by/3.0/).
  */
-// Import modules
-/*
-import { FATE } from "./module/config.js";
-import { preloadHandlebarsTemplates } from "./module/templates.js";
-import { CoreCharacterSheet } from "./module/actor/CoreSheet.js";
-import { FAECharacterSheet } from "./module/actor/FaeSheet.js";
-import { CondensedCharacterSheet } from "./module/actor/CondensedSheet.js";
-import { ItemSheetFATE } from "./module/item/ItemSheet.js";
-import { ExtraSheet } from "./module/item/ExtraSheet.js";
-import { ModularFateCharacter} from "./module/actor/ModularFateCharacter.js"
-*/
+
 /* -------------------------------- */
 /*	System initialization			*/
 /* -------------------------------- */
 
 import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
-import { ExtraSheet } from "./scripts/ExtraSheet.js";
+import { ExtraSheet } from "./scripts/ExtraSheet.js"
+import { Thing } from "./scripts/Thing.js"
 
 Hooks.on("preCreateActor", (data, options, userId) => {
     if (data.type =="Core" || data.type=="Accelerated"){
@@ -343,7 +334,7 @@ Hooks.once('init', async function () {
     })
 
     game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["ModularFate"]
+    game.system.entityTypes.Actor = ["ModularFate","Thing"]
 
     game.system.apps= {
         actor:[],
@@ -356,6 +347,8 @@ Hooks.once('init', async function () {
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     Actors.unregisterSheet('core', ActorSheet);
     Actors.registerSheet("ModularFate", ModularFateCharacter, { types: ["ModularFate"], makeDefault: true });
+    Actors.registerSheet("Thing" , Thing, {types: ["Thing"]});
+
     // Register Item sheets
     Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
 

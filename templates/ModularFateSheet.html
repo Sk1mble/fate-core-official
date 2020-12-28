@@ -230,7 +230,6 @@
                                     {{/unless}}
                                 </div>
                                 {{/each}}
-                                </table>
                             </div>
                             <!--End of stunt body-->
                         </div>
@@ -275,8 +274,8 @@
                             <div name="item_header" draggable="true" id="{{../this.actor._id}}_{{this._id}}" data-item="{{str this}}">
                             <div class = "fate-extras__row-header">
                                 <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this._id '_extra'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this._id}}_expandExtra"></button>&nbsp&nbsp{{{this.name}}}
-                                <button i icon class="fas fa-trash fate-extras__row-header-button" type="button" name="delete_extra" id="{{this._id}}"></button>
-                                <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button" id="{{this._id}}"></button>
+                                <button i icon class="fas fa-trash fate-extras__row-header-button" type="button" name="delete_extra" id="{{this._id}}_delete"></button>
+                                <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button" id="{{this._id}}_edit"></button>
                             </div>
                             <div class="fate-extras__row-body">
                                         <div class="fate-extras__row-body-content">{{#unless (expanded ../this.actor (concat this._id '_extra'))}}{{else}}{{{this.data.description.value}}}{{/unless}}</div>

@@ -990,7 +990,7 @@ async getData(){
     }
     data.notes = notes;
     canvas.tokens.placeables.forEach(token => {
-        if (token.actor != null && (token.data.hidden == false || game.user.isGM)){
+        if (token.actor != null && token.actor.data.type != "Thing" && (token.data.hidden == false || game.user.isGM)){
             all_tokens.push(token)
         } 
     })
