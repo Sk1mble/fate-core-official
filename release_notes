@@ -1,3 +1,6 @@
+# Version 2.2.1
+  Added a setting to invert the behaviour of dragging an extra on to a Thing or other owned character. Change this setting to make NOT deleting on transfer the default, but click-shift-drag will still delete.
+
 # Version 2.2.0
   Added a new system for managing Extras as tokens, including as containers for other extras. THIS IS ALMOST CERTAINLY INCOMPATIBLE WITH the module PICK-UP STIX.
   There is a new setting to allow or disallow players from creating item tokens (Player Thing Token Creation) - leave this set to false if you don't want players to be able to create item tokens.

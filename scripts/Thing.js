@@ -141,7 +141,9 @@ export class Thing extends ActorSheet {
         if (character != undefined && character != null){
             let item = this.actor.items.find(item => item._id == id);
             await character.createOwnedItem(item.data);
-            await this.actor.deleteOwnedItem(id);
+            if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                await this.actor.deleteOwnedItem(id);
+            }
         } else {
             ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
         }
@@ -348,11 +350,16 @@ async function createThing (canvas_scene, data, user_id){
                 if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
                     if (data.tokenId === undefined){
                         let actor=game.actors.get(data.actorId);
-                        await actor.deleteOwnedItem(data.data._id); 
+                        if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                            await actor.deleteOwnedItem(data.data._id); 
+                        }
+                        
                     } else { // This is a token actor. Respond accordingly.
                         let scene = game.scenes.get(canvas_scene._id)
                         let token = new Token(scene.data.tokens.find(token=>token._id == data.tokenId));
-                        token.actor.deleteOwnedItem(data.data._id);
+                        if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                            token.actor.deleteOwnedItem(data.data._id);
+                        }
                     }
                 }
     } else {
@@ -468,8 +475,14 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
             let actor = game.actors.get(data.actorId);
             //Need to check if the user has ownership of the target. If not, do nothing.
             if (target.owner){
-                if (!keyboard.isDown("Shift")){
-                    await actor.deleteOwnedItem(data.data._id); 
+                if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                    if (!keyboard.isDown("Shift")){
+                        await actor.deleteOwnedItem(data.data._id); 
+                    }
+                } else {
+                    if (keyboard.isDown("Shift")){
+                        await actor.deleteOwnedItem(data.data._id); 
+                    }
                 }
             }
         } else { // This is a token actor. Respond accordingly.
@@ -477,8 +490,14 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
                 if (token !== undefined){
                     let t = new Token(token);
                     if (t.actor.owner && target.owner){
-                        if (!keyboard.isDown("Shift")){
-                            await t.actor.deleteOwnedItem(data.data._id);
+                        if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                            if (!keyboard.isDown("Shift")){
+                                await t.actor.deleteOwnedItem(data.data._id);
+                            }
+                        } else {
+                            if (keyboard.isDown("Shift")){
+                                await t.actor.deleteOwnedItem(data.data._id);
+                            }
                         }
                     }
                 }
@@ -536,6 +555,17 @@ Hooks.once('init', async function () {
         name:game.i18n.localize("ModularFate.AllowPlayerThingCreation"),
         label:game.i18n.localize("ModularFate.ThingCreationLabel"),
         hint:game.i18n.localize("ModularFate.ThingCreationHint"),
+        type:Boolean,
+        scope:"world",
+        config:true,
+        restricted:true,
+        default:true
+    });
+
+    game.settings.register ("ModularFate","DeleteOnTransfer", {
+        name:game.i18n.localize("ModularFate.DeleteOnTransfer"),
+        label:game.i18n.localize("ModularFate.DeleteOnTransferLabel"),
+        hint:game.i18n.localize("ModularFate.DeleteOnTransferHint"),
         type:Boolean,
         scope:"world",
         config:true,
