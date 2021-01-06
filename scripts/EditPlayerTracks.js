@@ -384,14 +384,17 @@ class EditPlayerTracks extends FormApplication {
                 }
             }
         }
-
-        await this.object.update({"data.tracks":[{"empty":"empty"}]}) //This is needed to make the game see a change in order of keys as a difference.
-        await this.object.update({"data.tracks":output}); 
-
+        
         ui.notifications.info(game.i18n.localize("ModularFate.CharacterTrackChangesSaved"))   
-        //Initialise the actor sheet; this will automatically set up the boxes etc on tracks.
+        //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
-            this.sheet.initialise();
+            let tracks = this.object.setupTracks(duplicate(this.object.data.data.skills), output);
+            await this.object.update({"data.tracks":[{"empty":"empty"}]}) //This is needed to make the game see a change in order of keys as a difference.
+            await this.object.update({"data.tracks":tracks}); 
+            
+        } else {
+            await this.object.update({"data.tracks":[{"empty":"empty"}]}) //This is needed to make the game see a change in order of keys as a difference.
+            await this.object.update({"data.tracks":output}); 
         }
         this.render(false);
     }

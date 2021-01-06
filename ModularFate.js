@@ -21,6 +21,7 @@
 import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
 import { ExtraSheet } from "./scripts/ExtraSheet.js"
 import { Thing } from "./scripts/Thing.js"
+import { ModularFateActor } from "./scripts/ModularFateActor.js"
 
 Hooks.on("preCreateActor", (data, options, userId) => {
     if (data.type =="Core" || data.type=="Accelerated"){
@@ -29,6 +30,163 @@ Hooks.on("preCreateActor", (data, options, userId) => {
        //console.log(data);
     }
 });
+
+Hooks.on("createActor", async (data, options, userId) => {
+    if (data.data.type == "ModularFate" ) {
+        await initialiseModularFateCharacter(data);
+    }
+});
+
+async function initialiseModularFateCharacter (data) {
+    let actor = new Actor(data);
+    let working_data = duplicate(data.data);
+    // Logic to set up Refresh and Current
+
+    let refresh = game.settings.get("ModularFate", "refreshTotal");
+
+    working_data.data.details.fatePoints.refresh = refresh;
+    working_data.data.details.fatePoints.current = refresh;
+    
+    let p_skills=working_data.data.skills;
+    
+    //Check to see what skills the character has compared to the global skill list
+        var skill_list = game.settings.get("ModularFate","skills");
+        // This is the number of skills the character has currently.
+        //We only need to add any skills if this is currently 0,
+        
+        
+        let skills_to_add = [];
+
+        for (let w in skill_list){
+            let w_skill = skill_list[w];
+            if (p_skills[w]!=undefined){
+            } else {
+                if(w_skill.pc){
+                    skills_to_add.push(w_skill);
+                }
+            }
+        }
+
+        if (skills_to_add.length >0){
+            //Add any skills from the global list that they don't have at rank 0.
+            skills_to_add.forEach(skill => {
+                skill.rank=0;
+                p_skills[skill.name]=skill;
+            })
+        }        
+
+        let aspects = game.settings.get("ModularFate", "aspects");
+        let player_aspects = duplicate(aspects);
+        for (let a in player_aspects) {
+            player_aspects[a].value = "";
+        }
+        //Now to store the aspect list to the character
+        working_data.data.aspects = player_aspects;
+    
+        //Step one, get the list of universal tracks.
+        let world_tracks = duplicate(game.settings.get("ModularFate", "tracks"));
+        let tracks_to_write = working_data.data.tracks;
+        for (let t in world_tracks) {
+            let track = world_tracks[t];
+            if (track.universal == true) {
+                tracks_to_write[t] = world_tracks[t];
+            }
+        }
+        for (let t in tracks_to_write) {
+            let track = tracks_to_write[t];
+            //Add a notes field. This is a bit redundant for stress tracks,
+            //but useful for aspects, indebted, etc. Maybe it's configurable whether we show the
+            //notes or not for any given track. LATER NOTE: It is not.
+            track.notes = "";
+
+            //If this box is an aspect when marked, it needs an aspect.name data field.
+            if (track.aspect == game.i18n.localize("ModularFate.DefinedWhenMarked")) {
+                track.aspect = {};
+                track.aspect.name = "";
+                track.aspect.when_marked = true;
+                track.aspect.as_name = false;
+            }
+            if (track.aspect == game.i18n.localize("ModularFate.AspectAsName")) {
+                track.aspect = {};
+                track.aspect.name = "";
+                track.aspect.when_marked = true;
+                track.aspect.as_name = false;
+            }
+
+            //Initialise the box array for this track 
+            if (track.boxes > 0) {
+                let box_values = [];
+                for (let i = 0; i < track.boxes; i++) {
+                    box_values.push(false);
+                }
+                track.box_values = box_values;
+            }
+        }
+    working_data.data.tracks = tracks_to_write;
+    let tracks = working_data.data.tracks;
+    
+    let categories = game.settings.get("ModularFate", "track_categories");
+    //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
+    for (let t in tracks) {
+        let track = tracks[t];
+
+        if (track.universal) {
+            track.enabled = true;
+        }
+
+        // Check for linked skills and enable/add boxes as necessary.
+        if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(working_data.data.skills).length > 0) {
+            let skills = working_data.data.skills;
+            let linked_skills = tracks[t].linked_skills;
+            let box_mod = 0;
+            for (let i = 0; i < linked_skills.length; i++) {
+                let l_skill = linked_skills[i].linked_skill;
+                let l_skill_rank = linked_skills[i].rank;
+                let l_boxes = linked_skills[i].boxes;
+                let l_enables = linked_skills[i].enables;
+
+                //Get the value of the player's skill
+                if (working_data.data.skills[l_skill] == undefined){
+
+                }else {
+                    let skill_rank = working_data.data.skills[l_skill].rank;
+                    //If this is 'enables' and the skill is too low, disable.
+                    if (l_enables && skill_rank < l_skill_rank) {
+                    track.enabled = false;
+                }
+
+                //If this adds boxes and the skill is high enough, add boxes if not already present.
+                //Telling if the boxes are already present is the hard part.
+                //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
+                //or subract them at the end of our run through the linked skills.
+                    if (l_boxes > 0 && skill_rank >= l_skill_rank) {
+                        box_mod += l_boxes;
+                    }
+                }
+            } //End of linked_skill iteration
+            //Now to add or subtract the boxes
+
+            //Only if this track works with boxes, though
+            if (track.boxes > 0 || track.box_values != undefined) {
+                //If boxes + box_mod is greater than box_values.length add boxes
+                let toModify = track.boxes + box_mod - track.box_values.length;
+                if (toModify > 0) {
+                    for (let i = 0; i < toModify; i++) {
+                        track.box_values.push(false);
+                    }
+                }
+                //If boxes + box_mod is less than box_values.length subtract boxes.
+                if (toModify < 0) {
+                    for (let i = toModify; i < 0; i++) {
+                        track.box_values.pop();
+                    }
+                }
+            }
+        }
+    }
+    await actor.update(working_data);
+    await actor.sheet.render(false);
+}
 
 async function importFateCharacter(actor) {
     console.log("Original Fate Core character detected; setting them up for ModularFate")
@@ -293,6 +451,8 @@ Hooks.on('updateScene', (...args) => {
 
 Hooks.once('init', async function () {
 
+    CONFIG.Actor.entityClass = ModularFateActor;
+
     game.settings.register("ModularFate","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",
         hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
@@ -440,3 +600,12 @@ Hooks.once('init', async function () {
         default:[]
     })
 });
+
+Combat.prototype._getInitiativeFormula = function (combatant) {
+    let init_skill = game.settings.get("ModularFate","init_skill");
+    if (init_skill === "None") {
+        return "0";
+    }else {
+        return combatant.actor.data.data.skills[`${init_skill}`].rank.toString();
+    }
+}

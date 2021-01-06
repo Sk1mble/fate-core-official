@@ -1,3 +1,10 @@
+# Version 2.2.2
+  * Prevented automatic spawning of the skill editor window on creating a new character.
+  (It was annoying me)
+  * Refactored the code used to initialise characters' stress tracks from skills and to initially set up characters to increase efficiency.
+  * Refactored to add a ModularFateActor class to make it somewhat easier to override the sheet without also overriding a lot of core data manipulation processes. 
+  * Moved hooks and processes that modify actors to this class.
+
 # Version 2.2.1
   Added a setting to invert the behaviour of dragging an extra on to a Thing or other owned character. Change this setting to make NOT deleting on transfer the default, but click-shift-drag will still delete.
 

@@ -100,9 +100,9 @@ class EditPlayerSkills extends FormApplication{
             if (!game.user.isGM && isPlayer && !canSave){
                 ui.notifications.error(game.i18n.localize("ModularFate.UnableToSave"));
             } else {
-                await this.object.update({"data.skills":this.player_skills}); 
-                ui.notifications.info(game.i18n.localize("ModularFate.SkillsSaved"));
-                await this.sheet.initialise();
+                let tracks = this.object.setupTracks (duplicate(this.player_skills), duplicate(this.object.data.data.tracks));
+                await this.object.update({"data.tracks":tracks,"data.skills":this.player_skills}); 
+                ui.notifications.info(game.i18n.localize("ModularFate.SkillsSaved"))
                 this.close();
             }
         }
