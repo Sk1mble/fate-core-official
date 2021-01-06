@@ -339,7 +339,7 @@ async function createThing (canvas_scene, data, user_id){
                     itemActor = await Actor.create({
                         name: newItem.name,
                         type: "Thing",
-                        data:{"container.isContainer":false},
+                        data:{"container.isContainer":false,"container.img":newItem.img},
                         img:newItem.img,
                         folder: folder.id,
                         sort: 12000,
@@ -381,7 +381,7 @@ async function createThing (canvas_scene, data, user_id){
                     itemActor = await Actor.create({
                         name: newItem.name,
                         type: "Thing",
-                        data:{"container.isContainer":false},
+                        data:{"container.isContainer":false, "container.img":newItem.img},
                         img:newItem.img,
                         folder: folder.id,
                         sort: 12000,
@@ -408,7 +408,7 @@ async function createThing (canvas_scene, data, user_id){
                     itemActor = await Actor.create({
                         name: newItem.name,
                         type: "Thing",
-                        data:{"container.isContainer":false},
+                        data:{"container.isContainer":false, "container.img":newItem.img},
                         img:newItem.img,
                         folder: folder.id,
                         sort: 12000,
