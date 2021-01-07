@@ -673,7 +673,6 @@ export class ModularFateCharacter extends ActorSheet {
 
         this.object.items.entries.forEach(item => {
             let cost = parseInt(item.data.data.refresh);
-            console.log(cost)
             if (!isNaN(cost) && cost != undefined){
                 paidExtras += parseInt(item.data.data.refresh);
             }

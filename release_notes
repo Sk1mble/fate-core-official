@@ -1,5 +1,6 @@
 # Version 2.2.3
   * Things now set the container avatar by default to be the same as the item being dragged out to create the Thing. Container avatars can still be changed normally after creation.
+  * If an extra has a blank cost field, it won't cause spent refresh to be calculated as NaN.
 
 # Version 2.2.2
   * Prevented automatic spawning of the skill editor window on creating a new character.
