@@ -372,7 +372,7 @@ export class ModularFateCharacter extends ActorSheet {
                                                     <td style="width:400px;">
                                                         <b>${game.i18n.localize("ModularFate.Description")}:</b>
                                                     </td>
-                                                    <td style="width:2000px;">
+                                                    <td style="width:2000px; padding-left:5px">
                                                         ${skill.description}
                                                     </td>
                                                 </tr>
@@ -380,15 +380,15 @@ export class ModularFateCharacter extends ActorSheet {
                                                     <td>
                                                         <b>${game.i18n.localize("ModularFate.Overcome")}:</b>
                                                     </td>
-                                                    <td>
+                                                    <td style="width:2000px; padding-left:5px">
                                                         ${skill.overcome}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
+                                                   <td>
                                                         <b>${game.i18n.localize("ModularFate.CAA")}:</b>
                                                     </td>
-                                                    <td>
+                                                    <td style="width:2000px; padding-left:5px">
                                                         ${skill.caa}
                                                     </td>
                                                 </tr>
@@ -396,7 +396,7 @@ export class ModularFateCharacter extends ActorSheet {
                                                     <td>
                                                         <b>${game.i18n.localize("ModularFate.Attack")}:</b>
                                                     </td>
-                                                    <td>
+                                                    <td style="width:2000px; padding-left:5px">
                                                         ${skill.attack}
                                                     </td>
                                                 </tr>
@@ -404,7 +404,7 @@ export class ModularFateCharacter extends ActorSheet {
                                                     <td>
                                                         <b>${game.i18n.localize("ModularFate.Defend")}:</b>
                                                     </td>
-                                                    <td>
+                                                    <td style="width:2000px; padding-left:5px">
                                                         ${skill.defend}
                                                     </td>
                                                 </tr>
