@@ -1,6 +1,8 @@
 # Version 2.2.3
   * Things now set the container avatar by default to be the same as the item being dragged out to create the Thing. Container avatars can still be changed normally after creation.
   * If an extra has a blank cost field, it won't cause spent refresh to be calculated as NaN.
+  * Fixed a bug that was preventing refresh all from working if Things were on the scene.
+  * Changed the logic that dtermines whether to initialise a character to ensure character initialising doesn't happen when copying an actor that has already been initialised.
 
 # Version 2.2.2
   * Prevented automatic spawning of the skill editor window on creating a new character.

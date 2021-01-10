@@ -649,7 +649,8 @@ class FateUtilities extends Application{
         let updates = [];
         for (let i = 0; i < tokens.length; i++){
             let token = tokens[i];
-            if (token.actor == null || !token.actor.hasPlayerOwner){
+        
+            if (token.actor == null || !token.actor.hasPlayerOwner || token.actor.data.type == "Thing"){
                 continue;
             }
             let current = parseInt(token.actor.data.data.details.fatePoints.current);

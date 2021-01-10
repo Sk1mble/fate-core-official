@@ -32,9 +32,14 @@ Hooks.on("preCreateActor", (data, options, userId) => {
 });
 
 Hooks.on("createActor", async (data, options, userId) => {
-    if (data.data.type == "ModularFate" ) {
-        await initialiseModularFateCharacter(data);
-    }
+    if (data.data.type == "ModularFate") {
+        if (game.user == game.users.find(e => e.isGM && e.active)){
+            console.log(data?.data?.data?.details?.fatePoints?.refresh)
+            if (data?.data?.data?.details?.fatePoints?.refresh === ""){  
+                await initialiseModularFateCharacter(data);
+            }
+        }
+    } 
 });
 
 async function initialiseModularFateCharacter (data) {
