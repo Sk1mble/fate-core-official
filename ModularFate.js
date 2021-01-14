@@ -25,21 +25,18 @@ import { ModularFateActor } from "./scripts/ModularFateActor.js"
 
 Hooks.on("preCreateActor", (data, options, userId) => {
     if (data.type =="Core" || data.type=="Accelerated"){
-        //console.log("importing")
         data = migrateFateCharacter(data);
-       //console.log(data);
     }
 });
 
 Hooks.on("createActor", async (data, options, userId) => {
     if (data.data.type == "ModularFate") {
-        if (game.user == game.users.find(e => e.isGM && e.active)){
-            console.log(data?.data?.data?.details?.fatePoints?.refresh)
+        if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
             if (data?.data?.data?.details?.fatePoints?.refresh === ""){  
                 await initialiseModularFateCharacter(data);
             }
         }
-    } 
+    }
 });
 
 async function initialiseModularFateCharacter (data) {
@@ -189,8 +186,7 @@ async function initialiseModularFateCharacter (data) {
             }
         }
     }
-    await actor.update(working_data);
-    await actor.sheet.render(false);
+    await setTimeout(function(){actor.update(working_data)},0);
 }
 
 async function importFateCharacter(actor) {

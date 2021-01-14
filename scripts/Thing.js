@@ -198,6 +198,7 @@ export class Thing extends ActorSheet {
         }
 
         if (shouldUpdate(this.actor)){
+        
             if (this.actor.data.data.container.isContainer){
                 let img = this.actor.data.data.container.img;
                 if (img == undefined) img = "icons/svg/mystery-man.svg";
@@ -241,10 +242,15 @@ export class Thing extends ActorSheet {
     }
 
     async render (...args){
-        if (this.editing == false){
+        if (this.editing == false && this.token || game.user.isGM ){
             super.render(...args);
         } else {
-            this.renderBanked = true;
+            if (this.editing){
+                this.renderBanked = true;
+            }
+            else {
+                ui.notifications.info("You can only view Things represented by unlinked tokens.")
+            }
         }
     }
 }
@@ -346,6 +352,14 @@ async function createThing (canvas_scene, data, user_id){
                         items: [newItem],
                         permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                       });
+                } else {
+                    // Update the actor with the new item.
+                    let oldItem = itemActor.items.find(item => item.name===newItem.name);
+                    if (oldItem != undefined){
+                        await itemActor.deleteOwnedItem(oldItem.id);
+                        await itemActor.createOwnedItem(newItem);
+                        await itemActor.update({"img":newItem.img, "data.container.img":newItem.img});
+                    }
                 }
                 if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
                     if (data.tokenId === undefined){
@@ -388,6 +402,14 @@ async function createThing (canvas_scene, data, user_id){
                         items: [newItem],
                         permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                       });
+                } else {
+                    // Update the actor with the new item.
+                    let oldItem = itemActor.items.find(item => item.name===newItem.name);
+                    if (oldItem != undefined){
+                        await itemActor.deleteOwnedItem(oldItem.id);
+                        await itemActor.createOwnedItem(newItem);
+                        await itemActor.update({"img":newItem.img, "data.container.img":newItem.img});
+                    }
                 }
         } else {
             if (data.type == "Item"){ // This means it was dropped straight from the items list.
@@ -415,6 +437,14 @@ async function createThing (canvas_scene, data, user_id){
                         items: [newItem],
                         permission:{"default":3} // Owner permissions are required to see and interact with items.
                       });
+                } else {
+                    // Update the actor with the new item.
+                    let oldItem = itemActor.items.find(item => item.name===newItem.name);
+                    if (oldItem != undefined){
+                        await itemActor.deleteOwnedItem(oldItem.id);
+                        await itemActor.createOwnedItem(newItem);
+                        await itemActor.update({"img":newItem.img, "data.container.img":newItem.img});
+                    }
                 }
             }
         }
@@ -430,7 +460,7 @@ async function createThing (canvas_scene, data, user_id){
         hidden: false,
         actorId: itemActor.id,
         actorLink: false,
-        actorData: {},
+        actorData: {}
       }
 
     let scene =new Scene(canvas_scene);

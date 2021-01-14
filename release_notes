@@ -1,3 +1,9 @@
+# Version 2.2.4
+  * If a GM isn't logged in and players have permission to create actors, a non-GM player doing so will now cause the actor to be properly initialised.
+  * Removed bug that sometimes caused an actor's sheet not to refresh after initialisation with game defaults.
+  * Made it impossible for non-GMs to open Thing sheets from the actor list (to prevent spoilers and odd scenarios like players taking items from Things before they're even on the map. Note that once you've dragged an item to the map players will be able to see it in the list of ModularFate Things under the Actors list, so to maintain surprises only drag items to the map when ready for players to see them.)
+  * Dragging out an item to make a token will now replace the corresponding existing Thing with the new item.
+
 # Version 2.2.3
   * Things now set the container avatar by default to be the same as the item being dragged out to create the Thing. Container avatars can still be changed normally after creation.
   * If an extra has a blank cost field, it won't cause spent refresh to be calculated as NaN.
