@@ -1,4 +1,5 @@
 {
+    "ModularFate.Contents":"Contents",
     "ModularFate.DeleteOnTransfer":"Delete extras on transfer?",
     "ModularFate.DeleteOnTransferLabel":"Default to deleting extras on transfer?",
     "ModularFate.DeleteOnTransferHint":"If true, extras will be deleted from source on transferring to another owned character or a Thing.",

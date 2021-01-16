@@ -146,5 +146,25 @@
                                     {{/if}}{{/each}}
                                 </div>
                             </div>
-                            <!--end of tracks body-->
+							<!--end of tracks body-->
+							{{#if (eq this.contents false)}}{{else}}
+							<!--Here are the contents of the extra.-->
+                            <div class="mfate-panel__header" name="contents_header">
+                                <b class="mfate-panel__header-label">{{localize 'ModularFate.Contents'}}</b> 
+							</div>
+							<div name = "contents_body" style="scrollbar-width:thin">
+								{{#if this.contents.locked}}<ul>(Container is locked)</ul>{{else}}{{/if}}
+								{{#if (eq this.contents.locked false)}}
+								{{#each this.contents.extras}}
+									<div><ul>{{this.name}}</ul></div>
+								{{/each}}
+								{{/if}}
+								{{#if this.contents.locked}}{{#if this.GM}}
+								{{#each this.contents.extras}}
+									<div><ul>{{this.name}}</ul></div>
+								{{/each}}
+								{{/if}}{{/if}}
+							</div>
+							<!--end of contents body-->
+							{{/if}}
 </form>

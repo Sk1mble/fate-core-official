@@ -25,6 +25,13 @@ export class ExtraSheet extends ItemSheet {
 
         data.dataTemplate = () => `systems/ModularFate/templates/ExtraSheet.html`;
         data.GM=game.user.isGM;
+        if (this.object?.data?.data?.contents != undefined && !jQuery.isEmptyObject(this.object?.data?.data?.contents))
+        {
+            data.contents = this.object.data.data.contents;
+        }
+        else {
+            data.contents = false;
+        }
         return data;
     }
 

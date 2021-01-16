@@ -601,6 +601,9 @@ class FateUtilities extends Application{
                         roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvokeReroll")}`
                         let r = new Roll ("4dF");
                         let r2 = r.roll();
+                        r2.toMessage({
+                            flavor: `<h1>${game.i18n.localize("ModularFate.PaidRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
+                        });
                         let oldDiceValue = 0;
                         for (let i = 0; i< 4; i++){
                             oldDiceValue += roll.dice[i]
@@ -1311,7 +1314,7 @@ Hooks.on('renderFateUtilities', function(){
     }
     
     if (numAspects > game.system.sit_aspects){
-        let pane = document.getElementById("fu_aspects_pane")
+        let pane = document.getElementById("fu_aspects_pane");
         pane.scrollTop=pane.scrollHeight;
         game.system.sit_aspects = numAspects;
     }

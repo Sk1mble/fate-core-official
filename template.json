@@ -29,10 +29,10 @@
 		"Thing":{
 			"container": {
 				"locked":"false",
-				"description":"",
 				"security":"0",
 				"isContainer":"false",
-				"img":"icons/svg/mystery-man.svg"
+				"movable":true,
+				"extra":{}
 			}
 		}
 	},
@@ -60,7 +60,8 @@
 				"attack": "",
 				"defend": ""
 			},
-			"countSkills": false
+			"countSkills": false,
+			"contents":{}
 		},
 		"Stunt": {
 			"templates": ["baseItem"]

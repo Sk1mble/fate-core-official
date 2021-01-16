@@ -1,5 +1,13 @@
 export class ModularFateActor extends Actor {
 
+    async prepareData (...args){
+        super.prepareData(...args);
+
+        if (this.data.type === "Thing"){
+            
+        }
+    }
+
     setupTracks (skills, tracks) {
         // This method takes skill and track data and returns corrected tracks enabled and disabled etc. according to the values of those skills
         // and the tracks' settings for enabling/disabling tracks according to skill ranks.

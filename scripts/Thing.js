@@ -40,12 +40,65 @@ export class Thing extends ActorSheet {
         const extras_edit = html.find ("button[name='edit_extra']");
         const extras_delete = html.find("button[name='delete_extra']");
         const extras_grab = html.find("button[name='grab_extra']")
+        const isContainer = html.find("input[name='data.container.isContainer']");
+        const takeAll = html.find("button[name='container_take_all']");
+        const takeContainer = html.find("button[name='container_take']");
 
         extras_button.on("click", event => this._on_extras_click(event, html));
         extras_edit.on("click", event => this._on_extras_edit_click(event, html));
         extras_delete.on("click", event => this._on_extras_delete(event, html));
         extras_grab.on("click", event => this._on_extras_grab(event, html));
 
+        takeAll.on("click", async event => {
+            let character = game.user.character;
+
+            if (character != undefined && character != null){
+                await character.createOwnedItem(this.actor.items.entries);
+                if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                    await this.actor.deleteOwnedItem(this.actor.items.entries.map(item => item.id));
+                }
+            } else {
+                ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
+            }
+        })
+
+        takeContainer.on("click", async event => {
+            let character = game.user.character;
+
+            if (character != undefined && character != null){
+                let container;
+                
+                if (jQuery.isEmptyObject(this.actor.data.data.container.extra)){
+                    container = await (this.actor.createOwnedItem({"name":this.actor.name,"description":this.actor.data.description,"type":"Extra"}));
+                    await this.actor.update({"data.container.extra":container})
+                    await this.actor.deleteOwnedItem(container);
+                    container = new Item(this.actor.data.data.container.extra);
+                } else {
+                    container = new Item(this.actor.data.data.container.extra);
+                }
+
+                let contents = {};
+                contents.locked = this.actor.data.data.container.locked;
+                contents.security = this.actor.data.data.container.security;
+                contents.extras=[];
+                this.actor.items.entries.forEach(item => {
+                    contents.extras.push(item.data);
+                })
+                container.data.data.contents = contents;
+                character.createOwnedItem(container.data);
+
+                if (game.user.isGM){
+                    this.actor.token.delete();
+                    this.actor.sheet.close({"force":true});
+                } else {
+                    let t = canvas.tokens.placeables.find(token => token?.actor?.id === this.actor.id);
+                    game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
+                    this.actor.sheet.close({"force":true});
+                }                
+            } else {
+                ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
+            }
+        })
 
         const expandExtra = html.find("button[name='expandExtra']");
 
@@ -197,39 +250,11 @@ export class Thing extends ActorSheet {
             game.user.expanded = {};
         }
 
-        if (shouldUpdate(this.actor)){
-        
-            if (this.actor.data.data.container.isContainer){
-                let img = this.actor.data.data.container.img;
-                if (img == undefined) img = "icons/svg/mystery-man.svg";
-                if (this.actor?.token?.img != img){
-                    await this.actor.update({"token.img":img,"img":img})
-                }
-                if (this.actor.token != null && this.actor?.token?.img != img){
-                    await this.actor.token.update({"img":img});
-                }
-            } else {
-                let img = this.actor.items.entries[0]?.data?.img;
-                if (img == undefined) img = "icons/svg/mystery-man.svg";
-
-                if (this.actor?.token?.img != img){
-                    await this.actor.update({"token.img":img,"img":img})
-                }
-                if (this.actor.token != null && this.actor.token.img != img){
-                    await this.actor.token.update({"img":img});
-                }
-            }   
-        }
-
         if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
 
         const sheetData = await super.getData();
         let numExtras = this.actor.items.entries.length;
         sheetData.numExtras = numExtras;
-        let itemImg = this.actor.items.entries[0]?.img ?? "icons/svg/mystery-man.svg";
-        let itemName = this.actor.items.entries[0]?.name ?? "Blank Item";
-        sheetData.itemImg = itemImg;
-        sheetData.itemName = itemName;
 
         let viewable = false;
         if (game.user.isGM) viewable = true;
@@ -242,145 +267,193 @@ export class Thing extends ActorSheet {
     }
 
     async render (...args){
-        if (this.editing == false && this.token || game.user.isGM ){
+        if (this.editing == false ){
             super.render(...args);
         } else {
-            if (this.editing){
-                this.renderBanked = true;
-            }
-            else {
-                ui.notifications.info("You can only view Things represented by unlinked tokens.")
-            }
+            this.renderBanked = true;
         }
     }
 }
 
-Hooks.on('preCreateOwnedItem', (actorData, itemData) => {
-    if (actorData.type == "Thing") {
-        let actor = game.actors.find(a=>a.id == actorData.id);
-            if (actor.items.entries.length == 1 && actor.data.data.container.isContainer == false){
-                ui.notifications.error("This is not a container and can only represent a single Extra.");        
-                return false;
-            }
-            if (actor.data.data?.container?.isContainer == true && actor.data.data?.container?.locked == true){
-                ui.notifications.error("You can't put items in a locked container.");
-                return false;
-            }
+Hooks.on('preCreateOwnedItem', (actor, itemData) => {
+    if (actor.data.type == "Thing") {
+        
+        if (actor.items.entries.length == 1 && actor.data.data.container.isContainer == false){
+            ui.notifications.error("This is not a container and can only represent a single Extra.");        
+            return false;
+        }
+        if (actor.data.data?.container?.isContainer == true && actor.data.data?.container?.locked == true){
+            ui.notifications.error("You can't put items in a locked container.");
+            return false;
+        }
     }
 })
 
 Hooks.on('preUpdateToken', (scene, tokenData, aData) => {
-    let token = canvas.tokens.placeables.find(t => t.id == tokenData._id);
-    let actor = undefined;
-    
-    if (token != undefined) {
-        actor = token.actor;
-    } 
+    if (game.user == game.users.find(e => e.isGM && e.active)){
+        let token = canvas.tokens.placeables.find(t => t.id == tokenData._id);
+        let actor = undefined;
+        
+        if (token != undefined) {
+            actor = token.actor;
+        } 
 
-    if (actor?.data?.type != "Thing" || aData?.actorData?.items == undefined){
-        return;
-    }
-
-        let changedItems = aData.actorData.items;
-        let originalItems = actor.items.entries;
-        if (changedItems.length > originalItems.length){
-            if (originalItems.length == 1 && actor.data.data.container.isContainer == false){
-                ui.notifications.error("This is not a container and can only represent a single Extra.")        
-                return false;
-            }
-
-            if (actor.data.data?.container?.isContainer == true && actor.data.data?.container?.locked == true){
-                ui.notifications.error("You can't put items in a locked container.");
-                return false;
-            }
+        if (actor?.data?.type != "Thing" || aData?.actorData?.items == undefined){
+            return;
         }
-})
 
-Hooks.on('updateToken', async (scene, tokenData, aData) => {
+            let changedItems = aData.actorData.items;
+            let originalItems = actor.items.entries;
 
-    let token = canvas.tokens.placeables.find(t => t.id == tokenData._id);
-    let actor = undefined;
-    
-    if (token != undefined) {
-        actor = token.actor;
-    } 
+            if (changedItems.length > originalItems.length){
+                if (originalItems.length == 1 && actor.data.data.container.isContainer == false){
+                    ui.notifications.error("This is not a container and can only represent a single Extra.")        
+                    return false;
+                }
 
-    if (actor?.data?.type != "Thing" || aData?.actorData?.items == undefined){
-        return;
-    }
- 
-    if (actor.data.items.length == 0){
-        if (actor.data.type =="Thing" && !actor.data.data?.container?.isContainer){
-            await actor.sheet.close({"force":true});
-            if (actor.token != undefined){
-                if (game.user.isGM){
-                    actor.token.delete();
-                } else {
-                    game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":actor.token.id});
+                if (actor.data.data?.container?.isContainer == true && actor.data.data?.container?.locked == true){
+                    ui.notifications.error("You can't put items in a locked container.");
+                    return false;
                 }
             }
+    }
+})
+
+Hooks.on('deleteToken', async (scene, token) => {
+    // Delete the actor associated with this token if it is a Thing.
+    if (game.user == game.users.find(e => e.isGM && e.active)){
+        let actor = game.actors.get(token.actorId)
+        if (actor?.data?.type !== "Thing"){
+            return;
+        } else {
+            if (game.user.isGM){
+                await actor.delete();
+            }
         }
     }
 })
 
-async function createThing (canvas_scene, data, user_id){
+Hooks.on('deleteOwnedItem', async (actor) => {
+    if (actor.data.type !== "Thing"){
+        return;
+    }
+
+    // Delete if this isn't a container and now has no items in it.
+    if (actor.items.entries.length == 0){
+        if (actor.data.type =="Thing" && !actor.data.data?.container?.isContainer){
+            await actor.sheet.close({"force":true});
+            if (game.user == game.users.find(e => e.isGM && e.active)){
+                let t = canvas.tokens.placeables.find(token => token.actor.id === actor.id);
+                t.delete();
+            } else {
+                let t = canvas.tokens.placeables.find(token => token.actor.id === actor.id);
+                game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
+            }
+        }
+    }
+})
+
+Hooks.on('updateActor', async (actor) => {
+    if (actor.data.type !== "Thing"){
+        return;
+    }
+
+    // Handle the necessary item management if this is turned into a container.
+    if (game.user == game.users.find(e => e.isGM && e.active)){
+        await checkContainer(actor);
+    }
+})
+
+async function checkContainer (actor){
+    if (!actor.updatePending) {
+        actor.updatePending = true;
+        setTimeout(() => {
+            if (actor.items.entries.length === 1 && actor.data.data?.container?.isContainer){
+                actor.deleteOwnedItem(actor.items.entries[0].id);
+            }
+        
+            if (actor.data.data.container.isContainer === false && actor.items.entries.length === 0){
+                if (actor?.data?.data?.container?.extra?.name !== undefined){
+                    actor.createOwnedItem(actor.data.data.container.extra);
+                }
+            }
+            actor.updatePending = false;
+        }, 0);
+    }
+}
+
+async function createThing (canvas_scene, data, user_id, shiftDown){
     if (data.type != "Item"){
         return;
     }
-
     let itemActor = undefined;
+    let contents = undefined;
+    let newItem;
 
     if (data.data != undefined){ // This means it came from a token
         let itemData = data.data;
-        let newItem = new Item(itemData);
+        newItem = new Item(itemData);
+        
+        //Let's get the contents, if there are any, so we can do some stuff with them later.
+        if (newItem?.data?.data?.contents){
+            contents = duplicate(newItem.data.data.contents);
+            delete newItem.data.data.contents;
+        }
+
         let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
                 if (folder == undefined){
                     folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
                 }
 
-                let things = game.actors.entries.filter(a => a.data.type=="Thing");
-                itemActor = things.find(thing => thing.name == newItem.name);
+                itemActor = await Actor.create({
+                    name: newItem.name,
+                    type: "Thing",
+                    data:{"container.isContainer":false, "container.extra":newItem.data},
+                    img:newItem.img,
+                    items:[newItem],
+                    folder: folder.id,
+                    sort: 12000,
+                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
+                });
 
-                if (itemActor == undefined) {
-                    itemActor = await Actor.create({
-                        name: newItem.name,
-                        type: "Thing",
-                        data:{"container.isContainer":false,"container.img":newItem.img},
-                        img:newItem.img,
-                        folder: folder.id,
-                        sort: 12000,
-                        items: [newItem],
-                        permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                      });
-                } else {
-                    // Update the actor with the new item.
-                    let oldItem = itemActor.items.find(item => item.name===newItem.name);
-                    if (oldItem != undefined){
-                        await itemActor.deleteOwnedItem(oldItem.id);
-                        await itemActor.createOwnedItem(newItem);
-                        await itemActor.update({"img":newItem.img, "data.container.img":newItem.img});
-                    }
-                }
                 if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
                     if (data.tokenId === undefined){
                         let actor=game.actors.get(data.actorId);
                         if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
-                            await actor.deleteOwnedItem(data.data._id); 
+                            if (shiftDown === false){
+                                await actor.deleteOwnedItem(data.data._id); 
+                            }
+                        } else {
+                            if (shiftDown === true){
+                                await actor.deleteOwnedItem(data.data._id); 
+                            }
                         }
                         
                     } else { // This is a token actor. Respond accordingly.
                         let scene = game.scenes.get(canvas_scene._id)
                         let token = new Token(scene.data.tokens.find(token=>token._id == data.tokenId));
                         if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
-                            token.actor.deleteOwnedItem(data.data._id);
+                            if (shiftDown === false){
+                                await actor.deleteOwnedItem(data.data._id); 
+                            }
+                        } else {
+                            if (shiftDown === true){
+                                await actor.deleteOwnedItem(data.data._id); 
+                            }
                         }
                     }
                 }
     } else {
         if (data.pack != undefined){ // This means it came from a compendium
             const pack = game.packs.get(data.pack);
-            let newItem = await pack.getEntity(data.id);
+            newItem = await pack.getEntity(data.id);
             let permission = newItem.data.permission;
+
+            //Let's get the contents, if there are any, so we can do some stuff with them later.
+            if (newItem?.data?.data?.contents){
+                contents = duplicate(newItem.data.data.contents);
+                delete newItem.data.data.contents;
+            }
             
             let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
                 if (folder == undefined){
@@ -391,32 +464,28 @@ async function createThing (canvas_scene, data, user_id){
                 let things = game.actors.entries.filter(a => a.data.type=="Thing");
                 itemActor = things.find(thing => thing.name == newItem.name);
 
-                if (itemActor == undefined) {
-                    itemActor = await Actor.create({
-                        name: newItem.name,
-                        type: "Thing",
-                        data:{"container.isContainer":false, "container.img":newItem.img},
-                        img:newItem.img,
-                        folder: folder.id,
-                        sort: 12000,
-                        items: [newItem],
-                        permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                      });
-                } else {
-                    // Update the actor with the new item.
-                    let oldItem = itemActor.items.find(item => item.name===newItem.name);
-                    if (oldItem != undefined){
-                        await itemActor.deleteOwnedItem(oldItem.id);
-                        await itemActor.createOwnedItem(newItem);
-                        await itemActor.update({"img":newItem.img, "data.container.img":newItem.img});
-                    }
-                }
+                itemActor = await Actor.create({
+                    name: newItem.name,
+                    type: "Thing",
+                    data:{"container.isContainer":false, "container.extra":newItem.data},
+                    img:newItem.img,
+                    items:[newItem],
+                    folder: folder.id,
+                    sort: 12000,
+                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
+                });   
         } else {
             if (data.type == "Item"){ // This means it was dropped straight from the items list.
                 let itemData = game.items.entries.find(it => it.id == data.id).data
                 let permission = itemData.permission;
 
-                let newItem = new Item(itemData);
+                newItem = new Item(itemData);
+
+                //Let's get the contents, if there are any, so we can do some stuff with them later.
+                if (newItem?.data?.data?.contents){
+                    contents = duplicate(newItem.data.data.contents);
+                    delete newItem.data.data.contents;
+                }
             
                 let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
                 if (folder == undefined){
@@ -426,26 +495,17 @@ async function createThing (canvas_scene, data, user_id){
                 let things = game.actors.entries.filter(a => a.data.type=="Thing");
                 itemActor = things.find(thing => thing.name == newItem.name);
 
-                if (itemActor == undefined) {
-                    itemActor = await Actor.create({
-                        name: newItem.name,
-                        type: "Thing",
-                        data:{"container.isContainer":false, "container.img":newItem.img},
-                        img:newItem.img,
-                        folder: folder.id,
-                        sort: 12000,
-                        items: [newItem],
-                        permission:{"default":3} // Owner permissions are required to see and interact with items.
-                      });
-                } else {
-                    // Update the actor with the new item.
-                    let oldItem = itemActor.items.find(item => item.name===newItem.name);
-                    if (oldItem != undefined){
-                        await itemActor.deleteOwnedItem(oldItem.id);
-                        await itemActor.createOwnedItem(newItem);
-                        await itemActor.update({"img":newItem.img, "data.container.img":newItem.img});
-                    }
-                }
+
+                itemActor = await Actor.create({
+                    name: newItem.name,
+                    type: "Thing",
+                    data:{"container.isContainer":false, "container.extra":newItem.data},
+                    img:newItem.img,
+                    items:[newItem],
+                    folder: folder.id,
+                    sort: 12000,
+                    permission:{"default":3} // Owner permissions are required to see and interact with items.
+                });
             }
         }
     }
@@ -459,24 +519,37 @@ async function createThing (canvas_scene, data, user_id){
         vision: false,
         hidden: false,
         actorId: itemActor.id,
-        actorLink: false,
+        actorLink: true,
         actorData: {}
       }
 
     let scene =new Scene(canvas_scene);
-    scene.createEmbeddedEntity("Token",token);
+    await scene.createEmbeddedEntity("Token",token);
+
+    //Now we need to create the contents and set the container parameters.
+    if (contents.extras != undefined){
+        await itemActor.update({
+            "data.container.isContainer":true,
+            "data.container.locked":contents.locked,
+            "data.container.security":contents.security,
+            "data.container.movable":true,
+            "data.img":newItem.img,
+        })
+        await itemActor.createOwnedItem(contents.extras);
+        await itemActor.deleteOwnedItem(newItem);
+    }
 }
 
 Hooks.on ('dropCanvasData', async (canvas, data) => {
     if (game.user.isGM){
-        createThing (canvas.scene, data, game.user.id);
+        createThing (canvas.scene, data, game.user.id, keyboard.isDown("Shift"));
     } else {
         if (game.settings.get("ModularFate","PlayerThings")){
             let GMs = game.users.entries.filter(user => user.active && user.isGM);
             if (GMs.length == 0) {
                 ui.notifications.error("A GM has to be logged in for you to create item tokens.")
             } else {
-                game.socket.emit("system.ModularFate", {"action":"create_thing", "scene":canvas.scene, "data":data, "id":game.user.id})
+                game.socket.emit("system.ModularFate", {"action":"create_thing", "scene":canvas.scene, "data":data, "id":game.user.id, "shiftDown":keyboard.isDown("Shift")})
             }
         }
     }
@@ -564,7 +637,7 @@ Hooks.once('ready', async function () {
                     return;
             }
             if (data.action == "create_thing"){
-                    await createThing (data.scene, data.data, data.id);                
+                    await createThing (data.scene, data.data, data.id, data.shiftDown);                
             }  
             if (data.action == "delete_token"){
                 let scene = new Scene(data.scene);

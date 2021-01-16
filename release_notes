@@ -1,3 +1,18 @@
+# Version 2.2.5
+  * Fixed a bug where a reroll with a fate point wasn't producing a chat message if you're a player.
+  * Container improvements 1: Things that represent containers no longer contain an item representing themselves (this should reduce confusion about the way Things work)
+  * Container improvements 2: Things that represent containers can only be converted back to regular items when they are empty. This will restore a copy of the original item that created the Thing (if created from an item by dragging to the map)
+  * Extras can now contain static data items representing their contents. This allows nesting containers and various other enhancements.
+  * Updated the ModularFate actorsheet to show the contents of extras that contain other extras.
+  * Things now use linked actors for everything, so each item put on the map will create a new Item. This is a breaking change for anyone who already had items out on their maps prior to this release, sorry.
+  * However, this should solve a lot of other thorny problems! The system will also clear up after itself when you create and delete tokens by removing the related actors. This means your ModularFate/Things folder ought to be empty unless you have Thing tokens out on ANY map in your current game world.
+  * Player characters can now pick up entire containers if they're set to 'movable'.
+  * They can also empty out all of the contents of a container.
+  * Containers can now contain other containers and their contents. It's Russian dolls all the way down.
+  * Manipulating Things still requires a GM to be logged in for it to work properly!
+  * Tidied up behaviour of containers a bit to make life easier, including getting rid of some redundant data values in Things for their container attributes.
+  * You shouldn't EVER create Things directly; let the system handle it for you when you drag an item on to the map.
+
 # Version 2.2.4
   * If a GM isn't logged in and players have permission to create actors, a non-GM player doing so will now cause the actor to be properly initialised.
   * Removed bug that sometimes caused an actor's sheet not to refresh after initialisation with game defaults.

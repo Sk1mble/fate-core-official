@@ -1,20 +1,19 @@
 <form style="background: white; width:100%; height: 100%; border:none !important; padding:10px">
     <div style="display:flex; flex-direction:row">
-        {{#unless data.container.isContainer}}<table style="background-color:white; border:none; width:100px"><tr><td><img class="mfate-sheet__identity-avatar" width="100" height="auto" style="padding:10px; border:0; cursor: pointer;" src="{{itemImg}}" {{#unless this.GM}}disabled = "disabled"{{/unless}}></img></td></tr></table>{{/unless}}
-        {{#if data.container.isContainer}}<table style="background-color:white; border:none; width:100px"><tr><td><img class="mfate-sheet__identity-avatar" width="100" height="auto" style="padding:10px; border:0; cursor: pointer;" id="avatar" {{#if this.GM}}data-edit="data.container.img"{{/if}} src="{{actor.img}}" {{#unless this.GM}}disabled = "disabled"{{/unless}}></img></td></tr></table>{{/if}}
-        {{#unless data.container.isContainer}}<textarea class="mfate-sheet__identity-name" rows="2" disabled="disabled">{{itemName}}</textarea>{{/unless}}
-        {{#if data.container.isContainer}}<span style="padding:10px"><textarea class="mfate-sheet__identity-name" name="name" rows="2" data-edit="name" {{#unless this.GM}}disabled = "disabled"{{/unless}}>{{actor.name}}</textarea></span>
-        <span style="vertical-align:middle">{{/if}}
-            <div>Container?</div><div><input type="checkbox" name="data.container.isContainer" {{#if data.container.isContainer}}checked="checked"{{/if}}{{#if (gt numExtras 1)}}disabled="disabled"{{/if}} {{#unless this.GM}}disabled="disabled"{{/unless}}></input></div><br>
+        <table style="background-color:white; border:none; width:100px"><tr><td><img class="mfate-sheet__identity-avatar" width="100" height="auto" style="padding:0px; border:0; cursor: pointer;" id="avatar" src="{{actor.img}}" {{#unless this.GM}}disabled = "disabled"{{/unless}}></img></td></tr></table>
+        <textarea class="mfate-sheet__identity-name" rows="2" disabled="disabled" style="width:70%">{{actor.name}}</textarea>
+        <span style="vertical-align:middle; width:30%">
+            <div>Container?</div>
+            <div>
+                <input type="checkbox" name="data.container.isContainer" {{#if data.container.isContainer}}checked="checked"{{/if}}{{#if (gt numExtras 1)}}disabled="disabled"{{/if}}{{#if (gt numExtras 0)}}{{#if data.container.isContainer}} disabled="disabled"{{/if}}{{/if}} {{#unless this.GM}}disabled="disabled"{{/unless}}></input> 
+            </div>
+            {{#if data.container.isContainer}}
+            <div>Movable?</div>
+            <div><input type="checkbox" name="data.container.movable" {{#if data.container.movable}}checked="checked"{{/if}}{{#unless this.GM}}disabled="disabled"{{/unless}}></input></div>{{/if}}
             {{#if data.container.isContainer}}<div>Locked?</div><div><input type="checkbox" name="data.container.locked" {{#if data.container.locked}}checked="checked"{{/if}} {{#unless this.GM}}disabled="disabled"{{/unless}}></input>
             <label style="padding-left:25px; vertical-align:top">Security: </label><input class="mfate-sheet__meta-value" style="width:3rem; vertical-align:top" type="number" name="data.container.security" value="{{data.container.security}}" {{#unless this.GM}}disabled="disabled"{{/unless}}></input></div>{{/if}}        
-        </span>
+            {{#if data.container.isContainer}}</span>{{/if}}
     </div>
-    {{#if data.container.isContainer}}
-        <span>
-            <label>Description:</label><textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" name="data.container.description" {{#unless this.GM}}disabled = "disabled"{{/unless}}>{{data.container.description}}</textarea>
-        </span>
-    {{/if}}
 
     {{#if (expanded this.actor '_extras')}}<div style="height:82%">{{else}}<div class="mfate-extras-collapsed">{{/if}}
         {{#unless viewable}}This container is closed, locked, or too far away for you to see what's inside it.{{else}}
@@ -57,4 +56,5 @@
     </div>
     {{/if}}
     {{/unless}}
+    {{#if data.container.isContainer}}{{#unless data.container.locked}}{{#if (gt numExtras 0)}}<button type="button" style="width:150px" name="container_take_all">Take All</button>{{/if}}{{/unless}}{{#if data.container.movable}}<button type="button" style="width:150px" name="container_take">Take Container</button>{{/if}}{{/if}}
 </form>
