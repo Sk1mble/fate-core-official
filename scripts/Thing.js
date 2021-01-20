@@ -414,7 +414,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                });
+                },{"temporary":false,"renderSheet":false,"thing":true});
 
                 if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
                     if (data.tokenId === undefined){
@@ -473,7 +473,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                });   
+                },{"temporary":false,"renderSheet":false,"thing":true});   
         } else {
             if (data.type == "Item"){ // This means it was dropped straight from the items list.
                 let itemData = game.items.entries.find(it => it.id == data.id).data
@@ -505,7 +505,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are required to see and interact with items.
-                });
+                },{"temporary":false,"renderSheet":false,"thing":true});
             }
         }
     }

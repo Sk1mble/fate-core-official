@@ -1,3 +1,8 @@
+# Version 2.2.6
+  * Created an override in preCreateActor hook so you cannot create a Thing except by dragging a token to the map.
+  * Fixed a typo on a language string name in the ManageSkills source (ModularFate.Name).
+  * Added an option in Fate Utilities to increase or decrease the size of the font used, making it easier to compress the window into a smaller space.
+
 # Version 2.2.5
   * Fixed a bug where a reroll with a fate point wasn't producing a chat message if you're a player.
   * Container improvements 1: Things that represent containers no longer contain an item representing themselves (this should reduce confusion about the way Things work)

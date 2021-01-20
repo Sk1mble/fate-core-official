@@ -129,7 +129,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                ${game.i18n.localize("ModularFate.Namer")}:
+                ${game.i18n.localize("ModularFate.Name")}:
                 </td>
                 <td>
                     <input id = "name" type="text" value="${game.i18n.localize("ModularFate.NewTrack")}"></input>

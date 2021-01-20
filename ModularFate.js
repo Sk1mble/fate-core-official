@@ -27,6 +27,13 @@ Hooks.on("preCreateActor", (data, options, userId) => {
     if (data.type =="Core" || data.type=="Accelerated"){
         data = migrateFateCharacter(data);
     }
+
+    if (data.type == "Thing"){
+        if (!options.thing){
+            ui.notifications.error(game.i18n.localize("ModularFate.CantCreateThing"));
+            return false;
+        }
+    }
 });
 
 Hooks.on("createActor", async (data, options, userId) => {
@@ -600,7 +607,17 @@ Hooks.once('init', async function () {
         restricted:true,
         default:[]
     })
+
+    game.settings.register("ModularFate", "fuFontSize", {
+        name: "Fate Utilities Font Size",
+        scope:"user",
+        config:false,
+        type:Number,
+        restricted:false,
+        default:10 //Size in points (pt)
+    })
 });
+
 
 Combat.prototype._getInitiativeFormula = function (combatant) {
     let init_skill = game.settings.get("ModularFate","init_skill");

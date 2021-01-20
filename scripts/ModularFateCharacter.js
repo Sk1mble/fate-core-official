@@ -4,6 +4,10 @@ Handlebars.registerHelper("add1", function(value) {
     return value+1;
 });
 
+Handlebars.registerHelper("add5", function(value) {
+    return value+5;
+})
+
 Handlebars.registerHelper("str", function(value) {
     return JSON.stringify(value);
 });

@@ -44,6 +44,26 @@ class FateUtilities extends Application{
             this.editing = false;
         });
 
+        const fontDown = html.find("button[id='fu_shrink_font']");
+        const fontUp = html.find("button[id='fu_grow_font']");
+
+        fontUp.on("click", async event => {
+            let font = game.settings.get("ModularFate","fuFontSize");
+            font +=1;
+            await game.settings.set ("ModularFate","fuFontSize",font);
+            await this.render(false);
+        })
+
+        fontDown.on("click", async event => {
+            let font = game.settings.get("ModularFate","fuFontSize");
+            font -=1;
+            if (font < 4){
+                font = 4;
+            }
+            await game.settings.set ("ModularFate","fuFontSize",font);
+            await this.render(false);
+        })
+
         const iseAspects = html.find("button[name='iseAspects']");
         iseAspects.on("click", event => this.iseAspect(event, html));
 
@@ -1041,6 +1061,7 @@ async getData(){
     data.game_aspects = aspects;
     data.game_time = game.settings.get("ModularFate","gameTime");
     data.game_notes = game.settings.get("ModularFate","gameNotes");
+    data.fontSize = game.settings.get("ModularFate","fuFontSize");
     return data;
 }
 

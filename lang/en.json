@@ -1,4 +1,5 @@
 {
+    "ModularFate.CantCreateThing":"You can't create a Thing directly, only by dragging an Extra to the map.",
     "ModularFate.Contents":"Contents",
     "ModularFate.DeleteOnTransfer":"Delete extras on transfer?",
     "ModularFate.DeleteOnTransferLabel":"Default to deleting extras on transfer?",
