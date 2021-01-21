@@ -1,3 +1,6 @@
+# Version 2.2.7
+  * Added a system setting to override the size of the font used in aspect labels created from Fate Utilities.
+
 # Version 2.2.6
   * Created an override in preCreateActor hook so you cannot create a Thing except by dragging a token to the map.
   * Fixed a typo on a language string name in the ManageSkills source (ModularFate.Name).

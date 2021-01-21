@@ -616,6 +616,16 @@ Hooks.once('init', async function () {
         restricted:false,
         default:10 //Size in points (pt)
     })
+
+    game.settings.register("ModularFate", "fuAspectLabelSize", {
+        name: "Fate Utilities Aspect Label Size",
+        hint:game.i18n.localize("ModularFate.fuAspectLabelSizeHint"),
+        scope:"world",
+        config:true,
+        type:Number,
+        restricted:true,
+        default:48 
+    })
 });
 
 

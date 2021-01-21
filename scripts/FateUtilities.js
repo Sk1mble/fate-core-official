@@ -759,14 +759,16 @@ class FateUtilities extends Application{
             } else {
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
-
+                let size = game.settings.get("ModularFate","fuAspectLabelSize");
+                let height = size * 1.5;
+                let width = text.length * size /2;
                 Drawing.create({
                     type: CONST.DRAWING_TYPES.RECTANGLE,
                     author: game.user._id,
                     x: canvas.stage.pivot._x,
                     y: canvas.stage.pivot._y,
-                    width: text.length*20,
-                    height: 75,
+                    width: width,
+                    height: height,
                     fillType: CONST.DRAWING_FILL_TYPES.SOLID,
                     fillColor: "#FFFFFF",
                     fillAlpha: 1,
@@ -775,7 +777,7 @@ class FateUtilities extends Application{
                     strokeAlpha: 1,
                     text: text,
                     fontFamily: "Modesto Condensed",
-                    fontSize: 48,
+                    fontSize: size,
                     textColor: "#000000",
                     points: []
                 });   
