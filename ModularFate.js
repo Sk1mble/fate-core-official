@@ -618,14 +618,26 @@ Hooks.once('init', async function () {
     })
 
     game.settings.register("ModularFate", "fuAspectLabelSize", {
-        name: "Fate Utilities Aspect Label Size",
+        name: game.i18n.localize("ModularFate.fuAspectLabelSizeName"),
         hint:game.i18n.localize("ModularFate.fuAspectLabelSizeHint"),
         scope:"world",
         config:true,
         type:Number,
         restricted:true,
-        default:48 
+        default:0 
     })
+
+    game.settings.register("ModularFate","fuAspectLabelFont", {
+        name: game.i18n.localize("ModularFate.fuAspectLabelFont"),
+        hint:game.i18n.localize("ModularFate.fuAspectLabelFontHint"),
+        scope:"world",
+        config:true,
+        type:String,
+        restricted:true,
+        choices:CONFIG.fontFamilies,
+        default:"Modesto Condensed",
+    })
+
 });
 
 

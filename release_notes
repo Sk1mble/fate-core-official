@@ -1,3 +1,7 @@
+# Version 2.2.8
+  * Made the default for FUAspectLabelSize 0 - this will automatically size the text to a percentage of the current scene width.
+  * Added a Font setting for FUAspectLabelFont
+
 # Version 2.2.7
   * Added a system setting to override the size of the font used in aspect labels created from Fate Utilities.
 

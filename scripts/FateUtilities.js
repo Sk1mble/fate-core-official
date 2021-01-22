@@ -750,7 +750,7 @@ class FateUtilities extends Application{
         let index=event.target.id.split("_")[1];
         let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
         let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
-
+        
         if (canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name))==undefined)
         {
             let text;
@@ -760,6 +760,10 @@ class FateUtilities extends Application{
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
                 let size = game.settings.get("ModularFate","fuAspectLabelSize");
+                let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+                if (size === 0){
+                    size = game.scenes.viewed.data.width*(1/100);
+                }
                 let height = size * 1.5;
                 let width = text.length * size /2;
                 Drawing.create({
@@ -776,7 +780,7 @@ class FateUtilities extends Application{
                     strokeColor: "#000000",
                     strokeAlpha: 1,
                     text: text,
-                    fontFamily: "Modesto Condensed",
+                    fontFamily: font,
                     fontSize: size,
                     textColor: "#000000",
                     points: []

@@ -1,5 +1,7 @@
 {
-    "ModularFate.fuAspectLabelSizeHint":"Set the size of the text in aspect labels created from Fate Utilities",
+    "ModularFate.fuAspectLabelFont":"Fate Utilities Aspect Label Font",
+    "ModularFate.fuAspectLabelFontHint":"Sets the font to use on Fate Utilities Situation Aspect labels",
+    "ModularFate.fuAspectLabelSizeHint":"Set the size of the text in aspect labels created from Fate Utilities. If 0, uses a percentage of the current scene height.",
     "ModularFate.fuAspectLabelSizeName":"Fate Utilities Aspect Label Size",
     "ModularFate.CantCreateThing":"You can't create a Thing directly, only by dragging an Extra to the map.",
     "ModularFate.Contents":"Contents",
