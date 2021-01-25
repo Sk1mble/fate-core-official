@@ -54,6 +54,10 @@ export class ModularFateCharacter extends ActorSheet {
         await super.close(options);
     }
 
+    toFront (){
+        $(`#actor-${this.actor.id}`).css({zIndex: Math.min(++_maxZ, 9999)});
+    }
+
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.resizable=true;

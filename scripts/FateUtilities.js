@@ -181,6 +181,15 @@ class FateUtilities extends Application{
         tokenName.on("dblclick", event => this.tokenNameChange(event, html));
         const popcornButtons = html.find("button[class='popcorn']");
         popcornButtons.on("click", event => this._onPopcornButton(event, html));
+        popcornButtons.on("contextmenu", event => {
+            let t_id = event.target.id;
+            let token = canvas.tokens.placeables.find(t => t.id == t_id);
+            const sheet = token.actor.sheet;
+            sheet.render(true, {token: token});
+            sheet.maximize();
+            sheet.toFront();
+        })
+
         const nextButton = html.find("button[id='next_exchange']");
         nextButton.on("click", event => this._nextButton(event, html));
         const endButton = html.find("button[id='end_conflict']");
@@ -246,6 +255,7 @@ class FateUtilities extends Application{
             const sheet = token.actor.sheet;
             sheet.render(true, {token: token});
             sheet.maximize();
+            sheet.toFront();
         })
 
         const fu_clear_rolls = html.find("button[id='fu_clear_rolls']");
@@ -337,10 +347,11 @@ class FateUtilities extends Application{
             } else {
                 text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
+            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
             drawing.update({
                 "text":text,
                 width: text.length*20,
-                fontFamily: "Modesto Condensed",
+                fontFamily: font,
             });
         }
 
@@ -726,10 +737,11 @@ class FateUtilities extends Application{
             } else {
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
+            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
             drawing.update({
                 "text":text,
                 width: text.length*20,
-                fontFamily: "Modesto Condensed",
+                fontFamily: font,
             });
         }
     }
@@ -1123,7 +1135,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
                     name:"FateUtilities",//Completed
                     title:game.i18n.localize("ModularFate.LaunchFateUtilities"),
                     icon:"fas fa-theater-masks",
-                    onClick: ()=> {let fu = new FateUtilities; fu.render(true)},
+                    onClick: async ()=> {let fu = new FateUtilities; await fu.render(true); $('#FateUtilities').css({zIndex: Math.min(++_maxZ, 9999)});},
                     button:true
                 });
             }
