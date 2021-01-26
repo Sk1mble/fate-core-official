@@ -449,6 +449,7 @@
                 <td>
                     {{this.name}}
                     <div style="float:right; padding-right:5px">
+                        {{#if ../GM}}<button name = "popcorn" type="button" id = "{{this.id}}_unact" title="{{localize 'ModularFate.pocornUnactHint'}}" i icon class="fas fa-undo" style="width:35px; height:35px"></button>{{else}}{{/if}}
                         <button name = "popcorn" type="button" id = "{{this.id}}_find" title="{{localize 'ModularFate.pocornFindHint'}}" i icon class="fas fa-search" style="width:35px; height:35px"></button>
                         <button name = "popcorn" type="button" id = "{{this.id}}_sheet" title="{{localize 'ModularFate.pocornSheetHint'}}" i icon class="fas fa-user" style="width:35px; height:35px"></button>
                 </td>

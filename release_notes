@@ -1,3 +1,6 @@
+# Version 2.2.12
+  * Added a 'unact' button to change a character's status in the combat tracker to 'not acted'.
+
 # Version 2.2.11
   * Controlled tokens' lines in the Combat Tracker of Fate Utilities are now highlighted in blue.
   * Clicking on the magnifying glass in the combat tracker will control the token (if owned) and release control of all other tokens.

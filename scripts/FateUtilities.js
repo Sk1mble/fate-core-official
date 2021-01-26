@@ -909,6 +909,12 @@ class FateUtilities extends Application{
             await token.setFlag("ModularFate","hasActed", true);
         }
 
+        if (type === "unact"){
+            let t_id = id;
+            let token = canvas.tokens.placeables.find(token => token.id == t_id)
+            await token.setFlag("ModularFate","hasActed", false);
+        }
+
         if (type === "find"){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
