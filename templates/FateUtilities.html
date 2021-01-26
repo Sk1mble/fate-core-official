@@ -412,9 +412,9 @@
             {{/if}}
             <table style="border:none; background-color:white">
             {{#each combat_tokens}}
-            <tr>    
+            <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue;"{{/if}}>    
                 <td style="width:60px">
-                    <button type="button" name="popcorn" id="{{this.id}}_act" title="{{localize 'ModularFate.pocornAvatarHint'}}" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
+                    <button type="button" name="popcorn" id="{{this.id}}_act1" title="{{localize 'ModularFate.pocornAvatarHint'}}" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
                 </td>
                 <td>
                     {{this.name}}
@@ -422,15 +422,10 @@
                         {{#if ../GM}}<button name = "popcorn" type="button" id = "{{this.id}}_act" title="{{localize 'ModularFate.pocornAvatarHint'}}" i icon class="fas fa-play" style="width:35px; height:35px"></button>{{else}}{{/if}}
                         <button name = "popcorn" type="button" id = "{{this.id}}_find" title="{{localize 'ModularFate.pocornFindHint'}}" i icon class="fas fa-search" style="width:35px; height:35px"></button>
                         <button name = "popcorn" type="button" id = "{{this.id}}_sheet" title="{{localize 'ModularFate.pocornSheetHint'}}" i icon class="fas fa-user" style="width:35px; height:35px"></button>
-                    </div>
                 </td>
             </tr>
             {{/each}}
             </table>
-            <h3>{{localize 'ModularFate.AlreadyActed'}}:</h3>
-            {{#each has_acted_tokens}}
-            <li>{{this.name}}</li>
-            {{/each}}
             <table style="border:none; background-color:white">
             {{#if GM}}
             <tr>
@@ -438,12 +433,28 @@
                     <button type="button" style="width:50px; height:25px; float:left" id="next_exchange" title="{{localize 'ModularFate.NextExchange'}}" i icon class="fas fa-forward"></button>                    
                     <button type="button" style="width:50px; height:25px; float:left" id="timed_event" title="{{localize 'ModularFate.TimedEvent'}}" i icon class="fas fa-clock"></button>                    
                 </td>
-                <td>
-                    <button type="button" style="width:50px; height:25px; float:right" id="end_conflict" title="{{localize 'ModularFate.EndConflict'}}" i icon class="fas fa-trash"></button>
+                <td style="padding-right:5px">
+                    <button type="button" style="width:50px; height:25px; float:right;" id="end_conflict" title="{{localize 'ModularFate.EndConflict'}}" i icon class="fas fa-trash"></button>
                 </td>
             </tr>
             {{/if}}
             </table>                
+            <h3>{{localize 'ModularFate.AlreadyActed'}}:</h3>
+            <table style="border:none; background-color:lightgrey">
+            {{#each has_acted_tokens}}
+            <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue;"{{/if}}>    
+                <td style="width:60px">
+                    <button type="button" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" disabled="disabled"/>     
+                </td>
+                <td>
+                    {{this.name}}
+                    <div style="float:right; padding-right:5px">
+                        <button name = "popcorn" type="button" id = "{{this.id}}_find" title="{{localize 'ModularFate.pocornFindHint'}}" i icon class="fas fa-search" style="width:35px; height:35px"></button>
+                        <button name = "popcorn" type="button" id = "{{this.id}}_sheet" title="{{localize 'ModularFate.pocornSheetHint'}}" i icon class="fas fa-user" style="width:35px; height:35px"></button>
+                </td>
+            </tr>
+            {{/each}}
+            </table>
         </div><!--End action tracker body-->
     </td>
     {{/if}}

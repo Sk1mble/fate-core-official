@@ -1,3 +1,8 @@
+# Version 2.2.11
+  * Controlled tokens' lines in the Combat Tracker of Fate Utilities are now highlighted in blue.
+  * Clicking on the magnifying glass in the combat tracker will control the token (if owned) and release control of all other tokens.
+  * Changed the display of actors who've acted so that the pan and character sheet buttons are still available.
+
 # Version 2.2.10
   * Fate Utilities' combat tracker now has three buttons per character to make them act, to centre the canvas on their token, and to open their character sheet.
 

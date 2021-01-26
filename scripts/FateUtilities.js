@@ -902,9 +902,8 @@ class FateUtilities extends Application{
 
         let type = event.target.id.split("_")[1];
         let id = event.target.id.split("_")[0];
-        console.log(type);
 
-        if (type === "act"){
+        if (type.startsWith("act")){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
             await token.setFlag("ModularFate","hasActed", true);
@@ -913,7 +912,10 @@ class FateUtilities extends Application{
         if (type === "find"){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
-            canvas.animatePan(token, 1)
+            canvas.animatePan(token, 1);
+            if (token.owner) {
+                token.control({releaseOthers:true});
+            }
         }
 
         if (type === "sheet"){
