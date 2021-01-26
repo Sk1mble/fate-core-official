@@ -1,5 +1,7 @@
 {
-    "ModularFate.pocornAvatarHint":"Left click to have this character take an action. Right click to open their character sheet",
+    "ModularFate.pocornAvatarHint":"Left click to have this character take an action.",
+    "ModularFate.pocornFindHint":"Left click to centre your view on this token.",
+    "ModularFate.pocornSheetHint":"Left click to open this token's character sheet.",
     "ModularFate.fuAspectLabelFont":"Fate Utilities Aspect Label Font",
     "ModularFate.fuAspectLabelFontHint":"Sets the font to use on Fate Utilities Situation Aspect labels",
     "ModularFate.fuAspectLabelSizeHint":"Set the size of the text in aspect labels created from Fate Utilities. If 0, uses a percentage of the current scene height.",

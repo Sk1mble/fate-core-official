@@ -179,16 +179,8 @@ class FateUtilities extends Application{
 
         const tokenName = html.find("td[class='tName']");
         tokenName.on("dblclick", event => this.tokenNameChange(event, html));
-        const popcornButtons = html.find("button[class='popcorn']");
+        const popcornButtons = html.find("button[name='popcorn']");
         popcornButtons.on("click", event => this._onPopcornButton(event, html));
-        popcornButtons.on("contextmenu", event => {
-            let t_id = event.target.id;
-            let token = canvas.tokens.placeables.find(t => t.id == t_id);
-            const sheet = token.actor.sheet;
-            sheet.render(true, {token: token});
-            sheet.maximize();
-            sheet.toFront();
-        })
 
         const nextButton = html.find("button[id='next_exchange']");
         nextButton.on("click", event => this._nextButton(event, html));
@@ -907,10 +899,31 @@ class FateUtilities extends Application{
     }
 
     async _onPopcornButton(event, html){
-        let t_id = event.target.id;
-        let token = canvas.tokens.placeables.find(token => token.id == t_id)
-        await token.setFlag("ModularFate","hasActed", true);
-        //this.render(False);
+
+        let type = event.target.id.split("_")[1];
+        let id = event.target.id.split("_")[0];
+        console.log(type);
+
+        if (type === "act"){
+            let t_id = id;
+            let token = canvas.tokens.placeables.find(token => token.id == t_id)
+            await token.setFlag("ModularFate","hasActed", true);
+        }
+
+        if (type === "find"){
+            let t_id = id;
+            let token = canvas.tokens.placeables.find(token => token.id == t_id)
+            canvas.animatePan(token, 1)
+        }
+
+        if (type === "sheet"){
+            let t_id = id;
+            let token = canvas.tokens.placeables.find(t => t.id == t_id);
+            const sheet = token.actor.sheet;
+            sheet.render(true, {token: token});
+            sheet.maximize();
+            sheet.toFront();
+        }
     }
 
     async _endButton(event, html){

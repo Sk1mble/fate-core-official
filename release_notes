@@ -1,3 +1,6 @@
+# Version 2.2.10
+  * Fate Utilities' combat tracker now has three buttons per character to make them act, to centre the canvas on their token, and to open their character sheet.
+
 # Version 2.2.9
   * Fate Utilities now honours the choice of Fate Utilities font when you update a situation aspect's free invokes.
   * When you click on the Fate Utilities button, if FU is alread open it will be brought to the top of the application stack.
