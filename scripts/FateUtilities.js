@@ -996,8 +996,16 @@ class FateUtilities extends Application{
 
 async getData(){
     //Let's prepare the data for the initiative tracker here
+    //Check if we're using an initiative skill, if so disable the initiative tracker in favour of using the default one
+    let init_skill = game.settings.get("ModularFate","init_skill");
+    let tracker_disabled = false;
+    
+    if (init_skill !== "None"){
+        tracker_disabled = true;
+    }
+    
     const data =   super.getData();
-    if (game.combat==null){
+    if (game.combat==null || tracker_disabled){
         data.conflict = false;
     } else {
         data.conflict = true;

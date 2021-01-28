@@ -1,5 +1,6 @@
 # Version 2.2.12
   * Added a 'unact' button to change a character's status in the combat tracker to 'not acted'.
+  * Disabled the Fate Utilities conflict action tracker if an initiative skill has been set, as you can use the standard combat tracking tools in this use case.
 
 # Version 2.2.11
   * Controlled tokens' lines in the Combat Tracker of Fate Utilities are now highlighted in blue.
