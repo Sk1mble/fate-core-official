@@ -1,3 +1,8 @@
+# Version 2.2.13
+  * Fixed a bug that prevented an extra from copied from a token to the map or another character.
+  * Fixed a bug (and Foundry default behaviour too, I think) that prevented an extra from being copied from a token character to another token character.
+  * Fixed a typo that prevented the text for 'Create an Advantage' from appearing on clicking on a skill in the player skill editor.
+
 # Version 2.2.12
   * Added a 'unact' button to change a character's status in the combat tracker to 'not acted'.
   * Disabled the Fate Utilities conflict action tracker if an initiative skill has been set, as you can use the standard combat tracking tools in this use case.

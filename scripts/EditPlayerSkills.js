@@ -310,7 +310,7 @@ class EditPlayerSkills extends FormApplication{
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b${game.i18n.localize("ModularFate.CAA")}:</b>
+                                                        <b>${game.i18n.localize("ModularFate.CAA")}:</b>
                                                     </td>
                                                     <td>
                                                         ${skill.caa}

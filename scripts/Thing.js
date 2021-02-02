@@ -434,11 +434,11 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                         let token = new Token(scene.data.tokens.find(token=>token._id == data.tokenId));
                         if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
                             if (shiftDown === false){
-                                await actor.deleteOwnedItem(data.data._id); 
+                                await token.actor.deleteOwnedItem(data.data._id); 
                             }
                         } else {
                             if (shiftDown === true){
-                                await actor.deleteOwnedItem(data.data._id); 
+                                await token.actor.deleteOwnedItem(data.data._id); 
                             }
                         }
                     }
@@ -573,10 +573,21 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
         return;
     }
 
-    if (target.id !== data.actorId){
-        if (data.tokenId === undefined){ //This is from a real actor
-            let actor = game.actors.get(data.actorId);
-            //Need to check if the user has ownership of the target. If not, do nothing.
+    if (target.id === data.actorId){
+        if (data.tokenId === undefined){ // This is being dragged on the same linked actor, do nothing.
+            return;
+        } else {
+            // This is a token actor, so it could be being dragged from one instance of the token to another. 
+            // We need to check if the token IDs are the same rather than the actor IDs.
+            if (target.token.id === data.tokenId){ // Being dragged within token sheet.
+                return;
+            }
+        }
+    }
+
+    if (data.tokenId === undefined){ //This is from a real actor
+        let actor = game.actors.get(data.actorId);
+        //Need to check if the user has ownership of the target. If not, do nothing.
             if (target.owner){
                 if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
                     if (!keyboard.isDown("Shift")){
@@ -588,22 +599,31 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
                     }
                 }
             }
-        } else { // This is a token actor. Respond accordingly.
-            let token = data.scene.tokens.find(token=> token._id === data.tokenId);
-                if (token !== undefined){
-                    let t = new Token(token);
-                    if (t.actor.owner && target.owner){
-                        if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
-                            if (!keyboard.isDown("Shift")){
-                                await t.actor.deleteOwnedItem(data.data._id);
-                            }
-                        } else {
-                            if (keyboard.isDown("Shift")){
-                                await t.actor.deleteOwnedItem(data.data._id);
-                            }
-                        }
+    } else { // This is a token actor. Respond accordingly.
+        let token = data.scene.tokens.find(token=> token._id === data.tokenId);
+
+        let destination = data.scene.tokens.find(token=> token._id == target?.token?.id)
+        if (token !== undefined){
+            let t = new Token(token);
+            let dt = new Token(destination);
+            
+            if (t.actor.id == dt?.actor?.id){
+                // Create a copy of the item on the destination, as it appears Foundry doesn't by default.
+                await dt.actor.createOwnedItem(data.data);
+            } else {
+                // Do nothing, as the default Foundry behaviour has got this covered.
+            }
+            if (t.actor.owner && target.owner){
+                if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                    if (!keyboard.isDown("Shift")){
+                        await t.actor.deleteOwnedItem(data.data._id);
+                    }
+                } else {
+                    if (keyboard.isDown("Shift")){
+                        await t.actor.deleteOwnedItem(data.data._id);
                     }
                 }
+            }
         }
     }
 })
