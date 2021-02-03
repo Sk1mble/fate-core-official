@@ -643,7 +643,7 @@ Hooks.once('init', async function () {
 
 Combat.prototype._getInitiativeFormula = function (combatant) {
     let init_skill = game.settings.get("ModularFate","init_skill");
-    if (init_skill === "None") {
+    if (init_skill === "None" || init_skill === "Disable") {
         return "0";
     }else {
         return combatant.actor.data.data.skills[`${init_skill}`].rank.toString();

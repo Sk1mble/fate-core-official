@@ -117,6 +117,7 @@ Hooks.once('init', async function () {
     let skills = game.settings.get("ModularFate", "skills")
     
     skill_choices["None"]="None";
+    skill_choices["Disable"]="Disable";
     for (let skill in skills){skill_choices[skill]=skill};
 
     game.settings.register("ModularFate","init_skill", {

@@ -407,7 +407,7 @@
         {{#if conflict}}
          ({{localize 'ModularFate.Exchange'}} {{exchange}})</h2>
         <h3 style="padding-left:5px">{{localize 'ModularFate.StillToAct'}}:</h3>
-        <div class="Action Tracker" style="padding-left:5px; overflow-y:auto; height:auto">
+        <div class="Action Tracker" style="padding-left:5px; overflow-y:auto; max-height:72vh; height:auto">
             {{else}}</h2>{{localize 'ModularFate.NoConflictDetected'}}
             {{/if}}
             <table style="border:none; background-color:white">
@@ -417,7 +417,7 @@
                     <button type="button" name="popcorn" id="{{this.id}}_act1" title="{{localize 'ModularFate.pocornAvatarHint'}}" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
                 </td>
                 <td>
-                    {{this.name}}
+                    <span {{#if ../GM}}id="{{this.id}}_tokenNameA_AT" class="tName" title="{{localize 'ModularFate.DoubleClickToChangeName'}}"{{/if}}>{{this.name}}</span>
                     <div style="float:right; padding-right:5px">
                         {{#if ../GM}}<button name = "popcorn" type="button" id = "{{this.id}}_act" title="{{localize 'ModularFate.pocornAvatarHint'}}" i icon class="fas fa-play" style="width:35px; height:35px"></button>{{else}}{{/if}}
                         <button name = "popcorn" type="button" id = "{{this.id}}_find" title="{{localize 'ModularFate.pocornFindHint'}}" i icon class="fas fa-search" style="width:35px; height:35px"></button>
@@ -447,7 +447,7 @@
                     <button type="button" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" disabled="disabled"/>     
                 </td>
                 <td>
-                    {{this.name}}
+                    <span {{#if ../GM}}id="{{this.id}}_tokenNameA_AT" class="tName" title="{{localize 'ModularFate.DoubleClickToChangeName'}}"{{/if}}>{{this.name}}</span>
                     <div style="float:right; padding-right:5px">
                         {{#if ../GM}}<button name = "popcorn" type="button" id = "{{this.id}}_unact" title="{{localize 'ModularFate.pocornUnactHint'}}" i icon class="fas fa-undo" style="width:35px; height:35px"></button>{{else}}{{/if}}
                         <button name = "popcorn" type="button" id = "{{this.id}}_find" title="{{localize 'ModularFate.pocornFindHint'}}" i icon class="fas fa-search" style="width:35px; height:35px"></button>

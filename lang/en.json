@@ -15,7 +15,7 @@
     "ModularFate.AllowPlayerThingCreation":"Player Thing Token Creation",
     "ModularFate.ThingCreationLabel":"Allow players to create Thing tokens?",
     "ModularFate.ThingCreationHint":"If set to true, players can drag items and Things to the map.",
-    "ModularFate.initiativeSetting":"This skill's rank is each character's initiative score. Leave on 'None' if you use Elective Action Order.",
+    "ModularFate.initiativeSetting":"This skill's rank is each character's initiative score. Leave on 'None' if you use Elective Action Order. If you use a separate tracker, set to 'Disable' to disable the Fate Utilities action tracker without setting an initiative skill.",
     "ModularFate.initiativeSkill":"Initiative Skill",
     "ModularFate.GameTime":"Game time and date",
     "ModularFate.Notes":"Notes",

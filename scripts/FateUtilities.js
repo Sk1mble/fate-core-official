@@ -177,7 +177,7 @@ class FateUtilities extends Application{
             this.render(false);
         })
 
-        const tokenName = html.find("td[class='tName']");
+        const tokenName = html.find("td[class='tName'], span[class='tName']");
         tokenName.on("dblclick", event => this.tokenNameChange(event, html));
         const popcornButtons = html.find("button[name='popcorn']");
         popcornButtons.on("click", event => this._onPopcornButton(event, html));
@@ -1000,7 +1000,7 @@ async getData(){
     let init_skill = game.settings.get("ModularFate","init_skill");
     let tracker_disabled = false;
     
-    if (init_skill !== "None"){
+    if (init_skill !== "None" || init_skill === "Disabled"){
         tracker_disabled = true;
     }
     

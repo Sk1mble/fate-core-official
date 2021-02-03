@@ -1,3 +1,8 @@
+# Version 2.2.14
+  * Fixed the height of the Action Tracker pane in Fate Utilities to 72vh to align it with the other panes and prevent it from scrolling the main FU headers out of view.
+  * Tweaked the option for setting an initiative skill to add a 'Disabled' option. This enables you to disable the FU action tracker without setting an initiative skill.
+  * Added the ability to double click the name in the action tracker to change the name of a token.
+
 # Version 2.2.13
   * Fixed a bug that prevented an extra from copied from a token to the map or another character.
   * Fixed a bug (and Foundry default behaviour too, I think) that prevented an extra from being copied from a token character to another token character.
