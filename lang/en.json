@@ -1,4 +1,5 @@
 {
+    "ModularFate.addToSceneAspects":"Click to add this track aspect to the list of scene aspects.",
     "ModularFate.pocornUnactHint":"Left click to reset this character as not having acted this exchange.",
     "ModularFate.pocornAvatarHint":"Left click to have this character take an action.",
     "ModularFate.pocornFindHint":"Left click to centre your view on this token.",

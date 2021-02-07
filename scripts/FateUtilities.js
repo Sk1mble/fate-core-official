@@ -209,6 +209,9 @@ class FateUtilities extends Application{
         const add_sit_aspect = html.find("button[id='add_sit_aspect']")
         add_sit_aspect.on("click", event => this._add_sit_aspect(event, html));
 
+        const add_sit_aspect_from_track = html.find("button[name='track_aspect_button']")
+        add_sit_aspect_from_track.on("click", event => this._add_sit_aspect_from_track(event, html));
+
         //Situation Aspect Buttons
         const del_sit_aspect = html.find("button[name='del_sit_aspect']");
         del_sit_aspect.on("click", event => this._del_sit_aspect(event, html));
@@ -829,6 +832,32 @@ class FateUtilities extends Application{
         }                                
         situation_aspects.push(situation_aspect);
         game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+    }
+
+    async _add_sit_aspect_from_track(event, html){
+        let aspect = event.target.id.split("_")[1];
+        let name = event.target.id.split("_")[0];
+        let text = name + " ("+aspect+")";
+        let situation_aspects = [];
+        let situation_aspect = {
+                                    "name":text,
+                                    "free_invokes":1
+                                };
+        try {
+            situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
+        } catch {
+        }
+        let exists = false;
+        situation_aspects.forEach(aspect => {
+           if (aspect.name === text) {
+                exists = true;
+           } 
+        })
+        if (!exists){
+            situation_aspects.push(situation_aspect);
+            game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+       } else {
+       }
     }
 
     async _saveNotes(event, html){

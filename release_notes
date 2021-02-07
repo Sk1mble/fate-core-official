@@ -1,3 +1,6 @@
+# Version 2.2.15
+  * Added a little icon to tracks that have named aspects in Fate Utilities. When clicked, the aspect will be added to the list of situation aspects for the scene.
+
 # Version 2.2.14
   * Fixed the height of the Action Tracker pane in Fate Utilities to 72vh to align it with the other panes and prevent it from scrolling the main FU headers out of view.
   * Tweaked the option for setting an initiative skill to add a 'Disabled' option. This enables you to disable the FU action tracker without setting an initiative skill.
