@@ -34,7 +34,7 @@
                     </tr>
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}
-                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-top:black 2px solid"{{else}}style="border-top:black 2px solid"{{/if}}>
+                    <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:black 2px solid"{{else}}class="{{this.id}}_fu" style="border-top:black 2px solid"{{/if}}>
                         <td style="width:20px; vertical-align:top">
                             <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand" title="{{localize 'ModularFate.Maximise'}}" {{else}}i icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{/if}}></button>
                         </td>
@@ -89,7 +89,7 @@
                     {{/if}}
                     {{/each}}
                     {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                    <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue; border-top:black 2px solid"{{else}}style="border-top:black 2px solid"{{/if}}>
+                    <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:black 2px solid"{{else}}class="{{this.id}}_fu" style="border-top:black 2px solid"{{/if}}>
                         <td style="vertical-align:top; width:20px">
                             <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand" title="{{localize 'ModularFate.Maximise'}}" {{else}}i icon class="fas fa-compress" title="{{localize 'ModularFate.Maximise'}}"{{/if}}></button>
                         </td>
@@ -149,6 +149,7 @@
             </div><!--End Aspects tab--------------------------------------->
             
             <!--------BEGIN Tracks tab-->
+
             <div name="tracks" class="tab tracks" data-tab="tracks" style="background-color:lightgray; font-family:Montserrat; padding-top:10px; font-size:{{fontSize}}pt">
                 {{localize 'ModularFate.Category'}}: 
                 <select style="font-family:Montserrat" id = "category_select" style="padding-right:100px">
@@ -163,8 +164,7 @@
                 <div id="fu_tracks_tab" style="background-color:lightgray; overflow-y:auto; max-height:72vh">
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}
-                {{#if (eq this._controlled true)}} <table style="padding:10px; border-top:none; border-bottom:none; background-color:lightsteelblue">{{else}}
-                    <table style="padding:10px; border-top:none; border-bottom:none">{{/if}}
+                <table class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
                     <tr style="border-top:2px black solid">
                         <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
                             <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand" title="{{localize 'ModularFate.Maximise'}}" {{else}}i icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{/if}}></button>
@@ -199,8 +199,7 @@
                 {{/each}}<!--ENd all_tokens each-->
                 {{#each all_tokens}}
                 {{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                {{#if (eq this._controlled true)}} <table style="padding:10px; border-top:none; border-bottom:none; background-color:lightsteelblue">{{else}}
-                <table style="padding:10px; border-top:none; border-bottom:none">{{/if}}
+                <table class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
                     <tr style="border-top:2px black solid">
                         <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold;">
                             <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand"{{else}}i icon class="fas fa-compress"{{/if}}></button>
@@ -412,7 +411,7 @@
             {{/if}}
             <table style="border:none; background-color:white">
             {{#each combat_tokens}}
-            <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue;"{{/if}}>    
+            <tr class="{{#if (eq this._controlled true)}} fu_controlled {{/if}} {{this.id}}_fu">    
                 <td style="width:60px">
                     <button type="button" name="popcorn" id="{{this.id}}_act1" title="{{localize 'ModularFate.pocornAvatarHint'}}" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
                 </td>
@@ -442,7 +441,7 @@
             <h3>{{localize 'ModularFate.AlreadyActed'}}:</h3>
             <table style="border:none; background-color:lightgrey">
             {{#each has_acted_tokens}}
-            <tr {{#if (eq this._controlled true)}}style="background-color:lightsteelblue;"{{/if}}>    
+            <tr class="{{#if (eq this._controlled true)}} fu_controlled {{/if}} {{this.id}}_fu">
                 <td style="width:60px">
                     <button type="button" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" disabled="disabled"/>     
                 </td>

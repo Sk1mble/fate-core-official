@@ -446,7 +446,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.Universal")}br>
+                    ${game.i18n.localize("ModularFate.Universal")}<br>
                     ${game.i18n.localize("ModularFate.Unique")}<br>
                     ${game.i18n.localize("ModularFate.Paid")}<br>
                 </td>
@@ -458,6 +458,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
+                    ${game.i18n.localize("ModularFate.RecoveryType")}:<br>
                     ${game.i18n.localize("ModularFate.AspectWhenMarked")}:<br>
                     ${game.i18n.localize("ModularFate.NameAsAspect?")}:<br>
                     ${game.i18n.localize("ModularFate.Boxes")}:<br>

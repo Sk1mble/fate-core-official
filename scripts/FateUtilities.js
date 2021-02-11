@@ -177,6 +177,27 @@ class FateUtilities extends Application{
             this.render(false);
         })
 
+        const rollTab = html.find("a[data-tab='rolls']");
+        rollTab.on("click", event => {
+            if (this.delayedRender){
+                this.render(false);
+            }
+        })
+
+        const sceneTab = html.find("a[data-tab='scene']");
+        sceneTab.on("click", event => {
+            if (this.delayedRender){
+                this.render(false);
+            }
+        })
+
+        const gameInfoTab = html.find("a[data-tab='game_info']");
+        gameInfoTab.on("click", event => {
+            if (this.delayedRender){
+                this.render(false);
+            }
+        })
+
         const tokenName = html.find("td[class='tName'], span[class='tName']");
         tokenName.on("dblclick", event => this.tokenNameChange(event, html));
         const popcornButtons = html.find("button[name='popcorn']");
@@ -1150,6 +1171,36 @@ async render (...args){
 }
 
 async renderMe(...args){
+    let tab = this._tabs[0].active;
+
+    if (args[0][1]?.flags?.ModularFate?.rolls != undefined){
+        // It was a roll.
+        if (tab !== "rolls"){
+            // change a boolean to remind us to update FateUtilities once the tab is changed, but don't re-render
+            this.delayedRender = true;
+            return;
+        } 
+    }
+
+    if (args[0][0] === "scene"){
+        if (tab !== "scene"){
+            this.delayedRender = true;
+            return;
+        } 
+    }
+
+    if (args[0] === "controlToken"){
+        // Use jquery to find the relevant token and highlight it in all relevant things.
+        //args[1] == token id
+        //args[2] == control true/false 
+        if (args[2] === true){
+            $(`.${args[1]}_fu`).addClass("fu_controlled");
+        }
+        if (args[2] === false){
+            $(`.${args[1]}_fu`).removeClass("fu_controlled");
+        }
+        return;
+    }
     //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
     //Scene, User, and Combat.
     //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
@@ -1157,6 +1208,7 @@ async renderMe(...args){
         this.renderPending = true;
         setTimeout(() => {
           this.render(false);
+          this.delayedRender = false;
           this.renderPending = false;
         }, 0);
       }
@@ -1382,7 +1434,14 @@ Hooks.once('ready', async function () {
         if (render.render){
             let FU = Object.values(ui.windows).find(window=>window.options.id=="FateUtilities");
             if (FU != undefined){
-                FU.render(false);
+                let tab = FU._tabs[0].active;
+
+                if (tab !== "game_info"){
+                    FU.delayedRender = true; 
+                    return;
+                } else {
+                    FU.render(false);
+                }
             }
         }
     })

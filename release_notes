@@ -1,3 +1,10 @@
+# Version 2.2.16
+  * Fixed a layout bug in the presentation of player track information in Fate Utilities.
+  * Controlling a token no longer causes FU to completely re-render, instead it changes the class of controlled token rows/tables to highlight their colour.
+  * A dice roll now only causes FateUtilities to re-render if you're looking at the dice history at the time. It will of course re-render the roll tab when you click on it, ensuring the roll history is up-to-date.
+  * Made similar changes so the game info tab and the scene tab will only re-render if those tabs are open when a re-render request is sent, or the next time those tabs are clicked.
+  * In all, these should prevent a LOT of unnecessary renders of FateUtilities.
+
 # Version 2.2.15
   * Added a little icon to tracks that have named aspects in Fate Utilities. When clicked, the aspect will be added to the list of situation aspects for the scene.
 

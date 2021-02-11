@@ -99,6 +99,10 @@ button:hover {
   border-radius: 0;
 }
 
+.fu_controlled {
+  background-color:lightsteelblue !important;
+}
+
 .mf_item {
   background-color:white; 
   margin:0px; 
