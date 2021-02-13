@@ -1,4 +1,5 @@
 <form id="FateUtilities" style="background-color:lightgrey" onsubmit="event.preventDefault();">
+<div style="border:none; margin:0px;display:grid;">
 <nav class="navigation foo">
     <a class="item fu_item_1" data-tab="aspects"><b title="{{localize 'ModularFate.AspectsFatePoints'}}" i icon class="fas fa-theater-masks"></b></a>
     <a class="item fu_item_2" data-tab="tracks"><b title="{{localize 'ModularFate.CharacterTracks'}}" i icon class="fas fa-user-injured"></b></a>
@@ -7,10 +8,8 @@
     <a class="item fu_item_5" data-tab="game_info"><b title="{{localize 'ModularFate.GameInformation'}}" i icon class="fas fa-feather"></b></a>                    
     <div style="float:right"><button type="button" style="border:none; background-color:transparent; font-size:xx-small; width:25px;" title="Shrink Font" id="fu_shrink_font">A</button><button type="button" style="font-size:medium; border:none; background-color: transparent; width:25px; vertical-align:bottom" id="fu_grow_font" title="Grow Font">A</button></div>
 </nav>
-
-<table style="border:none; margin:0px;">
-<tr>
-    <td style="vertical-align:top">
+<div>
+    <div style="vertical-align:top">
         <section class="utilities-body">
 
             <!----------------------BEGIN Aspects Tab-->
@@ -399,9 +398,9 @@
              </div><!--End game information tab-->
 
         </section>
-    </td>
+    </div>
     {{#if conflict}}
-    <td width="32%" style="vertical-align:top">
+    <div width="32%" style="vertical-align:top">
         <h2 style="padding:5px">{{localize 'ModularFate.ActionTracker'}}
         {{#if conflict}}
          ({{localize 'ModularFate.Exchange'}} {{exchange}})</h2>
@@ -456,8 +455,8 @@
             {{/each}}
             </table>
         </div><!--End action tracker body-->
-    </td>
+    </div>
     {{/if}}
-</tr>
-</table>
+</div>
+</div>
 </form>
