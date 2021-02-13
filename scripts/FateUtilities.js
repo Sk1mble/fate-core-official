@@ -96,7 +96,7 @@ class FateUtilities extends Application{
         const iseTracks = html.find("button[name='iseTracks']");
         iseTracks.on("click", event => this.iseTrack(event, html));
 
-        const expandAspectNotes = html.find("button[name='FUexpandAspect");
+        const expandAspectNotes = html.find("div[name='FUexpandAspect");
         expandAspectNotes.on("click", event => {
             let details = event.target.id.split("_");
             let token_id = details[0];
@@ -156,7 +156,7 @@ class FateUtilities extends Application{
         })
 
 
-        const expandTrackNotes = html.find("button[name='FUexpandTrack']");
+        const expandTrackNotes = html.find("div[name='FUexpandTrack']");
         
         expandTrackNotes.on("click", event => {
             let details = event.target.id.split("_");

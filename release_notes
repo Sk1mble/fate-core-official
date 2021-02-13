@@ -1,3 +1,7 @@
+# Version 2.2.19
+  * The expand and contract aspect buttons in FU are now divs and the icon fully scales with the font size, as does the padding. This means that changing the size of the font in FU now allows the aspects tables to be significantly compressed.
+  * Ditto for the expand and contract track buttons in FU.  
+
 # Version 2.2.18
   * FU now uses DIVs rather than a table to layout its elements.
 

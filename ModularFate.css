@@ -103,6 +103,10 @@ button:hover {
   background-color:lightsteelblue Q;
 }
 
+.fuExpandAspect:hover {
+  background-color:lightSteelblue !important
+}
+
 .mf_item {
   background-color:white; 
   margin:0px; 
