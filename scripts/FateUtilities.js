@@ -1026,7 +1026,7 @@ class FateUtilities extends Application{
         //The HTML file used to render this window
         options.template = "systems/ModularFate/templates/FateUtilities.html"; 
         options.width="1000";
-        options.height="auto";
+        options.height=window.visualViewport.height*0.9;
         options.title = game.i18n.localize("ModularFate.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
