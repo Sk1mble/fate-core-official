@@ -1031,11 +1031,11 @@ class FateUtilities extends Application{
         //The HTML file used to render this window
         options.template = "systems/ModularFate/templates/FateUtilities.html"; 
         options.width="1000";
-        options.height=window.visualViewport.height*0.9;
+        options.height=window.innerHeight*0.9;
         options.title = game.i18n.localize("ModularFate.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
-        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_aspects_pane", "#fu_scene_notes_pane"]
+        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes_pane"]
 
         mergeObject(options, {
             tabs: [

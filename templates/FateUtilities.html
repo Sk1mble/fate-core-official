@@ -402,7 +402,7 @@
                 {{#if conflict}}
                 ({{localize 'ModularFate.Exchange'}} {{exchange}})</h2>
                 <h3 style="padding-left:5px">{{localize 'ModularFate.StillToAct'}}:</h3>
-                <div class="Action Tracker" style="padding-left:5px; overflow-y:auto; max-height:calc({{height}}px - 200px)">
+                <div id="fu_conflict_tracker" class="Action Tracker" style="padding-left:5px; overflow-y:auto; max-height:calc({{height}}px - 200px)">
                     {{else}}</h2>{{localize 'ModularFate.NoConflictDetected'}}
                     {{/if}}
                     <table style="border:none; background-color:white">

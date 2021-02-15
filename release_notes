@@ -1,3 +1,7 @@
+# Version 2.2.22
+  * Set ScrollY for the conflict tracker so it properly scrolls to the bottom when an update occurs.
+  * Discovered that the auto-reszing code for Fate Utilities doesn't work in Firefox unless you set dom.visualViewport.enabled to true, so changed the code to use window.innerHeight instead of window.visualViewport
+
 # Version 2.2.21
   * FU is back to using div elements to lay out the page, but is now done correctly and the tabs won't disappear from the page regardless of the scroll situation.
   * When you resize the FU window, it will now re-render based on the new size of the window to ensure that all components are laid out nicely and to minimise scrollbars.
