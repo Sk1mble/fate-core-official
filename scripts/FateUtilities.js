@@ -20,6 +20,11 @@ class FateUtilities extends Application{
         await super.close(options);
     }
 
+    _onResize(event){
+        super._onResize(event);
+        this.render(false);
+    }
+
     activateListeners(html) {
         super.activateListeners(html);
         const input = html.find('input[type="text"], input[type="number"], textarea');
@@ -1030,7 +1035,7 @@ class FateUtilities extends Application{
         options.title = game.i18n.localize("ModularFate.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
-        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_rolls_tab", "#fu_aspects_pane", "#fu_scene_notes_pane"]
+        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_aspects_pane", "#fu_scene_notes_pane"]
 
         mergeObject(options, {
             tabs: [
@@ -1159,6 +1164,7 @@ async getData(){
     data.game_time = game.settings.get("ModularFate","gameTime");
     data.game_notes = game.settings.get("ModularFate","gameNotes");
     data.fontSize = game.settings.get("ModularFate","fuFontSize");
+    data.height = this.position.height;
     return data;
 }
 
