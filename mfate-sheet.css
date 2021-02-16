@@ -449,7 +449,7 @@
     display: table-cell;
     vertical-align: top;
     padding: 8px 0;
-    width:50%;
+    width: 18px;em;
 }
 
 .mfate-tracks__boxes {

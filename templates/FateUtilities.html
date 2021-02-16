@@ -6,8 +6,9 @@
             <a class="item fu_item_2" data-tab="tracks"><b title="{{localize 'ModularFate.CharacterTracks'}}" i icon class="fas fa-user-injured"></b></a>
             <a class="item fu_item_3" data-tab="scene"><b title="{{localize 'ModularFate.SceneNotes'}}" i icon class="fas fa-book"></b></a>                
             <a class="item fu_item_4" data-tab="rolls"><b title="{{localize 'ModularFate.RollHistory'}}" i icon class="fas fa-dice"></b></a>                
-            <a class="item fu_item_5" data-tab="game_info"><b title="{{localize 'ModularFate.GameInformation'}}" i icon class="fas fa-feather"></b></a>                    
+            <a class="item fu_item_5" data-tab="game_info"><b title="{{localize 'ModularFate.GameInformation'}}" i icon class="fas fa-feather"></b></a>
             <div style="float:right"><button type="button" style="border:none; background-color:transparent; font-size:xx-small; width:25px;" title="Shrink Font" id="fu_shrink_font">A</button><button type="button" style="font-size:medium; border:none; background-color: transparent; width:25px; vertical-align:bottom" id="fu_grow_font" title="Grow Font">A</button></div>
+            <div style="width:100%; border-bottom:1px black solid; text-align:center; font-size:x-large; padding: 15px;">&nbsp</div>
         </nav>
     </div>
     <div style="height 90%; display:flex; overflow-y:auto; flex-direction:row"><!-- Container div for the main Fate Utilities content.-->        
@@ -182,7 +183,7 @@
                                 <label class="box"><input type="checkbox" name = "box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
                                 <label class="box"><input type="checkbox" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
                                 {{/each}}
-                                {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input style="font-size:{{../../fontSize}}pt" type="text" {{#if ../this.owner}}{{else}}disabled="disabled"{{/if}} class="aspect_box" id="{{../this.id}}_{{this.name}}" name = "track_aspect" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{#if ../../GM}}{{#unless (eq this.aspect.name "")}}<button type="button" style="border:none; background-color:transparent; width:25px; height:25px; font-size:x-small" i icon class="fas fa-sticky-note" name="track_aspect_button" title="{{localize 'ModularFate.addToSceneAspects'}}" id="{{this.aspect.name}}_{{../this.actor.name}}_button{{this.name}}"></button>{{/unless}}{{/if}}{{/if}}
+                                {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input style="font-size:{{../../fontSize}}pt;" type="text" {{#if ../this.owner}}{{else}}disabled="disabled"{{/if}} class="aspect_box" id="{{../this.id}}_{{this.name}}" name = "track_aspect" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{#if ../../GM}}{{#unless (eq this.aspect.name "")}}<button type="button" style="border:none; background-color:transparent; width:25px; height:25px; font-size:x-small" i icon class="fas fa-sticky-note" name="track_aspect_button" title="{{localize 'ModularFate.addToSceneAspects'}}" id="{{this.aspect.name}}_{{../this.actor.name}}_button{{this.name}}"></button>{{/unless}}{{/if}}{{/if}}
                                 {{#if (expanded ../this.actor (concat this.name '_track'))}}
                                 <textarea style="background-color:white; font-size:{{../../fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; min-height:75px; border-left:none; border-bottom:1px lightsteelblue solid" type="text" {{#if (lt ../this.actor.permission 3)}}disabled="disabled"{{else}}{{/if}} name="FUTrackNotesText" id="{{../this.id}}_{{this.name}}_FUTrackNotes">{{this.notes}}</textarea>
                                 {{else}}{{/if}}
@@ -235,7 +236,7 @@
                 </div><!--End tracks tab-------------------------------->
                 <!----------------------------------------------------------------------BEGIN SCENE TAB-->
                     <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:lightgray; padding:10px;">
-                            <h1>{{localize 'ModularFate.SituationAspects'}}</h1>
+                            <h2>{{localize 'ModularFate.SituationAspects'}}</h2>
                             {{#if GM}}<button type="button" id="add_sit_aspect" style="width:auto; height:auto; font-size:{{fontSize}}pt">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
                             <div style="max-height:calc({{height}}px - 220px); overflow-y:auto">   
                             <div id="fu_aspects_pane">
@@ -257,7 +258,7 @@
                                     </div>
                                 {{/each}}
                             </div>
-                            <h1>{{localize 'ModularFate.SceneNotesTitle'}}</h1>
+                            <h2>{{localize 'ModularFate.SceneNotesTitle'}}</h2>
                             <div style="min-height:250px;  overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane; max-height:32vh">
                                 <div {{#if GM}} class="contenteditable" contenteditable="true"{{else}}{{/if}} id="scene_notes" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; min-height:250px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                             </div>
@@ -356,7 +357,7 @@
                     </div><!--End rolls body-->
 
                     <!-----------------------BEGIN game information tab-->
-                    <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="background-color:lightgray; font-family:Montserrat; padding:10px">
+                    <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="background-color:lightgray; padding:10px">
                             <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 150px);">
                                 <h2 style="vertical-align:top">{{localize 'ModularFate.DateAndTimeNotes'}}</h2>
                                 <textarea id="game_date_time" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid" type="text">{{this.game_time}}</textarea>
@@ -390,7 +391,7 @@
                                 <!--Game notes-->
                                 <h2 style="vertical-align:top">{{localize 'ModularFate.GameNotes'}}</h1>
                                     <div style="max-height:45vh; overflow-y:auto;">
-                                        <div {{#if GM}}class="contenteditable" contenteditable="true"{{else}}{{/if}} id="game_notes" style="font-size:{{fontSize}}pt; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; min-height:250px; padding:5px">{{{this.game_notes}}}</div>
+                                        <div {{#if GM}}class="contenteditable" contenteditable="true"{{else}}{{/if}} id="game_notes" style="font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; min-height:250px; padding:5px">{{{this.game_notes}}}</div>
                                     </div>
                             </div><!--End of game info tab container pane-->
                     </div><!--End game information tab-->
@@ -398,7 +399,7 @@
        </div><!-- This div contains the main content pane-->
        {{#if conflict}}
        <div style="width:32%; display:flex; padding:2px; flex-direction:column"><!-- This div contains the combat tracker pane-->
-            <h2 style="padding:5px">{{localize 'ModularFate.ActionTracker'}}
+            <h2 style="padding-top:8px">{{localize 'ModularFate.ActionTracker'}}
                 {{#if conflict}}
                 ({{localize 'ModularFate.Exchange'}} {{exchange}})</h2>
                 <h3 style="padding-left:5px">{{localize 'ModularFate.StillToAct'}}:</h3>

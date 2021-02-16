@@ -1,3 +1,9 @@
+# Version 2.2.23
+  * Spent hours tweaking the appearance of FU tabs.
+  * Set font size maximum in FU to 20. (Minimum was already set to 4)
+  * Aspect boxes on tracks on character sheets and FU is now a percentage allowing them to grow.
+  * Tweaked width of track names on character sheets.
+
 # Version 2.2.22
   * Set ScrollY for the conflict tracker so it properly scrolls to the bottom when an update occurs.
   * Discovered that the auto-reszing code for Fate Utilities doesn't work in Firefox unless you set dom.visualViewport.enabled to true, so changed the code to use window.innerHeight instead of window.visualViewport

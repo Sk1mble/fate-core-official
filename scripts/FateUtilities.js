@@ -55,6 +55,10 @@ class FateUtilities extends Application{
         fontUp.on("click", async event => {
             let font = game.settings.get("ModularFate","fuFontSize");
             font +=1;
+            if (font > 20){
+                font = 20;
+                ui.notifications.info("")
+            }
             await game.settings.set ("ModularFate","fuFontSize",font);
             await this.render(false);
         })

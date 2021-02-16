@@ -123,69 +123,93 @@ button:hover {
 }
 
 .fu_item_1 {
+  width:60px;
+  text-align:center;
   font-size:x-large; 
   padding: 15px; 
   float:left; 
+  color:grey;
   background-color:lightgray;
+  box-shadow: inset 0px -6px 15px -6px black;
+  border-bottom: 1px solid black;
+}
+
+.fu_item_1.active {
   color:black;
+  border: solid black; border-width: 1px 1px 0px 1px;
+  box-shadow:none;
 }
 
 .fu_item_2 {
+  width:60px;
   font-size:x-large; 
+  text-align:center;
   padding: 15px; 
   float:left; 
   background-color:lightgray;
+  color:grey;
+  box-shadow: inset 0px -6px 15px -6px black;
+  border-bottom: 1px solid black
+}
+
+.fu_item_2.active {
   color:black;
+  border: solid black; border-width: 1px 1px 0px 1px;
+  box-shadow:none;
 }
 
 .fu_item_3 {
+  width:60px;
+  text-align:center;
   font-size:x-large; 
   padding: 15px; 
   float:left; 
   background-color:lightgray;
+  color:grey;
+  box-shadow: inset 0px -6px 15px -6px black;
+  border-bottom: 1px solid black
+}
+
+.fu_item_3.active {
   color:black;
+  border: solid black; border-width: 1px 1px 0px 1px;
+  box-shadow:none;
 }
 
 .fu_item_4 {
+  text-align:center;
+  width:60px;
   font-size:x-large; 
   padding: 15px; 
   float:left; 
   background-color:lightgray;
+  color:grey;
+  box-shadow: inset 0px -6px 15px -6px black;
+  border-bottom: 1px solid black
+}
+
+.fu_item_4.active {
   color:black;
+  border: solid black; border-width: 1px 1px 0px 1px;
+  box-shadow:none;
 }
 
 .fu_item_5 {
+  text-align:center;
+  width:60px;
   font-size:x-large; 
   padding: 15px; 
   float:left; 
   background-color:lightgray;
+  color:grey;
+  box-shadow: inset 0px -6px 15px -6px black;
+  border-bottom: 1px solid black
+}
+
+.fu_item_5.active {
   color:black;
-}
-
-
-.fu_item_1:not(.active){
-    box-shadow: inset 0px -6px 15px -6px black;
-    color:grey;
-}
-
-.fu_item_2:not(.active){
-  box-shadow: inset 0px -6px 15px -6px black;
-  color:grey;
-}
-
-.fu_item_3:not(.active){
-  box-shadow: inset 0px -6px 15px -6px black;
-  color:grey;
-}
-
-.fu_item_4:not(.active){
-  box-shadow: inset 0px -6px 15px -6px black;
-  color:grey;
-}
-
-.fu_item_5:not(.active){
-  box-shadow: inset 0px -6px 15px -6px black;
-  color:grey;
+  border: solid black; border-width: 1px 1px 0px 1px; 
+  box-shadow:none;
 }
 
 /* The container */
@@ -261,7 +285,7 @@ button:hover {
 .aspect_box {
   font-size:small; 
   min-width:100px !important;
-  max-width:200px !important; 
+  max-width:80% !important; 
   margin-top:5px !important; 
   margin-bottom:5px !important; 
   border-style:solid !important; 
