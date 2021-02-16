@@ -27,6 +27,23 @@ class FateUtilities extends Application{
 
     activateListeners(html) {
         super.activateListeners(html);
+
+        const addConflict = html.find('button[id="add_conflict"]');
+        addConflict.on("click", async (event) => {
+            let cbt = await game.combats.object.create({scene: game.scenes.viewed._id});
+            await cbt.activate();
+        })
+
+        const nextConflict = html.find('button[id="next_conflict"]');
+        nextConflict.on("click", async (event) => {
+            let combats = game.combats.entities.filter(c => c.data.scene == game.scenes.viewed.id);
+            let combat = game.combats.viewed;
+            let index = combats.indexOf(combat);
+            index ++;
+            if (index >= combats.length) index = 0;
+            await combats[index].activate();
+        })
+
         const input = html.find('input[type="text"], input[type="number"], textarea');
 
         input.on("keyup", event => {
@@ -105,7 +122,7 @@ class FateUtilities extends Application{
         const iseTracks = html.find("button[name='iseTracks']");
         iseTracks.on("click", event => this.iseTrack(event, html));
 
-        const expandAspectNotes = html.find("div[name='FUexpandAspect");
+        const expandAspectNotes = html.find("div[name='FUexpandAspect']");
         expandAspectNotes.on("click", event => {
             let details = event.target.id.split("_");
             let token_id = details[0];
@@ -121,6 +138,17 @@ class FateUtilities extends Application{
                 game.user.expanded[key] = true;
             } else {
                 game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const fu_combatants_toggle = html.find("i[id='toggle_fu_combatants']");
+        fu_combatants_toggle.on("click", async (event) => {
+            let toggle = game.settings.get("ModularFate","fu_combatants_only");
+            if (toggle) {
+                await game.settings.set("ModularFate","fu_combatants_only",false);
+            } else {
+                await game.settings.set("ModularFate","fu_combatants_only",true);
             }
             this.render(false);
         })
@@ -1039,7 +1067,7 @@ class FateUtilities extends Application{
         options.title = game.i18n.localize("ModularFate.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
-        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes_pane"]
+        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane"]
 
         mergeObject(options, {
             tabs: [
@@ -1169,6 +1197,22 @@ async getData(){
     data.game_notes = game.settings.get("ModularFate","gameNotes");
     data.fontSize = game.settings.get("ModularFate","fuFontSize");
     data.height = this.position.height;
+    data.combatants_only = game.settings.get("ModularFate","fu_combatants_only");
+
+    if (data.combatants_only && data.conflict){
+        let combatTokens = data.combat_tokens.concat(data.has_acted_tokens);
+        data.all_tokens = data.all_tokens.filter(t=>combatTokens.indexOf(t) != -1);
+    }
+    data.numConflicts = game.combats.entities.filter(c => c.data.scene == game.scenes.viewed.id).length;
+
+    let aspectsHeight = situation_aspects.length * 45;
+
+    data.fuPaneHeight = (this.position.height - 220) / 2;
+
+    let modifier = data.fuPaneHeight - aspectsHeight;
+    if (modifier < 0) modifier = 0;
+
+    data.fuNotesHeight = (this.position.height - 220) / 2 - 35 + modifier;
     return data;
 }
 

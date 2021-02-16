@@ -122,6 +122,34 @@ button:hover {
   box-shadow: inset 0px -6px 15px -6px grey;
 }
 
+.fu_toggle_off {
+  width:60px;
+  text-align:top;
+  font-size:x-large; 
+  color:grey;
+  background-color:lightgray;
+  text-align:right;
+  padding-left:30px;
+}
+
+.fu_toggle_on {
+  width:60px;
+  text-align:top;
+  font-size:x-large; 
+  color:black;
+  background-color:lightgray;
+  text-align:right;
+  padding-left:30px;
+}
+
+.fu_toggle_off:hover {
+  text-shadow: 0 0 8px red;
+}
+
+.fu_toggle_on:hover {
+  text-shadow: 0 0 8px red;
+}
+
 .fu_item_1 {
   width:60px;
   text-align:center;

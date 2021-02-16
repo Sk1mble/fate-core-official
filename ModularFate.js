@@ -470,6 +470,15 @@ Hooks.once('init', async function () {
         type:Boolean
     })
 
+    game.settings.register("ModularFate","fu_combatants_only", {
+        name:"Display information only for combatants in the current 'encounter' rather than all tokens?",
+        hint:"Toggle between display of all tokens or just active combatants in Fate Utilities",
+        scope:"user",
+        config:false,
+        default:false,
+        type:Boolean
+    })
+
     //Initialise the setting if it is currently empty.
     if (jQuery.isEmptyObject(game.settings.get("ModularFate","stunts"))){
         game.settings.set("ModularFate","stunts",{});

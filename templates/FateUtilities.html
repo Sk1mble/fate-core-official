@@ -1,6 +1,6 @@
 <form id="FateUtilities" style="background-color:lightgrey; height:100%; onsubmit="event.preventDefault();">
 <div style="height:100%; display:flex; flex-direction:column"> <!--Container div for absolutely everything-->
-    <div style="height 10%"> <!-- Container div for the Nav bar-->
+    <div> <!-- Container div for the Nav bar-->
         <nav class="navigation foo">
             <a class="item fu_item_1" data-tab="aspects"><b title="{{localize 'ModularFate.AspectsFatePoints'}}" i icon class="fas fa-theater-masks"></b></a>
             <a class="item fu_item_2" data-tab="tracks"><b title="{{localize 'ModularFate.CharacterTracks'}}" i icon class="fas fa-user-injured"></b></a>
@@ -11,7 +11,7 @@
             <div style="width:100%; border-bottom:1px black solid; text-align:center; font-size:x-large; padding: 15px;">&nbsp</div>
         </nav>
     </div>
-    <div style="height 90%; display:flex; overflow-y:auto; flex-direction:row"><!-- Container div for the main Fate Utilities content.-->        
+    <div style="display:flex; overflow-y:auto; flex-direction:row"><!-- Container div for the main Fate Utilities content.-->        
        <div {{#if conflict}}style="width:68%;" {{else}}style="width:98%"{{/if}}> <!-- This div contains the main content pane-->
              <section class="utilities-body">
                  <!----------------------BEGIN Aspects Tab-->
@@ -174,7 +174,7 @@
                         {{#each this.actor.data.data.tracks}}
                         {{#if (category ../../category this.category)}}{{#if this.enabled}}
                         <tr>
-                            <td width="25%" style="vertical-align:top">
+                            <td style="vertical-align:top; width:18em">
                                 <div name="FUexpandTrack" style="width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; cursor:pointer; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress fuExpandAspect" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fuExpandAspect" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></div><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal; font-size:{{../../fontSize}}pt">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br> <span style="padding-left:27px; font-size:{{../../fontSize}}pt">{{localize 'ModularFate.Notes'}}:</span>{{/if}}</div>
                             </td>
                             <td style="vertical-align:top">
@@ -209,7 +209,7 @@
                         {{#each this.actor.data.data.tracks}}
                         {{#if (category ../../category this.category)}}{{#if this.enabled}}
                         <tr>
-                            <td width="25%" style="vertical-align:top">
+                            <td style="vertical-align:top; width:18em">
                                 <div name="FUexpandTrack" style="width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; cursor:pointer; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress fuExpandAspect" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fuExpandAspect" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></div><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal; font-size:{{../../fontSize}}pt">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br> <span style="padding-left:27px; font-size:{{../../fontSize}}pt">{{localize 'ModularFate.Notes'}}:</span>{{/if}}</div>
                             </td>
                             <td style="vertical-align:top; font-size:{{../../fontSize}}">
@@ -239,7 +239,7 @@
                             <h2>{{localize 'ModularFate.SituationAspects'}}</h2>
                             {{#if GM}}<button type="button" id="add_sit_aspect" style="width:auto; height:auto; font-size:{{fontSize}}pt">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
                             <div style="max-height:calc({{height}}px - 220px); overflow-y:auto">   
-                            <div id="fu_aspects_pane">
+                            <div id="fu_aspects_pane" style="overflow-y:auto; max-height:{{fuPaneHeight}}px">
                                 {{#each situation_aspects}}
                                     <div style="font-family:Montserrat; padding-top:10px; display:flex; flex-direction:row; align-items:center">
                                         <span style="width:100%;">
@@ -259,8 +259,8 @@
                                 {{/each}}
                             </div>
                             <h2>{{localize 'ModularFate.SceneNotesTitle'}}</h2>
-                            <div style="min-height:250px;  overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane; max-height:32vh">
-                                <div {{#if GM}} class="contenteditable" contenteditable="true"{{else}}{{/if}} id="scene_notes" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; min-height:250px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
+                            <div style="overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane;">
+                                <div {{#if GM}} class="contenteditable" contenteditable="true"{{else}}{{/if}} id="scene_notes" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                             </div>
                         </div>                
                     </div><!--End Scene tab---------------------------------------------------->
@@ -401,9 +401,24 @@
        <div style="width:32%; display:flex; padding:2px; flex-direction:column"><!-- This div contains the combat tracker pane-->
             <h2 style="padding-top:8px">{{localize 'ModularFate.ActionTracker'}}
                 {{#if conflict}}
-                ({{localize 'ModularFate.Exchange'}} {{exchange}})</h2>
-                <h3 style="padding-left:5px">{{localize 'ModularFate.StillToAct'}}:</h3>
+                ({{localize 'ModularFate.Exchange'}} {{exchange}}){{#unless combatants_only}}<i id="toggle_fu_combatants" title="{{localize 'ModularFate.notCombatantsOnly'}}" class="fu_toggle_off fas fa-fist-raised"></i>{{else}}<i id="toggle_fu_combatants" title="{{localize 'ModularFate.combatantsOnly'}}" class="fu_toggle_on fas fa-fist-raised"></i>{{/unless}}</h2>
+                    <table style="border:none; background-color:transparent">
+                    {{#if GM}}
+                    <tr>
+                        <td>
+                            <button type="button" style="width:50px; height:25px; float:left" id="next_exchange" title="{{localize 'ModularFate.NextExchange'}}" i icon class="fas fa-forward"></button>
+                            <button type="button" style="width:50px; height:25px; float:left" id="timed_event" title="{{localize 'ModularFate.TimedEvent'}}" i icon class="fas fa-clock"></button>  
+                        </td>
+                        <td style="padding-right:5px">
+                            <button type="button" style="width:50px; height:25px; float:left" {{#unless (gt numConflicts 1)}}disabled = "disabled"{{/unless}} id="next_conflict" title="{{localize 'ModularFate.NextConflict'}}" i icon class="fas fa-arrow-right"></button>                                        
+                            <button type="button" style="width:50px; height:25px; float:left" id="add_conflict" title="{{localize 'ModularFate.AddConflict'}}" i icon class="fas fa-plus"></button>                                      
+                            <button type="button" style="width:50px; height:25px; float:right;" id="end_conflict" title="{{localize 'ModularFate.EndConflict'}}" i icon class="fas fa-trash"></button>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    </table>  
                 <div id="fu_conflict_tracker" class="Action Tracker" style="padding-left:5px; overflow-y:auto; max-height:calc({{height}}px - 200px)">
+                     <h3 style="padding-left:5px">{{localize 'ModularFate.StillToAct'}}:</h3>
                     {{else}}</h2>{{localize 'ModularFate.NoConflictDetected'}}
                     {{/if}}
                     <table style="border:none; background-color:white">
@@ -421,20 +436,7 @@
                         </td>
                     </tr>
                     {{/each}}
-                    </table>
-                    <table style="border:none; background-color:white">
-                    {{#if GM}}
-                    <tr>
-                        <td>
-                            <button type="button" style="width:50px; height:25px; float:left" id="next_exchange" title="{{localize 'ModularFate.NextExchange'}}" i icon class="fas fa-forward"></button>                    
-                            <button type="button" style="width:50px; height:25px; float:left" id="timed_event" title="{{localize 'ModularFate.TimedEvent'}}" i icon class="fas fa-clock"></button>                    
-                        </td>
-                        <td style="padding-right:5px">
-                            <button type="button" style="width:50px; height:25px; float:right;" id="end_conflict" title="{{localize 'ModularFate.EndConflict'}}" i icon class="fas fa-trash"></button>
-                        </td>
-                    </tr>
-                    {{/if}}
-                    </table>                
+                    </table>              
                     <h3>{{localize 'ModularFate.AlreadyActed'}}:</h3>
                     <table style="border:none; background-color:lightgrey">
                     {{#each has_acted_tokens}}

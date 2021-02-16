@@ -1,3 +1,9 @@
+# Version 2.2.24
+  * FU scene notes pane now much more responsive to changes in size and scrollY fixed.
+  * The Scene Notes pane now expands and contracts organically as you add or subtract scene aspects to give maximal space to write notes in
+  * Added a new toggle to the FU window in the conflict tracker that toggles between showing all actors in the scene, and all actors in the current conflict.
+  * Added buttons to add new conflicts to the list of conflicts and cycle through the conflicts on the current scene.
+
 # Version 2.2.23
   * Spent hours tweaking the appearance of FU tabs.
   * Set font size maximum in FU to 20. (Minimum was already set to 4)
