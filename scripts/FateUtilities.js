@@ -1207,12 +1207,18 @@ async getData(){
 
     let aspectsHeight = situation_aspects.length * 45;
 
-    data.fuPaneHeight = (this.position.height - 220) / 2;
+    data.fuPaneHeight = (this.position.height - 250) / 2;
 
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
-
     data.fuNotesHeight = (this.position.height - 220) / 2 - 35 + modifier;
+
+    data.gameAspectsHeight = 180;
+    let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 45;
+    if (gaModifier <0) gaModifier = 0;
+    data.gameNotesHeight = (this.position.height - 525) + gaModifier;
+    if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
+    
     return data;
 }
 

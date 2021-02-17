@@ -366,7 +366,7 @@
                                 
                                 {{#if GM}}<button type="button" id="add_game_aspect" style="width:200px; height:auto; font-size:{{fontSize}}pt">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
 
-                                <div style="max-height:18vh; overflow-y:auto">
+                                <div style="max-height:{{gameAspectsHeight}}px; overflow-y:auto">
                                     {{#each game_aspects}}
                                     <div style="padding-top: 10px; font-family:Montserrat; font-size:{{../fontSize}}pt; display: flex; flex-direction: row; align-items:center">
                                         <button type="button" name="FUexpandGameAspect" style="vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button>
@@ -390,8 +390,8 @@
                                 </div>
                                 <!--Game notes-->
                                 <h2 style="vertical-align:top">{{localize 'ModularFate.GameNotes'}}</h1>
-                                    <div style="max-height:45vh; overflow-y:auto;">
-                                        <div {{#if GM}}class="contenteditable" contenteditable="true"{{else}}{{/if}} id="game_notes" style="font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; min-height:250px; padding:5px">{{{this.game_notes}}}</div>
+                                    <div>
+                                        <div {{#if GM}}class="contenteditable" contenteditable="true"{{else}}{{/if}} id="game_notes" style="overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
                                     </div>
                             </div><!--End of game info tab container pane-->
                     </div><!--End game information tab-->
