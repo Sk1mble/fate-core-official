@@ -20,7 +20,8 @@ Hooks.once('init', async function () {
             scope: "world",
             config: true,
             type: Number,
-            restricted:true
+            restricted:true,
+            default:20,
         });
         //Initialise if not yet set
         if (isNaN(game.settings.get("ModularFate","skillTotal"))){
@@ -43,7 +44,8 @@ Hooks.once('init', async function () {
         scope:"world",
         config:true,
         type: Boolean,
-        restricted:true
+        restricted:true,
+        default:true
     })
 
     game.settings.register("ModularFate","enforceSkillTotal", {
@@ -52,7 +54,8 @@ Hooks.once('init', async function () {
         scope:"world",
         config:true,
         type: Boolean,
-        restricted:true
+        restricted:true,
+        default:true
     })
 
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.

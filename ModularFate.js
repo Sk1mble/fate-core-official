@@ -489,7 +489,8 @@ Hooks.once('init', async function () {
         hint:"Pops up a brief tutorial message on first load of a world with this system",
         scope:"world",
         config:false,
-        type: Boolean
+        type: Boolean,
+        default:true
     })
 
     game.settings.register("ModularFate","sheet_template", {
@@ -535,7 +536,8 @@ Hooks.once('init', async function () {
         hint: game.i18n.localize("ModularFate.RefreshTotalHint"),
         scope: "world",
         config: true,
-        type: Number
+        type: Number,
+        default:3
     });
     //Initialise if not yet set
     if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
@@ -548,7 +550,8 @@ Hooks.once('init', async function () {
         scope:"user",
         config:true,
         type:Boolean,
-        restricted:false
+        restricted:false,
+        default:false
     });
 
     game.settings.register("ModularFate","exportSettings", {

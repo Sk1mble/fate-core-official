@@ -12,7 +12,7 @@
         </nav>
     </div>
     <div style="display:flex; overflow-y:auto; flex-direction:row"><!-- Container div for the main Fate Utilities content.-->        
-       <div {{#if conflict}}style="width:68%;" {{else}}style="width:98%"{{/if}}> <!-- This div contains the main content pane-->
+       <div style="width:100%"> <!-- This div contains the main content pane-->
              <section class="utilities-body">
                  <!----------------------BEGIN Aspects Tab-->
                     <div id="fu_aspects_tab" class="tab aspects" data-tab="aspects" style="padding:10px;">
@@ -398,21 +398,21 @@
              </section>
        </div><!-- This div contains the main content pane-->
        {{#if conflict}}
-       <div style="width:32%; display:flex; padding:2px; flex-direction:column"><!-- This div contains the combat tracker pane-->
+       <div style="width:32em; display:flex; padding:2px; flex-direction:column"><!-- This div contains the combat tracker pane-->
             <h2 style="padding-top:8px">{{localize 'ModularFate.ActionTracker'}}
-                {{#if conflict}}
-                ({{localize 'ModularFate.Exchange'}} {{exchange}}){{#unless combatants_only}}<i id="toggle_fu_combatants" title="{{localize 'ModularFate.notCombatantsOnly'}}" class="fu_toggle_off fas fa-fist-raised"></i>{{else}}<i id="toggle_fu_combatants" title="{{localize 'ModularFate.combatantsOnly'}}" class="fu_toggle_on fas fa-fist-raised"></i>{{/unless}}</h2>
+                {{#if conflict}}{{#unless combatants_only}}<i id="toggle_fu_combatants" title="{{localize 'ModularFate.notCombatantsOnly'}}" class="fu_toggle_off fas fa-fist-raised"></i>{{else}}<i id="toggle_fu_combatants" title="{{localize 'ModularFate.combatantsOnly'}}" class="fu_toggle_on fas fa-fist-raised"></i>{{/unless}}
+                ({{localize 'ModularFate.Exchange'}} {{exchange}})</h2>
                     <table style="border:none; background-color:transparent">
                     {{#if GM}}
                     <tr>
                         <td>
-                            <button type="button" style="width:50px; height:25px; float:left" id="next_exchange" title="{{localize 'ModularFate.NextExchange'}}" i icon class="fas fa-forward"></button>
-                            <button type="button" style="width:50px; height:25px; float:left" id="timed_event" title="{{localize 'ModularFate.TimedEvent'}}" i icon class="fas fa-clock"></button>  
+                            <button type="button" style="width:35px; height:35px; float:left" id="next_exchange" title="{{localize 'ModularFate.NextExchange'}}" i icon class="fas fa-forward"></button>
+                            <button type="button" style="width:35px; height:35px; float:left" id="timed_event" title="{{localize 'ModularFate.TimedEvent'}}" i icon class="fas fa-clock"></button>  
                         </td>
                         <td style="padding-right:5px">
-                            <button type="button" style="width:50px; height:25px; float:left" {{#unless (gt numConflicts 1)}}disabled = "disabled"{{/unless}} id="next_conflict" title="{{localize 'ModularFate.NextConflict'}}" i icon class="fas fa-arrow-right"></button>                                        
-                            <button type="button" style="width:50px; height:25px; float:left" id="add_conflict" title="{{localize 'ModularFate.AddConflict'}}" i icon class="fas fa-plus"></button>                                      
-                            <button type="button" style="width:50px; height:25px; float:right;" id="end_conflict" title="{{localize 'ModularFate.EndConflict'}}" i icon class="fas fa-trash"></button>
+                            <button type="button" style="width:35px; height:35px; float:left" {{#unless (gt numConflicts 1)}}disabled = "disabled"{{/unless}} id="next_conflict" title="{{localize 'ModularFate.NextConflict'}}" i icon class="fas fa-arrow-right"></button>                                        
+                            <button type="button" style="width:35px; height:35px; float:left" id="add_conflict" title="{{localize 'ModularFate.AddConflict'}}" i icon class="fas fa-plus"></button>                                      
+                            <button type="button" style="width:35px; height:35px; float:right;" id="end_conflict" title="{{localize 'ModularFate.EndConflict'}}" i icon class="fas fa-trash"></button>
                         </td>
                     </tr>
                     {{/if}}

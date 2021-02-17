@@ -123,23 +123,24 @@ button:hover {
 }
 
 .fu_toggle_off {
-  width:60px;
-  text-align:top;
   font-size:x-large; 
   color:grey;
   background-color:lightgray;
   float:right;
-  padding-left:30px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:5px;
 }
 
 .fu_toggle_on {
-  width:60px;
-  text-align:top;
+  
   font-size:x-large; 
   color:black;
   background-color:lightgray;
   float:right;
-  padding-left:30px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-bottom:5px;
 }
 
 .fu_toggle_off:hover {

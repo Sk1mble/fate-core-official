@@ -1,3 +1,8 @@
+# Version 2.2.26
+  * Further tweaks to the appearance of the new conflict filter icon.
+  * Added some defaults to settings so they don't become undefined on using the 'reset defaults' button (until the world is next opened)
+  * The Action Tracker is now at a fixed maximum width rather than a relative one, so it doesn't grow as you stretch the FU window out.
+
 # Version 2.2.25
   * Tweaked the position of the new icon for the conflict actors only filter.
   * The Game Notes page is now much more responsive than it was before to changes in size.
