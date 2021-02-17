@@ -2,6 +2,7 @@
   * Further tweaks to the appearance of the new conflict filter icon.
   * Added some defaults to settings so they don't become undefined on using the 'reset defaults' button (until the world is next opened)
   * The Action Tracker is now at a fixed maximum width rather than a relative one, so it doesn't grow as you stretch the FU window out.
+  * Acted tokens now have a washed out appearance to distinguish them visually from tokens that haven't acted without needing explicit headers.
 
 # Version 2.2.25
   * Tweaked the position of the new icon for the conflict actors only filter.

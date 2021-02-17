@@ -2,6 +2,7 @@
 <div style="height:100%; display:flex; flex-direction:column"> <!--Container div for absolutely everything-->
     <div> <!-- Container div for the Nav bar-->
         <nav class="navigation foo">
+            <i style="float:left; width:5px; border-bottom:1px black solid; text-align:center; font-size:x-large; padding-top: 15px; padding-bottom:15px">&nbsp</i>
             <a class="item fu_item_1" data-tab="aspects"><b title="{{localize 'ModularFate.AspectsFatePoints'}}" i icon class="fas fa-theater-masks"></b></a>
             <a class="item fu_item_2" data-tab="tracks"><b title="{{localize 'ModularFate.CharacterTracks'}}" i icon class="fas fa-user-injured"></b></a>
             <a class="item fu_item_3" data-tab="scene"><b title="{{localize 'ModularFate.SceneNotes'}}" i icon class="fas fa-book"></b></a>                
@@ -418,7 +419,7 @@
                     {{/if}}
                     </table>  
                 <div id="fu_conflict_tracker" class="Action Tracker" style="padding-left:5px; overflow-y:auto; max-height:calc({{height}}px - 200px)">
-                     <h3 style="padding-left:5px">{{localize 'ModularFate.StillToAct'}}:</h3>
+                     
                     {{else}}</h2>{{localize 'ModularFate.NoConflictDetected'}}
                     {{/if}}
                     <table style="border:none; background-color:white">
@@ -437,15 +438,15 @@
                     </tr>
                     {{/each}}
                     </table>              
-                    <h3>{{localize 'ModularFate.AlreadyActed'}}:</h3>
+                    
                     <table style="border:none; background-color:lightgrey">
                     {{#each has_acted_tokens}}
-                    <tr class="{{#if (eq this._controlled true)}} fu_controlled {{/if}} {{this.id}}_fu">
+                    <tr class="{{#if (eq this._controlled true)}} fu_controlled {{else}} fu_uncontrolled {{/if}} {{this.id}}_fu">
                         <td style="width:60px">
-                            <button type="button" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" disabled="disabled"/>     
+                            <button type="button" style="filter:opacity(25%); border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" disabled="disabled"/>     
                         </td>
                         <td>
-                            <span {{#if ../GM}}id="{{this.id}}_tokenNameA_AT" class="tName" title="{{localize 'ModularFate.DoubleClickToChangeName'}}"{{/if}}>{{this.name}}</span>
+                            <span {{#if ../GM}}id="{{this.id}}_tokenNameA_AT" class="tName" style="color:grey" title="{{localize 'ModularFate.DoubleClickToChangeName'}}"{{/if}}>{{this.name}}</span>
                             <div style="float:right; padding-right:5px">
                                 {{#if ../GM}}<button name = "popcorn" type="button" id = "{{this.id}}_unact" title="{{localize 'ModularFate.pocornUnactHint'}}" i icon class="fas fa-undo" style="width:35px; height:35px"></button>{{else}}{{/if}}
                                 <button name = "popcorn" type="button" id = "{{this.id}}_find" title="{{localize 'ModularFate.pocornFindHint'}}" i icon class="fas fa-search" style="width:35px; height:35px"></button>

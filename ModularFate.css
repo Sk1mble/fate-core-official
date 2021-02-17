@@ -103,6 +103,10 @@ button:hover {
   background-color:lightsteelblue !important;
 }
 
+.fu_uncontrolled {
+  background-color:lightgrey !important;
+}
+
 .fuExpandAspect:hover {
   background-color:lightSteelblue !important
 }
