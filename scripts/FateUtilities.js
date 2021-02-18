@@ -1062,7 +1062,7 @@ class FateUtilities extends Application{
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
         options.template = "systems/ModularFate/templates/FateUtilities.html"; 
-        options.width="1000";
+        options.width=window.innerWidth*0.5;
         options.height=window.innerHeight*0.9;
         options.title = game.i18n.localize("ModularFate.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors

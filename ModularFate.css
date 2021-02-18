@@ -63,6 +63,7 @@ button {
   font-family: "Montserrat", "Arial", sans-serif;
   border: 2px solid black;
 }
+
 button:hover {
   background: rgba(255, 255, 255, 0.2);
 }
@@ -107,8 +108,9 @@ button:hover {
   background-color:lightgrey !important;
 }
 
-.fuExpandAspect:hover {
-  background-color:lightSteelblue !important
+.fu_button:hover {
+  filter: drop-shadow(0px 0px 3px red) !important;
+  box-shadow:none !important;
 }
 
 .mf_item {

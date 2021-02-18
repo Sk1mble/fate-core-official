@@ -337,6 +337,11 @@
     cursor: pointer;
 }
 
+.mfate-panel__header-button:hover {
+    box-shadow:none;
+    filter: drop-shadow(0px 0px 3px red);
+}
+
 
 /* Skills list */
 

@@ -1,3 +1,8 @@
+# Version 2.2.27
+    * Yet more tweaks to FU, amending the responsiveness of the aspect pane (and fixing it for non-GMs)
+    * Changed hover effect on buttons that aren't rectangles so they look nicer.
+    * FU window width now defaults to 0.5 of the width of the main Foundry window.
+
 # Version 2.2.26
   * Further tweaks to the appearance of the new conflict filter icon.
   * Added some defaults to settings so they don't become undefined on using the 'reset defaults' button (until the world is next opened)

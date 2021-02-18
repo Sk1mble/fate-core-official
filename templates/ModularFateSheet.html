@@ -111,7 +111,7 @@
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
                                             <div name="track_name" style="font-family:Montserrat">
-                                                <button type="button" name="expandTrack" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></button>
+                                                <button type="button" name="expandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></button>
                                                 <i style="font-style:normal; font-weight:bold; font-family: Montserrat; padding-left:5px">{{this.name}}</i>
                                             </div>
                                         </div>
@@ -174,7 +174,7 @@
                         {{#each data.aspects}}
 
                         <li name="aspect" class="mfate-aspects-list__item">
-                            <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this.name '_aspect'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
+                            <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.actor (concat this.name '_aspect'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
                         </li>
@@ -200,7 +200,7 @@
                                 <div class="mfate-stunts__row">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">
-                                            <button type="button" name="expandStunt" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this.name '_stunt'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></button>
+                                            <button type="button" name="expandStunt" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_stunt'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></button>
                                             <i style="font-style:normal; padding-left:5px">{{this.name}} ({{this.linked_skill}})</i>
                                             {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_stunt" id="{{this.name}}_delete"></button> 
@@ -273,7 +273,7 @@
                             {{#each items}}
                             <div name="item_header" draggable="true" id="{{../this.actor._id}}_{{this._id}}" data-item="{{str this}}">
                             <div class = "fate-extras__row-header">
-                                <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:white; border:none" {{#if (expanded ../this.actor (concat this._id '_extra'))}}icon class="fas fa-compress" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this._id}}_expandExtra"></button>&nbsp&nbsp{{{this.name}}}
+                                <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this._id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this._id}}_expandExtra"></button>&nbsp&nbsp{{{this.name}}}
                                 <button i icon class="fas fa-trash fate-extras__row-header-button" type="button" name="delete_extra" id="{{this._id}}_delete"></button>
                                 <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button" id="{{this._id}}_edit"></button>
                             </div>
