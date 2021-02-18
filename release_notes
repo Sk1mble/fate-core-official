@@ -1,3 +1,6 @@
+# Version 2.2.28
+  * Minor bug fixes to the layout of the aspects on tracks in FU and modular fate character sheets.
+
 # Version 2.2.27
     * Yet more tweaks to FU, amending the responsiveness of the aspect pane (and fixing it for non-GMs)
     * Changed hover effect on buttons that aren't rectangles so they look nicer.

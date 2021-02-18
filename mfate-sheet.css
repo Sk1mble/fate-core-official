@@ -454,7 +454,7 @@
     display: table-cell;
     vertical-align: top;
     padding: 8px 0;
-    width:18em;
+    width:15em;
 }
 
 .mfate-tracks__boxes {
@@ -490,13 +490,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.aspect_box.aspect_box {
-    float: none !important;
-    border: bottom 1px solid lightsteelblue, top none, left none, right, none !important;
-}
-
+}   
 
 /* Stunts */
 
