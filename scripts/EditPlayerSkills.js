@@ -129,7 +129,7 @@ class EditPlayerSkills extends FormApplication{
                 for (let sk in p_skills){
                     if (p_skills[sk].extra_tag != undefined){
                         let extra_id = p_skills[sk].extra_tag.extra_id;
-                        let extra = this.object.items.find(item=>item._id == extra_id);
+                        let extra = this.object.items.find(item=>item.id == extra_id);
                 
                         if (extra != undefined && extra.data.data.countSkills){
                             ranks[p_skills[sk].rank]++    
@@ -176,7 +176,7 @@ class EditPlayerSkills extends FormApplication{
                 for (let sk in p_skills){
                     if (p_skills[sk].extra_tag != undefined){
                         let extra_id = p_skills[sk].extra_tag.extra_id;
-                        let extra = this.object.items.find(item=>item._id == extra_id);
+                        let extra = this.object.items.find(item=>item.id == extra_id);
                 
                         if (extra != undefined && extra.data.data.countSkills){
                             player_total+=p_skills[sk].rank;   

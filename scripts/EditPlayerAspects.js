@@ -132,7 +132,7 @@ class EditPlayerAspects extends FormApplication{
         }
 
         else {
-            if (this.object._id == id){
+            if (this.object.id == id){
                 if (!this.renderPending) {
                     this.renderPending = true;
                     setTimeout(() => {

@@ -56,7 +56,7 @@ class EditPlayerStunts extends FormApplication {
 
     renderMe(id,data){
         if (this.object.isToken){
-            if (this.actor.token.data._id == id){
+            if (this.actor.token.data.id == id){
                let name = this.stunt.name;
                 try {
                     if (data.actorData.data.stunts[name]!=undefined){

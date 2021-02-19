@@ -75,16 +75,16 @@ export class ModularFateActor extends Actor {
 }
 
 function shouldUpdate(actor){
-    if (!actor.owner){
+    if (!actor.isOwner){
         return false;
     }
     const permissions = actor.data.permission;
-    const activePlayers = game.users.entities
+    const activePlayers = game.users.contents
        .filter(user => user.active)
        .map(user => user.id);
 
     for (let playerId in permissions) {
-        var isOwner = permissions[playerId] === CONST.ENTITY_PERMISSIONS.OWNER;
+        var isOwner = permissions[playerId] === CONST.ENTITY_PERMISSIONS.isOwner;
         var isActive = activePlayers.includes(playerId);
 
         if (isOwner && isActive) {
@@ -117,7 +117,7 @@ async function updateFromExtra(actor, itemData) {
         let tracks_output = {};
 
             let extra_name = extra.name;
-            let extra_id = extra._id;
+            let extra_id = extra.id;
             let extra_tag = {"extra_name":extra_name, "extra_id":extra_id};
 
             let stunts = duplicate(extra.data.stunts);
@@ -267,7 +267,7 @@ Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
         for(let aspect in actor_aspects)
         {
             let et = actor_aspects[aspect].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
+            if (et != undefined && et.extra_id == itemData.id){
                 updateObject[`data.aspects.-=${aspect}`] = null;
             }
         }
@@ -276,7 +276,7 @@ Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
 
         for (let stunt in actor_stunts){
             let et = actor_stunts[stunt].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
+            if (et != undefined && et.extra_id == itemData.id){
                 updateObject[`data.stunts.-=${stunt}`] = null;
             }
         }
@@ -285,7 +285,7 @@ Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
 
         for (let track in actor_tracks){
             let et = actor_tracks[track].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
+            if (et != undefined && et.extra_id == itemData.id){
                 updateObject[`data.tracks.-=${track}`] = null;
             }
         }
@@ -294,7 +294,7 @@ Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
 
         for (let skill in actor_skills){
             let et = actor_skills[skill].extra_tag;
-            if (et!= undefined && et.extra_id == itemData._id){
+            if (et!= undefined && et.extra_id == itemData.id){
                 updateObject[`data.skills.-=${skill}`] = null;
             }
         }      
@@ -312,7 +312,7 @@ Hooks.on('createOwnedItem', async (actorData, itemData) => {
 })
 
 Hooks.on('updateToken', async (scene, tokenData, aData) => {
-    let token = canvas.tokens.placeables.find(t => t.id == tokenData._id);
+    let token = canvas.tokens.placeables.find(t => t.id == tokenData.id);
     let actor = undefined;
     
     if (token != undefined) {
@@ -342,7 +342,7 @@ Hooks.on('updateToken', async (scene, tokenData, aData) => {
         
                 for (let aspect in actor_aspects){
                     let et = actor_aspects[aspect].extra_tag;
-                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
                         update_object[`data.aspects.-=${aspect}`] = null;
                     }
                 } 
@@ -351,7 +351,7 @@ Hooks.on('updateToken', async (scene, tokenData, aData) => {
         
                 for (let stunt in actor_stunts){
                     let et = actor_stunts[stunt].extra_tag;
-                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
                         update_object[`data.aspects.-=${stunt}`] = null;
                     }
                 }
@@ -360,7 +360,7 @@ Hooks.on('updateToken', async (scene, tokenData, aData) => {
         
                 for (let track in actor_tracks){
                     let et = actor_tracks[track].extra_tag;
-                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
                         update_object[`data.tracks.-=${track}`] = null;
                     }
                 }
@@ -369,7 +369,7 @@ Hooks.on('updateToken', async (scene, tokenData, aData) => {
         
                 for (let skill in actor_skills){
                     let et = actor_skills[skill].extra_tag;
-                    if (et != undefined && items.find(ite=> ite._id == et.extra_id) == undefined){
+                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
                         update_object[`data.skills.-=${skill}`] = null;
                     }
                 }                      

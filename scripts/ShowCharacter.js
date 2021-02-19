@@ -51,7 +51,7 @@ class ShowCharacter extends Application{
             elements.name=token.name;
         }
         if (actorInfo[0]=="actor"){
-            let actor = game.actors.entries.find(actor => actor.id == actorInfo[1])
+            let actor = game.actors.contents.find(actor => actor.id == actorInfo[1])
             actor_data = actor.data;
             elements.name=actor.data.name;
         }
@@ -104,9 +104,10 @@ class ShowCharacter extends Application{
 
     async getData(){
         const data = await super.getData();
+        console.log(data);
         data.users = game.users.players;
         data.tokens = canvas.tokens.placeables;
-        data.actors = game.actors.entries;
+        data.actors = game.actors.contents;
         return data;
     }
 }
@@ -119,7 +120,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
                     name:"ShowCharacter",
                     title:game.i18n.localize("ModularFate.ShowCharacterTitle"),
                     icon:"fas fa-binoculars",
-                    onClick: ()=> {let sc = new ShowCharacter; sc.render(true)},
+                    onClick: ()=> {debugger;let sc = new ShowCharacter; sc.render(true)},
                     button:true
                 });
             }
@@ -131,7 +132,7 @@ Hooks.once('ready', async function () {
         //Elements is an object containing the data to be shown, which can be: avatar, aspects, tracks, bio, 
         //description, skills, stunts, extras
         let myId=game.users.current.id;
-        if (data.players != undefined && data.players.find(player => player._id == myId)!=undefined){
+        if (data.players != undefined && data.players.find(player => player.id == myId)!=undefined){
             let cv = new CharacterView(data.elements);
             cv.render(true);
         }

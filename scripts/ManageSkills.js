@@ -152,7 +152,7 @@ class SkillSetup extends FormApplication{
             game.system.skillSetup = this;
     }
 
-    _updateObject(){
+    async _updateObject(){
     }
 
     //Set up the default options for instances of this class

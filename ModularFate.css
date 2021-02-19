@@ -113,6 +113,11 @@ button:hover {
   box-shadow:none !important;
 }
 
+.fu_button:focus {
+  filter: drop-shadow(0px 0px 3px red) !important;
+  box-shadow:none !important;
+}
+
 .mf_item {
   background-color:white; 
   margin:0px; 

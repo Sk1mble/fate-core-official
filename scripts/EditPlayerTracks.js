@@ -63,7 +63,7 @@ class EditPlayerTracks extends FormApplication {
         }
 
         else {
-            if (this.object._id == id){
+            if (this.object.id == id){
                 if (data.data != undefined && data.data.tracks != undefined)
                     this.tracks_by_category=undefined;
                     if (!this.renderPending) {

@@ -30,13 +30,13 @@ class FateUtilities extends Application{
 
         const addConflict = html.find('button[id="add_conflict"]');
         addConflict.on("click", async (event) => {
-            let cbt = await game.combats.object.create({scene: game.scenes.viewed._id});
+            let cbt = await Combat.create({scene: game.scenes.viewed.id});
             await cbt.activate();
         })
 
         const nextConflict = html.find('button[id="next_conflict"]');
         nextConflict.on("click", async (event) => {
-            let combats = game.combats.entities.filter(c => c.data.scene == game.scenes.viewed.id);
+            let combats = game.combats.contents.filter(c => c.data.scene == game.scenes.viewed.id);
             let combat = game.combats.viewed;
             let index = combats.indexOf(combat);
             index ++;
@@ -183,13 +183,15 @@ class FateUtilities extends Application{
         });
 
         const gameAspect = html.find("input[name='game_aspect']");
-        gameAspect.on("change", event => {
-            let aspectName = event.target.id.split("_")[0];
-            let aspects = duplicate(game.settings.get("ModularFate", "gameAspects"));
-            let aspect = aspects.find(a => a.name == aspectName);
+        gameAspect.on("change", async (event) => {
+            let index = event.target.id.split("_")[0];
+            let aspects = duplicate(game.settings.get("ModularFate", "gameAspects")); // Should contain an aspect with the current name.
+            let aspect = aspects[index];
+            console.log(aspect);
             aspect.name = event.target.value;
-            game.settings.set("ModularFate","gameAspects",aspects);
-            game.socket.emit("system.ModularFate",{"render":true});
+            await game.settings.set("ModularFate","gameAspects",aspects);
+            await game.socket.emit("system.ModularFate",{"render":true});
+            this.render(false);
         })
 
 
@@ -401,7 +403,7 @@ class FateUtilities extends Application{
                 text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
             let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
-            drawing.update({
+            drawing.document.update({
                 "text":text,
                 width: text.length*20,
                 fontFamily: font,
@@ -444,10 +446,10 @@ class FateUtilities extends Application{
     }
 
     async _game_a_free_i_button(event,html){
-        let name=event.target.id.split("_")[0];
-        let value=html.find(`input[id="${name}_ga_free_invokes"]`)[0].value
+        let index=event.target.id.split("_")[0];
+        let value=html.find(`input[id="${index}_ga_free_invokes"]`)[0].value
         let game_aspects = duplicate(game.settings.get("ModularFate","gameAspects"));
-        let aspect = game_aspects[game_aspects.findIndex(gam => gam.name == name)];
+        let aspect = game_aspects[index];
         aspect.free_invokes = value;
         await game.settings.set("ModularFate","gameAspects",game_aspects);
         game.socket.emit("system.ModularFate",{"render":true});
@@ -608,7 +610,9 @@ class FateUtilities extends Application{
 
         if (action == "plus2fp"){
             //Find the right character and deduct one from their fate points
-            let user = game.users.entries.find(user => user.id == roll.user._id)
+            console.log(game.users.contents)
+
+            let user = game.users.contents.find(u => u.id == roll.user._id)
 
             if (user.isGM){
                 let fps = user.getFlag("ModularFate","gmfatepoints");
@@ -644,7 +648,7 @@ class FateUtilities extends Application{
 
         if (action == "rerollfp"){
             //Find the right character and deduct one from their fate points
-            let user = game.users.entries.find(user => user.id == roll.user._id)
+            let user = game.users.contents.find(user => user.id == roll.user._id)
 
             if (user.isGM){
                 let fps = user.getFlag("ModularFate","gmfatepoints");
@@ -748,7 +752,7 @@ class FateUtilities extends Application{
             }
             updates.push({"_id":token.actor.id,"data.details.fatePoints.current":current})
         }
-        Actor.update(updates);
+        Actor.updateDocuments(updates)
     }
 
     async _edit_player_points(event, html){
@@ -764,7 +768,7 @@ class FateUtilities extends Application{
     }
 
     async _edit_gm_points(event, html){
-        let user = game.users.entries.find(user => user.id == event.target.id);
+        let user = game.users.contents.find(user => user.id == event.target.id);
         let fp = parseInt(event.target.value)
         user.setFlag("ModularFate","gmfatepoints",fp);
     }
@@ -791,7 +795,7 @@ class FateUtilities extends Application{
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
             let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
-            drawing.update({
+            drawing.document.update({
                 "text":text,
                 width: text.length*20,
                 fontFamily: font,
@@ -831,9 +835,9 @@ class FateUtilities extends Application{
                 }
                 let height = size * 1.5;
                 let width = text.length * size /2;
-                Drawing.create({
+                DrawingDocument.create({
                     type: CONST.DRAWING_TYPES.RECTANGLE,
-                    author: game.user._id,
+                    author: game.user.id,
                     x: canvas.stage.pivot._x,
                     y: canvas.stage.pivot._y,
                     width: width,
@@ -849,7 +853,7 @@ class FateUtilities extends Application{
                     fontSize: size,
                     textColor: "#000000",
                     points: []
-                });   
+                }, {parent: game.scenes.viewed});   
         }
         else {
             ui.notifications.error(game.i18n.localize("ModularFate.AlreadyANoteForThatAspect"));
@@ -993,20 +997,20 @@ class FateUtilities extends Application{
         if (type.startsWith("act")){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
-            await token.setFlag("ModularFate","hasActed", true);
+            await token.document.setFlag("ModularFate","hasActed", true);
         }
 
         if (type === "unact"){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
-            await token.setFlag("ModularFate","hasActed", false);
+            await token.document.setFlag("ModularFate","hasActed", false);
         }
 
         if (type === "find"){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
             canvas.animatePan(token, 1);
-            if (token.owner) {
+            if (token.isOwner) {
                 token.control({releaseOthers:true});
             }
         }
@@ -1027,7 +1031,7 @@ class FateUtilities extends Application{
         if (fin != false){
             let updates = actors.map(actor => {
                                 let update = {};
-                                update._id = actor.token._id;
+                                update._id = actor.token.id;
                                 update.flags = {
                                                     "ModularFate":
                                                     {
@@ -1036,7 +1040,7 @@ class FateUtilities extends Application{
                                                 }        
                                         return update;
                                 })
-            game.scenes.viewed.updateEmbeddedEntity("Token", updates);
+            game.scenes.viewed.updateEmbeddedDocuments("Token", updates);
         }
     }
 
@@ -1044,7 +1048,7 @@ class FateUtilities extends Application{
         let actors = game.combat.combatants;
             let updates = actors.map(actor => {
                             let update = {};
-                            update._id = actor.token._id;
+                            update._id = actor.token.id;
                             update.flags = {
                                                 "ModularFate":
                                                 {
@@ -1053,7 +1057,7 @@ class FateUtilities extends Application{
                                             }        
                                     return update;
                             })
-        game.scenes.viewed.updateEmbeddedEntity("Token", updates);
+        game.scenes.viewed.updateEmbeddedDocuments("Token", updates);
         game.combat.nextRound();
     }
 
@@ -1091,7 +1095,7 @@ async getData(){
         tracker_disabled = true;
     }
     
-    const data =   super.getData();
+    const data = {};
     if (game.combat==null || tracker_disabled){
         data.conflict = false;
     } else {
@@ -1103,7 +1107,7 @@ async getData(){
         let has_acted = [];
         let tokenId = undefined;
         c.forEach(comb => {
-                tokenId= comb?.token?._id;
+                tokenId= comb?.token?.id;
                 let foundToken = undefined;
                 let hidden = false;
                 let hasActed = false;
@@ -1124,7 +1128,7 @@ async getData(){
                     hidden = true;
                 } 
 
-                hasActed = foundToken.getFlag("ModularFate","hasActed");                       
+                hasActed = foundToken.document.getFlag("ModularFate","hasActed");                       
                 
                 if ((hasActed == undefined || hasActed == false) && hidden == false){
                     tokens.push(foundToken)
@@ -1165,7 +1169,7 @@ async getData(){
     data.GM=game.user.isGM;
     
     let GMUsers={};
-    game.users.entries.forEach(user => {
+    game.users.contents.forEach(user => {
         if (user.isGM){
             GMUsers[user.name]=user;
             GMUsers[user.name]["fatepoints"]=user.getFlag("ModularFate","gmfatepoints")
@@ -1191,7 +1195,7 @@ async getData(){
     data.rolls = rolls;
     data.user = game.user;
     let aspects = game.settings.get("ModularFate","gameAspects");
-    await ModularFateConstants.sort_name(aspects);
+
     data.game_aspects = aspects;
     data.game_time = game.settings.get("ModularFate","gameTime");
     data.game_notes = game.settings.get("ModularFate","gameNotes");
@@ -1203,7 +1207,7 @@ async getData(){
         let combatTokens = data.combat_tokens.concat(data.has_acted_tokens);
         data.all_tokens = data.all_tokens.filter(t=>combatTokens.indexOf(t) != -1);
     }
-    data.numConflicts = game.combats.entities.filter(c => c.data.scene == game.scenes.viewed.id).length;
+    data.numConflicts = game.combats.contents.filter(c => c.data.scene == game.scenes.viewed.id).length;
 
     let aspectsHeight = situation_aspects.length * 45;
 
@@ -1275,10 +1279,12 @@ async renderMe(...args){
 }
 
 async clearFleeting(object){
-    this.object = object;
-
         //This is a convenience method which clears all fleeting Tracks.
-        let tracks = duplicate(this.object.data.data.tracks);
+        let tracks = {};
+        if (this.object.data.data.tracks != undefined) {
+            tracks = duplicate(this.object.data.data.tracks);
+        }
+        console.log(tracks);
         
         for (let t in tracks){
             let track = tracks[t];
@@ -1443,7 +1449,7 @@ Hooks.on('createChatMessage', (message) => {
     }
 
     // We only need to take action on this if we're the first logged-in GM.
-    if (game.users.entries.find(user => user.active && user.isGM) == game.user){
+    if (game.users.contents.find(user => user.active && user.isGM) == game.user){
         let roll = JSON.parse(message.data.roll)
         if (roll.formula.startsWith("4df") || roll.formula.startsWith("4dF")){
             //We're not interested in it unless it's a Fate roll.
@@ -1508,8 +1514,8 @@ Hooks.once('ready', async function () {
 })
 
 async function updateRolls (rolls) {
-    if (rolls.rolls != undefined && game.users.entries.find(user => user.active && user.isGM) == game.user){
-        let scene = game.scenes.entries.find(sc=> sc.id==rolls.scene._id);
+    if (rolls.rolls != undefined && game.users.contents.find(user => user.active && user.isGM) == game.user){
+        let scene = game.scenes.contents.find(sc=> sc.id==rolls.scene.id);
         let currRolls = scene.getFlag("ModularFate","rolls");
         if (currRolls == undefined){
             currRolls = [];

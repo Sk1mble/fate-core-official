@@ -29,7 +29,7 @@ Handlebars.registerHelper("expanded", function (actor, item){
     if (actor == "game"){
         key = "game"+item;
     } else {
-        key = actor._id + item;
+        key = actor.id + item;
     }
 
     if (game.user.expanded != undefined){
@@ -104,7 +104,7 @@ export class ModularFateCharacter extends ActorSheet {
 
     //Here are the action listeners
     activateListeners(html) {
-        if (this.actor.owner){
+        if (this.actor.isOwner){
             const skillsButton = html.find("div[name='edit_player_skills']");;
             skillsButton.on("click", event => this._onSkillsButton(event, html));
 
@@ -328,8 +328,8 @@ export class ModularFateCharacter extends ActorSheet {
                     game.user.expanded = {};
                 }
 
-                this.actor.items.entries.forEach(item => {
-                    let key = this.actor.id+item._id+"_extra";
+                this.actor.items.contents.forEach(item => {
+                    let key = this.actor.id+item.id+"_extra";
                     game.user.expanded[key] = true;
                 })  
                 this.render(false);
@@ -340,8 +340,8 @@ export class ModularFateCharacter extends ActorSheet {
                     game.user.expanded = {};
                 }
 
-                this.actor.items.entries.forEach(item => {
-                    let key = this.actor.id+item._id+"_extra";
+                this.actor.items.contents.forEach(item => {
+                    let key = this.actor.id+item.id+"_extra";
                     game.user.expanded[key] = false;
                 })
                 this.render(false);
@@ -664,7 +664,9 @@ export class ModularFateCharacter extends ActorSheet {
 
         this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         this.freeStunts = game.settings.get("ModularFate", "freeStunts");
-        const sheetData = await super.getData();
+
+        const sheetData = this.document.data;
+
         let numStunts = Object.keys(sheetData.data.stunts).length;
         let paidTracks = 0;
         let paidStunts = 0;
@@ -679,7 +681,7 @@ export class ModularFateCharacter extends ActorSheet {
             }
         }
 
-        this.object.items.entries.forEach(item => {
+        this.object.items.contents.forEach(item => {
             let cost = parseInt(item.data.data.refresh);
             if (!isNaN(cost) && cost != undefined){
                 paidExtras += parseInt(item.data.data.refresh);
@@ -735,14 +737,14 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.ordered_skills = ordered_skills;
         sheetData.sorted_by_rank = sorted_by_rank;
         sheetData.gameRefresh = game.settings.get("ModularFate", "refreshTotal");
-        sheetData.item=this.object.items;
+        sheetData.items=this.object.items;
 
         let skillTotal = 0;
         for (let s in ordered_skills) {
             //Ignore any skills with an extra field where the associated extra's countSkills is false.
             if (ordered_skills[s].extra_tag != undefined){
                 let extra_id = ordered_skills[s].extra_tag.extra_id;
-                let extra = this.object.items.find(item=>item._id == extra_id);
+                let extra = this.object.items.find(item=>item.id == extra_id);
         
                 if (extra != undefined && extra.data.data.countSkills){
                     skillTotal += ordered_skills[s].rank;    

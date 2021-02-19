@@ -366,7 +366,7 @@ Hooks.once('ready', async function () {
     //We need to copy over their aspects.
     //We need to copy over their biography and description
     
-    let actors = game.actors.entries;
+    let actors = game.actors.contents;
     actors.forEach(actor =>{
         if (actor.data.type == "Core" || actor.data.type=="Accelerated"){
             importFateCharacter(actor);
@@ -377,7 +377,7 @@ Hooks.once('ready', async function () {
 Hooks.on('updateToken', (scene, token, data) => {
     if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined){
         game.system.apps["actor"].forEach(a=> {
-            a.renderMe(token._id, data);
+            a.renderMe(token.id, data);
         })
     }
 })
@@ -409,14 +409,14 @@ Hooks.on('updateActor', (actor, data) => {
 
 Hooks.on('updateItem', (item, data) => {
     game.system.apps["item"].forEach(a=> {
-        a.renderMe(item._id, data);
+        a.renderMe(item.id, data);
     })
 })
 
 Hooks.on('updateOwnedItem', (actor, item, data) => {
     game.system.apps["item"].forEach(a=> {
-        setTimeout(function(){a.renderMe(item._id, data)},200);
-        a.renderMe(item._id, data);
+        setTimeout(function(){a.renderMe(item.id, data)},200);
+        a.renderMe(item.id, data);
     })
 })
 
@@ -458,8 +458,7 @@ Hooks.on('updateScene', (...args) => {
 })
 
 Hooks.once('init', async function () {
-
-    CONFIG.Actor.entityClass = ModularFateActor;
+    CONFIG.Actor.documentClass = ModularFateActor;
 
     game.settings.register("ModularFate","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",

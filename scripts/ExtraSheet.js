@@ -6,7 +6,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async getData() {
-        const data = await super.getData();
+        const data = this.document.data;
         data.type = this.item.type.toLowerCase();
         data.stunts = this.object.data.data.stunts;
         data.aspects = this.object.data.data.aspects;
@@ -133,7 +133,7 @@ export class ExtraSheet extends ItemSheet {
         return 'systems/ModularFate/templates/ExtraSheet.html';
     }
 
-    _updateObject(event, formData){
+    async _updateObject(event, formData){
         super._updateObject(event, formData);
     }
 

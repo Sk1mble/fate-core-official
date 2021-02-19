@@ -42,14 +42,14 @@
                                     </td>
                                     <td style="width:60px; padding:5px; text-align:left; vertical-align:top">
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none;"/>{{else}}
-                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:50px; cursor: pointer; height:auto; border:none"/>{{/if}}
+                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none;"/>{{else}}
+                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.data.id}}_avatar" style="width:50px; cursor: pointer; height:auto; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
                                     <td id="{{this.id}}_tokenNameA" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
                                         {{this.name}}<br>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if this.owner}}
+                                        {{#if this.isOwner}}
                                         <select title="{{localize 'ModularFate.RollHelp'}}" class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px; font-size:{{../fontSize}}">
                                             <option disabled="disabled" selected="selected">{{localize 'ModularFate.PickASkill'}}</option>
                                             {{#each this.actor.data.data.skills}}
@@ -60,7 +60,7 @@
                                             {{/each}}
                                         </select>
                                         {{/if}}
-                                        {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; font-style:normal; font-size:{{../fontSize}}pt; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:Montserrat; font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
+                                        {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="background-color:white; width:50px; font-family:Montserrat; font-style:normal; font-size:{{../fontSize}}pt; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if this.isOwner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:Montserrat; font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
                                         {{/if}}
                                     </td>
                                     <td>
@@ -97,14 +97,14 @@
                                     </td>
                                     <td style="width:60px; padding:5px; text-align:left; vertical-align:top">
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data._id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none"/>{{else}}
-                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.data._id}}_avatar" style="width:50px; cursor: pointer; height:auto; cursor: pointer; border:none"/>{{/if}}
+                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none"/>{{else}}
+                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.data.id}}_avatar" style="width:50px; cursor: pointer; height:auto; cursor: pointer; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
                                     <td id="{{this.id}}_tokenNameA" title="Double click to change the name shown on this token" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
                                         {{this.name}}<br>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if this.owner}}
+                                        {{#if this.isOwner}}
                                         <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
                                             <option disabled="disabled" selected="selected">{{localize 'ModularFate.PickASkill'}}</option>
                                             {{#each this.actor.data.data.skills}}
@@ -115,7 +115,7 @@
                                             {{/each}}
                                         </select>
                                         {{/if}}
-                                        {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; font-style:normal; font-size:{{../fontSize}}pt" {{#if this.owner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:Montserrat; font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
+                                        {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" name="player_fps" value="{{this.actor.data.data.details.fatePoints.current}}" style="width:50px; font-family:Montserrat; font-style:normal; font-size:{{../fontSize}}pt" {{#if this.isOwner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:Montserrat; font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> {{localize 'ModularFate.FatePoints'}}</i>{{/if}}
                                         {{/if}}
                                     </td>
                                     <td>
@@ -181,10 +181,10 @@
                             <td style="vertical-align:top">
                                 {{#each this.box_values}}
                                 {{#if this}}                        
-                                <label class="box"><input type="checkbox" name = "box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
-                                <label class="box"><input type="checkbox" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
+                                <label class="box"><input type="checkbox" name = "box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../this.isOwner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
+                                <label class="box"><input type="checkbox" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../this.isOwner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
                                 {{/each}}
-                                {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input style="font-size:{{../../fontSize}}pt;" type="text" {{#if ../this.owner}}{{else}}disabled="disabled"{{/if}} class="aspect_box" id="{{../this.id}}_{{this.name}}" name = "track_aspect" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{#if ../../GM}}{{#unless (eq this.aspect.name "")}}<button type="button" style="border:none; background-color:transparent; width:25px; height:25px; font-size:x-small" i icon class="fas fa-sticky-note" name="track_aspect_button" title="{{localize 'ModularFate.addToSceneAspects'}}" id="{{this.aspect.name}}_{{../this.actor.name}}_button{{this.name}}"></button>{{/unless}}{{/if}}{{/if}}
+                                {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input style="font-size:{{../../fontSize}}pt;" type="text" {{#if ../this.isOwner}}{{else}}disabled="disabled"{{/if}} class="aspect_box" id="{{../this.id}}_{{this.name}}" name = "track_aspect" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{#if ../../GM}}{{#unless (eq this.aspect.name "")}}<button type="button" style="border:none; background-color:transparent; width:25px; height:25px; font-size:x-small" i icon class="fas fa-sticky-note" name="track_aspect_button" title="{{localize 'ModularFate.addToSceneAspects'}}" id="{{this.aspect.name}}_{{../this.actor.name}}_button{{this.name}}"></button>{{/unless}}{{/if}}{{/if}}
                                 {{#if (expanded ../this.actor (concat this.name '_track'))}}
                                 <textarea style="background-color:white; font-size:{{../../fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; min-height:75px; border-left:none; border-bottom:1px lightsteelblue solid" type="text" {{#if (lt ../this.actor.permission 3)}}disabled="disabled"{{else}}{{/if}} name="FUTrackNotesText" id="{{../this.id}}_{{this.name}}_FUTrackNotes">{{this.notes}}</textarea>
                                 {{else}}{{/if}}
@@ -216,10 +216,10 @@
                             <td style="vertical-align:top; font-size:{{../../fontSize}}">
                                 {{#each this.box_values}}
                                 {{#if this}}                        
-                                <label class="box"><input type="checkbox" name = "box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
-                                <label class="box"><input type="checkbox" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../this.owner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
+                                <label class="box"><input type="checkbox" name = "box" id="{{../name}}_{{@index}}_false_{{../../this.id}}" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../this.isOwner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
+                                <label class="box"><input type="checkbox" name="box" id="{{../name}}_{{@index}}_true_{{../../this.id}}" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../this.isOwner}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
                                 {{/each}}
-                                {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input style="font-size:{{../../fontSize}}pt" type="text" {{#if ../this.owner}}{{else}}disabled="disabled"{{/if}} class="aspect_box" id="{{../this.id}}_{{this.name}}" name = "track_aspect" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{#if ../../GM}}{{#unless (eq this.aspect.name "")}}<button type="button" style="border:none; background-color:transparent; width:25px; height:25px; font-size:x-small" i icon class="fas fa-sticky-note" name="track_aspect_button" title="{{localize 'ModularFate.addToSceneAspects'}}" id="{{this.aspect.name}}_{{../this.actor.name}}_button{{this.name}}"></button>{{/unless}}{{/if}}{{/if}}
+                                {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input style="font-size:{{../../fontSize}}pt" type="text" {{#if ../this.isOwner}}{{else}}disabled="disabled"{{/if}} class="aspect_box" id="{{../this.id}}_{{this.name}}" name = "track_aspect" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{#if ../../GM}}{{#unless (eq this.aspect.name "")}}<button type="button" style="border:none; background-color:transparent; width:25px; height:25px; font-size:x-small" i icon class="fas fa-sticky-note" name="track_aspect_button" title="{{localize 'ModularFate.addToSceneAspects'}}" id="{{this.aspect.name}}_{{../this.actor.name}}_button{{this.name}}"></button>{{/unless}}{{/if}}{{/if}}
                                 {{#if (expanded ../this.actor (concat this.name '_track'))}}
                                 <br><textarea style="background-color:white; font-size:{{../../fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; min-height:75px; border-left:none; border-bottom:1px lightsteelblue solid" type="text" {{#if (lt ../this.actor.permission 3)}}disabled="disabled"{{else}}{{/if}} name="FUTrackNotesText" id="{{../this.id}}_{{this.name}}_FUTrackNotes">{{this.notes}}</textarea>
                                 {{else}}{{/if}}
@@ -268,10 +268,10 @@
                     <!----------------------------------------------------------------------END SCENE TAB-->
 
                     <!----------------------BEGIN Roll History Tab-->
-                    <div name = "rolls" class="tab rolls" data-tab="rolls" style="background-color:lightgray; font-family:Montserrat; padding-top:10px;">
+                    <div name = "rolls" class="tab rolls" data-tab="rolls" style="background-color:lightgray; text-align:center; font-family:Montserrat; padding-top:10px; max-width:99%">
                         {{#if GM}}<button type="button" id="fu_clear_rolls" style="font-size:{{fontSize}}pt">{{localize 'ModularFate.ClearAllRolls'}}</button>{{/if}}
                         <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 175px);">
-                        <table style="background:none">
+                        <table style="background:none;">
                         <tr>
                             <th style="border:2px solid black; font-weight:bold; text-align:left; font-size:{{fontSize}}pt">
                                 {{localize 'ModularFate.Character'}}
@@ -332,7 +332,7 @@
                                             </tr>
                                     </table>
                                 {{/if}}
-                                {{#if (eq this.user._id ../user._id)}}{{#if ../GM}}{{else}}
+                                {{#if (eq this.user.id ../user.id)}}{{#if ../GM}}{{else}}
                                 <table style="background:none; border:none">
                                     <tr><th>{{localize 'ModularFate.FreeActions'}}</th>
                                         <th>{{localize 'ModularFate.FatePointActions'}}</th>
@@ -372,10 +372,10 @@
                                     <div style="padding-top: 10px; font-family:Montserrat; font-size:{{../fontSize}}pt; display: flex; flex-direction: row; align-items:center">
                                         <button type="button" name="FUexpandGameAspect" style="vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button>
                                         <span style="width:100%; padding-left:10px; vertical-align:middle">
-                                                <input name="game_aspect" type="text" value="{{this.name}}" id="{{this.name}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid; vertical-align:middle;"></input>
+                                                <input name="game_aspect" type="text" value="{{this.name}}" id="{{@key}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid; vertical-align:middle;"></input>
                                         </span>
                                         <span style="padding-left:10px; vertical-align:middle">
-                                            <input type="number" name="game_a_free_i" id="{{this.name}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
+                                            <input type="number" name="game_a_free_i" id="{{@key}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
                                         </span>
                                         {{#if ../GM}}
                                             <span style="padding-left:5px; vertical-align:middle"><button type="button" name="del_game_aspect" id="delete_ga_{{this.name}}" title="{{localize 'ModularFate.DeleteAspect'}}" style="vertical-align:middle; width:30px; height:30px" i icon class="fas fa-trash"></button></span>
