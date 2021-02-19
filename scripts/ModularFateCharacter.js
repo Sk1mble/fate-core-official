@@ -425,16 +425,19 @@ export class ModularFateCharacter extends ActorSheet {
         let actor_id = info[0];
         let item = JSON.parse(event.target.getAttribute("data-item"));
         let tokenId = undefined;
-        
-        if (this.actor?.token?.data?.actorLink === false){
+
+        if (this.actor.isToken === true){
             tokenId = this.actor.token.id;
         }
 
+        let i = new Item(item);
+
         let data = {
-            "type":"Item",
+                    "type":"Item",
+                    "actor":this.actor,
                     "id":item_id,
                     "actorId":actor_id,
-                    "data":item,
+                    "data":i,
                     "tokenId":tokenId,
                     "scene":game.scenes.viewed
                 }
@@ -519,7 +522,7 @@ export class ModularFateCharacter extends ActorSheet {
             "name": game.i18n.localize("New Extra"),
             "type": "Extra"
         };
-        const created = await this.actor.createEmbeddedEntity("OwnedItem", data);
+        const created = await this.document.createEmbeddedDocuments("Item", [data]);
     }
     async _on_extras_edit_click(event, html){
         let items = this.object.items;
@@ -530,7 +533,8 @@ export class ModularFateCharacter extends ActorSheet {
     async _on_extras_delete(event, html){
         let del = await ModularFateConstants.confirmDeletion();
         if (del){
-            await this.actor.deleteOwnedItem(event.target.id.split("_")[0]);
+            console.log(event.target.id.split("_")[0])
+            await this.actor.deleteEmbeddedDocuments("Item",[event.target.id.split("_")[0]]);
         }
     }
 
@@ -653,7 +657,6 @@ export class ModularFateCharacter extends ActorSheet {
     }
 
     async getData() {
-
         if (game.user.expanded == undefined){
                 game.user.expanded = {};
         }

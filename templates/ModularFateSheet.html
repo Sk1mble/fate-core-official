@@ -270,7 +270,7 @@
                 <div class="mfate-extras__content">
                     <div class="fate-extras__content-body" name="extras_body">
                         <div class="fate-extras__row">
-                            {{log items}}{{#each items}}
+                            {{#each items}}
                             <div name="item_header" draggable="true" id="{{../this.document.id}}_{{this.id}}" data-item="{{str this}}">
                             <div class = "fate-extras__row-header">
                                 <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></button>&nbsp&nbsp{{{this.name}}}

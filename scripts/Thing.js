@@ -53,9 +53,9 @@ export class Thing extends ActorSheet {
             let character = game.user.character;
 
             if (character != undefined && character != null){
-                await character.createOwnedItem(this.actor.items.contents);
+                await character.createEmbeddedDocuments("Item", this.document.items.contents.map(it => it.data));
                 if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
-                    await this.actor.deleteOwnedItem(this.actor.items.contents.map(item => item.id));
+                    await this.actor.deleteEmbeddedDocuments("Item", this.actor.items.contents.map(item => item.id));
                 }
             } else {
                 ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
@@ -67,13 +67,17 @@ export class Thing extends ActorSheet {
 
             if (character != undefined && character != null){
                 let container;
-                
+        
                 if (jQuery.isEmptyObject(this.actor.data.data.container.extra)){
-                    container = await (this.actor.createOwnedItem({"name":this.actor.name,"description":this.actor.data.description,"type":"Extra"}));
+                    console.log(this.actor.name);
+                    container = await (this.actor.createEmbeddedDocuments("Item",[{"name":this.actor.name,"description":this.actor.data.description,"type":"Extra"}]));
+                    console.log(container)
                     await this.actor.update({"data.container.extra":container})
-                    await this.actor.deleteOwnedItem(container);
+                    await this.actor.deleteEmbeddedDocuments("Item", [container.id]);
+                
                     container = new Item(this.actor.data.data.container.extra);
                 } else {
+                    console.log(this.actor.data.data.container.extra);
                     container = new Item(this.actor.data.data.container.extra);
                 }
 
@@ -85,7 +89,7 @@ export class Thing extends ActorSheet {
                     contents.extras.push(item.data);
                 })
                 container.data.data.contents = contents;
-                character.createOwnedItem(container.data);
+                character.createEmbeddedDocuments("Item",[container.data]);
 
                 if (game.user.isGM){
                     this.actor.token.delete();
@@ -192,16 +196,18 @@ export class Thing extends ActorSheet {
         let character = game.user.character;
 
         if (character != undefined && character != null){
-            let item = this.actor.items.find(item => item.id == id);
-            await character.createOwnedItem(item.data);
+            let item = this.actor.items.find(item => item.id == id).data;
+            await character.createEmbeddedDocuments("Item", [item]);
             if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
-                await this.actor.deleteOwnedItem(id);
+                await this.actor.deleteEmbeddedDocuments("Item", [id]);
             }
         } else {
             ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
         }
     }
 
+    // Handler for dragging extras from a ThingSheet (not to be confused with the main character sheet drag handler).
+    // We should standardsise this given that all extras are the same!
     async _on_item_drag (event, html){
         let info = event.target.id.split("_");
         let item_id = info[1];
@@ -212,11 +218,16 @@ export class Thing extends ActorSheet {
         if (this.actor?.token?.data?.actorLink === false){
             tokenId = this.actor.token.id;
         }
+
+        let i = new Item(item);
+        console.log(this.actor.isToken);
+
         let data = {
                     "type":"Item",
+                    "actor":this.actor,
                     "id":item_id,
                     "actorId":actor_id,
-                    "data":item,
+                    "data":i,
                     "tokenId":tokenId,
                     "scene":game.scenes.viewed
                 }
@@ -233,7 +244,7 @@ export class Thing extends ActorSheet {
     async _on_extras_delete(event, html){
         let del = await ModularFateConstants.confirmDeletion();
         if (del){
-            await this.actor.deleteOwnedItem(event.target.id.split("_")[0]);
+            await this.actor.deleteEmbeddedDocuments("Item", [event.target.id.split("_")[0]]);
         }
     }
 
@@ -242,7 +253,7 @@ export class Thing extends ActorSheet {
             "name": game.i18n.localize("New Extra"),
             "type": "Extra"
         };
-        const created = await this.actor.createEmbeddedEntity("OwnedItem", data);
+        const created = await this.actor.createEmbeddedDocuments("Item", [data]);
     }
 
     async getData() {
@@ -275,7 +286,7 @@ export class Thing extends ActorSheet {
     }
 }
 
-Hooks.on('preCreateOwnedItem', (actor, itemData) => {
+Hooks.on('preCreateItem', (actor, itemData) => {
     if (actor.data.type == "Thing") {
         
         if (actor.items.contents.length == 1 && actor.data.data.container.isContainer == false){
@@ -286,36 +297,6 @@ Hooks.on('preCreateOwnedItem', (actor, itemData) => {
             ui.notifications.error("You can't put items in a locked container.");
             return false;
         }
-    }
-})
-
-Hooks.on('preUpdateToken', (scene, tokenData, aData) => {
-    if (game.user == game.users.find(e => e.isGM && e.active)){
-        let token = canvas.tokens.placeables.find(t => t.id == tokenData.id);
-        let actor = undefined;
-        
-        if (token != undefined) {
-            actor = token.actor;
-        } 
-
-        if (actor?.data?.type != "Thing" || aData?.actorData?.items == undefined){
-            return;
-        }
-
-            let changedItems = aData.actorData.items;
-            let originalItems = actor.items.contents;
-
-            if (changedItems.length > originalItems.length){
-                if (originalItems.length == 1 && actor.data.data.container.isContainer == false){
-                    ui.notifications.error("This is not a container and can only represent a single Extra.")        
-                    return false;
-                }
-
-                if (actor.data.data?.container?.isContainer == true && actor.data.data?.container?.locked == true){
-                    ui.notifications.error("You can't put items in a locked container.");
-                    return false;
-                }
-            }
     }
 })
 
@@ -334,7 +315,7 @@ Hooks.on('deleteToken', async (scene, token) => {
     }
 })
 
-Hooks.on('deleteOwnedItem', async (actor) => {
+Hooks.on('deleteItem', async (actor) => {
     if (actor.data.type !== "Thing"){
         return;
     }
@@ -344,10 +325,10 @@ Hooks.on('deleteOwnedItem', async (actor) => {
         if (actor.data.type =="Thing" && !actor.data.data?.container?.isContainer){
             await actor.sheet.close({"force":true});
             if (game.user == game.users.find(e => e.isGM && e.active)){
-                let t = canvas.tokens.placeables.find(token => token.actor.id === actor.id);
-                t.delete();
+                let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id);
+                game.scenes.viewed.deleteEmbeddedDocuments("Token", [t.id])
             } else {
-                let t = canvas.tokens.placeables.find(token => token.actor.id === actor.id);
+                let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id); //game.scenes.viewed.tokens.contents is the no-canvas safe alternative to canvas.tokens.placeables.
                 game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
             }
         }
@@ -369,13 +350,16 @@ async function checkContainer (actor){
     if (!actor.updatePending) {
         actor.updatePending = true;
         setTimeout(() => {
+            console.log(actor.data.data.container.extra);
             if (actor.items.contents.length === 1 && actor.data.data?.container?.isContainer){
-                actor.deleteOwnedItem(actor.items.contents[0].id);
+                actor.deleteEmbeddedDocuments("Item", [actor.items.contents[0].id]);
             }
         
             if (actor.data.data.container.isContainer === false && actor.items.contents.length === 0){
                 if (actor?.data?.data?.container?.extra?.name !== undefined){
-                    actor.createOwnedItem(actor.data.data.container.extra);
+                    let item = duplicate(actor.data.data.container.extra);
+                    let item2 = new Item (item);
+                    actor.createEmbeddedDocuments("Item",[item2.data]);
                 }
             }
             actor.updatePending = false;
@@ -384,16 +368,17 @@ async function checkContainer (actor){
 }
 
 async function createThing (canvas_scene, data, user_id, shiftDown){
-    if (data.type != "Item"){
+    
+    if (data.type != "Item" && data.type != "Extra"){
         return;
     }
+
     let itemActor = undefined;
     let contents = undefined;
     let newItem;
 
     if (data.data != undefined){ // This means it came from a token
-        let itemData = data.data;
-        newItem = new Item(itemData);
+        newItem = new Item(data.data);
         
         //Let's get the contents, if there are any, so we can do some stuff with them later.
         if (newItem?.data?.data?.contents){
@@ -405,41 +390,44 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                 if (folder == undefined){
                     folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
                 }
-
+                
                 itemActor = await Actor.create({
                     name: newItem.name,
                     type: "Thing",
-                    data:{"container.isContainer":false, "container.extra":newItem.data},
+                    data:{"container.isContainer":false, "container.extra":newItem.toJSON()},
                     img:newItem.img,
-                    items:[newItem],
+                    items:[newItem.data],
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                 },{"temporary":false,"renderSheet":false,"thing":true});
 
                 if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
+                    let actor = new Actor (data.actor);
                     if (data.tokenId === undefined){
                         let actor=game.actors.get(data.actorId);
+                    
                         if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
                             if (shiftDown === false){
-                                await actor.deleteOwnedItem(data.data.id); 
+                                await actor.deleteEmbeddedDocuments("Item", [data.id]); 
                             }
                         } else {
                             if (shiftDown === true){
-                                await actor.deleteOwnedItem(data.data.id); 
+                                await actor.deleteEmbeddedDocuments("Item", [data.id]); 
                             }
                         }
                         
                     } else { // This is a token actor. Respond accordingly.
-                        let scene = game.scenes.get(canvas_scene.id)
-                        let token = new Token(scene.data.tokens.find(token=>token.id == data.tokenId));
+                        let scene = game.scenes.contents.find(c => c.id == canvas_scene.document.id);
+                        let token = scene.data.tokens.find(t=>t.id == data.tokenId);
+                        
                         if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
                             if (shiftDown === false){
-                                await token.actor.deleteOwnedItem(data.data.id); 
+                                await token.actor.deleteEmbeddedDocuments("Item", [data.id]); 
                             }
                         } else {
                             if (shiftDown === true){
-                                await token.actor.deleteOwnedItem(data.data.id); 
+                                await token.actor.deleteEmbeddedDocuments("Item", [data.id]); 
                             }
                         }
                     }
@@ -447,8 +435,9 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
     } else {
         if (data.pack != undefined){ // This means it came from a compendium
             const pack = game.packs.get(data.pack);
-            newItem = await pack.getEntity(data.id);
+            newItem = await duplicate(await pack.getDocument(data.id));
             let permission = newItem.data.permission;
+            let i = new Item (newItem); 
 
             //Let's get the contents, if there are any, so we can do some stuff with them later.
             if (newItem?.data?.data?.contents){
@@ -461,24 +450,24 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
                 }
 
-
                 let things = game.actors.contents.filter(a => a.data.type=="Thing");
                 itemActor = things.find(thing => thing.name == newItem.name);
 
                 itemActor = await Actor.create({
                     name: newItem.name,
                     type: "Thing",
-                    data:{"container.isContainer":false, "container.extra":newItem.data},
+                    data:{"container.isContainer":false, "container.extra":i.toJSON()},
                     img:newItem.img,
-                    items:[newItem],
+                    items:[i.toJSON()],
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                 },{"temporary":false,"renderSheet":false,"thing":true});   
         } else {
             if (data.type == "Item"){ // This means it was dropped straight from the items list.
-                console.log(data);
+                
                 let newItem = duplicate(game.items.contents.find(it => it.id == data.id));
+                let i = new Item (newItem);
                 let permission = newItem.data.permission;
 
                 //Let's get the contents, if there are any, so we can do some stuff with them later.
@@ -499,9 +488,9 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                 itemActor = await Actor.create({
                     name: newItem.name,
                     type: "Thing",
-                    data:{"container.isContainer":false, "container.extra":newItem.data},
+                    data:{"container.isContainer":false, "container.extra":i.toJSON()},
                     img:newItem.img,
-                    items:[newItem],
+                    items:[i.toJSON()],
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are required to see and interact with items.
@@ -523,10 +512,12 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
         actorData: {}
       }
 
-    await canvas_scene.createEmbeddedEntity("Token",token);
+
+    let scene = game.scenes.contents.find(sc => sc.id == canvas_scene._id);
+    await scene.createEmbeddedDocuments("Token", [token]); //createEmbeddedDocuments takes an array of creation data.
 
     //Now we need to create the contents and set the container parameters.
-    if (contents.extras != undefined){
+    if (contents?.extras != undefined){
         await itemActor.update({
             "data.container.isContainer":true,
             "data.container.locked":contents.locked,
@@ -534,14 +525,15 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
             "data.container.movable":true,
             "data.img":newItem.img,
         })
-        await itemActor.createOwnedItem(contents.extras);
-        await itemActor.deleteOwnedItem(newItem);
+        console.log(contents);
+        await itemActor.createEmbeddedDocuments("Item", contents.extras);
+        await itemActor.deleteEmbeddedDocuments("Item", [newItem.id]);
     }
 }
 
 Hooks.on ('dropCanvasData', async (canvas, data) => {
     if (game.user.isGM){
-        createThing (canvas.scene, data, game.user.id, keyboard.isDown("Shift"));
+        createThing (canvas.scene.data, data, game.user.id, keyboard.isDown("Shift"));
     } else {
         if (game.settings.get("ModularFate","PlayerThings")){
             let GMs = game.users.contents.filter(user => user.active && user.isGM);
@@ -555,7 +547,6 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
 })
 
 Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
-
     if (target.data.data?.container?.isContainer == false && target.data?.items?.length == 1){
         return;
     }
@@ -571,6 +562,8 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
     if (target.data.data?.container?.isContainer == true && target.data?.data?.container?.locked == true){
         return;
     }
+
+    let i = new Item(data.data);
 
     if (target.id === data.actorId){
         if (data.tokenId === undefined){ // This is being dragged on the same linked actor, do nothing.
@@ -588,38 +581,42 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
         let actor = game.actors.get(data.actorId);
         //Need to check if the user has ownership of the target. If not, do nothing.
             if (target.isOwner){
+                //target.createEmbeddedDocuments("Item", [i.data]);
                 if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
                     if (!keyboard.isDown("Shift")){
-                        await actor.deleteOwnedItem(data.data.id); 
+                        await actor.deleteEmbeddedDocuments("Item", [i.id]);
                     }
                 } else {
                     if (keyboard.isDown("Shift")){
-                        await actor.deleteOwnedItem(data.data.id); 
+                        await actor.deleteEmbeddedDocuments("Item", [i.id]);
                     }
                 }
             }
-    } else { // This is a token actor. Respond accordingly.
-        let token = data.scene.tokens.find(token=> token.id === data.tokenId);
-
-        let destination = data.scene.tokens.find(token=> token.id == target?.token?.id)
+    } else { // This is from a token actor. Respond accordingly.
+        let scene = new Scene(data.scene);
+        let token = scene.tokens.find(t1 => t1.id === data.tokenId);
+        let destination = scene.tokens.find(t2=> t2.id == target?.token?.id)
+    
         if (token !== undefined){
-            let t = new Token(token);
-            let dt = new Token(destination);
+            let t = token;
+            let dt = destination;
             
             if (t.actor.id == dt?.actor?.id){
                 // Create a copy of the item on the destination, as it appears Foundry doesn't by default.
-                await dt.actor.createOwnedItem(data.data);
+                await dt.actor.createEmbeddedDocuments("Item", [data]);
             } else {
                 // Do nothing, as the default Foundry behaviour has got this covered.
             }
+            
             if (t.actor.isOwner && target.isOwner){
                 if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
                     if (!keyboard.isDown("Shift")){
-                        await t.actor.deleteOwnedItem(data.data.id);
+                        console.log(data.data);
+                        await t.actor.deleteEmbeddedDocuments("Item", [data.data._id]);
                     }
                 } else {
                     if (keyboard.isDown("Shift")){
-                        await t.actor.deleteOwnedItem(data.data.id);
+                        await t.actor.deleteEmbeddedDocuments("Item", [data.data._id])
                     }
                 }
             }
@@ -647,7 +644,6 @@ function shouldUpdate(actor){
 }
 
 Hooks.once('ready', async function () {
-
     if (game.user.isGM){
         game.socket.on("system.ModularFate", async (data) => {
             let GMs = game.users.filter(user => user.isGM && user.active);
@@ -659,8 +655,8 @@ Hooks.once('ready', async function () {
                     await createThing (data.scene, data.data, data.id, data.shiftDown);                
             }  
             if (data.action == "delete_token"){
-                let scene = new Scene(data.scene);
-                scene.deleteEmbeddedEntity("Token", data.token);
+                let scene = game.scenes.get(data.scene._id);
+                await scene.deleteEmbeddedDocuments("Token", [data.token]);
             }
         })
     }
