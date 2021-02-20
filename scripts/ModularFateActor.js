@@ -78,13 +78,13 @@ function shouldUpdate(actor){
     if (!actor.isOwner){
         return false;
     }
-    const permissions = actor.data.permission;
-    const activePlayers = game.users.contents
+    const permissions = actor.data.permission; // Exists
+    const activePlayers = game.users.contents // Exists
        .filter(user => user.active)
        .map(user => user.id);
 
     for (let playerId in permissions) {
-        var isOwner = permissions[playerId] === CONST.ENTITY_PERMISSIONS.isOwner;
+        var isOwner = permissions[playerId] === CONST.ENTITY_PERMISSIONS.OWNER;
         var isActive = activePlayers.includes(playerId);
 
         if (isOwner && isActive) {
@@ -94,7 +94,6 @@ function shouldUpdate(actor){
 }
 
 async function updateFromExtra(actor, itemData) {
-
     if (!shouldUpdate(actor)){
         return;
     } else {
@@ -241,16 +240,16 @@ async function updateFromExtra(actor, itemData) {
     await setTimeout(function(){actor.sheet.render(false)},0);
 }
 
-Hooks.on('updateOwnedItem', async (actorData, itemData) => {
-    if (actorData.data.type == "ModularFate") {
-        updateFromExtra(actorData,itemData);
+Hooks.on('updateItem', async (actor, item) => {
+    if (actor.type == "ModularFate") {
+        updateFromExtra(actor,item.data);
     }
 })
 
-Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
-    let actor = game.actors.find(a=>a.id == actorData.id);
+Hooks.on('deleteItem', async (actor, item) => {
+    let itemData = item.data;
 
-    if (actor.data.type != "ModularFate"){
+    if (actor.type != "ModularFate"){
         return;
     }
 
@@ -304,15 +303,14 @@ Hooks.on('deleteOwnedItem', async (actorData, itemData) => {
     }
 })
 
-Hooks.on('createOwnedItem', async (actorData, itemData) => {
-    if (actorData.data.type == "ModularFate") {
-        let actor = game.actors.find(a=>a.id == actorData.id);
-        updateFromExtra(actor,itemData);
+Hooks.on('createItem', async (actor, item) => {
+    if (actor.type == "ModularFate") {
+        updateFromExtra(actor,item.data);
     }
 })
 
-Hooks.on('updateToken', async (scene, tokenData, aData) => {
-    let token = canvas.tokens.placeables.find(t => t.id == tokenData.id);
+/*Hooks.on('updateToken', async (scene, tokenData, aData) => {
+    let token = game.scenes.viewed.tokens.contents.find(t => t.id == tokenData.id);
     let actor = undefined;
     
     if (token != undefined) {
@@ -378,5 +376,4 @@ Hooks.on('updateToken', async (scene, tokenData, aData) => {
                 await setTimeout(function(){actor.sheet.render(false)},0);
             }
         }
-    }
-})
+})*/

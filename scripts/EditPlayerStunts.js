@@ -224,7 +224,6 @@ class StuntDB extends Application {
     async _onImportStunts(event, html){
         let text = await this.getStunts();
         try {
-            console.log(text)
             let imported_stunts = JSON.parse(text);
             let stuntDB = duplicate(game.settings.get("ModularFate","stunts"));
             if (stuntDB == undefined){

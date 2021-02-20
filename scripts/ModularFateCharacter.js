@@ -533,7 +533,6 @@ export class ModularFateCharacter extends ActorSheet {
     async _on_extras_delete(event, html){
         let del = await ModularFateConstants.confirmDeletion();
         if (del){
-            console.log(event.target.id.split("_")[0])
             await this.actor.deleteEmbeddedDocuments("Item",[event.target.id.split("_")[0]]);
         }
     }

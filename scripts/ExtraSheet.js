@@ -7,7 +7,7 @@ export class ExtraSheet extends ItemSheet {
 
     async getData() {
         const data = this.document.data;
-        data.type = this.item.type.toLowerCase();
+        data.type = this.item.type;
         data.stunts = this.object.data.data.stunts;
         data.aspects = this.object.data.data.aspects;
         data.skills = this.object.data.data.skills;
@@ -138,9 +138,9 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async _on_boxes_change(html, event){
-        //console.log(event.target.value)
+        ////console.log(event.target.value)
         let num = parseInt(event.target.innerHTML);
-        //console.log(num);
+        ////console.log(num);
     }
     static get defaultOptions() {
         const options = super.defaultOptions;

@@ -69,15 +69,12 @@ export class Thing extends ActorSheet {
                 let container;
         
                 if (jQuery.isEmptyObject(this.actor.data.data.container.extra)){
-                    console.log(this.actor.name);
                     container = await (this.actor.createEmbeddedDocuments("Item",[{"name":this.actor.name,"description":this.actor.data.description,"type":"Extra"}]));
-                    console.log(container)
                     await this.actor.update({"data.container.extra":container})
                     await this.actor.deleteEmbeddedDocuments("Item", [container.id]);
                 
                     container = new Item(this.actor.data.data.container.extra);
                 } else {
-                    console.log(this.actor.data.data.container.extra);
                     container = new Item(this.actor.data.data.container.extra);
                 }
 
@@ -95,7 +92,7 @@ export class Thing extends ActorSheet {
                     this.actor.token.delete();
                     this.actor.sheet.close({"force":true});
                 } else {
-                    let t = canvas.tokens.placeables.find(token => token?.actor?.id === this.actor.id);
+                    let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
                     game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
                     this.actor.sheet.close({"force":true});
                 }                
@@ -220,7 +217,7 @@ export class Thing extends ActorSheet {
         }
 
         let i = new Item(item);
-        console.log(this.actor.isToken);
+        ////console.log(this.actor.isToken);
 
         let data = {
                     "type":"Item",
@@ -325,10 +322,10 @@ Hooks.on('deleteItem', async (actor) => {
         if (actor.data.type =="Thing" && !actor.data.data?.container?.isContainer){
             await actor.sheet.close({"force":true});
             if (game.user == game.users.find(e => e.isGM && e.active)){
-                let t = canvas.tokens.placeables.find(token => token?.actor?.id === actor.id);
+                let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id);
                 game.scenes.viewed.deleteEmbeddedDocuments("Token", [t.id])
             } else {
-                let t = canvas.tokens.placeables.find(token => token?.actor?.id === actor.id); //canvas.tokens.placeables is the no-canvas safe alternative to canvas.tokens.placeables.
+                let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id); //game.scenes.viewed.tokens.contents is the no-canvas safe alternative to game.scenes.viewed.tokens.contents.
                 game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
             }
         }
@@ -350,7 +347,7 @@ async function checkContainer (actor){
     if (!actor.updatePending) {
         actor.updatePending = true;
         setTimeout(() => {
-            console.log(actor.data.data.container.extra);
+            //console.log(actor.data.data.container.extra);
             if (actor.items.contents.length === 1 && actor.data.data?.container?.isContainer){
                 actor.deleteEmbeddedDocuments("Item", [actor.items.contents[0].id]);
             }
@@ -525,7 +522,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
             "data.container.movable":true,
             "data.img":newItem.img,
         })
-        console.log(contents);
+        //console.log(contents);
         await itemActor.createEmbeddedDocuments("Item", contents.extras);
         await itemActor.deleteEmbeddedDocuments("Item", [newItem.id]);
     }
@@ -611,7 +608,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
             if (t.actor.isOwner && target.isOwner){
                 if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
                     if (!keyboard.isDown("Shift")){
-                        console.log(data.data);
+                        //console.log(data.data);
                         await t.actor.deleteEmbeddedDocuments("Item", [data.data._id]);
                     }
                 } else {

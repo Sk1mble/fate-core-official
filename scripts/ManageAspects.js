@@ -1,6 +1,6 @@
 Hooks.once('init', async function () {
     //On init, we initialise all settings and settings menus and override the HUD as required.
-    console.log(`Initializing manageAspects`);
+    //console.log(`Initializing manageAspects`);
     //We will be using this setting to store the world's list of aspects.
     
     game.settings.register("ModularFate", "aspects", {

@@ -1,4 +1,4 @@
-<form style="font-family:Montserrat">
+<form id="CharacterView" style="font-family:Montserrat">
     <h1>{{name}}</h1>
     {{#if (eq avatar undefined)}}{{else}}<img style="width:200px; height:auto" src = "{{avatar}}"/><p/>{{/if}}
     {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'ModularFate.Biography'}}</h2>{{{biography.value}}}</div><p/>{{/if}}
@@ -57,7 +57,7 @@
     <table style="border:none; background:none; padding:10px">
     {{#each stunts}}
         <tr>
-            <td>{{this.name}}</td>
+            <td width = 25%>{{this.name}}</td>
             <td>{{this.description}}</td>
         </tr>
     {{/each}}

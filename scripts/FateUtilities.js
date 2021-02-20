@@ -97,12 +97,12 @@ class FateUtilities extends Application{
         const minimiseAspects = html.find("button[id='minimiseAllAspects']");
 
         maximiseAspects.on("click", event => {
-            canvas.tokens.placeables.forEach(token => token.aspectsMaximised = true);
+            game.scenes.viewed.tokens.contents.forEach(token => token.aspectsMaximised = true);
             this.render(false);
         })
 
         minimiseAspects.on("click", event => {
-            canvas.tokens.placeables.forEach(token => token.aspectsMaximised = false);
+            game.scenes.viewed.tokens.contents.forEach(token => token.aspectsMaximised = false);
             this.render(false);
         })
 
@@ -110,12 +110,12 @@ class FateUtilities extends Application{
         const minimiseTracks = html.find("button[id='minimiseAllTracks']");
 
         maximiseTracks.on("click", event => {
-            canvas.tokens.placeables.forEach(token => token.tracksMaximised = true);
+            game.scenes.viewed.tokens.contents.forEach(token => token.tracksMaximised = true);
             this.render(false);
         })
 
         minimiseTracks.on("click", event => {
-            canvas.tokens.placeables.forEach(token => token.tracksMaximised = false);
+            game.scenes.viewed.tokens.contents.forEach(token => token.tracksMaximised = false);
             this.render(false);
         })
 
@@ -127,7 +127,7 @@ class FateUtilities extends Application{
             let details = event.target.id.split("_");
             let token_id = details[0];
             let aspect = details[1];
-            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let token = game.scenes.viewed.tokens.contents.find(t => t.id == token_id);
             let key = token.actor.id+aspect+"_aspect";
         
             if (game.user.expanded == undefined){
@@ -187,7 +187,6 @@ class FateUtilities extends Application{
             let index = event.target.id.split("_")[0];
             let aspects = duplicate(game.settings.get("ModularFate", "gameAspects")); // Should contain an aspect with the current name.
             let aspect = aspects[index];
-            console.log(aspect);
             aspect.name = event.target.value;
             await game.settings.set("ModularFate","gameAspects",aspects);
             await game.socket.emit("system.ModularFate",{"render":true});
@@ -201,7 +200,7 @@ class FateUtilities extends Application{
             let details = event.target.id.split("_");
             let token_id = details[0];
             let track = details[1];
-            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let token = game.scenes.viewed.tokens.contents.find(t => t.id == token_id);
             let key = token.actor.id+track+"_track";
         
             if (game.user.expanded == undefined){
@@ -307,7 +306,7 @@ class FateUtilities extends Application{
         
         avatar.on("click", event => {
             let t_id = event.target.id.split("_")[0];
-            let token = canvas.tokens.placeables.find(t => t.id == t_id);
+            let token = game.scenes.viewed.tokens.contents.find(t => t.id == t_id);
             const sheet = token.actor.sheet;
             sheet.render(true, {token: token});
             sheet.maximize();
@@ -339,7 +338,7 @@ class FateUtilities extends Application{
             let details = event.target.id.split("_");
             let token_id = details[0];
             let aspect = details[1];
-            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let token = game.scenes.viewed.tokens.contents.find(t => t.id == token_id);
             let actor = token.actor;
             actor.update({[`data.aspects.${aspect}.notes`]:event.target.value});
         });
@@ -349,7 +348,7 @@ class FateUtilities extends Application{
             let details = event.target.id.split("_");
             let token_id = details[0];
             let track = details[1];
-            let token = canvas.tokens.placeables.find(t => t.id == token_id);
+            let token = game.scenes.viewed.tokens.contents.find(t => t.id == token_id);
             let actor = token.actor;
             actor.update({[`data.tracks.${track}.notes`]:event.target.value});
         });
@@ -457,7 +456,7 @@ class FateUtilities extends Application{
     }
 
     async iseAspect(event, html){
-        let token = canvas.tokens.placeables.find(token => token.id == event.target.id.split("_")[0]);
+        let token = game.scenes.viewed.tokens.contents.find(token => token.id == event.target.id.split("_")[0]);
         if (token.aspectsMaximised == true || token.aspectsMaximised == undefined){
             token.aspectsMaximised = false;
         }else {
@@ -469,7 +468,7 @@ class FateUtilities extends Application{
     }
 
     async iseTrack(event, html){
-        let token = canvas.tokens.placeables.find(token => token.id == event.target.id.split("_")[0]);
+        let token = game.scenes.viewed.tokens.contents.find(token => token.id == event.target.id.split("_")[0]);
         if (token.tracksMaximised == true || token.tracksMaximised == undefined){
             token.tracksMaximised = false;
         }else {
@@ -482,7 +481,7 @@ class FateUtilities extends Application{
 
     async tokenNameChange(event, html){
         let t_id = event.target.id.split("_")[0];
-        let token = canvas.tokens.placeables.find(token => token.id==t_id);
+        let token = game.scenes.viewed.tokens.contents.find(token => token.id==t_id);
         if (token != undefined){
             let name = await ModularFateConstants.updateShortText(game.i18n.localize("ModularFate.whatShouldTokenNameBe"),token.data.name);
             await token.update({"name":name});
@@ -491,7 +490,7 @@ class FateUtilities extends Application{
 
     async _selectRoll (event, html){
         let t_id = event.target.id.split("_")[0]
-        let token = canvas.tokens.placeables.find(t => t.id==t_id);
+        let token = game.scenes.viewed.tokens.contents.find(t => t.id==t_id);
         
         let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
         let skill;
@@ -611,7 +610,6 @@ class FateUtilities extends Application{
 
         if (action == "plus2fp"){
             //Find the right character and deduct one from their fate points
-            console.log(game.users.contents)
 
             let user = game.users.contents.find(u => u.id == roll.user._id)
 
@@ -721,7 +719,7 @@ class FateUtilities extends Application{
         if (game.user.isGM){
             let fu_actor_avatars = game.settings.get("ModularFate","fu_actor_avatars");
             let t_id = event.target.id.split("_")[0];
-            let token = canvas.tokens.placeables.find(t => t.id == t_id);
+            let token = game.scenes.viewed.tokens.contents.find(t => t.id == t_id);
             if (!fu_actor_avatars){
                 ui.notifications.info("Switching to actor avatars");
                 await game.settings.set("ModularFate","fu_actor_avatars",true);
@@ -737,7 +735,7 @@ class FateUtilities extends Application{
     }
 
     async refresh_fate_points(event, html){
-        let tokens = canvas.tokens.placeables;
+        let tokens = game.scenes.viewed.tokens.contents;
         let updates = [];
         for (let i = 0; i < tokens.length; i++){
             let token = tokens[i];
@@ -760,7 +758,7 @@ class FateUtilities extends Application{
         let id = event.target.id;
         let parts = id.split("_");
         let t_id = parts[0]
-        let token = canvas.tokens.placeables.find(t => t.id==t_id);
+        let token = game.scenes.viewed.tokens.contents.find(t => t.id==t_id);
         let fps = parseInt(event.target.value);
 
         token.actor.update({
@@ -928,7 +926,7 @@ class FateUtilities extends Application{
     }
 
     async _clear_fleeting(event, html){
-        let tokens = canvas.tokens.placeables;
+        let tokens = game.scenes.viewed.tokens.contents;
         for (let i = 0; i<tokens.length; i++){
             this.clearFleeting(tokens[i].actor)
         }
@@ -940,7 +938,7 @@ class FateUtilities extends Application{
         let t_id = parts[0];
         let name = parts[1];
         let text = event.target.value;
-        let token = canvas.tokens.placeables.find(t => t.id==t_id);
+        let token = game.scenes.viewed.tokens.contents.find(t => t.id==t_id);
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[name]
         track.aspect.name=text;
@@ -961,11 +959,11 @@ class FateUtilities extends Application{
         if (checked == "false") {
             checked = false
         }
-        let token = canvas.tokens.placeables.find(t => t.id==t_id);
+        let token = game.scenes.viewed.tokens.contents.find(t => t.id==t_id);
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[name]
         track.box_values[index] = checked;
-        console.log(token);
+        //console.log(token);
         await token.actor.update({
             ["data.tracks"]: tracks
         })
@@ -976,7 +974,7 @@ class FateUtilities extends Application{
         // Launch a simple application that returns us some nicely formatted text.
         //First, get the token
         let token_id = event.target.id;
-        let token = canvas.tokens.placeables.find(t => t.id==token_id);
+        let token = game.scenes.viewed.tokens.contents.find(t => t.id==token_id);
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[event.target.innerHTML]
         let notes = track.notes;
@@ -998,19 +996,19 @@ class FateUtilities extends Application{
 
         if (type.startsWith("act")){
             let t_id = id;
-            let token = canvas.tokens.placeables.find(token => token.id == t_id)
+            let token = game.scenes.viewed.tokens.contents.find(token => token.id == t_id)
             await token.actor.setFlag("ModularFate","hasActed", true);
         }
 
         if (type === "unact"){
             let t_id = id;
-            let token = canvas.tokens.placeables.find(token => token.id == t_id)
+            let token = game.scenes.viewed.tokens.contents.find(token => token.id == t_id)
             await token.actor.setFlag("ModularFate","hasActed", false);
         }
 
         if (type === "find"){
             let t_id = id;
-            let token = canvas.tokens.placeables.find(token => token.id == t_id)
+            let token = game.scenes.viewed.tokens.contents.find(token => token.id == t_id)
             canvas.animatePan(token, 1);
             if (token.isOwner) {
                 token.control({releaseOthers:true});
@@ -1019,7 +1017,7 @@ class FateUtilities extends Application{
 
         if (type === "sheet"){
             let t_id = id;
-            let token = canvas.tokens.placeables.find(t => t.id == t_id);
+            let token = game.scenes.viewed.tokens.contents.find(t => t.id == t_id);
             const sheet = token.actor.sheet;
             sheet.render(true, {token: token});
             sheet.maximize();
@@ -1034,12 +1032,11 @@ class FateUtilities extends Application{
     }
 
     async _endButton(event, html){
-        let actors = game.combat.combatants;
         let fin = await Promise.resolve(game.combat.endCombat());
         if (fin != false){
-            let updates = actors.map(actor => {
+                let updates = combatants.map(combatant => {
                                 let update = {};
-                                update._id = actor.token.id;
+                                update._id = combatant.token.actor.id;
                                 update.flags = {
                                                     "ModularFate":
                                                     {
@@ -1048,15 +1045,15 @@ class FateUtilities extends Application{
                                                 }        
                                         return update;
                                 })
-            game.scenes.viewed.updateEmbeddedDocuments("Token", updates);
+            await Actor.updateDocuments(updates);
         }
     }
 
     async _nextButton(event, html){
-        let actors = game.combat.combatants;
-            let updates = actors.map(actor => {
+        let combatants = game.combat.combatants;
+            let updates = combatants.map(combatant => {
                             let update = {};
-                            update._id = actor.token.id;
+                            update._id = combatant.actor.id;
                             update.flags = {
                                                 "ModularFate":
                                                 {
@@ -1065,7 +1062,7 @@ class FateUtilities extends Application{
                                             }        
                                     return update;
                             })
-        game.scenes.viewed.updateEmbeddedDocuments("Token", updates);
+        await Actor.updateDocuments(updates);
         game.combat.nextRound();
     }
 
@@ -1109,7 +1106,7 @@ async getData(){
     } else {
         data.conflict = true;
 
-        //Let's build a list of the tokens from canvas.tokens.placeables and feed them to the presentation layer
+        //Let's build a list of the tokens from game.scenes.viewed.tokens.contents and feed them to the presentation layer
         let c = game.combat.combatants;
         let tokens = [];
         let has_acted = [];
@@ -1121,7 +1118,7 @@ async getData(){
                 let hasActed = false;
 
                 if (tokenId != undefined){
-                    foundToken = canvas.tokens.placeables.find(val => {return val.id == tokenId;})
+                    foundToken = game.scenes.viewed.tokens.contents.find(val => {return val.id == tokenId;})
                 }
 
                 if (foundToken == undefined){
@@ -1159,7 +1156,7 @@ async getData(){
         notes = ""
     }
     data.notes = notes;
-    canvas.tokens.placeables.forEach(token => {
+    game.scenes.viewed.tokens.contents.forEach(token => {
         if (token.actor != null && token.actor.data.type != "Thing" && (token.data.hidden == false || game.user.isGM)){
             all_tokens.push(token)
         } 
@@ -1289,10 +1286,10 @@ async renderMe(...args){
 async clearFleeting(object){
         //This is a convenience method which clears all fleeting Tracks.
         let tracks = {};
-        if (this.object.data.data.tracks != undefined) {
-            tracks = duplicate(this.object.data.data.tracks);
+        let updates = [];
+        if (object.data.data.tracks != undefined) {
+            tracks = duplicate(object.data.data.tracks);
         }
-        console.log(tracks);
         
         for (let t in tracks){
             let track = tracks[t];
@@ -1305,9 +1302,9 @@ async clearFleeting(object){
                 }
             }
         }
-        this.object.update({
-            ["data.tracks"]: tracks
-        })
+        updates.push({"_id":object.id, ["data.tracks"]:tracks})
+        
+        Actor.updateDocuments(updates)
     }
 }
 

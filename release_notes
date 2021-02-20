@@ -1,3 +1,7 @@
+# Version 3.0.0
+  * New version number as this is the first version compatible with Foundry 0.8.0 with many breaking changes.
+  * Removed support for importing characters from Nick East's original system (It's been long enough now that anyoen who wished to import will already have done so, I think)
+
 # Version 2.2.28
   * Minor bug fixes to the layout of the aspects on tracks in FU and modular fate character sheets.
 

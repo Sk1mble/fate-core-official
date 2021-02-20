@@ -242,7 +242,6 @@ class EditTracks extends FormApplication {
     async _onExportTrack (event, html){
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
-        //console.log(edit_track_name[0].value)
         if (name == "" || name == game.i18n.localize("ModularFate.NewTrack")){
             ui.notifications.error(game.i18n.localize("ModularFate.SelectATrackToCopyFirst"));
         }
@@ -261,7 +260,7 @@ class EditTracks extends FormApplication {
     async _onCopyTrackButton (event, html){
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
-        //console.log(edit_track_name[0].value)
+        ////console.log(edit_track_name[0].value)
         if (name == "" || name == game.i18n.localize("ModularFate.NewTrack")){
             ui.notifications.error(game.i18n.localize("ModularFate.SelectATrackToCopyFirst"));
         }

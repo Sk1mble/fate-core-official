@@ -1,12 +1,12 @@
 //This application lets the GM show their choice of data from a specific character or token to one or more players
 //Even if the character or token is hidden or the user's permissions don't ordinarily allow them to see it.
 
-class ShowCharacter extends Application{
+class ShowCharacter extends Application {
 
     constructor(){
         super();
     }
-
+ 
     activateListeners(html) {
         super.activateListeners(html);
         const showButton = html.find("button[id='show_button']");
@@ -46,7 +46,7 @@ class ShowCharacter extends Application{
         let actorInfo = html.find("select[id='character']")[0].value;
         actorInfo = actorInfo.split("_");
         if (actorInfo[0]=="token"){
-            let token = canvas.tokens.placeables.find(token => token.id == actorInfo[1])
+            let token = game.scenes.viewed.tokens.contents.find(token => token.id == actorInfo[1])
             actor_data = token.actor.data;
             elements.name=token.name;
         }
@@ -95,7 +95,7 @@ class ShowCharacter extends Application{
         const options = super.defaultOptions; 
         options.template= "systems/ModularFate/templates/ShowCharacter.html";
         options.title=game.i18n.localize("ModularFate.ShowACharacter");
-        options.id = ShowCharacter;
+        options.id = "ShowCharacter";
         options.width="auto";
         options.height="auto";
         options.resizable = false;
@@ -104,9 +104,9 @@ class ShowCharacter extends Application{
 
     async getData(){
         const data = await super.getData();
-        console.log(data);
+        ////console.log(data);
         data.users = game.users.players;
-        data.tokens = canvas.tokens.placeables;
+        data.tokens = game.scenes.viewed.tokens.contents;
         data.actors = game.actors.contents;
         return data;
     }
@@ -120,7 +120,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
                     name:"ShowCharacter",
                     title:game.i18n.localize("ModularFate.ShowCharacterTitle"),
                     icon:"fas fa-binoculars",
-                    onClick: ()=> {debugger;let sc = new ShowCharacter; sc.render(true)},
+                    onClick: ()=> {let sc = new ShowCharacter; sc.render(true)},
                     button:true
                 });
             }
@@ -132,7 +132,7 @@ Hooks.once('ready', async function () {
         //Elements is an object containing the data to be shown, which can be: avatar, aspects, tracks, bio, 
         //description, skills, stunts, extras
         let myId=game.users.current.id;
-        if (data.players != undefined && data.players.find(player => player.id == myId)!=undefined){
+        if (data.players != undefined && data.players.find(player => player._id == myId)!=undefined){
             let cv = new CharacterView(data.elements);
             cv.render(true);
         }
@@ -152,7 +152,9 @@ class CharacterView extends Application {
         options.title=game.i18n.localize("ModularFate.TemporaryView")
         options.width="1000";
         options.height="800";
-        options.resizable = false;
+        options.resizable = true;
+        options.closeOnSubmit = false;
+        options.id="CharacterView";
         return options;
     }
 
