@@ -241,6 +241,7 @@ class FateUtilities extends Application{
         tokenName.on("dblclick", event => this.tokenNameChange(event, html));
         const popcornButtons = html.find("button[name='popcorn']");
         popcornButtons.on("click", event => this._onPopcornButton(event, html));
+        popcornButtons.on("contextmenu", event => this._onPopcornRemove(event, html));
 
         const nextButton = html.find("button[id='next_exchange']");
         nextButton.on("click", event => this._nextButton(event, html));
@@ -964,7 +965,8 @@ class FateUtilities extends Application{
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[name]
         track.box_values[index] = checked;
-        token.actor.update({
+        console.log(token);
+        await token.actor.update({
             ["data.tracks"]: tracks
         })
     }
@@ -997,13 +999,13 @@ class FateUtilities extends Application{
         if (type.startsWith("act")){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
-            await token.document.setFlag("ModularFate","hasActed", true);
+            await token.actor.setFlag("ModularFate","hasActed", true);
         }
 
         if (type === "unact"){
             let t_id = id;
             let token = canvas.tokens.placeables.find(token => token.id == t_id)
-            await token.document.setFlag("ModularFate","hasActed", false);
+            await token.actor.setFlag("ModularFate","hasActed", false);
         }
 
         if (type === "find"){
@@ -1023,6 +1025,12 @@ class FateUtilities extends Application{
             sheet.maximize();
             sheet.toFront();
         }
+    }
+
+    async _onPopcornRemove(event, html){
+        
+        let id = event.target.id.split("_")[0];
+        await game.combats.active.getCombatantByToken(id).delete();
     }
 
     async _endButton(event, html){
@@ -1128,7 +1136,7 @@ async getData(){
                     hidden = true;
                 } 
 
-                hasActed = foundToken.document.getFlag("ModularFate","hasActed");                       
+                hasActed = foundToken.actor.getFlag("ModularFate","hasActed");                       
                 
                 if ((hasActed == undefined || hasActed == false) && hidden == false){
                     tokens.push(foundToken)

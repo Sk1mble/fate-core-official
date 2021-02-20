@@ -303,7 +303,7 @@ Hooks.on('preCreateItem', (actor, itemData) => {
 Hooks.on('deleteToken', async (scene, token) => {
     // Delete the actor associated with this token if it is a Thing.
     if (game.user == game.users.find(e => e.isGM && e.active)){
-        let actor = game.actors.get(token.actor.id)
+        let actor = game.actors.get(token?.actor?.id)
 
         if (actor?.data?.type !== "Thing"){
             return;
@@ -325,10 +325,10 @@ Hooks.on('deleteItem', async (actor) => {
         if (actor.data.type =="Thing" && !actor.data.data?.container?.isContainer){
             await actor.sheet.close({"force":true});
             if (game.user == game.users.find(e => e.isGM && e.active)){
-                let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id);
+                let t = canvas.tokens.placeables.find(token => token?.actor?.id === actor.id);
                 game.scenes.viewed.deleteEmbeddedDocuments("Token", [t.id])
             } else {
-                let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id); //game.scenes.viewed.tokens.contents is the no-canvas safe alternative to canvas.tokens.placeables.
+                let t = canvas.tokens.placeables.find(token => token?.actor?.id === actor.id); //canvas.tokens.placeables is the no-canvas safe alternative to canvas.tokens.placeables.
                 game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
             }
         }
