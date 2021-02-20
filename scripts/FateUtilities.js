@@ -1029,9 +1029,12 @@ class FateUtilities extends Application{
         
         let id = event.target.id.split("_")[0];
         await game.combats.active.getCombatantByToken(id).delete();
+        let token = game.scenes.viewed.tokens.contents.find(t => t.id == id);
+        await token.setFlag("ModularFate","hasActed",false);
     }
 
     async _endButton(event, html){
+        let combatants = game.combat.combatants;
         let fin = await Promise.resolve(game.combat.endCombat());
         if (fin != false){
                 let updates = combatants.map(combatant => {
