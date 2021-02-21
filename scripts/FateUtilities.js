@@ -401,10 +401,17 @@ class FateUtilities extends Application{
             } else {
                 text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
+            let size = game.settings.get("ModularFate","fuAspectLabelSize");
             let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+            if (size === 0){
+                size = game.scenes.viewed.data.width*(1/100);
+            }
+            let height = size * 2;
+            let width = (text.length * size) / 1.5;
             drawing.document.update({
                 "text":text,
-                width: text.length*20,
+                width: width,
+                height: height,
                 fontFamily: font,
             });
         }
@@ -793,7 +800,7 @@ class FateUtilities extends Application{
                     size = game.scenes.viewed.data.width*(1/100);
                 }
                 let height = size * 2;
-                let width = text.length * size;
+                let width = (text.length * size) / 1.5;
             if (value == 1){
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
             } else {
@@ -839,7 +846,7 @@ class FateUtilities extends Application{
                     size = game.scenes.viewed.data.width*(1/100);
                 }
                 let height = size * 2;
-                let width = text.length * size;
+                let width = (text.length * size / 1.5);
                 DrawingDocument.create({
                     type: CONST.DRAWING_TYPES.RECTANGLE,
                     author: game.user.id,
