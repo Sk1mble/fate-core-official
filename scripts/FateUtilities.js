@@ -794,18 +794,18 @@ class FateUtilities extends Application{
         let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
         if (drawing != undefined){
             let text;
-            let size = game.settings.get("ModularFate","fuAspectLabelSize");
-                let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
-                if (size === 0){
-                    size = game.scenes.viewed.data.width*(1/100);
-                }
-                let height = size * 2;
-                let width = (text.length * size) / 1.5;
             if (value == 1){
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
             } else {
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
+            let size = game.settings.get("ModularFate","fuAspectLabelSize");
+            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+            if (size === 0){
+                size = game.scenes.viewed.data.width*(1/100);
+            }
+            let height = size * 2;
+            let width = (text.length * size) / 1.5;
             drawing.document.update({
                 "text":text,
                 width: width,
