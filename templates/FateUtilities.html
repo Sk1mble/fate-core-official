@@ -332,7 +332,7 @@
                                             </tr>
                                     </table>
                                 {{/if}}
-                                {{#if (eq this.user.id ../user.id)}}{{#if ../GM}}{{else}}
+                                {{../user._id}}{{#if (eq this.user._id ../user.id)}}{{#if ../GM}}{{else}}
                                 <table style="background:none; border:none">
                                     <tr><th>{{localize 'ModularFate.FreeActions'}}</th>
                                         <th>{{localize 'ModularFate.FatePointActions'}}</th>
