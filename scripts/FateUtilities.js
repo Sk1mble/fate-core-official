@@ -799,7 +799,6 @@ class FateUtilities extends Application{
             } else {
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
             }
-            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
             drawing.document.update({
                 "text":text,
                 width: width,
