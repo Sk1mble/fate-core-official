@@ -377,7 +377,6 @@ class FateUtilities extends Application{
         //Situation Aspect Buttons
         const del_game_aspect = html.find("button[name='del_game_aspect']");
         del_game_aspect.on("click", event => this._del_game_aspect(event, html));
-        //name="game_a_free_i" id="{{this.name}}_ga_free_invokes"
         const game_a_free_i = html.find("input[name='game_a_free_i']");
         game_a_free_i.on("change", event => this._game_a_free_i_button(event, html));
     }
@@ -788,6 +787,13 @@ class FateUtilities extends Application{
         let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
         if (drawing != undefined){
             let text;
+            let size = game.settings.get("ModularFate","fuAspectLabelSize");
+                let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+                if (size === 0){
+                    size = game.scenes.viewed.data.width*(1/100);
+                }
+                let height = size * 2;
+                let width = text.length * size;
             if (value == 1){
                 text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
             } else {
@@ -796,7 +802,8 @@ class FateUtilities extends Application{
             let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
             drawing.document.update({
                 "text":text,
-                width: text.length*20,
+                width: width,
+                height: height,
                 fontFamily: font,
             });
         }
@@ -832,8 +839,8 @@ class FateUtilities extends Application{
                 if (size === 0){
                     size = game.scenes.viewed.data.width*(1/100);
                 }
-                let height = size * 1.5;
-                let width = text.length * size /2;
+                let height = size * 2;
+                let width = text.length * size;
                 DrawingDocument.create({
                     type: CONST.DRAWING_TYPES.RECTANGLE,
                     author: game.user.id,

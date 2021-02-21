@@ -1,3 +1,6 @@
+# Version 3.0.1
+  * Tweaked the size of the aspect labels added to the map to be slightly wider and higher.
+
 # Version 3.0.0
   * New version number as this is the first version compatible with Foundry 0.8.0 with many breaking changes.
   * Removed support for importing characters from Nick East's original system (It's been long enough now that anyoen who wished to import will already have done so, I think)

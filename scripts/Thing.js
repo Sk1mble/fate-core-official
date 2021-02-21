@@ -621,25 +621,6 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
     }
 })
 
-function shouldUpdate(actor){
-    if (!actor.isOwner){
-        return false;
-    }
-    const permissions = actor.data.permission;
-    const activePlayers = game.users.contents
-       .filter(user => user.active)
-       .map(user => user.id);
-
-    for (let playerId in permissions) {
-        var isOwner = permissions[playerId] === CONST.ENTITY_PERMISSIONS.isOwner;
-        var isActive = activePlayers.includes(playerId);
-
-        if (isOwner && isActive) {
-            return playerId === game.user.id;
-        }
-    }
-}
-
 Hooks.once('ready', async function () {
     if (game.user.isGM){
         game.socket.on("system.ModularFate", async (data) => {
