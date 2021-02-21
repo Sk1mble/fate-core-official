@@ -118,6 +118,10 @@
     filter: invert(75%) hue-rotate(122deg);
 }
 
+.mfate-sheet_extra-avatar[src="icons/svg/item-bag.svg"] {
+    filter: invert(75%) hue-rotate(122deg) !important;
+}
+
 .mfate-sheet__identity-name {
     min-width: 120px;
     border: 1px solid gray;

@@ -187,7 +187,6 @@ async function initialiseModularFateCharacter (actor) {
             }
         }
     }
-    actor.data = working_data;
     return actor;
 }
 

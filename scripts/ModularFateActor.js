@@ -304,6 +304,7 @@ Hooks.on('deleteItem', async (actor, item) => {
 })
 
 Hooks.on('createItem', async (actor, item) => {
+    console.log(actor.type);
     if (actor.type == "ModularFate") {
         updateFromExtra(actor,item.data);
     }
