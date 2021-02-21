@@ -1536,8 +1536,9 @@ Hooks.once('ready', async function () {
 
 async function updateRolls (rolls) {
     if (rolls.rolls != undefined && game.users.contents.find(user => user.active && user.isGM) == game.user){
-        let scene = game.scenes.contents.find(sc=> sc.id==rolls.scene.id);
-        let currRolls = scene.getFlag("ModularFate","rolls");
+        
+        let scene = game.scenes.get(rolls.scene._id);
+        let currRolls = scene.getFlag("ModularFate","rolls"); 
         if (currRolls == undefined){
             currRolls = [];
         }
