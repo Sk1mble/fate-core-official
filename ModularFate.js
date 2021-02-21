@@ -197,6 +197,7 @@ Hooks.once('ready', async function () {
             game.settings.set("ModularFate","run_once", true)
         }
     }
+    CONFIG.fontFamilies.push("Montserrat");
 })
 
 Hooks.on('updateToken', (scene, token, data) => {
@@ -464,7 +465,7 @@ Hooks.once('init', async function () {
         type:String,
         restricted:true,
         choices:CONFIG.fontFamilies,
-        default:"Modesto Condensed",
+        default:"Montserrat",
     })
 
 });
