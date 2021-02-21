@@ -29,19 +29,7 @@ Anybody who wants to use custom 'tracks' (that is, stress, consequences, and con
 The system contains default settings for the tracks, aspects and skills from Core, Condensed, and Accelerated, but you should be able to create setups for any other Fate game with the tools provided. The only thing that isn't really supported is 2-column systems.
 
 ## 2 Importing worlds or characters from the Fate system by Nick East
-If you're already running a game using Nick's original Fate system and you want to give Modular Fate a try, you have two options.
-If you choose option 1, **back up your data first**.
-
-### Option 1: Convert your World
-Step 1: Back up your world folder. You can do this by copying the whole folder from ../data/worlds/yourworldnamehere to another folder.
-Step 2: Open the file world.json in your favourite text editor
-Step 3: Change any reference to "system":"Fate" to "system":"ModularFate" (this is case sensitive, so make sure you use ModularFate and not modularFATE or any other combination).
-Step 4: Open your world as normal. All of the existing characters SHOULD be converted to the new system.
-
-### Option 2: Import Characters
-Step 1: Save the characters from your current world to a compendium.
-Step 2: Create a new world in the usual way with the ModularFate system.
-Step 3: Import the characters from the compendium into the new world. Each character will be converted to Modular Fate when imported.
+Importing worlds from the Fate system by Nick East is no longer supported.
 
 ## 3 System Settings
 When you first create a world with the Modular Fate system, it will be a blank slate. To get it ready for play, you'll need to set it up in the Foundry system settings. 
@@ -201,13 +189,10 @@ You can also edit the Scene Notes, which is visible to all players. This is a gr
 ### Action Tracker
 Once a character has entered a conflict (using the standard icon on the token) an Action Tracker is added to the right of the FU window. This displays all tokens that are joined in the conflict and not hidden (hidden tokens show to the GM).
 
-Click a character's portrait to ahve them take their action for the exchange.
+Click a character's portrait to have them take their action for the exchange.
 Click the fast forward button to advance to the next exchange
 Click the clock icon to set up a timed event which will trigger on a particular exchange.
 Click the trash icon to delete the conflict.
-
-## FAQ
-Watch this space!
 
 
 
