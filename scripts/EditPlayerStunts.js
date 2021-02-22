@@ -40,6 +40,11 @@ class EditPlayerStunts extends FormApplication {
         }
         this.stunt.name=this.stunt.name.split(".").join("․");
         await this.actor.update({"data.stunts":{[this.stunt.name]:this.stunt}})
+        if (this.object.type == "Extra"){
+            //code to render editplayerstunts.
+            console.log(this.actor);
+            Hooks.call("updateItem", {"id":this.object.id})
+        }
     }
 
     activateListeners(html) {

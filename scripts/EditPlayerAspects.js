@@ -108,7 +108,14 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async getData(){
-        return this.aspects;
+        let current = duplicate(this.object.data.data.aspects);
+        let updated = this.aspects;
+        for (let aspect in current){
+            if (updated[aspect] == undefined){
+                delete current[aspect];
+            }
+        }
+        return mergeObject(this.aspects, current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
     }
 
     async _updateObject(event, formData){
@@ -118,7 +125,7 @@ class EditPlayerAspects extends FormApplication{
     }
 
     //This function is called when an actor update is called.
-    renderMe(id){
+    async renderMe(id){
         if (this.object.isToken){
             if (this.object.token.id == id){
                 if (!this.renderPending) {

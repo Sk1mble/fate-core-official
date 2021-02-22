@@ -116,7 +116,7 @@ async function updateFromExtra(actor, itemData) {
         let tracks_output = {};
 
             let extra_name = extra.name;
-            let extra_id = extra.id;
+            let extra_id = extra._id;
             let extra_tag = {"extra_name":extra_name, "extra_id":extra_id};
 
             let stunts = duplicate(extra.data.stunts);
@@ -205,7 +205,7 @@ async function updateFromExtra(actor, itemData) {
             let skill = actor_skills[s];
             if (skill != undefined && skill.extra_tag != undefined && skill.extra_tag.extra_id == extra_id){
                 if (skills_output[s] == undefined){
-                    update_object[`data.skills.-=${s}`] = null;;
+                    update_object[`data.skills.-=${s}`] = null;
                     actor_skills = duplicate(actor.data.data.skills);
                 }
             }
@@ -248,6 +248,7 @@ Hooks.on('updateItem', async (actor, item) => {
 
 Hooks.on('deleteItem', async (actor, item) => {
     let itemData = item.data;
+    console.log(itemData)
 
     if (actor.type != "ModularFate"){
         return;
@@ -266,7 +267,7 @@ Hooks.on('deleteItem', async (actor, item) => {
         for(let aspect in actor_aspects)
         {
             let et = actor_aspects[aspect].extra_tag;
-            if (et != undefined && et.extra_id == itemData.id){
+            if (et != undefined && et.extra_id == itemData._id){
                 updateObject[`data.aspects.-=${aspect}`] = null;
             }
         }
@@ -275,7 +276,7 @@ Hooks.on('deleteItem', async (actor, item) => {
 
         for (let stunt in actor_stunts){
             let et = actor_stunts[stunt].extra_tag;
-            if (et != undefined && et.extra_id == itemData.id){
+            if (et != undefined && et.extra_id == itemData._id){
                 updateObject[`data.stunts.-=${stunt}`] = null;
             }
         }
@@ -284,7 +285,7 @@ Hooks.on('deleteItem', async (actor, item) => {
 
         for (let track in actor_tracks){
             let et = actor_tracks[track].extra_tag;
-            if (et != undefined && et.extra_id == itemData.id){
+            if (et != undefined && et.extra_id == itemData._id){
                 updateObject[`data.tracks.-=${track}`] = null;
             }
         }
@@ -293,7 +294,7 @@ Hooks.on('deleteItem', async (actor, item) => {
 
         for (let skill in actor_skills){
             let et = actor_skills[skill].extra_tag;
-            if (et!= undefined && et.extra_id == itemData.id){
+            if (et!= undefined && et.extra_id == itemData._id){
                 updateObject[`data.skills.-=${skill}`] = null;
             }
         }      
@@ -309,72 +310,3 @@ Hooks.on('createItem', async (actor, item) => {
         updateFromExtra(actor,item.data);
     }
 })
-
-/*Hooks.on('updateToken', async (scene, tokenData, aData) => {
-    let token = game.scenes.viewed.tokens.contents.find(t => t.id == tokenData.id);
-    let actor = undefined;
-    
-    if (token != undefined) {
-        actor = token.actor;
-    } 
-
-    if (actor?.data?.type != "ModularFate"){
-        return;
-    }
-    
-    if (aData.actorData != undefined && aData.actorData.items != undefined && aData.actorData.items[0] != undefined) {
-        for (let i = 0; i < aData.actorData.items.length; i++){
-            updateFromExtra(actor, aData.actorData.items[i]);
-        }
-    }
-    else {
-        if (aData.actorData != undefined){
-
-            let items = actor.items;
-            if (!shouldUpdate(actor)){
-                return;
-            } else {
-                //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
-                actor.sheet.editing = true;
-                let update_object = {};
-                let actor_aspects = duplicate(actor.data.data.aspects)
-        
-                for (let aspect in actor_aspects){
-                    let et = actor_aspects[aspect].extra_tag;
-                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
-                        update_object[`data.aspects.-=${aspect}`] = null;
-                    }
-                } 
-            
-                let actor_stunts = duplicate(actor.data.data.stunts)
-        
-                for (let stunt in actor_stunts){
-                    let et = actor_stunts[stunt].extra_tag;
-                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
-                        update_object[`data.aspects.-=${stunt}`] = null;
-                    }
-                }
-        
-                let actor_tracks = duplicate(actor.data.data.tracks)
-        
-                for (let track in actor_tracks){
-                    let et = actor_tracks[track].extra_tag;
-                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
-                        update_object[`data.tracks.-=${track}`] = null;
-                    }
-                }
-        
-                let actor_skills = duplicate(actor.data.data.skills)
-        
-                for (let skill in actor_skills){
-                    let et = actor_skills[skill].extra_tag;
-                    if (et != undefined && items.find(ite=> ite.id == et.extra_id) == undefined){
-                        update_object[`data.skills.-=${skill}`] = null;
-                    }
-                }                      
-                await actor.update(update_object);
-                actor.sheet.editing = false;
-                await setTimeout(function(){actor.sheet.render(false)},0);
-            }
-        }
-})*/

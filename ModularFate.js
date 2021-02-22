@@ -197,7 +197,6 @@ Hooks.once('ready', async function () {
             game.settings.set("ModularFate","run_once", true)
         }
     }
-    CONFIG.fontFamilies.push("Montserrat");
 })
 
 Hooks.on('updateToken', (scene, token, data) => {
@@ -278,6 +277,7 @@ Hooks.on('updateScene', (...args) => {
 
 Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = ModularFateActor;
+    CONFIG.fontFamilies.push("Montserrat");
 
     game.settings.register("ModularFate","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",

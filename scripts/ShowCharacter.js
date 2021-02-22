@@ -46,7 +46,7 @@ class ShowCharacter extends Application {
         let actorInfo = html.find("select[id='character']")[0].value;
         actorInfo = actorInfo.split("_");
         if (actorInfo[0]=="token"){
-            let token = game.scenes.viewed.tokens.contents.find(token => token.id == actorInfo[1])
+            let token = game.scenes.viewed.getEmbeddedDocument("Token", actorInfo[1]);
             actor_data = token.actor.data;
             elements.name=token.name;
         }

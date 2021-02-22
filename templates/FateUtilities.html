@@ -42,8 +42,8 @@
                                     </td>
                                     <td style="width:60px; padding:5px; text-align:left; vertical-align:top">
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none;"/>{{else}}
-                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.data.id}}_avatar" style="width:50px; cursor: pointer; height:auto; border:none"/>{{/if}}
+                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none;"/>{{else}}
+                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.id}}_avatar" style="width:50px; cursor: pointer; height:auto; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
                                     <td id="{{this.id}}_tokenNameA" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
@@ -97,8 +97,8 @@
                                     </td>
                                     <td style="width:60px; padding:5px; text-align:left; vertical-align:top">
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.data.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none"/>{{else}}
-                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.data.id}}_avatar" style="width:50px; cursor: pointer; height:auto; cursor: pointer; border:none"/>{{/if}}
+                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.data.img}}" id="{{this.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none"/>{{else}}
+                                        <img name="avatar" src="{{this.actor.img}}" id="{{this.id}}_avatar" style="width:50px; cursor: pointer; height:auto; cursor: pointer; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
                                     <td id="{{this.id}}_tokenNameA" title="Double click to change the name shown on this token" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
