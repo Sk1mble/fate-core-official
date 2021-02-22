@@ -199,10 +199,12 @@ Hooks.once('ready', async function () {
     }
 })
 
+
+// Needed to update with token name changes in FU.
 Hooks.on('updateToken', (scene, token, data) => {
     if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined){
         game.system.apps["actor"].forEach(a=> {
-            a.renderMe(token.id, data);
+            a.renderMe(token.id, data, token);
         })
     }
 })
@@ -228,13 +230,13 @@ Hooks.on('renderPlayerList',(...args) =>{
 
 Hooks.on('updateActor', (actor, data) => {
     game.system.apps["actor"].forEach(a=> {
-        a.renderMe(actor.id, data);
+        a.renderMe(actor.id, data, actor);
     })
 })
 
 Hooks.on('updateItem', (item, data) => {
     game.system.apps["item"].forEach(a=> {
-        a.renderMe(item.id, data);
+        a.renderMe(item.id, data, item);
     })
 })
 

@@ -31,7 +31,9 @@ class EditPlayerSkills extends FormApplication{
     }
 
     //This function is called when an actor or item update is called.
-    async renderMe(id){
+    async renderMe(id, data, object){
+        console.log(object);
+    /*    console.log(object);
         if (this.object.isToken){
             if (this.object.token.id == id){
                     //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
@@ -56,6 +58,7 @@ class EditPlayerSkills extends FormApplication{
                     }
             }
         }       
+    */
     }
 
     //Set up the default options for instances of this class

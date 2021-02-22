@@ -5,7 +5,21 @@ export class ExtraSheet extends ItemSheet {
         this.track_category = "All";
     }
 
-    async getData() {
+    async render(...args){
+        if (!this.object.parent.sheet.editing){
+            if (!this.renderPending) {
+                this.renderPending = true;
+                setTimeout(() => {
+                  super.render(...args);
+                  this.renderPending = false;
+                }, 0);
+            }
+        }
+    }
+
+
+
+    async getData() {        
         const data = this.document.data;
         data.type = this.item.type;
         data.stunts = this.object.data.data.stunts;
@@ -134,7 +148,10 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async _updateObject(event, formData){
-        super._updateObject(event, formData);
+        console.log(formData)
+        await super._updateObject(event, formData);
+        console.log(this.object.parent);
+        await this.object.parent.updateFromExtra (this.object.data)
     }
 
     async _on_boxes_change(html, event){
@@ -151,5 +168,9 @@ export class ExtraSheet extends ItemSheet {
         options.submitOnChange = true;
         options.title=`${game.i18n.localize("ModularFate.Extra")}: ${this.name}`
         return options;
+    }
+
+    async close(...args){
+        super.close(...args);
     }
 }
