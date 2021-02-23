@@ -299,12 +299,14 @@ class SkillSetup extends FormApplication{
             skills[name]=skill;
             await game.settings.set("ModularFate","skills",skills);
             this.render(true);
+            ui.windows[this.appId].bringToTop();
         }
     }
     async _onAddButton(event,html){
         //Launch the EditSkill FormApplication.
         let e = new EditSkill(undefined);
         e.render(true);
+        ui.windows[e.appId].bringToTop();
     }
 }
 
@@ -385,4 +387,5 @@ class EditSkill extends FormApplication{
 
 Hooks.on('closeEditSkill',async () => {
     game.system.skillSetup.render(true);
+    ui.windows[game.system.skillSetup.appId].bringToTop();
 })

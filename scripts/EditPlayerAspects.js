@@ -10,6 +10,7 @@ class EditPlayerAspects extends FormApplication{
                 this.player_aspects=duplicate(this.object.data.data.aspects);
                 
                 game.system.apps["actor"].push(this);
+                game.system.apps["item"].push(this);
                 this.aspects=duplicate(this.object.data.data.aspects)
     }
 
@@ -124,30 +125,17 @@ class EditPlayerAspects extends FormApplication{
         await this.render(false);
     }
 
-    //This function is called when an actor update is called.
-    async renderMe(id){
-        if (this.object.isToken){
-            if (this.object.token.id == id){
-                if (!this.renderPending) {
-                    this.renderPending = true;
-                    setTimeout(() => {
-                    this.render(false);
-                    this.renderPending = false;
-                    }, 0);
-                }
-            }
-        }
+    //This function is called when an actor or item update is called.
 
-        else {
-            if (this.object.id == id){
-                if (!this.renderPending) {
-                    this.renderPending = true;
-                    setTimeout(() => {
-                    this.render(false);
-                    this.renderPending = false;
-                    }, 0);
-                }
+    async renderMe(id){
+        if (this.object.id == id || this.object?.parent.id == id){
+            if (!this.renderPending) {
+                this.renderPending = true;
+                setTimeout(() => {
+                this.render(false);
+                this.renderPending = false;
+                }, 0);
             }
-        }       
+        }    
     }
 }

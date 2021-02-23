@@ -89,8 +89,8 @@ export class Thing extends ActorSheet {
                 character.createEmbeddedDocuments("Item",[container.data]);
 
                 if (game.user.isGM){
-                    console.log(this)
-                    //this.actor.token.delete();
+                    let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
+                    t.delete();
                     this.actor.sheet.close({"force":true});
                 } else {
                     let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
@@ -169,7 +169,7 @@ export class Thing extends ActorSheet {
                 game.user.expanded[key] = true;
             })  
             this.render(false);
-        })
+        }) 
 
         compressAllExtras.on("click", event => {
             if (game.user.expanded == undefined){

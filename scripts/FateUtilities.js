@@ -521,6 +521,7 @@ class FateUtilities extends Application{
                 let mrd = new ModifiedRollDialog (token.actor, skill);
                 mrd.render(true);
                 this.shift=false;
+                ui.windows[mrd.appId].bringToTop();
         } else {
             let r;
             if (bonus >0){

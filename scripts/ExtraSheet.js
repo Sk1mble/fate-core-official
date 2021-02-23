@@ -6,7 +6,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async render(...args){
-        if (!this.object.parent.sheet.editing && !this.editing){
+        if (!this.object?.parent?.sheet?.editing && !this.editing){
             if (!this.renderPending) {
                     this.renderPending = true;
                     setTimeout(() => {
@@ -169,6 +169,13 @@ export class ExtraSheet extends ItemSheet {
             let value = event.target.checked;
             await this.document.update({"data.countSkills":value})
         })
+
+        const aspect = html.find("textarea[class='cs_box mfate-aspects-list__input']");
+        aspect.on("change", async event => {
+            let field = event.target.name;
+            let value = event.target.value;
+            await this.document.update({[field]:value});
+        })
     }
 
     async _onTracks_click(event, html) {
@@ -176,6 +183,7 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerTracks(this.object); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
+        ui.windows[editor.appId].bringToTop();
     }
 
     async _cat_select_change (event, html){
@@ -188,11 +196,13 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerSkills(this.object); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
+        ui.windows[editor.appId].bringToTop();
     }
 
     async _onAspectClick(event, html) {
             let av = new EditPlayerAspects(this.object);
             av.render(true);
+            ui.windows[av.appId].bringToTop();
     }
 
     async _db_add_click(event, html){
@@ -206,6 +216,7 @@ export class ExtraSheet extends ItemSheet {
     async _stunt_db_click(event, html){
         let sd = new StuntDB(this.object);
         sd.render(true);
+        ui.windows[sd.appId].bringToTop();
     }
 
     async _onStunts_click(event, html) {
@@ -224,6 +235,7 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerStunts(this.object, stunt);
         editor.render(true);
         editor.setSheet(this);
+        ui.windows[editor.appId].bringToTop();
     }
 
     async _onEdit (event, html){
@@ -232,6 +244,7 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerStunts(this.object, this.object.data.data.stunts[name]);
         editor.render(true);
         editor.setSheet(this);
+        ui.windows[editor.appId].bringToTop();
     }
 
     async _onDelete(event, html){
@@ -270,5 +283,6 @@ export class ExtraSheet extends ItemSheet {
                 await this.document.parent.updateFromExtra(this.document.data);
             }
         }
+        this.editing = false;
     }
 }

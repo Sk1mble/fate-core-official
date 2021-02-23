@@ -282,6 +282,7 @@ class EditPlayerSkills extends FormApplication{
         if (game.user.isGM || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
             e.render(true);
+            ui.windows[e.appId].bringToTop();
             e.skillsWindow = this;
         }
         else {
@@ -408,6 +409,7 @@ class EditGMSkills extends FormApplication{
         }
         await this.object.update(updateObject)    
         this.close();
+        this.skillsWindow.render(false);
     }
 
     async _adHocButton(event, html){
@@ -433,7 +435,7 @@ class EditGMSkills extends FormApplication{
         }
     }
 
-    _updateObject(event, html){
+    async _updateObject(event, html){
     }
 
     async getData(){
