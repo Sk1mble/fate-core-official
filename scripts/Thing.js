@@ -89,7 +89,8 @@ export class Thing extends ActorSheet {
                 character.createEmbeddedDocuments("Item",[container.data]);
 
                 if (game.user.isGM){
-                    this.actor.token.delete();
+                    console.log(this)
+                    //this.actor.token.delete();
                     this.actor.sheet.close({"force":true});
                 } else {
                     let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
@@ -600,7 +601,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
             
             if (t.actor.id == dt?.actor?.id){
                 // Create a copy of the item on the destination, as it appears Foundry doesn't by default.
-                await dt.actor.createEmbeddedDocuments("Item", [data]);
+                await dt.actor.createEmbeddedDocuments("Item", [data.data]);
             } else {
                 // Do nothing, as the default Foundry behaviour has got this covered.
             }
