@@ -459,10 +459,12 @@ export class ModularFateCharacter extends ActorSheet {
 
     async _stunt_db_click(event, html){
         let sd = new StuntDB(this.actor);
-        await sd.render(true);
-        setTimeout(() => {
-           sd.bringToTop();
-            }, 0);
+        sd.render(true)
+        try {
+            sd.bringToTop();
+        } catch  {
+            // Do nothing.
+        }
     }
     
     async _on_stunt_roll_click(event,html){
@@ -556,9 +558,11 @@ export class ModularFateCharacter extends ActorSheet {
         let editor = new EditPlayerStunts(this.actor, this.object.data.data.stunts[name]);
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _on_track_name_click(event, html) {
@@ -609,27 +613,33 @@ export class ModularFateCharacter extends ActorSheet {
         let editor = new EditPlayerStunts(this.actor, stunt);
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
     async _onTracks_click(event, html) {
         //Launch the EditPlayerTracks FormApplication.
         let editor = new EditPlayerTracks(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
 
        async _onAspectClick(event, html) {
         if (game.user.isGM) {
             let av = new EditPlayerAspects(this.actor);
             av.render(true);
-            setTimeout(() => {
+            try {
                 av.bringToTop();
-                 }, 20);
+            } catch  {
+                // Do nothing.
+            }
         }
     }
     async _onSkillsButton(event, html) {
@@ -637,9 +647,11 @@ export class ModularFateCharacter extends ActorSheet {
         let editor = new EditPlayerSkills(this.actor); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
     async _onSortButton() {
         if (this.sortByRank == undefined) {
@@ -647,9 +659,11 @@ export class ModularFateCharacter extends ActorSheet {
         }
         this.sortByRank = !this.sortByRank;
         this.render(false);
-        setTimeout(() => {
-            this.bringToTop();
-             }, 0);
+        try {
+            editor.bringToTop();
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _onSkill_name(event, html) {
@@ -657,9 +671,11 @@ export class ModularFateCharacter extends ActorSheet {
         if (event.shiftKey){
            let mrd = new ModifiedRollDialog(this.actor, event.target.id);
             mrd.render(true);
-            setTimeout(() => {
-                mrd.bringToTop();
-                 }, 0);
+            try {
+                editor.bringToTop();
+            } catch  {
+                // Do nothing.
+            }
         }
         else {
             let skill = this.object.data.data.skills[event.target.id];

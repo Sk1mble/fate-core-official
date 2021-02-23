@@ -183,9 +183,12 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerTracks(this.object); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        await e.render(true);
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _cat_select_change (event, html){
@@ -198,17 +201,21 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerSkills(this.object); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _onAspectClick(event, html) {
             let av = new EditPlayerAspects(this.object);
             av.render(true);
-            setTimeout(() => {
+            try {
                 av.bringToTop();
-                 }, 0);
+            } catch  {
+                // Do nothing.
+            }
     }
 
     async _db_add_click(event, html){
@@ -222,9 +229,11 @@ export class ExtraSheet extends ItemSheet {
     async _stunt_db_click(event, html){
         let sd = new StuntDB(this.object);
         sd.render(true);
-        setTimeout(() => {
+        try {
             sd.bringToTop();
-             }, 0);
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _onStunts_click(event, html) {
@@ -243,9 +252,11 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerStunts(this.object, stunt);
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _onEdit (event, html){
@@ -254,9 +265,11 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerStunts(this.object, this.object.data.data.stunts[name]);
         editor.render(true);
         editor.setSheet(this);
-        setTimeout(() => {
+        try {
             editor.bringToTop();
-             }, 20);
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _onDelete(event, html){

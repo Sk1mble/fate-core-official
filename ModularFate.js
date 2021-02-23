@@ -473,13 +473,11 @@ Hooks.once('init', async function () {
 
 });
 
-
-Combat.prototype._getInitiativeFormula = function (combatant) {
-    debugger
+Combatant.prototype._getInitiativeFormula = function () {
     let init_skill = game.settings.get("ModularFate","init_skill");
     if (init_skill === "None" || init_skill === "Disable") {
-        return 0;
+        return "1d0";
     }else {
-        return combatant.actor.data.data.skills[`${init_skill}`].rank;
+        return `1d0+${this.actor.data.data.skills[init_skill].rank}`;
     }
 }

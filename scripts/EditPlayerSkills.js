@@ -282,10 +282,11 @@ class EditPlayerSkills extends FormApplication{
         if (game.user.isGM || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
             await e.render(true);
-            setTimeout(() => {
+            try {
                 e.bringToTop();
-                 }, 0);
-            e.skillsWindow = this;
+            } catch  {
+                // Do nothing.
+            }
         }
         else {
             ui.notifications.error(game.i18n.localize("ModularFate.OnlyGMsCanManuallyEdit"));

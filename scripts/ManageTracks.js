@@ -306,9 +306,11 @@ class EditTracks extends FormApplication {
             let track=this.tracks[name];
             let linked_skill_editor = new EditLinkedSkills(track);
             linked_skill_editor.render(true);
-            setTimeout(() => {
+            try {
                 linked_skill_editor.bringToTop();
-                 }, 0);
+            } catch  {
+                // Do nothing.
+            }
         }
     }
 
@@ -588,9 +590,11 @@ class TrackSetup extends FormApplication{
         if (category !="" && category != undefined){
             let track_editor = new EditTracks(category);
             track_editor.render(true);
-            setTimeout(() => {
+            try {
                 track_editor.bringToTop();
-                 }, 0);
+            } catch  {
+                // Do nothing.
+            }
         } else {
             ui.notifications.error(game.i18n.localize("ModularFate.PleaseSelectACategoryFirst"))
         }
@@ -599,7 +603,9 @@ class TrackSetup extends FormApplication{
 
 Hooks.on('closeEditTracks',async () => {
     game.system.manageTracks.render(true);
-    setTimeout(() => {
+    try {
         game.system.manageTracks.bringToTop();
-         }, 0);
+    } catch  {
+        // Do nothing.
+    }
 })

@@ -207,9 +207,11 @@ class AspectSetup extends FormApplication{
             aspects[name]=aspect;
             await game.settings.set("ModularFate","aspects",aspects);
             this.render(true);
-            setTimeout(() => {
+            try {
                 this.bringToTop();
-                 }, 0);
+            } catch  {
+                // Do nothing.
+            }
         }
     }
     
@@ -219,9 +221,11 @@ class AspectSetup extends FormApplication{
         let aspect = html.find("select[id='aspectListBox']")[0].value;
         let e = new EditAspect(aspects[aspect]);
         e.render(true);
-        setTimeout(() => {
+        try {
             e.bringToTop();
-             }, 0);
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _onDeleteButton(event,html){
@@ -237,9 +241,11 @@ class AspectSetup extends FormApplication{
                 delete aspects[aspect];
                 await game.settings.set("ModularFate","aspects",aspects);
                 this.render(true);
-                setTimeout(() => {
-                    this.bringToTop();
-                    }, 0);
+                try {
+                    e.bringToTop();
+                } catch  {
+                    // Do nothing.
+                }
             }
         }
     }
