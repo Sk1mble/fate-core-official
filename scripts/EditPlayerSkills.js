@@ -281,8 +281,10 @@ class EditPlayerSkills extends FormApplication{
     async _onEditButton (event, html){
         if (game.user.isGM || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
-            e.render(true);
-            ui.windows[e.appId].bringToTop();
+            await e.render(true);
+            setTimeout(() => {
+                e.bringToTop();
+                 }, 0);
             e.skillsWindow = this;
         }
         else {
