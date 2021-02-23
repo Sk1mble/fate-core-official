@@ -8,15 +8,20 @@ export class ModularFateActor extends Actor {
         }
     }
 
+    async update (...args){
+        // We can do some overriding here if we need to, to prevent recursive loops. 
+        // Perhaps!
+        super.update(...args)
+    }
+
     async updateFromExtra(itemData) {
-        console.log("UpdatefromExtra called");
         let actor = this;
+    
         if (!shouldUpdate(actor)){
             return;
         } else {
-            console.log("Updating from extra")
             actor.sheet.editing = true;
-            let extra = itemData;
+            let extra = duplicate(itemData);
     
             //Find each aspect, skill, stunt, and track attached to each extra
             //Add an extra data item to the data type containing the id of the original item.
@@ -59,6 +64,7 @@ export class ModularFateActor extends Actor {
                 }
                 
                 let aspects = duplicate(extra.data.aspects);
+
                 if (!Array.isArray(aspects)){
                     for (let aspect in aspects){
                         aspects[aspect].extra_tag = extra_tag;
@@ -68,6 +74,7 @@ export class ModularFateActor extends Actor {
                 }
                 
                 let tracks = duplicate(extra.data.tracks);
+                
                 if (!Array.isArray(tracks)){
                     for (let track in tracks){
                         tracks[track].extra_tag = extra_tag;
@@ -92,7 +99,7 @@ export class ModularFateActor extends Actor {
                 if (track.extra_tag != undefined && track.extra_tag.extra_id == extra_id){
                     if (tracks_output[t] == undefined){
                         update_object[`data.tracks.-=${t}`] = null;
-                        actor_tracks = duplicate(actor.data.data.tracks);
+                        //actor_tracks = duplicate(actor.data.data.tracks);
                     }
                 }
             }
@@ -111,7 +118,7 @@ export class ModularFateActor extends Actor {
                 if (aspect != undefined && aspect.extra_tag != undefined && aspect.extra_tag.extra_id == extra_id){
                     if (aspects_output[a] == undefined){
                         update_object[`data.aspects.-=${a}`] = null;
-                        actor_aspects = duplicate(actor.data.data.aspects);
+                        //actor_aspects = duplicate(actor.data.data.aspects);
                     }
                 }
             }
@@ -124,7 +131,7 @@ export class ModularFateActor extends Actor {
                 if (skill != undefined && skill.extra_tag != undefined && skill.extra_tag.extra_id == extra_id){
                     if (skills_output[s] == undefined){
                         update_object[`data.skills.-=${s}`] = null;
-                        actor_skills = duplicate(actor.data.data.skills);
+                        //actor_skills = duplicate(actor.data.data.skills);
                     }
                 }
             }
@@ -135,27 +142,25 @@ export class ModularFateActor extends Actor {
                 if (stunt != undefined && stunt.extra_tag != undefined && stunt.extra_tag.extra_id == extra_id){
                     if (stunts_output[s] == undefined){
                         update_object[`data.stunts.-=${s}`] = null;;
-                        actor_stunts = duplicate(actor.data.data.stunts);
+                        //actor_stunts = duplicate(actor.data.data.stunts);
                     }
                 }
             }
     
-            await actor.update(update_object, {"noHook":true});
-    
-            let final_stunts = mergeObject(actor.data.data.stunts, stunts_output);
-            let final_tracks = mergeObject(actor.data.data.tracks, tracks_output);
-            let final_skills = mergeObject(actor.data.data.skills, skills_output);
-            let final_aspects = mergeObject(actor.data.data.aspects, aspects_output);
-    
-            await actor.update({    
-                                    "data.tracks":final_tracks,
-                                    "data.aspects":final_aspects,
-                                    "data.skills":final_skills,
-                                    "data.stunts":final_stunts
-                                },{"noHook":true});
+            await actor.update(update_object);
             actor.sheet.editing = false;
-            
-            await setTimeout(function(){actor.sheet.render(false)},0);
+
+            let final_stunts = mergeObject(actor.data.data.stunts, stunts_output, {"inPlace":false});
+            let final_tracks = mergeObject(actor.data.data.tracks, tracks_output, {"inPlace":false});
+            let final_skills = mergeObject(actor.data.data.skills, skills_output, {"inPlace":false});
+            let final_aspects = mergeObject(actor.data.data.aspects, aspects_output, {"inPlace":false});
+
+            await actor.update({    
+                "data.tracks":final_tracks,
+                "data.aspects":final_aspects,
+                "data.skills":final_skills,
+                "data.stunts":final_stunts
+            })
         }
     }
 
@@ -244,18 +249,6 @@ function shouldUpdate(actor){
     }
 }
 
-/*Hooks.on('updateItem', async (actor, item) => {
-    if (actor.type == "ModularFate") {
-        try {
-            updateFromExtra(actor,item.data);
-        } catch (err) {
-            console.log(err);
-            console.log(actor)
-            actor.sheet.editing = false;
-        }
-    }
-})&=*/
-
 Hooks.on('deleteItem', async (actor, item) => {
     let itemData = item.data;
 
@@ -312,10 +305,8 @@ Hooks.on('deleteItem', async (actor, item) => {
     }
 })
 
-
-
 Hooks.on('createItem', async (actor, item) => {
     if (actor.type == "ModularFate") {
-        await updateFromExtra(actor,item.data);
+        await actor. updateFromExtra(item.data);
     }
 })

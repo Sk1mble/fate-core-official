@@ -1,12 +1,12 @@
-<form class="contenteditable" style="background-color:white; padding-right:10px; padding-left:10px">
+<form class="contenteditable" onsubmit="event.preventDefault();" style="background-color:white; padding-right:10px; padding-left:10px">
 		<table style="border:none; background-color:white">
 			<tr>
 				<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Artwork'}}</td>
-				<td style="width:100px"><img class="mfate-sheet_extra-avatar profile-img" style="max-width:100px; height:auto; border:none" id="avatar" data-edit="img" src="{{this.document.img}}"></img></td>
+				<td style="width:100px"><img class="mfate-sheet_extra-avatar profile-img" name="img" id="{{this.document.id}}_avatar" style="max-width:100px; height:auto; border:none" data-edit="img" src="{{this.document.img}}"></img></td>
 			 </tr>		
 		 <tr>
 			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Name'}}:</td>
-			<td style="width:75%"><textarea rows="2" name="name" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{this.document.name}}</textarea></td>
+			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{this.document.name}}</textarea></td>
 		 </tr>	
 		 <tr>
 			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Permissions'}}:</td>
