@@ -183,7 +183,7 @@ export class ExtraSheet extends ItemSheet {
         let editor = new EditPlayerTracks(this.object); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
-        await e.render(true);
+        await editor.render(true);
         try {
             editor.bringToTop();
         } catch  {

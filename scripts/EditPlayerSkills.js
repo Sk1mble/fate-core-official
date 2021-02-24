@@ -111,10 +111,10 @@ class EditPlayerSkills extends FormApplication{
         }
     }
 
-    async close(options){
+    async close(...args){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
         game.system.apps["item"].splice(game.system.apps["item"].indexOf(this),1); 
-        await super.close(options);
+        await super.close(...args);
     }
 
     async checkSkills(p){
@@ -282,6 +282,7 @@ class EditPlayerSkills extends FormApplication{
         if (game.user.isGM || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
             await e.render(true);
+            e.skillsWindow = this;
             try {
                 e.bringToTop();
             } catch  {
@@ -411,8 +412,8 @@ class EditGMSkills extends FormApplication{
             }
         }
         await this.object.update(updateObject)    
-        this.close();
         this.skillsWindow.render(false);
+        this.close();
     }
 
     async _adHocButton(event, html){
