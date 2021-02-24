@@ -1,4 +1,4 @@
-# Version 3.0.2
+# Version 3.0.2 - 3.03
   * Fixed some issues with Thing manipulation. There were errors being caused by various issues due to the three different use cases of token to map, item list to map, and compendium to map.
 
 # Version 3.0.1
