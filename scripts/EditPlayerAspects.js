@@ -130,15 +130,17 @@ class EditPlayerAspects extends FormApplication{
     //This function is called when an actor or item update is called.
 
     async renderMe(id){
-        //console.log(this.object);
-        if (this?.object?.id == id || this?.object?.parent?.id == id){
-            if (!this.renderPending) {
-                this.renderPending = true;
-                setTimeout(() => {
-                this.render(false);
-                this.renderPending = false;
-                }, 0);
-            }
-        }    
+        await setTimeout(async () => {
+                if (this?.object?.id == id || this?.object?.parent?.id == id){
+                    if (!this.renderPending) {
+                        this.renderPending = true;
+                        setTimeout(() => {
+                        this.render(false);
+                        this.renderPending = false;
+                        }, 0);
+                    }
+                }    
+            }, 0);
+        
     }
 }
