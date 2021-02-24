@@ -978,7 +978,11 @@ class FateUtilities extends Application{
             situation_aspects.splice(situation_aspects.indexOf(aspect),1);
             await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
             let d = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(previousText));
-            d.delete();
+            try {
+                d.delete();
+            } catch (err) {
+                
+            }
             return;
         }
         aspect.name = newText;
