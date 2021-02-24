@@ -400,7 +400,6 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                 }
-                if (!isContainer) toCreate.items = i.toJSON()
                 if (!isContainer) toCreate.items = [newItem.toJSON()]
 
                 itemActor = await Actor.create(toCreate
