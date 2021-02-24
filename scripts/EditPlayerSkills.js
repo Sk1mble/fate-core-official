@@ -32,33 +32,16 @@ class EditPlayerSkills extends FormApplication{
 
     //This function is called when an actor or item update is called.
     async renderMe(id, data, object){
-        console.log(object);
-    /*    console.log(object);
-        if (this.object.isToken){
-            if (this.object.token.id == id){
-                    //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
-                    if (!this.renderPending) {
-                        this.renderPending = true;
-                        setTimeout(() => {
-                        this.render(false);
-                        this.renderPending = false;
-                        }, 0);
-                    }
+        if (this?.object?.id == id){
+            //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
+            if (!this.renderPending) {
+                this.renderPending = true;
+                setTimeout(() => {
+                this.render(false);
+                this.renderPending = false;
+                }, 0);
             }
         }
-        else {
-            if (this.object.id == id){
-                    //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
-                    if (!this.renderPending) {
-                        this.renderPending = true;
-                        setTimeout(() => {
-                        this.render(false);
-                        this.renderPending = false;
-                        }, 0);
-                    }
-            }
-        }       
-    */
     }
 
     //Set up the default options for instances of this class
@@ -434,8 +417,10 @@ class EditGMSkills extends FormApplication{
         }
         if (newSkill != undefined){
             newSkill.name=newSkill.name.split(".").join("․");
-            await this.object.update({"data.skills": {[newSkill.name]:newSkill}})  
-            this.render(false);
+            this.object.update({"data.skills": {[newSkill.name]:newSkill}}).then(() => this.render(false));
+            await setTimeout(() => {
+                this.render(false);
+                }, 0);
         }
     }
 

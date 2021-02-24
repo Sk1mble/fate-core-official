@@ -124,14 +124,14 @@ class EditPlayerAspects extends FormApplication{
         await setTimeout(async () => {
             await this.object.update({"data.aspects":this.aspects})
             }, 0)
-        await this.render(false);
+        this.render(false);
     }
 
     //This function is called when an actor or item update is called.
 
     async renderMe(id){
         //console.log(this.object);
-        if (this.object.id == id || this.object?.parent.id == id){
+        if (this?.object?.id == id || this?.object?.parent?.id == id){
             if (!this.renderPending) {
                 this.renderPending = true;
                 setTimeout(() => {
