@@ -1,3 +1,6 @@
+# Version 3.0.2
+  * Fixed some issues with Thing manipulation. There were errors being caused by various issues due to the three different use cases of token to map, item list to map, and compendium to map.
+
 # Version 3.0.1
   * Tweaked the size of the aspect labels added to the map to be slightly wider and higher.
   * The aspects viewer now re-renders to show any changed aspect text if someone else edits the character's aspects while you're in the player aspect editor.

@@ -70,11 +70,12 @@ export class Thing extends ActorSheet {
         
                 if (jQuery.isEmptyObject(this.actor.data.data.container.extra)){
                     container = await (this.actor.createEmbeddedDocuments("Item",[{"name":this.actor.name,"description":this.actor.data.description,"type":"Extra"}]));
-                    await this.actor.update({"data.container.extra":container})
+                    await this.actor.update({"data.data.container.extra":container})
                     await this.actor.deleteEmbeddedDocuments("Item", [container.id]);
                 
                     container = new Item(this.actor.data.data.container.extra);
                 } else {
+                    console.log(this.actor.data.data.container.extra)
                     container = new Item(this.actor.data.data.container.extra);
                 }
 
@@ -363,6 +364,8 @@ async function checkContainer (actor){
 }
 
 async function createThing (canvas_scene, data, user_id, shiftDown){
+    console.log("Entering CreateThing");
+    console.log(data)
     
     if (data.type != "Item" && data.type != "Extra"){
         return;
@@ -398,6 +401,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                 }
                 if (!isContainer) toCreate.items = i.toJSON()
+                if (!isContainer) toCreate.items = [newItem.toJSON()]
 
                 itemActor = await Actor.create(toCreate
                 ,{"temporary":false,"renderSheet":false,"thing":true});   
@@ -435,74 +439,69 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
     } else {
         if (data.pack != undefined){ // This means it came from a compendium
             const pack = game.packs.get(data.pack);
-            newItem = await duplicate(await pack.getDocument(data.id));
-            
-            let permission = newItem.data.permission;
-            let i = new Item (newItem); 
+            let i = await duplicate(await pack.getDocument(data.id));
+            let permission = i.data.permission;
+            newItem = new Item (i); 
 
-            //Let's get the contents, if there are any, so we can do some stuff with them later.
-            if (newItem?.data?.contents){
-                contents = duplicate(newItem.data.contents);
-                delete newItem.data.contents;
-            }
-            
-            let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
-            if (folder == undefined){
-                folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
-            }
-            let things = game.actors.contents.filter(a => a.data.type=="Thing");
-            itemActor = things.find(thing => thing.name == newItem.name);
+        //Let's get the contents, if there are any, so we can do some stuff with them later.
+        if (newItem?.data?.data?.contents){
+            contents = duplicate(newItem.data.data.contents);
+            delete newItem.data.data.contents;
+        }
 
-            let isContainer = contents.extras != undefined;
-                
-            let toCreate = {
-                name: newItem.name,
-                type: "Thing",
-                data:{"container.isContainer":isContainer, "container.extra":i.toJSON()},
-                img:newItem.img,
-                folder: folder.id,
-                sort: 12000,
-                permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-            }
-            if (!isContainer) toCreate.items = i.toJSON()
-
-            itemActor = await Actor.create(toCreate
-            ,{"temporary":false,"renderSheet":false,"thing":true});      
-        } else {
-            if (data.type == "Item"){ // This means it was dropped straight from the items list.
-                
-                newItem = duplicate(game.items.contents.find(it => it.id == data.id));
-                let i = new Item (newItem);
-                let permission = newItem.data.permission;
-
-                //Let's get the contents, if there are any, so we can do some stuff with them later.
-                if (newItem?.data?.contents){
-                    contents = duplicate(newItem.data.contents);
-                    delete newItem.data.contents;
-                }
-            
-                let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
+        let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
                 if (folder == undefined){
                     folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
                 }
-                let things = game.actors.contents.filter(a => a.data.type=="Thing");
-                itemActor = things.find(thing => thing.name == newItem.name);
 
                 let isContainer = contents.extras != undefined;
                 
                 let toCreate = {
                     name: newItem.name,
                     type: "Thing",
-                    data:{"container.isContainer":isContainer, "container.extra":i.toJSON()},
+                    data:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
                     img:newItem.img,
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                 }
-                if (!isContainer) toCreate.items = i.toJSON()
+                if (!isContainer) toCreate.items = [newItem.toJSON()]
 
                 itemActor = await Actor.create(toCreate
-                ,{"temporary":false,"renderSheet":false,"thing":true});   
+                ,{"temporary":false,"renderSheet":false,"thing":true});      
+        } else {
+            if (data.type == "Item"){ // This means it was dropped straight from the items list.
+                
+                let i = duplicate(game.items.contents.find(it => it.id == data.id));
+                newItem = new Item (i);
+                let permission = newItem.data.permission;
+
+        //Let's get the contents, if there are any, so we can do some stuff with them later.
+        if (newItem?.data?.data?.contents){
+            contents = duplicate(newItem.data.data.contents);
+            delete newItem.data.data.contents;
+        }
+
+        let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
+                if (folder == undefined){
+                    folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
+                }
+
+                let isContainer = contents.extras != undefined;
+                
+                let toCreate = {
+                    name: newItem.name,
+                    type: "Thing",
+                    data:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
+                    img:newItem.img,
+                    folder: folder.id,
+                    sort: 12000,
+                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
+                }
+                if (!isContainer) toCreate.items = [newItem.toJSON()]
+
+                itemActor = await Actor.create(toCreate
+                ,{"temporary":false,"renderSheet":false,"thing":true});      
             }
         }
     }
