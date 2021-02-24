@@ -921,7 +921,8 @@ class FateUtilities extends Application{
         let situation_aspects = [];
         let situation_aspect = {
                                     "name":text,
-                                    "free_invokes":1
+                                    "free_invokes":1,
+                                    "linked":true
                                 };
         try {
             situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
@@ -961,7 +962,56 @@ class FateUtilities extends Application{
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[name]
         track.aspect.name=text;
+        let previousText = `${token.actor.data.data.tracks[name].aspect.name} (${token.actor.name})`;
         token.actor.update({[`data.tracks.${name}.aspect`]:track.aspect})
+
+        // See if this aspect exists in the list of game aspects and update it if so.
+        let newText = `${text} (${token.actor.name})`;
+
+        let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
+        let aspect = situation_aspects.find(aspect => aspect.name == previousText);
+
+        if (aspect == undefined){
+            return;
+        }
+        if (text == ""){
+            situation_aspects.splice(situation_aspects.indexOf(aspect),1);
+            await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+            let d = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(previousText));
+            d.delete();
+            return;
+        }
+        aspect.name = newText;
+
+        await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+
+        let drawing = undefined;
+        if (aspect.name != "") {
+            drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(previousText));
+        }
+
+        if (drawing != undefined){
+            let text;
+            let value = aspect.free_invokes;
+            if (value == 1){
+                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
+            } else {
+                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
+            }
+            let size = game.settings.get("ModularFate","fuAspectLabelSize");
+            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+            if (size === 0){
+                size = game.scenes.viewed.data.width*(1/100);
+            }
+            let height = size * 2;
+            let width = (text.length * size) / 1.5;
+            drawing.document.update({
+                "text":text,
+                width: width,
+                height: height,
+                fontFamily: font,
+            });
+        }
     }
 
     async _on_click_box(event, html) {

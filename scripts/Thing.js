@@ -218,7 +218,6 @@ export class Thing extends ActorSheet {
         }
 
         let i = new Item(item);
-        ////console.log(this.actor.isToken);
 
         let data = {
                     "type":"Item",
@@ -286,7 +285,6 @@ export class Thing extends ActorSheet {
 
 Hooks.on('preCreateItem', (actor, itemData) => {
     if (actor.data.type == "Thing") {
-        
         if (actor.items.contents.length == 1 && actor.data.data.container.isContainer == false){
             ui.notifications.error("This is not a container and can only represent a single Extra.");        
             return false;
@@ -348,7 +346,6 @@ async function checkContainer (actor){
     if (!actor.updatePending) {
         actor.updatePending = true;
         setTimeout(() => {
-            //console.log(actor.data.data.container.extra);
             if (actor.items.contents.length === 1 && actor.data.data?.container?.isContainer){
                 actor.deleteEmbeddedDocuments("Item", [actor.items.contents[0].id]);
             }
@@ -388,17 +385,22 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                 if (folder == undefined){
                     folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
                 }
+
+                let isContainer = contents.extras != undefined;
                 
-                itemActor = await Actor.create({
+                let toCreate = {
                     name: newItem.name,
                     type: "Thing",
-                    data:{"container.isContainer":false, "container.extra":newItem.toJSON()},
+                    data:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
                     img:newItem.img,
-                    items:[newItem.data],
                     folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                },{"temporary":false,"renderSheet":false,"thing":true});
+                }
+                if (!isContainer) toCreate.items = i.toJSON()
+
+                itemActor = await Actor.create(toCreate
+                ,{"temporary":false,"renderSheet":false,"thing":true});   
 
                 if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
                     let actor = new Actor (data.actor);
@@ -434,65 +436,73 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
         if (data.pack != undefined){ // This means it came from a compendium
             const pack = game.packs.get(data.pack);
             newItem = await duplicate(await pack.getDocument(data.id));
+            
             let permission = newItem.data.permission;
             let i = new Item (newItem); 
 
             //Let's get the contents, if there are any, so we can do some stuff with them later.
-            if (newItem?.data?.data?.contents){
-                contents = duplicate(newItem.data.data.contents);
-                delete newItem.data.data.contents;
+            if (newItem?.data?.contents){
+                contents = duplicate(newItem.data.contents);
+                delete newItem.data.contents;
             }
             
             let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
-                if (folder == undefined){
-                    folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
-                }
+            if (folder == undefined){
+                folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
+            }
+            let things = game.actors.contents.filter(a => a.data.type=="Thing");
+            itemActor = things.find(thing => thing.name == newItem.name);
 
-                let things = game.actors.contents.filter(a => a.data.type=="Thing");
-                itemActor = things.find(thing => thing.name == newItem.name);
+            let isContainer = contents.extras != undefined;
+                
+            let toCreate = {
+                name: newItem.name,
+                type: "Thing",
+                data:{"container.isContainer":isContainer, "container.extra":i.toJSON()},
+                img:newItem.img,
+                folder: folder.id,
+                sort: 12000,
+                permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
+            }
+            if (!isContainer) toCreate.items = i.toJSON()
 
-                itemActor = await Actor.create({
-                    name: newItem.name,
-                    type: "Thing",
-                    data:{"container.isContainer":false, "container.extra":i.toJSON()},
-                    img:newItem.img,
-                    items:[i.toJSON()],
-                    folder: folder.id,
-                    sort: 12000,
-                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                },{"temporary":false,"renderSheet":false,"thing":true});   
+            itemActor = await Actor.create(toCreate
+            ,{"temporary":false,"renderSheet":false,"thing":true});      
         } else {
             if (data.type == "Item"){ // This means it was dropped straight from the items list.
                 
-                let newItem = duplicate(game.items.contents.find(it => it.id == data.id));
+                newItem = duplicate(game.items.contents.find(it => it.id == data.id));
                 let i = new Item (newItem);
                 let permission = newItem.data.permission;
 
                 //Let's get the contents, if there are any, so we can do some stuff with them later.
-                if (newItem?.data?.data?.contents){
-                    contents = duplicate(newItem.data.data.contents);
-                    delete newItem.data.data.contents;
+                if (newItem?.data?.contents){
+                    contents = duplicate(newItem.data.contents);
+                    delete newItem.data.contents;
                 }
             
                 let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
                 if (folder == undefined){
                     folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
                 }
-
                 let things = game.actors.contents.filter(a => a.data.type=="Thing");
                 itemActor = things.find(thing => thing.name == newItem.name);
 
-
-                itemActor = await Actor.create({
+                let isContainer = contents.extras != undefined;
+                
+                let toCreate = {
                     name: newItem.name,
                     type: "Thing",
-                    data:{"container.isContainer":false, "container.extra":i.toJSON()},
+                    data:{"container.isContainer":isContainer, "container.extra":i.toJSON()},
                     img:newItem.img,
-                    items:[i.toJSON()],
                     folder: folder.id,
                     sort: 12000,
-                    permission:{"default":3} // Owner permissions are required to see and interact with items.
-                },{"temporary":false,"renderSheet":false,"thing":true});
+                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
+                }
+                if (!isContainer) toCreate.items = i.toJSON()
+
+                itemActor = await Actor.create(toCreate
+                ,{"temporary":false,"renderSheet":false,"thing":true});   
             }
         }
     }
@@ -510,22 +520,17 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
         actorData: {}
       }
 
-
     let scene = game.scenes.contents.find(sc => sc.id == canvas_scene._id);
     await scene.createEmbeddedDocuments("Token", [token]); //createEmbeddedDocuments takes an array of creation data.
-
     //Now we need to create the contents and set the container parameters.
     if (contents?.extras != undefined){
         await itemActor.update({
-            "data.container.isContainer":true,
             "data.container.locked":contents.locked,
             "data.container.security":contents.security,
             "data.container.movable":true,
             "data.img":newItem.img,
         })
-        //console.log(contents);
         await itemActor.createEmbeddedDocuments("Item", contents.extras);
-        await itemActor.deleteEmbeddedDocuments("Item", [newItem.id]);
     }
 }
 

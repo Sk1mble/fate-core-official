@@ -244,7 +244,7 @@
                                 {{#each situation_aspects}}
                                     <div style="font-family:Montserrat; padding-top:10px; display:flex; flex-direction:row; align-items:center">
                                         <span style="width:100%;">
-                                            <input name="sit_aspect" type="text" value="{{this.name}}" id="{{@key}}_sit_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="font-size:{{../fontSize}}pt; width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
+                                            <input name="sit_aspect" type="text" value="{{this.name}}" id="{{@key}}_sit_aspect" {{#if this.linked}}disabled="disabled" title="{{localize 'ModularFate.aspectFromTrack'}}" {{/if}}{{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="font-size:{{../fontSize}}pt; width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
                                         </span>    
                                         <span style="padding-left:10px; width:120px">
                                             <input type="number" name="free_i" id="{{@key}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="font-size:{{../fontSize}}pt; width:75px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
