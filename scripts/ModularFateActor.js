@@ -8,12 +8,6 @@ export class ModularFateActor extends Actor {
         }
     }
 
-    async update (...args){
-        // We can do some overriding here if we need to, to prevent recursive loops. 
-        // Perhaps!
-        super.update(...args)
-    }
-
     async updateFromExtra(itemData) {
         let actor = this;
     

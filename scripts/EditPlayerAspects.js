@@ -120,11 +120,8 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _updateObject(event, formData){
-        await this.object.update({"data.aspects":[]})//Name changes won't be propagated unless we delete.
-        await setTimeout(async () => {
-            await this.object.update({"data.aspects":this.aspects})
-            }, 0)
-        this.render(false);
+        await this.object.update({"data.aspects":[]}, {render:false})
+        this.object.update({"data.aspects":this.aspects})
     }
 
     //This function is called when an actor or item update is called.

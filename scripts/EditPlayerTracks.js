@@ -389,19 +389,12 @@ class EditPlayerTracks extends FormApplication {
         //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
             let tracks = this.object.setupTracks(duplicate(this.object.data.data.skills), output);
-            await this.object.update({"data.tracks":[{"empty":"empty"}]}) //This is needed to make the game see a change in order of keys as a difference.
-            await setTimeout(async () => {
-                await this.object.update({"data.tracks":tracks}); 
-                }, 0);
-            this.render(false);
+            await this.object.update({"data.tracks":[{"empty":"empty"}]}, {render:false}) //This is needed to make the game see a change in order of keys as a difference.
+            await this.object.update({"data.tracks":tracks});             
         } else {
-            await this.object.update({"data.tracks":[{"empty":"empty"}]}) //This is needed to make the game see a change in order of keys as a difference.
-            await setTimeout(async () => {
-                await this.object.update({"data.tracks":tracks}); 
-                }, 0);
-            this.render(false);
+            await this.object.update({"data.tracks":[{"empty":"empty"}]}, {render:false}) //This is needed to make the game see a change in order of keys as a difference.
+            await this.object.update({"data.tracks":tracks});             
         }
-        //this.render(false);
     }
 
     async _on_sb_change(event, html){

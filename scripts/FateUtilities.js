@@ -389,7 +389,7 @@ class FateUtilities extends Application{
 
         let drawing = undefined;
         if (aspect.name != "") {
-            drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(aspect.name));
+            drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(aspect.name));
         }
         
         aspect.name = event.target.value;
@@ -797,7 +797,7 @@ class FateUtilities extends Application{
         aspect.free_invokes = value;
         game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
         //Done: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
-        let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
+        let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
         if (drawing != undefined){
             let text;
             if (value == 1){
@@ -824,7 +824,7 @@ class FateUtilities extends Application{
     async _panToAspect(event, html){
         let index=event.target.id.split("_")[1];
         let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
-        let drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
+        let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
         
         if (drawing != undefined) {
             let x = drawing.data.x;
@@ -838,7 +838,7 @@ class FateUtilities extends Application{
         let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
         let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
         
-        if (canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name))==undefined)
+        if (canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name))==undefined)
         {
             let text;
             if (value == 1){
@@ -892,7 +892,7 @@ class FateUtilities extends Application{
             let drawing = undefined;
 
             if (name !="") {
-                drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(name));
+                drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
             }
             if (drawing != undefined){
                 drawing.delete();
@@ -977,11 +977,11 @@ class FateUtilities extends Application{
         if (text == ""){
             situation_aspects.splice(situation_aspects.indexOf(aspect),1);
             await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
-            let d = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(previousText));
+            let d = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(previousText));
             try {
                 d.delete();
             } catch (err) {
-                
+
             }
             return;
         }
@@ -991,7 +991,7 @@ class FateUtilities extends Application{
 
         let drawing = undefined;
         if (aspect.name != "") {
-            drawing = canvas.drawings.objects.children.find(drawing => drawing.data?.text?.startsWith(previousText));
+            drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(previousText));
         }
 
         if (drawing != undefined){
