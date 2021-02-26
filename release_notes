@@ -1,3 +1,6 @@
+# Version 3.0.5
+  Disabling the canvas now causes FateUtilities to be opened on load.
+
 # Version 3.0.4 
   * Got rid of the need for a timeout in some code.
 

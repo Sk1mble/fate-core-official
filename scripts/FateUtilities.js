@@ -1384,6 +1384,13 @@ async clearFleeting(object){
     }
 }
 
+Hooks.on('ready', function()
+{
+    if (!canvas.ready) {
+        let fu = new FateUtilities().render(true);
+    }
+})
+
 Hooks.on('getSceneControlButtons', function(hudButtons)
 {
     let hud = hudButtons.find(val => {return val.name == "token";})
