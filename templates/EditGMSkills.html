@@ -1,5 +1,6 @@
 <form class="editable" onsubmit="event.preventDefault();">
-<table style="border:none; background:none">
+<div style="max-height:75vh; overflow-y:auto">
+    <table style="border:none; background:none">
     <tr>
         <td colspan="2">
             <hr><h3>{{localize 'ModularFate.WorldSkillsPresent'}}</h3><hr>
@@ -9,7 +10,7 @@
     {{#if (eq this.extra_tag undefined)}}
     <tr>
         <td style="width:100px">
-            <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
         </td>
         <td>
             {{this.name}}
@@ -26,7 +27,7 @@
         {{#if (eq this.extra_tag undefined)}}
         <tr>
             <td style="width:100px">
-                <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
+                <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
             </td>
             <td>
                 {{this.name}}
@@ -43,7 +44,7 @@
     {{#if (eq this.extra_tag undefined)}}
     <tr>
         <td style="width:100px">
-            <input type="checkbox" checked id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
         </td>
         <td>
             {{this.name}}
@@ -59,7 +60,7 @@
     {{#each absent_skills}}
     <tr>
         <td>
-            <input type="checkbox" id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" id="{{this.name}}" name="{{this.name}}_present"}>
         </td>
         <td>
             {{this.name}}
@@ -74,14 +75,15 @@
     {{#each non_pc}}
     <tr>
         <td>
-            <input type="checkbox" id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" id="{{this.name}}" name="{{this.name}}_present"}>
         </td>
         <td>
             {{this.name}}
         </td>
     </tr>
     {{/each}}
-</table>
+    </table>
+</div>
 <table style="background:none; border:none">
     <tr>
         <td>
@@ -89,6 +91,20 @@
         </td>
         <td>
             <input name="ad_hoc_input" id="ad_hoc_input" style="color:black; background: white; font-family:Arial; width:200px"><button style="width:30px; height:30px;"" type="button" id="add_ah_button" i icon class="fas fa-plus"></button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button type="button" id="select_all_skills_button">
+                {{localize 'ModularFate.CheckAllSkills'}}
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button type="button" id="deselect_all_skills_button">
+                {{localize 'ModularFate.UnCheckAllSkills'}}
+            </button>
         </td>
     </tr>
     <tr>

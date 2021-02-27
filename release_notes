@@ -1,5 +1,7 @@
 # Version 3.0.5
-  Disabling the canvas now causes FateUtilities to be opened on load.
+  * Disabling the canvas now causes FateUtilities to be opened on load.
+  * Added a 'Check All' button and an 'Uncheck All' button to the GM skill editor for a character.
+  * Improved layout of skill editor window & GM skill editor window in respect of scrolling etc.
 
 # Version 3.0.4 
   * Got rid of the need for a timeout in some code.

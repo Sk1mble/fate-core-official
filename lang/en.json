@@ -190,6 +190,8 @@
     "ModularFate.Actors":"Actors",
     "ModularFate.PickWhoToShowTo":"Pick who to show this character to",
     "ModularFate.SelectAll":"Select All",
+    "ModularFate.CheckAllSkills":"Check all skills",
+    "ModularFate.UnCheckAllSkills":"Uncheck all skills",
     "ModularFate.PickWhatToShow":"Pick what to show",
     "ModularFate.Avatar":"Avatar",
     "ModularFate.ShowNow":"Show Now",

@@ -369,6 +369,25 @@ class EditGMSkills extends FormApplication{
         add_ad_hoc.on("click", event => this._adHocButton(event, html));
         const confirm = html.find("button[id='add_remove_button']")
         confirm.on("click", event => this._confirm(event, html));
+
+        const selectAll = html.find("button[id='select_all_skills_button']");
+        selectAll.on("click", event => {
+            const boxes = $("input[class='skill_check_box']");
+            console.log(boxes);
+            for (let box of boxes){
+                box.checked = true;
+            }
+        })
+
+        const deSelectAll = html.find("button[id='deselect_all_skills_button']");
+        deSelectAll.on("click", event => {
+            const boxes = $("input[class='skill_check_box']");
+            console.log(boxes);
+            for (let box of boxes){
+                box.checked = false;
+            }
+        })
+
     }
 
     async _confirm(event,html){
