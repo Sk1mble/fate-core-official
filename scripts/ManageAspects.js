@@ -8,12 +8,9 @@ Hooks.once('init', async function () {
         hint: "This is the list of aspects for this particular world.",
         scope: "world",
         config: false,
-        type: Object
+        type: Object,
+        default:{}
     });
-    //Initialise the setting if it is currently empty.
-    if (jQuery.isEmptyObject(game.settings.get("ModularFate","aspects"))){
-        game.settings.set("ModularFate","aspects",{});
-    }
 
     // Register the menu to setup the world's aspect list.
     game.settings.registerMenu("ModularFate","AspectSetup", {

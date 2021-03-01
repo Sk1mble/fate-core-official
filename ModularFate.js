@@ -272,10 +272,17 @@ Hooks.on('createToken', (...args) => {
 })
 
 Hooks.on('updateScene', (...args) => {
-    let ags = args;
     game.system.apps["combat"].forEach(a=> {
         a.renderMe(args);
     })
+})
+
+Hooks.on('updateSetting', (...args) => {
+    for (let app in ui.windows){
+        if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+            ui.windows[app]?.render(false);
+        }
+    }
 })
 
 Hooks.once('init', async function () {
@@ -299,11 +306,6 @@ Hooks.once('init', async function () {
         default:false,
         type:Boolean
     })
-
-    //Initialise the setting if it is currently empty.
-    if (jQuery.isEmptyObject(game.settings.get("ModularFate","stunts"))){
-        game.settings.set("ModularFate","stunts",{});
-    }
 
     game.settings.register("ModularFate", "run_once", {
         name: "Run Once?",
@@ -360,10 +362,6 @@ Hooks.once('init', async function () {
         type: Number,
         default:3
     });
-    //Initialise if not yet set
-    if (isNaN(game.settings.get("ModularFate","refreshTotal"))){
-            game.settings.set("ModularFate","refreshTotal",3);
-    }
 
     game.settings.register("ModularFate","confirmDeletion", {
         name: game.i18n.localize("ModularFate.ConfirmDeletionName"),

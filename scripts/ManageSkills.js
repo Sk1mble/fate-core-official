@@ -6,12 +6,9 @@ Hooks.once('init', async function () {
         hint: "This is the list of skills for this particular world.",
         scope: "world",
         config: false,
-        type: Object
+        type: Object,
+        default:{}
     });
-    //Initialise the setting if it is currently empty.
-    if (jQuery.isEmptyObject(game.settings.get("ModularFate","skills"))){
-        game.settings.set("ModularFate","skills",{});
-    }
 
         //Register a setting for the game's current skill total
         game.settings.register("ModularFate", "skillTotal", {
@@ -23,10 +20,6 @@ Hooks.once('init', async function () {
             restricted:true,
             default:20,
         });
-        //Initialise if not yet set
-        if (isNaN(game.settings.get("ModularFate","skillTotal"))){
-            game.settings.set("ModularFate","skillTotal",20);
-        }
 
     game.settings.register("ModularFate","freeStunts", {
         name:game.i18n.localize("ModularFate.FreeStunts"),
@@ -113,7 +106,8 @@ Hooks.once('init', async function () {
         hint:"A list of approved stunts that can be added to characters",
         scope:"world",
         config:false,
-        type:Object
+        type:Object,
+        default:{}
     })
 
     let skill_choices = {};

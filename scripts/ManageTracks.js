@@ -8,25 +8,17 @@ Hooks.once('init',async function(){
         hint:game.i18n.localize("ModularFate.TrackManagerHint"),
         scope:"world",
         config:false,
-        type: Object
+        type: Object,
+        default: {}
     });
     game.settings.register("ModularFate","track_categories",{
         name:"track categories",
         hint:game.i18n.localize("ModularFate.TrackCategoriesHint"),
         scope:"world",
         config:false,
-        type: Object
+        type: Object,
+        default:{"Combat":"Combat","Other":"Other"}
     });
-
-    //Initialise the settings if they are currently empty.
-    if (jQuery.isEmptyObject(game.settings.get("ModularFate","tracks"))){
-        game.settings.set("ModularFate","tracks",{});
-    }
-
-    //Initialise the settings if they are currently empty.
-    if (jQuery.isEmptyObject(game.settings.get("ModularFate","track_categories"))){
-        game.settings.set("ModularFate","track_categories",{Combat:"Combat",Other:"Other"});
-    }
 
     // Register the menu to setup the world's conditions etc.
     game.settings.registerMenu("ModularFate", "TrackSetup", {
@@ -34,7 +26,7 @@ Hooks.once('init',async function(){
         label: game.i18n.localize("ModularFate.Setup"),      // The text label used in the button
         hint: game.i18n.localize("ModularFate.TrackSetupHint"),
         type: TrackSetup,   // A FormApplication subclass which should be created
-        restricted: true                   // Restrict this submenu to gamemaster only?
+        restricted: true    // Restrict this submenu to gamemaster only?
       });
 
      // Register a setting for replacing the existing track list with one of the pre-defined default sets.

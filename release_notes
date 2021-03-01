@@ -1,3 +1,8 @@
+# Version 3.0.6
+  * No errors now thrown on trying to open FateUtilities with no scene active.
+  * Fate Utilities only opens automatically if no canvas and no canvas setting turned on.
+  * Characters now refresh when a game setting is changed.
+
 # Version 3.0.5
   * Disabling the canvas now causes FateUtilities to be opened on load.
   * Added a 'Check All' button and an 'Uncheck All' button to the GM skill editor for a character.

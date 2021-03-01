@@ -1227,18 +1227,18 @@ async getData(){
         data.exchange = game.combat.round;   
     }
     let all_tokens = [];
-    let notes = game.scenes.viewed.getFlag("ModularFate","sceneNotes");
+    let notes = game?.scenes?.viewed?.getFlag("ModularFate","sceneNotes");
     if (notes == undefined){
         notes = ""
     }
     data.notes = notes;
-    game.scenes.viewed.tokens.contents.forEach(token => {
+    game?.scenes?.viewed?.tokens?.contents?.forEach(token => {
         if (token.actor != null && token.actor.data.type != "Thing" && (token.data.hidden == false || game.user.isGM)){
             all_tokens.push(token)
         } 
     })
 
-    let situation_aspects = game.scenes.viewed.getFlag("ModularFate","situation_aspects")
+    let situation_aspects = game?.scenes?.viewed?.getFlag("ModularFate","situation_aspects")
     if (situation_aspects == undefined){
         situation_aspects = [];
     }
@@ -1269,7 +1269,7 @@ async getData(){
     data.tokenAvatar = !game.settings.get("ModularFate","fu_actor_avatars");
 
     //Let's get the list of Fate rolls made
-    let rolls = game.scenes.viewed.getFlag("ModularFate","rolls");
+    let rolls = game?.scenes?.viewed?.getFlag("ModularFate","rolls");
     if (rolls == undefined){
         rolls = [];
     }
@@ -1386,7 +1386,7 @@ async clearFleeting(object){
 
 Hooks.on('ready', function()
 {
-    if (!canvas.ready) {
+    if (!canvas.ready && game.settings.get("core", "noCanvas")) {
         let fu = new FateUtilities().render(true);
     }
 })
@@ -1556,7 +1556,7 @@ Hooks.on('createChatMessage', (message) => {
                 }
             }
             let user = message.user;
-            let rolls = game.scenes.viewed.getFlag("ModularFate","rolls");
+            let rolls = game?.scenes?.viewed?.getFlag("ModularFate","rolls");
             if (rolls == undefined){
                 rolls = [];
             }
