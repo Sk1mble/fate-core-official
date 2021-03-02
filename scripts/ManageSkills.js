@@ -19,6 +19,13 @@ Hooks.once('init', async function () {
             type: Number,
             restricted:true,
             default:20,
+            onChange: () =>{
+                for (let app in ui.windows){
+                    if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                        ui.windows[app]?.render(false);
+                    }
+                }
+            }
         });
 
     game.settings.register("ModularFate","freeStunts", {
@@ -28,7 +35,14 @@ Hooks.once('init', async function () {
         config:true,
         type:Number,
         restricted:true,
-        default:3
+        default:3,
+        onChange: () =>{
+            for (let app in ui.windows){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
     })
 
     game.settings.register("ModularFate","enforceColumn", {
@@ -38,7 +52,14 @@ Hooks.once('init', async function () {
         config:true,
         type: Boolean,
         restricted:true,
-        default:true
+        default:true,
+        onChange: () =>{
+            for (let app in ui.windows){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
     })
 
     game.settings.register("ModularFate","enforceSkillTotal", {
@@ -48,7 +69,14 @@ Hooks.once('init', async function () {
         config:true,
         type: Boolean,
         restricted:true,
-        default:true
+        default:true,
+        onChange: () =>{
+            for (let app in ui.windows){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
     })
 
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.

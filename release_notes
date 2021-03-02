@@ -1,3 +1,6 @@
+#Version 3.0.7
+  * Moved sheet re-render on setting update from a hook responding to updateSettings to the onChange callback function of each relevant setting. This will prevent false positives and unnecessary re-renders.
+
 # Version 3.0.6
   * No errors now thrown on trying to open FateUtilities with no scene active.
   * Fate Utilities only opens automatically if no canvas and no canvas setting turned on.

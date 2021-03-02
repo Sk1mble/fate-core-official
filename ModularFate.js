@@ -277,14 +277,6 @@ Hooks.on('updateScene', (...args) => {
     })
 })
 
-Hooks.on('updateSetting', (...args) => {
-    for (let app in ui.windows){
-        if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
-            ui.windows[app]?.render(false);
-        }
-    }
-})
-
 Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = ModularFateActor;
     CONFIG.fontFamilies.push("Montserrat");
@@ -360,7 +352,14 @@ Hooks.once('init', async function () {
         scope: "world",
         config: true,
         type: Number,
-        default:3
+        default:3,
+        onChange: () =>{
+            for (let app in ui.windows){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
     });
 
     game.settings.register("ModularFate","confirmDeletion", {
