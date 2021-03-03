@@ -1,4 +1,7 @@
-#Version 3.0.7
+# Version 3.0.8
+  * Creation of timed events now works regardless of whether the Fate Utilities window is popped out or not.
+
+# Version 3.0.7
   * Moved sheet re-render on setting update from a hook responding to updateSettings to the onChange callback function of each relevant setting. This will prevent false positives and unnecessary re-renders.
 
 # Version 3.0.6

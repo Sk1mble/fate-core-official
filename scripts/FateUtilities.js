@@ -1465,22 +1465,23 @@ class TimedEvent extends Application {
                             </table>`,
                     default:"create",
                     "buttons":{
-                        create:{label:game.i18n.localize("ModularFate.Create"), callback:async () => {
+                        create:{label:game.i18n.localize("ModularFate.Create"), callback:async (teDialog) => {
+
                             //if no flags currently set, initialise
                             var timedEvents = game.combat.getFlag("ModularFate","timedEvents");
                             
                             if (timedEvents ==null || timedEvents == undefined){
                                 game.combat.setFlag("ModularFate","timedEvents",[
-                                                                                        {   "round":`${document.getElementById("eventExchange").value}`,
-                                                                                            "event":`${document.getElementById("eventToCreate").value}`,
-                                                                                            "complete":false
-                                                                                        }
+                                                                                    {   "round":`${teDialog.find("#eventExchange")[0].value}`,
+                                                                                        "event":`${teDialog.find("#eventToCreate")[0].value}`,
+                                                                                        "complete":false
+                                                                                    }
                                                                                 ])
                                                                                 timedEvents=game.combat.getFlag("ModularFate","timedEvents");
                             } else {
                                 timedEvents.push({   
-                                                    "round":`${document.getElementById("eventExchange").value}`,
-                                                    "event":`${document.getElementById("eventToCreate").value}`,
+                                                    "round":`${teDialog.find("#eventExchange")[0].value}`,
+                                                    "event":`${teDialog.find("#eventToCreate")[0].value}`,
                                                     "complete":false
                                 });
                                 game.combat.setFlag("ModularFate","timedEvents",timedEvents);
