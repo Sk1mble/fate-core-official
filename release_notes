@@ -1,3 +1,9 @@
+# Version 3.0.9
+  * Fixed a bug with the hasacted status of actors when removed from the conflict via right-clicking them in the action tracker.
+  * HasActed flag is now applied to combatants rather than tokens, this solves a lot of ghostly 'hasacted' issues.
+  * Fixed issues with the clear stress button in FU
+  * Creating a new conflict with FU and cycling through conflicts in FU now working again.
+
 # Version 3.0.8
   * Creation of timed events now works regardless of whether the Fate Utilities window is popped out or not.
 

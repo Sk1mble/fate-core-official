@@ -32,6 +32,7 @@ class FateUtilities extends Application{
         addConflict.on("click", async (event) => {
             let cbt = await Combat.create({scene: game.scenes.viewed.id});
             await cbt.activate();
+            ui.combat.initialize({cbt});
         })
 
         const nextConflict = html.find('button[id="next_conflict"]');
@@ -41,7 +42,9 @@ class FateUtilities extends Application{
             let index = combats.indexOf(combat);
             index ++;
             if (index >= combats.length) index = 0;
-            await combats[index].activate();
+            let nextCombat = combats[index];
+            await nextCombat.activate();
+            ui.combat.initialize({nextCombat});
         })
 
         const input = html.find('input[type="text"], input[type="number"], textarea');
@@ -394,6 +397,13 @@ class FateUtilities extends Application{
         
         aspect.name = event.target.value;
         let value = aspect.free_invokes;
+
+        if (aspect.name == ""){
+            if (drawing != undefined){
+                game.scenes.viewed.deleteEmbeddedDocuments ("Drawing", [drawing.id]);
+                return;
+            }
+        }
 
         if (drawing != undefined){
             let text;
@@ -763,7 +773,7 @@ class FateUtilities extends Application{
             }
             updates.push({"_id":token.actor.id,"data.details.fatePoints.current":current})
         }
-        Actor.updateDocuments(updates)
+        Actor.updateDocuments(updates);
     }
 
     async _edit_player_points(event, html){
@@ -895,7 +905,7 @@ class FateUtilities extends Application{
                 drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
             }
             if (drawing != undefined){
-                drawing.delete();
+                game.scenes.viewed.deleteEmbeddedDocuments("Drawing", [drawing.id]);
             }
         }
     }
@@ -947,9 +957,38 @@ class FateUtilities extends Application{
 
     async _clear_fleeting(event, html){
         let tokens = game.scenes.viewed.tokens.contents;
+        let updates = [];
+        let tokenUpdates = [];
+
         for (let i = 0; i<tokens.length; i++){
-            this.clearFleeting(tokens[i].actor)
+            let tracks = {};    
+            let actor = tokens[i].actor;
+
+            if (actor.data.data.tracks == undefined){
+                return
+            }
+
+            tracks = duplicate (actor.data.data.tracks);
+            for (let t in tracks){
+                let track = tracks[t];
+                if (track.recovery_type == "Fleeting"){
+                    for (let i = 0; i < track.box_values.length; i++){
+                        track.box_values[i] = false;
+                    }
+                    if (track.aspect.name != undefined){
+                        track.aspect.name = "";
+                    }
+                }
+            }
+
+            if (!actor.isToken){  
+                updates.push({"_id":actor.id, "data.tracks":tracks});
+            } else {
+                tokenUpdates.push({"_id":tokens[i].id, "actorData.data.tracks":tracks});
+            }
         }
+        await Actor.updateDocuments(updates);
+        await game.scenes.viewed.updateEmbeddedDocuments("Token", tokenUpdates);
     }
 
     async _on_aspect_change(event, html){
@@ -979,9 +1018,9 @@ class FateUtilities extends Application{
             await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
             let d = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(previousText));
             try {
-                d.delete();
+                game.scenes.viewed.deleteEmbeddedDocuments("Drawing", [d.id])
             } catch (err) {
-
+                console.log(err);
             }
             return;
         }
@@ -1068,15 +1107,15 @@ class FateUtilities extends Application{
         let id = event.target.id.split("_")[0];
 
         if (type.startsWith("act")){
-            let t_id = id;
-            let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
-            await token.actor.setFlag("ModularFate","hasActed", true);
+            let combatants = game.combat.combatants;
+            let combatant = combatants.find(comb => comb.token.id == id);
+            await combatant.setFlag("ModularFate","hasActed", true);
         }
 
         if (type === "unact"){
-            let t_id = id;
-            let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
-            await token.actor.setFlag("ModularFate","hasActed", false);
+            let combatants = game.combat.combatants;
+            let combatant = combatants.find(comb => comb.token.id == id);
+            await combatant.setFlag("ModularFate","hasActed", false);
         }
 
         if (type === "find"){
@@ -1099,46 +1138,21 @@ class FateUtilities extends Application{
     }
 
     async _onPopcornRemove(event, html){
-        
         let id = event.target.id.split("_")[0];
         await game.combats.active.getCombatantByToken(id).delete();
-        let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);;
-        await token.setFlag("ModularFate","hasActed",false);
     }
 
     async _endButton(event, html){
-        let combatants = game.combat.combatants;
         let fin = await Promise.resolve(game.combat.endCombat());
-        if (fin != false){
-                let updates = combatants.map(combatant => {
-                                let update = {};
-                                update._id = combatant.token.actor.id;
-                                update.flags = {
-                                                    "ModularFate":
-                                                    {
-                                                        "hasActed":false
-                                                    }
-                                                }        
-                                        return update;
-                                })
-            await Actor.updateDocuments(updates);
-        }
     }
 
     async _nextButton(event, html){
         let combatants = game.combat.combatants;
-            let updates = combatants.map(combatant => {
-                            let update = {};
-                            update._id = combatant.actor.id;
-                            update.flags = {
-                                                "ModularFate":
-                                                {
-                                                    "hasActed":false
-                                                }
-                                            }        
-                                    return update;
-                            })
-        await Actor.updateDocuments(updates);
+        let updates = [];
+        combatants.forEach(async comb => {
+            updates.push({"_id":comb.id, "flags.ModularFate.hasActed":false})
+        })
+        await game.combat.updateEmbeddedDocuments("Combatant", updates);
         game.combat.nextRound();
     }
 
@@ -1209,7 +1223,7 @@ async getData(){
                     hidden = true;
                 } 
 
-                hasActed = foundToken.actor.getFlag("ModularFate","hasActed");                       
+                hasActed = comb.getFlag("ModularFate","hasActed");                       
                 
                 if ((hasActed == undefined || hasActed == false) && hidden == false){
                     tokens.push(foundToken)
@@ -1356,31 +1370,7 @@ async renderMe(...args){
           this.delayedRender = false;
           this.renderPending = false;
         }, 0);
-      }
-}
-
-async clearFleeting(object){
-        //This is a convenience method which clears all fleeting Tracks.
-        let tracks = {};
-        let updates = [];
-        if (object.data.data.tracks != undefined) {
-            tracks = duplicate(object.data.data.tracks);
-        }
-        
-        for (let t in tracks){
-            let track = tracks[t];
-            if (track.recovery_type == "Fleeting"){
-                for (let i = 0; i < track.box_values.length; i++){
-                    track.box_values[i] = false;
-                }
-                if (track.aspect.name != undefined){
-                    track.aspect.name = "";
-                }
-            }
-        }
-        updates.push({"_id":object.id, ["data.tracks"]:tracks})
-        
-        Actor.updateDocuments(updates)
+      } 
     }
 }
 
