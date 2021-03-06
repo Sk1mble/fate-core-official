@@ -964,11 +964,7 @@ class FateUtilities extends Application{
             let tracks = {};    
             let actor = tokens[i].actor;
 
-            if (actor.data.data.tracks == undefined){
-                return
-            }
-
-            tracks = duplicate (actor.data.data.tracks);
+            if (actor.data.data.tracks != undefined) tracks = duplicate (actor.data.data.tracks);
             for (let t in tracks){
                 let track = tracks[t];
                 if (track.recovery_type == "Fleeting"){
@@ -986,7 +982,7 @@ class FateUtilities extends Application{
             } else {
                 tokenUpdates.push({"_id":tokens[i].id, "actorData.data.tracks":tracks});
             }
-        }
+        } 
         await Actor.updateDocuments(updates);
         await game.scenes.viewed.updateEmbeddedDocuments("Token", tokenUpdates);
     }
