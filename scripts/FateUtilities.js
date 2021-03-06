@@ -1208,7 +1208,7 @@ async getData(){
                 }
 
                 if (foundToken == undefined){
-                    return;
+                    break;
                 }
 
                 if (comb.defeated){
