@@ -209,15 +209,6 @@ Hooks.on('updateToken', (scene, token, data) => {
     }
 })
 
-Hooks.on('updateCombatant', (scene, combatant, data) => {
-    if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined){
-        game.system.apps["actor"].forEach(a=> {
-            a.renderMe(combatant.id, data, combatant);
-        })
-    }
-})
-
-
 Hooks.on('controlToken', (token, control) => {
         game.system.apps["actor"].forEach (a=> {
             a.renderMe("controlToken",token.id, control);
