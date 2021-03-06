@@ -1139,7 +1139,7 @@ class FateUtilities extends Application{
 
     async _onPopcornRemove(event, html){
         let id = event.target.id.split("_")[0];
-        await game.combats.active.getCombatantByToken(id).delete();
+        await game.combat.getCombatantByToken(id).delete();
     }
 
     async _endButton(event, html){
