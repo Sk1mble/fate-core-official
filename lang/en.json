@@ -1,4 +1,8 @@
 {
+    "ModularFate.OrderAspectsTitle":"Default Aspect Order Setup for ",
+    "ModularFate.OrderAspects":"Set order for Aspects on new sheets",
+    "ModularFate.OrderTracksTitle":"Default Track Order Setup for ",
+    "ModularFate.OrderTracks":"Set order for tracks on new sheets",
     "ModularFate.aspectFromTrack":"This aspect is from a character's track and can't be edited here.",
     "ModularFate.NextConflict":"Cycle to next conflict in this scene.",
     "ModularFate.AddConflict":"Add a new conflict to this scene.",

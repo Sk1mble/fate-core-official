@@ -90,7 +90,7 @@ class AspectSetup extends FormApplication{
         options.template = "systems/ModularFate/templates/AspectSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.SetupAspectsForWorld")} ${game.world.title}`;
+        options.title = `${game.i18n.localize("ModularFate.SetupAspectsForWorld")} ${game.world.data.title}`;
         options.closeOnSubmit = false;
         options.id = "AspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -116,6 +116,7 @@ class AspectSetup extends FormApplication{
         const exportAspect = html.find("button[id='exportAspect']");
         const importAspects = html.find("button[id='importAspects']");
         const exportAspects = html.find("button[id='exportAspects']");
+        const orderAspects = html.find("button[id='orderAspects']");
 
         editButton.on("click", event => this._onEditButton(event, html));
         deleteButton.on("click", event => this._onDeleteButton(event, html));
@@ -125,9 +126,16 @@ class AspectSetup extends FormApplication{
         exportAspect.on("click", event => this._onExportAspect(event, html));
         importAspects.on("click", event => this._onImportAspects(event, html));
         exportAspects.on("click", event => this._onExportAspects(event, html));
+        orderAspects.on("click", event => this._onOrderAspects(event, html));
     }
 
     //Here are the event listener functions.
+
+    async _onOrderAspects (event, html){
+        let oa = new OrderAspects();
+        oa.manageAspects = this;
+        oa.render(true);
+    }
 
     async _onExportAspect(event, html){
         let aspects = game.settings.get("ModularFate","aspects");
@@ -330,3 +338,71 @@ class EditAspect extends FormApplication{
 Hooks.on('closeEditAspect',async () => {
     game.system.manageAspects.render(true);
 })
+
+Hooks.on('closeOrderAspects', async () => {
+    game.system.manageAspects.render(true);
+})
+
+class OrderAspects extends FormApplication {
+    constructor(...args){
+        super(...args);
+        let aspects = game.settings.get("ModularFate", "aspects");
+        this.data = [];
+        for (let aspect in aspects){
+            this.data.push(aspects[aspect]);
+        }
+    }
+    //Set up the default options for instances of this class
+    static get defaultOptions() {
+        const options = super.defaultOptions; //begin with the super's default options
+        //The HTML file used to render this window
+        options.template = "systems/ModularFate/templates/OrderAspects.html"; 
+        options.width = "auto";
+        options.height = "auto";
+        options.title = `${game.i18n.localize("ModularFate.OrderAspectsTitle")} ${game.world.data.title}`;
+        options.closeOnSubmit = true;
+        options.id = "OrderAspects"; // CSS id if you want to override default behaviors
+        options.resizable = false;
+        return options;
+    }
+    //The function that returns the data model for this window. In this case, we need the list of stress tracks
+    //conditions, and consequences.
+    getData(){
+        return this.data;
+    }
+
+        //Here are the action listeners
+        activateListeners(html) {
+        super.activateListeners(html);
+        const oa_up = html.find("button[name='oa_up']");
+        const oa_down = html.find("button[name='oa_down']");
+        const oa_save = html.find("button[id='oa_save']");
+        
+        oa_up.on("click", event => {
+            let index = parseInt(event.target.id.split("_")[2]);
+            if (index > 0){
+                let aspect = this.data.splice(index,1)[0];
+                this.data.splice(index - 1, 0, aspect);
+                this.render(false);
+            }
+        })
+
+        oa_down.on("click", event => {
+            let index = parseInt(event.target.id.split("_")[2]);
+            if (index < this.data.length){
+                let aspect = this.data.splice(index, 1)[0];
+                this.data.splice(index + 1, 0, aspect);
+                this.render(false);
+            }
+        })
+
+        oa_save.on("click", async event => {
+            let aspects = {};
+            for (let i = 0; i < this.data.length; i++){
+                aspects[this.data[i].name] = this.data[i];
+            }
+            await game.settings.set("ModularFate", "aspects", aspects);
+            this.close();
+        })
+    }
+}

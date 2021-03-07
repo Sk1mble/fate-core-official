@@ -184,7 +184,7 @@ class SkillSetup extends FormApplication{
         options.template = "systems/ModularFate/templates/SkillSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.SetupSkillsTitle")} ${game.world.title}`;
+        options.title = `${game.i18n.localize("ModularFate.SetupSkillsTitle")} ${game.world.data.title}`;
         options.closeOnSubmit = false;
         options.id = "SkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;

@@ -448,7 +448,7 @@ class TrackSetup extends FormApplication{
         options.template = "systems/ModularFate/templates/TrackSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.TrackCategorySetup")} ${game.world.title}`;
+        options.title = `${game.i18n.localize("ModularFate.TrackCategorySetup")} ${game.world.data.title}`;
         options.closeOnSubmit = false;
         options.id = "TrackSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -473,8 +473,9 @@ class TrackSetup extends FormApplication{
         const addCategoryButton = html.find("button[id='add_category']");
         const editTracksButton = html.find("button[id='edit_tracks']");
         const selectBox = html.find("select[id='track_categories_select']");
-        const importTracks = html.find("button[id='import_tracks']")
-        const exportTracks = html.find("button[id='export_tracks']")
+        const importTracks = html.find("button[id='import_tracks']");
+        const exportTracks = html.find("button[id='export_tracks']");
+        const orderTracks = html.find("button[id='order_tracks']");
 
         deleteCategoryButton.on("click", event => this._onDeleteCategoryButton(event, html));
         addCategoryButton.on("click", event => this._onAddCategoryButton(event, html));
@@ -482,9 +483,15 @@ class TrackSetup extends FormApplication{
         selectBox.on("dblclick", event => this._onEditTracksButton(event,html));
         importTracks.on("click", event => this._importTracks(event,html));
         exportTracks.on("click", event => this._exportTracks(event,html));
+        orderTracks.on("click", event => this._orderTracks (event, html));
     }
     
     //Here are the event listener functions.
+
+    async _orderTracks (event, html){
+        let ot = new OrderTracks();
+        ot.render(true);
+    }
 
     async _exportTracks(event, html){
         let tracks = game.settings.get("ModularFate","tracks");
@@ -601,3 +608,67 @@ Hooks.on('closeEditTracks',async () => {
         // Do nothing.
     }
 })
+
+class OrderTracks extends FormApplication {
+    constructor(...args){
+        super(...args);
+        let tracks = game.settings.get("ModularFate", "tracks");
+        this.data = [];
+        for (let track in tracks){
+            this.data.push(tracks[track]);
+        }
+    }
+    //Set up the default options for instances of this class
+    static get defaultOptions() {
+        const options = super.defaultOptions; //begin with the super's default options
+        //The HTML file used to render this window
+        options.template = "systems/ModularFate/templates/OrderTracks.html"; 
+        options.width = "auto";
+        options.height = "auto";
+        options.title = `${game.i18n.localize("ModularFate.OrderTracksTitle")} ${game.world.data.title}`;
+        options.closeOnSubmit = true;
+        options.id = "OrderTracks"; // CSS id if you want to override default behaviors
+        options.resizable = false;
+        return options;
+    }
+    //The function that returns the data model for this window. In this case, we need the list of stress tracks
+    //conditions, and consequences.
+    getData(){
+        return this.data;
+    }
+
+        //Here are the action listeners
+        activateListeners(html) {
+        super.activateListeners(html);
+        const ot_up = html.find("button[name='ot_up']");
+        const ot_down = html.find("button[name='ot_down']");
+        const ot_save = html.find("button[id='ot_save']");
+        
+        ot_up.on("click", event => {
+            let index = parseInt(event.target.id.split("_")[2]);
+            if (index > 0){
+                let track = this.data.splice(index,1)[0];
+                this.data.splice(index - 1, 0, track);
+                this.render(false);
+            }
+        })
+
+        ot_down.on("click", event => {
+            let index = parseInt(event.target.id.split("_")[2]);
+            if (index < this.data.length){
+                let track = this.data.splice(index, 1)[0];
+                this.data.splice(index + 1, 0, track);
+                this.render(false);
+            }
+        })
+
+        ot_save.on("click", event => {
+            let tracks = {};
+            for (let i = 0; i < this.data.length; i++){
+                tracks[this.data[i].name] = this.data[i];
+            }
+            game.settings.set("ModularFate", "tracks", tracks);
+            this.close();
+        })
+    }
+}
