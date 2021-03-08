@@ -68,10 +68,10 @@
                                             <div style="font-size:{{../fontSize}}pt; font-family:Montserrat;">
                                                 {{#each this.actor.data.data.aspects}}
                                                 <div {{#if (eq @index 0)}}style="display:flex; flex-direction:row; align-items:top; padding:0.2em;"{{else}}style="display:flex; flex-direction:row; align-items:top; padding:0.2em; border-top:groove;"{{/if}}>
-                                                    <span style="width:25%; text-align:left">
+                                                    <span style="min-width:{{../../aspectLabelWidth}}em; max-width:{{../../aspectLabelWidth}}em; text-align:left">
                                                         <div name="FUexpandAspect" style="cursor:pointer; width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; background-color:Transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_aspect'))}}icon class="fas fa-compress fuExpandAspect fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fuExpandAspect fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandAspect"></div><b style="padding:5px">{{this.name}}:</b>                                
                                                     </span>
-                                                    <span style="width:75%; text-align:left">
+                                                    <span style="text-align:left">
                                                         {{this.value}}
                                                     </span>
                                                 </div>    
@@ -123,10 +123,10 @@
                                             <div style="font-size:{{../fontSize}}pt; font-family:Montserrat;">
                                                 {{#each this.actor.data.data.aspects}}
                                                 <div {{#if (eq @index 0)}}style="display:flex; flex-direction:row; align-items:top; padding:3px;"{{else}}style="display:flex; flex-direction:row; align-items:top; padding:3px; border-top:groove;"{{/if}}>
-                                                     <span style="width:25%; text-align:left">
+                                                     <span style="min-width:{{../../aspectLabelWidth}}em; max-width:{{../../aspectLabelWidth}}em; text-align:left">
                                                         <div name="FUexpandAspect" style="cursor:pointer; width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; background-color:Transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_aspect'))}}icon class="fas fa-compress fuExpandAspect fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fuExpandAspect fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandAspect"></div><b style="padding:5px">{{this.name}}:</b>                                
                                                     </span>
-                                                     <span style="width:75%; text-align:left;">
+                                                     <span style="text-align:left;">
                                                         {{this.value}}
                                                     </span>
                                                 </div>    
@@ -165,7 +165,7 @@
                         {{#each all_tokens}}
                         {{#if this.actor.hasPlayerOwner}}
                         <table class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
-                            <tr style="border-top:2px black solid">
+                            <tr style="border-top:2px black solid;">
                                 <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'ModularFate.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
                                     <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{/if}}></button>
                                     {{this.name}}
@@ -175,7 +175,7 @@
                         {{#each this.actor.data.data.tracks}}
                         {{#if (category ../../category this.category)}}{{#if this.enabled}}
                         <tr>
-                            <td style="vertical-align:top; width:18em">
+                            <td style="vertical-align:top; width:18em; padding-left:15px">
                                 <div name="FUexpandTrack" style="width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; cursor:pointer; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress fu_button fuExpandAspect" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button fuExpandAspect fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></div><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal; font-size:{{../../fontSize}}pt">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br> <span style="padding-left:27px; font-size:{{../../fontSize}}pt">{{localize 'ModularFate.Notes'}}:</span>{{/if}}</div>
                             </td>
                             <td style="vertical-align:top">
@@ -210,7 +210,7 @@
                         {{#each this.actor.data.data.tracks}}
                         {{#if (category ../../category this.category)}}{{#if this.enabled}}
                         <tr>
-                            <td style="vertical-align:top; width:18em">
+                            <td style="vertical-align:top; width:18em; padding-left:15px">
                                 <div name="FUexpandTrack" style="width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; cursor:pointer; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress fuExpandAspect fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fuExpandAspect fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></div><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal; font-size:{{../../fontSize}}pt">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br> <span style="padding-left:27px; font-size:{{../../fontSize}}pt">{{localize 'ModularFate.Notes'}}:</span>{{/if}}</div>
                             </td>
                             <td style="vertical-align:top; font-size:{{../../fontSize}}">

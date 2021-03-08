@@ -1313,6 +1313,7 @@ async getData(){
     if (gaModifier <0) gaModifier = 0;
     data.gameNotesHeight = (this.position.height - 525) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
+    data.aspectLabelWidth = game.settings.get("ModularFate","aspectwidth");
     
     return data;
 }

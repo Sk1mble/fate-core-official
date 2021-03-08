@@ -1,4 +1,5 @@
 {
+    "ModularFate.AspectLabelWidth":"How wide should aspect labels be in FU in em?",
     "ModularFate.OrderAspectsTitle":"Default Aspect Order Setup for ",
     "ModularFate.OrderAspects":"Set order for Aspects on new sheets",
     "ModularFate.OrderTracksTitle":"Default Track Order Setup for ",
