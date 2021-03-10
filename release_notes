@@ -1,3 +1,6 @@
+# Version 3.0.13
+  * Added an option to render all drawings on top of all other layers, making it easier to see aspect labels etc. when there is lighting, walls etc. present.
+
 # Version 3.0.12
   * Made the size of aspect labels in Fate Utilites a fixed width in em, defaulting to 12.
   * Added a setting to configure the width of aspect labels in FU so that users can set this between 5em and 50em.
