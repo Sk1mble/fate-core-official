@@ -280,6 +280,15 @@ Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = ModularFateActor;
     CONFIG.fontFamilies.push("Montserrat");
 
+    game.settings.register("ModularFate","drawingsOnTop", {
+        name:game.i18n.localize("ModularFate.DrawingsOnTop"),
+        hint:game.i18n.localize("ModularFate.DrawingsOnTopHint"),
+        scope:"world",
+        config:"true",
+        type:Boolean,
+        default:false
+    })
+
     game.settings.register("ModularFate","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",
         hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
@@ -477,3 +486,26 @@ Combatant.prototype._getInitiativeFormula = function () {
         return `1d0+${this.actor.data.data.skills[init_skill].rank}`;
     }
 }
+
+// Custom drawings layer with different z index
+class CustomDrawingsLayer extends DrawingsLayer {
+    static get layerOptions() {
+        const options = super.layerOptions;
+        options.zIndex = 350;
+        return options;
+    }
+}
+
+Hooks.on("init", () => {
+    if (game.settings.get ("ModularFate", "drawingsOnTop")){
+        // Force Canvas to use the new DrawingsLayer
+        const existingLayers = Canvas.layers;
+        existingLayers.drawings = CustomDrawingsLayer;
+        Object.defineProperty(Canvas, "layers", { get: () => existingLayers });
+    }
+});
+
+Hooks.on("getSceneControlButtons", (controls) => {
+    controls.find(c => c.name === "drawings").layer = "CustomDrawingsLayer";
+})
+

@@ -1,4 +1,6 @@
 {
+    "ModularFate.DrawingsOnTop":"Render all drawings on top of other canvas elements?",
+    "ModularFate.DrawingsOnTopHint":"If 'true', all drawings (e.g. aspect labels) will be rendered on top of all other canvas elements including tokens (refresh required).",
     "ModularFate.AspectLabelWidth":"How wide should aspect labels be in FU in em?",
     "ModularFate.OrderAspectsTitle":"Default Aspect Order Setup for ",
     "ModularFate.OrderAspects":"Set order for Aspects on new sheets",
