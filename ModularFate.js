@@ -506,6 +506,8 @@ Hooks.on("init", () => {
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {
-    controls.find(c => c.name === "drawings").layer = "CustomDrawingsLayer";
+    if (game.settings.get ("ModularFate", "drawingsOnTop")){
+        controls.find(c => c.name === "drawings").layer = "CustomDrawingsLayer";
+    }
 })
 
