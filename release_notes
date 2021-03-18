@@ -1,3 +1,6 @@
+# Version 3.0.14
+  * Added a Notes field to characters and a tab to the character sheet for this so that players and GMs can make detailed notes on their character sheet rather than in a journal entry.
+
 # Version 3.0.13
   * Added an option to render all drawings on top of all other layers, making it easier to see aspect labels etc. when there is lighting, walls etc. present.
 
