@@ -10,6 +10,9 @@
 					"biography": {
 						"value": ""
 					},
+					"notes": {
+						"value": ""
+					},
 					"fatePoints": {
 						"current":"",
 						"refresh":""

@@ -63,7 +63,7 @@ export class ModularFateCharacter extends ActorSheet {
         options.resizable=true;
         options.width = "1000"
         options.height = "1000"
-        options.scrollY = ["#skills_body", "#aspects_body","#tracks_body", "#stunts_body", "#biography_body"]
+        options.scrollY = ["#skills_body", "#aspects_body","#tracks_body", "#stunts_body", "#biography_body", "#notes_body"]
         mergeObject(options, {
             tabs: [
                 {
@@ -148,6 +148,10 @@ export class ModularFateCharacter extends ActorSheet {
 
             const bio = html.find(`div[id='${this.object.id}_biography']`)
             bio.on("focus",event => this._onBioInput(event, html));
+
+            const notes = html.find (`div[id='${this.object.id}_notes']`);
+            notes.on("focus", event => this._onNotesInput(event, html));
+
             const desc = html.find(`div[id='${this.object.id}_description']`)
             desc.on("focus",event => this._onDescInput(event, html));
             bio.on("blur", event => this._onBioFocusOut(event, html));
@@ -507,6 +511,10 @@ export class ModularFateCharacter extends ActorSheet {
     }
 
     async _onBioInput(event, html){
+        this.editing = true;
+    }
+
+    async _onNotesInput(event, html) {
         this.editing = true;
     }
 

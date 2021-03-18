@@ -72,6 +72,10 @@
     display: flex !important;
 }
 
+.notes-body {
+    margin-top:10px;
+}
+
 .sheet-body {
     grid-area: content;
     overflow: hidden;
@@ -285,6 +289,15 @@
     min-height: 30px;
     border-radius: 15px;
     margin-top: 10px;
+}
+
+.mfate-sheet-notes {
+    min-height: 95%;
+    max-height: 95%;
+    overflow-y: auto;
+    background-color:white !important;
+    font-family:Montserrat !important;
+    font-size:10pt;
 }
 
 .mfate-panel__header-select {
@@ -582,6 +595,14 @@
     margin-bottom: 10px;
 }
 
+.mfate-notes {
+    display:flex;
+    flex-direction:column;
+    flex-grow:1;
+    flex-shrink:1;
+    min-height:20%;
+}
+
 .mfate-biography-collapsed {
     height:2.5rem;
 }
@@ -592,11 +613,12 @@
 
 .mfate-description__content,
 .mfate-biography__content,
-.mfate-extras__content {
+.mfate-extras__content 
+.mfate-notes__content {
     flex-grow:1;
     flex-shrink:1;
     margin:10px;
-    overflow-y:auto;
+    
 }
 
 .mthing-extras__content {

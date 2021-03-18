@@ -48,11 +48,26 @@
                     <span class="sr-only">{{localize 'ModularFate.BiographyAndExtras'}}</span>
                     <b title="{{localize 'ModularFate.BiographyAndExtras'}}" class="fas fa-portrait mfate-sheet__tabs-nav-icon"></b>
                 </a>
+                <a class="mfate-sheet__tabs-nav-link item" data-tab="notes">
+                    <span class="sr-only">{{localize 'ModularFate.Notes'}}</span>
+                    <b title="{{localize 'ModularFate.Notes'}}" class="fas fa-file-alt mfate-sheet__tabs-nav-icon"></b>
+                </a>
             </nav>
         </div>
     </div>
 
     <section class="sheet-body">
+        <div class = "tab notes mfate-sheet__tab mfate-sheet__tab--main" name="notes" data-tab="notes" style="font-style:normal; padding-bottom:6px; padding-left:6px; padding-right:6px">
+            <div class="mfate-notes" style="max-height:100%">
+                <div class="mfate-panel__header">
+                    <div class="mfate-panel__header-label">{{localize 'ModularFate.Notes'}}</div>
+                </div>
+                <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
+                    <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" contenteditable="true" name="data.details.notes.value" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                </div>
+            </div>
+        </div>
+
         <div class="tab sheet mfate-sheet__tab mfate-sheet__tab--main" name="character_sheet" data-tab="sheet">
             <!-- PANELS START -->
             <div class="mfate-sheet__column">
