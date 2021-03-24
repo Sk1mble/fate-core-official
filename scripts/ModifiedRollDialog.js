@@ -21,7 +21,7 @@ class ModifiedRollDialog extends Application {
         roll.on("click",event => this.on_roll_click(event, html));
     }
 
-    on_roll_click(event, html){
+    async on_roll_click(event, html){
         let total_modifier = 0;     
         let modifier = html.find("input[id='modifier']")[0].value;
 
@@ -63,7 +63,7 @@ class ModifiedRollDialog extends Application {
         }
 
         let r = new Roll(`4dF + ${total_modifier}`);
-        let roll = r.roll();
+        let roll = await r.roll();
 
         let msg = ChatMessage.getSpeaker(this.actor)
         msg.alias = this.actor.name;

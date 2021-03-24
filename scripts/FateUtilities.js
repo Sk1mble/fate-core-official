@@ -543,7 +543,7 @@ class FateUtilities extends Application{
             } else {
                 r = new Roll(`4dF + ${rank}`);
             }
-                let roll = r.roll();
+                let roll = await r.roll();
                 let name = game.user.name
 
                 let flavour;
@@ -603,7 +603,7 @@ class FateUtilities extends Application{
 
         if (action == "reroll"){
             let r = new Roll ("4dF");
-            let r2 = r.roll();
+            let r2 = await r.roll();
             r2.toMessage({
                 flavor: `<h1>${game.i18n.localize("ModularFate.FreeRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
             });
@@ -678,7 +678,7 @@ class FateUtilities extends Application{
                 } else {
                     user.setFlag("ModularFate","gmfatepoints",fps-1);
                     let r = new Roll ("4dF");
-                    let r2 = r.roll();
+                    let r2 = await r.roll();
                     r2.toMessage({
                         flavor: `<h1>${game.i18n.localize("ModularFate.PaidRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
                     });
@@ -709,7 +709,7 @@ class FateUtilities extends Application{
                         char.update({"data.details.fatePoints.current":fps-1})
                         roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvokeReroll")}`
                         let r = new Roll ("4dF");
-                        let r2 = r.roll();
+                        let r2 = await r.roll();
                         r2.toMessage({
                             flavor: `<h1>${game.i18n.localize("ModularFate.PaidRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
                         });

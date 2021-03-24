@@ -1,3 +1,6 @@
+# Version 3.0.15
+  * Added 'await' to all rolls in preparation for async rolls in 0.8.1.
+
 # Version 3.0.14
   * Added a Notes field to characters and a tab to the character sheet for this so that players and GMs can make detailed notes on their character sheet rather than in a journal entry.
 

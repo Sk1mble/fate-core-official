@@ -483,7 +483,7 @@ export class ModularFateCharacter extends ActorSheet {
         let rung = ladder[rankS];
 
         let r = new Roll(`4dF + ${rank}+${bonus}`);
-        let roll = r.roll();
+        let roll = await r.roll();
 
         let msg = ChatMessage.getSpeaker(this.object.actor)
         msg.alias = this.object.name;
@@ -692,7 +692,7 @@ export class ModularFateCharacter extends ActorSheet {
             let ladder = ModularFateConstants.getFateLadder();
             let rankS = rank.toString();
             let rung = ladder[rankS];
-            let roll = r.roll();
+            let roll = await r.roll();
 
             let msg = ChatMessage.getSpeaker(this.object.actor)
             msg.alias = this.object.name;
