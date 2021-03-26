@@ -75,7 +75,7 @@ export class Thing extends ActorSheet {
                 
                     container = new Item(this.actor.data.data.container.extra);
                 } else {
-                    console.log(this.actor.data.data.container.extra)
+                    // console.log(this.actor.data.data.container.extra)
                     container = new Item(this.actor.data.data.container.extra);
                 }
 
@@ -363,10 +363,7 @@ async function checkContainer (actor){
     }
 }
 
-async function createThing (canvas_scene, data, user_id, shiftDown){
-    console.log("Entering CreateThing");
-    console.log(data)
-    
+async function createThing (canvas_scene, data, user_id, shiftDown){    
     if (data.type != "Item" && data.type != "Extra"){
         return;
     }

@@ -373,7 +373,7 @@ class EditGMSkills extends FormApplication{
         const selectAll = html.find("button[id='select_all_skills_button']");
         selectAll.on("click", event => {
             const boxes = $("input[class='skill_check_box']");
-            console.log(boxes);
+    
             for (let box of boxes){
                 box.checked = true;
             }
@@ -382,7 +382,7 @@ class EditGMSkills extends FormApplication{
         const deSelectAll = html.find("button[id='deselect_all_skills_button']");
         deSelectAll.on("click", event => {
             const boxes = $("input[class='skill_check_box']");
-            console.log(boxes);
+            
             for (let box of boxes){
                 box.checked = false;
             }

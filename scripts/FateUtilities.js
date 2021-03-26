@@ -308,7 +308,6 @@ class FateUtilities extends Application{
         avatar.on("contextmenu", event=> this._on_avatar_click(event,html));
         
         avatar.on("click", event => {
-            console.log(event.target.id)
             let t_id = event.target.id.split("_")[0];
             let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
             const sheet = token.actor.sheet;
@@ -1016,7 +1015,7 @@ class FateUtilities extends Application{
             try {
                 game.scenes.viewed.deleteEmbeddedDocuments("Drawing", [d.id])
             } catch (err) {
-                console.log(err);
+                //console.log(err);
             }
             return;
         }

@@ -156,6 +156,7 @@ export class ModularFateCharacter extends ActorSheet {
             desc.on("focus",event => this._onDescInput(event, html));
             bio.on("blur", event => this._onBioFocusOut(event, html));
             desc.on("blur", event => this._onDescFocusOut(event, html));
+            notes.on("blur", event => this._onNotesFocusOut(event, html));
 
             const stunt_roll = html.find("button[name='stunt_name']");
             stunt_roll.on("click", event => this._on_stunt_roll_click(event,html));
@@ -503,6 +504,13 @@ export class ModularFateCharacter extends ActorSheet {
         this.render(false);
     }
 
+    async _onNotesFocusOut (event, html){
+        this.editing = false;
+        let notes = event.target.innerHTML;
+        await this.object.update({"data.details.notes.value":notes})
+        this.render(false);
+    }
+
     async _onDescFocusOut (event, html){
         this.editing = false;
         let desc = event.target.innerHTML;
@@ -716,8 +724,9 @@ export class ModularFateCharacter extends ActorSheet {
 
         this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         this.freeStunts = game.settings.get("ModularFate", "freeStunts");
-
+    
         const sheetData = this.document.data;
+        //const sheetData = await super.getData().actor.data;
 
         let numStunts = Object.keys(sheetData.data.stunts).length;
         let paidTracks = 0;
@@ -733,14 +742,14 @@ export class ModularFateCharacter extends ActorSheet {
             }
         }
 
-        this.object.items.contents.forEach(item => {
+        sheetData.items.contents.forEach(item => {
             let cost = parseInt(item.data.data.refresh);
             if (!isNaN(cost) && cost != undefined){
                 paidExtras += parseInt(item.data.data.refresh);
             }
         })
 
-        let stunts = this.object.data.data.stunts;
+        let stunts = sheetData.data.stunts;
         for (let s in stunts){
             paidStunts += parseInt(stunts[s].refresh_cost);
         }
@@ -789,7 +798,6 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.ordered_skills = ordered_skills;
         sheetData.sorted_by_rank = sorted_by_rank;
         sheetData.gameRefresh = game.settings.get("ModularFate", "refreshTotal");
-        sheetData.items=this.object.items;
 
         let skillTotal = 0;
         for (let s in ordered_skills) {
@@ -822,8 +830,8 @@ export class ModularFateCharacter extends ActorSheet {
         track_categories=Array.from(cats);
         sheetData.category = this.track_category;
         sheetData.track_categories = track_categories;
-        sheetData.tracks = this.object.data.data.tracks;
-        sheetData.stunts = this.object.data.data.stunts;
+        //sheetData.tracks = sheetData.data.tracks;
+        //sheetData.stunts = sheetData.data.stunts;
 
         return sheetData;
     }

@@ -121,7 +121,7 @@
                                 <div title="{{localize 'ModularFate.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_player_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
                             </div>
                             <div name="tracks_body" id="tracks_body" style="scrollbar-width:thin">
-                                {{#each tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}} 
+                                {{#each data.tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}} 
                                 <div class="mfate-tracks__list">
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
@@ -211,7 +211,7 @@
                         <!--Begin the stunts block-->
                         <div name="stunts_body mfate-stunts__body">
                             <div class="mfate-stunts__table">
-                                {{#each stunts}}
+                                {{#each data.stunts}}
                                 <div class="mfate-stunts__row">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">

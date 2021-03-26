@@ -1,13 +1,4 @@
 export class ModularFateActor extends Actor {
-
-    async prepareData (...args){
-        super.prepareData(...args);
-
-        if (this.data.type === "Thing"){
-            
-        }
-    }
-
     async updateFromExtra(itemData) {
         let actor = this;
     
