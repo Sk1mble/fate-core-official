@@ -393,7 +393,7 @@ class EditPlayerTracks extends FormApplication {
             await this.object.update({"data.tracks":tracks});             
         } else {
             await this.object.update({"data.tracks":[{"empty":"empty"}]}, {render:false}) //This is needed to make the game see a change in order of keys as a difference.
-            await this.object.update({"data.tracks":tracks});             
+            await this.object.update({"data.tracks":output});             
         }
     }
 

@@ -283,9 +283,10 @@ export class Thing extends ActorSheet {
         }
     }
 }
-
-Hooks.on('preCreateItem', (actor, itemData) => {
-    if (actor.data.type == "Thing") {
+//preCreate[documentName](document:Document, data:object, options:object, userId:string) {}
+Hooks.on('preCreateItem', (item) => {
+    let actor = item.parent;
+    if (actor?.data?.type == "Thing") {
         if (actor.items.contents.length == 1 && actor.data.data.container.isContainer == false){
             ui.notifications.error("This is not a container and can only represent a single Extra.");        
             return false;
@@ -297,7 +298,7 @@ Hooks.on('preCreateItem', (actor, itemData) => {
     }
 })
 
-Hooks.on('deleteToken', async (scene, token) => {
+Hooks.on('deleteToken', async (token) => {
     // Delete the actor associated with this token if it is a Thing.
     if (game.user == game.users.find(e => e.isGM && e.active)){
         let actor = game.actors.get(token?.actor?.id)
@@ -312,8 +313,9 @@ Hooks.on('deleteToken', async (scene, token) => {
     }
 })
 
-Hooks.on('deleteItem', async (actor) => {
-    if (actor.data.type !== "Thing"){
+Hooks.on('deleteItem', async (item) => {
+    let actor = item.parent;
+    if (actor?.data?.type !== "Thing"){
         return;
     }
 

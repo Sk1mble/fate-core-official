@@ -12,6 +12,16 @@
  *      This work is based on Fate Condensed (found at http://www.faterpg.com/), a product of Evil Hat Productions, LLC, 
  *      developed, authored, and edited by PK Sullivan, Ed Turner, Leonard Balsera, Fred Hicks, Richard Bellingham, Robert Hanz, Ryan Macklin, 
  *      and Sophie Lagacé, and licensed for our use under the Creative Commons Attribution 3.0 Unported license (http://creativecommons.org/licenses/by/3.0/).
+ *
+ * 
+ * Note to self: New standardised hook signatures:
+ * preCreate[documentName](document:Document, data:object, options:object, userId:string) {}
+ * create[documentName](document:Document, options:object, userId: string) {}
+ * preUpdate[documentName](document:Document, change:object, options:object, userId: string) {}
+ * update[documentName](document:Document, change:object, options:object, userId: string) {}
+ * preDelete[documentName](document:Document, options:object, userId: string) {}
+ * delete[documentName](document:Document, options:object, userId: string) {}
+
  */
 
 /* -------------------------------- */
@@ -23,7 +33,7 @@ import { ExtraSheet } from "./scripts/ExtraSheet.js"
 import { Thing } from "./scripts/Thing.js"
 import { ModularFateActor } from "./scripts/ModularFateActor.js"
 
-Hooks.on("preCreateActor", (actor, options, userId) => {
+Hooks.on("preCreateActor", async (actor, data, options, userId) => {
 
     if (actor.type == "Thing"){
         if (!options.thing){
@@ -35,13 +45,16 @@ Hooks.on("preCreateActor", (actor, options, userId) => {
     if (actor.type == "ModularFate"){
         if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
             if (actor?.data?.data?.details?.fatePoints?.refresh === ""){
-                actor = initialiseModularFateCharacter(actor);
+                let modified_data = await initialiseModularFateCharacter(actor);
+                data.data = modified_data.data;            
             }
         }
     }
 });
 
 async function initialiseModularFateCharacter (actor) {
+
+    //Modifies the data of the supplied actor to add tracks, aspects, etc. from system settings, then returns the data.
     let working_data = actor.data.toJSON();
     // Logic to set up Refresh and Current
 
@@ -187,7 +200,7 @@ async function initialiseModularFateCharacter (actor) {
             }
         }
     }
-    return actor;
+    return working_data;
 }
 
 Hooks.once('ready', async function () {
@@ -201,7 +214,7 @@ Hooks.once('ready', async function () {
 
 
 // Needed to update with token name changes in FU.
-Hooks.on('updateToken', (scene, token, data) => {
+Hooks.on('updateToken', (token, data, userId) => {
     if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined){
         game.system.apps["actor"].forEach(a=> {
             a.renderMe(token.id, data, token);
