@@ -739,7 +739,7 @@ export class ModularFateCharacter extends ActorSheet {
         const superData = super.getData();
         const sheetData = superData.data;
         sheetData.document = superData.actor;
-        sheetData.items = this.object.items.contents; // It's safe to use the actual items because we never edit them from here.
+        let items = this.object.items.contents; // It's safe to use the actual items because we never edit them from here.
         let superItems = superData.items;
         sheetData.items = [];
 
