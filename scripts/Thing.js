@@ -84,10 +84,10 @@ export class Thing extends ActorSheet {
                 contents.security = this.actor.data.data.container.security;
                 contents.extras=[];
                 this.actor.items.contents.forEach(item => {
-                    contents.extras.push(item.data);
+                    contents.extras.push(item.data.toJSON());
                 })
                 container.data.data.contents = contents;
-                character.createEmbeddedDocuments("Item",[container.data]);
+                await character.createEmbeddedDocuments("Item",[container.data]);
 
                 if (game.user.isGM){
                     let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
@@ -261,9 +261,12 @@ export class Thing extends ActorSheet {
 
         if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
 
-        const sheetData = this.document.data;
-        let numExtras = this.actor.items.contents.length;
-        sheetData.numExtras = numExtras;
+        const superData = super.getData();
+        const sheetData = superData.data;
+        sheetData.document = superData.actor;
+        sheetData.items = this.object.items.contents; // It's safe to use the actual contents list because we never modify it directly.
+
+        sheetData.numExtras = sheetData.items.length;
 
         let viewable = false;
         if (game.user.isGM) viewable = true;
@@ -527,6 +530,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
             "data.container.movable":true,
             "data.img":newItem.img,
         })
+        console.log(contents.extras);
         await itemActor.createEmbeddedDocuments("Item", contents.extras);
     }
 }

@@ -333,7 +333,7 @@ export class ModularFateCharacter extends ActorSheet {
                     game.user.expanded = {};
                 }
 
-                this.actor.items.contents.forEach(item => {
+                this.actor.items.forEach(item => {
                     let key = this.actor.id+item.id+"_extra";
                     game.user.expanded[key] = true;
                 })  
@@ -721,51 +721,67 @@ export class ModularFateCharacter extends ActorSheet {
         if (game.user.expanded[this.actor.id+"_biography"] == undefined) game.user.expanded[this.actor.id+"_biography"] = true;
         if (game.user.expanded[this.actor.id+"_description"] == undefined) game.user.expanded[this.actor.id+"_description"] = true;
         if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
-
-        this.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
-        this.freeStunts = game.settings.get("ModularFate", "freeStunts");
     
-        const sheetData = this.document.data;
-        //const sheetData = await super.getData().actor.data;
+        // super.getData() now returns an object in this format:
+        /*
+            {
+                actor: this.object,
+                cssClass: isEditable ? "editable" : "locked",
+                data: data, // A deepclone duplicate of the actor's data.
+                effects: effects,
+                items: items,
+                limited: this.object.limited,
+                options: this.options,
+                owner: isOwner,
+                title: this.title
+                };
+        */
+        const superData = super.getData();
+        const sheetData = superData.data;
+        sheetData.document = superData.actor;
+        sheetData.items = this.object.items.contents; // It's safe to use the actual items because we never edit them from here.
+        let superItems = superData.items;
+        sheetData.items = [];
 
-        let numStunts = Object.keys(sheetData.data.stunts).length;
-        let paidTracks = 0;
-        let paidStunts = 0;
-        let paidExtras = 0;    
+        superItems.forEach(item => {
+            sheetData.items.push(items.find(it => it.id === item._id));
+        })
 
-        //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value
+        sheetData.paidTracks = 0;
+        sheetData.paidStunts = 0;
+        sheetData.paidExtras = 0;   
 
-        let tracks = duplicate(sheetData.data.tracks);
+        sheetData.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
+        sheetData.freeStunts = game.settings.get("ModularFate", "freeStunts");
+
+        //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value        
+        let tracks = sheetData.data.tracks; // Removed duplicate() here as we don't write to the tracks data, just read from it.
         for (let track in tracks) {
             if (tracks[track].paid) {
-                paidTracks++;
+                sheetData.paidTracks++;
             }
         }
 
-        sheetData.items.contents.forEach(item => {
+        sheetData.items.forEach(item => {
             let cost = parseInt(item.data.data.refresh);
             if (!isNaN(cost) && cost != undefined){
-                paidExtras += parseInt(item.data.data.refresh);
+                sheetData.paidExtras += cost;
             }
         })
 
         let stunts = sheetData.data.stunts;
         for (let s in stunts){
-            paidStunts += parseInt(stunts[s].refresh_cost);
+            sheetData.paidStunts += parseInt(stunts[s].refresh_cost);
         }
         
-        paidStunts -= this.freeStunts;
+        sheetData.paidStunts -= sheetData.freeStunts;
+        sheetData.refreshSpent = sheetData.paidTracks + sheetData.paidStunts + sheetData.paidExtras;
 
-        this.refreshSpent = paidTracks + paidStunts + paidExtras;
-        sheetData.paidTracks = paidTracks;
-        sheetData.paidStunts = paidStunts;
-        sheetData.paidExtras = paidExtras;
-        sheetData.freeStunts = this.freeStunts;
         let isPlayer = this.object.hasPlayerOwner;
         let error = false;
         if (isPlayer) {
             // Refresh spent + refresh should = the game's refresh.
-            let checkSpent = sheetData.data.details.fatePoints.refresh + this.refreshSpent;
+            let checkSpent = sheetData.data.details.fatePoints.refresh + sheetData.refreshSpent;
             let worldRefresh = game.settings.get("ModularFate", "refreshTotal");
             let checkWorld = worldRefresh - sheetData.data.details.fatePoints.refresh;
 
@@ -800,11 +816,12 @@ export class ModularFateCharacter extends ActorSheet {
         sheetData.gameRefresh = game.settings.get("ModularFate", "refreshTotal");
 
         let skillTotal = 0;
+
         for (let s in ordered_skills) {
             //Ignore any skills with an extra field where the associated extra's countSkills is false.
             if (ordered_skills[s].extra_tag != undefined){
                 let extra_id = ordered_skills[s].extra_tag.extra_id;
-                let extra = this.object.items.find(item=>item.id == extra_id);
+                let extra = sheetData.items.find(item=>item.id == extra_id);
         
                 if (extra != undefined && extra.data.data.countSkills){
                     skillTotal += ordered_skills[s].rank;    
@@ -815,24 +832,20 @@ export class ModularFateCharacter extends ActorSheet {
         }
 
         sheetData.skillTotal = skillTotal;
-        sheetData.refreshSpent = this.refreshSpent;
         sheetData.ladder = ModularFateConstants.getFateLadder();
         sheetData.sortByRank = this.sortByRank;
         sheetData.gameSkillPoints = game.settings.get("ModularFate", "skillTotal")
         sheetData.GM = game.user.isGM;
 
-        let track_categories = this.object.data.data.tracks;
+        let track_categories = sheetData.data.tracks;
         let cats = new Set();
         for (let c in track_categories){
             let cat = track_categories[c].category;
             cats.add(cat);
         }
-        track_categories=Array.from(cats);
+        sheetData.track_categories=Array.from(cats);
         sheetData.category = this.track_category;
-        sheetData.track_categories = track_categories;
-        //sheetData.tracks = sheetData.data.tracks;
-        //sheetData.stunts = sheetData.data.stunts;
-
+    
         return sheetData;
     }
 }
