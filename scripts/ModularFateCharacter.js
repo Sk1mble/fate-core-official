@@ -178,7 +178,6 @@ export class ModularFateCharacter extends ActorSheet {
 
             const expandAspect = html.find("button[name='expandAspect']");
 
-
             expandAspect.on("click", event => {
                 let a = event.target.id.split("_")[0];
                 let aspect = this.actor.data.data.aspects[a];
@@ -739,13 +738,9 @@ export class ModularFateCharacter extends ActorSheet {
         const superData = super.getData();
         const sheetData = superData.data;
         sheetData.document = superData.actor;
-        let items = this.object.items.contents; // It's safe to use the actual items because we never edit them from here.
-        let superItems = superData.items;
-        sheetData.items = [];
-
-        superItems.forEach(item => {
-            sheetData.items.push(items.find(it => it.id === item._id));
-        })
+        let items = this.object.items.contents;
+        items.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)); // Sort according to each item's sort parameter.
+        sheetData.items = items;
 
         sheetData.paidTracks = 0;
         sheetData.paidStunts = 0;

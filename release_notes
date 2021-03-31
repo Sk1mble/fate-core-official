@@ -1,3 +1,6 @@
+# Version 3.0.17
+  * Minor tweak to the way extras are displayed in a sorted fashion on the character sheet.
+
 # Version 3.0.16
   * Fixed a bug on taking Things from the map that prevented them from being put back down again with their contents remaining intact.
   * Switched the getData() method for Actor & Thing to use a duplicated copy of the actor's data in order to prevent pollution (albeit in RAM) of the actor's actual data with the data used for the sheet.

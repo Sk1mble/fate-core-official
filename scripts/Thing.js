@@ -264,7 +264,9 @@ export class Thing extends ActorSheet {
         const superData = super.getData();
         const sheetData = superData.data;
         sheetData.document = superData.actor;
-        sheetData.items = this.object.items.contents; // It's safe to use the actual contents list because we never modify it directly.
+        let items = this.object.items.contents;
+        items.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)); // Sort according to each item's sort parameter.
+        sheetData.items = items;
 
         sheetData.numExtras = sheetData.items.length;
 
