@@ -234,7 +234,13 @@ function shouldUpdate(actor){
     }
 }
 
-Hooks.on('deleteItem', async (item) => {
+Hooks.on('deleteItem', async (...args) => {
+    let item;
+    for (let i = 0; i < args.length; i++){
+        if (args[i].constructor.name == "Item"){
+            item = args[i];
+        }
+    }
     let itemData = item.data;
     let actor = item.parent;
     if (actor?.type != "ModularFate"){
@@ -290,7 +296,13 @@ Hooks.on('deleteItem', async (item) => {
     }
 })
 
-Hooks.on('createItem', async (item) => {
+Hooks.on('createItem', async (...args) => {
+    let item;
+    for (let i = 0; i < args.length; i++){
+        if (args[i].constructor.name == "Item"){
+            item = args[i];
+        }
+    }
     let actor = item.parent;
     if (actor?.type == "ModularFate") {
         await actor. updateFromExtra(item.data);

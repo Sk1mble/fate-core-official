@@ -1,5 +1,6 @@
 # Version 3.0.17
   * Minor tweak to the way extras are displayed in a sorted fashion on the character sheet.
+  * Amended code on create/delete item hooks to cope with inconsistent hook parameters (they are passing actor, item, options, userID on token actors rather than item, options, userID)
 
 # Version 3.0.16
   * Fixed a bug on taking Things from the map that prevented them from being put back down again with their contents remaining intact.
