@@ -1,3 +1,7 @@
+# Version 3.0.18
+  * Bug fix: Clearing fleeting stress tracks no longer causes an error if there's a token in the scene whose actor has been deleted.
+  * Efficiency Improvement: Clearing fleeting stress tracks now only pushes an update for actors that have stress tracks.
+
 # Version 3.0.17
   * Minor tweak to the way extras are displayed in a sorted fashion on the character sheet.
   * Amended code on create/delete item hooks to cope with inconsistent hook parameters (they are passing actor, item, options, userID on token actors rather than item, options, userID)

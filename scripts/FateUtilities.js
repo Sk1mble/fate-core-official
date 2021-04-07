@@ -962,24 +962,26 @@ class FateUtilities extends Application{
         for (let i = 0; i<tokens.length; i++){
             let tracks = {};    
             let actor = tokens[i].actor;
+            if (actor == null || actor == undefined) continue;
 
-            if (actor.data.data.tracks != undefined) tracks = duplicate (actor.data.data.tracks);
-            for (let t in tracks){
-                let track = tracks[t];
-                if (track.recovery_type == "Fleeting"){
-                    for (let i = 0; i < track.box_values.length; i++){
-                        track.box_values[i] = false;
-                    }
-                    if (track.aspect.name != undefined){
-                        track.aspect.name = "";
+            if (actor?.data?.data?.tracks != undefined) {
+                tracks = duplicate (actor.data.data.tracks);
+                for (let t in tracks){
+                    let track = tracks[t];
+                    if (track.recovery_type == "Fleeting"){
+                        for (let i = 0; i < track.box_values.length; i++){
+                            track.box_values[i] = false;
+                        }
+                        if (track.aspect.name != undefined){
+                            track.aspect.name = "";
+                        }
                     }
                 }
-            }
-
-            if (!actor.isToken){  
-                updates.push({"_id":actor.id, "data.tracks":tracks});
-            } else {
-                tokenUpdates.push({"_id":tokens[i].id, "actorData.data.tracks":tracks});
+                if (!actor.isToken){  
+                    updates.push({"_id":actor.id, "data.tracks":tracks});
+                } else {
+                    tokenUpdates.push({"_id":tokens[i].id, "actorData.data.tracks":tracks});
+                }    
             }
         } 
         await Actor.updateDocuments(updates);
