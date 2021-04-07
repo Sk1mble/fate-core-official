@@ -64,6 +64,7 @@
 				"defend": ""
 			},
 			"countSkills": false,
+			"active":true,
 			"contents":{}
 		}
 	}

@@ -149,6 +149,54 @@ export class ModularFateActor extends Actor {
         }
     }
 
+    async deactivateExtra (item){
+        this.sheet.editing = true;
+        let actor = this;
+        let itemData = item.data;
+        //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
+    
+        let updateObject = {}
+    
+        let actor_aspects = duplicate(actor.data.data.aspects)
+    
+        for(let aspect in actor_aspects)
+        {
+            let et = actor_aspects[aspect].extra_tag;
+            if (et != undefined && et.extra_id == itemData._id){
+                updateObject[`data.aspects.-=${aspect}`] = null;
+            }
+        }
+        
+        let actor_stunts = duplicate(actor.data.data.stunts)
+    
+        for (let stunt in actor_stunts){
+            let et = actor_stunts[stunt].extra_tag;
+            if (et != undefined && et.extra_id == itemData._id){
+                updateObject[`data.stunts.-=${stunt}`] = null;
+            }
+        }
+    
+        let actor_tracks = duplicate(actor.data.data.tracks)
+    
+        for (let track in actor_tracks){
+            let et = actor_tracks[track].extra_tag;
+            if (et != undefined && et.extra_id == itemData._id){
+                updateObject[`data.tracks.-=${track}`] = null;
+            }
+        }
+    
+        let actor_skills = duplicate(actor.data.data.skills)
+    
+        for (let skill in actor_skills){
+            let et = actor_skills[skill].extra_tag;
+            if (et!= undefined && et.extra_id == itemData._id){
+                updateObject[`data.skills.-=${skill}`] = null;
+            }
+        }      
+        actor.sheet.editing = false;
+        await actor.update(updateObject);
+    }
+
     setupTracks (skills, tracks) {
         // This method takes skill and track data and returns corrected tracks enabled and disabled etc. according to the values of those skills
         // and the tracks' settings for enabling/disabling tracks according to skill ranks.
@@ -241,7 +289,6 @@ Hooks.on('deleteItem', async (...args) => {
             item = args[i];
         }
     }
-    let itemData = item.data;
     let actor = item.parent;
     if (actor?.type != "ModularFate"){
         return;
@@ -250,49 +297,7 @@ Hooks.on('deleteItem', async (...args) => {
     if (!shouldUpdate(actor)){
         return;
     } else {
-        actor.sheet.editing = true;
-        //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
-
-        let updateObject = {}
-
-        let actor_aspects = duplicate(actor.data.data.aspects)
-
-        for(let aspect in actor_aspects)
-        {
-            let et = actor_aspects[aspect].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
-                updateObject[`data.aspects.-=${aspect}`] = null;
-            }
-        }
-        
-        let actor_stunts = duplicate(actor.data.data.stunts)
-
-        for (let stunt in actor_stunts){
-            let et = actor_stunts[stunt].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
-                updateObject[`data.stunts.-=${stunt}`] = null;
-            }
-        }
-
-        let actor_tracks = duplicate(actor.data.data.tracks)
-
-        for (let track in actor_tracks){
-            let et = actor_tracks[track].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
-                updateObject[`data.tracks.-=${track}`] = null;
-            }
-        }
-
-        let actor_skills = duplicate(actor.data.data.skills)
-
-        for (let skill in actor_skills){
-            let et = actor_skills[skill].extra_tag;
-            if (et!= undefined && et.extra_id == itemData._id){
-                updateObject[`data.skills.-=${skill}`] = null;
-            }
-        }      
-        actor.sheet.editing = false;
-        await actor.update(updateObject);
+        await actor.deactivateExtra (item);
     }
 })
 

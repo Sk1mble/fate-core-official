@@ -288,9 +288,11 @@
                             {{#each items}}
                             <div name="item_header" draggable="true" id="{{../this.document.id}}_{{this.id}}" data-item="{{str this}}">
                             <div class = "fate-extras__row-header">
-                                <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></button>&nbsp&nbsp{{{this.name}}}
+                                <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></button>
+                                &nbsp&nbsp{{{this.name}}}
                                 <button i icon class="fas fa-trash fate-extras__row-header-button fu_button" type="button" name="delete_extra" id="{{this.id}}_delete"></button>
                                 <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button fu_button" id="{{this.id}}_edit"></button>
+                                <button title="{{localize 'ModularFate.active'}}" name="extra_active" type="button" {{#if this.data.data.active}}i icon class="fas fa-toggle-on  fate-extras__row-header-button fu_button"{{else}}i icon class="fas fa-toggle-off  fate-extras__row-header-button fu_button"{{/if}} id="{{this.id}}_active"></button>
                             </div>
                             <div class="fate-extras__row-body">
                                         <div class="fate-extras__row-body-content">{{#unless (expanded ../this.document (concat this.id '_extra'))}}{{else}}{{{this.data.data.description.value}}}{{/unless}}</div>

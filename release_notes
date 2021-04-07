@@ -1,3 +1,11 @@
+# Version 3.0.19
+  * Added an 'active' flag to Extras. This enables you to have multiple extras on your sheet which aren't active. This enables you to keep them on your sheet but temporarily disable them.
+  * Extras that aren't active have all of their aspects, tracks, skills etc. removed from your character.
+  * Extras that aren't active don't count towards refresh spent; to all intents and purposes it's as if they aren't on your character sheet at all.
+  * There is a toggle next to each extra's 'edit' button on your character sheet.
+  * You can also toggle the 'active' flag from each extra's sheet. This is a checkbox next to the extra's Refresh cost.
+  * Use case: Shape shifting. Say you have a human form and a beast form. You can set up an extra containing your skills in human form, and one for your skills in beast form. If your alternate form cost a refresh, ensure you mark both human and beast form as costing one refresh to ensure your total remains accurate. When you change from human to beast, deactivate the 'human form' extra and activate the 'beast form' extra. Your character sheet will magically update to show the different skills.  
+
 # Version 3.0.18
   * Bug fix: Clearing fleeting stress tracks no longer causes an error if there's a token in the scene whose actor has been deleted.
   * Efficiency Improvement: Clearing fleeting stress tracks now only pushes an update for actors that have stress tracks.

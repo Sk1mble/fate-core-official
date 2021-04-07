@@ -176,6 +176,20 @@ export class ModularFateCharacter extends ActorSheet {
             //const input = html.find("input");
             const input = html.find('input[type="text"], input[type="number"], textarea');
 
+            const extra_active = html.find('button[name = "extra_active"]');
+            extra_active.on("click", async event => {
+                console.log(event.target.id);
+                let item_id = event.target.id.split("_")[0];
+                let item = this.document.items.get(item_id);
+                if (item.data.data.active){
+                    await item.update({"data.active":false},{render:false});
+                    this.document.deactivateExtra(item);
+                } else {
+                    await item.update({"data.active":true},{render:false});
+                    this.document.updateFromExtra(item);
+                }
+            });
+
             const expandAspect = html.find("button[name='expandAspect']");
 
             expandAspect.on("click", event => {
@@ -759,7 +773,7 @@ export class ModularFateCharacter extends ActorSheet {
 
         sheetData.items.forEach(item => {
             let cost = parseInt(item.data.data.refresh);
-            if (!isNaN(cost) && cost != undefined){
+            if (!isNaN(cost) && cost != undefined & item.data.data.active){
                 sheetData.paidExtras += cost;
             }
         })

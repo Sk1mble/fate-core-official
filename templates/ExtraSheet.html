@@ -18,8 +18,13 @@
 		</tr>
 		<tr>
 			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.RefreshCost'}}:</td>
-			<td style="width:75%"><input type="number" name="data.refresh" min="0" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat; width:50px" value="{{data.refresh}}">
-			</input></td>
+			<td style="width:75%">
+				<input type="number" name="data.refresh" min="0" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat; width:50px" value="{{data.refresh}}">
+				</input>
+				{{localize 'ModularFate.active'}}
+				{{log this}}
+				<input name="data.active" type="checkbox" id="{{this.active}}" {{#if this.data.active}}checked="checked"{{/if}}></input>
+			</td>
 		</tr>
 		<tr>
 			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Description'}}:</td>

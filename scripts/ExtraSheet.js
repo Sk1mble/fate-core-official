@@ -170,6 +170,19 @@ export class ExtraSheet extends ItemSheet {
             await this.document.update({"data.countSkills":value})
         })
 
+        const active = html.find("input[name='data.active']");
+        active.on("change", async event => {
+            let value = event.target.checked;
+            if (this.document.parent){
+                if (value){
+                    this.document.parent.updateFromExtra(this.document.data);
+                } else {
+                    this.document.parent.deactivateExtra(this.document);
+                }
+            }
+            await this.document.update({"data.active":value})
+        })
+
         const aspect = html.find("textarea[class='cs_box mfate-aspects-list__input']");
         aspect.on("change", async event => {
             let field = event.target.name;
@@ -304,8 +317,14 @@ export class ExtraSheet extends ItemSheet {
     async close(...args){
         await super.close(...args);
         if (this.document.parent){
-            if (this.document.parent.type == "ModularFate"){
+            if (this.document.parent.type == "ModularFate" && this.document.data.data.active){
                 await this.document.parent.updateFromExtra(this.document.data);
+            } else {
+                if (this.document.parent.type == "ModularFate" && !this.document.data.data.active){
+                    console.log(this.document.parent);
+                    await this.document.parent.deactivateExtra(this.object)
+                }
+                
             }
         }
         this.editing = false;
