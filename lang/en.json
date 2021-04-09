@@ -1,5 +1,7 @@
 {
     "ModularFate.active":"Active?",
+    "ModularFate.ImportCharacter":"Import a non-ModularFate character from a JSON string",
+    "ModularFate.PasteCharacterData":"Paste the character's JSON data here",
     "ModularFate.DrawingsOnTop":"Render all drawings on top of other canvas elements?",
     "ModularFate.DrawingsOnTopHint":"If 'true', all drawings (e.g. aspect labels) will be rendered on top of all other canvas elements including tokens (refresh required).",
     "ModularFate.AspectLabelWidth":"How wide should aspect labels be in FU in em?",

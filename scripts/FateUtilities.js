@@ -972,7 +972,7 @@ class FateUtilities extends Application{
                         for (let i = 0; i < track.box_values.length; i++){
                             track.box_values[i] = false;
                         }
-                        if (track.aspect.name != undefined){
+                        if (track?.aspect?.name != undefined){
                             track.aspect.name = "";
                         }
                     }
