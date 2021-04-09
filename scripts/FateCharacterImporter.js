@@ -55,13 +55,123 @@ class FateCharacterImporter {
             }
         }
 
+        if (data?.type==="ModularFate"){
+            actorData = data;
+        }
+
         if (data?.flags?.exportSource?.system === "fatex"){
             console.log(data);
+            actorData.name = data.name;
+            actorData.img = data.img;
+            actorData.token = data.token;
+            actorData.data.details = {
+                fatePoints:{
+                    current:data.data.fatepoints.current, 
+                    refresh:data.data.fatepoints.refresh
+                },
+                biography:{
+                    value:data.data.biography.value
+                }
+            };
+
+            // That's all the basic data, for everything else we have to iterate through the character's items.
+            const items = data.items;
+            
+            // Let's begin with aspects
+            const rawAspects = items.filter(item => item.type === "aspect");
+            let aspects = {};
+            rawAspects.forEach(rawAspect => {
+                let aspect = {};
+                aspect.name = rawAspect.name.split(".").join("․");
+                aspect.value = rawAspect.data.value;
+                aspect.description = rawAspect.data.description;
+                aspects[`${aspect.name}`] = aspect;
+            })
+            actorData.data.aspects = aspects;
+
+            //Skills
+            const rawSkills = items.filter(item => item.type === "skill");
+            let skills = {};
+            rawSkills.forEach(rawSkill => {
+                let skill = {};
+                skill.name = rawSkill.name.split(".").join("․");
+                skill.rank = rawSkill.data.rank;
+                skill.description = rawSkill.data.description;
+                skills[`${skill.name}`] = skill;
+            })
+            actorData.data.skills = skills;
+
+            //Stunts
+            const rawStunts = items.filter(item => item.type === "stunt");
+            let stunts = {};
+            rawStunts.forEach(rawStunt => {
+                let stunt = {};
+                stunt.name = rawStunt.name.split(".").join("․");
+                stunt.description = rawStunt.data.description;
+                stunt.refresh_cost = 0;
+                stunts[`${stunt.name}`] = stunt;
+            })
+            actorData.data.stunts = stunts;
+
+            let tracks = {};
+            
+            //Stress
+            //isChecked: data.data.value & (2 ** i),
+            //Could use !! data.data.value & (2 ** i)
+            const rawStresses = items.filter (item => item.type === "stress");
+            rawStresses.forEach(rawStress => {
+                let track = {};
+                track.name = rawStress.name.split(".").join("․");
+                track.category = "Combat";
+                track.description = rawStress.data.description;
+                track.unique = true;
+                track.enabled = true;
+                if (track.name.toLowerCase().includes("physical") || track.name.toLowerCase().includes("mental")) {
+                    track.recovery_type = "fleeting";
+                }
+                else {
+                    track.recovery_type = "sticky";
+                }
+                track.aspect = "No";
+                if (rawStress.data.labelType == 0){
+                    track.label="escalating";
+                }
+                if (rawStress.data.labelType == 1){
+                    track.label="1";
+                }
+                if (rawStress.data.labelType == 2){
+                    track.label=rawStress.data.customLabel.split(" ")[0];
+                }
+                track.boxes = rawStress.data.size;
+                track.box_values = [];
+                for (let i = 0; i < rawStress.data.size; i++){
+                    track.box_values.push(rawStress.data.value & (2 **i) === 1) //Should be false if 0 and true if 1
+                }
+                tracks[`${track.name}`] = track;
+            })
+
+            //Consequences
+            //Can have box values a-la Stress tracks because he's implemented conditions here.
+            const rawConsequences = items.filter (item => item.type === "consequence");
+            rawConsequences.forEach (rawConsequence => {
+                let track = {};
+                track.name = rawConsequence.name.split(".").join("․");
+                track.category = "Combat";
+                track.description = rawConsequence.data.description;
+                track.unique = true;
+                track.enabled = true;
+
+            })
+
+            actorData.data.tracks = tracks;
+
+            //Extras
+
         }
 
         // Import from Fari (only supports the newest version)
-        console.log(data);
-        if (data?.fariType.toLowerCase() === "character") {
+        //console.log(data);
+        if (data?.fariType?.toLowerCase() === "character") {
             const allSections = data.pages.flatMap((page) => {
                 return page.sections;
             });
@@ -191,6 +301,7 @@ class FateCharacterImporter {
             actorData.data.details.description={value:descriptionText};
 
             //Assign stress & consequences
+            //only works if there's exactly one Conseqences/Conditions section on the sheet.
             const consequencesSection = allSections.find (
                 (section) => section.label.toLowerCase().includes("consequences") || section.label.toLowerCase().includes("conditions")
             );
@@ -248,7 +359,5 @@ class FateCharacterImporter {
             actorData.name = data?.name;
         }
         let finalActor = await Actor.create(actorData, {"renderSheet":true});
-        
-
     }
 }
