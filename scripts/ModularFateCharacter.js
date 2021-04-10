@@ -854,6 +854,8 @@ export class ModularFateCharacter extends ActorSheet {
         }
 
         sheetData.skillTotal = skillTotal;
+        let skills_label = game.settings.get("ModularFate", "skillsLabel");
+        sheetData.skillsLabel = skills_label || game.i18n.localize("ModularFate.defaultSkillsLabel");
         sheetData.ladder = ModularFateConstants.getFateLadder();
         sheetData.sortByRank = this.sortByRank;
         sheetData.gameSkillPoints = game.settings.get("ModularFate", "skillTotal")

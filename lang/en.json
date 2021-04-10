@@ -1,4 +1,8 @@
 {
+    "ModularFate.SkillsLabelName": "Skills label",
+    "ModularFate.SkillsLabelHint": "The label used on the character sheet for the Skills section. If left empty, will default to 'Skills'",
+    "ModularFate.defaultSkillsLabel": "Skills",
+    "ModularFate.FateAcceleratedSkillsLabel": "Approaches",
     "ModularFate.addStunt":"Add a stunt",
     "ModularFate.active":"Active?",
     "ModularFate.EditStunt":"Edit stunt",

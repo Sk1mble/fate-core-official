@@ -34,6 +34,8 @@ export class ExtraSheet extends ItemSheet {
         data.category = this.track_category;
         data.track_categories = track_categories;
         data.tracks = this.object.data.data.tracks;
+        let skills_label = game.settings.get("ModularFate", "skillsLabel");
+        data.skillsLabel = skills_label || game.i18n.localize("ModularFate.defaultSkillsLabel");
 
         data.dataTemplate = () => `systems/ModularFate/templates/ExtraSheet.html`;
         data.GM=game.user.isGM;

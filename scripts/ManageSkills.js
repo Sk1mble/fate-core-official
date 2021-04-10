@@ -1,3 +1,16 @@
+Hooks.once('ready', async function () {
+    let defaultLabel = game.i18n.localize("ModularFate.defaultSkillsLabel");
+    game.settings.register("ModularFate", "skillsLabel", {
+        name: game.i18n.localize("ModularFate.SkillsLabelName"),
+        hint: game.i18n.localize("ModularFate.SkillsLabelHint"),
+        scope: "world",     // This specifies a client-stored setting
+        config: true,        // This specifies that the setting appears in the configuration view
+        type: String,
+        restricted:true,
+        default: defaultLabel,
+      });
+})
+
 Hooks.once('init', async function () {
     //On init, we initialise all settings and settings menus for dealing with skills 
     //We will be using this setting to store the world's list of skills.
@@ -101,29 +114,34 @@ Hooks.once('init', async function () {
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCoreDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM) {
                         game.settings.set("ModularFate","skills",{});
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCondensedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateAcceleratedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
                     }
                 }
             }

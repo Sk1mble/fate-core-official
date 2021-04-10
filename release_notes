@@ -1,3 +1,6 @@
+# Version 3.0.22
+  * Added John Helmuth's code to add a setting for the title of 'Skills' on the character sheet.
+
 # Version 3.0.21
   * GMs can now add stunts to the stunt DB and edit stunts directly in the stunt DB rather than having to put them on an actor first.
 
