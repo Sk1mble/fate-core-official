@@ -1,5 +1,7 @@
 {
+    "ModularFate.addStunt":"Add a stunt",
     "ModularFate.active":"Active?",
+    "ModularFate.EditStunt":"Edit stunt",
     "ModularFate.select_a_skill":"Select a skill to roll with this stunt",
     "ModularFate.Special":"Special",
     "ModularFate.ImportCharacter":"Import a non-ModularFate character from a JSON string",

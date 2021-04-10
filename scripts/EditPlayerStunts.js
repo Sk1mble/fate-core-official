@@ -6,16 +6,21 @@ class EditPlayerStunts extends FormApplication {
         this.stunt=duplicate(stunt);
 
         //This is a good place to set up some variables at the top level so we can access them with this.
-        if (this.actor.type == "Extra"){
-            this.options.title=`${game.i18n.localize("ModularFate.ExtraStuntEditor")} ${this.object.name}`
+        
+        if (this.actor == null){
+            this.options.title=`${game.i18n.localize("ModularFate.ExtraStuntEditor")}}`
         } else {
-            if (this.actor.isToken) {
-                this.options.title=`${game.i18n.localize("ModularFate.TokenStuntEditor")} ${this.object.name}`
+            if (this?.actor?.type == "Extra"){
+                this.options.title=`${game.i18n.localize("ModularFate.ExtraStuntEditor")} ${this.object.name}`
             } else {
-                this.options.title=`${game.i18n.localize("ModularFate.StuntEditorFor")} ${this.object.name}`
+                if (this.actor.isToken) {
+                    this.options.title=`${game.i18n.localize("ModularFate.TokenStuntEditor")} ${this.object.name}`
+                } else {
+                    this.options.title=`${game.i18n.localize("ModularFate.StuntEditorFor")} ${this.object.name}`
+                }
             }
+            game.system.apps["actor"].push(this);
         }
-        game.system.apps["actor"].push(this);
     } //End constructor
 
     static get defaultOptions(){
@@ -31,18 +36,33 @@ class EditPlayerStunts extends FormApplication {
     } // End getDefaultOptions
 
     async _updateObject(event, formData){
-        if (formData["name"]!=this.stunt.name) {
-            await this.object.update({"data.stunts":{[`-=${this.stunt.name}`]:null}});
-        }
-        
-        for (let t in formData){
-            this.stunt[t]=formData[t];
-        }
-        this.stunt.name=this.stunt.name.split(".").join("․");
-        await this.actor.update({"data.stunts":{[this.stunt.name]:this.stunt}})
-        if (this.object.type == "Extra"){
-            //code to render editplayerstunts.
-            Hooks.call("updateItem", {"id":this.object.id})
+
+        if (this.actor == null){ // This is a stunt in the database
+            let stunts = duplicate(game.settings.get("ModularFate","stunts"));
+            if (formData["name"]!=this.stunt.name) {
+                delete stunts[this.stunt.name];
+            }
+            for (let t in formData){
+                this.stunt[t]=formData[t];
+            }
+            this.stunt.name=this.stunt.name.split(".").join("․");
+            stunts[this.stunt.name] = this.stunt;
+            await game.settings.set("ModularFate","stunts",stunts);
+            this.originator.render(false);
+        } else {
+            if (formData["name"]!=this.stunt.name) {
+                await this.object.update({"data.stunts":{[`-=${this.stunt.name}`]:null}});
+            }
+            
+            for (let t in formData){
+                this.stunt[t]=formData[t];
+            }
+            this.stunt.name=this.stunt.name.split(".").join("․");
+            await this.actor.update({"data.stunts":{[this.stunt.name]:this.stunt}})
+            if (this.object.type == "Extra"){
+                //code to render editplayerstunts.
+                Hooks.call("updateItem", {"id":this.object.id})
+            }
         }
     }
 
@@ -116,10 +136,14 @@ class EditPlayerStunts extends FormApplication {
     async getData(){
         let data={}
         data.stunt=this.stunt;
-        if (this.actor.type=="Extra"){
+        if (this.actor == null){
             data.skills=game.settings.get("ModularFate","skills");
         } else {
-            data.skills=this.actor.data.data.skills;
+            if (this.actor.type=="Extra"){
+                data.skills=game.settings.get("ModularFate","skills");
+            } else {
+                data.skills=this.actor.data.data.skills;
+            }
         }
         data.gm = game.user.isGM;
         return data
@@ -181,6 +205,25 @@ class StuntDB extends Application {
         import_stunts.on("click", event => this._onImportStunts(event, html));
         const export_stunt = html.find("button[name='export_stunt']");
         export_stunt.on("click", event => this._onExportStunt(event, html));
+        const edit_stunt = html.find ("button[name='edit_stunt']");
+        edit_stunt.on("click", event => this._onEditStunt(event, html));
+        const add_stunt = html.find("button[id='add_db_stunt']");
+        add_stunt.on("click", event => {
+            let stunt = {
+                "name":game.i18n.localize("ModularFate.NewStunt"),
+                "linked_skill":"None",
+                "description":"",
+                "refresh_cost":1,
+                "overcome":false,
+                "caa":false,
+                "attack":false,
+                "defend":false,
+                "bonus":0
+            }
+            let editor = new EditPlayerStunts(null, stunt);
+            editor.originator = this;
+            editor.render(true);
+        })
     } //End activateListeners
 
     async _onExportStunts(event, html){
@@ -206,6 +249,15 @@ class StuntDB extends Application {
             buttons: {
             },
         }).render(true);
+    }
+
+    async _onEditStunt(event, html){
+        //Create a stunt editor with a null actor
+        //Edit the stunt editor so if the actor is null it knows to save the stunt to the stunt DB on exit rather than to an actor's sheet.
+        let stunt_name = event.target.id.split("_")[0];
+        let stunt = game.settings.get("ModularFate","stunts")[stunt_name];
+        let eps = new EditPlayerStunts(null, stunt).render(true);
+        eps.originator = this;
     }
 
     async getStunts(){

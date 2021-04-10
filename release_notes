@@ -1,3 +1,6 @@
+# Version 3.0.21
+  * GMs can now add stunts to the stunt DB and edit stunts directly in the stunt DB rather than having to put them on an actor first.
+
 # Version 3.0.20
   * Implemented a charater importer for the latest version of Fari and for FateX.
   * The Fari importer seems to work quite well with the standard templates but may be unpredictable if it doesn't find the right headers in the sheet.
