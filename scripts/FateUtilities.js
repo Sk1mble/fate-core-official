@@ -521,7 +521,21 @@ class FateUtilities extends Application{
         } else {
             skill = sk.value.split("(")[0].trim();
         }
-        let rank = token.actor.data.data.skills[skill].rank;
+
+        let rank = 0;
+        if (skill == "Special"){
+            // We need to pop up a dialog to get a skill to roll.
+            let skills = [];
+            for (let x in token.actor.data.data.skills){
+                skills.push(token.actor.data.data.skills[x].name);
+            }
+            let sk = await ModularFateConstants.getInputFromList (game.i18n.localize("ModularFate.select_a_skill"), skills);
+            skill = sk;
+            rank = token.actor.data.data.skills[skill].rank;
+        } else {
+            rank = token.actor.data.data.skills[skill].rank;
+        }
+
         let ladder = ModularFateConstants.getFateLadder();
         let rankS = rank.toString();
         let rung = ladder[rankS];

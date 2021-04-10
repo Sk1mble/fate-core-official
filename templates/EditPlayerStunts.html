@@ -8,7 +8,7 @@
             </tr>
             <tr>
                 <td style="font-family:Montserrat">{{localize 'ModularFate.LinkedSkill'}}:</td>                
-                <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat; border:1px solid lightsteelblue" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>{{localize 'ModularFate.None'}}</option></option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
+                <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat; border:1px solid lightsteelblue" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>{{localize 'ModularFate.None'}}</option><option>{{localize 'ModularFate.Special'}}</option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
                 <i style="font-family:Montserrat; font-style:normal;">{{localize 'ModularFate.Bonus'}}: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="color:black; background-color:white; border:solid 1px lightsteelblue; width:50px"></input></td>
             </tr>
             <tr>

@@ -110,6 +110,28 @@ class ModularFateConstants {
         });
     }
 
+    static getInputFromList(prompt, options){
+        let optionsText = "";
+        options.forEach(option =>{
+            optionsText+=`<option>${option}</option>`
+        })        
+        return new Promise(resolve => {
+            new Dialog({
+                title: prompt,
+                content: `<div align="center"><select id="dialog_box" style="width:375px">${optionsText}</select></div>`,
+                buttons: {
+                    ok: {
+                        label: game.i18n.localize("ModularFate.OK"),
+                        callback: () => {
+                            resolve(document.getElementById("dialog_box").value)
+                        }
+                    }
+                },
+                default:"ok"
+            }).render(true);
+        });
+    }
+
     static updateText(prompt, textToUpdate){
     return new Promise(resolve => {
         new Dialog({

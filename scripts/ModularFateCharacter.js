@@ -492,7 +492,20 @@ export class ModularFateCharacter extends ActorSheet {
         let bonus = parseInt(items[2]);
 
         let ladder = ModularFateConstants.getFateLadder();
-        let rank = this.object.data.data.skills[skill].rank
+        let rank = 0;
+        if (skill == "Special"){
+            // We need to pop up a dialog to get a skill to roll.
+            let skills = [];
+            for (let x in this.object.data.data.skills){
+                skills.push(this.object.data.data.skills[x].name);
+            }
+            let sk = await ModularFateConstants.getInputFromList (game.i18n.localize("ModularFate.select_a_skill"), skills);
+            skill = sk;
+            rank = this.object.data.data.skills[skill].rank;
+        } else {
+            rank = this.object.data.data.skills[skill].rank;
+        }
+
         let rankS = rank.toString();
         let rung = ladder[rankS];
 

@@ -60,7 +60,6 @@ class FateCharacterImporter {
         }
 
         if (data?.flags?.exportSource?.system === "fatex"){
-            console.log(data);
             actorData.name = data.name;
             actorData.img = data.img;
             actorData.token = data.token;
@@ -115,58 +114,148 @@ class FateCharacterImporter {
 
             let tracks = {};
             
-            //Stress
-            //isChecked: data.data.value & (2 ** i),
-            //Could use !! data.data.value & (2 ** i)
-            const rawStresses = items.filter (item => item.type === "stress");
-            rawStresses.forEach(rawStress => {
+            //Tracks (Stress and consequences in the FateX parlance)
+            const rawTracks = items.filter (item => item.type === "stress" || item.type === "consequence");
+            rawTracks.forEach(rawTrack => {
                 let track = {};
-                track.name = rawStress.name.split(".").join("․");
+                track.name = rawTrack.name.split(".").join("․");
                 track.category = "Combat";
-                track.description = rawStress.data.description;
+                track.description = rawTrack.data.description;
                 track.unique = true;
                 track.enabled = true;
-                if (track.name.toLowerCase().includes("physical") || track.name.toLowerCase().includes("mental")) {
+                track.universal = true;
+                if (track.type === "stress" && (track.name.toLowerCase().includes("physical") || track.name.toLowerCase().includes("mental"))) {
                     track.recovery_type = "fleeting";
                 }
                 else {
                     track.recovery_type = "sticky";
                 }
-                track.aspect = "No";
-                if (rawStress.data.labelType == 0){
+                
+                if (rawTrack.type == "stress") track.aspect = "No";
+                if (rawTrack.type == "consequence") {
+                    track.aspect = {name:rawTrack.data.value, when_marked:true, as_name:false};
+                    track.harm_can_absorb = rawTrack.data.icon;
+                    track.label="none";
+                }
+
+                if (rawTrack.data.labelType == 0){
                     track.label="escalating";
                 }
-                if (rawStress.data.labelType == 1){
+                if (rawTrack.data.labelType == 1){
                     track.label="1";
                 }
-                if (rawStress.data.labelType == 2){
-                    track.label=rawStress.data.customLabel.split(" ")[0];
+                if (rawTrack.data.labelType == 2){
+                    track.label=rawTrack.data.customLabel.split(" ")[0];
                 }
-                track.boxes = rawStress.data.size;
+
+                //Need to get the values from atomatiion here, if any, to ensure the number of stress boxes is correct.
+                const skillReferences = rawTrack?.flags?.fatex?.skillReferences;
+                const skillReferenceSettings = rawTrack?.flags?.fatex?.skillReferenceSettings;
+
+                /*  OPERATOR_EQUALS: 0,
+                    OPERATOR_NOT_EQUALS: 1,
+                    OPERATOR_GT: 2,
+                    OPERATOR_LT: 3,
+                    OPERATOR_GTE: 4,
+                    OPERATOR_LTE: 5,
+
+                    TYPES
+                    STATUS: 0,
+                    BOXES: 1,
+
+                    CONJUNCTIONS
+                    OR 0
+                    AND 1
+                */
+
+                let boxModifier = 0;
+                if (skillReferences){
+                    track.enabled = false;
+                    let linked_skills = [];
+                    skillReferences.forEach(reference =>{
+                        let linked_skill = {};
+                        //condition is the value of the skill we're checking for
+                        let condition = reference?.condition;
+                        let skill = reference.skill;
+                        //Basically all tracks use gte, operator 4, so let's ignore everything else.
+                        
+                        if (skillReferenceSettings?.conjunction == 0){
+                            //enable if one of conditions met OR
+                            if (actorData.data.skills[skill].rank >= condition){
+                                linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
+                                linked_skills.push(linked_skill);
+                                track.enabled = true;
+                            } 
+                        }
+
+                        if (skillReferenceSettings?.conjunction == 1){
+                            //enable if all conditions met AND
+                            linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
+                            linked_skills.push(linked_skill);
+                            if (actorData.data.skills[skill].rank >= condition){
+                                track.enabled = true;
+                            } else {
+                                track.enabled = false;
+                            }
+                        }
+
+                        if (actorData.data.skills[skill].rank >= condition){
+                            if (reference.type == 0){
+                                // Enables
+                                linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
+                                linked_skills.push(linked_skill);
+                                track.enabled = true;
+                            }
+                        }
+                        
+                        if (actorData.data.skills[skill].rank >= condition){
+                            if (reference.type == 1) {
+                                //Modifies boxes
+                                track.enabled = true;
+                                boxModifier += reference.argument;
+                                linked_skill = {linked_skill:skill, rank:condition, boxes:reference.argument, enables:false}
+                                linked_skills.push(linked_skill);
+                            }
+                        }
+                    })
+                    track.linked_skills = linked_skills;
+                }
+
+                let boxValues = 0;
+                if (rawTrack.type == "stress"){
+                    track.boxes = rawTrack.data.size+boxModifier;
+                    boxValues = rawTrack.data.value;
+                }
+
+                if (rawTrack.type == "consequence"){
+                    track.boxes = rawTrack.data.boxAmount+boxModifier;
+                    boxValues = rawTrack.data.boxValues;
+                }
                 track.box_values = [];
-                for (let i = 0; i < rawStress.data.size; i++){
-                    track.box_values.push(rawStress.data.value & (2 **i) === 1) //Should be false if 0 and true if 1
+                for (let i = 1; i <= track.boxes; i++){
+                    track.box_values.push((parseInt(boxValues) & (2 **i)) != 0) //Should be false if 0 and true otherwise
                 }
                 tracks[`${track.name}`] = track;
             })
-
-            //Consequences
-            //Can have box values a-la Stress tracks because he's implemented conditions here.
-            const rawConsequences = items.filter (item => item.type === "consequence");
-            rawConsequences.forEach (rawConsequence => {
-                let track = {};
-                track.name = rawConsequence.name.split(".").join("․");
-                track.category = "Combat";
-                track.description = rawConsequence.data.description;
-                track.unique = true;
-                track.enabled = true;
-
-            })
-
             actorData.data.tracks = tracks;
 
             //Extras
-
+            const rawExtras = items.filter (item => item.type === "extra");
+            let extras = [];
+            rawExtras.forEach(rawExtra => {
+                    let extra = {
+                        name:rawExtra.name,
+                        type:"Extra",
+                        data:{
+                            description:{value:rawExtra.data.description},
+                            refresh:0,
+                            countSkills:false,
+                            active:true
+                        }
+                    }
+                extras.push(extra);
+            })
+            actorData.items = extras;
         }
 
         // Import from Fari (only supports the newest version)

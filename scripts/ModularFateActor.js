@@ -212,6 +212,7 @@ export class ModularFateActor extends Actor {
 
             // Check for linked skills and enable/add boxes as necessary.
             if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(skills).length > 0) {
+                track.enabled = false;
                 let linked_skills = tracks[t].linked_skills;
                 let box_mod = 0;
                 for (let i = 0; i < linked_skills.length; i++) {
@@ -225,17 +226,20 @@ export class ModularFateActor extends Actor {
 
                     }else {
                         let skill_rank = skills[l_skill].rank;
-                        //If this is 'enables' and the skill is too low, disable.
-                        if (l_enables && skill_rank < l_skill_rank) {
-                        track.enabled = false;
+                        //If this is 'enables' and the skill is high enough, enable.
+                        if (l_enables && skill_rank >= l_skill_rank) {
+                        track.enabled = true;
                     }
-
                     //If this adds boxes and the skill is high enough, add boxes if not already present.
                     //Telling if the boxes are already present is the hard part.
                     //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
                     //or subract them at the end of our run through the linked skills.
-                        if (l_boxes > 0 && skill_rank >= l_skill_rank) {
-                            box_mod += l_boxes;
+                        
+                        if (l_boxes > 0) {
+                            track.enabled = true;
+                            if (skill_rank >= l_skill_rank){
+                                box_mod += l_boxes;
+                            }
                         }
                     }
                 } //End of linked_skill iteration

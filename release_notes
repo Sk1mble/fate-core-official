@@ -1,3 +1,13 @@
+# Version 3.0.20
+  * Implemented a charater importer for the latest version of Fari and for FateX.
+  * The Fari importer seems to work quite well with the standard templates but may be unpredictable if it doesn't find the right headers in the sheet.
+  * The FateX importer works well with one exception; track automation relying on AND operations will be treated as OR operations in Modular Fate.
+  * To use the importer, export your character from Fari or FateX, open as a text file, copy the whole JSON string from there.
+  * Then, click the 'download arrow' icon in the toolbard to the left and paste the text into the box that appears before hitting the 'save' button.
+  * Your character will be imported.
+  * Added a 'Special' skill that can be applied as the linked skill for a stunt. If you do, clicking on the stunt roll button will pop up a dialog to ask you what skill you wish to roll with the stunt.
+  * Using the modified roll dialog (shift-click on a roll other than a stunt roll) will include all stunts linked to Special in the list of available stunts to apply to the roll.
+
 # Version 3.0.19
   * Added an 'active' flag to Extras. This enables you to have multiple extras on your sheet which aren't active. This enables you to keep them on your sheet but temporarily disable them.
   * Extras that aren't active have all of their aspects, tracks, skills etc. removed from your character.

@@ -1,5 +1,7 @@
 {
     "ModularFate.active":"Active?",
+    "ModularFate.select_a_skill":"Select a skill to roll with this stunt",
+    "ModularFate.Special":"Special",
     "ModularFate.ImportCharacter":"Import a non-ModularFate character from a JSON string",
     "ModularFate.PasteCharacterData":"Paste the character's JSON data here",
     "ModularFate.DrawingsOnTop":"Render all drawings on top of other canvas elements?",
