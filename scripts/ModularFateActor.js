@@ -314,6 +314,6 @@ Hooks.on('createItem', async (...args) => {
     }
     let actor = item.parent;
     if (actor?.type == "ModularFate") {
-        await actor. updateFromExtra(item.data);
+        await actor.updateFromExtra(item.data);
     }
 })
