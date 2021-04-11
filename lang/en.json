@@ -1,4 +1,5 @@
 {
+    "ModularFate.couldnotparse":"I couldn't parse that character JSON",
     "ModularFate.SkillsLabelName": "Skills label",
     "ModularFate.SkillsLabelHint": "The label used on the character sheet for the Skills section. If left empty, will default to 'Skills'",
     "ModularFate.defaultSkillsLabel": "Skills",

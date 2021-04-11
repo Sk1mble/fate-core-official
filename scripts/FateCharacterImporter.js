@@ -37,7 +37,12 @@ class FateCharacterImporter {
     }
 
     async import (data){
-        data = JSON.parse(data);
+        try {
+            data = JSON.parse(data);    
+        } catch {
+            ui.notifications.error(game.i18n.localize("ModularFate.couldnotparse"));
+            return;
+        }
         
         //First we need to figure out where the character came from
         //Fari: data.fariType == character
