@@ -147,17 +147,21 @@ class FateCharacterDefaults {
         await Actor.create(actor_data);
     }
 
-    async applyDefault (actor, default_name, sections, overwrite){
+    async applyDefault (actor, default_name, options){
         //Parameters are: 
         //Actor: A reference to the actor to which the template is to be applied
         //default_name: The character default to apply
-        //Sections: An array of section names which are to be applied
-        //Overwrite: If true, will replace the existing sections on the sheet with those from the default. 
+        //Options: 
+        //overwrite: If true, will replace the existing sections on the sheet with those from the default. 
         //If false, will merge the sections from the default with the existing sections on the sheet as much as possible.
+        //extras: If true will copy the template's items to the actor.
+        //avatar: If true will replace the avatar with the one from the template
+        //sections: An array of section names which are to be applied
 
         const character_default = await this.getDefault(default_name);
-        if (overwrite){
+        if (options.overwrite){
             let updates = {};
+            let sections = options.sections;
             for (let section of sections){
                 updates[`data.${section}`] = "blank";
             }
@@ -168,34 +172,39 @@ class FateCharacterDefaults {
                 updates[`data.${section}`] = character_default[section];
             }
             //Replace the avatar and token images also
-            updates["img"] = character_default["img"];
-            updates["token.img"] = character_default["token_img"];
-
+            if (options.avatar) {
+                updates["img"] = character_default["img"];
+                updates["token.img"] = character_default["token_img"];
+            }
+        
             //Now commit the updates.
             await actor.update(updates);
 
-            //Regardless of whether we overwrite or merge, just add all extras from default.
-            await (actor.createEmbeddedDocuments("Item", character_default.extras))
+            // delete all extras and add all extras from default.
+            if (options.extras) {
+                await (actor.deleteEmbeddedDocuments("Item", actor.items.contents.map(item=> item.id)));
+                await (actor.createEmbeddedDocuments("Item", character_default.extras));
+            }
         } else {
             // Here is where we try to merge the updates as best as possible; we can do that using mergeObject.
             let updates = {};
+            let sections = options.sections;
             for (let section of sections){
                 updates[`data.${section}`] = mergeObject (character_default[section], actor.data.data[`${section}`], {inplace:false});
             }
-            //Replace the avatar image and token from the default if they're currently set to system default
-            if (!actor?.img || actor?.img === CONST.DEFAULT_TOKEN){
+            if (options.avatar){
                 updates["img"] = character_default["img"];
-            }
-            if (!actor?.token?.img || actor?.token?.img === CONST.DEFAULT_TOKEN){
                 updates["token.img"] = character_default["token_img"];
             }
-
             await actor.update(updates);
 
-            //Regardless of whether we overwrite or merge, just add all extras from default.
-            await (actor.createEmbeddedDocuments("Item", character_default.extras))
+            //Add all extras from default.
+            if (options.extras) {
+                await (actor.createEmbeddedDocuments("Item", character_default.extras))
+            }
         }
     }
 
     //TODO: Now I just need to write the user interface for managing existing templates (delete template, create actor from template, maybe import template from JSON, export template to JSON) and the UI widgets on character sheets for applying templates to the sheet as a whole or a given section individually
+    //Will be an option on apply to tick the following boxes: stunts, tracks, skills, aspects, avatar, items.
 }
