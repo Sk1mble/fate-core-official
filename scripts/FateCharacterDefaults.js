@@ -113,6 +113,11 @@ class FateCharacterDefaults {
         character_default.skills = skills;
         character_default.aspects = aspects;
         character_default.extras = extras;
+        
+        //Let's apply the actor's avatar to the default, too.
+        character_default.img = data.img;
+        character_default.token_img = data.token.img;
+
         //This is important; it's the value which is used to grab the default out of the settings.
         character_default.default_name = default_name;
 
@@ -130,6 +135,8 @@ class FateCharacterDefaults {
             name:name,
             type:"ModularFate",
             items:character_default.extras,
+            img:character_default.img,
+            token:{img:character_default.token_img},
             data:{
                 skills:character_default.skills,
                 stunts:character_default.stunts,
@@ -157,9 +164,16 @@ class FateCharacterDefaults {
             await actor.update(updates, {render:false});
 
             for (let section of sections){
+                console.log(character_default[section])
                 updates[`data.${section}`] = character_default[section];
             }
+            //Replace the avatar and token images also
+            updates["img"] = character_default["img"];
+            updates["token.img"] = character_default["token_img"];
+
+            //Now commit the updates.
             await actor.update(updates);
+
             //Regardless of whether we overwrite or merge, just add all extras from default.
             await (actor.createEmbeddedDocuments("Item", character_default.extras))
         } else {
@@ -168,7 +182,16 @@ class FateCharacterDefaults {
             for (let section of sections){
                 updates[`data.${section}`] = mergeObject (character_default[section], actor.data.data[`${section}`], {inplace:false});
             }
+            //Replace the avatar image and token from the default if they're currently set to system default
+            if (!actor?.img || actor?.img === CONST.DEFAULT_TOKEN){
+                updates["img"] = character_default["img"];
+            }
+            if (!actor?.token?.img || actor?.token?.img === CONST.DEFAULT_TOKEN){
+                updates["token.img"] = character_default["token_img"];
+            }
+
             await actor.update(updates);
+
             //Regardless of whether we overwrite or merge, just add all extras from default.
             await (actor.createEmbeddedDocuments("Item", character_default.extras))
         }
