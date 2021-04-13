@@ -17,7 +17,8 @@
 					"./scripts/EditPlayerAspects.js",
 					"./scripts/ModifiedRollDialog.js",
 					"./scripts/ShowCharacter.js",
-					"./scripts/FateCharacterImporter.js"
+					"./scripts/FateCharacterImporter.js",
+					"./scripts/FateCharacterDefaults.js"
 				],
 	"styles": ["ModularFate.css","mfate-sheet.css"],
 	"packs": [],
