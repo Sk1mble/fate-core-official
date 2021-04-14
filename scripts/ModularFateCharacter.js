@@ -190,6 +190,31 @@ export class ModularFateCharacter extends ActorSheet {
                 }
             });
 
+            const manageDefault = html.find("button[name='manageDefault']");
+            manageDefault.on("click", async event => {
+                let f = new FateCharacterDefaults();
+                let option = await ModularFateConstants.getInputFromList(game.i18n.localize("ModularFate.whatDoYouWantToDo"),[game.i18n.localize("ModularFate.createADefaultFromThis"),game.i18n.localize("ModularFate.applyDefaultToThis")]);
+                if (option === game.i18n.localize("ModularFate.createADefaultFromThis")){
+                    let name = "unassigned";
+                    
+                    while (name == "unassigned") {
+                        name = await ModularFateConstants.getInput(game.i18n.localize("ModularFate.pickADefaultName"));
+                        if (!name || name.toLowerCase() == "blank" || name.toLowerCase() == "modularfate"){
+                            ui.notifications.error(game.i18n.localize("ModularFate.reservedName"));
+                            name = "unassigned";
+                        }
+                    }
+                    if (name){ 
+                        let d = await f.extractDefault(this.document.data, name);
+                        await f.storeDefault(d);
+                    }
+
+                }
+                if (option === game.i18n.localize("ModularFate.applyDefaultToThis")){
+                    console.log("Apply a default")
+                }
+            })
+
             const expandAspect = html.find("button[name='expandAspect']");
 
             expandAspect.on("click", event => {

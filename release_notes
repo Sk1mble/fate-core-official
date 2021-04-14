@@ -1,3 +1,7 @@
+# Version 3.0.25
+  * Things are now hidden from the actor view. The ModularFate Things folder will be automatically deleted next time you create an item on the map.
+  * You can temporarily cause Thing actors to be visible on a re-render by setting game.system.showThings to true.
+
 # Version 3.0.24
   * Added some error handling to the FateCharacterImporter.
 

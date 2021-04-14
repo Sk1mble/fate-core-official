@@ -389,8 +389,8 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
         }
 
         let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
-                if (folder == undefined){
-                    folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
+                if (folder != undefined){
+                    folder.delete();
                 }
 
                 let isContainer = contents.extras != undefined;
@@ -400,7 +400,6 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     type: "Thing",
                     data:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
                     img:newItem.img,
-                    folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                 }
@@ -453,9 +452,9 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
         }
 
         let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
-                if (folder == undefined){
-                    folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
-                }
+        if (folder != undefined){
+            folder.delete();
+        }
 
                 let isContainer = contents.extras != undefined;
                 
@@ -486,10 +485,9 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
         }
 
         let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
-                if (folder == undefined){
-                    folder = await Folder.create({name:"ModularFate Things", type:"Actor", parent:null})
-                }
-
+        if (folder != undefined){
+            folder.delete();
+        }
                 let isContainer = contents.extras != undefined;
                 
                 let toCreate = {

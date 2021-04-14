@@ -1,4 +1,14 @@
 export class ModularFateActor extends Actor {
+
+    get visible(){
+        if (this.type === "Thing" && game.system.showThings !== true){
+            return false;
+        } 
+        else {
+            return super.visible;
+        }
+    }
+
     async updateFromExtra(itemData) {
         let actor = this;
     

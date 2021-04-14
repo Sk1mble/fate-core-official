@@ -40,6 +40,7 @@
                 </div>
             </div>
             <nav class="mfate-sheet__tabs-nav foo">
+                {{#if GM}}<button type="button" name="manageDefault" style="width:35px; height:35px; float:left" title="{{localize 'ModularFate.workWithDefaults'}}"><i class="fas fa-user-cog"></i></button>{{/if}}
                 <a class="mfate-sheet__tabs-nav-link item active" data-tab="sheet">
                     <span class="sr-only">{{localize 'ModularFate.CharacterSheet'}}</span>
                     <b title="{{localize 'ModularFate.CharacterSheet'}}" class="fas fa-clipboard mfate-sheet__tabs-nav-icon"></b>
