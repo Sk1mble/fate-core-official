@@ -207,6 +207,7 @@ export class ModularFateCharacter extends ActorSheet {
                     if (name){ 
                         let d = await f.extractDefault(this.document.data, name);
                         await f.storeDefault(d);
+                        ui.sidebar.render(false);
                     }
 
                 }

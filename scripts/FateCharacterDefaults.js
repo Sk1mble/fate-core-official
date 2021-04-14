@@ -234,7 +234,6 @@ class FateCharacterDefaults {
             await actor.update(updates, {render:false});
 
             for (let section of sections){
-                console.log(character_default[section])
                 updates[`data.${section}`] = character_default[section];
             }
             //Replace the avatar and token images also
@@ -287,7 +286,6 @@ Hooks.on("renderSidebarTab", (app, html) => {
     let blank = "<option>Blank</option>\n"
     let defaults = f.defaults.map(d => `<option>${d}</option>`).join("\n");
     let options = standard+blank+defaults;
-    console.log(options);
     targetElement.before(`
         <div style="max-height:45px; text-align:center">
             <input type="text" value = "New Character" style="background-color:#f0f0e0; width:35%; height:25px;" id="MF_actor_to_create">
