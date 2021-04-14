@@ -353,3 +353,7 @@ button:hover {
 .long_text:hover {
   background-color: lightsteelblue !important;
 }
+
+span.fas.inactive {
+  opacity: 0.5;
+}

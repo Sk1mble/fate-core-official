@@ -3,8 +3,8 @@ Hooks.once('ready', async function () {
     game.settings.register("ModularFate", "skillsLabel", {
         name: game.i18n.localize("ModularFate.SkillsLabelName"),
         hint: game.i18n.localize("ModularFate.SkillsLabelHint"),
-        scope: "world",     // This specifies a client-stored setting
-        config: true,        // This specifies that the setting appears in the configuration view
+        scope: "world",     // This specifies a client-stored setting.
+        config: false,      // This specifies that the setting does not appear in the configuration view.
         type: String,
         restricted:true,
         default: defaultLabel,
@@ -211,8 +211,10 @@ class SkillSetup extends FormApplication{
     //The function that returns the data model for this window. In this case, we only need the game's skill list.
     getData(){
         this.skills=ModularFateConstants.sortByKey(game.settings.get("ModularFate","skills"))
+        this.skills_label = game.settings.get("ModularFate", "skillsLabel");
         const templateData = {
-           skills:this.skills
+           skills: this.skills,
+           skills_label: this.skills_label, 
         }
         return templateData;
     }
@@ -228,6 +230,7 @@ class SkillSetup extends FormApplication{
         const exportSkill = html.find("button[id='exportSkill']");
         const importSkills = html.find("button[id='importSkills']");
         const exportSkills = html.find("button[id='exportSkills']");
+        const skillsLabelEdit = html.find('#skillsLabelEdit');
 
         editButton.on("click", event => this._onEditButton(event, html));
         deleteButton.on("click", event => this._onDeleteButton(event, html));
@@ -237,6 +240,7 @@ class SkillSetup extends FormApplication{
         exportSkill.on("click", event => this._onExportSkill(event, html));
         importSkills.on("click", event => this._onImportSkills(event, html));
         exportSkills.on("click", event => this._onExportSkills(event, html));
+        skillsLabelEdit.on("click", event => this._onLabelEdit(event, html, skillsLabelEdit));
     }
     
     //Here are the event listener functions.
@@ -299,6 +303,25 @@ class SkillSetup extends FormApplication{
             this.render(false);
         } catch (e) {
             ui.notifications.error(e);
+        }
+    }
+    
+    _onLabelEdit(event, html, skillsLabelEdit) {
+        const input_id = `#${skillsLabelEdit.data('edit-element')}`;
+        const skillsLabelInput = html.find(input_id);
+        const is_editing = skillsLabelEdit.hasClass('inactive');
+        if (skillsLabelInput.length && ! is_editing) {
+            skillsLabelEdit.addClass('inactive');
+            skillsLabelInput
+                .removeAttr('disabled')
+                .focus()
+                .on('blur.edit_label', () => {
+                    skillsLabelEdit.removeClass('inactive');
+                    skillsLabelInput.attr('disabled', 'disabled');
+                    skillsLabelInput.off('blur.edit_label');
+                    const skills_label = skillsLabelInput.val();
+                    game.settings.set("ModularFate", "skillsLabel", skills_label);
+                });
         }
     }
 

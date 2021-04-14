@@ -2,7 +2,10 @@
     <table style="width:auto" cellspacing ="4" cellpadding="4">
         <tr>
             <td>
-                {{localize 'ModularFate.Skills'}}:
+                <div style="display: flex; align-items: center; justify-content: space-around;">
+                    <input type="text" style="flex-grow: 0; flex-basis: 75%;" id="skillsLabel" class="approach_box" value="{{this.skills_label}}" disabled>
+                    <span id="skillsLabelEdit" data-edit-element="skillsLabel" style="flex-grow: 0; flex-basis: 10%" aria-label="Edit skills label." class="fas fa-edit"></span>
+                </div>
             </td>
             <td>
                 <select id="skillListBox" size = "25" style="background: white; color: black; font-family:Arial; width: 150px; height: 250px">
