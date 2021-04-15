@@ -213,6 +213,11 @@ class FateCharacterDefaults {
         return await Actor.create(actor_data, {renderSheet:render});
     }
 
+    presentDefault (default_name){
+        //Returns the details of the default as an array with a human-readable format.
+        //Used to present the default at the presentation layer so GM can get an idea of what the settings are for that template.
+    }
+
     async applyDefault (actor, default_name, options){
         //Parameters are: 
         //Actor: A reference to the actor to which the template is to be applied
