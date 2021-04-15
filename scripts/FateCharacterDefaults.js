@@ -366,6 +366,5 @@ Hooks.on("renderSidebarTab", (app, html) => {
         }
 
         await f.createCharacterFromDefault(default_name, actor_name, true);
-
     });
 });

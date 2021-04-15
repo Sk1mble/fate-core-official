@@ -310,15 +310,15 @@ export class ModularFateCharacter extends ActorSheet {
                     buttons: {
                         ok: {
                             label:"OK",
-                            callback: async () => {
-                                let avatar = $(`#${this.document.id}_def_avatar`)[0].classList.contains("fa-toggle-on");
-                                let tracks = $(`#${this.document.id}_def_tracks`)[0].classList.contains("fa-toggle-on");
-                                let stunts = $(`#${this.document.id}_def_stunts`)[0].classList.contains("fa-toggle-on");
-                                let extras = $(`#${this.document.id}_def_extras`)[0].classList.contains("fa-toggle-on");
-                                let skills = $(`#${this.document.id}_def_skills`)[0].classList.contains("fa-toggle-on");
-                                let aspects = $(`#${this.document.id}_def_aspects`)[0].classList.contains("fa-toggle-on");
-                                let merge = $(`#${this.document.id}_def_overwrite`)[0].classList.contains("fa-toggle-on");
-                                let default_name = $(`#${this.document.id}_select_default`)[0].value;
+                            callback: async () => {                                
+                                let avatar = $(`#${this.document.id}_def_avatar`).hasClass('fa-toggle-on');
+                                let tracks = $(`#${this.document.id}_def_tracks`).hasClass('fa-toggle-on');
+                                let stunts = $(`#${this.document.id}_def_stunts`).hasClass('fa-toggle-on');
+                                let extras = $(`#${this.document.id}_def_extras`).hasClass('fa-toggle-on');
+                                let skills = $(`#${this.document.id}_def_skills`).hasClass('fa-toggle-on');
+                                let aspects = $(`#${this.document.id}_def_aspects`).hasClass('fa-toggle-on');
+                                let merge = $(`#${this.document.id}_def_overwrite`).hasClass('fa-toggle-on');
+                                let default_name = $(`#${this.document.id}_select_default`).val();
                                 if (!avatar && !tracks && !stunts && !extras && !skills && !aspects){
                                     // Todo: Add a message here to explain why nothing happens?
                                     return;
@@ -341,7 +341,7 @@ export class ModularFateCharacter extends ActorSheet {
                                 let content = "";
     
                                 if (merge){
-                                    prompt = `${game.i18n.localize("ModularFate.merge")} with '${default_name}' default`;
+                                    prompt = `${game.i18n.localize("ModularFate.merge")} from '${default_name}' default`;
                                     content = game.i18n.localize("ModularFate.proceedToMerge");
                                 } 
                                 if (!merge) {
