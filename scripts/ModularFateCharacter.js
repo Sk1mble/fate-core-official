@@ -190,30 +190,178 @@ export class ModularFateCharacter extends ActorSheet {
                 }
             });
 
-            const manageDefault = html.find("button[name='manageDefault']");
-            manageDefault.on("click", async event => {
+            const saveDefault = html.find("button[name='saveDefault']");
+            saveDefault.on("click", async event => {
                 let f = new FateCharacterDefaults();
-                let option = await ModularFateConstants.getInputFromList(game.i18n.localize("ModularFate.whatDoYouWantToDo"),[game.i18n.localize("ModularFate.createADefaultFromThis"),game.i18n.localize("ModularFate.applyDefaultToThis")]);
-                if (option === game.i18n.localize("ModularFate.createADefaultFromThis")){
-                    let name = "unassigned";
-                    
-                    while (name == "unassigned") {
-                        name = await ModularFateConstants.getInput(game.i18n.localize("ModularFate.pickADefaultName"));
-                        if (!name || name.toLowerCase() == "blank" || name.toLowerCase() == "modularfate"){
-                            ui.notifications.error(game.i18n.localize("ModularFate.reservedName"));
-                            name = "unassigned";
+                let content = 
+                                `<table style="background-color:transparent; border:none">
+                                    <tr>
+                                        <td>
+                                            ${game.i18n.localize("ModularFate.name")}
+                                        </td>
+                                        <td>
+                                            <input id="${this.document.id}_choose_default_name" type="text"></input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            ${game.i18n.localize("ModularFate.description")}
+                                        </td>
+                                        <td>
+                                            <input id = "${this.document.id}_choose_default_description" type="text"></input>
+                                        </td>
+                                    </tr>
+                                </table>`
+                    let d = new Dialog({
+                    title: game.i18n.localize("ModularFate.pickADefaultName"),
+                    content: content,
+                    buttons: {
+                        ok: {
+                            label:"OK",
+                            callback: async () => {
+                                let name = $(`#${this.document.id}_choose_default_name`)[0].value;
+                                let desc = $(`#${this.document.id}_choose_default_description`)[0].value;
+                                if (!name) name = this.document.name;
+                                let f = new FateCharacterDefaults();
+                                let def = await f.extractDefault(this.document.data, name, desc);
+                                await f.storeDefault(def);
+                                ui.sidebar.render(false);
+                            }
                         }
-                    }
-                    if (name){ 
-                        let d = await f.extractDefault(this.document.data, name);
-                        await f.storeDefault(d);
-                        ui.sidebar.render(false);
-                    }
+                    },
+                    default: "ok"
+                }).render(true);
+            })
 
-                }
-                if (option === game.i18n.localize("ModularFate.applyDefaultToThis")){
-                    console.log("Apply a default")
-                }
+            const applyDefault = html.find("button[name='applyDefault']");
+            applyDefault.on("click", async event => {
+                let f = new FateCharacterDefaults();
+                let options = f.defaults.map(d => `<option>${d}</option>`).join("\n");
+                let content = `
+                <h2>${game.i18n.localize("ModularFate.applyDefault")}</h2>
+                <select style="width:100%" id="${this.document.id}_select_default">
+                                    ${options}
+                </select>
+                <table style="border:none, background-color:transparent">
+                            <table style="border:none, background-color:transparent">
+                                <th style="width:60%; text-align:left">
+                                    ${game.i18n.localize("ModularFate.item")}
+                                </th>
+                                <th style="width:40%; text-align:left">
+                                    ${game.i18n.localize("ModularFate.applyFromDefault")}
+                                </th>
+                                <tr>
+                                    <td style="width:60%; text-align:left">
+                                        ${game.i18n.localize("ModularFate.avatar")}
+                                    </td>
+                                    <td style="width:40%; text-align:left">
+                                        <i id="${this.document.id}_def_avatar" class="def_toggle fas fa-toggle-on"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:60%; text-align:left">
+                                        ${game.i18n.localize("ModularFate.tracks")}
+                                    </td>
+                                    <td style="width:40%; text-align:left">
+                                        <i id="${this.document.id}_def_tracks" class="def_toggle fas fa-toggle-on"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:60%; text-align:left">
+                                        ${game.i18n.localize("ModularFate.aspects")}
+                                    </td>
+                                    <td style="width:40%; text-align:left">
+                                        <i id="${this.document.id}_def_aspects" class="def_toggle fas fa-toggle-on"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:60%; text-align:left">
+                                        ${game.i18n.localize("ModularFate.stunts")}
+                                    </td>
+                                    <td style="width:40%; text-align:left">
+                                        <i id="${this.document.id}_def_stunts" class="def_toggle fas fa-toggle-on"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:60%; text-align:left">
+                                        ${game.i18n.localize("ModularFate.extras")}
+                                    </td>
+                                    <td style="width:40%; text-align:left">
+                                        <i id="${this.document.id}_def_extras" class="def_toggle fas fa-toggle-on"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:60%; text-align:left">
+                                        ${game.settings.get("ModularFate","skillsLabel")}
+                                    </td>
+                                    <td style="width:40%; text-align:left">
+                                        <i id="${this.document.id}_def_skills" class="def_toggle fas fa-toggle-on"></i>
+                                    </td>
+                                </tr>
+                            </table>
+                            <h2 style="text-align:center"><i id="${this.document.id}_def_overwrite" class="def_toggle fas fa-toggle-on"></i> <b id="def_mo">${game.i18n.localize("ModularFate.merge")}</b></h2>
+                        </td>
+                    </row>
+                </table>
+                `
+                let d = await new Dialog({
+                    title: game.i18n.localize("ModularFate.applyDefaultOptions"),
+                    content: content,
+                    buttons: {
+                        ok: {
+                            label:"OK",
+                            callback: async () => {
+                                let avatar = $(`#${this.document.id}_def_avatar`)[0].classList.contains("fa-toggle-on");
+                                let tracks = $(`#${this.document.id}_def_tracks`)[0].classList.contains("fa-toggle-on");
+                                let stunts = $(`#${this.document.id}_def_stunts`)[0].classList.contains("fa-toggle-on");
+                                let extras = $(`#${this.document.id}_def_extras`)[0].classList.contains("fa-toggle-on");
+                                let skills = $(`#${this.document.id}_def_skills`)[0].classList.contains("fa-toggle-on");
+                                let aspects = $(`#${this.document.id}_def_aspects`)[0].classList.contains("fa-toggle-on");
+                                let merge = $(`#${this.document.id}_def_overwrite`)[0].classList.contains("fa-toggle-on");
+                                let default_name = $(`#${this.document.id}_select_default`)[0].value;
+                                if (!avatar && !tracks && !stunts && !extras && !skills && !aspects){
+                                    // Todo: Add a message here to explain why nothing happens?
+                                    return;
+                                }
+
+                                let sections = [];
+                                if (tracks) sections.push("tracks");
+                                if (stunts) sections.push("stunts");
+                                if (aspects) sections.push("aspects");
+                                if (skills) sections.push("skills");
+
+                                let options = {
+                                    "overwrite":!merge,
+                                    "extras":extras,
+                                    "avatar":avatar,
+                                    "sections":sections
+                                }
+                                
+                                let prompt = "";
+                                let content = "";
+    
+                                if (merge){
+                                    prompt = `${game.i18n.localize("ModularFate.merge")} with '${default_name}' default`;
+                                    content = game.i18n.localize("ModularFate.proceedToMerge");
+                                } 
+                                if (!merge) {
+                                    prompt = `${game.i18n.localize("ModularFate.overwrite")} with '${default_name}' default`
+                                    content = game.i18n.localize("ModularFate.proceedToOverwrite");
+                                }
+                                let proceed = await ModularFateConstants.awaitYesNoDialog(prompt, content);
+                                if (proceed == "yes") {
+                                    await f.applyDefault(this.document, default_name, options);
+                                }
+                            }
+                        }
+                    },
+                    default: "ok"
+                })._render(true); // Using _render because it's async
+            
+                $(`.def_toggle`).on('click', function (event) {
+                    event.target.classList.toggle("fa-toggle-on");
+                    event.target.classList.toggle("fa-toggle-off");
+                })
             })
 
             const expandAspect = html.find("button[name='expandAspect']");

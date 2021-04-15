@@ -40,15 +40,17 @@ class FateCharacterDefaults {
                 character_default.default_name = newName;
                 defaults[this.getSafeName(newName)] = character_default;
                 await game.settings.set("ModularFate", "defaults", defaults)
+                ui.sidebar.render(false);
             }
         } else {
             defaults[this.getSafeName(character_default.default_name)] = character_default;
             await game.settings.set("ModularFate", "defaults", defaults)
+            ui.sidebar.render(false);
         }
     }
 
     get defaults(){
-        // Return an array of strings of default_name values from defaults, for presentation
+        // Return an array of strings of default_name values from defaults
         let defaults = duplicate(game.settings.get("ModularFate", "defaults"));
         let list = [];
         for (let d in defaults){
@@ -77,7 +79,7 @@ class FateCharacterDefaults {
 
     async getDefault(name){
         // Get a named character default from the game's settings.
-        let defaults = duplicate(game.settings.get("ModularFate", "defaults"));
+        let defaults = await duplicate(game.settings.get("ModularFate", "defaults"));
         if (defaults[this.getSafeName(name)]){
             return(defaults[this.getSafeName(name)]);
         } 
@@ -109,7 +111,7 @@ class FateCharacterDefaults {
         }
     }
 
-    async extractDefault(actorData, default_name){
+    async extractDefault(actorData, default_name, default_description){
         // This method takes actorData and returns an object to store as a default.
         // This default contains empty versions of the character's:
         // Tracks
@@ -119,6 +121,7 @@ class FateCharacterDefaults {
         // Extras are returned exactly as they are
         // It also contains any necessary metadata for working with defaults.
         //First, we clone the actorData to make sure we're working with a copy and not the original.
+        if (!default_description) default_description = "";
         let data = actorData.toJSON();
         let character_default = {};
         
@@ -180,6 +183,7 @@ class FateCharacterDefaults {
 
         //This is important; it's the value which is used to grab the default out of the settings.
         character_default.default_name = default_name;
+        character_default.default_description = default_description;
 
         return character_default;
     }
@@ -213,9 +217,38 @@ class FateCharacterDefaults {
         return await Actor.create(actor_data, {renderSheet:render});
     }
 
-    presentDefault (default_name){
+    async presentDefault (default_name){
         //Returns the details of the default as an array with a human-readable format.
         //Used to present the default at the presentation layer so GM can get an idea of what the settings are for that template.
+        let d = await duplicate(await this.getDefault(default_name));
+        let output = {};
+
+        output.img = d.img;
+        output.token_img = d.token_img;
+        output.default_name = d.default_name;
+        output.default_description = d.default_name;
+        let stunt_names = [];
+        let aspect_names = [];
+        let track_names = [];
+        let skill_names = [];
+
+        for (let stunt in d.stunts){
+            stunt_names.push(d.stunts[stunt].name)
+        }
+        for (let aspect in d.aspects){
+            aspect_names.push(d.aspects[aspect].name)
+        }
+        for (let track in d.tracks){
+            track_names.push(d.tracks[track].name)
+        }
+        for (let skill in d.skills){
+            skill_names.push(d.skills[skill].name)
+        }
+        output.stunts = stunt_names.join("\n");
+        output.aspects = aspect_names.join("\n");
+        output.tracks = track_names.join("\n");
+        output.skills = skill_names.join("\n");
+        return output;
     }
 
     async applyDefault (actor, default_name, options){

@@ -207,7 +207,9 @@ Hooks.once('ready', async function () {
     if (game.settings.get("ModularFate","run_once") == false){
         if (game.user.isGM){
             ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.WelcomeTitle"),game.i18n.localize("ModularFate.WelcomeText"),500,250);
-            game.settings.set("ModularFate","run_once", true)
+            game.settings.set("ModularFate","run_once", true);
+            console.log(game.i18n.localize("ModularFate.baseDefaults"));
+            game.settings.set("ModularFate","defaults",game.i18n.localize("ModularFate.baseDefaults"))
         }
     }
 })
@@ -326,7 +328,7 @@ Hooks.once('init', async function () {
         scope:"world",
         config:false,
         type: Boolean,
-        default:true
+        default:false
     })
 
     game.settings.register("ModularFate","sheet_template", {
