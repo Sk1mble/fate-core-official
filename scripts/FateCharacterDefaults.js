@@ -70,6 +70,40 @@ class FateCharacterDefaults {
         } 
     }
 
+    async presentDefault (default_name){
+        //Returns the details of the default as an array with a human-readable format.
+        //Used to present the default at the presentation layer so GM can get an idea of what the settings are for that template.
+        let d = await duplicate(await this.getDefault(default_name));
+        let output = {};
+
+        output.img = d.img;
+        output.token_img = d.token_img;
+        output.default_name = d.default_name;
+        output.default_description = d.default_name;
+        let stunt_names = [];
+        let aspect_names = [];
+        let track_names = [];
+        let skill_names = [];
+
+        for (let stunt in d.stunts){
+            stunt_names.push(d.stunts[stunt].name)
+        }
+        for (let aspect in d.aspects){
+            aspect_names.push(d.aspects[aspect].name)
+        }
+        for (let track in d.tracks){
+            track_names.push(d.tracks[track].name)
+        }
+        for (let skill in d.skills){
+            skill_names.push(d.skills[skill].name)
+        }
+        output.stunts = stunt_names.join(", ");
+        output.aspects = aspect_names.join(", ");
+        output.tracks = track_names.join(", ");
+        output.skills = skill_names.join(", ");
+        return output;
+    }
+
     async renameDefault (old_name, new_name){
         let defaults = duplicate(game.settings.get("ModularFate", "defaults"));
         let de = duplicate(defaults[this.getSafeName(old_name)]);
