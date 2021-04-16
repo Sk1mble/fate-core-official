@@ -41,11 +41,13 @@ class FateCharacterDefaults {
                 defaults[this.getSafeName(newName)] = character_default;
                 await game.settings.set("ModularFate", "defaults", defaults)
                 ui.sidebar.render(false);
+                if (game.system.mdf) game.system.mdf.render(false);
             }
         } else {
             defaults[this.getSafeName(character_default.default_name)] = character_default;
             await game.settings.set("ModularFate", "defaults", defaults)
             ui.sidebar.render(false);
+            if (game.system.mdf) game.system.mdf.render(false);
         }
     }
 
@@ -67,6 +69,7 @@ class FateCharacterDefaults {
             delete defaults[this.getSafeName(name)];
             await game.settings.set("ModularFate", "defaults", defaults);
             ui.sidebar.render(false);
+            if (game.system.mdf) game.system.mdf.render(false);
         } 
     }
 
@@ -74,6 +77,7 @@ class FateCharacterDefaults {
         //Returns the details of the default as an array with a human-readable format.
         //Used to present the default at the presentation layer so GM can get an idea of what the settings are for that template.
         let d = await duplicate(await this.getDefault(default_name));
+        console.log(d);
         let output = {};
 
         output.img = d.img;
@@ -84,6 +88,7 @@ class FateCharacterDefaults {
         let aspect_names = [];
         let track_names = [];
         let skill_names = [];
+        let extra_names = [];
 
         for (let stunt in d.stunts){
             stunt_names.push(d.stunts[stunt].name)
@@ -97,10 +102,15 @@ class FateCharacterDefaults {
         for (let skill in d.skills){
             skill_names.push(d.skills[skill].name)
         }
-        output.stunts = stunt_names.join(", ");
-        output.aspects = aspect_names.join(", ");
-        output.tracks = track_names.join(", ");
-        output.skills = skill_names.join(", ");
+        for (let extra of d.extras){
+            extra_names.push(extra.name)
+        }
+
+        output.stunts = stunt_names.sort().join(", ");
+        output.aspects = aspect_names.sort().join(", ");
+        output.tracks = track_names.sort().join(", ");
+        output.skills = skill_names.sort().join(", ");
+        output.extras = extra_names.sort().join(", ");
         return output;
     }
 
@@ -111,6 +121,7 @@ class FateCharacterDefaults {
         de.default_name = new_name;
         await this.storeDefault(de);
         ui.sidebar.render(false);
+        if (game.system.mdf) game.system.mdf.render(false);
     }
 
     async editDescription (name, new_desc){
@@ -118,6 +129,7 @@ class FateCharacterDefaults {
         let de = defaults[this.getSafeName(name)];
         de.default_description = new_desc;
         await game.settings.set("ModularFate","defaults",defaults);
+        if (game.system.mdf) game.system.mdf.render(false);
     }
 
     async getDefault(name){
@@ -379,6 +391,8 @@ Hooks.on("renderSidebarTab", (app, html) => {
 class ManageDefaults extends FormApplication {
     constructor(...args){
         super(...args);
+        this.editing = false;
+        game.system.mdf = this;
     }
     //Set up the default options for instances of this class
     static get defaultOptions() {
@@ -397,16 +411,171 @@ class ManageDefaults extends FormApplication {
     //conditions, and consequences.
     async getData(){
         let f = new FateCharacterDefaults();
+        let defaults = [];
+        let def_objs = await duplicate(game.settings.get("ModularFate","defaults"));
+        for (let o in def_objs){
+            defaults.push(def_objs[o]);
+        }
+        ModularFateConstants.sort_key(defaults, "default_name");
         let data = {
             default_names:f.defaults,
-            defaults:game.settings.get("ModularFate","defaults"),
+            defaults:defaults
         }
+        data.editing = this.editing;
         return data;
     }
 
     //Here are the action listeners
     activateListeners(html) {
         super.activateListeners(html);
+
+        const toggle_edit = $('#md_toggle_edit');
+        if (toggle_edit.hasClass("fa-toggle-off")){
+            this.editing = false;
+                $('button[name="delete_default"]').hide();
+        }
+
+        toggle_edit.on('click', (event, html) => {
+            toggle_edit.toggleClass("fa-toggle-off");
+            toggle_edit.toggleClass("fa-toggle-on");
+            if (toggle_edit.hasClass("fa-toggle-off")){
+                this.editing = false;
+                $('.md_edit').prop('disabled', true);
+                $('button[name="delete_default"]').hide();
+            }
+            if (toggle_edit.hasClass("fa-toggle-on")){
+                this.editing = true;
+                $('.md_edit').prop('disabled', false)
+                $('button[name="delete_default"]').show();
+            }
+        })
+
+        const displayButton = $("button[name='inspect_default']");
+        displayButton.on('click', async (event, html)=> {
+            let f = new FateCharacterDefaults();
+            let def = await f.getDefault(event.target.getAttribute("Data-default_name"));
+            let prompt = game.i18n.localize("ModularFate.defaultCharacterFramework")+ " " + def.default_name;
+            let presentation = await f.presentDefault(def.default_name);
+            let content = `
+                <div style="max-height:100em; max-width:50em; scroll-y:auto">
+                    <table style="background-color:transparent; border:0px; text-align:left; vertical-align:middle">
+                        <th style="width:6em">
+                            ${game.i18n.localize("ModularFate.item")}
+                        </th>
+                        <th>
+                            ${game.i18n.localize("ModularFate.Contents")}
+                        </th>
+                        <tr>
+                            <td>
+                                ${game.i18n.localize("ModularFate.avatar")}
+                            </td>
+                            <td>
+                                <img style="width:50px; height:auto" title="${presentation.img}" src="${presentation.img}"/> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            ${game.i18n.localize("ModularFate.token")}
+                            </td>
+                            <td>
+                            <img style="width:50px; height:auto" title = "${presentation.img}" src="${presentation.token_img}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 ${game.i18n.localize("ModularFate.Skills")}
+                            </td>
+                            <td>
+                                ${presentation.skills}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 ${game.i18n.localize("ModularFate.Tracks")}
+                            </td>
+                            <td>
+                                ${presentation.tracks}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 ${game.i18n.localize("ModularFate.Aspects")}
+                            </td>
+                            <td>
+                                ${presentation.aspects}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 ${game.i18n.localize("ModularFate.Stunts")}
+                            </td>
+                            <td>
+                                ${presentation.stunts}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                 ${game.i18n.localize("ModularFate.Extras")}
+                            </td>
+                            <td>
+                                ${presentation.extras}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                `
+            await ModularFateConstants.awaitOKDialog(prompt, content, "100em", "50em");
+        })
+
+        const imp = $('#md_import');
+        const exp_all = $('#md_export_all');
+        const exp_sel = $('#md_export_selected');
+
+        imp.on('click', async (event, html)=>{
+            let str = await new Promise(resolve => {
+                new Dialog({
+                    title: game.i18n.localize("ModularFate.PasteDefaults"),
+                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_defaults"></textarea></div>`,                    buttons: {
+                        ok: {
+                            label: "Save",
+                            callback: () => {
+                                resolve (document.getElementById("import_defaults").value);
+                            }
+                        }
+                    },
+                }).render(true)
+            });
+            let f = new FateCharacterDefaults();
+            await f.importDefaults(str);
+        })
+
+        exp_all.on('click', async (event, html)=>{
+            let f = new FateCharacterDefaults();
+            let str = await f.exportDefaults();
+            new Dialog({
+                title: game.i18n.localize("ModularFate.copyAndPasteToSaveDefaults"), 
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${str}</textarea></div>`,
+                buttons: {
+                },
+            }).render(true);
+        })
+
+        exp_sel.on('click', async (event, html)=>{
+            let f = new FateCharacterDefaults();
+            let boxes = $("input[name='def_select']");
+            let list = [];
+            for (let box of boxes){
+                if (box.checked) list.push(box.dataset.default_name);
+            }
+            $("input[name='def_select']").prop('checked', false);
+            let str = await f.exportDefaults(list);
+           new Dialog({
+                title: game.i18n.localize("ModularFate.copyAndPasteToSaveDefaults"), 
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${str}</textarea></div>`,
+                buttons: {
+                },
+            }).render(true);
+        })
     
         const d_name = html.find("input[name='def_name']");
         d_name.on('change', async (event, html) =>{
@@ -414,14 +583,12 @@ class ManageDefaults extends FormApplication {
             let oldName = event.target.getAttribute("data-oldValue");
             let newName = event.target.value;
             await f.renameDefault(oldName, newName);
-            this.render(false);
         })     
 
         const d_desc = html.find("input[name='def_desc']");
         d_desc.on('change', async (event, html) =>{
             let f = new FateCharacterDefaults();
             await f.editDescription(event.target.getAttribute("data-default_name"), event.target.value);
-            this.render(false);
         })     
 
         const d_def = html.find("button[name='delete_default']");
@@ -429,7 +596,6 @@ class ManageDefaults extends FormApplication {
             let f = new FateCharacterDefaults();
             let del = await ModularFateConstants.confirmDeletion();
             if (del) await f.removeDefault(event.target.getAttribute("data-default_name"));
-            this.render(false);
         })
 
         const inspect_default = html.find("button[name='inspect_default']");
@@ -437,7 +603,6 @@ class ManageDefaults extends FormApplication {
             let f = new FateCharacterDefaults();
             let name = event.target.getAttribute("data-default_name");
             let d = await f.getDefault(name);
-            //Todo: code to display window with details of tracks etc for this default.
         })
     }
 }

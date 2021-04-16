@@ -1,4 +1,11 @@
 {
+    "ModularFate.PasteDefaults":"Paste data here; we'll ask before overwriting defaults",
+    "ModularFate.copyAndPasteToSaveDefaults":"Copy & Paste this to save your defaults",
+    "ModularFate.defaultCharacterFramework":"Default Character Framework - ",
+    "ModularFate.exportAllDefaults":"Export all",
+    "ModularFate.exportSelected":"Export Selected",
+    "ModularFate.import":"Import",
+    "ModularFate.edit":"EDIT",
     "ModularFate.defaultSetup":"Manage Character Default Frameworks",
     "ModularFate.proceedToMerge":"Proceed to merge? No stunts, skills, or tracks will be lost.",
     "ModularFate.proceedToOverwrite":"Proceed to overwrite? All data in selected sections will be lost.",
@@ -9,6 +16,7 @@
     "ModularFate.stunts":"Stunts",
     "ModularFate.extras":"Extras",
     "ModularFate.avatar":"Avatar",
+    "ModularFate.token":"Token",
     "ModularFate.name":"Name",
     "ModularFate.item":"Item",
     "ModularFate.applyFromDefault":"Apply from default?",
@@ -414,7 +422,7 @@
            "img":"icons/svg/mystery-man.svg",
            "token_img":"icons/svg/mystery-man.svg",
            "default_name":"Fate Core",
-           "default_description":"Fate Core standard character"
+           "default_description":"Fate Core Standard Character"
         },
         "fate-condensed":{
            "stunts":{
@@ -828,7 +836,7 @@
            "img":"icons/svg/mystery-man.svg",
            "token_img":"icons/svg/mystery-man.svg",
            "default_name":"Fate Condensed",
-           "default_description":"Fate Condensed standard character"
+           "default_description":"Fate Condensed Standard Character"
         },
         "fate-accelerated":{
            "stunts":{
@@ -1009,7 +1017,7 @@
            "img":"icons/svg/mystery-man.svg",
            "token_img":"icons/svg/mystery-man.svg",
            "default_name":"Fate Accelerated",
-           "default_description":"Fate Accelerated Standard character"
+           "default_description":"Fate Accelerated Standard Character"
         },
         "dresden-files-accelerated":{
            "stunts":{
@@ -1209,7 +1217,7 @@
            "img":"icons/svg/mystery-man.svg",
            "token_img":"icons/svg/mystery-man.svg",
            "default_name":"Dresden Files Accelerated",
-           "default_description":"Dresden Files Accelerated Standard character"
+           "default_description":"Dresden Files Accelerated Standard Character"
         }
      },
     "ModularFate.applyDefaultOptions":"Options for default framework",

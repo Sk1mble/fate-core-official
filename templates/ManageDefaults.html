@@ -1,19 +1,27 @@
-<form>
-    {{#each this.defaults}}
-    <div style="max-height:100%; overflow-y:auto; display:flex; flex-direction:row; padding:5px">
-        <div>
-            <input name="def_name" type="text" data-oldValue = "{{this.default_name}}" value="{{this.default_name}}"></input>
+<form style = "max-height:75vh; width:45em">
+    <div>
+        <div style="height:2em;"">
+            <button type="button" style="line-height:1em; width:10em; padding:0px; font-size:1em; height:2em" id="md_export_all">{{localize 'ModularFate.exportAllDefaults'}}</button>
+            <button type="button" style="line-height:1em; width:10em; padding:0px; font-size:1em; height:2em" id="md_export_selected">{{localize 'ModularFate.exportSelected'}}</button>
+            <button type="button" style="line-height:1em; width:10em; padding:0px; font-size:1em; height:2em" id="md_import">{{localize 'ModularFate.import'}}</button>
+            <h3 style="float:right"><i id="md_toggle_edit" {{#if this.editing}}class = "fas fa-toggle-on"{{else}}class = "fas fa-toggle-off"{{/if}}></i> {{localize 'ModularFate.edit'}}</h2>
         </div>
-        <div>
-            <input name = "def_desc" type="text" data-default_name = "{{this.default_name}}" value="{{this.default_description}}"</input>
-        </div>
-        <div>
-            <input name = "def_select" data-default_name = "{{this.default_name}}" type="checkbox"></input>
-            <button type="button" style="height:35px; width:35px" name="inspect_default" data-default_name = "{{this.default_name}}" class="fas fa-search"></button>
-        </div>
-        <div style="padding-left:20px">
-            <button type="button" style="height:35px;" name="delete_default" data-default_name = "{{this.default_name}}" class="fas fa-trash"></button>
+        <div style="overflow-y:auto; max-height:70vh;">
+            {{#each this.defaults}}
+            <div style="display:flex; flex-direction:row; height:3em; padding:5px">
+                <div style="width:15em; padding-top:5px">
+                    <input class = "md_edit" {{#unless ../this.editing}}disabled="true"{{/unless}} name="def_name" type="text" data-oldValue = "{{this.default_name}}" value="{{this.default_name}}"></input>
+                </div>
+                <div style="width:20em; padding-left:10px; padding-top:5px">
+                    <input class = "md_edit" {{#unless ../this.editing}}disabled="true"{{/unless}} name = "def_desc" type="text" data-default_name = "{{this.default_name}}" value="{{this.default_description}}"</input>
+                </div>
+                <div>
+                    <input name = "def_select" data-default_name = "{{this.default_name}}" type="checkbox"></input>
+                    <button type="button" style="font-size:0.75em; height:25px; width:25px;" name="inspect_default" data-default_name = "{{this.default_name}}" class="fas fa-search"></button>
+                    <button type="button" style="font-size:0.75em; height:25px; width:25px;" name="delete_default" data-default_name = "{{this.default_name}}" {{#unless ../this.editing}}disabled="true" {{/unless}} class="md_edit fas fa-trash"></button>
+                </div>
+            </div>
+            {{/each}}
         </div>
     </div>
-    {{/each}}
 </form>
