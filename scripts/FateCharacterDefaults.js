@@ -66,6 +66,7 @@ class FateCharacterDefaults {
         if (defaults[this.getSafeName(name)]){
             delete defaults[this.getSafeName(name)];
             await game.settings.set("ModularFate", "defaults", defaults);
+            ui.sidebar.render(false);
         } 
     }
 
@@ -75,6 +76,14 @@ class FateCharacterDefaults {
         await this.removeDefault(old_name);
         de.default_name = new_name;
         await this.storeDefault(de);
+        ui.sidebar.render(false);
+    }
+
+    async editDescription (name, new_desc){
+        let defaults = await duplicate(game.settings.get("ModularFate", "defaults"));
+        let de = defaults[this.getSafeName(name)];
+        de.default_description = new_desc;
+        await game.settings.set("ModularFate","defaults",defaults);
     }
 
     async getDefault(name){
@@ -217,40 +226,6 @@ class FateCharacterDefaults {
         return await Actor.create(actor_data, {renderSheet:render});
     }
 
-    async presentDefault (default_name){
-        //Returns the details of the default as an array with a human-readable format.
-        //Used to present the default at the presentation layer so GM can get an idea of what the settings are for that template.
-        let d = await duplicate(await this.getDefault(default_name));
-        let output = {};
-
-        output.img = d.img;
-        output.token_img = d.token_img;
-        output.default_name = d.default_name;
-        output.default_description = d.default_name;
-        let stunt_names = [];
-        let aspect_names = [];
-        let track_names = [];
-        let skill_names = [];
-
-        for (let stunt in d.stunts){
-            stunt_names.push(d.stunts[stunt].name)
-        }
-        for (let aspect in d.aspects){
-            aspect_names.push(d.aspects[aspect].name)
-        }
-        for (let track in d.tracks){
-            track_names.push(d.tracks[track].name)
-        }
-        for (let skill in d.skills){
-            skill_names.push(d.skills[skill].name)
-        }
-        output.stunts = stunt_names.join("\n");
-        output.aspects = aspect_names.join("\n");
-        output.tracks = track_names.join("\n");
-        output.skills = skill_names.join("\n");
-        return output;
-    }
-
     async applyDefault (actor, default_name, options){
         //Parameters are: 
         //Actor: A reference to the actor to which the template is to be applied
@@ -307,9 +282,6 @@ class FateCharacterDefaults {
             }
         }
     }
-
-    //TODO: Now I just need to write the user interface for managing existing templates (delete template, create actor from template, maybe import template from JSON, export template to JSON) and the UI widgets on character sheets for applying templates to the sheet as a whole or a given section individually
-    //Will be an option on apply to tick the following boxes: stunts, tracks, skills, aspects, avatar, items.
 }
 
 // Add extra button to foundry's settings menu
@@ -344,6 +316,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
 
     html.on("click", 'button[id="manage_defaults"]', () => {
         //Code to handle the defaults management (view list, delete)
+        let md = new ManageDefaults().render(true);
     })
 
     html.on("click", 'button[id="create_from_default"]', async () => {
@@ -368,3 +341,69 @@ Hooks.on("renderSidebarTab", (app, html) => {
         await f.createCharacterFromDefault(default_name, actor_name, true);
     });
 });
+
+class ManageDefaults extends FormApplication {
+    constructor(...args){
+        super(...args);
+    }
+    //Set up the default options for instances of this class
+    static get defaultOptions() {
+        const options = super.defaultOptions; //begin with the super's default options
+        //The HTML file used to render this window
+        options.template = "systems/ModularFate/templates/ManageDefaults.html"; 
+        options.width = "auto";
+        options.height = "auto";
+        options.title = `${game.i18n.localize("ModularFate.defaultSetup")} in ${game.world.data.title}`;
+        options.closeOnSubmit = true;
+        options.id = "DefaultSetup"; // CSS id if you want to override default behaviors
+        options.resizable = false;
+        return options;
+    }
+    //The function that returns the data model for this window. In this case, we need the list of stress tracks
+    //conditions, and consequences.
+    async getData(){
+        let f = new FateCharacterDefaults();
+        let data = {
+            default_names:f.defaults,
+            defaults:game.settings.get("ModularFate","defaults"),
+        }
+        return data;
+    }
+
+    //Here are the action listeners
+    activateListeners(html) {
+        super.activateListeners(html);
+    
+        const d_name = html.find("input[name='def_name']");
+        d_name.on('change', async (event, html) =>{
+            let f = new FateCharacterDefaults();
+            let oldName = event.target.getAttribute("data-oldValue");
+            let newName = event.target.value;
+            await f.renameDefault(oldName, newName);
+            this.render(false);
+        })     
+
+        const d_desc = html.find("input[name='def_desc']");
+        d_desc.on('change', async (event, html) =>{
+            let f = new FateCharacterDefaults();
+            await f.editDescription(event.target.getAttribute("data-default_name"), event.target.value);
+            this.render(false);
+        })     
+
+        const d_def = html.find("button[name='delete_default']");
+        d_def.on("click", async (event, html) =>{
+            let f = new FateCharacterDefaults();
+            let del = await ModularFateConstants.confirmDeletion();
+            if (del) await f.removeDefault(event.target.getAttribute("data-default_name"));
+            this.render(false);
+        })
+
+        const inspect_default = html.find("button[name='inspect_default']");
+        inspect_default.on("click", async (event, html) => {
+            let f = new FateCharacterDefaults();
+            let name = event.target.getAttribute("data-default_name");
+            let d = await f.getDefault(name);
+            //Todo: code to display window with details of tracks etc for this default.
+        })
+    }
+}

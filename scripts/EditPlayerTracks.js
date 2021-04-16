@@ -98,7 +98,6 @@ class EditPlayerTracks extends FormApplication {
         save.on("click", event => this._save(event, html))
         const ad_hoc = html.find("button[id='ad_hoc']");
         ad_hoc.on("click", event => this._ad_hoc(event, html));
-        const checkboxes = html.find("input[type='checkbox']");
         const numberbox = html.find("input[type='number']");
         numberbox.on("change", event => this._numChange(event, html));
         const checkbox = html.find("input[type='checkbox']");

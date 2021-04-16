@@ -1,4 +1,5 @@
 {
+    "ModularFate.defaultSetup":"Manage Character Default Frameworks",
     "ModularFate.proceedToMerge":"Proceed to merge? No stunts, skills, or tracks will be lost.",
     "ModularFate.proceedToOverwrite":"Proceed to overwrite? All data in selected sections will be lost.",
     "ModularFate.overwrite":"OVERWRITE",

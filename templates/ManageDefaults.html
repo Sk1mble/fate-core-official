@@ -1,0 +1,19 @@
+<form>
+    {{#each this.defaults}}
+    <div style="max-height:100%; overflow-y:auto; display:flex; flex-direction:row; padding:5px">
+        <div>
+            <input name="def_name" type="text" data-oldValue = "{{this.default_name}}" value="{{this.default_name}}"></input>
+        </div>
+        <div>
+            <input name = "def_desc" type="text" data-default_name = "{{this.default_name}}" value="{{this.default_description}}"</input>
+        </div>
+        <div>
+            <input name = "def_select" data-default_name = "{{this.default_name}}" type="checkbox"></input>
+            <button type="button" style="height:35px; width:35px" name="inspect_default" data-default_name = "{{this.default_name}}" class="fas fa-search"></button>
+        </div>
+        <div style="padding-left:20px">
+            <button type="button" style="height:35px;" name="delete_default" data-default_name = "{{this.default_name}}" class="fas fa-trash"></button>
+        </div>
+    </div>
+    {{/each}}
+</form>
