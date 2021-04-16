@@ -79,7 +79,7 @@ class FateCharacterDefaults {
         output.img = d.img;
         output.token_img = d.token_img;
         output.default_name = d.default_name;
-        output.default_description = d.default_descriptions;
+        output.default_description = d.default_description;
         let stunt_names = [];
         let aspect_names = [];
         let track_names = [];
