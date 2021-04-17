@@ -233,13 +233,15 @@ export class ModularFateActor extends Actor {
 
                     //Get the value of the player's skill
                     if (skills[l_skill] == undefined){
-
+                        if (l_boxes > 0) {
+                            track.enabled = true;
+                        }
                     }else {
                         let skill_rank = skills[l_skill].rank;
                         //If this is 'enables' and the skill is high enough, enable.
                         if (l_enables && skill_rank >= l_skill_rank) {
-                        track.enabled = true;
-                    }
+                            track.enabled = true;
+                        }
                     //If this adds boxes and the skill is high enough, add boxes if not already present.
                     //Telling if the boxes are already present is the hard part.
                     //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
