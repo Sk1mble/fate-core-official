@@ -232,7 +232,7 @@ export class ModularFateActor extends Actor {
                     let l_enables = linked_skills[i].enables;
 
                     //Get the value of the player's skill
-                    if (skills[l_skill] == undefined){
+                    if (skills[l_skill] == undefined && l_enables == false){
                         if (l_boxes > 0) {
                             track.enabled = true;
                         }
@@ -247,8 +247,8 @@ export class ModularFateActor extends Actor {
                     //If boxes.length > boxes it means we have added boxes, but how many? I think we need to store a count and add
                     //or subract them at the end of our run through the linked skills.
                         
-                        if (l_boxes > 0) {
-                            track.enabled = true;
+                        if (l_boxes > 0 ) {
+                            if (l_enables == false) track.enabled = true;
                             if (skill_rank >= l_skill_rank){
                                 box_mod += l_boxes;
                             }
