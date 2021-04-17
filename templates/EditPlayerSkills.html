@@ -8,7 +8,7 @@
             <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="width:50px; height:35px; text-align:left"></input>
         </div> 
         <div style="float:left; width:80%; margin:auto; padding:3px">
-            <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button" style="text-align:left; width:200px; height:35px; background-color: lightsteelblue;">{{this.name}}</button>
+            <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button" style="text-align:left; width:200px; height:35px; background-color: lightsteelblue; overflow-y:scroll; width:100%">{{this.name}}</button>
         </div>
     </div>
     {{else}}{{/if}}

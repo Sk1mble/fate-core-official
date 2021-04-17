@@ -1,3 +1,7 @@
+# Version 3.1.1
+  * Improved display of long skill names in skill editor
+  * Added ability to edit ad-hoc skills from the GM skill editor
+
 # Version 3.1.0
   * Added a comprehensive character default framework feature for almost instantaneous creation of characters from predefined sets of skills, stunts, aspects, extras, and tracks. Guide to follow.
   * Things are now hidden from the actor view. The ModularFate Things folder will be automatically deleted next time you create an item on the map.

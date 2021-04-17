@@ -12,7 +12,7 @@
         <td style="width:100px">
             <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
         </td>
-        <td>
+        <td style="width:100%">
             {{this.name}}
         </td>
     </tr>
@@ -47,7 +47,7 @@
             <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
         </td>
         <td>
-            {{this.name}}
+            <input type="text" style="width:95%;" name="adhoc_skill_name" value="{{this.name}}" data-oldName="{{this.name}}"></input>
         </td>
     </tr>
     {{else}}{{/if}}
@@ -90,7 +90,7 @@
             {{localize 'ModularFate.AdHocSkillToAdd'}}:
         </td>
         <td>
-            <input name="ad_hoc_input" id="ad_hoc_input" style="color:black; background: white; font-family:Arial; width:200px"><button style="width:30px; height:30px;"" type="button" id="add_ah_button" i icon class="fas fa-plus"></button>
+            <input name="ad_hoc_input" type="text" id="ad_hoc_input" style="width:80%">&nbsp&nbsp<button style="width:30px; height:30px;"" type="button" id="add_ah_button" i icon class="fas fa-plus"></button>
         </td>
     </tr>
     <tr>

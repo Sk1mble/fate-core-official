@@ -388,6 +388,30 @@ class EditGMSkills extends FormApplication{
             }
         })
 
+        const asn = $('input[name="adhoc_skill_name"]');
+        asn.on('blur', async (event, html)=>{
+            let oldSkill = event.target.getAttribute("data-oldName");
+            let newSkill = event.target.value.split(".").join("․");
+            if (oldSkill != newSkill){
+                let rank = this.object.data.data.skills[oldSkill].rank;
+                newSkill= {
+                    "name":newSkill,
+                    "description":game.i18n.localize("ModularFate.AdHocSkill"),
+                    "pc":false,
+                    "overcome":"",
+                    "caa":"",
+                    "attack":"",
+                    "defend":"",
+                    "rank":rank,
+                    "adhoc":true
+                }
+    
+                if (newSkill != undefined){
+                    newSkill.name=newSkill.name.split(".").join("․");
+                    this.object.update({"data.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
+                }
+            }
+        })
     }
 
     async _confirm(event,html){
