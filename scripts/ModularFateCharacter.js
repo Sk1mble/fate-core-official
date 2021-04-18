@@ -173,12 +173,29 @@ export class ModularFateCharacter extends ActorSheet {
             const item = html.find("div[name='item_header']");
             item.on("dragstart", event => this._on_item_drag (event, html));
 
+            const mfdraggable = html.find('.mf_draggable');
+            mfdraggable.on("dragstart", event => {
+                if (game.user.isGM){
+                    let ident = "mf_draggable"
+                    let type = event.target.getAttribute("data-mfdtype");
+                    let origin = event.target.getAttribute("data-mfactorid");
+                    let dragged_name = event.target.getAttribute("data-mfname");
+                    let dragged;
+                    if (type == "skill") dragged = this.actor.data.data.skills[dragged_name];
+                    if (type == "stunt") dragged = this.actor.data.data.stunts[dragged_name];
+                    if (type == "aspect") dragged = this.actor.data.data.aspects[dragged_name];
+                    if (type == "track") dragged = this.actor.data.data.tracks[dragged_name]
+                    let user = game.user.id;
+                    let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged};
+                    event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
+                }
+            })
+
             //const input = html.find("input");
             const input = html.find('input[type="text"], input[type="number"], textarea');
 
             const extra_active = html.find('button[name = "extra_active"]');
             extra_active.on("click", async event => {
-                console.log(event.target.id);
                 let item_id = event.target.id.split("_")[0];
                 let item = this.document.items.get(item_id);
                 if (item.data.data.active){
@@ -1047,3 +1064,60 @@ export class ModularFateCharacter extends ActorSheet {
         return sheetData;
     }
 }
+
+Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
+    if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === data.userid){
+        //First check it's not from the same sheet
+        if (data.ident !== "mf_draggable") return;
+        if (actor.id == data.origin) return;
+        if (data.type == "stunt"){
+            let old = actor.data.data.stunts[data.dragged.name];
+            if (old) {
+                let answer = await ModularFateConstants.awaitYesNoDialog(game.i18n.localize("ModularFate.overwrite_element"), game.i18n.localize("ModularFate.exists"));
+                if (answer == "no") return
+            } 
+            await actor.update({"data.stunts":{[data.dragged.name]:data.dragged}});
+        }
+        if (data.type == "aspect"){
+            let old = actor.data.data.aspects[data.dragged.name];
+            if (old) {
+                let answer = await ModularFateConstants.awaitYesNoDialog(game.i18n.localize("ModularFate.overwrite_element"), game.i18n.localize("ModularFate.exists"));
+                if (answer == "no") return
+            } 
+            data.dragged.value = "";
+            data.dragged.notes = "";
+            await actor.update({"data.aspects":{[data.dragged.name]:data.dragged}});
+        }
+        if (data.type == "skill"){
+            let old = actor.data.data.skills[data.dragged.name];
+            if (old) {
+                let answer = await ModularFateConstants.awaitYesNoDialog(game.i18n.localize("ModularFate.overwrite_element"), game.i18n.localize("ModularFate.exists"));
+                if (answer == "no") return
+            } 
+            data.dragged.rank = 0;
+            await actor.update({"data.skills":{[data.dragged.name]:data.dragged}});
+        }
+        if (data.type == "track"){
+            let track = data.dragged;
+            if (track?.aspect && track?.aspect !== "No"){
+                track.aspect.name = "";
+            }
+
+            if (track?.boxes > 0){
+                for (let i = 0; i < track.box_values.length; i++){
+                    track.box_values[i] = false;
+                }
+            }
+
+            if (track?.notes){
+                track.notes = "";
+            }
+            let old = actor.data.data.tracks[track.name];
+            if (old) {
+                let answer = await ModularFateConstants.awaitYesNoDialog(game.i18n.localize("ModularFate.overwrite_element"), game.i18n.localize("ModularFate.exists"));
+                if (answer == "no") return
+            } 
+            await actor.update({"data.tracks":{[track.name]:track}});
+        }
+    }
+})

@@ -1,4 +1,6 @@
 {
+   "ModularFate.overwrite_element":"Overwrite character element?",
+   "ModularFate.exists":"The element you dragged matches one already on the target character. Overwrite?",
     "ModularFate.PasteDefaults":"Paste data here; we'll ask before overwriting defaults",
     "ModularFate.copyAndPasteToSaveDefaults":"Copy & Paste this to save your defaults",
     "ModularFate.defaultCharacterFramework":"Default Character Framework - ",
