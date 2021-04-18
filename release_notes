@@ -1,3 +1,7 @@
+# Version 3.1.3 
+  * If you hold down shift when dragging an element from one character to another, the original data will be carried with.
+  * (In the case of extras, this will prevent the extra from being deleted on copy to another character)
+  
 # Version 3.1.2
   * If you're the GM, You can now drag skills, stunts, tracks, and aspects between characters. This will place a blank copy of the relevant element on the target character sheet.
   * You can use this as a quick way of creating a new character template by cherry picking parts of an existing character.
