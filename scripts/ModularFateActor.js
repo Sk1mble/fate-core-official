@@ -11,11 +11,7 @@ export class ModularFateActor extends Actor {
 
     async updateFromExtra(itemData) {
         let actor = this;
-    
-        if (!shouldUpdate(actor)){
-            return;
-        } else {
-            actor.sheet.editing = true;
+        actor.sheet.editing = true;
             let extra = duplicate(itemData);
     
             //Find each aspect, skill, stunt, and track attached to each extra
@@ -156,7 +152,6 @@ export class ModularFateActor extends Actor {
                 "data.skills":final_skills,
                 "data.stunts":final_stunts
             })
-        }
     }
 
     async deactivateExtra (item){
@@ -278,54 +273,3 @@ export class ModularFateActor extends Actor {
         return tracks;
     }
 }
-
-function shouldUpdate(actor){
-    if (!actor.isOwner){
-        return false;
-    }
-    const permissions = actor.data.permission; // Exists
-    const activePlayers = game.users.contents // Exists
-       .filter(user => user.active)
-       .map(user => user.id);
-
-    for (let playerId in permissions) {
-        var isOwner = permissions[playerId] === CONST.ENTITY_PERMISSIONS.OWNER;
-        var isActive = activePlayers.includes(playerId);
-
-        if (isOwner && isActive) {
-            return playerId === game.user.id;
-        }
-    }
-}
-
-Hooks.on('deleteItem', async (...args) => {
-    let item;
-    for (let i = 0; i < args.length; i++){
-        if (args[i].constructor.name == "Item"){
-            item = args[i];
-        }
-    }
-    let actor = item.parent;
-    if (actor?.type != "ModularFate"){
-        return;
-    }
-
-    if (!shouldUpdate(actor)){
-        return;
-    } else {
-        await actor.deactivateExtra (item);
-    }
-})
-
-Hooks.on('createItem', async (...args) => {
-    let item;
-    for (let i = 0; i < args.length; i++){
-        if (args[i].constructor.name == "Item"){
-            item = args[i];
-        }
-    }
-    let actor = item.parent;
-    if (actor?.type == "ModularFate") {
-        await actor.updateFromExtra(item.data);
-    }
-})

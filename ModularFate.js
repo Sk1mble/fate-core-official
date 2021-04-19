@@ -32,6 +32,7 @@ import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
 import { ExtraSheet } from "./scripts/ExtraSheet.js"
 import { Thing } from "./scripts/Thing.js"
 import { ModularFateActor } from "./scripts/ModularFateActor.js"
+import { ModularFateExtra } from "./scripts/ModularFateExtra.js"
 
 Hooks.on("preCreateActor", async (actor, data, options, userId) => {
 
@@ -293,6 +294,7 @@ Hooks.on('updateScene', (...args) => {
 
 Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = ModularFateActor;
+    CONFIG.Item.documentClass = ModularFateExtra;
     CONFIG.fontFamilies.push("Montserrat");
 
     game.settings.register("ModularFate","drawingsOnTop", {
