@@ -1,4 +1,6 @@
 {
+    "ModularFate.modifiedRollDefault":"Always use modified roll dialog?",
+    "ModularFate.modifiedRollDefaultExplainer":"Always launch the modified roll dialog when making a roll",
     "ModularFate.NextConflict":"Cycle to next conflict in this scene.",
     "ModularFate.AddConflict":"Add a new conflict to this scene.",
     "ModularFate.combatantsOnly":"Click to show information for all tokens in this scene.",
