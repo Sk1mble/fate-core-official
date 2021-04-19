@@ -628,7 +628,11 @@ export class ModularFateCharacter extends ActorSheet {
 
     async _onSkill_name(event, html) {
 
-        if (event.shiftKey){
+        let umr = false;
+        if (event.shiftKey && !game.settings.get("ModularFate","modifiedRollDefault")) umr = true;
+        if (!event.shiftKey && game.settings.get("ModularFate","modifiedRollDefault")) umr = true;
+
+        if (umr){
            let mrd = new ModifiedRollDialog(this.actor, event.target.id);
             mrd.render(true);
         }
