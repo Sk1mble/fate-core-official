@@ -1,4 +1,7 @@
 # Version 2.2.28
+  * Ported the feature from 3.1.5; a setting to always use the modified roll dialog.
+
+# Version 2.2.28
   * Minor bug fixes to the layout of the aspects on tracks in FU and modular fate character sheets.
 
 # Version 2.2.27
