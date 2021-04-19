@@ -306,6 +306,15 @@ Hooks.once('init', async function () {
         default:false
     })
 
+    game.settings.register("ModularFate","modifiedRollDefault", {
+        name:game.i18n.localize("ModularFate.modifiedRollDefault"),
+        hint:game.i18n.localize("ModularFate.modifiedRollDefaultExplainer"),
+        scope:"world",
+        config:"true",
+        type:Boolean,
+        default:false
+    })
+
     game.settings.register("ModularFate","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",
         hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",

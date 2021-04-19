@@ -1,3 +1,6 @@
+# Version 3.1.5
+  * Added a setting to turn the Modified Roll Dialog on by default.
+
 # Version 3.1.4
   * Following advice from Atropos, functions to manipulate character based on extras moved to _preCreate and _preDelete methods of the new ModularFateExtra class.
 

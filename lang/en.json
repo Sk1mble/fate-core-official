@@ -1,4 +1,6 @@
 {
+   "ModularFate.modifiedRollDefault":"Always use modified roll dialog?",
+   "ModularFate.modifiedRollDefaultExplainer":"Always launch the modified roll dialog when making a roll",
    "ModularFate.overwrite_element":"Overwrite character element?",
    "ModularFate.exists":"The element you dragged matches one already on the target character. Overwrite?",
     "ModularFate.PasteDefaults":"Paste data here; we'll ask before overwriting defaults",

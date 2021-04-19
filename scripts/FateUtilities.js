@@ -540,7 +540,11 @@ class FateUtilities extends Application{
         let rankS = rank.toString();
         let rung = ladder[rankS];
 
-        if (this.shift && !sk.value.startsWith("stunt")) {
+        let umr = false;
+        if (this.shift && !game.settings.get("ModularFate","modifiedRollDefault")) umr = true;
+        if (!this.shift && game.settings.get("ModularFate","modifiedRollDefault")) umr = true;
+
+        if (umr && !sk.value.startsWith("stunt")) {
                 let mrd = new ModifiedRollDialog (token.actor, skill);
                 mrd.render(true);
                 this.shift=false;
