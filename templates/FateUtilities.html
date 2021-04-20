@@ -30,7 +30,7 @@
                                     <td style="font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
                                         {{this.name}} ({{localize 'ModularFate.GM'}})
                                     </td>
-                                    <td>
+                                    <td style="padding-right:10px">
                                         <input id="{{this.id}}" name="gmfp" type="number" min="0" value="{{this.fatepoints}}" style="background-color:white; width:50px; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" {{#if ../GM}}{{else}}disabled="disabled"{{/if}}/> {{localize 'ModularFate.SceneFatePoints'}}{{#if ../GM}}<button type="button" id="refresh_fate_points" style="width:300px; float:right; font-size:{{../fontSize}}pt"> {{localize 'ModularFate.RefreshPlayerFatePoints'}}</button>{{/if}}
                                     </td>
                                 </tr>
@@ -238,7 +238,7 @@
                 <!----------------------------------------------------------------------BEGIN SCENE TAB-->
                     <div name = "scene" id="fu_scene_tab" class="tab scene" data-tab="scene" style="background-color:lightgray; padding:10px;">
                             <h2>{{localize 'ModularFate.SituationAspects'}}</h2>
-                            {{#if GM}}<button type="button" id="add_sit_aspect" style="width:auto; height:auto; font-size:{{fontSize}}pt">{{localize 'ModularFate.AddNewAspect'}}</button>{{/if}}
+                            {{#if GM}}<button type="button" id="add_sit_aspect" style="width:auto; height:32px; font-size:{{fontSize}}pt">{{localize 'ModularFate.AddNewAspect'}}</button>&nbsp<button type="button" id="fuAspectLabelSettings" title="{{localize 'ModularFate.fuLabelSettingsHint'}}" i icon class="fas fa-palette" style="width:32px; height:32px"></button>{{/if}}
                             <div style="max-height:calc({{height}}px - 220px); overflow-y:auto">   
                             <div id="fu_aspects_pane" style="overflow-y:auto; max-height:{{fuPaneHeight}}px">
                                 {{#each situation_aspects}}

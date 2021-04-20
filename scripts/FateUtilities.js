@@ -387,6 +387,11 @@ class FateUtilities extends Application{
         del_game_aspect.on("click", event => this._del_game_aspect(event, html));
         const game_a_free_i = html.find("input[name='game_a_free_i']");
         game_a_free_i.on("change", event => this._game_a_free_i_button(event, html));
+
+        const fuLabelSettings = html.find('button[id="fuAspectLabelSettings"]');
+        fuLabelSettings.on('click', async event => {
+            new FUAspectLabelClass().render(true);
+        })
     }
 
     async _sit_aspect_change(event, html){
@@ -1515,6 +1520,50 @@ class TimedEvent extends Application {
             let d = new Dialog(dp, dO);
             d.render(true);
         }
+    }
+}
+
+class FUAspectLabelClass extends FormApplication {
+    static get defaultOptions (){
+        const options = super.defaultOptions;
+        options.template = "systems/ModularFate/templates/FULabelSettings.html";
+        options.closeOnSubmit = true;
+        options.submitOnClose = false;
+        options.title = game.i18n.localize("ModularFate.fuAspectLabelSettingsTitle");
+        return options;
+    }
+
+    async _updateObject(event, formData){
+        let font = formData.fu_label_font;
+        let size = formData.fu_font_size;
+        let text = formData.fu_text_color;
+        let fill = formData.fu_fill_color;
+        let border = formData.fu_border_color;
+
+        await game.settings.set("ModularFate","fuAspectLabelFont", CONFIG.fontFamilies.indexOf(font));
+        await game.settings.set("ModularFate","fuAspectLabelSize", size);
+        await game.settings.set("ModularFate", "fuAspectLabelTextColour", text);
+        await game.settings.set("ModularFate", "fuAspectLabelFillColour", fill);
+        await game.settings.set("ModularFate", "fuAspectLabelBorderColour",border);
+
+        this.close();
+    }
+
+    async getData(){
+        return {
+                    fonts:CONFIG.fontFamilies, 
+                    currentFont:CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")],
+                    fontSize:game.settings.get("ModularFate", "fuAspectLabelSize"),
+                    textColour:game.settings.get("ModularFate","fuAspectLabelTextColour"),
+                    fillColour:game.settings.get("ModularFate","fuAspectLabelFillColour"),
+                    borderColour:game.settings.get("ModularFate","fuAspectLabelBorderColour")
+                }
+    }
+
+    async activateListeners(html){
+        $('#save_fu_label_settings').on('click', async event => {
+            this.submit();
+        })
     }
 }
 

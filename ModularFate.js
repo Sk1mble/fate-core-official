@@ -763,62 +763,6 @@ game.settings.register("ModularFate","freeStunts", {
         default:12
     });
 
-
-    class FUAspectLabelClass extends FormApplication {
-        static get defaultOptions (){
-            const options = super.defaultOptions;
-            options.template = "systems/ModularFate/templates/FULabelSettings.html";
-            options.closeOnSubmit = true;
-            options.submitOnClose = false;
-            options.title = game.i18n.localize("ModularFate.fuAspectLabelSettingsTitle");
-            return options;
-        }
-
-        async _updateObject(event, formData){
-            let font = formData.fu_label_font;
-            let size = formData.fu_font_size;
-            let text = formData.fu_text_color;
-            let fill = formData.fu_fill_color;
-            let border = formData.fu_border_color;
-
-            await game.settings.set("ModularFate","fuAspectLabelFont", CONFIG.fontFamilies.indexOf(font));
-            await game.settings.set("ModularFate","fuAspectLabelSize", size);
-            await game.settings.set("ModularFate", "fuAspectLabelTextColour", text);
-            await game.settings.set("ModularFate", "fuAspectLabelFillColour", fill);
-            await game.settings.set("ModularFate", "fuAspectLabelBorderColour",border);
-
-            this.close();
-        }
-
-        async getData(){
-            return {
-                        fonts:CONFIG.fontFamilies, 
-                        currentFont:CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")],
-                        fontSize:game.settings.get("ModularFate", "fuAspectLabelSize"),
-                        textColour:game.settings.get("ModularFate","fuAspectLabelTextColour"),
-                        fillColour:game.settings.get("ModularFate","fuAspectLabelFillColour"),
-                        borderColour:game.settings.get("ModularFate","fuAspectLabelBorderColour")
-                    }
-        }
-
-        async activateListeners(html){
-            $('#save_fu_label_settings').on('click', async event => {
-                this.submit();
-            })
-        }
-    }
-
-    // Define a settings submenu which handles advanced configuration needs
-    game.settings.registerMenu("ModularFate", "fuLabelSettings", {
-        name: game.i18n.localize("ModularFate.fuAspectLabelSettingsTitle"),
-        label: game.i18n.localize("ModularFate.Setup"),// The text label used in the button
-        hint: game.i18n.localize("ModularFate.fuLabelSettingsHint"),
-        icon: "fas fa-palette",               // A Font Awesome icon used in the submenu button
-        type: FUAspectLabelClass,   // A FormApplication subclass which should be created
-        restricted: true                   // Restrict this submenu to gamemaster only?
-    });
-
-
     game.settings.register("ModularFate", "fuAspectLabelSize", {
         name: game.i18n.localize("ModularFate.fuAspectLabelSizeName"),
         hint:game.i18n.localize("ModularFate.fuAspectLabelSizeHint"),
