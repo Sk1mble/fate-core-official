@@ -5,7 +5,7 @@
                 {{localize 'ModularFate.fuAspectLabelFont'}}
             </td>
             <td style="width:10em">
-                <select name="fu_label_font">{{log this}}
+                <select name="fu_label_font">
                     {{#each this.fonts}}
                     <option {{#if (eq this ../currentFont)}}selected="selected"{{/if}}>
                         {{this}}
