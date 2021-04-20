@@ -1,5 +1,6 @@
 # Version 3.1.7
   * Moved settings menus around to a more logical and convenient order.
+  * FU aspect label setting now in the scene tab of FU itself.
 
 # Version 3.1.6
   * Added settings for the default aspect label fill, text, and border colours.
