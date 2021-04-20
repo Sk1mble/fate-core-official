@@ -282,6 +282,11 @@ class FateUtilities extends Application{
         const addToScene = html.find("button[name='addToScene']");
         addToScene.on("click", event => this._addToScene(event, html));
 
+        addToScene.on("dragstart", event => {
+            let drag_data = {type:"situation_aspect", aspect:event.target.getAttribute("data-aspect"), value:event.target.getAttribute("data-value")};
+            event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
+        })
+
         const panToAspect = html.find("button[name='panToAspect']");
         panToAspect.on("click", event => this._panToAspect(event, html));
 
@@ -860,11 +865,7 @@ class FateUtilities extends Application{
         }
     }
 
-    async _addToScene(event, html){
-        let index=event.target.id.split("_")[1];
-        let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
-        let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
-        
+    async addAspectDrawing(value, name, x, y){
         if (canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name))==undefined)
         {
             let text;
@@ -883,26 +884,34 @@ class FateUtilities extends Application{
                 DrawingDocument.create({
                     type: CONST.DRAWING_TYPES.RECTANGLE,
                     author: game.user.id,
-                    x: canvas.stage.pivot._x,
-                    y: canvas.stage.pivot._y,
+                    x: x,
+                    y: y,
                     width: width,
                     height: height,
                     fillType: CONST.DRAWING_FILL_TYPES.SOLID,
-                    fillColor: "#FFFFFF",
+                    fillColor: game.settings.get("ModularFate", "fuAspectLabelFillColour"),
                     fillAlpha: 1,
                     strokeWidth: 4,
-                    strokeColor: "#000000",
+                    strokeColor: game.settings.get("ModularFate", "fuAspectLabelBorderColour"),
                     strokeAlpha: 1,
                     text: text,
                     fontFamily: font,
                     fontSize: size,
-                    textColor: "#000000",
+                    textColor: game.settings.get("ModularFate", "fuAspectLabelTextColour"),
                     points: []
                 }, {parent: game.scenes.viewed});   
         }
         else {
             ui.notifications.error(game.i18n.localize("ModularFate.AlreadyANoteForThatAspect"));
         }
+    }
+
+    async _addToScene(event, html){
+        let index=event.target.id.split("_")[1];
+        let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
+        let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
+        
+        this.addAspectDrawing(value, name, canvas.stage.pivot._x, canvas.stage.pivot._y);
     }
 
     async _del_sit_aspect(event, html){
@@ -1657,5 +1666,16 @@ Hooks.on('renderFateUtilities', function(){
     
     if (numRolls < game.system.num_rolls){
         game.system.num_rolls = numRolls;
+    }
+})
+
+Hooks.on ('dropCanvasData', async (canvas, data) => {
+    if (data.type =="situation_aspect") {
+        let aspect = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[data.aspect].name;
+        let value = data.value;
+        let x = data.x;
+        let y = data.y;
+        let f = new FateUtilities();
+        f.addAspectDrawing(value, aspect, x, y);
     }
 })

@@ -1,3 +1,7 @@
+# Version 3.1.6
+  * Added settings for the default aspect label fill, text, and border colours.
+  * Moved these settings to a specialised formApplication
+
 # Version 3.1.5
   * Added a setting to turn the Modified Roll Dialog on by default.
 

@@ -78,6 +78,24 @@ class ModularFateConstants {
         })
     }
 
+    static awaitColourPicker(prompt){
+        return new Promise(resolve => {
+            new Dialog({
+                title: prompt,
+                content: '<input type="color" id="mf_cp" value="#000000"></input>',
+                buttons: {
+                    ok: {
+                        label: game.i18n.localize("ModularFate.OK"),
+                        callback: () => {
+                            resolve(document.getElementById("mf_cp").value)
+                        }
+                    }
+                },
+                default:"ok",
+            }).render(true);
+        })
+    }
+
     static async confirmDeletion(){
         let confirm = game.settings.get("ModularFate","confirmDeletion");
         if (!confirm){

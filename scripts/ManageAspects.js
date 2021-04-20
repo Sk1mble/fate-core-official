@@ -12,20 +12,7 @@ Hooks.once('init', async function () {
         default:{}
     });
 
-    game.settings.register("ModularFate", "aspectwidth", {
         name: "Aspect Label Width",
-        hint: game.i18n.localize("ModularFate.AspectLabelWidth"),
-        scope: "world",
-        config: true,
-        type: Number,
-        range: {
-            min: 5,
-            max: 50,
-            step: 1,
-        },
-        default:12
-    });
-
     // Register the menu to setup the world's aspect list.
     game.settings.registerMenu("ModularFate","AspectSetup", {
         name:game.i18n.localize("ModularFate.SetupAspects"),

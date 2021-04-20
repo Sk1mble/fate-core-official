@@ -251,7 +251,7 @@
                                         </span>
                                         {{#if ../GM}}
                                         <span style="padding-left:10px; width:200px">
-                                            <button type="button" name="addToScene" id="addToScene_{{@key}}" title="{{localize 'ModularFate.AddAspectToMap'}}" style="width:35px; height:35px" i icon class="fas fa-sticky-note"></button>
+                                            <button type="button" name="addToScene" draggable="true" data-aspect="{{@key}}" data-value="{{this.free_invokes}}" id="addToScene_{{@key}}" title="{{localize 'ModularFate.AddAspectToMap'}}" style="width:35px; height:35px" i icon class="fas fa-sticky-note"></button>
                                             <button type="button" name="panToAspect" id="panToAspect_{{@key}}" title="{{localize 'ModularFate.PanToAspect'}}" style="width:35px; height:35px" i icon class="fas fa-search-location"></button>
                                             <button type="button" name="del_sit_aspect" id="delete_{{@key}}" title="{{localize 'ModularFate.DeleteAspect'}}" style="width:35px; height:35px" i icon class="fas fa-trash"></button>
                                         </span>
