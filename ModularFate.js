@@ -297,113 +297,162 @@ Hooks.once('init', async function () {
     CONFIG.Item.documentClass = ModularFateExtra;
     CONFIG.fontFamilies.push("Montserrat");
 
-    game.settings.register("ModularFate","drawingsOnTop", {
-        name:game.i18n.localize("ModularFate.DrawingsOnTop"),
-        hint:game.i18n.localize("ModularFate.DrawingsOnTopHint"),
-        scope:"world",
-        config:"true",
-        type:Boolean,
-        default:false
-    })
-
-    game.settings.register("ModularFate","modifiedRollDefault", {
-        name:game.i18n.localize("ModularFate.modifiedRollDefault"),
-        hint:game.i18n.localize("ModularFate.modifiedRollDefaultExplainer"),
-        scope:"world",
-        config:"true",
-        type:Boolean,
-        default:false
-    })
-
-    game.settings.register("ModularFate","fu_actor_avatars", {
-        name:"Use actor avatars instead of token avatars in Fate Utilities?",
-        hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
-        scope:"world",
-        config:false,
-        default:false,
-        type:Boolean
-    })
-
-    game.settings.register("ModularFate","fu_combatants_only", {
-        name:"Display information only for combatants in the current 'encounter' rather than all tokens?",
-        hint:"Toggle between display of all tokens or just active combatants in Fate Utilities",
-        scope:"user",
-        config:false,
-        default:false,
-        type:Boolean
-    })
-
-    game.settings.register("ModularFate", "run_once", {
-        name: "Run Once?",
-        hint:"Pops up a brief tutorial message on first load of a world with this system",
-        scope:"world",
-        config:false,
-        type: Boolean,
-        default:false
-    })
-
-    game.settings.register("ModularFate","sheet_template", {
-        name:game.i18n.localize("ModularFate.DefaultSheetTemplateName"),
-        hint:game.i18n.localize("ModularFate.DefaultSheetTemplateHint"),
-        scope:"world",
-        config:"true",
-        type:String,
-        default:'systems/ModularFate/templates/ModularFateSheet.html'
-    })
-
-    game.settings.register("ModularFate","limited_sheet_template", {
-        name:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateName"),
-        hint:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateHint"),
-        scope:"world",
-        config:"true",
-        type:String,
-        default:'systems/ModularFate/templates/ModularFateSheet.html'
-    })
-
-    game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["ModularFate","Thing"]
-
-    game.system.apps= {
-        actor:[],
-        combat:[],
-        scene:[],
-        user:[],
-        item:[]
-    }
-
-    //On init, we initialise any settings and settings menus and HUD overrides as required.
-    Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet("ModularFate", ModularFateCharacter, { types: ["ModularFate"], makeDefault: true });
-    Actors.registerSheet("Thing" , Thing, {types: ["Thing"]});
-
-    // Register Item sheets
-    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
-
-    //Register a setting for the game's current Refresh total
-    game.settings.register("ModularFate", "refreshTotal", {
-        name: game.i18n.localize("ModularFate.RefreshTotalName"),
-        hint: game.i18n.localize("ModularFate.RefreshTotalHint"),
-        scope: "world",
-        config: true,
-        type: Number,
-        default:3,
-        onChange: () =>{
-            for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
-                    ui.windows[app]?.render(false);
+    // Register a setting for replacing the existing skill list with one of the pre-defined default sets.
+    game.settings.register("ModularFate", "defaultSkills", {
+        name: game.i18n.localize("ModularFate.ReplaceSkills"),
+        hint: game.i18n.localize("ModularFate.ReplaceSkillsHint"),
+        scope: "world",     // This specifies a client-stored setting
+        config: true,        // This specifies that the setting appears in the configuration view
+        type: String,
+        restricted:true,
+        choices: {           // If choices are defined, the resulting setting will be a select menu
+            "nothing":game.i18n.localize("ModularFate.No"),
+            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
+            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
+            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
+            "dfa":game.i18n.localize("ModularFate.YesDFA"),
+            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
+        },
+        default: "nothing",        // The default value for the setting
+        onChange: value => { // A callback function which triggers when the setting is changed
+                if (value == "fateCore"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCoreDefaultSkills"));
+                        game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
+                    }
+                }
+                if (value=="clearAll"){
+                    if (game.user.isGM) {
+                        game.settings.set("ModularFate","skills",{});
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
+                    }
+                }
+                if (value=="fateCondensed"){
+                    if (game.user.isGM){ 
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCondensedDefaultSkills"));
+                        game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
+                    }
+                }
+                if (value=="accelerated"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateAcceleratedDefaultSkills"));
+                        game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
+                    }
+                }
+                if (value=="dfa"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultSkills"));
+                        game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
+                    }
                 }
             }
-        }
     });
 
-    game.settings.register("ModularFate","confirmDeletion", {
-        name: game.i18n.localize("ModularFate.ConfirmDeletionName"),
-        hint:game.i18n.localize("ModularFate.ConfirmDeletionHint"),
-        scope:"user",
-        config:true,
-        type:Boolean,
-        restricted:false,
-        default:false
+        // Register a setting for replacing the existing aspect list with one of the pre-defined default sets.
+        game.settings.register("ModularFate", "defaultAspects", {
+            name: game.i18n.localize("ModularFate.ReplaceAspectsName"),
+            hint: game.i18n.localize("ModularFate.ReplaceAspectsHint"),
+            scope: "world",     // This specifies a client-stored setting
+            config: true,        // This specifies that the setting appears in the configuration view
+            type: String,
+            restricted:true,
+            choices: {           // If choices are defined, the resulting setting will be a select menu
+                "nothing":game.i18n.localize("No"),
+                "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
+                "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
+                "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
+                "dfa":game.i18n.localize("ModularFate.YesDFA"),
+                "clearAll":game.i18n.localize("ModularFate.YesClearAll")
+            },
+            default: "nothing",        // The default value for the setting
+            onChange: value => { // A callback function which triggers when the setting is changed
+                    if (value == "fateCore"){
+                        if (game.user.isGM){
+                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCoreDefaultAspects"));
+                            game.settings.set("ModularFate","defaultAspects","nothing");
+                        }
+                    }
+                    if (value == "fateCondensed"){
+                        if (game.user.isGM){
+                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCondensedDefaultAspects"));
+                            game.settings.set("ModularFate","defaultAspects","nothing");
+                        }
+                    }
+                    if (value=="clearAll"){
+                        if (game.user.isGM){
+                            game.settings.set("ModularFate","aspects",{});
+                            game.settings.set("ModularFate","defaultAspects","nothing");
+                        }
+                    }
+                    if (value=="accelerated"){
+                        if (game.user.isGM){
+                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateAcceleratedDefaultAspects"));
+                            game.settings.set("ModularFate","defaultAspects","nothing");
+                        }
+                    }
+                    if (value=="dfa"){
+                        if (game.user.isGM){
+                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultAspects"));
+                            game.settings.set("ModularFate","defaultAspects","nothing");
+                        }
+                    }
+                }
+        });
+
+    // Register a setting for replacing the existing track list with one of the pre-defined default sets.
+    game.settings.register("ModularFate", "defaultTracks", {
+        name: game.i18n.localize("ModularFate.ReplaceTracksName"),
+        hint: game.i18n.localize("ModularFate.ReplaceTracksHint"),
+        scope: "world",     // This specifies a client-stored setting
+        config: true,        // This specifies that the setting appears in the configuration view
+        type: String,
+        restricted:true,
+        choices: {           // If choices are defined, the resulting setting will be a select menu
+            "nothing":game.i18n.localize("ModularFate.No"),
+            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
+            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
+            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
+            "dfa":game.i18n.localize("ModularFate.YesDFA"),
+            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
+        },
+        default: "nothing",        // The default value for the setting
+        onChange: value => { // A callback function which triggers when the setting is changed
+                if (value == "fateCore"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCoreDefaultTracks"));
+                        game.settings.set("ModularFate","defaultTracks","nothing");
+                    }
+                }
+                if (value=="clearAll"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",{});
+                        game.settings.set("ModularFate","defaultTracks","nothing");
+                    }
+                }
+                if (value=="fateCondensed"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCondensedDefaultTracks"));
+                        game.settings.set("ModularFate","defaultTracks","nothing");
+                    }
+                }
+                if (value=="accelerated"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateAcceleratedDefaultTracks"));
+                        game.settings.set("ModularFate","defaultTracks","nothing");
+                    }
+                }
+                if (value == "dfa"){
+                    if (game.user.isGM){
+                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTracks"));
+                        game.settings.set("ModularFate","track_categories",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTrackCategories"));
+                        game.settings.set("ModularFate","defaultTracks","nothing");
+                    }
+                }
+            }
     });
 
     game.settings.register("ModularFate","exportSettings", {
@@ -444,6 +493,225 @@ Hooks.once('init', async function () {
             }
         }
     })
+
+//Register a setting for the game's current Refresh total
+game.settings.register("ModularFate", "refreshTotal", {
+    name: game.i18n.localize("ModularFate.RefreshTotalName"),
+    hint: game.i18n.localize("ModularFate.RefreshTotalHint"),
+    scope: "world",
+    config: true,
+    type: Number,
+    default:3,
+    onChange: () =>{
+        for (let app in ui.windows){
+            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                ui.windows[app]?.render(false);
+            }
+        }
+    }
+});
+
+game.settings.register("ModularFate","freeStunts", {
+    name:game.i18n.localize("ModularFate.FreeStunts"),
+    hint:game.i18n.localize("ModularFate.FreeStuntsHint"),
+    scope:"world",
+    config:true,
+    type:Number,
+    restricted:true,
+    default:3,
+    onChange: () =>{
+        for (let app in ui.windows){
+            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                ui.windows[app]?.render(false);
+            }
+        }
+    }
+})
+
+      //Register a setting for the game's current skill total
+      game.settings.register("ModularFate", "skillTotal", {
+        name: game.i18n.localize("ModularFate.SkillPointTotal"),
+        hint: game.i18n.localize("ModularFate.SkillPointTotalHint"),
+        scope: "world",
+        config: true,
+        type: Number,
+        restricted:true,
+        default:20,
+        onChange: () =>{
+            for (let app in ui.windows){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
+    });
+
+    game.settings.register("ModularFate","enforceSkillTotal", {
+        name: game.i18n.localize("ModularFate.EnforceSkillTotal"),
+        hint: game.i18n.localize("ModularFate.EnforceSkillTotalHint"),
+        scope:"world",
+        config:true,
+        type: Boolean,
+        restricted:true,
+        default:true,
+        onChange: () =>{
+            for (let app in ui.windows){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
+    })
+
+    game.settings.register("ModularFate","enforceColumn", {
+        name: game.i18n.localize("ModularFate.EnforceColumn"),
+        hint: game.i18n.localize("ModularFate.EnforceColumnHint"),
+        scope:"world",
+        config:true,
+        type: Boolean,
+        restricted:true,
+        default:true,
+        onChange: () =>{
+            for (let app in ui.windows){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
+    })
+    
+    let skill_choices = {};
+    let skills = game.settings.get("ModularFate", "skills")
+    
+    skill_choices["None"]="None";
+    skill_choices["Disable"]="Disable";
+    for (let skill in skills){skill_choices[skill]=skill};
+
+    game.settings.register("ModularFate","init_skill", {
+        name:game.i18n.localize("ModularFate.initiativeSkill"),
+        hint:game.i18n.localize("ModularFate.initiativeSetting"),
+        "scope":"world",
+        "config":true,
+        "restricted":true,
+        type:String,
+        default:"None",
+        choices:skill_choices
+    })
+
+    game.settings.register("ModularFate","modifiedRollDefault", {
+        name:game.i18n.localize("ModularFate.modifiedRollDefault"),
+        hint:game.i18n.localize("ModularFate.modifiedRollDefaultExplainer"),
+        scope:"world",
+        config:"true",
+        type:Boolean,
+        default:false
+    })
+
+    game.settings.register("ModularFate","sheet_template", {
+        name:game.i18n.localize("ModularFate.DefaultSheetTemplateName"),
+        hint:game.i18n.localize("ModularFate.DefaultSheetTemplateHint"),
+        scope:"world",
+        config:"true",
+        type:String,
+        default:'systems/ModularFate/templates/ModularFateSheet.html'
+    })
+    
+
+    game.settings.register("ModularFate","limited_sheet_template", {
+        name:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateName"),
+        hint:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateHint"),
+        scope:"world",
+        config:"true",
+        type:String,
+        default:'systems/ModularFate/templates/ModularFateSheet.html'
+    })
+
+    game.settings.register ("ModularFate","PlayerThings", {
+        name:game.i18n.localize("ModularFate.AllowPlayerThingCreation"),
+        label:game.i18n.localize("ModularFate.ThingCreationLabel"),
+        hint:game.i18n.localize("ModularFate.ThingCreationHint"),
+        type:Boolean,
+        scope:"world",
+        config:true,
+        restricted:true,
+        default:true
+    });
+
+    game.settings.register ("ModularFate","DeleteOnTransfer", {
+        name:game.i18n.localize("ModularFate.DeleteOnTransfer"),
+        label:game.i18n.localize("ModularFate.DeleteOnTransferLabel"),
+        hint:game.i18n.localize("ModularFate.DeleteOnTransferHint"),
+        type:Boolean,
+        scope:"world",
+        config:true,
+        restricted:true,
+        default:true
+    });
+
+    game.settings.register("ModularFate","confirmDeletion", {
+        name: game.i18n.localize("ModularFate.ConfirmDeletionName"),
+        hint:game.i18n.localize("ModularFate.ConfirmDeletionHint"),
+        scope:"user",
+        config:true,
+        type:Boolean,
+        restricted:false,
+        default:false
+    });
+
+    game.settings.register("ModularFate","drawingsOnTop", {
+        name:game.i18n.localize("ModularFate.DrawingsOnTop"),
+        hint:game.i18n.localize("ModularFate.DrawingsOnTopHint"),
+        scope:"world",
+        config:"true",
+        type:Boolean,
+        default:false
+    })
+
+    game.settings.register("ModularFate","fu_actor_avatars", {
+        name:"Use actor avatars instead of token avatars in Fate Utilities?",
+        hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
+        scope:"world",
+        config:false,
+        default:false,
+        type:Boolean
+    })
+
+    game.settings.register("ModularFate","fu_combatants_only", {
+        name:"Display information only for combatants in the current 'encounter' rather than all tokens?",
+        hint:"Toggle between display of all tokens or just active combatants in Fate Utilities",
+        scope:"user",
+        config:false,
+        default:false,
+        type:Boolean
+    })
+
+    game.settings.register("ModularFate", "run_once", {
+        name: "Run Once?",
+        hint:"Pops up a brief tutorial message on first load of a world with this system",
+        scope:"world",
+        config:false,
+        type: Boolean,
+        default:false
+    })
+
+    game.system.entityTypes.Item = ["Extra"];
+    game.system.entityTypes.Actor = ["ModularFate","Thing"]
+
+    game.system.apps= {
+        actor:[],
+        combat:[],
+        scene:[],
+        user:[],
+        item:[]
+    }
+
+    //On init, we initialise any settings and settings menus and HUD overrides as required.
+    Actors.unregisterSheet('core', ActorSheet);
+    Actors.registerSheet("ModularFate", ModularFateCharacter, { types: ["ModularFate"], makeDefault: true });
+    Actors.registerSheet("Thing" , Thing, {types: ["Thing"]});
+
+    // Register Item sheets
+    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
 
     game.settings.register("ModularFate", "gameTime", {
         name: game.i18n.localize("ModularFate.GameTime"),

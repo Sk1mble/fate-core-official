@@ -12,7 +12,6 @@ Hooks.once('init', async function () {
         default:{}
     });
 
-        name: "Aspect Label Width",
     // Register the menu to setup the world's aspect list.
     game.settings.registerMenu("ModularFate","AspectSetup", {
         name:game.i18n.localize("ModularFate.SetupAspects"),
@@ -20,57 +19,6 @@ Hooks.once('init', async function () {
         hint:game.i18n.localize("ModularFate.SetupAspectsHint"),
         type:AspectSetup,
         restricted:true
-    });
-
-    // Register a setting for replacing the existing aspect list with one of the pre-defined default sets.
-    game.settings.register("ModularFate", "defaultAspects", {
-        name: game.i18n.localize("ModularFate.ReplaceAspectsName"),
-        hint: game.i18n.localize("ModularFate.ReplaceAspectsHint"),
-        scope: "world",     // This specifies a client-stored setting
-        config: true,        // This specifies that the setting appears in the configuration view
-        type: String,
-        restricted:true,
-        choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":game.i18n.localize("No"),
-            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
-            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
-            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
-            "dfa":game.i18n.localize("ModularFate.YesDFA"),
-            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
-        },
-        default: "nothing",        // The default value for the setting
-        onChange: value => { // A callback function which triggers when the setting is changed
-                if (value == "fateCore"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCoreDefaultAspects"));
-                        game.settings.set("ModularFate","defaultAspects","nothing");
-                    }
-                }
-                if (value == "fateCondensed"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCondensedDefaultAspects"));
-                        game.settings.set("ModularFate","defaultAspects","nothing");
-                    }
-                }
-                if (value=="clearAll"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",{});
-                        game.settings.set("ModularFate","defaultAspects","nothing");
-                    }
-                }
-                if (value=="accelerated"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateAcceleratedDefaultAspects"));
-                        game.settings.set("ModularFate","defaultAspects","nothing");
-                    }
-                }
-                if (value=="dfa"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultAspects"));
-                        game.settings.set("ModularFate","defaultAspects","nothing");
-                    }
-                }
-            }
     });
 });
 

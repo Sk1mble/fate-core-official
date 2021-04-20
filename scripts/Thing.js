@@ -652,27 +652,3 @@ Hooks.once('ready', async function () {
         }
     })
 })
-
-Hooks.once('init', async function () {
-    game.settings.register ("ModularFate","PlayerThings", {
-        name:game.i18n.localize("ModularFate.AllowPlayerThingCreation"),
-        label:game.i18n.localize("ModularFate.ThingCreationLabel"),
-        hint:game.i18n.localize("ModularFate.ThingCreationHint"),
-        type:Boolean,
-        scope:"world",
-        config:true,
-        restricted:true,
-        default:true
-    });
-
-    game.settings.register ("ModularFate","DeleteOnTransfer", {
-        name:game.i18n.localize("ModularFate.DeleteOnTransfer"),
-        label:game.i18n.localize("ModularFate.DeleteOnTransferLabel"),
-        hint:game.i18n.localize("ModularFate.DeleteOnTransferHint"),
-        type:Boolean,
-        scope:"world",
-        config:true,
-        restricted:true,
-        default:true
-    });
-})

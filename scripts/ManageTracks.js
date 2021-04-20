@@ -28,58 +28,6 @@ Hooks.once('init',async function(){
         type: TrackSetup,   // A FormApplication subclass which should be created
         restricted: true    // Restrict this submenu to gamemaster only?
       });
-
-     // Register a setting for replacing the existing track list with one of the pre-defined default sets.
-     game.settings.register("ModularFate", "defaultTracks", {
-        name: game.i18n.localize("ModularFate.ReplaceTracksName"),
-        hint: game.i18n.localize("ModularFate.ReplaceTracksName"),
-        scope: "world",     // This specifies a client-stored setting
-        config: true,        // This specifies that the setting appears in the configuration view
-        type: String,
-        restricted:true,
-        choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":game.i18n.localize("ModularFate.No"),
-            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
-            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
-            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
-            "dfa":game.i18n.localize("ModularFate.YesDFA"),
-            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
-        },
-        default: "nothing",        // The default value for the setting
-        onChange: value => { // A callback function which triggers when the setting is changed
-                if (value == "fateCore"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCoreDefaultTracks"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
-                    }
-                }
-                if (value=="clearAll"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",{});
-                        game.settings.set("ModularFate","defaultTracks","nothing");
-                    }
-                }
-                if (value=="fateCondensed"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCondensedDefaultTracks"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
-                    }
-                }
-                if (value=="accelerated"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateAcceleratedDefaultTracks"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
-                    }
-                }
-                if (value == "dfa"){
-                    if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTracks"));
-                        game.settings.set("ModularFate","track_categories",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTrackCategories"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
-                    }
-                }
-            }
-    });
 });
 
 class EditLinkedSkills extends FormApplication {
