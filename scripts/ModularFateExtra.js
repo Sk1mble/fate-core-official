@@ -1,5 +1,6 @@
 export class ModularFateExtra extends Item {
     async _onCreate(...args){
+        if ( args[2] !== game.user.id ) return;
         let itemData;
         args.forEach(arg =>{
             if (arg.type == "Extra") itemData = duplicate (arg);
