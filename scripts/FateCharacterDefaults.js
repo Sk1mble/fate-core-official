@@ -394,6 +394,7 @@ class ManageDefaults extends FormApplication {
         this.editing = false;
         game.system.mdf = this;
     }
+
     //Set up the default options for instances of this class
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
@@ -405,6 +406,7 @@ class ManageDefaults extends FormApplication {
         options.closeOnSubmit = true;
         options.id = "DefaultSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
+        options.scrollY = ['#fu_manage_defaults']
         return options;
     }
     //The function that returns the data model for this window. In this case, we need the list of stress tracks
