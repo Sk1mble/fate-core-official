@@ -395,6 +395,23 @@ class ManageDefaults extends FormApplication {
         game.system.mdf = this;
     }
 
+    async _render(html){
+        // Override render to give focus back to the field that had focus when the 
+        let type = $(':focus').attr('name');
+        let focused = $(':focus').data('default_name');
+        await super._render(html);
+
+        if (type == "def_name"){
+            const fo = html.find(`[name="def_name"][data-default_name="${focused}"]`);
+            fo.focus();
+        }
+
+        if (type == "def_desc"){
+            const fo = $(`[name="def_desc"][data-default_name="${focused}"]`);
+            fo.focus();
+        }
+    }
+
     //Set up the default options for instances of this class
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options

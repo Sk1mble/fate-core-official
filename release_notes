@@ -1,5 +1,6 @@
 # Version 3.1.8
-  Tweaked which element of the aspect header mf_draggable is applied to (as clcking on the aspect text and dragging to select the text was dragging the aspect)
+  * Tweaked which element of the aspect header mf_draggable is applied to (as clcking on the aspect text and dragging to select the text was dragging the aspect)
+  * When editing defaults, on tabbing or clicking on a new field to commit the change to the current field, the field that now has focused regains focus after rendering completed.
 
 # Version 3.1.7
   * Moved settings menus around to a more logical and convenient order.

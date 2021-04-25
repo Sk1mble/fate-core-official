@@ -10,10 +10,10 @@
             {{#each this.defaults}}
             <div style="display:flex; flex-direction:row; height:3em; padding:5px">
                 <div style="width:15em; padding-top:5px">
-                    <input class = "md_edit" {{#unless ../this.editing}}disabled="true"{{/unless}} name="def_name" type="text" data-oldValue = "{{this.default_name}}" value="{{this.default_name}}"></input>
+                    <input class = "md_edit" {{#unless ../this.editing}}disabled="true"{{/unless}} name="def_name" type="text" data-default_name="{{this.default_name}}" data-oldValue = "{{this.default_name}}" value="{{this.default_name}}"></input>
                 </div>
                 <div style="width:20em; padding-left:10px; padding-top:5px">
-                    <input class = "md_edit" {{#unless ../this.editing}}disabled="true"{{/unless}} name = "def_desc" type="text" data-default_name = "{{this.default_name}}" value="{{this.default_description}}"</input>
+                    <input class = "md_edit" {{#unless ../this.editing}}disabled="true"{{/unless}} name = "def_desc" type="text" data-default_name = "{{this.default_name}}"  value="{{this.default_description}}"</input>
                 </div>
                 <div>
                     <input name = "def_select" data-default_name = "{{this.default_name}}" type="checkbox"></input>
