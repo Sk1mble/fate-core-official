@@ -313,7 +313,6 @@ export class ExtraSheet extends ItemSheet {
         options.resizable = true;
         options.submitOnChange = false;  
         options.submitOnClose = false;
-        console.log(this);
         return options;
     }
 
