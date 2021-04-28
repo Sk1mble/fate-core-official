@@ -135,6 +135,13 @@ export class ModularFateCharacter extends ActorSheet {
             const extras_button = html.find("div[name='add_player_extra']");
             const extras_edit = html.find ("button[name='edit_extra']");
             const extras_delete = html.find("button[name='delete_extra']");
+            const plug = $('.fa-plug');
+            plug.on("click", async event => {
+                let name = event.target.title;
+                let items = this.object.items;
+                let item = items.getName(name);
+                await item.sheet.render(true);
+            })
 
             extras_button.on("click", event => this._on_extras_click(event, html));
             extras_edit.on("click", event => this._on_extras_edit_click(event, html));
@@ -767,9 +774,7 @@ export class ModularFateCharacter extends ActorSheet {
     async _on_extras_edit_click(event, html){
         let items = this.object.items;
         let item = items.get(event.target.id.split("_")[0]);
-        let e = new ExtraSheet(item);
-        await e.render(true);
-
+        item.sheet.render(true);
     }    
 
     async _on_extras_delete(event, html){

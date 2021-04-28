@@ -91,8 +91,8 @@
                                 <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
                                 <div class="mfate-skills-list__skill-name" name="skill" id="{{this.name}}">
                                     {{this.name}} 
-                                    <i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i>
-                                    {{#if this.extra_tag.extra_name}}<i class="fas fa-plug" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
+                                    <i id="{{this.name}}" style="float:right" icon class="fas fa-dice fu_button"></i>
+                                    {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:10px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                                 </div>
                             </li>
                             {{/each}} {{else}} {{#each ordered_skills}}
@@ -101,8 +101,8 @@
                                 <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
                                 <div class="mfate-skills-list__skill-name" name="skill" id="{{this.name}}">
                                     {{this.name}}
-                                    <i id="{{this.name}}" style="float:right" icon class="fas fa-dice"></i>
-                                    {{#if this.extra_tag.extra_name}}<i class="fas fa-plug" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
+                                    <i id="{{this.name}}" style="float:right" icon class="fas fa-dice fu_button"></i>
+                                    {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:10px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                                 </div>
                             </li>
                             {{/each}} {{/if}}
@@ -166,7 +166,7 @@
                                             <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i>
                                             </input>
                                             {{/if}}
-                                            {{#if this.extra_tag.extra_name}}<i class="fas fa-plug" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
+                                            {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                                         </div>
                                     </div>
                                 </div>
@@ -195,7 +195,7 @@
 
                         <li name="aspect" class="mfate-aspects-list__item">
                             <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'ModularFate.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'ModularFate.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
-                            {{#if this.extra_tag.extra_name}}<i class="fas fa-plug" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
+                            {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (concat this.name '_aspect'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'ModularFate.Notes'}}:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{this.notes}}</textarea>{{/if}}
                         </li>
@@ -226,8 +226,8 @@
                                             {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon fu_button" name="delete_stunt" id="{{this.name}}_delete"></button> 
                                             {{/if}}
-                                            {{#if (eq this.linked_skill (localize 'ModularFate.none'))}}{{else}}
-                                            {{#if this.extra_tag.extra_name}}<i class="fas fa-plug mfate-stunts__row-header-icon" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
+                                            {{#if (eq this.linked_skill (localize 'ModularFate.none'))}}{{else}}                                            
+                                            {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:7px; padding-left:9px" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                                             <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon fu_button"></button>                                            
                                             {{/if}}
                                             {{#if (eq this.extra_tag undefined)}}

@@ -2,6 +2,7 @@ export class ExtraSheet extends ItemSheet {
 
     constructor (...args){
         super(...args);
+        this.options.title = `${game.i18n.localize("ModularFate.Extra")}: ${this.object.name}`
         this.track_category = "All";
     }
 
@@ -308,11 +309,11 @@ export class ExtraSheet extends ItemSheet {
         const options = super.defaultOptions;
         options.classes = options.classes.concat(['fate', 'item']);
         options.width = 850;
-        options.height = "850";
+        options.height = 850;
         options.resizable = true;
         options.submitOnChange = false;  
         options.submitOnClose = false;
-        options.title=`${game.i18n.localize("ModularFate.Extra")}: ${this.name}`
+        console.log(this);
         return options;
     }
 
