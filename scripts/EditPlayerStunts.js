@@ -154,6 +154,8 @@ class StuntDB extends Application {
 
     constructor(actor){
         super();
+        this.filter = "";
+        this.ignoreCase = false;
         this.actor=actor;
     }    
 
@@ -162,16 +164,31 @@ class StuntDB extends Application {
             this.sort="name";
         }
         let data = {};
-        let stunts = game.settings.get("ModularFate","stunts");
+        let stunts = duplicate(game.settings.get("ModularFate","stunts"));
         let stuntsA = [];
     
         for (let stunt in stunts){
-            stuntsA.push(stunts[stunt])
+            if (this.filter != ""){
+                if (this.ignoreCase){
+                    if ((stunts[stunt].name.toLowerCase()).includes(this.filter.toLowerCase()) || (stunts[stunt].linked_skill.toLowerCase()).includes(this.filter.toLowerCase()) || (stunts[stunt].description.toLowerCase()).includes(this.filter.toLowerCase())){
+                        stuntsA.push(stunts[stunt]);
+                    }
+                } else {
+                    if (stunts[stunt].name.includes(this.filter) || stunts[stunt].linked_skill.includes(this.filter) || stunts[stunt].description.includes(this.filter)){
+                        stuntsA.push(stunts[stunt]);
+                    }
+                }
+            }
+            else {
+                stuntsA.push(stunts[stunt])
+            }
         }
         ModularFateConstants.sort_key(stuntsA, this.sort);
         data.stunts = stuntsA;
         data.actor = this.actor;
         data.gm=game.user.isGM;
+        data.filter = this.filter;
+        data.ignoreCase = this.ignoreCase;
         return data;
     }
 
@@ -186,6 +203,14 @@ class StuntDB extends Application {
         options.scrollY = ["#stunts_db"]
         return options; 
     } 
+
+    async _render(...args){
+        let foc = false;
+        if ($(':focus')[0]?.id == "stunt_db_filter_box") foc = true;
+        await super._render(...args);
+        let fo = $('input[id="stunt_db_filter_box"]')[0];
+        if (foc) fo.select();
+    }
 
     activateListeners(html) {
         super.activateListeners(html);
@@ -208,6 +233,27 @@ class StuntDB extends Application {
         const edit_stunt = html.find ("button[name='edit_stunt']");
         edit_stunt.on("click", event => this._onEditStunt(event, html));
         const add_stunt = html.find("button[id='add_db_stunt']");
+
+        const filter_stunts = $('#stunt_db_filter_box');
+        filter_stunts.on('change', async event => {
+            this.filter = event.target.value;
+            await this._render(false);
+        })
+
+        const clear_filter = $('#stunt_db_clear_filter');
+        clear_filter.on('click', async event => {
+            this.filter = "";
+            await this._render(false);
+        })
+
+        const ignoreCase = $('#stunt_db_ignore_case');
+        ignoreCase.on('click', async event => {
+            this.ignoreCase = !this.ignoreCase;
+            if (this.ignoreCase) ignoreCase.css('opacity','0.4');
+            if (!this.ignoreCase) ignoreCase.css('opacity','1');
+            if (this.filter != "") await this._render(false);
+        })
+
         add_stunt.on("click", event => {
             let stunt = {
                 "name":game.i18n.localize("ModularFate.NewStunt"),

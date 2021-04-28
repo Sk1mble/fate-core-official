@@ -536,6 +536,8 @@
 .mfate-stunts__row {
     padding: 10px 0;
     border-bottom: 1px solid lightsteelblue;
+    background-color:transparent;
+    z-index:1;
 }
 
 .mfate-stunts__row-header-cell {
@@ -545,7 +547,7 @@
 
 .mfate-stunts__row-header-icon {
     border: none;
-    background: white;
+    background: transparent;
     float: right;
     width: 22px;
     height: 22px;

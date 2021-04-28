@@ -1,4 +1,7 @@
 {
+   "ModularFate.ignoreCase":"Case sensitive filter?",
+   "ModularFate.filter":"Filter stunt list by text",
+   "ModularFate.clear_filter":"Clear filter",
    "ModularFate.fuAspectLabelSettingsTitle":"Fate Utilities Aspect Label Settings",
    "ModularFate.fuLabelSettingsHint":"Adjust the appearance of aspect labels from Fate Utilities",
    "ModularFate.fuAspectLabelTextColour":"FU Aspect Label Text Colour",

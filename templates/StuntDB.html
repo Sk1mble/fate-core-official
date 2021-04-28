@@ -11,7 +11,10 @@
                 {{localize 'ModularFate.Refresh'}}
             </div>
             <div style="width:700px; border-right:1px solid lightsteelblue; font-weight:bold; float:left; padding:5px">
-                {{localize 'ModularFate.Description'}}
+                {{localize 'ModularFate.Description'}}  
+                <div style="float:right">
+                    {{localize 'ModularFate.filter'}} <input type="text" style="background-color:white; height:2em; width:12em" id="stunt_db_filter_box" value="{{filter}}"></input><i style="padding-left:5px; {{#if ignoreCase}} opacity:0.4{{/if}}" title="{{localize 'ModularFate.ignoreCase'}}" class="fu_button" id="stunt_db_ignore_case"> aA </i><i style="padding-left:5px" title="{{localize 'ModularFate.clear_filter'}}" class="fas fa-times-circle fu_button" id="stunt_db_clear_filter"></i>
+                </div>
             </div>
             <div style="width:120px; font-weight:bold; float:left; padding:5px">
                 {{localize 'ModularFate.Actions'}}
@@ -47,5 +50,6 @@
 </div>
 <div style="max-height:40px; padding:10px"><button type="button" id="export_stunts" style="height:30px; width:150px">{{localize 'ModularFate.ExportStunts'}}</button>
     {{#if this.gm}}<button type="button" id="import_stunts" style="height:30px; width:150px">{{localize 'ModularFate.ImportStunts'}}</button>
-    <button type="button" id="add_db_stunt" style="height:30px; width:150px">{{localize 'ModularFate.addStunt'}}</button>{{/if}}</div>
+    <button type="button" id="add_db_stunt" style="height:30px; width:150px">{{localize 'ModularFate.addStunt'}}</button>{{/if}}
+</div>
 </body>
