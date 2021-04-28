@@ -38,7 +38,7 @@ export class ModularFateActor extends Actor {
                 if (!Array.isArray(stunts)){
                     for (let stunt in stunts){
                         stunts[stunt].extra_tag = extra_tag;
-                        stunts[stunt].name = stunts[stunt].name+=" (Extra)";
+                        //stunts[stunt].name = stunts[stunt].name+=" (Extra)";
                         stunts_output[stunts[stunt].name]=stunts[stunt];
                     }
                 }
@@ -49,7 +49,7 @@ export class ModularFateActor extends Actor {
                     for (let skill in skills){
                         let sk = duplicate(skills[skill])
                         sk.extra_tag = extra_tag;
-                        sk.name = skills[skill].name+=" (Extra)";
+                        //sk.name = skills[skill].name+=" (Extra)";
                         skills_output[sk.name]=sk;
                     }
                 }
@@ -59,7 +59,7 @@ export class ModularFateActor extends Actor {
                 if (!Array.isArray(aspects)){
                     for (let aspect in aspects){
                         aspects[aspect].extra_tag = extra_tag;
-                        aspects[aspect].name = aspects[aspect].name+=" (Extra)";
+                        //aspects[aspect].name = aspects[aspect].name+=" (Extra)";
                         aspects_output[aspects[aspect].name]=aspects[aspect];
                     }
                 }
@@ -69,7 +69,7 @@ export class ModularFateActor extends Actor {
                 if (!Array.isArray(tracks)){
                     for (let track in tracks){
                         tracks[track].extra_tag = extra_tag;
-                        tracks[track].name = tracks[track].name+=" (Extra)";
+                        //tracks[track].name = tracks[track].name+=" (Extra)";
                         tracks_output[tracks[track].name]=tracks[track];
                     }        
                 }
@@ -142,9 +142,11 @@ export class ModularFateActor extends Actor {
             actor.sheet.editing = false;
 
             let final_stunts = mergeObject(actor.data.data.stunts, stunts_output, {"inPlace":false});
-            let final_tracks = mergeObject(actor.data.data.tracks, tracks_output, {"inPlace":false});
+            let working_tracks = mergeObject(actor.data.data.tracks, tracks_output, {"inPlace":false});
             let final_skills = mergeObject(actor.data.data.skills, skills_output, {"inPlace":false});
             let final_aspects = mergeObject(actor.data.data.aspects, aspects_output, {"inPlace":false});
+
+            let final_tracks = this.setupTracks (duplicate(final_skills), duplicate(working_tracks));
 
             await actor.update({    
                 "data.tracks":final_tracks,
@@ -200,6 +202,10 @@ export class ModularFateActor extends Actor {
         }      
         actor.sheet.editing = false;
         await actor.update(updateObject);
+        let ctracks = duplicate(actor.data.data.tracks);
+        let cskills = duplicate(actor.data.data.skills);
+        let etracks = actor.setupTracks(cskills, ctracks);
+        await actor.update({"data.tracks":etracks});
     }
 
     setupTracks (skills, tracks) {
@@ -232,7 +238,7 @@ export class ModularFateActor extends Actor {
                             track.enabled = true;
                         }
                     }else {
-                        let skill_rank = skills[l_skill].rank;
+                        let skill_rank = skills[l_skill]?.rank;
                         //If this is 'enables' and the skill is high enough, enable.
                         if (l_enables && skill_rank >= l_skill_rank) {
                             track.enabled = true;

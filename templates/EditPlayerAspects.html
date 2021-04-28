@@ -33,6 +33,15 @@
                 </textarea>
             </td>
         </tr>
+        <tr>
+            <td>
+                <label for"notes" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.Notes'}}:</label>
+            </td>
+            <td>
+                <textarea rows = "3" class="aspect_notes" name="notes_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.notes}}
+                </textarea>
+            </td>
+        </tr>
         {{else}}{{/if}}
         {{/each}}
     </table>

@@ -37,6 +37,9 @@ class EditPlayerAspects extends FormApplication{
 
         const value = html.find("textarea[class='aspect_value']")
         value.on("change", event => this._on_value_change(event, html));
+
+        const notes = html.find("textarea[class='aspect_notes']");
+        notes.on("change", event => this._on_notes_change(event, html));
     }
 
     async _on_name_change(event, html){
@@ -61,6 +64,11 @@ class EditPlayerAspects extends FormApplication{
     async _on_value_change(event, html){
         let name = event.target.name.split("_")[1];
         this.aspects[name].value=event.target.value;
+    }
+
+    async _on_notes_change(event, html){
+        let name = event.target.name.split("_")[1];
+        this.aspects[name].notes=event.target.value;
     }
 
     async _on_move(event,html, direction){

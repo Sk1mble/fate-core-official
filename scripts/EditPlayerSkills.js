@@ -479,10 +479,11 @@ class EditGMSkills extends FormApplication{
 
         for (let w in world_skills){
             let s = this.player_skills[w];
-            if (s == undefined){
-                if (!world_skills[w].pc){ 
+            if (s == undefined || s.extra_tag.extra_name){
+                if (!world_skills[w].pc && !s?.extra_tag.extra_name){ 
                     non_pc_world_skills.push(world_skills[w])
                 } else {
+                    if (!s?.extra_tag?.extra_name)
                     absent.push(world_skills[w])
                 }
             } else {

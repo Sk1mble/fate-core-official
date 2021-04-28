@@ -1,6 +1,9 @@
 # Version 3.1.8
   * Tweaked which element of the aspect header mf_draggable is applied to (as clcking on the aspect text and dragging to select the text was dragging the aspect)
   * When editing defaults, on tabbing or clicking on a new field to commit the change to the current field, the field that now has focused regains focus after rendering completed.
+  * Stunts, tracks, skills, etc. granted by Extras are no longer tagged with (Extra) - this enables tricks like basing track modifiers off of skills provided by extras, etc.
+  * Instead of the (Extra) tag, character components provided by Extras are now marked with a plug symbol.
+  * Hovering over the plug symbol will show you which extra this comes from.
 
 # Version 3.1.7
   * Moved settings menus around to a more logical and convenient order.
