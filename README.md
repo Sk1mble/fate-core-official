@@ -1,4 +1,4 @@
-# Modular Fate
+# Fate Core Official
 Author: Richard Bellingham, partially based on work by Nick van Oosten (NickEast)
 
 Software License: GNU GPLv3
@@ -32,14 +32,14 @@ The system contains default settings for the tracks, aspects and skills from Cor
 Importing worlds from the Fate system by Nick East is no longer supported.
 
 ## 3 System Settings
-When you first create a world with the Modular Fate system, it will be a blank slate. To get it ready for play, you'll need to set it up in the Foundry system settings. 
+When you first create a world with the Fate Core Official system, it will be a blank slate. To get it ready for play, you'll need to set it up in the Foundry system settings. 
 
 **If you don't set these up before you create any characters, the characters you create will not be initialised with any skills, aspects, or tracks.**
 
 Here are what the various settings do:
 
 ### Setup Skills
-You can edit, delete, or copy existing skills in your world or create new skills here. When you first create a new world with Modular Fate, this list will be empty. You can start setting up your own skill list here and now, or you can use the "Replace or clear all World Skills" option to set your world up with one of the default sets from Core, Condensed, or Accelerated (see below).
+You can edit, delete, or copy existing skills in your world or create new skills here. When you first create a new world, this list will be empty. You can start setting up your own skill list here and now, or you can use the "Replace or clear all World Skills" option to set your world up with one of the default sets from Core, Condensed, or Accelerated (see below).
 
 If you click "Add a new skill", a window will pop up with a box for each piece of information about the skill. Most of these will be self-explanatory.
 
