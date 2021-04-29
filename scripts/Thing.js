@@ -530,7 +530,6 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
             "data.container.movable":true,
             "data.img":newItem.img,
         })
-        console.log(contents.extras);
         await itemActor.createEmbeddedDocuments("Item", contents.extras);
     }
 }

@@ -35,6 +35,7 @@ import { FateCoreOfficialActor } from "./scripts/FateCoreOfficialActor.js"
 import { FateCoreOfficialExtra } from "./scripts/FateCoreOfficialExtra.js"
 
 Hooks.on("preCreateActor", async (actor, data, options, userId) => {
+    console.log("Firing preCreateActor")
 
     if (actor.type == "Thing"){
         if (!options.thing){
@@ -51,6 +52,11 @@ Hooks.on("preCreateActor", async (actor, data, options, userId) => {
             }
         }
     }
+
+    if (actor.type == "ModularFate"){
+        data.type = "FateCoreOfficial";
+    }
+
 });
 
 async function initialiseFateCoreOfficialCharacter (actor) {
@@ -695,7 +701,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
     })
 
     game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["FateCoreOfficial","Thing"]
+    game.system.entityTypes.Actor = ["FateCoreOfficial","Thing", "ModularFate"]
 
     game.system.apps= {
         actor:[],
@@ -707,7 +713,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet("FateCoreOfficial", FateCoreOfficialCharacter, { types: ["FateCoreOfficial"], makeDefault: true, label:game.i18n.localize("FateCoreOfficial.FateCoreOfficialCharacter") });
+    Actors.registerSheet("FateCoreOfficial", FateCoreOfficialCharacter, { types: ["FateCoreOfficial", "ModularFate"], makeDefault: true, label:game.i18n.localize("FateCoreOfficial.FateCoreOfficialCharacter") });
     Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("FateCoreOfficial.Thing")});
 
     // Register Item sheets

@@ -1,6 +1,6 @@
 {
 	"Actor": {
-		"types": ["FateCoreOfficial", "Thing"],
+		"types": ["FateCoreOfficial", "ModularFate", "Thing"],
 		"templates": {
 			"common": {
 				"details": {
@@ -9,6 +9,9 @@
 					},
 					"biography": {
 						"value": ""
+					},
+					"pronouns":{
+						"value":""
 					},
 					"notes": {
 						"value": ""
@@ -25,6 +28,11 @@
 			}
 		},
 		"FateCoreOfficial": {
+			"templates": ["common"],
+			"details": {
+			}
+		},
+		"ModularFate": {
 			"templates": ["common"],
 			"details": {
 			}
