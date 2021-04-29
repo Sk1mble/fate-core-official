@@ -160,6 +160,12 @@ export class FateCoreOfficialActor extends Actor {
         this.sheet.editing = true;
         let actor = this;
         let itemData = item.data;
+
+        //Add a parameter - 'deleting' - if false, push the existing track on the actor back to the extra
+        //before removing it - if the extra is toggled on and off, any tracks on the character that are partially
+        //filled in should remain that way. This should be as simple as adding a parameter to calls to this method
+        //and then removing extra_tag from each track and writing it back to the item in an update call.
+
         //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
     
         let updateObject = {}
