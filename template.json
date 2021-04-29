@@ -1,6 +1,6 @@
 {
 	"Actor": {
-		"types": ["ModularFate", "Thing"],
+		"types": ["FateCoreOfficial", "Thing"],
 		"templates": {
 			"common": {
 				"details": {
@@ -24,7 +24,7 @@
 				"stunts":{}
 			}
 		},
-		"ModularFate": {
+		"FateCoreOfficial": {
 			"templates": ["common"],
 			"details": {
 			}

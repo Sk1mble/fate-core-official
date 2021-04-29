@@ -3,32 +3,32 @@
     <div name = "stunt_body" style="overflow-y:auto; width:710px; height:auto; border:lightsteelblue; border-width:2px; border-style:solid"><!--Begin body-->
         <table style="background-color: white; border:none; width:690px">    
             <tr>
-                <td style="font-family:Montserrat" width="120">{{localize 'ModularFate.Name'}}:</td>
+                <td style="font-family:Montserrat" width="120">{{localize 'FateCoreOfficial.Name'}}:</td>
                 <td colspan="2"><input style="background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom: 1px solid lightsteelblue; width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
             </tr>
             <tr>
-                <td style="font-family:Montserrat">{{localize 'ModularFate.LinkedSkill'}}:</td>                
-                <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat; border:1px solid lightsteelblue" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>{{localize 'ModularFate.None'}}</option><option>{{localize 'ModularFate.Special'}}</option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
-                <i style="font-family:Montserrat; font-style:normal;">{{localize 'ModularFate.Bonus'}}: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="color:black; background-color:white; border:solid 1px lightsteelblue; width:50px"></input></td>
+                <td style="font-family:Montserrat">{{localize 'FateCoreOfficial.LinkedSkill'}}:</td>                
+                <td colspan ="2"><select style="background-color: white; color:black; font-family:Montserrat; border:1px solid lightsteelblue" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>{{localize 'FateCoreOfficial.None'}}</option><option>{{localize 'FateCoreOfficial.Special'}}</option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
+                <i style="font-family:Montserrat; font-style:normal;">{{localize 'FateCoreOfficial.Bonus'}}: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="color:black; background-color:white; border:solid 1px lightsteelblue; width:50px"></input></td>
             </tr>
             <tr>
-                <td style="font-family:Montserrat">{{localize 'ModularFate.Description'}}:</td>
+                <td style="font-family:Montserrat">{{localize 'FateCoreOfficial.Description'}}:</td>
                 <td colspan="2"><textarea name="description" style="background-color:white; color:black; font-family:Montserrat; border: 1px solid lightsteelblue; width:500px;" rows = "5">{{{stunt.description}}}</textarea></td>
             </tr>
             <tr>
-                <td style="font-family:Montserrat">{{localize 'ModularFate.RefreshCost'}}:</td>
+                <td style="font-family:Montserrat">{{localize 'FateCoreOfficial.RefreshCost'}}:</td>
                 <td><input type="number" min="0" name="refresh_cost" style="height:30px; width:50px; border:solid 1px lightsteelblue" value="{{stunt.refresh_cost}}"></input></td>
                 <td>     
-                    <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'ModularFate.Overcome'}}">O</b>
-                    <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'ModularFate.CAA'}}">C</b></input>
-                    <input type="checkbox" name="attack" {{checked stunt.attack}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'ModularFate.Attack'}}">A</b>
-                    <input type="checkbox" name="defend" {{checked stunt.defend}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'ModularFate.Defend'}}">D</b>                   
+                    <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'FateCoreOfficial.Overcome'}}">O</b>
+                    <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'FateCoreOfficial.CAA'}}">C</b></input>
+                    <input type="checkbox" name="attack" {{checked stunt.attack}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'FateCoreOfficial.Attack'}}">A</b>
+                    <input type="checkbox" name="defend" {{checked stunt.defend}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'FateCoreOfficial.Defend'}}">D</b>                   
                 </td>
             </tr>
         </table>
     </div><!--End body-->
     <div id="buttons" style="width:400px">
-        <button type="button" style="float:left; width:75px" id="save">{{localize 'ModularFate.Save'}}</button>
+        <button type="button" style="float:left; width:75px" id="save">{{localize 'FateCoreOfficial.Save'}}</button>
     </div><!--End buttons div-->
     </div><!--End of header DIV-->
 </form>

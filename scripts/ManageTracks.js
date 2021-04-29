@@ -3,17 +3,17 @@
 
 Hooks.once('init',async function(){
     //Let's initialise the settings at the system level.
-    game.settings.register("ModularFate","tracks",{
+    game.settings.register("FateCoreOfficial","tracks",{
         name:"tracks",
-        hint:game.i18n.localize("ModularFate.TrackManagerHint"),
+        hint:game.i18n.localize("FateCoreOfficial.TrackManagerHint"),
         scope:"world",
         config:false,
         type: Object,
         default: {}
     });
-    game.settings.register("ModularFate","track_categories",{
+    game.settings.register("FateCoreOfficial","track_categories",{
         name:"track categories",
-        hint:game.i18n.localize("ModularFate.TrackCategoriesHint"),
+        hint:game.i18n.localize("FateCoreOfficial.TrackCategoriesHint"),
         scope:"world",
         config:false,
         type: Object,
@@ -21,10 +21,10 @@ Hooks.once('init',async function(){
     });
 
     // Register the menu to setup the world's conditions etc.
-    game.settings.registerMenu("ModularFate", "TrackSetup", {
-        name: game.i18n.localize("ModularFate.SetupTracks"),
-        label: game.i18n.localize("ModularFate.Setup"),      // The text label used in the button
-        hint: game.i18n.localize("ModularFate.TrackSetupHint"),
+    game.settings.registerMenu("FateCoreOfficial", "TrackSetup", {
+        name: game.i18n.localize("FateCoreOfficial.SetupTracks"),
+        label: game.i18n.localize("FateCoreOfficial.Setup"),      // The text label used in the button
+        hint: game.i18n.localize("FateCoreOfficial.TrackSetupHint"),
         type: TrackSetup,   // A FormApplication subclass which should be created
         restricted: true    // Restrict this submenu to gamemaster only?
       });
@@ -38,18 +38,18 @@ class EditLinkedSkills extends FormApplication {
     getData(){
         const templateData = {
             track:this.track,
-            skills:game.settings.get("ModularFate","skills")
+            skills:game.settings.get("FateCoreOfficial","skills")
         }
         return templateData;
     }
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/EditLinkedSkills.html"; 
+        options.template = "systems/FateCoreOfficial/templates/EditLinkedSkills.html"; 
     
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";
-        options.title = game.i18n.localize("ModularFate.LinkedSkillEditor");
+        options.title = game.i18n.localize("FateCoreOfficial.LinkedSkillEditor");
         options.closeOnSubmit = false;
         options.id = "EditLinkedSkills"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -67,11 +67,11 @@ class EditLinkedSkills extends FormApplication {
     //Here are the event listener functions.
 
     async _onDeleteLinkedSkillButton(event, html){
-        let del = await ModularFateConstants.confirmDeletion();
+        let del = await FateCoreOfficialConstants.confirmDeletion();
         if (del){
              let toDelete = document.getElementById("linked_skills").value;
             let track = this.track;
-            let tracks = game.settings.get("ModularFate","tracks");
+            let tracks = game.settings.get("FateCoreOfficial","tracks");
             let linked_skills = track.linked_skills;
     
             for (let i = 0; i< linked_skills.length; i++){
@@ -81,7 +81,7 @@ class EditLinkedSkills extends FormApplication {
                 }
             }
             tracks[this.track.name]=this.track;
-            await game.settings.set("ModularFate","tracks",tracks);
+            await game.settings.set("FateCoreOfficial","tracks",tracks);
             this.render(false);
         }
     }
@@ -103,9 +103,9 @@ class EditLinkedSkills extends FormApplication {
                     "enables":enables
                 }
             )
-            let tracks=game.settings.get("ModularFate","tracks");
+            let tracks=game.settings.get("FateCoreOfficial","tracks");
             tracks[this.track.name] = this.track
-            await game.settings.set("ModularFate","tracks",tracks);
+            await game.settings.set("FateCoreOfficial","tracks",tracks);
             this.render(false);
     }
 }
@@ -114,8 +114,8 @@ class EditTracks extends FormApplication {
     constructor (category){
         super(category);
         this.category = category;
-        this.categories =game.settings.get("ModularFate","track_categories");
-        this.tracks = game.settings.get("ModularFate","tracks");
+        this.categories =game.settings.get("FateCoreOfficial","track_categories");
+        this.tracks = game.settings.get("FateCoreOfficial","tracks");
     }
 
     getData(){
@@ -134,12 +134,12 @@ class EditTracks extends FormApplication {
     }
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/EditTrack.html"; 
+        options.template = "systems/FateCoreOfficial/templates/EditTrack.html"; 
     
         //Define the FormApplication's options
         options.width = "auto";
         options.height = "auto";
-        options.title = game.i18n.localize("ModularFate.Track Editor");
+        options.title = game.i18n.localize("FateCoreOfficial.Track Editor");
         options.closeOnSubmit = false;
         options.id = "EditTrack"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -182,13 +182,13 @@ class EditTracks extends FormApplication {
     async _onExportTrack (event, html){
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
-        if (name == "" || name == game.i18n.localize("ModularFate.NewTrack")){
-            ui.notifications.error(game.i18n.localize("ModularFate.SelectATrackToCopyFirst"));
+        if (name == "" || name == game.i18n.localize("FateCoreOfficial.NewTrack")){
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.SelectATrackToCopyFirst"));
         }
         else {
             let track = `{"${name}":${JSON.stringify(this.tracks[name])}}`;
             new Dialog({
-                title: game.i18n.localize("ModularFate.CopyAndPasteToSaveThisTrack"), 
+                title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveThisTrack"), 
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${track}</textarea></div>`,
                 buttons: {
                 },
@@ -201,14 +201,14 @@ class EditTracks extends FormApplication {
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
         ////console.log(edit_track_name[0].value)
-        if (name == "" || name == game.i18n.localize("ModularFate.NewTrack")){
-            ui.notifications.error(game.i18n.localize("ModularFate.SelectATrackToCopyFirst"));
+        if (name == "" || name == game.i18n.localize("FateCoreOfficial.NewTrack")){
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.SelectATrackToCopyFirst"));
         }
         else {
             let track = duplicate(this.tracks[name]);
             track.name = track.name+" copy"
             this.tracks[track.name]=track;
-            await game.settings.set("ModularFate","tracks",this.tracks);
+            await game.settings.set("FateCoreOfficial","tracks",this.tracks);
             this.render(false);
         }
     }
@@ -224,15 +224,15 @@ class EditTracks extends FormApplication {
     }
 
     async _onDeleteTrackButton(event,html){
-        let del = await ModularFateConstants.confirmDeletion();
+        let del = await FateCoreOfficialConstants.confirmDeletion();
         if (del){
              let name = document.getElementById("track_select").value;
             try {
                     delete this.tracks[name];
-                    await game.settings.set("ModularFate","tracks",this.tracks);
+                    await game.settings.set("FateCoreOfficial","tracks",this.tracks);
                     this.render(false);
             } catch {
-                ui.notifications.error(game.i18n.localize("ModularFate.CannotDeleteThat"))
+                ui.notifications.error(game.i18n.localize("FateCoreOfficial.CannotDeleteThat"))
                 this.render(false)
             }
         }
@@ -240,7 +240,7 @@ class EditTracks extends FormApplication {
     async _edit_linked_skillsButtonClick(event, html){
         let name = document.getElementById("track_select").value;
         if (name=="New Track"){
-            ui.notifications.error(game.i18n.localize("ModularFate.SelectTrackBeforeAddingLinkedSkill"));
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.SelectTrackBeforeAddingLinkedSkill"));
         }
         else {
             let track=this.tracks[name];
@@ -256,7 +256,7 @@ class EditTracks extends FormApplication {
 
     async _track_selectChange(event, html){
         let name = document.getElementById("track_select").value;
-        if (name==game.i18n.localize("ModularFate.NewTrack")){
+        if (name==game.i18n.localize("FateCoreOfficial.NewTrack")){
             this.track=undefined;
             document.getElementById("edit_track_name").value="";
             document.getElementById("edit_track_description").value="";
@@ -377,7 +377,7 @@ class EditTracks extends FormApplication {
                 }
                 this.tracks[name]=newTrack;
             }
-            await game.settings.set("ModularFate","tracks",this.tracks);
+            await game.settings.set("FateCoreOfficial","tracks",this.tracks);
             this.render(false);
         }
     }
@@ -393,10 +393,10 @@ class TrackSetup extends FormApplication{
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/ModularFate/templates/TrackSetup.html"; 
+        options.template = "systems/FateCoreOfficial/templates/TrackSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.TrackCategorySetup")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("FateCoreOfficial.TrackCategorySetup")} ${game.world.data.title}`;
         options.closeOnSubmit = false;
         options.id = "TrackSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -405,8 +405,8 @@ class TrackSetup extends FormApplication{
     //The function that returns the data model for this window. In this case, we need the list of stress tracks
     //conditions, and consequences.
     getData(){
-        this.tracks=game.settings.get("ModularFate","tracks");
-        this.track_categories=game.settings.get("ModularFate","track_categories")
+        this.tracks=game.settings.get("FateCoreOfficial","tracks");
+        this.track_categories=game.settings.get("FateCoreOfficial","track_categories")
 
         const templateData = {
            track_categories:this.track_categories,
@@ -442,11 +442,11 @@ class TrackSetup extends FormApplication{
     }
 
     async _exportTracks(event, html){
-        let tracks = game.settings.get("ModularFate","tracks");
+        let tracks = game.settings.get("FateCoreOfficial","tracks");
         let tracks_text = JSON.stringify(tracks);
      
         new Dialog({
-            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveWorldTracks"),
+            title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveWorldTracks"),
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${tracks_text}</textarea></div>`,
             buttons: {
             },
@@ -456,7 +456,7 @@ class TrackSetup extends FormApplication{
     async getTracks(){
         return new Promise(resolve => {
             new Dialog({
-                title: game.i18n.localize("ModularFate.PasteToReplaceWorldTracks"),
+                title: game.i18n.localize("FateCoreOfficial.PasteToReplaceWorldTracks"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="itracks"></textarea></div>`,
                 buttons: {
                     ok: {
@@ -474,8 +474,8 @@ class TrackSetup extends FormApplication{
         let text = await this.getTracks();
         try {
             let imported_tracks = JSON.parse(text);
-            let tracks = duplicate(game.settings.get("ModularFate","tracks"));
-            let track_categories = duplicate (game.settings.get("ModularFate", "track_categories"));
+            let tracks = duplicate(game.settings.get("FateCoreOfficial","tracks"));
+            let track_categories = duplicate (game.settings.get("FateCoreOfficial", "track_categories"));
             if (tracks == undefined){
                 tracks = {};
             }
@@ -484,8 +484,8 @@ class TrackSetup extends FormApplication{
                 let cat = imported_tracks[track].category;
                 track_categories[cat]=cat;
             }
-            await game.settings.set("ModularFate","tracks", tracks);
-            await game.settings.set("ModularFate", "track_categories", track_categories);
+            await game.settings.set("FateCoreOfficial","tracks", tracks);
+            await game.settings.set("FateCoreOfficial", "track_categories", track_categories);
             this.render(false);
         } catch (e) {
             ui.notifications.error(e);
@@ -493,39 +493,39 @@ class TrackSetup extends FormApplication{
     }
 
     async _onAddCategoryButton(event,html){
-        let category = await ModularFateConstants.getInput(game.i18n.localize("ModularFate.ChooseCategoryName"));
-        let track_categories = game.settings.get("ModularFate","track_categories");
+        let category = await FateCoreOfficialConstants.getInput(game.i18n.localize("FateCoreOfficial.ChooseCategoryName"));
+        let track_categories = game.settings.get("FateCoreOfficial","track_categories");
         var duplicate = false;
 
         for (let cat in track_categories){
             if (track_categories[cat].toUpperCase == category.toUpperCase()){
-                ui.notifications.error(game.i18n.localize("ModularFate.CannotCreateDuplicateCategory"));
+                ui.notifications.error(game.i18n.localize("FateCoreOfficial.CannotCreateDuplicateCategory"));
                 duplicate = true;
             }
             if (!duplicate && category != "" && category != undefined){
                 track_categories[category]=category;
             }
-            await game.settings.set("ModularFate","track_categories",track_categories);
+            await game.settings.set("FateCoreOfficial","track_categories",track_categories);
             this.render(false);
         }
     }
 
     async _onDeleteCategoryButton(event,html){
-        let del = await ModularFateConstants.confirmDeletion();
+        let del = await FateCoreOfficialConstants.confirmDeletion();
         if (del){
-                    let track_categories = game.settings.get("ModularFate","track_categories");
+                    let track_categories = game.settings.get("FateCoreOfficial","track_categories");
                     let category  = document.getElementById("track_categories_select").value;
 
                     for (let cat in track_categories){
                         if (track_categories[cat].toUpperCase() == category.toUpperCase()){
                         if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
-                            ui.notifications.error(`${game.i18n.localize("ModularFate.CannotDeleteThe")} ${category} ${game.i18n.localize("ModularFate.CategoryThatCannotDelete")}`)
+                            ui.notifications.error(`${game.i18n.localize("FateCoreOfficial.CannotDeleteThe")} ${category} ${game.i18n.localize("FateCoreOfficial.CategoryThatCannotDelete")}`)
                         } else {
                                     delete track_categories[cat];
                                 }
                         } 
                 }
-                await game.settings.set("ModularFate","track_categories",track_categories);
+                await game.settings.set("FateCoreOfficial","track_categories",track_categories);
                 this.render(false);
         }
     }
@@ -543,7 +543,7 @@ class TrackSetup extends FormApplication{
                 // Do nothing.
             }
         } else {
-            ui.notifications.error(game.i18n.localize("ModularFate.PleaseSelectACategoryFirst"))
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.PleaseSelectACategoryFirst"))
         }
     }
 }
@@ -560,7 +560,7 @@ Hooks.on('closeEditTracks',async () => {
 class OrderTracks extends FormApplication {
     constructor(...args){
         super(...args);
-        let tracks = game.settings.get("ModularFate", "tracks");
+        let tracks = game.settings.get("FateCoreOfficial", "tracks");
         this.data = [];
         for (let track in tracks){
             this.data.push(tracks[track]);
@@ -570,10 +570,10 @@ class OrderTracks extends FormApplication {
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/ModularFate/templates/OrderTracks.html"; 
+        options.template = "systems/FateCoreOfficial/templates/OrderTracks.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.OrderTracksTitle")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("FateCoreOfficial.OrderTracksTitle")} ${game.world.data.title}`;
         options.closeOnSubmit = true;
         options.id = "OrderTracks"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -615,7 +615,7 @@ class OrderTracks extends FormApplication {
             for (let i = 0; i < this.data.length; i++){
                 tracks[this.data[i].name] = this.data[i];
             }
-            game.settings.set("ModularFate", "tracks", tracks);
+            game.settings.set("FateCoreOfficial", "tracks", tracks);
             this.close();
         })
     }

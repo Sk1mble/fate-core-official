@@ -5,7 +5,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
         if (hud){
             hud.tools.push({
                 name:"ImportCharacter",//Completed
-                title:game.i18n.localize("ModularFate.ImportCharacter"),
+                title:game.i18n.localize("FateCoreOfficial.ImportCharacter"),
                 icon:"fas fa-download",
                 onClick: async ()=> {
                     let fci = new FateCharacterImporter();
@@ -22,7 +22,7 @@ class FateCharacterImporter {
     async getFCI_JSON(){
         return new Promise(resolve => {
             new Dialog({
-                title: game.i18n.localize("ModularFate.PasteCharacterData"),
+                title: game.i18n.localize("FateCoreOfficial.PasteCharacterData"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_fate_character"></textarea></div>`,
                 buttons: {
                     ok: {
@@ -40,7 +40,7 @@ class FateCharacterImporter {
         try {
             data = JSON.parse(data);    
         } catch {
-            ui.notifications.error(game.i18n.localize("ModularFate.couldnotparse"));
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.couldnotparse"));
             return;
         }
         
@@ -50,7 +50,7 @@ class FateCharacterImporter {
 
         let actorData = {
             "name":"blank",
-            "type":"ModularFate",
+            "type":"FateCoreOfficial",
             "data":{
                         details:{
                                     fatePoints:{
@@ -60,7 +60,7 @@ class FateCharacterImporter {
             }
         }
 
-        if (data?.type==="ModularFate"){
+        if (data?.type==="FateCoreOfficial"){
             actorData = data;
         }
 

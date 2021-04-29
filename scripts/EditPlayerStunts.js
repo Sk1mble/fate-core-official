@@ -8,15 +8,15 @@ class EditPlayerStunts extends FormApplication {
         //This is a good place to set up some variables at the top level so we can access them with this.
         
         if (this.actor == null){
-            this.options.title=`${game.i18n.localize("ModularFate.ExtraStuntEditor")}}`
+            this.options.title=`${game.i18n.localize("FateCoreOfficial.ExtraStuntEditor")}}`
         } else {
             if (this?.actor?.type == "Extra"){
-                this.options.title=`${game.i18n.localize("ModularFate.ExtraStuntEditor")} ${this.object.name}`
+                this.options.title=`${game.i18n.localize("FateCoreOfficial.ExtraStuntEditor")} ${this.object.name}`
             } else {
                 if (this.actor.isToken) {
-                    this.options.title=`${game.i18n.localize("ModularFate.TokenStuntEditor")} ${this.object.name}`
+                    this.options.title=`${game.i18n.localize("FateCoreOfficial.TokenStuntEditor")} ${this.object.name}`
                 } else {
-                    this.options.title=`${game.i18n.localize("ModularFate.StuntEditorFor")} ${this.object.name}`
+                    this.options.title=`${game.i18n.localize("FateCoreOfficial.StuntEditorFor")} ${this.object.name}`
                 }
             }
             game.system.apps["actor"].push(this);
@@ -25,10 +25,10 @@ class EditPlayerStunts extends FormApplication {
 
     static get defaultOptions(){
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/EditPlayerStunts.html";
+        options.template = "systems/FateCoreOfficial/templates/EditPlayerStunts.html";
         options.width = "auto";
         options.height = "auto";
-        options.title = game.i18n.localize("ModularFate.CharacterStuntEditor");
+        options.title = game.i18n.localize("FateCoreOfficial.CharacterStuntEditor");
         options.closeOnSubmit = true;
         options.id = "PlayerStuntSetup";
         options.resizable = true;
@@ -38,7 +38,7 @@ class EditPlayerStunts extends FormApplication {
     async _updateObject(event, formData){
 
         if (this.actor == null){ // This is a stunt in the database
-            let stunts = duplicate(game.settings.get("ModularFate","stunts"));
+            let stunts = duplicate(game.settings.get("FateCoreOfficial","stunts"));
             if (formData["name"]!=this.stunt.name) {
                 delete stunts[this.stunt.name];
             }
@@ -47,7 +47,7 @@ class EditPlayerStunts extends FormApplication {
             }
             this.stunt.name=this.stunt.name.split(".").join("․");
             stunts[this.stunt.name] = this.stunt;
-            await game.settings.set("ModularFate","stunts",stunts);
+            await game.settings.set("FateCoreOfficial","stunts",stunts);
             this.originator.render(false);
         } else {
             if (formData["name"]!=this.stunt.name) {
@@ -88,7 +88,7 @@ class EditPlayerStunts extends FormApplication {
                             this.renderPending = true;
                             setTimeout(() => {
                                 this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
-                                ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
+                                ui.notifications.info(game.i18n.localize("FateCoreOfficial.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
                             }, 0);
@@ -110,7 +110,7 @@ class EditPlayerStunts extends FormApplication {
                             this.renderPending = true;
                             setTimeout(() => {
                                 this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
-                                ui.notifications.info(game.i18n.localize("ModularFate.StuntEdited"))
+                                ui.notifications.info(game.i18n.localize("FateCoreOfficial.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
                             }, 0);
@@ -137,10 +137,10 @@ class EditPlayerStunts extends FormApplication {
         let data={}
         data.stunt=this.stunt;
         if (this.actor == null){
-            data.skills=game.settings.get("ModularFate","skills");
+            data.skills=game.settings.get("FateCoreOfficial","skills");
         } else {
             if (this.actor.type=="Extra"){
-                data.skills=game.settings.get("ModularFate","skills");
+                data.skills=game.settings.get("FateCoreOfficial","skills");
             } else {
                 data.skills=this.actor.data.data.skills;
             }
@@ -164,7 +164,7 @@ class StuntDB extends Application {
             this.sort="name";
         }
         let data = {};
-        let stunts = duplicate(game.settings.get("ModularFate","stunts"));
+        let stunts = duplicate(game.settings.get("FateCoreOfficial","stunts"));
         let stuntsA = [];
     
         for (let stunt in stunts){
@@ -183,7 +183,7 @@ class StuntDB extends Application {
                 stuntsA.push(stunts[stunt])
             }
         }
-        ModularFateConstants.sort_key(stuntsA, this.sort);
+        FateCoreOfficialConstants.sort_key(stuntsA, this.sort);
         data.stunts = stuntsA;
         data.actor = this.actor;
         data.gm=game.user.isGM;
@@ -194,10 +194,10 @@ class StuntDB extends Application {
 
     static get defaultOptions(){
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/StuntDB.html";
+        options.template = "systems/FateCoreOfficial/templates/StuntDB.html";
         options.width = "auto";
         options.height = "auto";
-        options.title = game.i18n.localize("ModularFate.StuntDatabase");
+        options.title = game.i18n.localize("FateCoreOfficial.StuntDatabase");
         options.id = "StuntDB";
         options.resizable = false;
         options.scrollY = ["#stunts_db"]
@@ -256,7 +256,7 @@ class StuntDB extends Application {
 
         add_stunt.on("click", event => {
             let stunt = {
-                "name":game.i18n.localize("ModularFate.NewStunt"),
+                "name":game.i18n.localize("FateCoreOfficial.NewStunt"),
                 "linked_skill":"None",
                 "description":"",
                 "refresh_cost":1,
@@ -274,10 +274,10 @@ class StuntDB extends Application {
 
     async _onExportStunts(event, html){
  
-        let stunt_text = JSON.stringify(game.settings.get("ModularFate","stunts"));
+        let stunt_text = JSON.stringify(game.settings.get("FateCoreOfficial","stunts"));
  
         new Dialog({
-            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveStunts"), 
+            title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveStunts"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
@@ -287,10 +287,10 @@ class StuntDB extends Application {
     async _onExportStunt(event, html){
         let stunt = event.target.id.split("_")[0];
 
-        let stunt_text = `{"${stunt}":${JSON.stringify(game.settings.get("ModularFate","stunts")[stunt])}}`;
+        let stunt_text = `{"${stunt}":${JSON.stringify(game.settings.get("FateCoreOfficial","stunts")[stunt])}}`;
  
         new Dialog({
-            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveStunt"), 
+            title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveStunt"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
@@ -301,7 +301,7 @@ class StuntDB extends Application {
         //Create a stunt editor with a null actor
         //Edit the stunt editor so if the actor is null it knows to save the stunt to the stunt DB on exit rather than to an actor's sheet.
         let stunt_name = event.target.id.split("_")[0];
-        let stunt = game.settings.get("ModularFate","stunts")[stunt_name];
+        let stunt = game.settings.get("FateCoreOfficial","stunts")[stunt_name];
         let eps = new EditPlayerStunts(null, stunt).render(true);
         eps.originator = this;
     }
@@ -309,11 +309,11 @@ class StuntDB extends Application {
     async getStunts(){
         return new Promise(resolve => {
             new Dialog({
-                title: game.i18n.localize("ModularFate.PasteOverStunts"),
+                title: game.i18n.localize("FateCoreOfficial.PasteOverStunts"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_stunt_db"></textarea></div>`,
                 buttons: {
                     ok: {
-                        label: game.i18n.localize("ModularFate.Save"),
+                        label: game.i18n.localize("FateCoreOfficial.Save"),
                         callback: () => {
                             resolve (document.getElementById("import_stunt_db").value);
                         }
@@ -327,14 +327,14 @@ class StuntDB extends Application {
         let text = await this.getStunts();
         try {
             let imported_stunts = JSON.parse(text);
-            let stuntDB = duplicate(game.settings.get("ModularFate","stunts"));
+            let stuntDB = duplicate(game.settings.get("FateCoreOfficial","stunts"));
             if (stuntDB == undefined){
                 stuntDB = {};
             }
             for (let stunt in imported_stunts){
                 stuntDB[stunt]=imported_stunts[stunt];
             }
-            await game.settings.set("ModularFate","stunts", stuntDB);
+            await game.settings.set("FateCoreOfficial","stunts", stuntDB);
             this.render(false);
         } catch (e) {
             ui.notifications.error(e);
@@ -342,16 +342,16 @@ class StuntDB extends Application {
     }
 
     async _onAddButton(event, html){
-        let stunt = game.settings.get("ModularFate","stunts")[event.target.id.split("_")[0]];
+        let stunt = game.settings.get("FateCoreOfficial","stunts")[event.target.id.split("_")[0]];
         this.actor.update({"data.stunts":{[`${stunt.name}`]:stunt}});
     }
 
     async _onDeleteButton(event, html){
-        let del = await ModularFateConstants.confirmDeletion();
+        let del = await FateCoreOfficialConstants.confirmDeletion();
         if (del){
-            let stunts = duplicate (game.settings.get("ModularFate","stunts"));
+            let stunts = duplicate (game.settings.get("FateCoreOfficial","stunts"));
             await delete stunts[event.target.id.split("_")[0]];
-            await game.settings.set("ModularFate","stunts",stunts);
+            await game.settings.set("FateCoreOfficial","stunts",stunts);
             await this.render(false);
         }
     }

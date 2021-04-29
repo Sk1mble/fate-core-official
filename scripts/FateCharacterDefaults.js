@@ -1,7 +1,7 @@
 // Register a game setting for storing character defaults
 
 Hooks.once('init', async function () {
-    game.settings.register("ModularFate", "defaults", {
+    game.settings.register("FateCoreOfficial", "defaults", {
         name: "Character defaults",
         hint: "Character defaults - sets of tracks, skills, stunts, etc. for ease of character creation for GMs.",
         scope: "world",
@@ -21,16 +21,16 @@ class FateCharacterDefaults {
     async storeDefault (character_default, overwrite){
         // Store a character default (usually derived from extractDefault) in the game's settings.
         // If overwrite is true, automatically overwrite the existing default without asking.
-        let defaults = duplicate(game.settings.get("ModularFate", "defaults"));
+        let defaults = duplicate(game.settings.get("FateCoreOfficial", "defaults"));
         if (!character_default?.default_name){
             return;
         }
         // Check to see if this default already exists
         if (defaults[this.getSafeName(character_default.default_name)] && overwrite !== true){
-            let response  = await ModularFateConstants.awaitYesNoDialog(game.i18n.localize("ModularFate.checkDefaultOverwritePrompt"),character_default.default_name + game.i18n.localize("ModularFate.checkDefaultOverwriteContent"));
+            let response  = await FateCoreOfficialConstants.awaitYesNoDialog(game.i18n.localize("FateCoreOfficial.checkDefaultOverwritePrompt"),character_default.default_name + game.i18n.localize("FateCoreOfficial.checkDefaultOverwriteContent"));
             if (response === "yes"){
                 defaults[this.getSafeName(character_default.default_name)] = character_default;
-                await game.settings.set("ModularFate", "defaults", defaults)
+                await game.settings.set("FateCoreOfficial", "defaults", defaults)
             } else {
                 let count = 0;
                 for (let d in defaults){
@@ -39,13 +39,13 @@ class FateCharacterDefaults {
                 let newName = `${character_default.default_name} ${count + 1}`;
                 character_default.default_name = newName;
                 defaults[this.getSafeName(newName)] = character_default;
-                await game.settings.set("ModularFate", "defaults", defaults)
+                await game.settings.set("FateCoreOfficial", "defaults", defaults)
                 ui.sidebar.render(false);
                 if (game.system.mdf) game.system.mdf.render(false);
             }
         } else {
             defaults[this.getSafeName(character_default.default_name)] = character_default;
-            await game.settings.set("ModularFate", "defaults", defaults)
+            await game.settings.set("FateCoreOfficial", "defaults", defaults)
             ui.sidebar.render(false);
             if (game.system.mdf) game.system.mdf.render(false);
         }
@@ -53,7 +53,7 @@ class FateCharacterDefaults {
 
     get defaults(){
         // Return an array of strings of default_name values from defaults
-        let defaults = duplicate(game.settings.get("ModularFate", "defaults"));
+        let defaults = duplicate(game.settings.get("FateCoreOfficial", "defaults"));
         let list = [];
         for (let d in defaults){
             list.push (defaults[d].default_name)
@@ -63,11 +63,11 @@ class FateCharacterDefaults {
 
     async removeDefault (name){
         // Remove a character default from the game's settings.
-        let defaults = duplicate(game.settings.get("ModularFate", "defaults"));
+        let defaults = duplicate(game.settings.get("FateCoreOfficial", "defaults"));
         // Check to see if this default already exists, then delete it
         if (defaults[this.getSafeName(name)]){
             delete defaults[this.getSafeName(name)];
-            await game.settings.set("ModularFate", "defaults", defaults);
+            await game.settings.set("FateCoreOfficial", "defaults", defaults);
             ui.sidebar.render(false);
             if (game.system.mdf) game.system.mdf.render(false);
         } 
@@ -115,7 +115,7 @@ class FateCharacterDefaults {
     }
 
     async renameDefault (old_name, new_name){
-        let defaults = duplicate(game.settings.get("ModularFate", "defaults"));
+        let defaults = duplicate(game.settings.get("FateCoreOfficial", "defaults"));
         let de = duplicate(defaults[this.getSafeName(old_name)]);
         await this.removeDefault(old_name);
         de.default_name = new_name;
@@ -125,16 +125,16 @@ class FateCharacterDefaults {
     }
 
     async editDescription (name, new_desc){
-        let defaults = await duplicate(game.settings.get("ModularFate", "defaults"));
+        let defaults = await duplicate(game.settings.get("FateCoreOfficial", "defaults"));
         let de = defaults[this.getSafeName(name)];
         de.default_description = new_desc;
-        await game.settings.set("ModularFate","defaults",defaults);
+        await game.settings.set("FateCoreOfficial","defaults",defaults);
         if (game.system.mdf) game.system.mdf.render(false);
     }
 
     async getDefault(name){
         // Get a named character default from the game's settings.
-        let defaults = await duplicate(game.settings.get("ModularFate", "defaults"));
+        let defaults = await duplicate(game.settings.get("FateCoreOfficial", "defaults"));
         if (defaults[this.getSafeName(name)]){
             return(defaults[this.getSafeName(name)]);
         } 
@@ -147,7 +147,7 @@ class FateCharacterDefaults {
                 await this.storeDefault(new_defaults[d]);
             } else {
                 // Error handling goes here.
-                ui.notifications.error(d + game.i18n.localize("ModularFate.notAValidDefault"));
+                ui.notifications.error(d + game.i18n.localize("FateCoreOfficial.notAValidDefault"));
             }
         }
     }
@@ -155,10 +155,10 @@ class FateCharacterDefaults {
     async exportDefaults(list_to_export){
         // Return a string of the chosen defaults to export. If no array of default_name values given, return all defaults.
         if (! list_to_export){
-            return JSON.stringify(game.settings.get("ModularFate","defaults"));
+            return JSON.stringify(game.settings.get("FateCoreOfficial","defaults"));
         } else {
             let to_export = {};
-            let existing_defaults = duplicate (game.settings.get("ModularFate", "defaults"));
+            let existing_defaults = duplicate (game.settings.get("FateCoreOfficial", "defaults"));
             for (let d of list_to_export){
                 to_export[this.getSafeName(d)]=existing_defaults[this.getSafeName(d)];
             }
@@ -256,7 +256,7 @@ class FateCharacterDefaults {
         // This method creates a character of the given name from the character default that's fed to it.
         const actor_data = {
             name:name,
-            type:"ModularFate",
+            type:"FateCoreOfficial",
             items:character_default.extras,
             img:character_default.img,
             token:{img:character_default.token_img},
@@ -338,7 +338,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
 
     const targetElement = html.find('ol[class="directory-list"]');
     const f = new FateCharacterDefaults();
-    let standard = "<option selected = 'selected'>ModularFate</option>\n"
+    let standard = "<option selected = 'selected'>FateCoreOfficial</option>\n"
     let blank = "<option>Blank</option>\n"
     let defaults = f.defaults.map(d => `<option>${d}</option>`).join("\n");
     let options = standard+blank+defaults;
@@ -373,14 +373,14 @@ Hooks.on("renderSidebarTab", (app, html) => {
         if (default_name === "Blank"){
             let actorData = {
                 "name":actor_name,
-                "type":"ModularFate",
+                "type":"FateCoreOfficial",
                 "data.details.fatePoints.refresh":"0"
              }
              await Actor.create(actorData, {"renderSheet":true});
              return;
         }
-        if (default_name === "ModularFate"){
-            await Actor.create({"name":actor_name, "type":"ModularFate"},{renderSheet:true});
+        if (default_name === "FateCoreOfficial"){
+            await Actor.create({"name":actor_name, "type":"FateCoreOfficial"},{renderSheet:true});
             return;
         }
 
@@ -416,10 +416,10 @@ class ManageDefaults extends FormApplication {
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/ModularFate/templates/ManageDefaults.html"; 
+        options.template = "systems/FateCoreOfficial/templates/ManageDefaults.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.defaultSetup")} in ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("FateCoreOfficial.defaultSetup")} in ${game.world.data.title}`;
         options.closeOnSubmit = true;
         options.id = "DefaultSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -431,11 +431,11 @@ class ManageDefaults extends FormApplication {
     async getData(){
         let f = new FateCharacterDefaults();
         let defaults = [];
-        let def_objs = await duplicate(game.settings.get("ModularFate","defaults"));
+        let def_objs = await duplicate(game.settings.get("FateCoreOfficial","defaults"));
         for (let o in def_objs){
             defaults.push(def_objs[o]);
         }
-        ModularFateConstants.sort_key(defaults, "default_name");
+        FateCoreOfficialConstants.sort_key(defaults, "default_name");
         let data = {
             default_names:f.defaults,
             defaults:defaults
@@ -473,20 +473,20 @@ class ManageDefaults extends FormApplication {
         displayButton.on('click', async (event, html)=> {
             let f = new FateCharacterDefaults();
             let def = await f.getDefault(event.target.getAttribute("Data-default_name"));
-            let prompt = game.i18n.localize("ModularFate.defaultCharacterFramework")+ " " + def.default_name;
+            let prompt = game.i18n.localize("FateCoreOfficial.defaultCharacterFramework")+ " " + def.default_name;
             let presentation = await f.presentDefault(def.default_name);
             let content = `
                 <div style="max-height:100em; max-width:50em; scroll-y:auto">
                     <table style="background-color:transparent; border:0px; text-align:left; vertical-align:middle">
                         <th style="width:6em">
-                            ${game.i18n.localize("ModularFate.item")}
+                            ${game.i18n.localize("FateCoreOfficial.item")}
                         </th>
                         <th>
-                            ${game.i18n.localize("ModularFate.Contents")}
+                            ${game.i18n.localize("FateCoreOfficial.Contents")}
                         </th>
                         <tr>
                             <td>
-                                ${game.i18n.localize("ModularFate.avatar")}
+                                ${game.i18n.localize("FateCoreOfficial.avatar")}
                             </td>
                             <td>
                                 <img style="width:50px; height:auto" title="${presentation.img}" src="${presentation.img}"/> 
@@ -494,7 +494,7 @@ class ManageDefaults extends FormApplication {
                         </tr>
                         <tr>
                             <td>
-                            ${game.i18n.localize("ModularFate.token")}
+                            ${game.i18n.localize("FateCoreOfficial.token")}
                             </td>
                             <td>
                             <img style="width:50px; height:auto" title = "${presentation.img}" src="${presentation.token_img}"/>
@@ -502,7 +502,7 @@ class ManageDefaults extends FormApplication {
                         </tr>
                         <tr>
                             <td>
-                                 ${game.i18n.localize("ModularFate.Skills")}
+                                 ${game.i18n.localize("FateCoreOfficial.Skills")}
                             </td>
                             <td>
                                 ${presentation.skills}
@@ -510,7 +510,7 @@ class ManageDefaults extends FormApplication {
                         </tr>
                         <tr>
                             <td>
-                                 ${game.i18n.localize("ModularFate.Tracks")}
+                                 ${game.i18n.localize("FateCoreOfficial.Tracks")}
                             </td>
                             <td>
                                 ${presentation.tracks}
@@ -518,7 +518,7 @@ class ManageDefaults extends FormApplication {
                         </tr>
                         <tr>
                             <td>
-                                 ${game.i18n.localize("ModularFate.Aspects")}
+                                 ${game.i18n.localize("FateCoreOfficial.Aspects")}
                             </td>
                             <td>
                                 ${presentation.aspects}
@@ -526,7 +526,7 @@ class ManageDefaults extends FormApplication {
                         </tr>
                         <tr>
                             <td>
-                                 ${game.i18n.localize("ModularFate.Stunts")}
+                                 ${game.i18n.localize("FateCoreOfficial.Stunts")}
                             </td>
                             <td>
                                 ${presentation.stunts}
@@ -534,7 +534,7 @@ class ManageDefaults extends FormApplication {
                         </tr>
                         <tr>
                             <td>
-                                 ${game.i18n.localize("ModularFate.Extras")}
+                                 ${game.i18n.localize("FateCoreOfficial.Extras")}
                             </td>
                             <td>
                                 ${presentation.extras}
@@ -543,7 +543,7 @@ class ManageDefaults extends FormApplication {
                     </table>
                 </div>
                 `
-            await ModularFateConstants.awaitOKDialog(prompt, content, "100em", "50em");
+            await FateCoreOfficialConstants.awaitOKDialog(prompt, content, "100em", "50em");
         })
 
         const imp = $('#md_import');
@@ -553,7 +553,7 @@ class ManageDefaults extends FormApplication {
         imp.on('click', async (event, html)=>{
             let str = await new Promise(resolve => {
                 new Dialog({
-                    title: game.i18n.localize("ModularFate.PasteDefaults"),
+                    title: game.i18n.localize("FateCoreOfficial.PasteDefaults"),
                     content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_defaults"></textarea></div>`,                    buttons: {
                         ok: {
                             label: "Save",
@@ -572,7 +572,7 @@ class ManageDefaults extends FormApplication {
             let f = new FateCharacterDefaults();
             let str = await f.exportDefaults();
             new Dialog({
-                title: game.i18n.localize("ModularFate.copyAndPasteToSaveDefaults"), 
+                title: game.i18n.localize("FateCoreOfficial.copyAndPasteToSaveDefaults"), 
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${str}</textarea></div>`,
                 buttons: {
                 },
@@ -589,7 +589,7 @@ class ManageDefaults extends FormApplication {
             $("input[name='def_select']").prop('checked', false);
             let str = await f.exportDefaults(list);
            new Dialog({
-                title: game.i18n.localize("ModularFate.copyAndPasteToSaveDefaults"), 
+                title: game.i18n.localize("FateCoreOfficial.copyAndPasteToSaveDefaults"), 
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${str}</textarea></div>`,
                 buttons: {
                 },
@@ -613,7 +613,7 @@ class ManageDefaults extends FormApplication {
         const d_def = html.find("button[name='delete_default']");
         d_def.on("click", async (event, html) =>{
             let f = new FateCharacterDefaults();
-            let del = await ModularFateConstants.confirmDeletion();
+            let del = await FateCoreOfficialConstants.confirmDeletion();
             if (del) await f.removeDefault(event.target.getAttribute("data-default_name"));
         })
 

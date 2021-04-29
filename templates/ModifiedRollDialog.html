@@ -2,7 +2,7 @@
     <table style="border:none; font-family:Montserrat; background-color:white;" padding="10px" spacing="10px" margin="10px">
         <tr style="height:40px">
             <td style="font-weight:bold; padding-left:5px; width:200px">
-                {{localize 'ModularFate.Modifier'}}:
+                {{localize 'FateCoreOfficial.Modifier'}}:
             </td>
             <td>
                 <input type="number" id="modifier" style="background-color:white; border:1px solid lightsteelblue" value="0"></input>
@@ -10,7 +10,7 @@
         </tr>
         <tr style="height:40px">
             <td style="font-weight:bold; padding-left:5px">
-                {{localize 'ModularFate.Description'}}:
+                {{localize 'FateCoreOfficial.Description'}}:
             </td>
             <td>
                 <input type="text" id = "description" style="background-color:white; border-bottom:1px solid lightsteelblue; border-top:none; border-left:none; border-right:none; width:500px"></input>
@@ -18,11 +18,11 @@
         </tr>
         <tr style="height:40px">
             <td style="font-weight:bold; padding-left:5px">
-                {{localize 'ModularFate.AddSecondSkill'}}
+                {{localize 'FateCoreOfficial.AddSecondSkill'}}
             </td>
             <td>
                 <select id="second_skill">
-                    <option selected="selected">{{localize 'ModularFate.None'}}</option>
+                    <option selected="selected">{{localize 'FateCoreOfficial.None'}}</option>
                     {{#each this.data.data.skills}}
                     <option>{{this.name}}</option>
                     {{/each}}
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td style="font-weight:bold; padding-left:5px; vertical-align: top;">
-                {{localize 'ModularFate.Stunt_s'}}:
+                {{localize 'FateCoreOfficial.Stunt_s'}}:
             </td>
             <td width="300px">
                 {{#each this.data.data.stunts}}
@@ -46,7 +46,7 @@
         </tr>
         <tr>
             <td colspan="2" style="padding-top:10px">
-                <button type="button" class="modifiedRoll">{{localize 'ModularFate.Roll'}}</button>
+                <button type="button" class="modifiedRoll">{{localize 'FateCoreOfficial.Roll'}}</button>
             </td>
         </tr>
     </table>

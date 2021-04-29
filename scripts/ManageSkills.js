@@ -1,8 +1,8 @@
 Hooks.once('ready', async function () {
-    let defaultLabel = game.i18n.localize("ModularFate.defaultSkillsLabel");
-    game.settings.register("ModularFate", "skillsLabel", {
-        name: game.i18n.localize("ModularFate.SkillsLabelName"),
-        hint: game.i18n.localize("ModularFate.SkillsLabelHint"),
+    let defaultLabel = game.i18n.localize("FateCoreOfficial.defaultSkillsLabel");
+    game.settings.register("FateCoreOfficial", "skillsLabel", {
+        name: game.i18n.localize("FateCoreOfficial.SkillsLabelName"),
+        hint: game.i18n.localize("FateCoreOfficial.SkillsLabelHint"),
         scope: "world",     // This specifies a client-stored setting.
         config: false,      // This specifies that the setting does not appear in the configuration view.
         type: String,
@@ -14,7 +14,7 @@ Hooks.once('ready', async function () {
 Hooks.once('init', async function () {
     //On init, we initialise all settings and settings menus for dealing with skills 
     //We will be using this setting to store the world's list of skills.
-    game.settings.register("ModularFate", "skills", {
+    game.settings.register("FateCoreOfficial", "skills", {
         name: "Skill list",
         hint: "This is the list of skills for this particular world.",
         scope: "world",
@@ -23,7 +23,7 @@ Hooks.once('init', async function () {
         default:{}
     });
 
-    game.settings.register("ModularFate","stunts", {
+    game.settings.register("FateCoreOfficial","stunts", {
         name: "Stunts Database",
         hint:"A list of approved stunts that can be added to characters",
         scope:"world",
@@ -33,10 +33,10 @@ Hooks.once('init', async function () {
     })
 
     // Register the menu to setup the world's skill list.
-    game.settings.registerMenu("ModularFate", "SkillSetup", {
-        name: game.i18n.localize("ModularFate.SetupSkills"),
-        label: game.i18n.localize("ModularFate.Setup"),      // The text label used in the button
-        hint: game.i18n.localize("ModularFate.SetupSkillsHint"),
+    game.settings.registerMenu("FateCoreOfficial", "SkillSetup", {
+        name: game.i18n.localize("FateCoreOfficial.SetupSkills"),
+        label: game.i18n.localize("FateCoreOfficial.Setup"),      // The text label used in the button
+        hint: game.i18n.localize("FateCoreOfficial.SetupSkillsHint"),
         type: SkillSetup,   // A FormApplication subclass which should be created
         restricted: true                   // Restrict this submenu to gamemaster only?
       });
@@ -56,10 +56,10 @@ class SkillSetup extends FormApplication{
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/ModularFate/templates/SkillSetup.html"; 
+        options.template = "systems/FateCoreOfficial/templates/SkillSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.SetupSkillsTitle")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("FateCoreOfficial.SetupSkillsTitle")} ${game.world.data.title}`;
         options.closeOnSubmit = false;
         options.id = "SkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -67,8 +67,8 @@ class SkillSetup extends FormApplication{
     }
     //The function that returns the data model for this window. In this case, we only need the game's skill list.
     getData(){
-        this.skills=ModularFateConstants.sortByKey(game.settings.get("ModularFate","skills"))
-        this.skills_label = game.settings.get("ModularFate", "skillsLabel");
+        this.skills=FateCoreOfficialConstants.sortByKey(game.settings.get("FateCoreOfficial","skills"))
+        this.skills_label = game.settings.get("FateCoreOfficial", "skillsLabel");
         const templateData = {
            skills: this.skills,
            skills_label: this.skills_label, 
@@ -103,13 +103,13 @@ class SkillSetup extends FormApplication{
     //Here are the event listener functions.
 
     async _onExportSkill(event, html){
-        let skills = game.settings.get("ModularFate","skills");
+        let skills = game.settings.get("FateCoreOfficial","skills");
         let slb = html.find("select[id='skillListBox']")[0].value;
         let sk = skills[slb];
         let skill_text = `{"${slb}":${JSON.stringify(sk)}}`
  
         new Dialog({
-            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveSkill"),
+            title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveSkill"),
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skill_text}</textarea></div>`,
             buttons: {
             },
@@ -117,11 +117,11 @@ class SkillSetup extends FormApplication{
     }
 
     async _onExportSkills(event, html){
-        let skills = game.settings.get("ModularFate","skills");
+        let skills = game.settings.get("FateCoreOfficial","skills");
         let skills_text = JSON.stringify(skills);
  
         new Dialog({
-            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveSkills"), 
+            title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveSkills"), 
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skills_text}</textarea></div>`,
             buttons: {
             },
@@ -131,7 +131,7 @@ class SkillSetup extends FormApplication{
     async getSkills(){
         return new Promise(resolve => {
             new Dialog({
-                title: game.i18n.localize("ModularFate.PasteSkills"),
+                title: game.i18n.localize("FateCoreOfficial.PasteSkills"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_skills"></textarea></div>`,
                 buttons: {
                     ok: {
@@ -149,14 +149,14 @@ class SkillSetup extends FormApplication{
         let text = await this.getSkills();
         try {
             let imported_skills = JSON.parse(text);
-            let skills = duplicate(game.settings.get("ModularFate","skills"));
+            let skills = duplicate(game.settings.get("FateCoreOfficial","skills"));
             if (skills == undefined){
                 skills = {};
             }
             for (let skill in imported_skills){
                 skills[skill]=imported_skills[skill];
             }
-            await game.settings.set("ModularFate","skills", skills);
+            await game.settings.set("FateCoreOfficial","skills", skills);
             this.render(false);
         } catch (e) {
             ui.notifications.error(e);
@@ -177,31 +177,31 @@ class SkillSetup extends FormApplication{
                     skillsLabelInput.attr('disabled', 'disabled');
                     skillsLabelInput.off('blur.edit_label');
                     const skills_label = skillsLabelInput.val();
-                    game.settings.set("ModularFate", "skillsLabel", skills_label);
+                    game.settings.set("FateCoreOfficial", "skillsLabel", skills_label);
                 });
         }
     }
 
     async _onEditButton(event,html){
         //Launch the EditSkill FormApplication.
-        let skills = game.settings.get("ModularFate","skills");
+        let skills = game.settings.get("FateCoreOfficial","skills");
         let slb = html.find("select[id='skillListBox']")[0].value;
         let sk = skills[slb]
         let e = new EditSkill(sk);
         e.render(true);
     }
     async _onDeleteButton(event,html){
-        let del = await ModularFateConstants.confirmDeletion();
+        let del = await FateCoreOfficialConstants.confirmDeletion();
         if (del){
             //Code to delete the selected skill
             //First, get the name of the skill from the HTML element skillListBox
             let slb = html.find("select[id='skillListBox'")[0].value;
             
             //Find that skill in the list of skills
-            let skills=game.settings.get("ModularFate","skills");
+            let skills=game.settings.get("FateCoreOfficial","skills");
             if (skills[slb] != undefined){
                 delete skills[slb];
-                await game.settings.set("ModularFate","skills",skills);
+                await game.settings.set("FateCoreOfficial","skills",skills);
                 this.render(true);
             }
         }
@@ -210,14 +210,14 @@ class SkillSetup extends FormApplication{
         let selectBox = html.find("select[id='skillListBox']");
         let name = selectBox[0].value;
         if (name=="" || name == undefined){
-            ui.notifications.error(game.i18n.localize("ModularFate.SelectASkillToCopyFirst"));
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.SelectASkillToCopyFirst"));
         } else {
-            let skills=await game.settings.get("ModularFate", "skills");
+            let skills=await game.settings.get("FateCoreOfficial", "skills");
             let skill = duplicate(skills[name]);
-            name = skill.name+" "+game.i18n.localize("ModularFate.copy");
+            name = skill.name+" "+game.i18n.localize("FateCoreOfficial.copy");
             skill.name=name;
             skills[name]=skill;
-            await game.settings.set("ModularFate","skills",skills);
+            await game.settings.set("FateCoreOfficial","skills",skills);
             this.render(true);
             try {
                 this.bringToTop();
@@ -257,13 +257,13 @@ class EditSkill extends FormApplication{
         }
 
         async _updateObject(event, f) {
-            let skills=game.settings.get("ModularFate","skills");
+            let skills=game.settings.get("FateCoreOfficial","skills");
             let name = f.name.split(".").join("․").trim();
             let newSkill = {"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
             var existing = false;
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
             if (name == undefined || name ==""){
-                ui.notifications.error(game.i18n.localize("ModularFate.YouCannotHaveASkillWithABlankName"))
+                ui.notifications.error(game.i18n.localize("FateCoreOfficial.YouCannotHaveASkillWithABlankName"))
             } else {
                 if (skills[name] != undefined){
                     skills[name]=newSkill;
@@ -277,7 +277,7 @@ class EditSkill extends FormApplication{
                 }                      
                 skills[name]=newSkill;
             }
-            await game.settings.set("ModularFate","skills",skills);
+            await game.settings.set("FateCoreOfficial","skills",skills);
         }
 
     //Here are the action listeners
@@ -294,12 +294,12 @@ class EditSkill extends FormApplication{
 
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/EditSkill.html"; 
+        options.template = "systems/FateCoreOfficial/templates/EditSkill.html"; 
     
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";
-        options.title = game.i18n.localize("ModularFate.SkillEditor");
+        options.title = game.i18n.localize("FateCoreOfficial.SkillEditor");
         options.closeOnSubmit = true;
         options.id = "EditSkill"; // CSS id if you want to override default behaviors
         options.resizable = true;

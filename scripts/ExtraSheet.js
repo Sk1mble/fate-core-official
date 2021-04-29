@@ -2,7 +2,7 @@ export class ExtraSheet extends ItemSheet {
 
     constructor (...args){
         super(...args);
-        this.options.title = `${game.i18n.localize("ModularFate.Extra")}: ${this.object.name}`
+        this.options.title = `${game.i18n.localize("FateCoreOfficial.Extra")}: ${this.object.name}`
         this.track_category = "All";
     }
 
@@ -24,7 +24,7 @@ export class ExtraSheet extends ItemSheet {
         data.stunts = this.object.data.data.stunts;
         data.aspects = this.object.data.data.aspects;
         data.skills = this.object.data.data.skills;
-        data.ladder = ModularFateConstants.getFateLadder();
+        data.ladder = FateCoreOfficialConstants.getFateLadder();
         let track_categories = this.object.data.data.tracks;
         let cats = new Set();
         for (let c in track_categories){
@@ -35,10 +35,10 @@ export class ExtraSheet extends ItemSheet {
         data.category = this.track_category;
         data.track_categories = track_categories;
         data.tracks = this.object.data.data.tracks;
-        let skills_label = game.settings.get("ModularFate", "skillsLabel");
-        data.skillsLabel = skills_label || game.i18n.localize("ModularFate.defaultSkillsLabel");
+        let skills_label = game.settings.get("FateCoreOfficial", "skillsLabel");
+        data.skillsLabel = skills_label || game.i18n.localize("FateCoreOfficial.defaultSkillsLabel");
 
-        data.dataTemplate = () => `systems/ModularFate/templates/ExtraSheet.html`;
+        data.dataTemplate = () => `systems/FateCoreOfficial/templates/ExtraSheet.html`;
         data.GM=game.user.isGM;
         if (this.object?.data?.data?.contents != undefined && !jQuery.isEmptyObject(this.object?.data?.data?.contents))
         {
@@ -236,10 +236,10 @@ export class ExtraSheet extends ItemSheet {
 
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
-        let db = duplicate(game.settings.get("ModularFate","stunts"));
+        let db = duplicate(game.settings.get("FateCoreOfficial","stunts"));
         db[name]=this.object.data.data.stunts[name];
-        await game.settings.set("ModularFate","stunts",db);
-        ui.notifications.info(`${game.i18n.localize("ModularFate.Added")} ${name} ${game.i18n.localize("ModularFate.ToTheStuntDatabase")}`);
+        await game.settings.set("FateCoreOfficial","stunts",db);
+        ui.notifications.info(`${game.i18n.localize("FateCoreOfficial.Added")} ${name} ${game.i18n.localize("FateCoreOfficial.ToTheStuntDatabase")}`);
     }
 
     async _stunt_db_click(event, html){
@@ -255,8 +255,8 @@ export class ExtraSheet extends ItemSheet {
     async _onStunts_click(event, html) {
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
-            "name":game.i18n.localize("ModularFate.NewStunt"),
-            "linked_skill":game.i18n.localize("ModularFate.None"),
+            "name":game.i18n.localize("FateCoreOfficial.NewStunt"),
+            "linked_skill":game.i18n.localize("FateCoreOfficial.None"),
             "description":"",
             "refresh_cost":1,
             "overcome":false,
@@ -289,7 +289,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async _onDelete(event, html){
-        let del = await ModularFateConstants.confirmDeletion();
+        let del = await FateCoreOfficialConstants.confirmDeletion();
         if (del){
             let name = event.target.id.split("_")[0];
             await this.object.update({"data.stunts":{[`-=${name}`]:null}});
@@ -297,7 +297,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     get template (){
-        return 'systems/ModularFate/templates/ExtraSheet.html';
+        return 'systems/FateCoreOfficial/templates/ExtraSheet.html';
     }
 
     async _on_boxes_change(html, event){
@@ -319,10 +319,10 @@ export class ExtraSheet extends ItemSheet {
     async close(...args){
         await super.close(...args);
         if (this.document.parent){
-            if (this.document.parent.type == "ModularFate" && this.document.data.data.active){
+            if (this.document.parent.type == "FateCoreOfficial" && this.document.data.data.active){
                 await this.document.parent.updateFromExtra(this.document.data);
             } else {
-                if (this.document.parent.type == "ModularFate" && !this.document.data.data.active){
+                if (this.document.parent.type == "FateCoreOfficial" && !this.document.data.data.active){
                     console.log(this.document.parent);
                     await this.document.parent.deactivateExtra(this.object)
                 }

@@ -1,12 +1,12 @@
 <form id="ShowCharacter" style="font-family:Montserrat">
-    <p style="font-weight:bold">{{localize 'ModularFate.PickATokenOrActor'}}:</p>
+    <p style="font-weight:bold">{{localize 'FateCoreOfficial.PickATokenOrActor'}}:</p>
     <span style="width:25%; padding:5px">
-        {{localize 'ModularFate.Character'}}:
+        {{localize 'FateCoreOfficial.Character'}}:
     </span>
     <span style="width:75%; padding:5px">
         <select id="character">
             <option disabled="disabled">
-                {{localize 'ModularFate.Tokens'}}
+                {{localize 'FateCoreOfficial.Tokens'}}
             </option>
             {{#each tokens}}
                 <option value = "token_{{this.id}}">
@@ -14,7 +14,7 @@
                 </option>
             {{/each}}
             <option disabled="disabled">
-                {{localize 'ModularFate.Actors'}}
+                {{localize 'FateCoreOfficial.Actors'}}
             </option>
             {{#each actors}}
                 <option value = "actor_{{this.id}}">
@@ -24,8 +24,8 @@
         </select>
     </span><p/>
     <span>
-        <p style="font-weight:bold">{{localize 'ModularFate.PickWhoToShowTo'}}:</p>
-        <button type="button" id="all_players">{{localize 'ModularFate.SelectAll'}}</button><p/>
+        <p style="font-weight:bold">{{localize 'FateCoreOfficial.PickWhoToShowTo'}}:</p>
+        <button type="button" id="all_players">{{localize 'FateCoreOfficial.SelectAll'}}</button><p/>
     </span>
     {{#each users}}
     {{#if this.active}}
@@ -38,58 +38,58 @@
         {{/if}}
     {{/each}}
     <span>
-        <p style="font-weight:bold">{{localize 'ModularFate.PickWhatToShow'}}:</p>
-        <button type="button" id="all_elements">{{localize 'ModularFate.SelectAll'}}</button><p/>
+        <p style="font-weight:bold">{{localize 'FateCoreOfficial.PickWhatToShow'}}:</p>
+        <button type="button" id="all_elements">{{localize 'FateCoreOfficial.SelectAll'}}</button><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="avatar"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Avatar'}}
+                {{localize 'FateCoreOfficial.Avatar'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="biography"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Biography'}}
+                {{localize 'FateCoreOfficial.Biography'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="description"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Description'}}
+                {{localize 'FateCoreOfficial.Description'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="aspects"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Aspects'}}
+                {{localize 'FateCoreOfficial.Aspects'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="skills"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Skills'}}
+                {{localize 'FateCoreOfficial.Skills'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="tracks"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Tracks'}}
+                {{localize 'FateCoreOfficial.Tracks'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="stunts"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Stunts'}}
+                {{localize 'FateCoreOfficial.Stunts'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="extras"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'ModularFate.Extras'}}
+                {{localize 'FateCoreOfficial.Extras'}}
             </span><p/>
     </span>
     <span>
-        <button type="button" id="show_button">{{localize 'ModularFate.ShowNow'}}</button>
+        <button type="button" id="show_button">{{localize 'FateCoreOfficial.ShowNow'}}</button>
     </span>
 </form>

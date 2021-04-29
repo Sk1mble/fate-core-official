@@ -87,14 +87,14 @@ class ShowCharacter extends Application {
             }
         }
         // Create a socket call
-        await game.socket.emit("system.ModularFate",{"players":players,"elements":elements})
+        await game.socket.emit("system.FateCoreOfficial",{"players":players,"elements":elements})
         this.close();
     }
 
     static get defaultOptions() {
         const options = super.defaultOptions; 
-        options.template= "systems/ModularFate/templates/ShowCharacter.html";
-        options.title=game.i18n.localize("ModularFate.ShowACharacter");
+        options.template= "systems/FateCoreOfficial/templates/ShowCharacter.html";
+        options.title=game.i18n.localize("FateCoreOfficial.ShowACharacter");
         options.id = "ShowCharacter";
         options.width="auto";
         options.height="auto";
@@ -118,7 +118,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
             if (hud && game.user.isGM){
                 hud.tools.push({
                     name:"ShowCharacter",
-                    title:game.i18n.localize("ModularFate.ShowCharacterTitle"),
+                    title:game.i18n.localize("FateCoreOfficial.ShowCharacterTitle"),
                     icon:"fas fa-binoculars",
                     onClick: ()=> {let sc = new ShowCharacter; sc.render(true)},
                     button:true
@@ -127,7 +127,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
 })
 
 Hooks.once('ready', async function () {
-    game.socket.on("system.ModularFate", data => {
+    game.socket.on("system.FateCoreOfficial", data => {
         //Players is an array of player IDs to which the character is to be shown
         //Elements is an object containing the data to be shown, which can be: avatar, aspects, tracks, bio, 
         //description, skills, stunts, extras
@@ -143,13 +143,13 @@ class CharacterView extends Application {
     constructor(elements){
         super();
         this.elements = elements;
-        this.options.title=game.i18n.localize("ModularFate.TemporaryView")+" "+game.i18n.localize("ModularFate.of")+" "+elements.name
+        this.options.title=game.i18n.localize("FateCoreOfficial.TemporaryView")+" "+game.i18n.localize("FateCoreOfficial.of")+" "+elements.name
     }
 
     static get defaultOptions() {
         const options = super.defaultOptions; 
-        options.template= "systems/ModularFate/templates/CharacterView.html";
-        options.title=game.i18n.localize("ModularFate.TemporaryView")
+        options.template= "systems/FateCoreOfficial/templates/CharacterView.html";
+        options.title=game.i18n.localize("FateCoreOfficial.TemporaryView")
         options.width="1000";
         options.height="800";
         options.resizable = true;

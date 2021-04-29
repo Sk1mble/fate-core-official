@@ -3,12 +3,12 @@ class EditPlayerTracks extends FormApplication {
         super(...args);
         //This is a good place to set up some variables at the top level so we can access them with this.
         if (this.object.type=="Extra"){
-            this.options.title=`${game.i18n.localize("ModularFate.ExtraTrackEditor")} ${this.object.name}`
+            this.options.title=`${game.i18n.localize("FateCoreOfficial.ExtraTrackEditor")} ${this.object.name}`
         } else {
             if (this.object.isToken) {
-                this.options.title=`${game.i18n.localize("ModularFate.TokenTrackEditor")} ${this.object.name}`
+                this.options.title=`${game.i18n.localize("FateCoreOfficial.TokenTrackEditor")} ${this.object.name}`
             } else {
-                this.options.title=`${game.i18n.localize("ModularFate.ActorTrackEditor")} ${this.object.name}`
+                this.options.title=`${game.i18n.localize("FateCoreOfficial.ActorTrackEditor")} ${this.object.name}`
             }
         }
         this.selected_category = "";
@@ -19,10 +19,10 @@ class EditPlayerTracks extends FormApplication {
 
     static get defaultOptions(){
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/EditPlayerTracks.html";
+        options.template = "systems/FateCoreOfficial/templates/EditPlayerTracks.html";
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("ModularFate.CharacterTrackEditor")}`;
+        options.title = `${game.i18n.localize("FateCoreOfficial.CharacterTrackEditor")}`;
         options.closeOnSubmit = false;
         options.id = "PlayerTrackSetup";
         options.resizable = true;
@@ -108,11 +108,11 @@ class EditPlayerTracks extends FormApplication {
         catText += '</select>'
 
         let content = 
-        `<h1>${game.i18n.localize("ModularFate.AddAnAdHocTrack")}</h1>
+        `<h1>${game.i18n.localize("FateCoreOfficial.AddAnAdHocTrack")}</h1>
         <table border="1" cellpadding="4" cellspacing="4">
             <tr>
                 <td width = "200px">
-                ${game.i18n.localize("ModularFate.Category")}:
+                ${game.i18n.localize("FateCoreOfficial.Category")}:
                 </td>
                 <td>
                     ${catText}
@@ -120,15 +120,15 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                ${game.i18n.localize("ModularFate.Name")}:
+                ${game.i18n.localize("FateCoreOfficial.Name")}:
                 </td>
                 <td>
-                    <input id = "name" type="text" value="${game.i18n.localize("ModularFate.NewTrack")}"></input>
+                    <input id = "name" type="text" value="${game.i18n.localize("FateCoreOfficial.NewTrack")}"></input>
                 </td>
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.Description")}:
+                    ${game.i18n.localize("FateCoreOfficial.Description")}:
                 </td>
                 <td>
                     <input id = "description" type="text"></input>
@@ -136,15 +136,15 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.Universal")}
+                    ${game.i18n.localize("FateCoreOfficial.Universal")}
                 </td>
                 <td>
-                    ${game.i18n.localize("ModularFate.AdHocTracksNotUniversal")}
+                    ${game.i18n.localize("FateCoreOfficial.AdHocTracksNotUniversal")}
                 </td>
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.Unique")}
+                    ${game.i18n.localize("FateCoreOfficial.Unique")}
                 </td>
                 <td>
                     <input type="checkbox" id="unique" checked></input>
@@ -152,15 +152,15 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.RecoveryType")}:
+                    ${game.i18n.localize("FateCoreOfficial.RecoveryType")}:
                 </td>
                 <td>
-                    <select id = "recovery_type"><option selected="selected">${game.i18n.localize("ModularFate.Fleeting")}</option><option>${game.i18n.localize("ModularFate.Sticky")}</option><option>${game.i18n.localize("ModularFate.Lasting")}</option></Select>
+                    <select id = "recovery_type"><option selected="selected">${game.i18n.localize("FateCoreOfficial.Fleeting")}</option><option>${game.i18n.localize("FateCoreOfficial.Sticky")}</option><option>${game.i18n.localize("FateCoreOfficial.Lasting")}</option></Select>
                 </td>
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.AspectWhenMarked")}:
+                    ${game.i18n.localize("FateCoreOfficial.AspectWhenMarked")}:
                 </td>
                 <td>
                      <input id = "aspect_when_marked" type="checkbox">
@@ -168,7 +168,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.AspectAsName?")}
+                    ${game.i18n.localize("FateCoreOfficial.AspectAsName?")}
                 </td>
                 <td>
                     <input id = "aspect_as_name" type="checkbox"></input>
@@ -176,7 +176,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                ${game.i18n.localize("ModularFate.Boxes")}:
+                ${game.i18n.localize("FateCoreOfficial.Boxes")}:
                 </td>
                 <td>
                     <input id = "boxes" type="number" min = "0" value="0">
@@ -184,26 +184,26 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
             <td>
-                ${game.i18n.localize("ModularFate.BoxLabels")}:
+                ${game.i18n.localize("FateCoreOfficial.BoxLabels")}:
             </td>
             <td>
                 <select id="player_track_label_select" style="color:black; background:white;" >
                     <option value="escalating">
-                        ${game.i18n.localize("ModularFate.Escalating")}
+                        ${game.i18n.localize("FateCoreOfficial.Escalating")}
                     </option>
                     <option value="custom">
-                        ${game.i18n.localize("ModularFate.Custom")}
+                        ${game.i18n.localize("FateCoreOfficial.Custom")}
                     </option>
-                    <option selected="selected" value="${game.i18n.localize("ModularFate.none")}">
-                        ${game.i18n.localize("ModularFate.None")}
+                    <option selected="selected" value="${game.i18n.localize("FateCoreOfficial.none")}">
+                        ${game.i18n.localize("FateCoreOfficial.None")}
                     </option>
                 </select>
-                <input type="text" id="player_track_custom_label" maxlength="1" minlength="1" title="${game.i18n.localize("ModularFate.EnterASingleCharacter")}" style="color:black; background:white; width:50px"/>
+                <input type="text" id="player_track_custom_label" maxlength="1" minlength="1" title="${game.i18n.localize("FateCoreOfficial.EnterASingleCharacter")}" style="color:black; background:white; width:50px"/>
             </td>
         </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.Harm")}:
+                    ${game.i18n.localize("FateCoreOfficial.Harm")}:
                 </td>
                 <td>
                     <input id = "harm" type="number" min = "0" value="0">
@@ -211,7 +211,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.WhenMarked")}
+                    ${game.i18n.localize("FateCoreOfficial.WhenMarked")}
                 </td>
                 <td>
                     <input id="when_marked" type="text"></input>
@@ -219,7 +219,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.HowRecover")}
+                    ${game.i18n.localize("FateCoreOfficial.HowRecover")}
                 </td>
                 <td>
                     <input id="recovery_conditions" type="text"></input>
@@ -227,19 +227,19 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.LinkedSkills")}:
+                    ${game.i18n.localize("FateCoreOfficial.LinkedSkills")}:
                 </td>
                 <td>
-                    ${game.i18n.localize("ModularFate.AdHocTracksDoNotUseLinkedSkills")}
+                    ${game.i18n.localize("FateCoreOfficial.AdHocTracksDoNotUseLinkedSkills")}
             </tr>
         </table>`
 
         new Dialog({
-            title: game.i18n.localize("ModularFate.AdHocTrackEditor"),
+            title: game.i18n.localize("FateCoreOfficial.AdHocTrackEditor"),
             content: content,
             buttons: {
                 ok: {
-                    label: game.i18n.localize("ModularFate.Save"),
+                    label: game.i18n.localize("FateCoreOfficial.Save"),
                     callback: (html) => {
                         //Todo: code to save goes here;
                         let newTrack = {};
@@ -376,7 +376,7 @@ class EditPlayerTracks extends FormApplication {
             }
         }
         
-        ui.notifications.info(game.i18n.localize("ModularFate.CharacterTrackChangesSaved"))   
+        ui.notifications.info(game.i18n.localize("FateCoreOfficial.CharacterTrackChangesSaved"))   
         //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
             let tracks = this.object.setupTracks(duplicate(this.object.data.data.skills), output);
@@ -398,7 +398,7 @@ class EditPlayerTracks extends FormApplication {
         let category = info[0]
         let track = info[1]
         let tracks = this.tracks_by_category[category]
-        tracks = ModularFateConstants.moveKey(tracks, track, direction);
+        tracks = FateCoreOfficialConstants.moveKey(tracks, track, direction);
         this.tracks_by_category[category]=tracks;
         this.render(false);
     }
@@ -423,11 +423,11 @@ class EditPlayerTracks extends FormApplication {
         }
 
         let content = 
-        `<h1>${game.i18n.localize("ModularFate.DetailsFor")} ${track.name}</h1>
+        `<h1>${game.i18n.localize("FateCoreOfficial.DetailsFor")} ${track.name}</h1>
         <table border="1" cellpadding="4" cellspacing="4">
             <tr>
                 <td width = "200px">
-                    ${game.i18n.localize("ModularFate.Description")}:
+                    ${game.i18n.localize("FateCoreOfficial.Description")}:
                 </td>
                 <td>
                     ${track.description}
@@ -435,29 +435,29 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.Universal")}<br>
-                    ${game.i18n.localize("ModularFate.Unique")}<br>
-                    ${game.i18n.localize("ModularFate.Paid")}<br>
+                    ${game.i18n.localize("FateCoreOfficial.Universal")}<br>
+                    ${game.i18n.localize("FateCoreOfficial.Unique")}<br>
+                    ${game.i18n.localize("FateCoreOfficial.Paid")}<br>
                 </td>
                 <td>
-                    ${track.universal ? game.i18n.localize("ModularFate.Yes"):game.i18n.localize("ModularFate.No")}<br>
-                    ${track.unique ? game.i18n.localize("ModularFate.Yes"):game.i18n.localize("ModularFate.No")}<br>
-                    ${track.paid ? game.i18n.localize("ModularFate.Yes"):game.i18n.localize("ModularFate.No")}<br>
+                    ${track.universal ? game.i18n.localize("FateCoreOfficial.Yes"):game.i18n.localize("FateCoreOfficial.No")}<br>
+                    ${track.unique ? game.i18n.localize("FateCoreOfficial.Yes"):game.i18n.localize("FateCoreOfficial.No")}<br>
+                    ${track.paid ? game.i18n.localize("FateCoreOfficial.Yes"):game.i18n.localize("FateCoreOfficial.No")}<br>
                 </td>
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.RecoveryType")}:<br>
-                    ${game.i18n.localize("ModularFate.AspectWhenMarked")}:<br>
-                    ${game.i18n.localize("ModularFate.NameAsAspect?")}:<br>
-                    ${game.i18n.localize("ModularFate.Boxes")}:<br>
-                    ${game.i18n.localize("ModularFate.Box_Label")}:<br>
-                    ${game.i18n.localize("ModularFate.Harm")}:
+                    ${game.i18n.localize("FateCoreOfficial.RecoveryType")}:<br>
+                    ${game.i18n.localize("FateCoreOfficial.AspectWhenMarked")}:<br>
+                    ${game.i18n.localize("FateCoreOfficial.NameAsAspect?")}:<br>
+                    ${game.i18n.localize("FateCoreOfficial.Boxes")}:<br>
+                    ${game.i18n.localize("FateCoreOfficial.Box_Label")}:<br>
+                    ${game.i18n.localize("FateCoreOfficial.Harm")}:
                 </td>
                 <td>
                     ${track.recovery_type}<br>
-                    ${track.aspect.when_marked ? game.i18n.localize("ModularFate.Yes"):game.i18n.localize("ModularFate.No")}<br>
-                    ${track.aspect.as_name ? game.i18n.localize("ModularFate.Yes"):game.i18n.localize("ModularFate.No")}<br>
+                    ${track.aspect.when_marked ? game.i18n.localize("FateCoreOfficial.Yes"):game.i18n.localize("FateCoreOfficial.No")}<br>
+                    ${track.aspect.as_name ? game.i18n.localize("FateCoreOfficial.Yes"):game.i18n.localize("FateCoreOfficial.No")}<br>
                     ${track.boxes}<br>
                     ${track.label}<br>
                     ${track.harm_can_absorb}
@@ -465,7 +465,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.WhenMarked")}:
+                    ${game.i18n.localize("FateCoreOfficial.WhenMarked")}:
                 </td>
                 <td>
                     ${track.when_marked}
@@ -474,7 +474,7 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                    ${game.i18n.localize("ModularFate.HowRecover")}:
+                    ${game.i18n.localize("FateCoreOfficial.HowRecover")}:
                 </td>
                 <td>
                     ${track.recovery_conditions}
@@ -482,14 +482,14 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                ${game.i18n.localize("ModularFate.LinkedSkills")}:
+                ${game.i18n.localize("FateCoreOfficial.LinkedSkills")}:
                 </td>
                 <td>
                     ${linked_skills_text}
             </tr>
         </table>`
 
-        ModularFateConstants.awaitOKDialog(track.name, content, 1000);
+        FateCoreOfficialConstants.awaitOKDialog(track.name, content, 1000);
     }
 
     async prepareTrack(track){
@@ -507,7 +507,7 @@ class EditPlayerTracks extends FormApplication {
         track.notes = "";
 
         //If this box is an aspect when marked, it needs an aspect.name data field.
-        if (track.aspect == game.i18n.localize("ModularFate.DefinedWhenMarked")) {
+        if (track.aspect == game.i18n.localize("FateCoreOfficial.DefinedWhenMarked")) {
             track.aspect = {};
             track.aspect.name = "";
             track.aspect.when_marked = true;
@@ -531,12 +531,12 @@ class EditPlayerTracks extends FormApplication {
     }
         
     async getData(){
-        let world_tracks = await duplicate(game.settings.get("ModularFate","tracks"))
+        let world_tracks = await duplicate(game.settings.get("FateCoreOfficial","tracks"))
         //We need the list of track categories
         //We will use a dropdown list of categories in the editor to select which tracks are displayed
 
         if (this.tracks_by_category == undefined){
-            this.tracks_by_category = await duplicate(game.settings.get("ModularFate","track_categories"));
+            this.tracks_by_category = await duplicate(game.settings.get("FateCoreOfficial","track_categories"));
              //Initialise the values from text (used in the category editor) to JSON objects (used here)
             for (let c in this.tracks_by_category){
                 this.tracks_by_category[c]={};

@@ -9,14 +9,14 @@ This work is based on Fate Core System and Fate Accelerated Edition (found at ht
 This work is based on Fate Condensed (found at http://www.faterpg.com/), a product of Evil Hat Productions, LLC, developed, authored, and edited by PK Sullivan, Ed Turner, Leonard Balsera, Fred Hicks, Richard Bellingham, Robert Hanz, Ryan Macklin, and Sophie Lagacé, and licensed for our use under the Creative Commons Attribution 3.0 Unported license (http://creativecommons.org/licenses/by/3.0/).
 
 ## Contents
-1. What is Modular Fate Core?
+1. What is Fate Core Official?
 2. Importing worlds or characters from the Fate system by Nick East
 3. System Settings
 4. Character Sheet
 5. Fate Utilities
 6. FAQ
 
-## 1 What Is Modular Fate Core?
+## 1 What Is Fate Core Official?
 
 When I started using Foundry VTT, I found an existing system for Fate Core and Fate Accelerated by Nick East. The stress tracks specific to Fate Condensed and some other technology I needed like custom conditions wasn't supported in Nick's system, so I built some modules of my own to provide that functionality as a stopgap while Nick finishes working on Fate Condensed. Later, Nick decided to take a break from it to work on his own projects, so I decided to create my own implemnetation of Fate Core that had all of the features I wanted. This is that system.
 

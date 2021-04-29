@@ -29,7 +29,7 @@ export class Thing extends ActorSheet {
     }
 
     get template() {
-        let template = 'systems/ModularFate/templates/ThingSheet.html'
+        let template = 'systems/FateCoreOfficial/templates/ThingSheet.html'
         return template;
     }
 
@@ -54,7 +54,7 @@ export class Thing extends ActorSheet {
 
             if (character != undefined && character != null){
                 await character.createEmbeddedDocuments("Item", this.document.items.contents.map(it => it.data));
-                if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                if (game.settings.get("FateCoreOfficial", "DeleteOnTransfer")){ 
                     await this.actor.deleteEmbeddedDocuments("Item", this.actor.items.contents.map(item => item.id));
                 }
             } else {
@@ -95,7 +95,7 @@ export class Thing extends ActorSheet {
                     this.actor.sheet.close({"force":true});
                 } else {
                     let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
-                    game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
+                    game.socket.emit("system.FateCoreOfficial",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
                     this.actor.sheet.close({"force":true});
                 }                
             } else {
@@ -197,7 +197,7 @@ export class Thing extends ActorSheet {
         if (character != undefined && character != null){
             let item = this.actor.items.find(item => item.id == id).data;
             await character.createEmbeddedDocuments("Item", [item]);
-            if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+            if (game.settings.get("FateCoreOfficial", "DeleteOnTransfer")){ 
                 await this.actor.deleteEmbeddedDocuments("Item", [id]);
             }
         } else {
@@ -240,7 +240,7 @@ export class Thing extends ActorSheet {
     }
     
     async _on_extras_delete(event, html){
-        let del = await ModularFateConstants.confirmDeletion();
+        let del = await FateCoreOfficialConstants.confirmDeletion();
         if (del){
             await this.actor.deleteEmbeddedDocuments("Item", [event.target.id.split("_")[0]]);
         }
@@ -333,7 +333,7 @@ Hooks.on('deleteItem', async (item) => {
                 game.scenes.viewed.deleteEmbeddedDocuments("Token", [t.id])
             } else {
                 let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id); //game.scenes.viewed.tokens.contents is the no-canvas safe alternative to game.scenes.viewed.tokens.contents.
-                game.socket.emit("system.ModularFate",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
+                game.socket.emit("system.FateCoreOfficial",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
             }
         }
     }
@@ -388,7 +388,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
             delete newItem.data.data.contents;
         }
 
-        let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
+        let folder = game.folders.find (f => f.name.startsWith("FateCoreOfficial Things"));
                 if (folder != undefined){
                     folder.delete();
                 }
@@ -413,7 +413,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     if (data.tokenId === undefined){
                         let actor=game.actors.get(data.actorId);
                     
-                        if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                        if (game.settings.get("FateCoreOfficial", "DeleteOnTransfer")){ 
                             if (shiftDown === false){
                                 await actor.deleteEmbeddedDocuments("Item", [data.id]); 
                             }
@@ -427,7 +427,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                         let scene = game.scenes.contents.find(c => c.id == canvas_scene.document.id);
                         let token = scene.data.tokens.find(t=>t.id == data.tokenId);
                         
-                        if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                        if (game.settings.get("FateCoreOfficial", "DeleteOnTransfer")){ 
                             if (shiftDown === false){
                                 await token.actor.deleteEmbeddedDocuments("Item", [data.id]); 
                             }
@@ -451,7 +451,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
             delete newItem.data.data.contents;
         }
 
-        let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
+        let folder = game.folders.find (f => f.name.startsWith("FateCoreOfficial Things"));
         if (folder != undefined){
             folder.delete();
         }
@@ -484,7 +484,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
             delete newItem.data.data.contents;
         }
 
-        let folder = game.folders.find (f => f.name.startsWith("ModularFate Things"));
+        let folder = game.folders.find (f => f.name.startsWith("FateCoreOfficial Things"));
         if (folder != undefined){
             folder.delete();
         }
@@ -539,12 +539,12 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
     if (game.user.isGM){
         createThing (canvas.scene.data, data, game.user.id, keyboard.isDown("Shift"));
     } else {
-        if (game.settings.get("ModularFate","PlayerThings")){
+        if (game.settings.get("FateCoreOfficial","PlayerThings")){
             let GMs = game.users.contents.filter(user => user.active && user.isGM);
             if (GMs.length == 0) {
                 ui.notifications.error("A GM has to be logged in for you to create item tokens.")
             } else {
-                game.socket.emit("system.ModularFate", {"action":"create_thing", "scene":canvas.scene, "data":data, "id":game.user.id, "shiftDown":keyboard.isDown("Shift")})
+                game.socket.emit("system.FateCoreOfficial", {"action":"create_thing", "scene":canvas.scene, "data":data, "id":game.user.id, "shiftDown":keyboard.isDown("Shift")})
             }
         }
     }
@@ -586,7 +586,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
         //Need to check if the user has ownership of the target. If not, do nothing.
             if (target.isOwner){
                 //target.createEmbeddedDocuments("Item", [i.data]);
-                if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                if (game.settings.get("FateCoreOfficial", "DeleteOnTransfer")){ 
                     if (!keyboard.isDown("Shift")){
                         await actor.deleteEmbeddedDocuments("Item", [i.id]);
                     }
@@ -613,7 +613,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
             }
             
             if (t.actor.isOwner && target.isOwner){
-                if (game.settings.get("ModularFate", "DeleteOnTransfer")){ 
+                if (game.settings.get("FateCoreOfficial", "DeleteOnTransfer")){ 
                     if (!keyboard.isDown("Shift")){
                         //console.log(data.data);
                         await t.actor.deleteEmbeddedDocuments("Item", [data.data._id]);
@@ -630,7 +630,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
 
 Hooks.once('ready', async function () {
     if (game.user.isGM){
-        game.socket.on("system.ModularFate", async (data) => {
+        game.socket.on("system.FateCoreOfficial", async (data) => {
             let GMs = game.users.filter(user => user.isGM && user.active);
                 
             if (GMs[0].id != game.user.id){
@@ -646,7 +646,7 @@ Hooks.once('ready', async function () {
         })
     }
 
-    game.socket.on("system.ModularFate", async (data) => {
+    game.socket.on("system.FateCoreOfficial", async (data) => {
         if (data.action == "error_msg" && data.id == game.user.id){
             ui.notifications.error(data.error);
         }

@@ -28,38 +28,38 @@
 /*	System initialization			*/
 /* -------------------------------- */
 
-import { ModularFateCharacter } from "./scripts/ModularFateCharacter.js"
+import { FateCoreOfficialCharacter } from "./scripts/FateCoreOfficialCharacter.js"
 import { ExtraSheet } from "./scripts/ExtraSheet.js"
 import { Thing } from "./scripts/Thing.js"
-import { ModularFateActor } from "./scripts/ModularFateActor.js"
-import { ModularFateExtra } from "./scripts/ModularFateExtra.js"
+import { FateCoreOfficialActor } from "./scripts/FateCoreOfficialActor.js"
+import { FateCoreOfficialExtra } from "./scripts/FateCoreOfficialExtra.js"
 
 Hooks.on("preCreateActor", async (actor, data, options, userId) => {
 
     if (actor.type == "Thing"){
         if (!options.thing){
-            ui.notifications.error(game.i18n.localize("ModularFate.CantCreateThing"));
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.CantCreateThing"));
             return false;
         }
     }
 
-    if (actor.type == "ModularFate"){
+    if (actor.type == "FateCoreOfficial"){
         if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
             if (actor?.data?.data?.details?.fatePoints?.refresh === ""){
-                let modified_data = await initialiseModularFateCharacter(actor);
+                let modified_data = await initialiseFateCoreOfficialCharacter(actor);
                 data.data = modified_data.data;            
             }
         }
     }
 });
 
-async function initialiseModularFateCharacter (actor) {
+async function initialiseFateCoreOfficialCharacter (actor) {
 
     //Modifies the data of the supplied actor to add tracks, aspects, etc. from system settings, then returns the data.
     let working_data = actor.data.toJSON();
     // Logic to set up Refresh and Current
 
-    let refresh = game.settings.get("ModularFate", "refreshTotal");
+    let refresh = game.settings.get("FateCoreOfficial", "refreshTotal");
 
     working_data.data.details.fatePoints.refresh = refresh;
     working_data.data.details.fatePoints.current = refresh;
@@ -67,7 +67,7 @@ async function initialiseModularFateCharacter (actor) {
     let p_skills=working_data.data.skills;
     
     //Check to see what skills the character has compared to the global skill list
-        var skill_list = game.settings.get("ModularFate","skills");
+        var skill_list = game.settings.get("FateCoreOfficial","skills");
         // This is the number of skills the character has currently.
         //We only need to add any skills if this is currently 0,
         
@@ -92,7 +92,7 @@ async function initialiseModularFateCharacter (actor) {
             })
         }        
 
-        let aspects = game.settings.get("ModularFate", "aspects");
+        let aspects = game.settings.get("FateCoreOfficial", "aspects");
         let player_aspects = duplicate(aspects);
         for (let a in player_aspects) {
             player_aspects[a].value = "";
@@ -101,7 +101,7 @@ async function initialiseModularFateCharacter (actor) {
         working_data.data.aspects = player_aspects;
     
         //Step one, get the list of universal tracks.
-        let world_tracks = duplicate(game.settings.get("ModularFate", "tracks"));
+        let world_tracks = duplicate(game.settings.get("FateCoreOfficial", "tracks"));
         let tracks_to_write = working_data.data.tracks;
         for (let t in world_tracks) {
             let track = world_tracks[t];
@@ -117,13 +117,13 @@ async function initialiseModularFateCharacter (actor) {
             track.notes = "";
 
             //If this box is an aspect when marked, it needs an aspect.name data field.
-            if (track.aspect == game.i18n.localize("ModularFate.DefinedWhenMarked")) {
+            if (track.aspect == game.i18n.localize("FateCoreOfficial.DefinedWhenMarked")) {
                 track.aspect = {};
                 track.aspect.name = "";
                 track.aspect.when_marked = true;
                 track.aspect.as_name = false;
             }
-            if (track.aspect == game.i18n.localize("ModularFate.AspectAsName")) {
+            if (track.aspect == game.i18n.localize("FateCoreOfficial.AspectAsName")) {
                 track.aspect = {};
                 track.aspect.name = "";
                 track.aspect.when_marked = true;
@@ -142,7 +142,7 @@ async function initialiseModularFateCharacter (actor) {
     working_data.data.tracks = tracks_to_write;
     let tracks = working_data.data.tracks;
     
-    let categories = game.settings.get("ModularFate", "track_categories");
+    let categories = game.settings.get("FateCoreOfficial", "track_categories");
     //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
     for (let t in tracks) {
         let track = tracks[t];
@@ -205,12 +205,12 @@ async function initialiseModularFateCharacter (actor) {
 }
 
 Hooks.once('ready', async function () {
-    if (game.settings.get("ModularFate","run_once") == false){
+    if (game.settings.get("FateCoreOfficial","run_once") == false){
         if (game.user.isGM){
-            ModularFateConstants.awaitOKDialog(game.i18n.localize("ModularFate.WelcomeTitle"),game.i18n.localize("ModularFate.WelcomeText"),500,250);
-            game.settings.set("ModularFate","run_once", true);
-            console.log(game.i18n.localize("ModularFate.baseDefaults"));
-            game.settings.set("ModularFate","defaults",game.i18n.localize("ModularFate.baseDefaults"))
+            FateCoreOfficialConstants.awaitOKDialog(game.i18n.localize("FateCoreOfficial.WelcomeTitle"),game.i18n.localize("FateCoreOfficial.WelcomeText"),500,250);
+            game.settings.set("FateCoreOfficial","run_once", true);
+            console.log(game.i18n.localize("FateCoreOfficial.baseDefaults"));
+            game.settings.set("FateCoreOfficial","defaults",game.i18n.localize("FateCoreOfficial.baseDefaults"))
         }
     }
 })
@@ -293,170 +293,170 @@ Hooks.on('updateScene', (...args) => {
 })
 
 Hooks.once('init', async function () {
-    CONFIG.Actor.documentClass = ModularFateActor;
-    CONFIG.Item.documentClass = ModularFateExtra;
+    CONFIG.Actor.documentClass = FateCoreOfficialActor;
+    CONFIG.Item.documentClass = FateCoreOfficialExtra;
     CONFIG.fontFamilies.push("Montserrat");
 
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.
-    game.settings.register("ModularFate", "defaultSkills", {
-        name: game.i18n.localize("ModularFate.ReplaceSkills"),
-        hint: game.i18n.localize("ModularFate.ReplaceSkillsHint"),
+    game.settings.register("FateCoreOfficial", "defaultSkills", {
+        name: game.i18n.localize("FateCoreOfficial.ReplaceSkills"),
+        hint: game.i18n.localize("FateCoreOfficial.ReplaceSkillsHint"),
         scope: "world",     // This specifies a client-stored setting
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":game.i18n.localize("ModularFate.No"),
-            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
-            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
-            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
-            "dfa":game.i18n.localize("ModularFate.YesDFA"),
-            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
+            "nothing":game.i18n.localize("FateCoreOfficial.No"),
+            "fateCore":game.i18n.localize("FateCoreOfficial.YesFateCore"),
+            "fateCondensed":game.i18n.localize("FateCoreOfficial.YesFateCondensed"),
+            "accelerated":game.i18n.localize("FateCoreOfficial.YesFateAccelerated"),
+            "dfa":game.i18n.localize("FateCoreOfficial.YesDFA"),
+            "clearAll":game.i18n.localize("FateCoreOfficial.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCoreDefaultSkills"));
-                        game.settings.set("ModularFate","defaultSkills","nothing");
-                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
+                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.FateCoreDefaultSkills"));
+                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
+                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.defaultSkillsLabel"));
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM) {
-                        game.settings.set("ModularFate","skills",{});
-                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
+                        game.settings.set("FateCoreOfficial","skills",{});
+                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.defaultSkillsLabel"));
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
-                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCondensedDefaultSkills"));
-                        game.settings.set("ModularFate","defaultSkills","nothing");
-                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
+                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.FateCondensedDefaultSkills"));
+                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
+                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.defaultSkillsLabel"));
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateAcceleratedDefaultSkills"));
-                        game.settings.set("ModularFate","defaultSkills","nothing");
-                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
+                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.FateAcceleratedDefaultSkills"));
+                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
+                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.FateAcceleratedSkillsLabel"));
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultSkills"));
-                        game.settings.set("ModularFate","defaultSkills","nothing");
-                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
+                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultSkills"));
+                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
+                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.FateAcceleratedSkillsLabel"));
                     }
                 }
             }
     });
 
         // Register a setting for replacing the existing aspect list with one of the pre-defined default sets.
-        game.settings.register("ModularFate", "defaultAspects", {
-            name: game.i18n.localize("ModularFate.ReplaceAspectsName"),
-            hint: game.i18n.localize("ModularFate.ReplaceAspectsHint"),
+        game.settings.register("FateCoreOfficial", "defaultAspects", {
+            name: game.i18n.localize("FateCoreOfficial.ReplaceAspectsName"),
+            hint: game.i18n.localize("FateCoreOfficial.ReplaceAspectsHint"),
             scope: "world",     // This specifies a client-stored setting
             config: true,        // This specifies that the setting appears in the configuration view
             type: String,
             restricted:true,
             choices: {           // If choices are defined, the resulting setting will be a select menu
                 "nothing":game.i18n.localize("No"),
-                "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
-                "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
-                "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
-                "dfa":game.i18n.localize("ModularFate.YesDFA"),
-                "clearAll":game.i18n.localize("ModularFate.YesClearAll")
+                "fateCore":game.i18n.localize("FateCoreOfficial.YesFateCore"),
+                "fateCondensed":game.i18n.localize("FateCoreOfficial.YesFateCondensed"),
+                "accelerated":game.i18n.localize("FateCoreOfficial.YesFateAccelerated"),
+                "dfa":game.i18n.localize("FateCoreOfficial.YesDFA"),
+                "clearAll":game.i18n.localize("FateCoreOfficial.YesClearAll")
             },
             default: "nothing",        // The default value for the setting
             onChange: value => { // A callback function which triggers when the setting is changed
                     if (value == "fateCore"){
                         if (game.user.isGM){
-                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCoreDefaultAspects"));
-                            game.settings.set("ModularFate","defaultAspects","nothing");
+                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.FateCoreDefaultAspects"));
+                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
                         }
                     }
                     if (value == "fateCondensed"){
                         if (game.user.isGM){
-                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateCondensedDefaultAspects"));
-                            game.settings.set("ModularFate","defaultAspects","nothing");
+                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.FateCondensedDefaultAspects"));
+                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
                         }
                     }
                     if (value=="clearAll"){
                         if (game.user.isGM){
-                            game.settings.set("ModularFate","aspects",{});
-                            game.settings.set("ModularFate","defaultAspects","nothing");
+                            game.settings.set("FateCoreOfficial","aspects",{});
+                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
                         }
                     }
                     if (value=="accelerated"){
                         if (game.user.isGM){
-                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.FateAcceleratedDefaultAspects"));
-                            game.settings.set("ModularFate","defaultAspects","nothing");
+                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.FateAcceleratedDefaultAspects"));
+                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
                         }
                     }
                     if (value=="dfa"){
                         if (game.user.isGM){
-                            game.settings.set("ModularFate","aspects",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultAspects"));
-                            game.settings.set("ModularFate","defaultAspects","nothing");
+                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultAspects"));
+                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
                         }
                     }
                 }
         });
 
     // Register a setting for replacing the existing track list with one of the pre-defined default sets.
-    game.settings.register("ModularFate", "defaultTracks", {
-        name: game.i18n.localize("ModularFate.ReplaceTracksName"),
-        hint: game.i18n.localize("ModularFate.ReplaceTracksHint"),
+    game.settings.register("FateCoreOfficial", "defaultTracks", {
+        name: game.i18n.localize("FateCoreOfficial.ReplaceTracksName"),
+        hint: game.i18n.localize("FateCoreOfficial.ReplaceTracksHint"),
         scope: "world",     // This specifies a client-stored setting
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":game.i18n.localize("ModularFate.No"),
-            "fateCore":game.i18n.localize("ModularFate.YesFateCore"),
-            "fateCondensed":game.i18n.localize("ModularFate.YesFateCondensed"),
-            "accelerated":game.i18n.localize("ModularFate.YesFateAccelerated"),
-            "dfa":game.i18n.localize("ModularFate.YesDFA"),
-            "clearAll":game.i18n.localize("ModularFate.YesClearAll")
+            "nothing":game.i18n.localize("FateCoreOfficial.No"),
+            "fateCore":game.i18n.localize("FateCoreOfficial.YesFateCore"),
+            "fateCondensed":game.i18n.localize("FateCoreOfficial.YesFateCondensed"),
+            "accelerated":game.i18n.localize("FateCoreOfficial.YesFateAccelerated"),
+            "dfa":game.i18n.localize("FateCoreOfficial.YesDFA"),
+            "clearAll":game.i18n.localize("FateCoreOfficial.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCoreDefaultTracks"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
+                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.FateCoreDefaultTracks"));
+                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",{});
-                        game.settings.set("ModularFate","defaultTracks","nothing");
+                        game.settings.set("FateCoreOfficial","tracks",{});
+                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateCondensedDefaultTracks"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
+                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.FateCondensedDefaultTracks"));
+                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.FateAcceleratedDefaultTracks"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
+                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.FateAcceleratedDefaultTracks"));
+                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
                     }
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
-                        game.settings.set("ModularFate","tracks",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTracks"));
-                        game.settings.set("ModularFate","track_categories",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultTrackCategories"));
-                        game.settings.set("ModularFate","defaultTracks","nothing");
+                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultTracks"));
+                        game.settings.set("FateCoreOfficial","track_categories",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultTrackCategories"));
+                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
                     }
                 }
             }
     });
 
-    game.settings.register("ModularFate","exportSettings", {
-        name: game.i18n.localize("ModularFate.ExportSettingsName"),
+    game.settings.register("FateCoreOfficial","exportSettings", {
+        name: game.i18n.localize("FateCoreOfficial.ExportSettingsName"),
         scope:"world",
         config:true,
         type:Boolean,
@@ -464,56 +464,56 @@ Hooks.once('init', async function () {
         default:false,
         onChange: value => {
             if (value == true && game.user.isGM){
-                let text = ModularFateConstants.exportSettings();
+                let text = FateCoreOfficialConstants.exportSettings();
  
                 new Dialog({
-                    title: game.i18n.localize("ModularFate.ExportSettingsDialogTitle"), 
+                    title: game.i18n.localize("FateCoreOfficial.ExportSettingsDialogTitle"), 
                     content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
                     buttons: {
                     },
                 }).render(true);
-                game.settings.set("ModularFate","exportSettings",false);
+                game.settings.set("FateCoreOfficial","exportSettings",false);
             }
         }
     })
 
-    game.settings.register("ModularFate","importSettings", {
-        name: game.i18n.localize("ModularFate.ImportSettingsName"),
+    game.settings.register("FateCoreOfficial","importSettings", {
+        name: game.i18n.localize("FateCoreOfficial.ImportSettingsName"),
         scope:"world",
-        hint:game.i18n.localize("ModularFate.ImportSettingsHint"),
+        hint:game.i18n.localize("FateCoreOfficial.ImportSettingsHint"),
         config:true,
         type:Boolean,
         restricted:true,
         default:false,
         onChange: async value => {
             if (value == true && game.user.isGM){
-                let text = await ModularFateConstants.getSettings();
-                ModularFateConstants.importSettings(text);
-                game.settings.set("ModularFate","importSettings",false);
+                let text = await FateCoreOfficialConstants.getSettings();
+                FateCoreOfficialConstants.importSettings(text);
+                game.settings.set("FateCoreOfficial","importSettings",false);
             }
         }
     })
 
 //Register a setting for the game's current Refresh total
-game.settings.register("ModularFate", "refreshTotal", {
-    name: game.i18n.localize("ModularFate.RefreshTotalName"),
-    hint: game.i18n.localize("ModularFate.RefreshTotalHint"),
+game.settings.register("FateCoreOfficial", "refreshTotal", {
+    name: game.i18n.localize("FateCoreOfficial.RefreshTotalName"),
+    hint: game.i18n.localize("FateCoreOfficial.RefreshTotalHint"),
     scope: "world",
     config: true,
     type: Number,
     default:3,
     onChange: () =>{
         for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
                 ui.windows[app]?.render(false);
             }
         }
     }
 });
 
-game.settings.register("ModularFate","freeStunts", {
-    name:game.i18n.localize("ModularFate.FreeStunts"),
-    hint:game.i18n.localize("ModularFate.FreeStuntsHint"),
+game.settings.register("FateCoreOfficial","freeStunts", {
+    name:game.i18n.localize("FateCoreOfficial.FreeStunts"),
+    hint:game.i18n.localize("FateCoreOfficial.FreeStuntsHint"),
     scope:"world",
     config:true,
     type:Number,
@@ -521,7 +521,7 @@ game.settings.register("ModularFate","freeStunts", {
     default:3,
     onChange: () =>{
         for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
                 ui.windows[app]?.render(false);
             }
         }
@@ -529,9 +529,9 @@ game.settings.register("ModularFate","freeStunts", {
 })
 
       //Register a setting for the game's current skill total
-      game.settings.register("ModularFate", "skillTotal", {
-        name: game.i18n.localize("ModularFate.SkillPointTotal"),
-        hint: game.i18n.localize("ModularFate.SkillPointTotalHint"),
+      game.settings.register("FateCoreOfficial", "skillTotal", {
+        name: game.i18n.localize("FateCoreOfficial.SkillPointTotal"),
+        hint: game.i18n.localize("FateCoreOfficial.SkillPointTotalHint"),
         scope: "world",
         config: true,
         type: Number,
@@ -539,16 +539,16 @@ game.settings.register("ModularFate","freeStunts", {
         default:20,
         onChange: () =>{
             for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
                     ui.windows[app]?.render(false);
                 }
             }
         }
     });
 
-    game.settings.register("ModularFate","enforceSkillTotal", {
-        name: game.i18n.localize("ModularFate.EnforceSkillTotal"),
-        hint: game.i18n.localize("ModularFate.EnforceSkillTotalHint"),
+    game.settings.register("FateCoreOfficial","enforceSkillTotal", {
+        name: game.i18n.localize("FateCoreOfficial.EnforceSkillTotal"),
+        hint: game.i18n.localize("FateCoreOfficial.EnforceSkillTotalHint"),
         scope:"world",
         config:true,
         type: Boolean,
@@ -556,16 +556,16 @@ game.settings.register("ModularFate","freeStunts", {
         default:true,
         onChange: () =>{
             for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
                     ui.windows[app]?.render(false);
                 }
             }
         }
     })
 
-    game.settings.register("ModularFate","enforceColumn", {
-        name: game.i18n.localize("ModularFate.EnforceColumn"),
-        hint: game.i18n.localize("ModularFate.EnforceColumnHint"),
+    game.settings.register("FateCoreOfficial","enforceColumn", {
+        name: game.i18n.localize("FateCoreOfficial.EnforceColumn"),
+        hint: game.i18n.localize("FateCoreOfficial.EnforceColumnHint"),
         scope:"world",
         config:true,
         type: Boolean,
@@ -573,7 +573,7 @@ game.settings.register("ModularFate","freeStunts", {
         default:true,
         onChange: () =>{
             for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "ModularFate"){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
                     ui.windows[app]?.render(false);
                 }
             }
@@ -581,15 +581,15 @@ game.settings.register("ModularFate","freeStunts", {
     })
     
     let skill_choices = {};
-    let skills = game.settings.get("ModularFate", "skills")
+    let skills = game.settings.get("FateCoreOfficial", "skills")
     
     skill_choices["None"]="None";
     skill_choices["Disable"]="Disable";
     for (let skill in skills){skill_choices[skill]=skill};
 
-    game.settings.register("ModularFate","init_skill", {
-        name:game.i18n.localize("ModularFate.initiativeSkill"),
-        hint:game.i18n.localize("ModularFate.initiativeSetting"),
+    game.settings.register("FateCoreOfficial","init_skill", {
+        name:game.i18n.localize("FateCoreOfficial.initiativeSkill"),
+        hint:game.i18n.localize("FateCoreOfficial.initiativeSetting"),
         "scope":"world",
         "config":true,
         "restricted":true,
@@ -598,38 +598,38 @@ game.settings.register("ModularFate","freeStunts", {
         choices:skill_choices
     })
 
-    game.settings.register("ModularFate","modifiedRollDefault", {
-        name:game.i18n.localize("ModularFate.modifiedRollDefault"),
-        hint:game.i18n.localize("ModularFate.modifiedRollDefaultExplainer"),
+    game.settings.register("FateCoreOfficial","modifiedRollDefault", {
+        name:game.i18n.localize("FateCoreOfficial.modifiedRollDefault"),
+        hint:game.i18n.localize("FateCoreOfficial.modifiedRollDefaultExplainer"),
         scope:"world",
         config:"true",
         type:Boolean,
         default:false
     })
 
-    game.settings.register("ModularFate","sheet_template", {
-        name:game.i18n.localize("ModularFate.DefaultSheetTemplateName"),
-        hint:game.i18n.localize("ModularFate.DefaultSheetTemplateHint"),
+    game.settings.register("FateCoreOfficial","sheet_template", {
+        name:game.i18n.localize("FateCoreOfficial.DefaultSheetTemplateName"),
+        hint:game.i18n.localize("FateCoreOfficial.DefaultSheetTemplateHint"),
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/ModularFate/templates/ModularFateSheet.html'
+        default:'systems/FateCoreOfficial/templates/FateCoreOfficialSheet.html'
     })
     
 
-    game.settings.register("ModularFate","limited_sheet_template", {
-        name:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateName"),
-        hint:game.i18n.localize("ModularFate.DefaultLimitedSheetTemplateHint"),
+    game.settings.register("FateCoreOfficial","limited_sheet_template", {
+        name:game.i18n.localize("FateCoreOfficial.DefaultLimitedSheetTemplateName"),
+        hint:game.i18n.localize("FateCoreOfficial.DefaultLimitedSheetTemplateHint"),
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/ModularFate/templates/ModularFateSheet.html'
+        default:'systems/FateCoreOfficial/templates/FateCoreOfficialSheet.html'
     })
 
-    game.settings.register ("ModularFate","PlayerThings", {
-        name:game.i18n.localize("ModularFate.AllowPlayerThingCreation"),
-        label:game.i18n.localize("ModularFate.ThingCreationLabel"),
-        hint:game.i18n.localize("ModularFate.ThingCreationHint"),
+    game.settings.register ("FateCoreOfficial","PlayerThings", {
+        name:game.i18n.localize("FateCoreOfficial.AllowPlayerThingCreation"),
+        label:game.i18n.localize("FateCoreOfficial.ThingCreationLabel"),
+        hint:game.i18n.localize("FateCoreOfficial.ThingCreationHint"),
         type:Boolean,
         scope:"world",
         config:true,
@@ -637,10 +637,10 @@ game.settings.register("ModularFate","freeStunts", {
         default:true
     });
 
-    game.settings.register ("ModularFate","DeleteOnTransfer", {
-        name:game.i18n.localize("ModularFate.DeleteOnTransfer"),
-        label:game.i18n.localize("ModularFate.DeleteOnTransferLabel"),
-        hint:game.i18n.localize("ModularFate.DeleteOnTransferHint"),
+    game.settings.register ("FateCoreOfficial","DeleteOnTransfer", {
+        name:game.i18n.localize("FateCoreOfficial.DeleteOnTransfer"),
+        label:game.i18n.localize("FateCoreOfficial.DeleteOnTransferLabel"),
+        hint:game.i18n.localize("FateCoreOfficial.DeleteOnTransferHint"),
         type:Boolean,
         scope:"world",
         config:true,
@@ -648,9 +648,9 @@ game.settings.register("ModularFate","freeStunts", {
         default:true
     });
 
-    game.settings.register("ModularFate","confirmDeletion", {
-        name: game.i18n.localize("ModularFate.ConfirmDeletionName"),
-        hint:game.i18n.localize("ModularFate.ConfirmDeletionHint"),
+    game.settings.register("FateCoreOfficial","confirmDeletion", {
+        name: game.i18n.localize("FateCoreOfficial.ConfirmDeletionName"),
+        hint:game.i18n.localize("FateCoreOfficial.ConfirmDeletionHint"),
         scope:"user",
         config:true,
         type:Boolean,
@@ -658,16 +658,16 @@ game.settings.register("ModularFate","freeStunts", {
         default:false
     });
 
-    game.settings.register("ModularFate","drawingsOnTop", {
-        name:game.i18n.localize("ModularFate.DrawingsOnTop"),
-        hint:game.i18n.localize("ModularFate.DrawingsOnTopHint"),
+    game.settings.register("FateCoreOfficial","drawingsOnTop", {
+        name:game.i18n.localize("FateCoreOfficial.DrawingsOnTop"),
+        hint:game.i18n.localize("FateCoreOfficial.DrawingsOnTopHint"),
         scope:"world",
         config:"true",
         type:Boolean,
         default:false
     })
 
-    game.settings.register("ModularFate","fu_actor_avatars", {
+    game.settings.register("FateCoreOfficial","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",
         hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
         scope:"world",
@@ -676,7 +676,7 @@ game.settings.register("ModularFate","freeStunts", {
         type:Boolean
     })
 
-    game.settings.register("ModularFate","fu_combatants_only", {
+    game.settings.register("FateCoreOfficial","fu_combatants_only", {
         name:"Display information only for combatants in the current 'encounter' rather than all tokens?",
         hint:"Toggle between display of all tokens or just active combatants in Fate Utilities",
         scope:"user",
@@ -685,7 +685,7 @@ game.settings.register("ModularFate","freeStunts", {
         type:Boolean
     })
 
-    game.settings.register("ModularFate", "run_once", {
+    game.settings.register("FateCoreOfficial", "run_once", {
         name: "Run Once?",
         hint:"Pops up a brief tutorial message on first load of a world with this system",
         scope:"world",
@@ -695,7 +695,7 @@ game.settings.register("ModularFate","freeStunts", {
     })
 
     game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["ModularFate","Thing"]
+    game.system.entityTypes.Actor = ["FateCoreOfficial","Thing"]
 
     game.system.apps= {
         actor:[],
@@ -707,14 +707,14 @@ game.settings.register("ModularFate","freeStunts", {
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet("ModularFate", ModularFateCharacter, { types: ["ModularFate"], makeDefault: true, label:game.i18n.localize("ModularFate.ModularFateCharacter") });
-    Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("ModularFate.Thing")});
+    Actors.registerSheet("FateCoreOfficial", FateCoreOfficialCharacter, { types: ["FateCoreOfficial"], makeDefault: true, label:game.i18n.localize("FateCoreOfficial.FateCoreOfficialCharacter") });
+    Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("FateCoreOfficial.Thing")});
 
     // Register Item sheets
     Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
 
-    game.settings.register("ModularFate", "gameTime", {
-        name: game.i18n.localize("ModularFate.GameTime"),
+    game.settings.register("FateCoreOfficial", "gameTime", {
+        name: game.i18n.localize("FateCoreOfficial.GameTime"),
         scope:"world",
         config:false,
         type:String,
@@ -722,8 +722,8 @@ game.settings.register("ModularFate","freeStunts", {
         default:""
     })
     
-    game.settings.register("ModularFate", "gameNotes", {
-        name: game.i18n.localize("ModularFate.GameNotes"),
+    game.settings.register("FateCoreOfficial", "gameNotes", {
+        name: game.i18n.localize("FateCoreOfficial.GameNotes"),
         scope:"world",
         config:false,
         type:String,
@@ -731,8 +731,8 @@ game.settings.register("ModularFate","freeStunts", {
         default:""
     })
 
-    game.settings.register("ModularFate", "gameAspects", {
-        name: game.i18n.localize("ModularFate.GameTime"),
+    game.settings.register("FateCoreOfficial", "gameAspects", {
+        name: game.i18n.localize("FateCoreOfficial.GameTime"),
         scope:"world",
         config:false,
         type:Object,
@@ -740,7 +740,7 @@ game.settings.register("ModularFate","freeStunts", {
         default:[]
     })
 
-    game.settings.register("ModularFate", "fuFontSize", {
+    game.settings.register("FateCoreOfficial", "fuFontSize", {
         name: "Fate Utilities Font Size",
         scope:"user",
         config:false,
@@ -749,9 +749,9 @@ game.settings.register("ModularFate","freeStunts", {
         default:10 //Size in points (pt)
     })
 
-    game.settings.register("ModularFate", "aspectwidth", {
-        name: game.i18n.localize("ModularFate.aspectWidth"),
-        hint: game.i18n.localize("ModularFate.AspectLabelWidth"),
+    game.settings.register("FateCoreOfficial", "aspectwidth", {
+        name: game.i18n.localize("FateCoreOfficial.aspectWidth"),
+        hint: game.i18n.localize("FateCoreOfficial.AspectLabelWidth"),
         scope: "world",
         config: true,
         type: Number,
@@ -763,9 +763,9 @@ game.settings.register("ModularFate","freeStunts", {
         default:12
     });
 
-    game.settings.register("ModularFate", "fuAspectLabelSize", {
-        name: game.i18n.localize("ModularFate.fuAspectLabelSizeName"),
-        hint:game.i18n.localize("ModularFate.fuAspectLabelSizeHint"),
+    game.settings.register("FateCoreOfficial", "fuAspectLabelSize", {
+        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelSizeName"),
+        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelSizeHint"),
         scope:"world",
         config:false,
         type:Number,
@@ -773,9 +773,9 @@ game.settings.register("ModularFate","freeStunts", {
         default:0 
     })
 
-    game.settings.register("ModularFate","fuAspectLabelFont", {
-        name: game.i18n.localize("ModularFate.fuAspectLabelFont"),
-        hint:game.i18n.localize("ModularFate.fuAspectLabelFontHint"),
+    game.settings.register("FateCoreOfficial","fuAspectLabelFont", {
+        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelFont"),
+        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelFontHint"),
         scope:"world",
         config:false,
         type:String,
@@ -785,9 +785,9 @@ game.settings.register("ModularFate","freeStunts", {
     })
 
     // Text colour
-    game.settings.register("ModularFate","fuAspectLabelTextColour", {
-        name: game.i18n.localize("ModularFate.fuAspectLabelTextColour"),
-        hint:game.i18n.localize("ModularFate.fuAspectLabelTextColourHint"),
+    game.settings.register("FateCoreOfficial","fuAspectLabelTextColour", {
+        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelTextColour"),
+        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelTextColourHint"),
         scope:"world",
         config:false,
         type:String,
@@ -796,9 +796,9 @@ game.settings.register("ModularFate","freeStunts", {
     })
 
     //BG Colour
-    game.settings.register("ModularFate","fuAspectLabelFillColour", {
-        name: game.i18n.localize("ModularFate.fuAspectLabelFillColour"),
-        hint:game.i18n.localize("ModularFate.fuAspectLabelFillColourHint"),
+    game.settings.register("FateCoreOfficial","fuAspectLabelFillColour", {
+        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelFillColour"),
+        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelFillColourHint"),
         scope:"world",
         config:false,
         restricted:true,
@@ -808,9 +808,9 @@ game.settings.register("ModularFate","freeStunts", {
     })
 
     // Border colour
-    game.settings.register("ModularFate","fuAspectLabelBorderColour", {
-        name: game.i18n.localize("ModularFate.fuAspectLabelBorderColour"),
-        hint:game.i18n.localize("ModularFate.fuAspectLabelBorderColourHint"),
+    game.settings.register("FateCoreOfficial","fuAspectLabelBorderColour", {
+        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelBorderColour"),
+        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelBorderColourHint"),
         scope:"world",
         config:false,
         restricted:true,
@@ -822,7 +822,7 @@ game.settings.register("ModularFate","freeStunts", {
 });
 
 Combatant.prototype._getInitiativeFormula = function () {
-    let init_skill = game.settings.get("ModularFate","init_skill");
+    let init_skill = game.settings.get("FateCoreOfficial","init_skill");
     if (init_skill === "None" || init_skill === "Disable") {
         return "1d0";
     }else {
@@ -840,7 +840,7 @@ class CustomDrawingsLayer extends DrawingsLayer {
 }
 
 Hooks.on("init", () => {
-    if (game.settings.get ("ModularFate", "drawingsOnTop")){
+    if (game.settings.get ("FateCoreOfficial", "drawingsOnTop")){
         // Force Canvas to use the new DrawingsLayer
         const existingLayers = Canvas.layers;
         existingLayers.drawings = CustomDrawingsLayer;
@@ -849,7 +849,7 @@ Hooks.on("init", () => {
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {
-    if (game.settings.get ("ModularFate", "drawingsOnTop")){
+    if (game.settings.get ("FateCoreOfficial", "drawingsOnTop")){
         controls.find(c => c.name === "drawings").layer = "CustomDrawingsLayer";
     }
 })

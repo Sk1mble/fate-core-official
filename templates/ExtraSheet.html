@@ -1,55 +1,55 @@
 <form class="contenteditable" onsubmit="event.preventDefault();" style="background-color:white; padding-right:10px; padding-left:10px">
 		<table style="border:none; background-color:white">
 			<tr>
-				<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Artwork'}}</td>
+				<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'FateCoreOfficial.Artwork'}}</td>
 				<td style="width:100px"><img class="mfate-sheet_extra-avatar profile-img" name="img" id="{{this.document.id}}_avatar" style="max-width:100px; height:auto; border:none" data-edit="img" src="{{this.document.img}}"></img></td>
 			 </tr>		
 		 <tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Name'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'FateCoreOfficial.Name'}}:</td>
 			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{this.document.name}}</textarea></td>
 		 </tr>	
 		 <tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Permissions'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'FateCoreOfficial.Permissions'}}:</td>
 			<td style="width:75%"><textarea rows="2" name="data.permissions" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{data.permissions}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Costs'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'FateCoreOfficial.Costs'}}:</td>
 			<td style="width:75%"><textarea rows="2" name="data.costs" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat;">{{data.costs}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.RefreshCost'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'FateCoreOfficial.RefreshCost'}}:</td>
 			<td style="width:75%">
 				<input type="number" name="data.refresh" min="0" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat; width:50px" value="{{data.refresh}}">
 				</input>
-				{{localize 'ModularFate.active'}}
+				{{localize 'FateCoreOfficial.active'}}
 				<input name="data.active" type="checkbox" id="{{this.active}}" {{#if this.data.active}}checked="checked"{{/if}}></input>
 			</td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'ModularFate.Description'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%">{{localize 'FateCoreOfficial.Description'}}:</td>
 			<td style="width:75%"><textarea rows="2" name="data.description.value" style="width:100%; background-color: white; border: solid lightsteelblue 1px;  font-family:Montserrat;">{{data.description.value}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">O</i> {{localize 'ModularFate.Overcome'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">O</i> {{localize 'FateCoreOfficial.Overcome'}}:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.overcome" style="width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.overcome}}</textarea></td>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">C</i> {{localize 'ModularFate.CAA'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">C</i> {{localize 'FateCoreOfficial.CAA'}}:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.create" style="width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.create}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">A</i> {{localize 'ModularFate.Attack'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">A</i> {{localize 'FateCoreOfficial.Attack'}}:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.attack" style="width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:Montserrat;">{{data.actions.attack}}</textarea></td>
 		</tr>
 		<tr>
-			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">D</i> {{localize 'ModularFate.Defend'}}:</td>
+			<td style="font-family:Montserrat; font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">D</i> {{localize 'FateCoreOfficial.Defend'}}:</td>
 			<td style="width:75%"><textarea rows="2" name="data.actions.defend" style="width:100%; background-color: white; border: solid lightsteelblue 1px;  font-family:Montserrat;">{{data.actions.defend}}</textarea></td>
 		</tr>
 		</table>
 
 		<!-- Here are the aspects attached to the extra.-->
 			<div class="mfate-panel__header">
-				<div class="mfate-panel__header-label">{{localize 'ModularFate.Aspects'}}</div>
-				<div title="{{localize 'ModularFate.OpenTheAspectEditor'}}" name="edit_item_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
+				<div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Aspects'}}</div>
+				<div title="{{localize 'FateCoreOfficial.OpenTheAspectEditor'}}" name="edit_item_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
 			</div>
 
 			<ul class="mfate-aspects-list">
@@ -69,8 +69,8 @@
 				<div class="mfate-panel__header-label">{{ skillsLabel }}</div>
 				<!-- <button class="mfate-panel__header-button">Settings</button>
 					<button class="mfate-panel__header-button">Sort</button> -->
-					{{localize 'ModularFate.CountSkills'}} <input name="data.countSkills" type="checkbox" id="{{this.countSkills}}" {{#if this.data.countSkills}}checked="checked"{{/if}}></input>
-				<div title="{{localize 'ModularFate.OpenTheSkillEditor'}}" name="edit_item_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
+					{{localize 'FateCoreOfficial.CountSkills'}} <input name="data.countSkills" type="checkbox" id="{{this.countSkills}}" {{#if this.data.countSkills}}checked="checked"{{/if}}></input>
+				<div title="{{localize 'FateCoreOfficial.OpenTheSkillEditor'}}" name="edit_item_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
 			</div>
 			<div name="skills_body" id="skills_body" class="mfate-panel__body">
 				<ul class="mfate-skills-list">
@@ -89,9 +89,9 @@
 		<!-- Here are the stunts attached to the extra.-->
 
 			<div class="mfate-panel__header" name="stunts_header">
-				<b class="mfate-panel__header-label">{{localize 'ModularFate.Stunts'}}</b>
-				<div title="{{localize 'ModularFate.ViewTheStuntDatabase'}}" name="item_stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
-				<div class="fas fa-plus mfate-panel__header-button" title="{{localize 'ModularFate.AddANewStunt'}}" name="edit_item_stunts" i icon></div>
+				<b class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Stunts'}}</b>
+				<div title="{{localize 'FateCoreOfficial.ViewTheStuntDatabase'}}" name="item_stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
+				<div class="fas fa-plus mfate-panel__header-button" title="{{localize 'FateCoreOfficial.AddANewStunt'}}" name="edit_item_stunts" i icon></div>
 			</div>
 				<div name="stunts_body mfate-stunts__body" id="stunts_body">
 					<div class="mfate-stunts__table">
@@ -103,7 +103,7 @@
 
 									<button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_item_stunt" id="{{this.name}}_delete"></button> 
 									<button type="button" name="edit_item_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon" id="{{this.name}}_edit"></button> {{#if ../GM}}
-									<button type="button" name="item_db_stunt" title="{{localize 'ModularFate.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon" id="{{this.name}}_db"></button> {{/if}}
+									<button type="button" name="item_db_stunt" title="{{localize 'FateCoreOfficial.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon" id="{{this.name}}_db"></button> {{/if}}
 								</div>
 							</div>
 							<div class="mfate-stunts__row-body">
@@ -127,21 +127,21 @@
 
 				<!--Here are the tracks attached to the extra.-->
                             <div class="mfate-panel__header" name="tracks_header">
-                                <b class="mfate-panel__header-label">{{localize 'ModularFate.Tracks'}}</b>
+                                <b class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Tracks'}}</b>
                                 <select class="mfate-panel__header-select" id="item_track_category">
-                                    <option value="{{localize 'ModularFate.All'}}" {{#if (eq category "All")}}selected{{/if}}>All</option>
+                                    <option value="{{localize 'FateCoreOfficial.All'}}" {{#if (eq category "All")}}selected{{/if}}>All</option>
                                     {{#each track_categories}}
                                         <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
                                     {{/each}}
                                 </select>
-                                <div title="{{localize 'ModularFate.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_item_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
+                                <div title="{{localize 'FateCoreOfficial.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_item_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
                             </div>
                             <div name="tracks_body" id="tracks_body" style="scrollbar-width:thin">
                                 <div class="mfate-tracks__list">
                                     {{#each tracks}}{{#if (category ../category this.category)}}
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
-                                            <div name="track_name" style="font-family:Montserrat" title="{{localize 'ModularFate.ClickHereToEditTrackNotes'}} {{this.name}}">
+                                            <div name="track_name" style="font-family:Montserrat" title="{{localize 'FateCoreOfficial.ClickHereToEditTrackNotes'}} {{this.name}}">
                                                 <i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i>
                                             </div>
                                         </div>
@@ -153,7 +153,7 @@
 							{{#if (eq this.contents false)}}{{else}}
 							<!--Here are the contents of the extra.-->
                             <div class="mfate-panel__header" name="contents_header">
-                                <b class="mfate-panel__header-label">{{localize 'ModularFate.Contents'}}</b> 
+                                <b class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Contents'}}</b> 
 							</div>
 							<div name = "contents_body" style="scrollbar-width:thin">
 								{{#if this.contents.locked}}<ul>(Container is locked)</ul>{{else}}{{/if}}

@@ -1,9 +1,9 @@
 <form id="CharacterView" style="font-family:Montserrat">
     <h1>{{name}}</h1>
     {{#if (eq avatar undefined)}}{{else}}<img style="width:200px; height:auto" src = "{{avatar}}"/><p/>{{/if}}
-    {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'ModularFate.Biography'}}</h2>{{{biography.value}}}</div><p/>{{/if}}
-    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'ModularFate.Description'}}</h2>{{{description.value}}}</div><p/>{{/if}}
-    {{#if (eq aspects undefined)}}{{else}}<h2>{{localize 'ModularFate.Aspects'}}</h2>
+    {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'FateCoreOfficial.Biography'}}</h2>{{{biography.value}}}</div><p/>{{/if}}
+    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'FateCoreOfficial.Description'}}</h2>{{{description.value}}}</div><p/>{{/if}}
+    {{#if (eq aspects undefined)}}{{else}}<h2>{{localize 'FateCoreOfficial.Aspects'}}</h2>
     <table style="border:none; background:none">
     {{#each aspects}}
         <tr>
@@ -18,7 +18,7 @@
     </table><p/>
     {{/if}}
     {{#if (eq skills undefined)}}{{else}}
-        <h2>{{localize 'ModularFate.Skills'}}</h2>
+        <h2>{{localize 'FateCoreOfficial.Skills'}}</h2>
         <table style="border:none; background:none; padding:10px">
             {{#each skills}}
             <tr>
@@ -33,12 +33,12 @@
         </table><p/>
     {{/if}}
     {{#if (eq tracks undefined)}}{{else}}
-        <h2>{{localize 'ModularFate.Tracks'}}</h2>
+        <h2>{{localize 'FateCoreOfficial.Tracks'}}</h2>
         <table style="background:none; border:none; padding:10px;">
             {{#each tracks}}{{#if this.enabled}}
             <tr>
                 <td style="padding-bottom:10px; width:120px">
-                    <div name="track_name" style="font-family:Montserrat" title="{{localize 'ModularFate.ClickHereToEditTrackNotes'}} {{this.name}}"><i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i></div>
+                    <div name="track_name" style="font-family:Montserrat" title="{{localize 'FateCoreOfficial.ClickHereToEditTrackNotes'}} {{this.name}}"><i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i></div>
                 </td>
                 <td style="padding-bottom:10px">
                     {{#each this.box_values}}
@@ -53,7 +53,7 @@
         </table><p/>
     {{/if}}
     {{#if (eq stunts undefined)}}{{else}}
-    <h2>{{localize 'ModularFate.Stunts'}}:</h2>
+    <h2>{{localize 'FateCoreOfficial.Stunts'}}:</h2>
     <table style="border:none; background:none; padding:10px">
     {{#each stunts}}
         <tr>
@@ -64,7 +64,7 @@
     </table>
     {{/if}}
     {{#if (eq extras undefined)}}{{else}}
-    <h2>{{localize 'ModularFate.Extras'}}:</h2>
+    <h2>{{localize 'FateCoreOfficial.Extras'}}:</h2>
     <table style="border:none; background:none; padding:10px">
     {{#each extras}}
         <tr>

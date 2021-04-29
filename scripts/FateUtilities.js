@@ -73,23 +73,23 @@ class FateUtilities extends Application{
         const fontUp = html.find("button[id='fu_grow_font']");
 
         fontUp.on("click", async event => {
-            let font = game.settings.get("ModularFate","fuFontSize");
+            let font = game.settings.get("FateCoreOfficial","fuFontSize");
             font +=1;
             if (font > 20){
                 font = 20;
                 ui.notifications.info("")
             }
-            await game.settings.set ("ModularFate","fuFontSize",font);
+            await game.settings.set ("FateCoreOfficial","fuFontSize",font);
             await this.render(false);
         })
 
         fontDown.on("click", async event => {
-            let font = game.settings.get("ModularFate","fuFontSize");
+            let font = game.settings.get("FateCoreOfficial","fuFontSize");
             font -=1;
             if (font < 4){
                 font = 4;
             }
-            await game.settings.set ("ModularFate","fuFontSize",font);
+            await game.settings.set ("FateCoreOfficial","fuFontSize",font);
             await this.render(false);
         })
 
@@ -147,11 +147,11 @@ class FateUtilities extends Application{
 
         const fu_combatants_toggle = html.find("i[id='toggle_fu_combatants']");
         fu_combatants_toggle.on("click", async (event) => {
-            let toggle = game.settings.get("ModularFate","fu_combatants_only");
+            let toggle = game.settings.get("FateCoreOfficial","fu_combatants_only");
             if (toggle) {
-                await game.settings.set("ModularFate","fu_combatants_only",false);
+                await game.settings.set("FateCoreOfficial","fu_combatants_only",false);
             } else {
-                await game.settings.set("ModularFate","fu_combatants_only",true);
+                await game.settings.set("FateCoreOfficial","fu_combatants_only",true);
             }
             this.render(false);
         })
@@ -178,21 +178,21 @@ class FateUtilities extends Application{
         FUGameAspectNotes.on("change", event => {
             let details = event.target.id.split("_");
             let aspectName = details[1];
-            let aspects = duplicate(game.settings.get("ModularFate", "gameAspects"));
+            let aspects = duplicate(game.settings.get("FateCoreOfficial", "gameAspects"));
             let aspect = aspects.find(a => a.name == aspectName);
             aspect.notes = event.target.value;
-            game.settings.set("ModularFate","gameAspects",aspects);
-            game.socket.emit("system.ModularFate",{"render":true});
+            game.settings.set("FateCoreOfficial","gameAspects",aspects);
+            game.socket.emit("system.FateCoreOfficial",{"render":true});
         });
 
         const gameAspect = html.find("input[name='game_aspect']");
         gameAspect.on("change", async (event) => {
             let index = event.target.id.split("_")[0];
-            let aspects = duplicate(game.settings.get("ModularFate", "gameAspects")); // Should contain an aspect with the current name.
+            let aspects = duplicate(game.settings.get("FateCoreOfficial", "gameAspects")); // Should contain an aspect with the current name.
             let aspect = aspects[index];
             aspect.name = event.target.value;
-            await game.settings.set("ModularFate","gameAspects",aspects);
-            await game.socket.emit("system.ModularFate",{"render":true});
+            await game.settings.set("FateCoreOfficial","gameAspects",aspects);
+            await game.socket.emit("system.FateCoreOfficial",{"render":true});
             this.render(false);
         })
 
@@ -363,8 +363,8 @@ class FateUtilities extends Application{
 
         const game_date_time = html.find(("textarea[id='game_date_time']"));
         game_date_time.on("change", event => {
-            game.settings.set("ModularFate", "gameTime", event.target.value);
-            game.socket.emit("system.ModularFate",{"render":true});
+            game.settings.set("FateCoreOfficial", "gameTime", event.target.value);
+            game.socket.emit("system.FateCoreOfficial",{"render":true});
         })
 
         const game_notes = html.find(("div[id='game_notes']"));
@@ -374,8 +374,8 @@ class FateUtilities extends Application{
         })
 
         game_notes.on("blur", event => {
-            game.settings.set("ModularFate", "gameNotes", event.target.innerHTML);
-            game.socket.emit("system.ModularFate",{"render":true});
+            game.settings.set("FateCoreOfficial", "gameNotes", event.target.innerHTML);
+            game.socket.emit("system.FateCoreOfficial",{"render":true});
             this.editing = false;
         })
 
@@ -396,7 +396,7 @@ class FateUtilities extends Application{
 
     async _sit_aspect_change(event, html){
         let index = event.target.id.split("_")[0];
-        let aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
+        let aspects = duplicate(game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects"));
         let aspect = aspects[index];
 
         let drawing = undefined;
@@ -417,12 +417,12 @@ class FateUtilities extends Application{
         if (drawing != undefined){
             let text;
             if (value == 1){
-                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
+                text = aspect.name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvoke")})`;    
             } else {
-                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
+                text = aspect.name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvokes")})`;
             }
-            let size = game.settings.get("ModularFate","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+            let size = game.settings.get("FateCoreOfficial","fuAspectLabelSize");
+            let font = CONFIG.fontFamilies[game.settings.get("FateCoreOfficial","fuAspectLabelFont")];
             if (size === 0){
                 size = game.scenes.viewed.data.width*(1/100);
             }
@@ -436,19 +436,19 @@ class FateUtilities extends Application{
             });
         }
 
-        game.scenes.viewed.setFlag("ModularFate", "situation_aspects",aspects);
-        game.socket.emit("system.ModularFate",{"render":true});
+        game.scenes.viewed.setFlag("FateCoreOfficial", "situation_aspects",aspects);
+        game.socket.emit("system.FateCoreOfficial",{"render":true});
     }
 
     async _del_game_aspect(event, html){
-        let del =   ModularFateConstants.confirmDeletion();
+        let del =   FateCoreOfficialConstants.confirmDeletion();
         if (del){
             let id = event.target.id;
             let name = id.split("_")[1];
-            let game_aspects = duplicate(game.settings.get("ModularFate", "gameAspects"));
+            let game_aspects = duplicate(game.settings.get("FateCoreOfficial", "gameAspects"));
             game_aspects.splice(game_aspects.findIndex(sit => sit.name == name),1);
-            await game.settings.set("ModularFate","gameAspects",game_aspects);
-            game.socket.emit("system.ModularFate",{"render":true});
+            await game.settings.set("FateCoreOfficial","gameAspects",game_aspects);
+            game.socket.emit("system.FateCoreOfficial",{"render":true});
             this.render(false);
         }
     }
@@ -462,23 +462,23 @@ class FateUtilities extends Application{
                                     "notes":""
                                 };
         try {
-            game_aspects = duplicate(game.settings.get("ModularFate","gameAspects"));
+            game_aspects = duplicate(game.settings.get("FateCoreOfficial","gameAspects"));
         } catch {
         }                                
         game_aspects.push(aspect);
-        await game.settings.set("ModularFate","gameAspects",game_aspects);
-        game.socket.emit("system.ModularFate",{"render":true});
+        await game.settings.set("FateCoreOfficial","gameAspects",game_aspects);
+        game.socket.emit("system.FateCoreOfficial",{"render":true});
         this.render(false);
     }
 
     async _game_a_free_i_button(event,html){
         let index=event.target.id.split("_")[0];
         let value=html.find(`input[id="${index}_ga_free_invokes"]`)[0].value
-        let game_aspects = duplicate(game.settings.get("ModularFate","gameAspects"));
+        let game_aspects = duplicate(game.settings.get("FateCoreOfficial","gameAspects"));
         let aspect = game_aspects[index];
         aspect.free_invokes = value;
-        await game.settings.set("ModularFate","gameAspects",game_aspects);
-        game.socket.emit("system.ModularFate",{"render":true});
+        await game.settings.set("FateCoreOfficial","gameAspects",game_aspects);
+        game.socket.emit("system.FateCoreOfficial",{"render":true});
     }
 
     async iseAspect(event, html){
@@ -509,7 +509,7 @@ class FateUtilities extends Application{
         let t_id = event.target.id.split("_")[0];
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
         if (token != undefined){
-            let name = await ModularFateConstants.updateShortText(game.i18n.localize("ModularFate.whatShouldTokenNameBe"),token.data.name);
+            let name = await FateCoreOfficialConstants.updateShortText(game.i18n.localize("FateCoreOfficial.whatShouldTokenNameBe"),token.data.name);
             await token.update({"name":name});
         }
     }
@@ -539,20 +539,20 @@ class FateUtilities extends Application{
             for (let x in token.actor.data.data.skills){
                 skills.push(token.actor.data.data.skills[x].name);
             }
-            let sk = await ModularFateConstants.getInputFromList (game.i18n.localize("ModularFate.select_a_skill"), skills);
+            let sk = await FateCoreOfficialConstants.getInputFromList (game.i18n.localize("FateCoreOfficial.select_a_skill"), skills);
             skill = sk;
             rank = token.actor.data.data.skills[skill].rank;
         } else {
             rank = token.actor.data.data.skills[skill].rank;
         }
 
-        let ladder = ModularFateConstants.getFateLadder();
+        let ladder = FateCoreOfficialConstants.getFateLadder();
         let rankS = rank.toString();
         let rung = ladder[rankS];
 
         let umr = false;
-        if (this.shift && !game.settings.get("ModularFate","modifiedRollDefault")) umr = true;
-        if (!this.shift && game.settings.get("ModularFate","modifiedRollDefault")) umr = true;
+        if (this.shift && !game.settings.get("FateCoreOfficial","modifiedRollDefault")) umr = true;
+        if (!this.shift && game.settings.get("FateCoreOfficial","modifiedRollDefault")) umr = true;
 
         if (umr && !sk.value.startsWith("stunt")) {
                 let mrd = new ModifiedRollDialog (token.actor, skill);
@@ -575,12 +575,12 @@ class FateUtilities extends Application{
 
                 let flavour;
                 if (stunt != undefined){
-                    flavour = `<h1>${skill}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>
-                                ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})<br> 
-                                ${game.i18n.localize("ModularFate.Stunt")}: ${stunt} (+${bonus})`
+                    flavour = `<h1>${skill}</h1>${game.i18n.localize("FateCoreOfficial.RolledBy")}: ${game.user.name}<br>
+                                ${game.i18n.localize("FateCoreOfficial.SkillRank")}: ${rank} (${rung})<br> 
+                                ${game.i18n.localize("FateCoreOfficial.Stunt")}: ${stunt} (+${bonus})`
                 } else {
-                    flavour = `<h1>${skill}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>
-                                ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})`;
+                    flavour = `<h1>${skill}</h1>${game.i18n.localize("FateCoreOfficial.RolledBy")}: ${game.user.name}<br>
+                                ${game.i18n.localize("FateCoreOfficial.SkillRank")}: ${rank} (${rung})`;
                 }
 
                 roll.toMessage({
@@ -594,7 +594,7 @@ class FateUtilities extends Application{
 
     async _notesFocusOut(event, html){
         let notes = html.find("div[id='scene_notes']")[0].innerHTML
-        game.scenes.viewed.setFlag("ModularFate","sceneNotes",notes);
+        game.scenes.viewed.setFlag("FateCoreOfficial","sceneNotes",notes);
         this.editing=false;
     }
 
@@ -602,29 +602,29 @@ class FateUtilities extends Application{
         let detail = event.target.id.split("_");
         let index = detail[1];
         let action = detail[2];
-        let rolls = duplicate(game.scenes.viewed.getFlag("ModularFate","rolls"));
+        let rolls = duplicate(game.scenes.viewed.getFlag("FateCoreOfficial","rolls"));
         let roll = rolls[index]
         
         if (action == "plus1"){
             roll.total+=1;
-            roll.flavor+=`<br>${game.i18n.localize("ModularFate.PlusOne")}`
+            roll.flavor+=`<br>${game.i18n.localize("FateCoreOfficial.PlusOne")}`
             if (game.user.isGM){
-                game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                game.scenes.viewed.setFlag("FateCoreOfficial", "rolls", rolls);
             } else {
                 //Create a socket call to update the scene's roll data
-                game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                game.socket.emit("system.FateCoreOfficial",{"rolls":rolls, "scene":game.scenes.viewed})
             }
         }
 
         if (action == "plus2free"){
             roll.total+=2;
-            roll.flavor+=`<br>${game.i18n.localize("ModularFate.FreeInvoke")}`
+            roll.flavor+=`<br>${game.i18n.localize("FateCoreOfficial.FreeInvoke")}`
             if (game.user.isGM){ 
-                game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                game.scenes.viewed.setFlag("FateCoreOfficial", "rolls", rolls);
             }
             else {
                 //Create a socket call to update the scene's roll data
-                game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                game.socket.emit("system.FateCoreOfficial",{"rolls":rolls, "scene":game.scenes.viewed})
             }
         }
 
@@ -632,7 +632,7 @@ class FateUtilities extends Application{
             let r = new Roll ("4dF");
             let r2 = await r.roll();
             r2.toMessage({
-                flavor: `<h1>${game.i18n.localize("ModularFate.FreeRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
+                flavor: `<h1>${game.i18n.localize("FateCoreOfficial.FreeRerollExplainer")}</h1>${game.i18n.localize("FateCoreOfficial.RolledBy")}: ${game.user.name}<br>`
             });
             let oldDiceValue = 0;
             for (let i = 0; i< 4; i++){
@@ -648,12 +648,12 @@ class FateUtilities extends Application{
                 }
             }
             roll.total += r2.total;
-            roll.flavor+=`<br>${game.i18n.localize("ModularFate.FreeInvokeReroll")}`
+            roll.flavor+=`<br>${game.i18n.localize("FateCoreOfficial.FreeInvokeReroll")}`
             if (game.user.isGM){
-                game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                game.scenes.viewed.setFlag("FateCoreOfficial", "rolls", rolls);
             } else {
                 //Create a socket call to update the scene's roll data
-                game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                game.socket.emit("system.FateCoreOfficial",{"rolls":rolls, "scene":game.scenes.viewed})
             }
         }
 
@@ -663,33 +663,33 @@ class FateUtilities extends Application{
             let user = game.users.contents.find(u => u.id == roll.user._id)
 
             if (user.isGM){
-                let fps = user.getFlag("ModularFate","gmfatepoints");
+                let fps = user.getFlag("FateCoreOfficial","gmfatepoints");
                 if (fps == 0 || fps == undefined){
-                    ui.notifications.error(game.i18n.localize("ModularFate.NoGMFatePoints"))
+                    ui.notifications.error(game.i18n.localize("FateCoreOfficial.NoGMFatePoints"))
                 } else {
-                    user.setFlag("ModularFate","gmfatepoints",fps-1);
+                    user.setFlag("FateCoreOfficial","gmfatepoints",fps-1);
                     roll.total+=2;
-                    roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvoke")}`
-                    game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                    roll.flavor+=`<br>${game.i18n.localize("FateCoreOfficial.PaidInvoke")}`
+                    game.scenes.viewed.setFlag("FateCoreOfficial", "rolls", rolls);
                 }
             } else {
                 let char = user.character;
                 if (char.name == roll.speaker){
                     let fps = char.data.data.details.fatePoints.current;
                     if (fps == 0){
-                        ui.notifications.error(game.i18n.localize("ModularFate.NoFatePoints"))
+                        ui.notifications.error(game.i18n.localize("FateCoreOfficial.NoFatePoints"))
                     } else {
                         char.update({"data.details.fatePoints.current":fps-1})
                         roll.total+=2;
-                        roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvoke")}`
+                        roll.flavor+=`<br>${game.i18n.localize("FateCoreOfficial.PaidInvoke")}`
                         if (game.user.isGM){
-                            game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                            game.scenes.viewed.setFlag("FateCoreOfficial", "rolls", rolls);
                         } else {
-                            game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                            game.socket.emit("system.FateCoreOfficial",{"rolls":rolls, "scene":game.scenes.viewed})
                         }
                     }
                 } else {
-                    ui.notifications.error(game.i18n.localize("ModularFate.NotControllingCharacter"));
+                    ui.notifications.error(game.i18n.localize("FateCoreOfficial.NotControllingCharacter"));
                 }
             }
         }
@@ -699,15 +699,15 @@ class FateUtilities extends Application{
             let user = game.users.contents.find(user => user.id == roll.user._id)
 
             if (user.isGM){
-                let fps = user.getFlag("ModularFate","gmfatepoints");
+                let fps = user.getFlag("FateCoreOfficial","gmfatepoints");
                 if (fps == 0 || fps == undefined){
-                    ui.notifications.error(game.i18n.localize("ModularFate.NoGMFatePoints"))
+                    ui.notifications.error(game.i18n.localize("FateCoreOfficial.NoGMFatePoints"))
                 } else {
-                    user.setFlag("ModularFate","gmfatepoints",fps-1);
+                    user.setFlag("FateCoreOfficial","gmfatepoints",fps-1);
                     let r = new Roll ("4dF");
                     let r2 = await r.roll();
                     r2.toMessage({
-                        flavor: `<h1>${game.i18n.localize("ModularFate.PaidRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
+                        flavor: `<h1>${game.i18n.localize("FateCoreOfficial.PaidRerollExplainer")}</h1>${game.i18n.localize("FateCoreOfficial.RolledBy")}: ${game.user.name}<br>`
                     });
                     let oldDiceValue = 0;
                     for (let i = 0; i< 4; i++){
@@ -723,22 +723,22 @@ class FateUtilities extends Application{
                         }
                     }
                     roll.total += r2.total;
-                    roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvokeReroll")}`
-                    game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                    roll.flavor+=`<br>${game.i18n.localize("FateCoreOfficial.PaidInvokeReroll")}`
+                    game.scenes.viewed.setFlag("FateCoreOfficial", "rolls", rolls);
                 }
             } else {
                 let char = user.character;
                 if (char.name == roll.speaker){
                     let fps = char.data.data.details.fatePoints.current;
                     if (fps == 0){
-                        ui.notifications.error(game.i18n.localize("ModularFate.NoFatePoints"))
+                        ui.notifications.error(game.i18n.localize("FateCoreOfficial.NoFatePoints"))
                     } else {
                         char.update({"data.details.fatePoints.current":fps-1})
-                        roll.flavor+=`<br>${game.i18n.localize("ModularFate.PaidInvokeReroll")}`
+                        roll.flavor+=`<br>${game.i18n.localize("FateCoreOfficial.PaidInvokeReroll")}`
                         let r = new Roll ("4dF");
                         let r2 = await r.roll();
                         r2.toMessage({
-                            flavor: `<h1>${game.i18n.localize("ModularFate.PaidRerollExplainer")}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>`
+                            flavor: `<h1>${game.i18n.localize("FateCoreOfficial.PaidRerollExplainer")}</h1>${game.i18n.localize("FateCoreOfficial.RolledBy")}: ${game.user.name}<br>`
                         });
                         let oldDiceValue = 0;
                         for (let i = 0; i< 4; i++){
@@ -748,38 +748,38 @@ class FateUtilities extends Application{
                         roll.dice = r2.dice[0].values;
                         roll.total += r2.total;
                         if (game.user.isGM){
-                            game.scenes.viewed.setFlag("ModularFate", "rolls", rolls);
+                            game.scenes.viewed.setFlag("FateCoreOfficial", "rolls", rolls);
                         } else {
-                            game.socket.emit("system.ModularFate",{"rolls":rolls, "scene":game.scenes.viewed})
+                            game.socket.emit("system.FateCoreOfficial",{"rolls":rolls, "scene":game.scenes.viewed})
                         }
                     }
                 } else {
-                    ui.notifications.error(game.i18n.localize("ModularFate.NotControllingCharacter"))
+                    ui.notifications.error(game.i18n.localize("FateCoreOfficial.NotControllingCharacter"))
                 }
             }
         }
     }
 
     async _fu_clear_rolls(event,html){
-        game.scenes.viewed.unsetFlag("ModularFate","rolls");
+        game.scenes.viewed.unsetFlag("FateCoreOfficial","rolls");
     }
 
     async _on_avatar_click(event, html){
         if (game.user.isGM){
-            let fu_actor_avatars = game.settings.get("ModularFate","fu_actor_avatars");
+            let fu_actor_avatars = game.settings.get("FateCoreOfficial","fu_actor_avatars");
             let t_id = event.target.id.split("_")[0];
             let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
             if (!fu_actor_avatars){
                 ui.notifications.info("Switching to actor avatars");
-                await game.settings.set("ModularFate","fu_actor_avatars",true);
+                await game.settings.set("FateCoreOfficial","fu_actor_avatars",true);
             } else {
                 if (fu_actor_avatars){
                     ui.notifications.info("Switching to token avatars");
-                    await game.settings.set("ModularFate","fu_actor_avatars",false);
+                    await game.settings.set("FateCoreOfficial","fu_actor_avatars",false);
                 }
             }
             this.render(false);
-            game.socket.emit("system.ModularFate",{"render":true});
+            game.socket.emit("system.FateCoreOfficial",{"render":true});
         }
     }
 
@@ -818,7 +818,7 @@ class FateUtilities extends Application{
     async _edit_gm_points(event, html){
         let user = game.users.contents.find(user => user.id == event.target.id);
         let fp = parseInt(event.target.value)
-        user.setFlag("ModularFate","gmfatepoints",fp);
+        user.setFlag("FateCoreOfficial","gmfatepoints",fp);
     }
 
     async scene_notes_edit(event,html){
@@ -828,22 +828,22 @@ class FateUtilities extends Application{
     async _free_i_button(event,html){
         let index=event.target.id.split("_")[0];
         let value=html.find(`input[id="${index}_free_invokes"]`)[0].value
-        let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"))
+        let situation_aspects = duplicate(game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects"))
         let aspect = situation_aspects[index];
         let name = aspect.name;
         aspect.free_invokes = value;
-        game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+        game.scenes.viewed.setFlag("FateCoreOfficial","situation_aspects",situation_aspects);
         //Done: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
         let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
         if (drawing != undefined){
             let text;
             if (value == 1){
-                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
+                text = name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvoke")})`;    
             } else {
-                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
+                text = name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvokes")})`;
             }
-            let size = game.settings.get("ModularFate","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+            let size = game.settings.get("FateCoreOfficial","fuAspectLabelSize");
+            let font = CONFIG.fontFamilies[game.settings.get("FateCoreOfficial","fuAspectLabelFont")];
             if (size === 0){
                 size = game.scenes.viewed.data.width*(1/100);
             }
@@ -860,7 +860,7 @@ class FateUtilities extends Application{
 
     async _panToAspect(event, html){
         let index=event.target.id.split("_")[1];
-        let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
+        let name = game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects")[index].name;
         let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
         
         if (drawing != undefined) {
@@ -875,12 +875,12 @@ class FateUtilities extends Application{
         {
             let text;
             if (value == 1){
-                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
+                text = name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvoke")})`;    
             } else {
-                text = name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
+                text = name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvokes")})`;
             }
-                let size = game.settings.get("ModularFate","fuAspectLabelSize");
-                let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+                let size = game.settings.get("FateCoreOfficial","fuAspectLabelSize");
+                let font = CONFIG.fontFamilies[game.settings.get("FateCoreOfficial","fuAspectLabelFont")];
                 if (size === 0){
                     size = game.scenes.viewed.data.width*(1/100);
                 }
@@ -894,40 +894,40 @@ class FateUtilities extends Application{
                     width: width,
                     height: height,
                     fillType: CONST.DRAWING_FILL_TYPES.SOLID,
-                    fillColor: game.settings.get("ModularFate", "fuAspectLabelFillColour"),
+                    fillColor: game.settings.get("FateCoreOfficial", "fuAspectLabelFillColour"),
                     fillAlpha: 1,
                     strokeWidth: 4,
-                    strokeColor: game.settings.get("ModularFate", "fuAspectLabelBorderColour"),
+                    strokeColor: game.settings.get("FateCoreOfficial", "fuAspectLabelBorderColour"),
                     strokeAlpha: 1,
                     text: text,
                     fontFamily: font,
                     fontSize: size,
-                    textColor: game.settings.get("ModularFate", "fuAspectLabelTextColour"),
+                    textColor: game.settings.get("FateCoreOfficial", "fuAspectLabelTextColour"),
                     points: []
                 }, {parent: game.scenes.viewed});   
         }
         else {
-            ui.notifications.error(game.i18n.localize("ModularFate.AlreadyANoteForThatAspect"));
+            ui.notifications.error(game.i18n.localize("FateCoreOfficial.AlreadyANoteForThatAspect"));
         }
     }
 
     async _addToScene(event, html){
         let index=event.target.id.split("_")[1];
         let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
-        let name = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[index].name;
+        let name = game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects")[index].name;
         
         this.addAspectDrawing(value, name, canvas.stage.pivot._x, canvas.stage.pivot._y);
     }
 
     async _del_sit_aspect(event, html){
-        let del =   ModularFateConstants.confirmDeletion();
+        let del =   FateCoreOfficialConstants.confirmDeletion();
         if (del){
             let id = event.target.id;
             let index = id.split("_")[1];
-            let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate", "situation_aspects"));
+            let situation_aspects = duplicate(game.scenes.viewed.getFlag("FateCoreOfficial", "situation_aspects"));
             let name = situation_aspects[index].name;
             situation_aspects.splice(index,1);
-            game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+            game.scenes.viewed.setFlag("FateCoreOfficial","situation_aspects",situation_aspects);
         
             //If there's a note on the scene for this aspect, delete it
             let drawing = undefined;
@@ -948,11 +948,11 @@ class FateUtilities extends Application{
                                     "free_invokes":0
                                 };
         try {
-            situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
+            situation_aspects = duplicate(game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects"));
         } catch {
         }                                
         situation_aspects.push(situation_aspect);
-        game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+        game.scenes.viewed.setFlag("FateCoreOfficial","situation_aspects",situation_aspects);
     }
 
     async _add_sit_aspect_from_track(event, html){
@@ -966,7 +966,7 @@ class FateUtilities extends Application{
                                     "linked":true
                                 };
         try {
-            situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
+            situation_aspects = duplicate(game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects"));
         } catch {
         }
         let exists = false;
@@ -977,7 +977,7 @@ class FateUtilities extends Application{
         })
         if (!exists){
             situation_aspects.push(situation_aspect);
-            game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+            game.scenes.viewed.setFlag("FateCoreOfficial","situation_aspects",situation_aspects);
        } else {
        }
     }
@@ -1036,7 +1036,7 @@ class FateUtilities extends Application{
         // See if this aspect exists in the list of game aspects and update it if so.
         let newText = `${text} (${token.actor.name})`;
 
-        let situation_aspects = duplicate(game.scenes.viewed.getFlag("ModularFate","situation_aspects"));
+        let situation_aspects = duplicate(game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects"));
         let aspect = situation_aspects.find(aspect => aspect.name == previousText);
 
         if (aspect == undefined){
@@ -1044,7 +1044,7 @@ class FateUtilities extends Application{
         }
         if (text == ""){
             situation_aspects.splice(situation_aspects.indexOf(aspect),1);
-            await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+            await game.scenes.viewed.setFlag("FateCoreOfficial","situation_aspects",situation_aspects);
             let d = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(previousText));
             try {
                 game.scenes.viewed.deleteEmbeddedDocuments("Drawing", [d.id])
@@ -1055,7 +1055,7 @@ class FateUtilities extends Application{
         }
         aspect.name = newText;
 
-        await game.scenes.viewed.setFlag("ModularFate","situation_aspects",situation_aspects);
+        await game.scenes.viewed.setFlag("FateCoreOfficial","situation_aspects",situation_aspects);
 
         let drawing = undefined;
         if (aspect.name != "") {
@@ -1066,12 +1066,12 @@ class FateUtilities extends Application{
             let text;
             let value = aspect.free_invokes;
             if (value == 1){
-                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvoke")})`;    
+                text = aspect.name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvoke")})`;    
             } else {
-                text = aspect.name+` (${value} ${game.i18n.localize("ModularFate.freeinvokes")})`;
+                text = aspect.name+` (${value} ${game.i18n.localize("FateCoreOfficial.freeinvokes")})`;
             }
-            let size = game.settings.get("ModularFate","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")];
+            let size = game.settings.get("FateCoreOfficial","fuAspectLabelSize");
+            let font = CONFIG.fontFamilies[game.settings.get("FateCoreOfficial","fuAspectLabelFont")];
             if (size === 0){
                 size = game.scenes.viewed.data.width*(1/100);
             }
@@ -1119,7 +1119,7 @@ class FateUtilities extends Application{
         let tracks = duplicate(token.actor.data.data.tracks);
         let track = tracks[event.target.innerHTML]
         let notes = track.notes;
-        let text =  await ModularFateConstants.updateText(game.i18n.localize("ModularFate.TrackNotes"), notes);
+        let text =  await FateCoreOfficialConstants.updateText(game.i18n.localize("FateCoreOfficial.TrackNotes"), notes);
         token.actor.update({
             [`data.tracks.${event.target.innerHTML}.notes`]: text
         })
@@ -1138,13 +1138,13 @@ class FateUtilities extends Application{
         if (type.startsWith("act")){
             let combatants = game.combat.combatants;
             let combatant = combatants.find(comb => comb.token.id == id);
-            await combatant.setFlag("ModularFate","hasActed", true);
+            await combatant.setFlag("FateCoreOfficial","hasActed", true);
         }
 
         if (type === "unact"){
             let combatants = game.combat.combatants;
             let combatant = combatants.find(comb => comb.token.id == id);
-            await combatant.setFlag("ModularFate","hasActed", false);
+            await combatant.setFlag("FateCoreOfficial","hasActed", false);
         }
 
         if (type === "find"){
@@ -1179,7 +1179,7 @@ class FateUtilities extends Application{
         let combatants = game.combat.combatants;
         let updates = [];
         combatants.forEach(async comb => {
-            updates.push({"_id":comb.id, "flags.ModularFate.hasActed":false})
+            updates.push({"_id":comb.id, "flags.FateCoreOfficial.hasActed":false})
         })
         await game.combat.updateEmbeddedDocuments("Combatant", updates);
         game.combat.nextRound();
@@ -1189,10 +1189,10 @@ class FateUtilities extends Application{
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/ModularFate/templates/FateUtilities.html"; 
+        options.template = "systems/FateCoreOfficial/templates/FateUtilities.html"; 
         options.width=window.innerWidth*0.5;
         options.height=window.innerHeight*0.9;
-        options.title = game.i18n.localize("ModularFate.FateUtilities");
+        options.title = game.i18n.localize("FateCoreOfficial.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
         options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane"]
@@ -1212,7 +1212,7 @@ class FateUtilities extends Application{
 async getData(){
     //Let's prepare the data for the initiative tracker here
     //Check if we're using an initiative skill, if so disable the initiative tracker in favour of using the default one
-    let init_skill = game.settings.get("ModularFate","init_skill");
+    let init_skill = game.settings.get("FateCoreOfficial","init_skill");
     let tracker_disabled = false;
     
     if (init_skill !== "None" || init_skill === "Disabled"){
@@ -1252,7 +1252,7 @@ async getData(){
                     hidden = true;
                 } 
 
-                hasActed = comb.getFlag("ModularFate","hasActed");                       
+                hasActed = comb.getFlag("FateCoreOfficial","hasActed");                       
                 
                 if ((hasActed == undefined || hasActed == false) && hidden == false){
                     tokens.push(foundToken)
@@ -1263,14 +1263,14 @@ async getData(){
                     }
                 }
         })
-        ModularFateConstants.sort_key(has_acted,"name");
-        ModularFateConstants.sort_key(tokens,"name");
+        FateCoreOfficialConstants.sort_key(has_acted,"name");
+        FateCoreOfficialConstants.sort_key(tokens,"name");
         data.has_acted_tokens = has_acted;
         data.combat_tokens=tokens;
         data.exchange = game.combat.round;   
     }
     let all_tokens = [];
-    let notes = game?.scenes?.viewed?.getFlag("ModularFate","sceneNotes");
+    let notes = game?.scenes?.viewed?.getFlag("FateCoreOfficial","sceneNotes");
     if (notes == undefined){
         notes = ""
     }
@@ -1281,14 +1281,14 @@ async getData(){
         } 
     })
 
-    let situation_aspects = game?.scenes?.viewed?.getFlag("ModularFate","situation_aspects")
+    let situation_aspects = game?.scenes?.viewed?.getFlag("FateCoreOfficial","situation_aspects")
     if (situation_aspects == undefined){
         situation_aspects = [];
     }
     situation_aspects = duplicate(situation_aspects);
     
     data.situation_aspects = situation_aspects;
-    ModularFateConstants.sort_key(all_tokens, "name");
+    FateCoreOfficialConstants.sort_key(all_tokens, "name");
     data.all_tokens = all_tokens;
     data.GM=game.user.isGM;
     
@@ -1296,7 +1296,7 @@ async getData(){
     game.users.contents.forEach(user => {
         if (user.isGM){
             GMUsers[user.name]=user;
-            GMUsers[user.name]["fatepoints"]=user.getFlag("ModularFate","gmfatepoints")
+            GMUsers[user.name]["fatepoints"]=user.getFlag("FateCoreOfficial","gmfatepoints")
         }
     })
     data.GMUsers = GMUsers;
@@ -1309,23 +1309,23 @@ async getData(){
         }
     }
     data.categories = Array.from(categories);
-    data.tokenAvatar = !game.settings.get("ModularFate","fu_actor_avatars");
+    data.tokenAvatar = !game.settings.get("FateCoreOfficial","fu_actor_avatars");
 
     //Let's get the list of Fate rolls made
-    let rolls = game?.scenes?.viewed?.getFlag("ModularFate","rolls");
+    let rolls = game?.scenes?.viewed?.getFlag("FateCoreOfficial","rolls");
     if (rolls == undefined){
         rolls = [];
     }
     data.rolls = rolls;
     data.user = game.user;
-    let aspects = game.settings.get("ModularFate","gameAspects");
+    let aspects = game.settings.get("FateCoreOfficial","gameAspects");
 
     data.game_aspects = aspects;
-    data.game_time = game.settings.get("ModularFate","gameTime");
-    data.game_notes = game.settings.get("ModularFate","gameNotes");
-    data.fontSize = game.settings.get("ModularFate","fuFontSize");
+    data.game_time = game.settings.get("FateCoreOfficial","gameTime");
+    data.game_notes = game.settings.get("FateCoreOfficial","gameNotes");
+    data.fontSize = game.settings.get("FateCoreOfficial","fuFontSize");
     data.height = this.position.height;
-    data.combatants_only = game.settings.get("ModularFate","fu_combatants_only");
+    data.combatants_only = game.settings.get("FateCoreOfficial","fu_combatants_only");
 
     if (data.combatants_only && data.conflict){
         let combatTokens = data.combat_tokens.concat(data.has_acted_tokens);
@@ -1346,7 +1346,7 @@ async getData(){
     if (gaModifier <0) gaModifier = 0;
     data.gameNotesHeight = (this.position.height - 525) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
-    data.aspectLabelWidth = game.settings.get("ModularFate","aspectwidth");
+    data.aspectLabelWidth = game.settings.get("FateCoreOfficial","aspectwidth");
     
     return data;
 }
@@ -1362,7 +1362,7 @@ async render (...args){
 async renderMe(...args){
     let tab = this._tabs[0].active;
 
-    if (args[0][1]?.flags?.ModularFate?.rolls != undefined){
+    if (args[0][1]?.flags?.FateCoreOfficial?.rolls != undefined){
         // It was a roll.
         if (tab !== "rolls"){
             // change a boolean to remind us to update FateUtilities once the tab is changed, but don't re-render
@@ -1390,7 +1390,7 @@ async renderMe(...args){
         }
         return;
     }
-    //Code to execute when a hook is detected by ModularFate. Will need to tackle hooks for Actor
+    //Code to execute when a hook is detected by FateCoreOfficial. Will need to tackle hooks for Actor
     //Scene, User, and Combat.
     //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
     if (!this.renderPending) {
@@ -1417,7 +1417,7 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
             if (hud){
                 hud.tools.push({
                     name:"FateUtilities",//Completed
-                    title:game.i18n.localize("ModularFate.LaunchFateUtilities"),
+                    title:game.i18n.localize("FateCoreOfficial.LaunchFateUtilities"),
                     icon:"fas fa-theater-masks",
                     onClick: async ()=> {let fu = new FateUtilities; await fu.render(true); $('#FateUtilities').css({zIndex: Math.min(++_maxZ, 9999)});},
                     button:true
@@ -1439,12 +1439,12 @@ class TimedEvent extends Application {
             currentRound = game.combat.round;
         } catch {
             var dp = {
-                "title": game.i18n.localize("ModularFate.Error"),
-                "content": `${game.i18n.localize("ModularFate.NoCurrentCombat")}<p>`,
+                "title": game.i18n.localize("FateCoreOfficial.Error"),
+                "content": `${game.i18n.localize("FateCoreOfficial.NoCurrentCombat")}<p>`,
                 default:"oops",
                 "buttons": {
                     oops: {
-                        label: game.i18n.localize("ModularFate.OK"),
+                        label: game.i18n.localize("FateCoreOfficial.OK"),
                     }
                 }
             }
@@ -1452,13 +1452,13 @@ class TimedEvent extends Application {
             d.render(true);
         }
         if (currentRound != "NoCombat"){
-            var peText = `${game.i18n.localize("ModularFate.NoPendingEvents")}<p></p>`
-            let pendingEvents = game.combat.getFlag("ModularFate","timedEvents");
+            var peText = `${game.i18n.localize("FateCoreOfficial.NoPendingEvents")}<p></p>`
+            let pendingEvents = game.combat.getFlag("FateCoreOfficial","timedEvents");
             if (pendingEvents != null || pendingEvents != undefined){
                 peText=
                 `<tr>
-                    <td style="font-weight:bold">${game.i18n.localize("ModularFate.Exchange")}</td>
-                    <td style="font-weight:bold">${game.i18n.localize("ModularFate.PendingEvent")}</td>
+                    <td style="font-weight:bold">${game.i18n.localize("FateCoreOfficial.Exchange")}</td>
+                    <td style="font-weight:bold">${game.i18n.localize("FateCoreOfficial.PendingEvent")}</td>
                 </tr>`
                 pendingEvents.forEach(event => {
                     if (event.complete === false){
@@ -1467,44 +1467,44 @@ class TimedEvent extends Application {
                 });
             }
             var dp = {
-                "title":game.i18n.localize("ModularFate.TimedEvent"),
-                "content":`<h1>${game.i18n.localize("ModularFate.CreateATimedEvent")}</h1>
-                            ${game.i18n.localize("ModularFate.TheCurrentExchangeIs")} ${game.combat.round}.<p></p>
+                "title":game.i18n.localize("FateCoreOfficial.TimedEvent"),
+                "content":`<h1>${game.i18n.localize("FateCoreOfficial.CreateATimedEvent")}</h1>
+                            ${game.i18n.localize("FateCoreOfficial.TheCurrentExchangeIs")} ${game.combat.round}.<p></p>
                             <table style="background:none; border:none">
                                 ${peText}
                             </table>
                             <table style="background:none; border:none">
                                 <tr>
-                                    <td>${game.i18n.localize("ModularFate.WhatIsYourEvent")}:</td>
+                                    <td>${game.i18n.localize("FateCoreOfficial.WhatIsYourEvent")}:</td>
                                     <td><input type="text" id="eventToCreate" name="eventToCreate" style="background: white; color: black;" autofocus></input></td>
                                 </tr>
                                 <tr>
-                                    <td>${game.i18n.localize("ModularFate.TriggerEventOnExchange")}:</td>
+                                    <td>${game.i18n.localize("FateCoreOfficial.TriggerEventOnExchange")}:</td>
                                     <td><input type="number" value="${game.combat.round+1}" id="eventExchange" name="eventExchange"></input></td>
                                 </tr>
                             </table>`,
                     default:"create",
                     "buttons":{
-                        create:{label:game.i18n.localize("ModularFate.Create"), callback:async (teDialog) => {
+                        create:{label:game.i18n.localize("FateCoreOfficial.Create"), callback:async (teDialog) => {
 
                             //if no flags currently set, initialise
-                            var timedEvents = game.combat.getFlag("ModularFate","timedEvents");
+                            var timedEvents = game.combat.getFlag("FateCoreOfficial","timedEvents");
                             
                             if (timedEvents ==null || timedEvents == undefined){
-                                game.combat.setFlag("ModularFate","timedEvents",[
+                                game.combat.setFlag("FateCoreOfficial","timedEvents",[
                                                                                     {   "round":`${teDialog.find("#eventExchange")[0].value}`,
                                                                                         "event":`${teDialog.find("#eventToCreate")[0].value}`,
                                                                                         "complete":false
                                                                                     }
                                                                                 ])
-                                                                                timedEvents=game.combat.getFlag("ModularFate","timedEvents");
+                                                                                timedEvents=game.combat.getFlag("FateCoreOfficial","timedEvents");
                             } else {
                                 timedEvents.push({   
                                                     "round":`${teDialog.find("#eventExchange")[0].value}`,
                                                     "event":`${teDialog.find("#eventToCreate")[0].value}`,
                                                     "complete":false
                                 });
-                                game.combat.setFlag("ModularFate","timedEvents",timedEvents);
+                                game.combat.setFlag("FateCoreOfficial","timedEvents",timedEvents);
                                 
                                 }
 
@@ -1526,10 +1526,10 @@ class TimedEvent extends Application {
 class FUAspectLabelClass extends FormApplication {
     static get defaultOptions (){
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/FULabelSettings.html";
+        options.template = "systems/FateCoreOfficial/templates/FULabelSettings.html";
         options.closeOnSubmit = true;
         options.submitOnClose = false;
-        options.title = game.i18n.localize("ModularFate.fuAspectLabelSettingsTitle");
+        options.title = game.i18n.localize("FateCoreOfficial.fuAspectLabelSettingsTitle");
         return options;
     }
 
@@ -1540,11 +1540,11 @@ class FUAspectLabelClass extends FormApplication {
         let fill = formData.fu_fill_color;
         let border = formData.fu_border_color;
 
-        await game.settings.set("ModularFate","fuAspectLabelFont", CONFIG.fontFamilies.indexOf(font));
-        await game.settings.set("ModularFate","fuAspectLabelSize", size);
-        await game.settings.set("ModularFate", "fuAspectLabelTextColour", text);
-        await game.settings.set("ModularFate", "fuAspectLabelFillColour", fill);
-        await game.settings.set("ModularFate", "fuAspectLabelBorderColour",border);
+        await game.settings.set("FateCoreOfficial","fuAspectLabelFont", CONFIG.fontFamilies.indexOf(font));
+        await game.settings.set("FateCoreOfficial","fuAspectLabelSize", size);
+        await game.settings.set("FateCoreOfficial", "fuAspectLabelTextColour", text);
+        await game.settings.set("FateCoreOfficial", "fuAspectLabelFillColour", fill);
+        await game.settings.set("FateCoreOfficial", "fuAspectLabelBorderColour",border);
 
         this.close();
     }
@@ -1552,11 +1552,11 @@ class FUAspectLabelClass extends FormApplication {
     async getData(){
         return {
                     fonts:CONFIG.fontFamilies, 
-                    currentFont:CONFIG.fontFamilies[game.settings.get("ModularFate","fuAspectLabelFont")],
-                    fontSize:game.settings.get("ModularFate", "fuAspectLabelSize"),
-                    textColour:game.settings.get("ModularFate","fuAspectLabelTextColour"),
-                    fillColour:game.settings.get("ModularFate","fuAspectLabelFillColour"),
-                    borderColour:game.settings.get("ModularFate","fuAspectLabelBorderColour")
+                    currentFont:CONFIG.fontFamilies[game.settings.get("FateCoreOfficial","fuAspectLabelFont")],
+                    fontSize:game.settings.get("FateCoreOfficial", "fuAspectLabelSize"),
+                    textColour:game.settings.get("FateCoreOfficial","fuAspectLabelTextColour"),
+                    fillColour:game.settings.get("FateCoreOfficial","fuAspectLabelFillColour"),
+                    borderColour:game.settings.get("FateCoreOfficial","fuAspectLabelBorderColour")
                 }
     }
 
@@ -1570,18 +1570,18 @@ class FUAspectLabelClass extends FormApplication {
 Hooks.on('renderCombatTracker', () => {
     try {
         var r = game.combat.round;
-        let pendingEvents = game.combat.getFlag("ModularFate","timedEvents");
+        let pendingEvents = game.combat.getFlag("FateCoreOfficial","timedEvents");
         for (let i = 0; i<pendingEvents.length;i++){
             var event = pendingEvents[i];
             if (r==event.round && event.complete != true){
                 var dp = {
-                    "title": game.i18n.localize("ModularFate.TimedEvent"),
-                    "content":`<h2>${game.i18n.localize("ModularFate.TimedEventForExchange")} ${event.round}:</h2><p></p>
+                    "title": game.i18n.localize("FateCoreOfficial.TimedEvent"),
+                    "content":`<h2>${game.i18n.localize("FateCoreOfficial.TimedEventForExchange")} ${event.round}:</h2><p></p>
                                 <h3>${event.event}</h3>`,
                     default:"oops",
                     "buttons": {
                         oops: {
-                            label: game.i18n.localize("ModularFate.OK"),
+                            label: game.i18n.localize("FateCoreOfficial.OK"),
                         }
                     }
                 }
@@ -1621,7 +1621,7 @@ Hooks.on('createChatMessage', (message) => {
                 }
             }
             let user = message.user;
-            let rolls = game?.scenes?.viewed?.getFlag("ModularFate","rolls");
+            let rolls = game?.scenes?.viewed?.getFlag("FateCoreOfficial","rolls");
             if (rolls == undefined){
                 rolls = [];
             }
@@ -1637,19 +1637,19 @@ Hooks.on('createChatMessage', (message) => {
             }
             rolls.push(mFRoll);
 
-            game.scenes.viewed.setFlag("ModularFate","rolls",rolls);
+            game.scenes.viewed.setFlag("FateCoreOfficial","rolls",rolls);
         }
     }
 })
 
 Hooks.once('ready', async function () {
     if (game.user.isGM){
-        game.socket.on("system.ModularFate", rolls => {
+        game.socket.on("system.FateCoreOfficial", rolls => {
             updateRolls(rolls);
         })
     }
 
-    game.socket.on("system.ModularFate", render => {
+    game.socket.on("system.FateCoreOfficial", render => {
         if (render.render){
             let FU = Object.values(ui.windows).find(window=>window.options.id=="FateUtilities");
             if (FU != undefined){
@@ -1670,13 +1670,13 @@ async function updateRolls (rolls) {
     if (rolls.rolls != undefined && game.users.contents.find(user => user.active && user.isGM) == game.user){
         
         let scene = game.scenes.get(rolls.scene._id);
-        let currRolls = scene.getFlag("ModularFate","rolls"); 
+        let currRolls = scene.getFlag("FateCoreOfficial","rolls"); 
         if (currRolls == undefined){
             currRolls = [];
         }
         currRolls = duplicate(currRolls);
         let endRolls = mergeObject(currRolls, rolls.rolls);
-        scene.setFlag("ModularFate","rolls",endRolls);
+        scene.setFlag("FateCoreOfficial","rolls",endRolls);
     }
 }
 
@@ -1720,7 +1720,7 @@ Hooks.on('renderFateUtilities', function(){
 
 Hooks.on ('dropCanvasData', async (canvas, data) => {
     if (data.type =="situation_aspect") {
-        let aspect = game.scenes.viewed.getFlag("ModularFate","situation_aspects")[data.aspect].name;
+        let aspect = game.scenes.viewed.getFlag("FateCoreOfficial","situation_aspects")[data.aspect].name;
         let value = data.value;
         let x = data.x;
         let y = data.y;

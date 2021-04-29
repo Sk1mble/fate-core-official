@@ -5,7 +5,7 @@
             {{#each this}}
             {{#if (eq this.extra_tag undefined)}}
             <td style="border-bottom:1px; border-top:groove">
-                <label for="name" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.AspectName'}}:</label>    
+                <label for="name" style="font-family:Montserrat; font-weight:bold">{{localize 'FateCoreOfficial.AspectName'}}:</label>    
             </td>
             <td style="border-bottom:1px; border-top:groove">
                 <input type="text" class="aspect_name" name="name_{{this.name}}" style="background-color: white; border-top:none; border-left:none; border-right:none; border-bottom:1px solid lightsteelblue; width:300px; font-family:Montserrat" value="{{this.name}}">
@@ -17,7 +17,7 @@
         </tr>
         <tr>
             <td>
-                <label for"description" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.AspectDescription'}}:</label>
+                <label for"description" style="font-family:Montserrat; font-weight:bold">{{localize 'FateCoreOfficial.AspectDescription'}}:</label>
             </td>
             <td>
                 <textarea rows="2" class="aspect_description" name="description_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.description}}
@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>
-                <label for"value" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.AspectText'}}:</label>
+                <label for"value" style="font-family:Montserrat; font-weight:bold">{{localize 'FateCoreOfficial.AspectText'}}:</label>
             </td>
             <td>
                 <textarea rows = "1" class="aspect_value" name="value_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.value}}
@@ -35,7 +35,7 @@
         </tr>
         <tr>
             <td>
-                <label for"notes" style="font-family:Montserrat; font-weight:bold">{{localize 'ModularFate.Notes'}}:</label>
+                <label for"notes" style="font-family:Montserrat; font-weight:bold">{{localize 'FateCoreOfficial.Notes'}}:</label>
             </td>
             <td>
                 <textarea rows = "3" class="aspect_notes" name="notes_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.notes}}
@@ -45,6 +45,6 @@
         {{else}}{{/if}}
         {{/each}}
     </table>
-    <button type="button" id="save_aspects">{{localize 'ModularFate.Save'}}</button><button type="button" name="new_aspect">{{localize 'ModularFate.NewAspect'}}</button>
+    <button type="button" id="save_aspects">{{localize 'FateCoreOfficial.Save'}}</button><button type="button" name="new_aspect">{{localize 'FateCoreOfficial.NewAspect'}}</button>
 </div>
 </form>

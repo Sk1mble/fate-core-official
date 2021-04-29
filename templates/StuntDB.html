@@ -2,22 +2,22 @@
     <div style="width:1200px; max-height:50px; background-color:white; font-family:Montserrat; font-size:10pt; padding:0px; display:table">
         <div style="display:table-row;background-color:#185CAB; color:white;">
             <div name="sb_name" title="Sort by name" style="width:200px; border-right:1px solid lightsteelblue; font-weight:bold; float:left; padding:5px">
-                {{localize 'ModularFate.StuntName'}}
+                {{localize 'FateCoreOfficial.StuntName'}}
             </div>
             <div name="sb_skill" title="Sort by skill" style="width:100px; border-right:1px solid lightsteelblue; font-weight:bold; float:left ; padding:5px">
-                {{localize 'ModularFate.Skill'}}
+                {{localize 'FateCoreOfficial.Skill'}}
             </div>
             <div name="sb_refresh" title="Sort by refresh cost" style="width:80px; border-right:1px solid lightsteelblue;  font-weight:bold; float:left ; padding:5px">
-                {{localize 'ModularFate.Refresh'}}
+                {{localize 'FateCoreOfficial.Refresh'}}
             </div>
             <div style="width:700px; border-right:1px solid lightsteelblue; font-weight:bold; float:left; padding:5px">
-                {{localize 'ModularFate.Description'}}  
+                {{localize 'FateCoreOfficial.Description'}}  
                 <div style="float:right">
-                    {{localize 'ModularFate.filter'}} <input type="text" style="background-color:white; height:2em; width:12em" id="stunt_db_filter_box" value="{{filter}}"></input><i style="padding-left:5px; {{#if ignoreCase}} opacity:0.4{{/if}}" title="{{localize 'ModularFate.ignoreCase'}}" class="fu_button" id="stunt_db_ignore_case"> aA </i><i style="padding-left:5px" title="{{localize 'ModularFate.clear_filter'}}" class="fas fa-times-circle fu_button" id="stunt_db_clear_filter"></i>
+                    {{localize 'FateCoreOfficial.filter'}} <input type="text" style="background-color:white; height:2em; width:12em" id="stunt_db_filter_box" value="{{filter}}"></input><i style="padding-left:5px; {{#if ignoreCase}} opacity:0.4{{/if}}" title="{{localize 'FateCoreOfficial.ignoreCase'}}" class="fu_button" id="stunt_db_ignore_case"> aA </i><i style="padding-left:5px" title="{{localize 'FateCoreOfficial.clear_filter'}}" class="fas fa-times-circle fu_button" id="stunt_db_clear_filter"></i>
                 </div>
             </div>
             <div style="width:120px; font-weight:bold; float:left; padding:5px">
-                {{localize 'ModularFate.Actions'}}
+                {{localize 'FateCoreOfficial.Actions'}}
             </div>
         </div>
     </div>
@@ -38,18 +38,18 @@
                 {{{this.description}}}
             </div>
             <div style="border-bottom:1px solid lightsteelblue; width:120px; display:table-cell; padding:5px">
-                {{#if ../actor.isOwner}}<button type="button" name="add_stunt" style="border:none; float:left; width:25px; height:25px; background-color:transparent" title="{{localize 'ModularFate.AddStuntToActor'}} {{../actor.name}}" i icon class = "fas fa-download fu_button" id="{{this.name}}_addStunt"></button>{{/if}}
-                <button type="button" name="export_stunt" style="border:none; float:left; width: 25px; height:25px; background-color:transparent;" title="{{localize 'ModularFate.ExportStunt'}}" i icon class = "fas fa-file-export fu_button" id="{{this.name}}_exportStunt"></button>
+                {{#if ../actor.isOwner}}<button type="button" name="add_stunt" style="border:none; float:left; width:25px; height:25px; background-color:transparent" title="{{localize 'FateCoreOfficial.AddStuntToActor'}} {{../actor.name}}" i icon class = "fas fa-download fu_button" id="{{this.name}}_addStunt"></button>{{/if}}
+                <button type="button" name="export_stunt" style="border:none; float:left; width: 25px; height:25px; background-color:transparent;" title="{{localize 'FateCoreOfficial.ExportStunt'}}" i icon class = "fas fa-file-export fu_button" id="{{this.name}}_exportStunt"></button>
                 {{#if ../gm}}
-                <button type="button" name="del_stunt" style="border:none; float:right; width:25px; height:25px; background-color:transparent;" title="{{localize 'ModularFate.DeleteStunt'}}" i icon class = "fu_button fas fa-trash" id="{{this.name}}_deleteStunt"></button>
-                <button type="button" name="edit_stunt" style="border:none; float:right; width:25px; height:25px; background-color:transparent;" title="{{localize 'ModularFate.EditStunt'}}" i icon class = "fu_button fas fa-edit" id="{{this.name}}_editStunt"></button>{{/if}}
+                <button type="button" name="del_stunt" style="border:none; float:right; width:25px; height:25px; background-color:transparent;" title="{{localize 'FateCoreOfficial.DeleteStunt'}}" i icon class = "fu_button fas fa-trash" id="{{this.name}}_deleteStunt"></button>
+                <button type="button" name="edit_stunt" style="border:none; float:right; width:25px; height:25px; background-color:transparent;" title="{{localize 'FateCoreOfficial.EditStunt'}}" i icon class = "fu_button fas fa-edit" id="{{this.name}}_editStunt"></button>{{/if}}
             </div>
         </div>
         {{/each}}
     </div>    
 </div>
-<div style="max-height:40px; padding:10px"><button type="button" id="export_stunts" style="height:30px; width:150px">{{localize 'ModularFate.ExportStunts'}}</button>
-    {{#if this.gm}}<button type="button" id="import_stunts" style="height:30px; width:150px">{{localize 'ModularFate.ImportStunts'}}</button>
-    <button type="button" id="add_db_stunt" style="height:30px; width:150px">{{localize 'ModularFate.addStunt'}}</button>{{/if}}
+<div style="max-height:40px; padding:10px"><button type="button" id="export_stunts" style="height:30px; width:150px">{{localize 'FateCoreOfficial.ExportStunts'}}</button>
+    {{#if this.gm}}<button type="button" id="import_stunts" style="height:30px; width:150px">{{localize 'FateCoreOfficial.ImportStunts'}}</button>
+    <button type="button" id="add_db_stunt" style="height:30px; width:150px">{{localize 'FateCoreOfficial.addStunt'}}</button>{{/if}}
 </div>
 </body>

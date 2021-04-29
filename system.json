@@ -1,12 +1,12 @@
 {
-	"name": "ModularFate",
-	"title": "Modular Fate Core",
-	"description": "An implementation of Fate Core designed in a modular way to support skills, extras, approaches, conditions, standard stress, and 1-point stress.",
-	"version": "3.1.8",
+	"name": "FateCoreOfficial",
+	"title": "Fate Core Official",
+	"description": "The Evil Hat approved implementation of Fate Core for Foundry designed to support skills, extras, approaches, conditions, standard stress, and 1-point stress.",
+	"version": "3.1.9",
 	"author": "Richard Bellingham",
-	"esmodules": ["ModularFate.js"],
+	"esmodules": ["FateCoreOfficial.js"],
 	"scripts": [
-					"./scripts/ModularFateConstants.js",
+					"./scripts/FateCoreOfficialConstants.js",
 					"./scripts/ManageSkills.js",
 					"./scripts/ManageAspects.js",
 					"./scripts/ManageTracks.js",
@@ -20,15 +20,15 @@
 					"./scripts/FateCharacterImporter.js",
 					"./scripts/FateCharacterDefaults.js"
 				],
-	"styles": ["ModularFate.css","mfate-sheet.css"],
+	"styles": ["FateCoreOfficial.css","mfate-sheet.css"],
 	"packs": [],
 	"gridDistance": 1,
 	"gridUnits": "",
 	"minimumCoreVersion": "0.8.1",
 	"compatibleCoreVersion": "0.8.1",
-	"url": "https://github.com/Sk1mble/modularFate",
-	"manifest": "https://raw.githubusercontent.com/Sk1mble/modularFate/master/system.json",
-	"download": "https://github.com/Sk1mble/modularFate/archive/v3.1.8.zip",
+	"url": "https://github.com/Sk1mble/FateCoreOfficial",
+	"manifest": "https://raw.githubusercontent.com/Sk1mble/FateCoreOfficial/master/system.json",
+	"download": "https://github.com/Sk1mble/FateCoreOfficial/archive/v3.1.9.zip",
 	"socket":true,
 	"languages":[
 		{

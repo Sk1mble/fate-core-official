@@ -1,4 +1,4 @@
-export class ModularFateExtra extends Item {
+export class FateCoreOfficialExtra extends Item {
     async _onCreate(...args){
         if ( args[2] !== game.user.id ) return;
         let itemData;
