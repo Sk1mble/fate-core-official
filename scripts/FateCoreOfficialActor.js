@@ -179,7 +179,7 @@ export class FateCoreOfficialActor extends Actor {
                 }
             }
             console.log(trackUpdates)
-            item.update({"data.tracks":trackUpdates},{renderSheet:false});
+            await item.update({"data.tracks":trackUpdates},{renderSheet:false});
         }
         //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
     
