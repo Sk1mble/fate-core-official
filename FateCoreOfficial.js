@@ -211,6 +211,13 @@ async function initialiseFateCoreOfficialCharacter (actor) {
 }
 
 Hooks.once('ready', async function () {
+    //Convert any straggling ModularFate actors to FateCoreOfficial actors.
+    let updates = [];
+    game.actors.contents.forEach(actor => {
+        if (actor.type == "ModularFate") updates.push({_id:actor.id, type:"FateCoreOfficial"})
+    });
+    await Actor.updateDocuments(updates)
+                
     if (game.settings.get("FateCoreOfficial","run_once") == false){
         if (game.user.isGM){
             FateCoreOfficialConstants.awaitOKDialog(game.i18n.localize("FateCoreOfficial.WelcomeTitle"),game.i18n.localize("FateCoreOfficial.WelcomeText"),500,250);
