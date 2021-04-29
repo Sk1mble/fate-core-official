@@ -166,11 +166,16 @@ export class FateCoreOfficialActor extends Actor {
         //before removing it - if the extra is toggled on and off, any tracks on the character that are partially
         //filled in should remain that way. This should be as simple as adding a parameter to calls to this method
         //and then removing extra_tag from each track and writing it back to the item in an update call.
-        
-        for (let track in item.data.data.tracks){
-            console.log(track);
+        if (!deleting){
+            for (let t in item.data.data.tracks){
+                let track = actor?.data?.data?.tracks[t];
+                if (track){
+                    track = duplicate(track);
+                }
+                delete track.extra_tag;
+                item.update({data.data.tracks[t]:track,}{renderSheet:false});
+            }
         }
-
         //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
     
         let updateObject = {}
