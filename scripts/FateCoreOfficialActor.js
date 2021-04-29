@@ -158,6 +158,7 @@ export class FateCoreOfficialActor extends Actor {
 
     async deactivateExtra (item, deleting){
         console.log(item);
+        console.log(deleting);
         this.sheet.editing = true;
         let actor = this;
         let itemData = item.data;
@@ -177,6 +178,7 @@ export class FateCoreOfficialActor extends Actor {
                     trackUpdates[`data.tracks.${t}`] = track;
                 }
             }
+            console.log(trackUpdates)
             item.update({"data.tracks":trackUpdates},{renderSheet:false});
         }
         //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
