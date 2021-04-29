@@ -1,4 +1,6 @@
 {
+   "ModularFate.ModularFateCharacter":"Fate Character",
+   "ModularFate.Thing":"Thing Sheet",
    "ModularFate.ignoreCase":"Case sensitive filter?",
    "ModularFate.filter":"Filter stunt list by text",
    "ModularFate.clear_filter":"Clear filter",

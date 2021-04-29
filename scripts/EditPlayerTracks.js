@@ -1,11 +1,3 @@
-Handlebars.registerHelper("undefined", function(value) {
-    if (value == undefined){
-        return true;
-    } else {
-        return false;
-    }
-});
-
 class EditPlayerTracks extends FormApplication {
     constructor(...args){
         super(...args);

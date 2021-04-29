@@ -1,52 +1,5 @@
 import { ExtraSheet } from "./ExtraSheet.js";
 
-Handlebars.registerHelper("add1", function(value) {
-    return value+1;
-});
-
-Handlebars.registerHelper("add5", function(value) {
-    return value+5;
-})
-
-Handlebars.registerHelper("str", function(value) {
-    return JSON.stringify(value);
-});
-
-Handlebars.registerHelper("concat", function(value1, value2){
-    return value1.concat(value2);
-});
-
-Handlebars.registerHelper("category", function(category1, category2) {
-    if (category1 == "All" || category1 == category2){
-        return true;
-    } else {
-        return false;
-    }
-})
-
-Handlebars.registerHelper("expanded", function (actor, item){
-    let key;
-    if (actor == "game"){
-        key = "game"+item;
-    } else {
-        key = actor.id + item;
-    }
-
-    if (game.user.expanded != undefined){
-        return game.user.expanded[key]==true;
-    } else {
-        return false;
-    }
-});
-
-Handlebars.registerHelper("hasBoxes", function(track) {
-    if(track.box_values==undefined || track.box_values.length==0){
-        return false;
-    } else {
-        return true;
-    }
-});
-
 export class ModularFateCharacter extends ActorSheet {
 
     async close(options){

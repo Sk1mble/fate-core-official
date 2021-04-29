@@ -1,6 +1,7 @@
 # Version 3.1.9
   * Added a filter to the stunt database. Filters on name, description, and linked skill.
   * Added the 'Powered by Fate' logo to the standard character sheet.
+  * Moved all handlebars helpers to ModularFate.js
 
 # Version 3.1.8
   * Tweaked which element of the aspect header mf_draggable is applied to (as clcking on the aspect text and dragging to select the text was dragging the aspect)
