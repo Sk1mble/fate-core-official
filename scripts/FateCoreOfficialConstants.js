@@ -287,4 +287,14 @@ class FateCoreOfficialConstants {
         await game.settings.set("FateCoreOfficial","refreshTotal",input.refreshTotal);
         await game.settings.set("FateCoreOfficial","track_categories",input.track_categories);
     }
+
+    static async getMFSettings(){
+            let settings = game.user.getFlag("world", "oldSettings");
+            if (settings){
+                settings.forEach(async s =>{
+                    await game.settings.set("FateCoreOfficial", s.key, s.data)
+                })
+                game.user.unsetFlag("world", "oldSettings");
+            }            
+    }
 } 
