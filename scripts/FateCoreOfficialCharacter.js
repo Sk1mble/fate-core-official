@@ -162,7 +162,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                 let item = this.document.items.get(item_id);
                 if (item.data.data.active){
                     await item.update({"data.active":false},{render:false});
-                    this.document.deactivateExtra(item);
+                    this.document.deactivateExtra(item, false);
                 } else {
                     await item.update({"data.active":true},{render:false});
                     this.document.updateFromExtra(item);
