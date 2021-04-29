@@ -127,7 +127,6 @@
 }
 
 .mfate-sheet__identity-name {
-    min-width: 120px;
     min-width: 15em;
     max-width: 100em;
     border: 1px solid gray;
