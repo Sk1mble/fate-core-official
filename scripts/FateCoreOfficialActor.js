@@ -173,7 +173,7 @@ export class FateCoreOfficialActor extends Actor {
                     track = duplicate(track);
                 }
                 delete track.extra_tag;
-                item.update({data.data.tracks[t]:track,}{renderSheet:false});
+                item.update({data.data.tracks[`${t}`]:track},{renderSheet:false});
             }
         }
         //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
