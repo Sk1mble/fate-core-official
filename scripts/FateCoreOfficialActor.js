@@ -169,13 +169,13 @@ export class FateCoreOfficialActor extends Actor {
         //filled in should remain that way. This should be as simple as adding a parameter to calls to this method
         //and then removing extra_tag from each track and writing it back to the item in an update call.
         if (!deleting){
-            let trackUpdates = {};
-            for (let t in item.data.data.tracks){
+            let trackUpdates = duplicate(item.data.data.tracks);
+            for (let t in trackUpdates){
                 let track = actor?.data?.data?.tracks[t];
                 if (track){
                     track = duplicate(track);
                     delete track.extra_tag;
-                    trackUpdates[`data.tracks.${t}`] = track;
+                    trackUpdates[t] = track;
                 }
             }
             console.log(trackUpdates)
