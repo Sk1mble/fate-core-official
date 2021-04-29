@@ -157,6 +157,7 @@ export class FateCoreOfficialActor extends Actor {
     }
 
     async deactivateExtra (item, deleting){
+        console.log(item);
         this.sheet.editing = true;
         let actor = this;
         let itemData = item.data;
