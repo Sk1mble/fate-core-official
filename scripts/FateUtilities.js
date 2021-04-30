@@ -1637,7 +1637,7 @@ Hooks.on('createChatMessage', (message) => {
             }
             rolls.push(mFRoll);
 
-            game.scenes.viewed.setFlag("FateCoreOfficial","rolls",rolls);
+            game.scenes?.viewed?.setFlag("FateCoreOfficial","rolls",rolls);
         }
     }
 })
