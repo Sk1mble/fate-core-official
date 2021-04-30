@@ -613,6 +613,33 @@
     height:2.5rem;
 }
 
+.circle-input {
+    height: 75px !important; 
+    width: 75px !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    border-color:#6793c5 !important;
+    border-width:5px !important;
+    text-align:center !important;
+    font-size:2em !important;
+    padding-left:18px !important;
+    text-align:center !important;
+}
+
+.circle-input:disabled {
+    height: 75px !important;
+    width: 75px !important;
+    background-color: white !important;
+    border:5px solid !important;
+    border-radius: 50% !important;
+    border-color:#6793c5 !important;
+    border-width:5px !important;
+    text-align:center !important;
+    font-size:2em !important;
+    padding-left:18px !important;
+    text-align:center! important;
+}
+
 .mfate-description__content,
 .mfate-biography__content,
 .mfate-extras__content 

@@ -495,7 +495,6 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
                     type: "Thing",
                     data:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
                     img:newItem.img,
-                    folder: folder.id,
                     sort: 12000,
                     permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
                 }

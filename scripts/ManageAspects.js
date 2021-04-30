@@ -232,13 +232,14 @@ class EditAspect extends FormApplication{
         super.activateListeners(html);
         const saveButton = html.find("button[id='edit_aspect_save_changes']");
         saveButton.on("click", event => this._onSaveButton(event, html));
+        FateCoreOfficialConstants.getPen("edit_aspect_description");
     }
         
     //Here are the event listener functions.
     async _onSaveButton(event,html){
         //Get the name and description of the aspect
         let name = html.find("input[id='edit_aspect_name']")[0].value.split(".").join("․").trim();
-        let description = html.find("textarea[id='edit_aspect_description']")[0].value;
+        let description = html.find("div[id='edit_aspect_description']")[0].innerHTML;
         let aspects=game.settings.get("FateCoreOfficial","aspects");
         let newAspect = {"name":name, "description":description};
         var existing = false;

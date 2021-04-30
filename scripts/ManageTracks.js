@@ -139,7 +139,7 @@ class EditTracks extends FormApplication {
         //Define the FormApplication's options
         options.width = "auto";
         options.height = "auto";
-        options.title = game.i18n.localize("FateCoreOfficial.Track Editor");
+        options.title = game.i18n.localize("FateCoreOfficial.TrackEditor");
         options.closeOnSubmit = false;
         options.id = "EditTrack"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -166,6 +166,10 @@ class EditTracks extends FormApplication {
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
         copy_track.on("click", event => this._onCopyTrackButton(event, html));
         export_track.on("click", event => this._onExportTrack(event, html));
+        FateCoreOfficialConstants.getPen("edit_track_description");
+        FateCoreOfficialConstants.getPen("edit_track_when_marked");
+        FateCoreOfficialConstants.getPen("edit_track_when_recovers");
+
     }
     //Here are the event listener functions.
 
@@ -259,13 +263,13 @@ class EditTracks extends FormApplication {
         if (name==game.i18n.localize("FateCoreOfficial.NewTrack")){
             this.track=undefined;
             document.getElementById("edit_track_name").value="";
-            document.getElementById("edit_track_description").value="";
+            document.getElementById("edit_track_description").innerHTML="";
             document.getElementById("edit_track_universal").checked=true;
             document.getElementById("edit_track_unique").checked=true;
             document.getElementById("edit_track_recovery_type").value="Fleeting";
             document.getElementById("edit_track_aspect").value="No";
-            document.getElementById("edit_track_when_marked").value="";
-            document.getElementById("edit_track_when_recovers").value="";
+            document.getElementById("edit_track_when_marked").innerHTML="";
+            document.getElementById("edit_track_when_recovers").innerHTML="";
             document.getElementById("edit_track_boxes").value=0;
             document.getElementById("edit_track_harm").value=0;
             document.getElementById("edit_linked_skills").disabled=false;
@@ -275,13 +279,13 @@ class EditTracks extends FormApplication {
             let track=this.tracks[name];
             this.track=track;
             document.getElementById("edit_track_name").value=track.name;
-            document.getElementById("edit_track_description").value=track.description;
+            document.getElementById("edit_track_description").innerHTML=track.description;
             document.getElementById("edit_track_universal").checked=track.universal;
             document.getElementById("edit_track_unique").checked=track.unique;
             document.getElementById("edit_track_recovery_type").value=track.recovery_type;
             document.getElementById("edit_track_aspect").value=track.aspect;
-            document.getElementById("edit_track_when_marked").value=track.when_marked;
-            document.getElementById("edit_track_when_recovers").value=track.recovery_conditions;
+            document.getElementById("edit_track_when_marked").innerHTML=track.when_marked;
+            document.getElementById("edit_track_when_recovers").innerHTML=track.recovery_conditions;
             document.getElementById("edit_track_boxes").value=track.boxes;
             document.getElementById("edit_track_harm").value=track.harm_can_absorb;
             document.getElementById("edit_linked_skills").disabled=false;
@@ -313,13 +317,13 @@ class EditTracks extends FormApplication {
 
     async _onSaveTrackButton(event,html){
         let name = document.getElementById("edit_track_name").value.split(".").join("․").trim();
-        let description = document.getElementById("edit_track_description").value;
+        let description = document.getElementById("edit_track_description").innerHTML;
         let universal = document.getElementById("edit_track_universal").checked;
         let unique = document.getElementById("edit_track_unique").checked;
         let recovery_type = document.getElementById("edit_track_recovery_type").value;
         let aspect = document.getElementById("edit_track_aspect").value;
-        let when_marked = document.getElementById("edit_track_when_marked").value;
-        let when_recovers = document.getElementById("edit_track_when_recovers").value;
+        let when_marked = document.getElementById("edit_track_when_marked").innerHTML;
+        let when_recovers = document.getElementById("edit_track_when_recovers").innerHTML;
         let boxes = parseInt(document.getElementById("edit_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_track_harm").value);
         let paid = document.getElementById("edit_track_paid").checked;

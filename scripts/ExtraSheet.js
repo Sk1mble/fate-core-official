@@ -71,25 +71,45 @@ export class ExtraSheet extends ItemSheet {
         const tracks_button = html.find("div[name='edit_item_tracks']"); // Tracks, tracks, check
         tracks_button.on("click", event => this._onTracks_click(event, html));
 
-        const input = html.find('input[type="text"], input[type="number"], textarea');
-
+        const input = html.find('input[type="text"], input[type="number"], div[name="textIn"], textarea');
+        
+        // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
+        //First, Create Pen editor
+        FateCoreOfficialConstants.getPen(`${this.document.id}_descValue`);
+        //Get reference to field so we can update extra on change
+        const desc = $(`#${this.document.id}_descValue`);
+        //Update the extra when the field loses focus.
+        desc.on("blur", async event => {
+            await this.document.update({"data.description.value":event.target.innerHTML})
+        })
+        //That's the description field; still to come permissions, costs, caa, attack,overcome, defend
+        // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
+        
+        //First, Create Pen editors
+        FateCoreOfficialConstants.getPen(`${this.document.id}_permValue`);
+        FateCoreOfficialConstants.getPen(`${this.document.id}_costsValue`);
+        FateCoreOfficialConstants.getPen(`${this.document.id}_overcomeValue`);
+        FateCoreOfficialConstants.getPen(`${this.document.id}_attackValue`);
+        FateCoreOfficialConstants.getPen(`${this.document.id}_createValue`);
+        FateCoreOfficialConstants.getPen(`${this.document.id}_defendValue`);
+    
         input.on("focus", event => {
-                
             if (this.editing == false) {
                 this.editing = true;
             }
         });
-        input.on("blur", event => {
+        input.on("blur", async event => {
             this.editing = false
             if (this.renderBanked){
                 this.renderBanked = false;
-                this.render(false);
+                await this._render(false);
             }
         });
         
 
         input.on("keyup", event => {
-            if (event.keyCode === 13 && event.target.type != "textarea") {
+            console.log(event.target.type)
+            if (event.keyCode === 13 && event.target.type == "input") {
                 input.blur();
             }
         })
@@ -119,15 +139,15 @@ export class ExtraSheet extends ItemSheet {
             await this.document.update({"name":newName});
         })
 
-        const permissions = html.find("textarea[name='data.permissions']");
-        permissions.on("change", async event => {
-            let permissions = event.target.value;
+        const permissions = html.find(`div[id='${this.document.id}_permValue']`);
+        permissions.on("blur", async event => {
+            let permissions = event.target.innerHTML;
             await this.document.update({"data.permissions":permissions});
         })
 
-        const costs = html.find("textarea[name='data.costs']");
-        costs.on("change", async event => {
-            let costs = event.target.value;
+        const costs = html.find(`div[id='${this.document.id}_costsValue']`);
+        costs.on("blur", async event => {
+            let costs = event.target.innerHTML;
             await this.document.update({"data.costs":costs});
         })
 
@@ -137,33 +157,33 @@ export class ExtraSheet extends ItemSheet {
             await this.document.update({"data.refresh":r});
         })
 
-        const description = html.find("textarea[name='data.description.value']");
-        description.on("change", async event => {
-            let text = event.target.value;
+        const description = html.find(`div[id='${this.document.id}_descValue']`);
+        description.on("blur", async event => {
+            let text = event.target.innerHTML;
             await this.document.update({"data.description.value":text});
         })
 
-        const overcome = html.find("textarea[name='data.actions.overcome']");
-        overcome.on("change", async event => {
-            let text = event.target.value;
+        const overcome = html.find(`div[id='${this.document.id}_overcomeValue']`);
+        overcome.on("blur", async event => {
+            let text = event.target.innerHTML;
             await this.document.update({"data.actions.overcome":text});
         })
 
-        const create = html.find("textarea[name='data.actions.create']");
-        create.on("change", async event => {
-            let text = event.target.value;
+        const create = html.find(`div[id='${this.document.id}_createValue']`);
+        create.on("blur", async event => {
+            let text = event.target.innerHTML;
             await this.document.update({"data.actions.create":text});
         })
 
-        const attack = html.find("textarea[name='data.actions.attack']");
-        attack.on("change", async event => {
-            let text = event.target.value;
+        const attack = html.find(`div[id='${this.document.id}_attackValue']`);
+        attack.on("blur", async event => {
+            let text = event.target.innerHTML;
             await this.document.update({"data.actions.attack":text});
         })
 
-        const defend = html.find("textarea[name='data.actions.defend']");
-        defend.on("change", async event => {
-            let text = event.target.value;
+        const defend = html.find(`div[id='${this.document.id}_defendValue']`);
+        defend.on("blur", async event => {
+            let text = event.target.innerHTML;
             await this.document.update({"data.actions.defend":text});
         })
 

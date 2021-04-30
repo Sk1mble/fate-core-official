@@ -1,7 +1,7 @@
 <form class="mfate-sheet contenteditable" style="background: white; width:100%; height: 100%; border:none !important">
     <img src = "/systems/FateCoreOfficial/assets/pbf.svg" style = "z-index:0; position:absolute; bottom:-5%; right:0%; height:200px; width:200px; padding:20px; opacity:0.6; border:none;"/>
     <div class="mfate-sheet__header">
-        <div style="display:block; width:85%">
+        <div style="display:block; width:100%">
             <div style="display:flex; flex-direction:row"><img class="mfate-sheet__identity-avatar profile-img" width="100" height="auto" style="border:0; cursor: pointer;" id="avatar" data-edit="img" src="{{document.img}}"></img>
             <textarea class="mfate-sheet__identity-name" name="name" rows="1" data-edit="name">{{document.name}}</textarea></div>
             <div style="display:flex; flex-direction:row"><div class="mfate-sheet__meta-label">{{localize 'FateCoreOfficial.pronouns'}}:</div><input type="text" class="cs_box" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>
@@ -11,36 +11,19 @@
                 <div class="mfate-sheet__meta-column">
                     <div class="mfate-sheet__meta-item" style="display:flex; flex-direction:row; padding-left:10px">
                         <div style="display:block">
-                            <input class="circle-input" style="height: 75px;
-                            width: 75px;
-                            background-color: white;
-                            border-radius: 50%;
-                            border-color:#6793c5;
-                            border-width:5px;
-                            text-align:center;
-                            font-size:2em;
-                            padding-left:16px;
-                            text-align:center"
+                            <input class="circle-input"
                             class="mfate-sheet__meta-value" style="text-align:center" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
                             <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; min-width:75px; max-width:75px; width:75px">{{localize 'FateCoreOfficial.Current'}} </div>
                         </div>
                         <div style="display:block; padding-left:10px">
-                            <input style="height: 75px;
-                            width: 75px;
-                            background-color: white;
-                            border-radius: 50%;
-                            border-color:#6793c5;
-                            border-width:5px;
-                            text-align:center;
-                            font-size:2em;
-                            padding-left:16px"
+                            <input class="circle-input" 
                             class="mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="data.details.fatePoints.refresh" name="data.details.fatePoints.refresh" value="{{data.details.fatePoints.refresh}}"></input>
                             <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; min-width:75px; max-width:75px; width:75px">{{localize 'FateCoreOfficial.Refresh'}} </div> 
                         </div>
                     </div>
                 </div>
             </div>            
-            <nav class="mfate-sheet__tabs-nav foo">
+            <nav class="mfate-sheet__tabs-nav foo" style="margin-top:8px">
                 {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'FateCoreOfficial.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
                 <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'FateCoreOfficial.applyDefault'}}"><i class="fas fa-user-edit"></i></button>{{/if}}
                 <a class="mfate-sheet__tabs-nav-link item active" data-tab="sheet">
@@ -60,7 +43,7 @@
     </div>
 
     <section class="sheet-body">
-        <div class = "tab notes mfate-sheet__tab mfate-sheet__tab--main" name="notes" data-tab="notes" style="font-style:normal; padding-bottom:6px; padding-left:6px; padding-right:6px">
+        <div class = "tab notes mfate-sheet__tab mfate-sheet__tab--main" name="notes" data-tab="notes" style="font-style:normal; max-width:100%; padding-bottom:6px; padding-left:6px; padding-right:6px">
            <div>
                 <div class="mfate-sheet__meta">
                     <div class="mfate-sheet__meta-column">
@@ -84,12 +67,12 @@
                     </div>
                 </div>
             </div>
-            <div class="mfate-notes" style="max-height:100%">
+            <div class="mfate-notes" style="max-width:80%">
                 <div class="mfate-panel__header">
                     <div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Notes'}}</div>
                 </div>
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
-                    <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" contenteditable="true" name="data.details.notes.value" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                    <div class="mfate-sheet-notes" contenteditable="true" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
                 </div>
             </div>
         </div>

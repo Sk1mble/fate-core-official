@@ -285,6 +285,11 @@ class EditSkill extends FormApplication{
         super.activateListeners(html);
         const saveButton = html.find("button[id='edit_save_changes']");
         saveButton.on("click", event => this._onSaveButton(event, html));
+        FateCoreOfficialConstants.getPen("edit_skill_description");
+        FateCoreOfficialConstants.getPen("edit_skill_overcome");
+        FateCoreOfficialConstants.getPen("edit_skill_caa");
+        FateCoreOfficialConstants.getPen("edit_skill_attack");
+        FateCoreOfficialConstants.getPen("edit_skill_defend");
     }
         
     //Here are the event listener functions.

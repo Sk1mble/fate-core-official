@@ -18,9 +18,11 @@
 					"./scripts/ModifiedRollDialog.js",
 					"./scripts/ShowCharacter.js",
 					"./scripts/FateCharacterImporter.js",
-					"./scripts/FateCharacterDefaults.js"
+					"./scripts/FateCharacterDefaults.js",
+					"./scripts/Pen/pen.js",
+					"./scripts/Pen/markdown.js"
 				],
-	"styles": ["FateCoreOfficial.css","mfate-sheet.css"],
+	"styles": ["FateCoreOfficial.css","mfate-sheet.css", "./scripts/Pen/pen.css"],
 	"packs": [],
 	"gridDistance": 1,
 	"gridUnits": "",

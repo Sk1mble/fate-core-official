@@ -1,5 +1,6 @@
 # Version 3.1.10
   * Tracks with aspects and filled boxes now have their state stored when the extra is deactivated on the character by toggling it (as opposed to deletion)
+  * Added a custom lightweight rich text editor (pen.js) to the long fields on extras and the character sheet to allow for prettier formatting, use of pictures, etc.
   
 # Version 3.1.9
   * Added a filter to the stunt database. Filters on name, description, and linked skill.

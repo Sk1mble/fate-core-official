@@ -107,12 +107,15 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             tracks_button.on("click", event => this._onTracks_click(event, html));
 
             const bio = html.find(`div[id='${this.object.id}_biography']`)
+            FateCoreOfficialConstants.getPen(`${this.object.id}_biography`);
             bio.on("focus",event => this._onBioInput(event, html));
 
             const notes = html.find (`div[id='${this.object.id}_notes']`);
+            FateCoreOfficialConstants.getPen(`${this.object.id}_notes`);
             notes.on("focus", event => this._onNotesInput(event, html));
 
             const desc = html.find(`div[id='${this.object.id}_description']`)
+            FateCoreOfficialConstants.getPen(`${this.object.id}_description`);
             desc.on("focus",event => this._onDescInput(event, html));
             bio.on("blur", event => this._onBioFocusOut(event, html));
             desc.on("blur", event => this._onDescFocusOut(event, html));
@@ -677,24 +680,21 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     }
 
     async _onBioFocusOut (event, html){
-        this.editing = false;
         let bio = event.target.innerHTML;
         await this.object.update({"data.details.biography.value":bio})
-        this.render(false);
+        this.editing = false;
     }
 
     async _onNotesFocusOut (event, html){
-        this.editing = false;
         let notes = event.target.innerHTML;
         await this.object.update({"data.details.notes.value":notes})
-        this.render(false);
+        this.editing = false;
     }
 
     async _onDescFocusOut (event, html){
-        this.editing = false;
         let desc = event.target.innerHTML;
         await this.object.update({"data.details.description.value":desc})
-        this.render(false);
+        this.editing = false;
     }
 
     async _onBioInput(event, html){

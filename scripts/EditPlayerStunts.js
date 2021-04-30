@@ -36,6 +36,7 @@ class EditPlayerStunts extends FormApplication {
     } // End getDefaultOptions
 
     async _updateObject(event, formData){
+        console.log(formData);
 
         if (this.actor == null){ // This is a stunt in the database
             let stunts = duplicate(game.settings.get("FateCoreOfficial","stunts"));
@@ -72,6 +73,18 @@ class EditPlayerStunts extends FormApplication {
         addButton.on("click", event => this._onAddButton(event, html));
         const saveButton = html.find("button[id='save']");
         saveButton.on("click", event => this._onSaveButton(event, html));
+
+        let editor = html.find("div[id='edit_stunt_desc']")[0];
+        var options = {
+            editor: editor, // {DOM Element} [required]
+            stay: false,
+            class: 'pen', // {String} class of the editor,
+            debug: false, // {Boolean} false by default
+            textarea: '<textarea name="content"></textarea>', // fallback for old browsers
+            linksInNewWindow: false // open hyperlinks in a new windows/tab
+        }
+        return new Pen(options);
+
     } //End activateListeners
 
     async _onSaveButton(event, html){
