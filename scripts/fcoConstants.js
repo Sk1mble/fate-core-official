@@ -1,20 +1,20 @@
-class FateCoreOfficialConstants { 
+class fcoConstants { 
 
     static getFateLadder(){
         return  {
                     "10":"",
                     "9":"",
-                    "8":game.i18n.localize("FateCoreOfficial.Legendary"),
-                    "7":game.i18n.localize("FateCoreOfficial.Epic"),
-                    "6":game.i18n.localize("FateCoreOfficial.Fantastic"),
-                    "5":game.i18n.localize("FateCoreOfficial.Superb"),
-                    "4":game.i18n.localize("FateCoreOfficial.Great"),
-                    "3":game.i18n.localize("FateCoreOfficial.Good"),
-                    "2":game.i18n.localize("FateCoreOfficial.Fair"),
-                    "1":game.i18n.localize("FateCoreOfficial.Average"),
-                    "0":game.i18n.localize("FateCoreOfficial.Mediocre"),
-                    "-1":game.i18n.localize("FateCoreOfficial.Poor"),
-                    "-2":game.i18n.localize("FateCoreOfficial.Terrible"),
+                    "8":game.i18n.localize("fate-core-official.Legendary"),
+                    "7":game.i18n.localize("fate-core-official.Epic"),
+                    "6":game.i18n.localize("fate-core-official.Fantastic"),
+                    "5":game.i18n.localize("fate-core-official.Superb"),
+                    "4":game.i18n.localize("fate-core-official.Great"),
+                    "3":game.i18n.localize("fate-core-official.Good"),
+                    "2":game.i18n.localize("fate-core-official.Fair"),
+                    "1":game.i18n.localize("fate-core-official.Average"),
+                    "0":game.i18n.localize("fate-core-official.Mediocre"),
+                    "-1":game.i18n.localize("fate-core-official.Poor"),
+                    "-2":game.i18n.localize("fate-core-official.Terrible"),
                 }
     }
 
@@ -52,7 +52,7 @@ class FateCoreOfficialConstants {
                 content: content,
                 buttons: {
                     ok: {
-                        label: game.i18n.localize("FateCoreOfficial.OK"),
+                        label: game.i18n.localize("fate-core-official.OK"),
                         callback: () => {
                             resolve("OK");
                         }
@@ -75,13 +75,13 @@ class FateCoreOfficialConstants {
                 content: content,
                 buttons: {
                     yes: {
-                        label: game.i18n.localize("FateCoreOfficial.Yes"),
+                        label: game.i18n.localize("fate-core-official.Yes"),
                         callback: () => {
                             resolve("yes");
                         }
                     },
                     no: {
-                        label: game.i18n.localize("FateCoreOfficial.No"),
+                        label: game.i18n.localize("fate-core-official.No"),
                         callback: () => {
                             resolve("no");
                         }
@@ -100,7 +100,7 @@ class FateCoreOfficialConstants {
                 content: '<input type="color" id="mf_cp" value="#000000"></input>',
                 buttons: {
                     ok: {
-                        label: game.i18n.localize("FateCoreOfficial.OK"),
+                        label: game.i18n.localize("fate-core-official.OK"),
                         callback: () => {
                             resolve(document.getElementById("mf_cp").value)
                         }
@@ -112,11 +112,11 @@ class FateCoreOfficialConstants {
     }
 
     static async confirmDeletion(){
-        let confirm = game.settings.get("FateCoreOfficial","confirmDeletion");
+        let confirm = game.settings.get("fate-core-official","confirmDeletion");
         if (!confirm){
             return true;
         } else {
-            let del = await FateCoreOfficialConstants.awaitYesNoDialog(game.i18n.localize("FateCoreOfficial.ConfirmDeletion"));
+            let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.ConfirmDeletion"));
             if (del=="yes"){
                 return true;
             } else {
@@ -132,7 +132,7 @@ class FateCoreOfficialConstants {
                 content: '<div align="center"><input id="dialog_box" style="width:375px" autofocus></input></div>',
                 buttons: {
                     ok: {
-                        label: game.i18n.localize("FateCoreOfficial.OK"),
+                        label: game.i18n.localize("fate-core-official.OK"),
                         callback: () => {
                             resolve(document.getElementById("dialog_box").value)
                         }
@@ -154,7 +154,7 @@ class FateCoreOfficialConstants {
                 content: `<div align="center"><select id="dialog_box" style="width:375px">${optionsText}</select></div>`,
                 buttons: {
                     ok: {
-                        label: game.i18n.localize("FateCoreOfficial.OK"),
+                        label: game.i18n.localize("fate-core-official.OK"),
                         callback: () => {
                             resolve(document.getElementById("dialog_box").value)
                         }
@@ -172,7 +172,7 @@ class FateCoreOfficialConstants {
             content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
             buttons: {
                 ok: {
-                    label: game.i18n.localize("FateCoreOfficial.Save"),
+                    label: game.i18n.localize("fate-core-official.Save"),
                     callback: () => {
                         resolve(document.getElementById("get_text_box").value)
                     }
@@ -189,7 +189,7 @@ class FateCoreOfficialConstants {
                 content: `<div style="background-color:white; color:black;"><textarea rows="1" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
                 buttons: {
                     ok: {
-                        label: game.i18n.localize("FateCoreOfficial.Save"),
+                        label: game.i18n.localize("fate-core-official.Save"),
                         callback: () => {
                             resolve(document.getElementById("get_text_box").value)
                         }
@@ -262,25 +262,25 @@ class FateCoreOfficialConstants {
     static exportSettings (){
         //This function returns a text string in JSON notation containing all of the game's settings for backup or import into another world.
         let output = {};
-        output.stunts = game.settings.get("FateCoreOfficial","stunts");
-        output.skills = game.settings.get("FateCoreOfficial","skills");
-        output.skillTotal = game.settings.get("FateCoreOfficial", "skillTotal");
-        output.tracks = game.settings.get("FateCoreOfficial","tracks");
-        output.aspects = game.settings.get("FateCoreOfficial","aspects");
-        output.freeStunts = game.settings.get("FateCoreOfficial","freeStunts");
-        output.refreshTotal = game.settings.get("FateCoreOfficial","refreshTotal");
-        output.track_categories = game.settings.get("FateCoreOfficial","track_categories");
+        output.stunts = game.settings.get("fate-core-official","stunts");
+        output.skills = game.settings.get("fate-core-official","skills");
+        output.skillTotal = game.settings.get("fate-core-official", "skillTotal");
+        output.tracks = game.settings.get("fate-core-official","tracks");
+        output.aspects = game.settings.get("fate-core-official","aspects");
+        output.freeStunts = game.settings.get("fate-core-official","freeStunts");
+        output.refreshTotal = game.settings.get("fate-core-official","refreshTotal");
+        output.track_categories = game.settings.get("fate-core-official","track_categories");
         return JSON.stringify(output);
     }
 
     static async getSettings (){
         return new Promise(resolve => {
             new Dialog({
-                title: game.i18n.localize("FateCoreOfficial.PasteDataToOverwrite"),
+                title: game.i18n.localize("fate-core-official.PasteDataToOverwrite"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_settings"></textarea></div>`,
                 buttons: {
                     ok: {
-                        label: game.i18n.localize("FateCoreOfficial.Save"),
+                        label: game.i18n.localize("fate-core-official.Save"),
                         callback: () => {
                             resolve (document.getElementById("import_settings").value);
                         }
@@ -293,21 +293,21 @@ class FateCoreOfficialConstants {
     static async importSettings (input){
         //This function parses a text string in JSON notation containing all of the game's settings and writes those settings to System.settings.
         input = JSON.parse(input);
-        await game.settings.set("FateCoreOfficial","stunts",input.stunts);
-        await game.settings.set("FateCoreOfficial","skills",input.skills);
-        await game.settings.set("FateCoreOfficial","skillTotal",input.skillTotal);
-        await game.settings.set("FateCoreOfficial","tracks",input.tracks);
-        await game.settings.set("FateCoreOfficial","aspects",input.aspects);
-        await game.settings.set("FateCoreOfficial","freeStunts",input.freeStunts);
-        await game.settings.set("FateCoreOfficial","refreshTotal",input.refreshTotal);
-        await game.settings.set("FateCoreOfficial","track_categories",input.track_categories);
+        await game.settings.set("fate-core-official","stunts",input.stunts);
+        await game.settings.set("fate-core-official","skills",input.skills);
+        await game.settings.set("fate-core-official","skillTotal",input.skillTotal);
+        await game.settings.set("fate-core-official","tracks",input.tracks);
+        await game.settings.set("fate-core-official","aspects",input.aspects);
+        await game.settings.set("fate-core-official","freeStunts",input.freeStunts);
+        await game.settings.set("fate-core-official","refreshTotal",input.refreshTotal);
+        await game.settings.set("fate-core-official","track_categories",input.track_categories);
     }
 
     static async getMFSettings(){
             let settings = game.user.getFlag("world", "oldSettings");
             if (settings){
                 settings.forEach(async s =>{
-                    await game.settings.set("FateCoreOfficial", s.key, s.data)
+                    await game.settings.set("fate-core-official", s.key, s.data)
                 })
                 game.user.unsetFlag("world", "oldSettings");
             }            

@@ -3,17 +3,17 @@
 
 Hooks.once('init',async function(){
     //Let's initialise the settings at the system level.
-    game.settings.register("FateCoreOfficial","tracks",{
+    game.settings.register("fate-core-official","tracks",{
         name:"tracks",
-        hint:game.i18n.localize("FateCoreOfficial.TrackManagerHint"),
+        hint:game.i18n.localize("fate-core-official.TrackManagerHint"),
         scope:"world",
         config:false,
         type: Object,
         default: {}
     });
-    game.settings.register("FateCoreOfficial","track_categories",{
+    game.settings.register("fate-core-official","track_categories",{
         name:"track categories",
-        hint:game.i18n.localize("FateCoreOfficial.TrackCategoriesHint"),
+        hint:game.i18n.localize("fate-core-official.TrackCategoriesHint"),
         scope:"world",
         config:false,
         type: Object,
@@ -21,10 +21,10 @@ Hooks.once('init',async function(){
     });
 
     // Register the menu to setup the world's conditions etc.
-    game.settings.registerMenu("FateCoreOfficial", "TrackSetup", {
-        name: game.i18n.localize("FateCoreOfficial.SetupTracks"),
-        label: game.i18n.localize("FateCoreOfficial.Setup"),      // The text label used in the button
-        hint: game.i18n.localize("FateCoreOfficial.TrackSetupHint"),
+    game.settings.registerMenu("fate-core-official", "TrackSetup", {
+        name: game.i18n.localize("fate-core-official.SetupTracks"),
+        label: game.i18n.localize("fate-core-official.Setup"),      // The text label used in the button
+        hint: game.i18n.localize("fate-core-official.TrackSetupHint"),
         type: TrackSetup,   // A FormApplication subclass which should be created
         restricted: true    // Restrict this submenu to gamemaster only?
       });
@@ -38,18 +38,18 @@ class EditLinkedSkills extends FormApplication {
     getData(){
         const templateData = {
             track:this.track,
-            skills:game.settings.get("FateCoreOfficial","skills")
+            skills:game.settings.get("fate-core-official","skills")
         }
         return templateData;
     }
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.template = "systems/FateCoreOfficial/templates/EditLinkedSkills.html"; 
+        options.template = "systems/fate-core-official/templates/EditLinkedSkills.html"; 
     
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";
-        options.title = game.i18n.localize("FateCoreOfficial.LinkedSkillEditor");
+        options.title = game.i18n.localize("fate-core-official.LinkedSkillEditor");
         options.closeOnSubmit = false;
         options.id = "EditLinkedSkills"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -67,11 +67,11 @@ class EditLinkedSkills extends FormApplication {
     //Here are the event listener functions.
 
     async _onDeleteLinkedSkillButton(event, html){
-        let del = await FateCoreOfficialConstants.confirmDeletion();
+        let del = await fcoConstants.confirmDeletion();
         if (del){
              let toDelete = document.getElementById("linked_skills").value;
             let track = this.track;
-            let tracks = game.settings.get("FateCoreOfficial","tracks");
+            let tracks = game.settings.get("fate-core-official","tracks");
             let linked_skills = track.linked_skills;
     
             for (let i = 0; i< linked_skills.length; i++){
@@ -81,7 +81,7 @@ class EditLinkedSkills extends FormApplication {
                 }
             }
             tracks[this.track.name]=this.track;
-            await game.settings.set("FateCoreOfficial","tracks",tracks);
+            await game.settings.set("fate-core-official","tracks",tracks);
             this.render(false);
         }
     }
@@ -103,9 +103,9 @@ class EditLinkedSkills extends FormApplication {
                     "enables":enables
                 }
             )
-            let tracks=game.settings.get("FateCoreOfficial","tracks");
+            let tracks=game.settings.get("fate-core-official","tracks");
             tracks[this.track.name] = this.track
-            await game.settings.set("FateCoreOfficial","tracks",tracks);
+            await game.settings.set("fate-core-official","tracks",tracks);
             this.render(false);
     }
 }
@@ -114,8 +114,8 @@ class EditTracks extends FormApplication {
     constructor (category){
         super(category);
         this.category = category;
-        this.categories =game.settings.get("FateCoreOfficial","track_categories");
-        this.tracks = game.settings.get("FateCoreOfficial","tracks");
+        this.categories =game.settings.get("fate-core-official","track_categories");
+        this.tracks = game.settings.get("fate-core-official","tracks");
     }
 
     getData(){
@@ -134,12 +134,12 @@ class EditTracks extends FormApplication {
     }
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.template = "systems/FateCoreOfficial/templates/EditTrack.html"; 
+        options.template = "systems/fate-core-official/templates/EditTrack.html"; 
     
         //Define the FormApplication's options
         options.width = "auto";
         options.height = "auto";
-        options.title = game.i18n.localize("FateCoreOfficial.TrackEditor");
+        options.title = game.i18n.localize("fate-core-official.TrackEditor");
         options.closeOnSubmit = false;
         options.id = "EditTrack"; // CSS id if you want to override default behaviors
         options.resizable = true;
@@ -166,9 +166,9 @@ class EditTracks extends FormApplication {
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
         copy_track.on("click", event => this._onCopyTrackButton(event, html));
         export_track.on("click", event => this._onExportTrack(event, html));
-        FateCoreOfficialConstants.getPen("edit_track_description");
-        FateCoreOfficialConstants.getPen("edit_track_when_marked");
-        FateCoreOfficialConstants.getPen("edit_track_when_recovers");
+        fcoConstants.getPen("edit_track_description");
+        fcoConstants.getPen("edit_track_when_marked");
+        fcoConstants.getPen("edit_track_when_recovers");
 
     }
     //Here are the event listener functions.
@@ -186,13 +186,13 @@ class EditTracks extends FormApplication {
     async _onExportTrack (event, html){
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
-        if (name == "" || name == game.i18n.localize("FateCoreOfficial.NewTrack")){
-            ui.notifications.error(game.i18n.localize("FateCoreOfficial.SelectATrackToCopyFirst"));
+        if (name == "" || name == game.i18n.localize("fate-core-official.NewTrack")){
+            ui.notifications.error(game.i18n.localize("fate-core-official.SelectATrackToCopyFirst"));
         }
         else {
             let track = `{"${name}":${JSON.stringify(this.tracks[name])}}`;
             new Dialog({
-                title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveThisTrack"), 
+                title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${track}</textarea></div>`,
                 buttons: {
                 },
@@ -205,14 +205,14 @@ class EditTracks extends FormApplication {
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
         ////console.log(edit_track_name[0].value)
-        if (name == "" || name == game.i18n.localize("FateCoreOfficial.NewTrack")){
-            ui.notifications.error(game.i18n.localize("FateCoreOfficial.SelectATrackToCopyFirst"));
+        if (name == "" || name == game.i18n.localize("fate-core-official.NewTrack")){
+            ui.notifications.error(game.i18n.localize("fate-core-official.SelectATrackToCopyFirst"));
         }
         else {
             let track = duplicate(this.tracks[name]);
             track.name = track.name+" copy"
             this.tracks[track.name]=track;
-            await game.settings.set("FateCoreOfficial","tracks",this.tracks);
+            await game.settings.set("fate-core-official","tracks",this.tracks);
             this.render(false);
         }
     }
@@ -228,15 +228,15 @@ class EditTracks extends FormApplication {
     }
 
     async _onDeleteTrackButton(event,html){
-        let del = await FateCoreOfficialConstants.confirmDeletion();
+        let del = await fcoConstants.confirmDeletion();
         if (del){
              let name = document.getElementById("track_select").value;
             try {
                     delete this.tracks[name];
-                    await game.settings.set("FateCoreOfficial","tracks",this.tracks);
+                    await game.settings.set("fate-core-official","tracks",this.tracks);
                     this.render(false);
             } catch {
-                ui.notifications.error(game.i18n.localize("FateCoreOfficial.CannotDeleteThat"))
+                ui.notifications.error(game.i18n.localize("fate-core-official.CannotDeleteThat"))
                 this.render(false)
             }
         }
@@ -244,7 +244,7 @@ class EditTracks extends FormApplication {
     async _edit_linked_skillsButtonClick(event, html){
         let name = document.getElementById("track_select").value;
         if (name=="New Track"){
-            ui.notifications.error(game.i18n.localize("FateCoreOfficial.SelectTrackBeforeAddingLinkedSkill"));
+            ui.notifications.error(game.i18n.localize("fate-core-official.SelectTrackBeforeAddingLinkedSkill"));
         }
         else {
             let track=this.tracks[name];
@@ -260,7 +260,7 @@ class EditTracks extends FormApplication {
 
     async _track_selectChange(event, html){
         let name = document.getElementById("track_select").value;
-        if (name==game.i18n.localize("FateCoreOfficial.NewTrack")){
+        if (name==game.i18n.localize("fate-core-official.NewTrack")){
             this.track=undefined;
             document.getElementById("edit_track_name").value="";
             document.getElementById("edit_track_description").innerHTML="";
@@ -381,7 +381,7 @@ class EditTracks extends FormApplication {
                 }
                 this.tracks[name]=newTrack;
             }
-            await game.settings.set("FateCoreOfficial","tracks",this.tracks);
+            await game.settings.set("fate-core-official","tracks",this.tracks);
             this.render(false);
         }
     }
@@ -397,10 +397,10 @@ class TrackSetup extends FormApplication{
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/FateCoreOfficial/templates/TrackSetup.html"; 
+        options.template = "systems/fate-core-official/templates/TrackSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("FateCoreOfficial.TrackCategorySetup")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.TrackCategorySetup")} ${game.world.data.title}`;
         options.closeOnSubmit = false;
         options.id = "TrackSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -409,8 +409,8 @@ class TrackSetup extends FormApplication{
     //The function that returns the data model for this window. In this case, we need the list of stress tracks
     //conditions, and consequences.
     getData(){
-        this.tracks=game.settings.get("FateCoreOfficial","tracks");
-        this.track_categories=game.settings.get("FateCoreOfficial","track_categories")
+        this.tracks=game.settings.get("fate-core-official","tracks");
+        this.track_categories=game.settings.get("fate-core-official","track_categories")
 
         const templateData = {
            track_categories:this.track_categories,
@@ -446,11 +446,11 @@ class TrackSetup extends FormApplication{
     }
 
     async _exportTracks(event, html){
-        let tracks = game.settings.get("FateCoreOfficial","tracks");
+        let tracks = game.settings.get("fate-core-official","tracks");
         let tracks_text = JSON.stringify(tracks);
      
         new Dialog({
-            title: game.i18n.localize("FateCoreOfficial.CopyAndPasteToSaveWorldTracks"),
+            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveWorldTracks"),
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${tracks_text}</textarea></div>`,
             buttons: {
             },
@@ -460,7 +460,7 @@ class TrackSetup extends FormApplication{
     async getTracks(){
         return new Promise(resolve => {
             new Dialog({
-                title: game.i18n.localize("FateCoreOfficial.PasteToReplaceWorldTracks"),
+                title: game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks"),
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="itracks"></textarea></div>`,
                 buttons: {
                     ok: {
@@ -478,8 +478,8 @@ class TrackSetup extends FormApplication{
         let text = await this.getTracks();
         try {
             let imported_tracks = JSON.parse(text);
-            let tracks = duplicate(game.settings.get("FateCoreOfficial","tracks"));
-            let track_categories = duplicate (game.settings.get("FateCoreOfficial", "track_categories"));
+            let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
+            let track_categories = duplicate (game.settings.get("fate-core-official", "track_categories"));
             if (tracks == undefined){
                 tracks = {};
             }
@@ -488,8 +488,8 @@ class TrackSetup extends FormApplication{
                 let cat = imported_tracks[track].category;
                 track_categories[cat]=cat;
             }
-            await game.settings.set("FateCoreOfficial","tracks", tracks);
-            await game.settings.set("FateCoreOfficial", "track_categories", track_categories);
+            await game.settings.set("fate-core-official","tracks", tracks);
+            await game.settings.set("fate-core-official", "track_categories", track_categories);
             this.render(false);
         } catch (e) {
             ui.notifications.error(e);
@@ -497,39 +497,39 @@ class TrackSetup extends FormApplication{
     }
 
     async _onAddCategoryButton(event,html){
-        let category = await FateCoreOfficialConstants.getInput(game.i18n.localize("FateCoreOfficial.ChooseCategoryName"));
-        let track_categories = game.settings.get("FateCoreOfficial","track_categories");
+        let category = await fcoConstants.getInput(game.i18n.localize("fate-core-official.ChooseCategoryName"));
+        let track_categories = game.settings.get("fate-core-official","track_categories");
         var duplicate = false;
 
         for (let cat in track_categories){
             if (track_categories[cat].toUpperCase == category.toUpperCase()){
-                ui.notifications.error(game.i18n.localize("FateCoreOfficial.CannotCreateDuplicateCategory"));
+                ui.notifications.error(game.i18n.localize("fate-core-official.CannotCreateDuplicateCategory"));
                 duplicate = true;
             }
             if (!duplicate && category != "" && category != undefined){
                 track_categories[category]=category;
             }
-            await game.settings.set("FateCoreOfficial","track_categories",track_categories);
+            await game.settings.set("fate-core-official","track_categories",track_categories);
             this.render(false);
         }
     }
 
     async _onDeleteCategoryButton(event,html){
-        let del = await FateCoreOfficialConstants.confirmDeletion();
+        let del = await fcoConstants.confirmDeletion();
         if (del){
-                    let track_categories = game.settings.get("FateCoreOfficial","track_categories");
+                    let track_categories = game.settings.get("fate-core-official","track_categories");
                     let category  = document.getElementById("track_categories_select").value;
 
                     for (let cat in track_categories){
                         if (track_categories[cat].toUpperCase() == category.toUpperCase()){
                         if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
-                            ui.notifications.error(`${game.i18n.localize("FateCoreOfficial.CannotDeleteThe")} ${category} ${game.i18n.localize("FateCoreOfficial.CategoryThatCannotDelete")}`)
+                            ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${category} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`)
                         } else {
                                     delete track_categories[cat];
                                 }
                         } 
                 }
-                await game.settings.set("FateCoreOfficial","track_categories",track_categories);
+                await game.settings.set("fate-core-official","track_categories",track_categories);
                 this.render(false);
         }
     }
@@ -547,7 +547,7 @@ class TrackSetup extends FormApplication{
                 // Do nothing.
             }
         } else {
-            ui.notifications.error(game.i18n.localize("FateCoreOfficial.PleaseSelectACategoryFirst"))
+            ui.notifications.error(game.i18n.localize("fate-core-official.PleaseSelectACategoryFirst"))
         }
     }
 }
@@ -564,7 +564,7 @@ Hooks.on('closeEditTracks',async () => {
 class OrderTracks extends FormApplication {
     constructor(...args){
         super(...args);
-        let tracks = game.settings.get("FateCoreOfficial", "tracks");
+        let tracks = game.settings.get("fate-core-official", "tracks");
         this.data = [];
         for (let track in tracks){
             this.data.push(tracks[track]);
@@ -574,10 +574,10 @@ class OrderTracks extends FormApplication {
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/FateCoreOfficial/templates/OrderTracks.html"; 
+        options.template = "systems/fate-core-official/templates/OrderTracks.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("FateCoreOfficial.OrderTracksTitle")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.OrderTracksTitle")} ${game.world.data.title}`;
         options.closeOnSubmit = true;
         options.id = "OrderTracks"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -619,7 +619,7 @@ class OrderTracks extends FormApplication {
             for (let i = 0; i < this.data.length; i++){
                 tracks[this.data[i].name] = this.data[i];
             }
-            game.settings.set("FateCoreOfficial", "tracks", tracks);
+            game.settings.set("fate-core-official", "tracks", tracks);
             this.close();
         })
     }

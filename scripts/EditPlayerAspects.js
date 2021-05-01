@@ -3,9 +3,9 @@ class EditPlayerAspects extends FormApplication{
             super(...args);
     
                 if(this.object.isToken){
-                    this.options.title=`${game.i18n.localize("FateCoreOfficial.EditTokenAspectsTitle")} ${this.object.name}`                    
+                    this.options.title=`${game.i18n.localize("fate-core-official.EditTokenAspectsTitle")} ${this.object.name}`                    
                 } else {
-                    this.options.title=`${game.i18n.localize("FateCoreOfficial.EditAspectsTitle")} ${this.object.name}`
+                    this.options.title=`${game.i18n.localize("fate-core-official.EditAspectsTitle")} ${this.object.name}`
                 }
                 this.player_aspects=duplicate(this.object.data.data.aspects);
                 
@@ -74,12 +74,12 @@ class EditPlayerAspects extends FormApplication{
     async _on_move(event,html, direction){
         let info = event.target.id.split("_");
         let aspect = info[1]
-        this.aspects = FateCoreOfficialConstants.moveKey(this.aspects, aspect, direction)
+        this.aspects = fcoConstants.moveKey(this.aspects, aspect, direction)
         this.render(false);
     }
 
     async _onRemove(event,html){
-        let del = await FateCoreOfficialConstants.confirmDeletion();
+        let del = await fcoConstants.confirmDeletion();
         if (del){
             let info = event.target.id.split("_");
             let name = info[1];
@@ -91,12 +91,12 @@ class EditPlayerAspects extends FormApplication{
     async _onAdd(event, html){
         let count = 0;
         for (let a in this.aspects){
-            if (a.startsWith(game.i18n.localize("FateCoreOfficial.New_Aspect"))){
+            if (a.startsWith(game.i18n.localize("fate-core-official.New_Aspect"))){
                 count++
             }
         }
-        let name = game.i18n.localize("FateCoreOfficial.New_Aspect") + " "+ count;
-        let newAspect = {"name":name, "description":game.i18n.localize("FateCoreOfficial.New_Aspect"),"value":game.i18n.localize("FateCoreOfficial.New_Aspect")}
+        let name = game.i18n.localize("fate-core-official.New_Aspect") + " "+ count;
+        let newAspect = {"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}
        
         this.aspects[newAspect.name] = newAspect;
         this.render(false);
@@ -106,10 +106,10 @@ class EditPlayerAspects extends FormApplication{
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/FateCoreOfficial/templates/EditPlayerAspects.html"; 
+        options.template = "systems/fate-core-official/templates/EditPlayerAspects.html"; 
         options.width = "650";
         options.height = "800";
-        options.title = game.i18n.localize("FateCoreOfficial.CharacterAspectEditor");
+        options.title = game.i18n.localize("fate-core-official.CharacterAspectEditor");
         options.closeOnSubmit = false;
         options.id = "PlayerAspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;

@@ -1,4 +1,4 @@
-export class FateCoreOfficialExtra extends Item {
+export class fcoExtra extends Item {
     async _onCreate(...args){
         if ( args[2] !== game.user.id ) return;
         let itemData;

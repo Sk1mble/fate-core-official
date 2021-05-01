@@ -1,7 +1,7 @@
 <form onsubmit="event.preventDefault();">
-    <div align = "left"><h2>{{localize 'FateCoreOfficial.EditingTracks'}} {{this.category}} {{localize 'FateCoreOfficial.category'}}</h2></div>
+    <div align = "left"><h2>{{localize 'fate-core-official.EditingTracks'}} {{this.category}} {{localize 'fate-core-official.category'}}</h2></div>
     <div><select id="track_select" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
-        <option>{{localize 'FateCoreOfficial.NewTrack'}}</option>
+        <option>{{localize 'fate-core-official.NewTrack'}}</option>
         {{#each tracks}}
             <option>{{this.name}}</option>
         {{/each}}
@@ -11,7 +11,7 @@
     <table style="width:1000px" cellspacing ="4" cellpadding="4">
         <tr>
             <td width="100">
-                {{localize 'FateCoreOfficial.Name'}}:
+                {{localize 'fate-core-official.Name'}}:
             </td>
             <td>
                 <input type="text" id ="edit_track_name" style="background: white; color: black; font-family:Arial;"></input>
@@ -19,7 +19,7 @@
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.Description'}}:
+                {{localize 'fate-core-official.Description'}}:
             </td>
             <td>
                 <div id ="edit_track_description" style="background: white; color: black; font-family:Arial;"></div>
@@ -27,54 +27,54 @@
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.Universal'}}<p/><p/>
+                {{localize 'fate-core-official.Universal'}}<p/><p/>
             <td>
-                <input type="checkbox" id="edit_track_universal" checked></input>{{localize 'FateCoreOfficial.TrueIfFromSkillRating'}}<br/>
+                <input type="checkbox" id="edit_track_universal" checked></input>{{localize 'fate-core-official.TrueIfFromSkillRating'}}<br/>
             </td>
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.Unique'}}
+                {{localize 'fate-core-official.Unique'}}
             </td>
             <td>
-                <input type="checkbox" id="edit_track_unique" checked></input>{{localize 'FateCoreOfficial.TrueIfOnlyOneCopy'}} 
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{localize 'FateCoreOfficial.Paid'}}
-            </td>
-            <td>
-                <input type="checkbox" id="edit_track_paid"></input>{{localize 'FateCoreOfficial.TrueIfCostsOneRefresh'}} 
+                <input type="checkbox" id="edit_track_unique" checked></input>{{localize 'fate-core-official.TrueIfOnlyOneCopy'}} 
             </td>
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.RecoveryType'}}
+                {{localize 'fate-core-official.Paid'}}
+            </td>
+            <td>
+                <input type="checkbox" id="edit_track_paid"></input>{{localize 'fate-core-official.TrueIfCostsOneRefresh'}} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.RecoveryType'}}
             </td>
             <td>
                 <select id="edit_track_recovery_type" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
-                    <option>{{localize 'FateCoreOfficial.Fleeting'}}</option>
-                    <option>{{localize 'FateCoreOfficial.Sticky'}}</option>
-                    <option>{{localize 'FateCoreOfficial.Lasting'}}</option>
+                    <option>{{localize 'fate-core-official.Fleeting'}}</option>
+                    <option>{{localize 'fate-core-official.Sticky'}}</option>
+                    <option>{{localize 'fate-core-official.Lasting'}}</option>
                 </select>
             </td>
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.Aspect'}}:
+                {{localize 'fate-core-official.Aspect'}}:
             </td>
             <td>
                 <select id="edit_track_aspect" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
-                    <option>{{localize 'FateCoreOfficial.No'}}</option>
-                    <option>{{localize 'FateCoreOfficial.NameAsAspect'}}</option>
-                    <option>{{localize 'FateCoreOfficial.DefinedWhenMarked'}}</option>
+                    <option>{{localize 'fate-core-official.No'}}</option>
+                    <option>{{localize 'fate-core-official.NameAsAspect'}}</option>
+                    <option>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
                 </select>
             </td>
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.WhenMarked'}}
+                {{localize 'fate-core-official.WhenMarked'}}
             </td>
             <td>
                 <div id ="edit_track_when_marked" style="background: white; color: black; font-family:Arial;"></div>
@@ -82,7 +82,7 @@
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.HowRecover'}}
+                {{localize 'fate-core-official.HowRecover'}}
             </td>
             <td>
                 <div id ="edit_track_when_recovers" style="background: white; color: black; font-family:Arial;"></div>
@@ -90,7 +90,7 @@
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.Boxes'}}
+                {{localize 'fate-core-official.Boxes'}}
             </td>
             <td>
                 <input type="number" id="edit_track_boxes" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> 
@@ -98,34 +98,34 @@
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.BoxLabels'}}:
+                {{localize 'fate-core-official.BoxLabels'}}:
             </td>
             <td>
                 <select id="track_label_select" style="color:black; background:white;" >
                     <option value="escalating">
-                        {{localize 'FateCoreOfficial.Escalating'}}
+                        {{localize 'fate-core-official.Escalating'}}
                     </option>
                     <option value="custom">
-                        {{localize 'FateCoreOfficial.Custom'}}
+                        {{localize 'fate-core-official.Custom'}}
                     </option>
                     <option selected="selected" value="none">
-                        {{localize 'FateCoreOfficial.None'}}
+                        {{localize 'fate-core-official.None'}}
                     </option>
                 </select>
-                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="{{localize 'FateCoreOfficial.EnterASingleCharacter'}}" hidden="true" style="color:black; background:white; width:50px" value="{{this.label}}"/> {{localize 'FateCoreOfficial.LabelOverrides'}}
+                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" hidden="true" style="color:black; background:white; width:50px" value="{{this.label}}"/> {{localize 'fate-core-official.LabelOverrides'}}
             </td>
         </tr>
         <tr>
             <td>
-                {{localize 'FateCoreOfficial.Harm'}}:
+                {{localize 'fate-core-official.Harm'}}:
             </td>
             <td>
-                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> {{localize 'FateCoreOfficial.HowMuchHarm'}}
+                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> {{localize 'fate-core-official.HowMuchHarm'}}
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <button type="button" id="save_track" style="width:200px; height:50px">{{localize 'FateCoreOfficial.Save'}}</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" disabled>{{localize 'FateCoreOfficial.EditLinkedSkills'}}</button><button type="button" style ="width:30px; height:30px" id="delete_track" i icon class="fas fa-trash"></button>
+                <button type="button" id="save_track" style="width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" disabled>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:30px; height:30px" id="delete_track" i icon class="fas fa-trash"></button>
             </td>
         </tr>
     </table>

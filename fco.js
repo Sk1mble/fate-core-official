@@ -28,44 +28,44 @@
 /*	System initialization			*/
 /* -------------------------------- */
 
-import { FateCoreOfficialCharacter } from "./scripts/FateCoreOfficialCharacter.js"
+import { fcoCharacter } from "./scripts/fcoCharacter.js"
 import { ExtraSheet } from "./scripts/ExtraSheet.js"
 import { Thing } from "./scripts/Thing.js"
-import { FateCoreOfficialActor } from "./scripts/FateCoreOfficialActor.js"
-import { FateCoreOfficialExtra } from "./scripts/FateCoreOfficialExtra.js"
+import { fcoActor } from "./scripts/fcoActor.js"
+import { fcoExtra } from "./scripts/fcoExtra.js"
 
 Hooks.on("preCreateActor", async (actor, data, options, userId) => {
     console.log("Firing preCreateActor")
 
     if (actor.type == "Thing"){
         if (!options.thing){
-            ui.notifications.error(game.i18n.localize("FateCoreOfficial.CantCreateThing"));
+            ui.notifications.error(game.i18n.localize("fate-core-official.CantCreateThing"));
             return false;
         }
     }
 
-    if (actor.type == "FateCoreOfficial"){
+    if (actor.type == "fate-core-official"){
         if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
             if (actor?.data?.data?.details?.fatePoints?.refresh === ""){
-                let modified_data = await initialiseFateCoreOfficialCharacter(actor);
+                let modified_data = await initialisefcoCharacter(actor);
                 data.data = modified_data.data;            
             }
         }
     }
 
     if (actor.type == "ModularFate"){
-        data.type = "FateCoreOfficial";
+        data.type = "fate-core-official";
     }
 
 });
 
-async function initialiseFateCoreOfficialCharacter (actor) {
+async function initialisefcoCharacter (actor) {
 
     //Modifies the data of the supplied actor to add tracks, aspects, etc. from system settings, then returns the data.
     let working_data = actor.data.toJSON();
     // Logic to set up Refresh and Current
 
-    let refresh = game.settings.get("FateCoreOfficial", "refreshTotal");
+    let refresh = game.settings.get("fate-core-official", "refreshTotal");
 
     working_data.data.details.fatePoints.refresh = refresh;
     working_data.data.details.fatePoints.current = refresh;
@@ -73,7 +73,7 @@ async function initialiseFateCoreOfficialCharacter (actor) {
     let p_skills=working_data.data.skills;
     
     //Check to see what skills the character has compared to the global skill list
-        var skill_list = game.settings.get("FateCoreOfficial","skills");
+        var skill_list = game.settings.get("fate-core-official","skills");
         // This is the number of skills the character has currently.
         //We only need to add any skills if this is currently 0,
         
@@ -98,7 +98,7 @@ async function initialiseFateCoreOfficialCharacter (actor) {
             })
         }        
 
-        let aspects = game.settings.get("FateCoreOfficial", "aspects");
+        let aspects = game.settings.get("fate-core-official", "aspects");
         let player_aspects = duplicate(aspects);
         for (let a in player_aspects) {
             player_aspects[a].value = "";
@@ -107,7 +107,7 @@ async function initialiseFateCoreOfficialCharacter (actor) {
         working_data.data.aspects = player_aspects;
     
         //Step one, get the list of universal tracks.
-        let world_tracks = duplicate(game.settings.get("FateCoreOfficial", "tracks"));
+        let world_tracks = duplicate(game.settings.get("fate-core-official", "tracks"));
         let tracks_to_write = working_data.data.tracks;
         for (let t in world_tracks) {
             let track = world_tracks[t];
@@ -123,13 +123,13 @@ async function initialiseFateCoreOfficialCharacter (actor) {
             track.notes = "";
 
             //If this box is an aspect when marked, it needs an aspect.name data field.
-            if (track.aspect == game.i18n.localize("FateCoreOfficial.DefinedWhenMarked")) {
+            if (track.aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked")) {
                 track.aspect = {};
                 track.aspect.name = "";
                 track.aspect.when_marked = true;
                 track.aspect.as_name = false;
             }
-            if (track.aspect == game.i18n.localize("FateCoreOfficial.AspectAsName")) {
+            if (track.aspect == game.i18n.localize("fate-core-official.AspectAsName")) {
                 track.aspect = {};
                 track.aspect.name = "";
                 track.aspect.when_marked = true;
@@ -148,7 +148,7 @@ async function initialiseFateCoreOfficialCharacter (actor) {
     working_data.data.tracks = tracks_to_write;
     let tracks = working_data.data.tracks;
     
-    let categories = game.settings.get("FateCoreOfficial", "track_categories");
+    let categories = game.settings.get("fate-core-official", "track_categories");
     //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
     for (let t in tracks) {
         let track = tracks[t];
@@ -211,19 +211,19 @@ async function initialiseFateCoreOfficialCharacter (actor) {
 }
 
 Hooks.once('ready', async function () {
-    //Convert any straggling ModularFate actors to FateCoreOfficial actors.
+    //Convert any straggling ModularFate actors to fate-core-official actors.
     let updates = [];
     game.actors.contents.forEach(actor => {
-        if (actor.type == "ModularFate") updates.push({_id:actor.id, type:"FateCoreOfficial"})
+        if (actor.type == "ModularFate") updates.push({_id:actor.id, type:"fate-core-official"})
     });
     await Actor.updateDocuments(updates)
                 
-    if (game.settings.get("FateCoreOfficial","run_once") == false){
+    if (game.settings.get("fate-core-official","run_once") == false){
         if (game.user.isGM){
-            FateCoreOfficialConstants.awaitOKDialog(game.i18n.localize("FateCoreOfficial.WelcomeTitle"),game.i18n.localize("FateCoreOfficial.WelcomeText"),500,250);
-            game.settings.set("FateCoreOfficial","run_once", true);
-            console.log(game.i18n.localize("FateCoreOfficial.baseDefaults"));
-            game.settings.set("FateCoreOfficial","defaults",game.i18n.localize("FateCoreOfficial.baseDefaults"))
+            fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.WelcomeTitle"),game.i18n.localize("fate-core-official.WelcomeText"),500,250);
+            game.settings.set("fate-core-official","run_once", true);
+            console.log(game.i18n.localize("fate-core-official.baseDefaults"));
+            game.settings.set("fate-core-official","defaults",game.i18n.localize("fate-core-official.baseDefaults"))
         }
     }
 })
@@ -306,170 +306,170 @@ Hooks.on('updateScene', (...args) => {
 })
 
 Hooks.once('init', async function () {
-    CONFIG.Actor.documentClass = FateCoreOfficialActor;
-    CONFIG.Item.documentClass = FateCoreOfficialExtra;
+    CONFIG.Actor.documentClass = fcoActor;
+    CONFIG.Item.documentClass = fcoExtra;
     CONFIG.fontFamilies.push("Montserrat");
 
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.
-    game.settings.register("FateCoreOfficial", "defaultSkills", {
-        name: game.i18n.localize("FateCoreOfficial.ReplaceSkills"),
-        hint: game.i18n.localize("FateCoreOfficial.ReplaceSkillsHint"),
+    game.settings.register("fate-core-official", "defaultSkills", {
+        name: game.i18n.localize("fate-core-official.ReplaceSkills"),
+        hint: game.i18n.localize("fate-core-official.ReplaceSkillsHint"),
         scope: "world",     // This specifies a client-stored setting
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":game.i18n.localize("FateCoreOfficial.No"),
-            "fateCore":game.i18n.localize("FateCoreOfficial.YesFateCore"),
-            "fateCondensed":game.i18n.localize("FateCoreOfficial.YesFateCondensed"),
-            "accelerated":game.i18n.localize("FateCoreOfficial.YesFateAccelerated"),
-            "dfa":game.i18n.localize("FateCoreOfficial.YesDFA"),
-            "clearAll":game.i18n.localize("FateCoreOfficial.YesClearAll")
+            "nothing":game.i18n.localize("fate-core-official.No"),
+            "fateCore":game.i18n.localize("fate-core-official.YesFateCore"),
+            "fateCondensed":game.i18n.localize("fate-core-official.YesFateCondensed"),
+            "accelerated":game.i18n.localize("fate-core-official.YesFateAccelerated"),
+            "dfa":game.i18n.localize("fate-core-official.YesDFA"),
+            "clearAll":game.i18n.localize("fate-core-official.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.FateCoreDefaultSkills"));
-                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
-                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.defaultSkillsLabel"));
+                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.FateCoreDefaultSkills"));
+                        game.settings.set("fate-core-official","defaultSkills","nothing");
+                        game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM) {
-                        game.settings.set("FateCoreOfficial","skills",{});
-                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.defaultSkillsLabel"));
+                        game.settings.set("fate-core-official","skills",{});
+                        game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
-                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.FateCondensedDefaultSkills"));
-                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
-                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.defaultSkillsLabel"));
+                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.FateCondensedDefaultSkills"));
+                        game.settings.set("fate-core-official","defaultSkills","nothing");
+                        game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.FateAcceleratedDefaultSkills"));
-                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
-                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.FateAcceleratedSkillsLabel"));
+                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.FateAcceleratedDefaultSkills"));
+                        game.settings.set("fate-core-official","defaultSkills","nothing");
+                        game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","skills",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultSkills"));
-                        game.settings.set("FateCoreOfficial","defaultSkills","nothing");
-                        game.settings.set("FateCoreOfficial","skillsLabel",game.i18n.localize("FateCoreOfficial.FateAcceleratedSkillsLabel"));
+                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultSkills"));
+                        game.settings.set("fate-core-official","defaultSkills","nothing");
+                        game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
                 }
             }
     });
 
         // Register a setting for replacing the existing aspect list with one of the pre-defined default sets.
-        game.settings.register("FateCoreOfficial", "defaultAspects", {
-            name: game.i18n.localize("FateCoreOfficial.ReplaceAspectsName"),
-            hint: game.i18n.localize("FateCoreOfficial.ReplaceAspectsHint"),
+        game.settings.register("fate-core-official", "defaultAspects", {
+            name: game.i18n.localize("fate-core-official.ReplaceAspectsName"),
+            hint: game.i18n.localize("fate-core-official.ReplaceAspectsHint"),
             scope: "world",     // This specifies a client-stored setting
             config: true,        // This specifies that the setting appears in the configuration view
             type: String,
             restricted:true,
             choices: {           // If choices are defined, the resulting setting will be a select menu
                 "nothing":game.i18n.localize("No"),
-                "fateCore":game.i18n.localize("FateCoreOfficial.YesFateCore"),
-                "fateCondensed":game.i18n.localize("FateCoreOfficial.YesFateCondensed"),
-                "accelerated":game.i18n.localize("FateCoreOfficial.YesFateAccelerated"),
-                "dfa":game.i18n.localize("FateCoreOfficial.YesDFA"),
-                "clearAll":game.i18n.localize("FateCoreOfficial.YesClearAll")
+                "fateCore":game.i18n.localize("fate-core-official.YesFateCore"),
+                "fateCondensed":game.i18n.localize("fate-core-official.YesFateCondensed"),
+                "accelerated":game.i18n.localize("fate-core-official.YesFateAccelerated"),
+                "dfa":game.i18n.localize("fate-core-official.YesDFA"),
+                "clearAll":game.i18n.localize("fate-core-official.YesClearAll")
             },
             default: "nothing",        // The default value for the setting
             onChange: value => { // A callback function which triggers when the setting is changed
                     if (value == "fateCore"){
                         if (game.user.isGM){
-                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.FateCoreDefaultAspects"));
-                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
+                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.FateCoreDefaultAspects"));
+                            game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value == "fateCondensed"){
                         if (game.user.isGM){
-                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.FateCondensedDefaultAspects"));
-                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
+                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.FateCondensedDefaultAspects"));
+                            game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="clearAll"){
                         if (game.user.isGM){
-                            game.settings.set("FateCoreOfficial","aspects",{});
-                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
+                            game.settings.set("fate-core-official","aspects",{});
+                            game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="accelerated"){
                         if (game.user.isGM){
-                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.FateAcceleratedDefaultAspects"));
-                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
+                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.FateAcceleratedDefaultAspects"));
+                            game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="dfa"){
                         if (game.user.isGM){
-                            game.settings.set("FateCoreOfficial","aspects",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultAspects"));
-                            game.settings.set("FateCoreOfficial","defaultAspects","nothing");
+                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultAspects"));
+                            game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                 }
         });
 
     // Register a setting for replacing the existing track list with one of the pre-defined default sets.
-    game.settings.register("FateCoreOfficial", "defaultTracks", {
-        name: game.i18n.localize("FateCoreOfficial.ReplaceTracksName"),
-        hint: game.i18n.localize("FateCoreOfficial.ReplaceTracksHint"),
+    game.settings.register("fate-core-official", "defaultTracks", {
+        name: game.i18n.localize("fate-core-official.ReplaceTracksName"),
+        hint: game.i18n.localize("fate-core-official.ReplaceTracksHint"),
         scope: "world",     // This specifies a client-stored setting
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
-            "nothing":game.i18n.localize("FateCoreOfficial.No"),
-            "fateCore":game.i18n.localize("FateCoreOfficial.YesFateCore"),
-            "fateCondensed":game.i18n.localize("FateCoreOfficial.YesFateCondensed"),
-            "accelerated":game.i18n.localize("FateCoreOfficial.YesFateAccelerated"),
-            "dfa":game.i18n.localize("FateCoreOfficial.YesDFA"),
-            "clearAll":game.i18n.localize("FateCoreOfficial.YesClearAll")
+            "nothing":game.i18n.localize("fate-core-official.No"),
+            "fateCore":game.i18n.localize("fate-core-official.YesFateCore"),
+            "fateCondensed":game.i18n.localize("fate-core-official.YesFateCondensed"),
+            "accelerated":game.i18n.localize("fate-core-official.YesFateAccelerated"),
+            "dfa":game.i18n.localize("fate-core-official.YesDFA"),
+            "clearAll":game.i18n.localize("fate-core-official.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.FateCoreDefaultTracks"));
-                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.FateCoreDefaultTracks"));
+                        game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","tracks",{});
-                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","tracks",{});
+                        game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.FateCondensedDefaultTracks"));
-                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.FateCondensedDefaultTracks"));
+                        game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.FateAcceleratedDefaultTracks"));
-                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.FateAcceleratedDefaultTracks"));
+                        game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
-                        game.settings.set("FateCoreOfficial","tracks",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultTracks"));
-                        game.settings.set("FateCoreOfficial","track_categories",game.i18n.localize("FateCoreOfficial.DresdenFilesAcceleratedDefaultTrackCategories"));
-                        game.settings.set("FateCoreOfficial","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultTracks"));
+                        game.settings.set("fate-core-official","track_categories",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultTrackCategories"));
+                        game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
                 }
             }
     });
 
-    game.settings.register("FateCoreOfficial","exportSettings", {
-        name: game.i18n.localize("FateCoreOfficial.ExportSettingsName"),
+    game.settings.register("fate-core-official","exportSettings", {
+        name: game.i18n.localize("fate-core-official.ExportSettingsName"),
         scope:"world",
         config:true,
         type:Boolean,
@@ -477,56 +477,56 @@ Hooks.once('init', async function () {
         default:false,
         onChange: value => {
             if (value == true && game.user.isGM){
-                let text = FateCoreOfficialConstants.exportSettings();
+                let text = fcoConstants.exportSettings();
  
                 new Dialog({
-                    title: game.i18n.localize("FateCoreOfficial.ExportSettingsDialogTitle"), 
+                    title: game.i18n.localize("fate-core-official.ExportSettingsDialogTitle"), 
                     content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
                     buttons: {
                     },
                 }).render(true);
-                game.settings.set("FateCoreOfficial","exportSettings",false);
+                game.settings.set("fate-core-official","exportSettings",false);
             }
         }
     })
 
-    game.settings.register("FateCoreOfficial","importSettings", {
-        name: game.i18n.localize("FateCoreOfficial.ImportSettingsName"),
+    game.settings.register("fate-core-official","importSettings", {
+        name: game.i18n.localize("fate-core-official.ImportSettingsName"),
         scope:"world",
-        hint:game.i18n.localize("FateCoreOfficial.ImportSettingsHint"),
+        hint:game.i18n.localize("fate-core-official.ImportSettingsHint"),
         config:true,
         type:Boolean,
         restricted:true,
         default:false,
         onChange: async value => {
             if (value == true && game.user.isGM){
-                let text = await FateCoreOfficialConstants.getSettings();
-                FateCoreOfficialConstants.importSettings(text);
-                game.settings.set("FateCoreOfficial","importSettings",false);
+                let text = await fcoConstants.getSettings();
+                fcoConstants.importSettings(text);
+                game.settings.set("fate-core-official","importSettings",false);
             }
         }
     })
 
 //Register a setting for the game's current Refresh total
-game.settings.register("FateCoreOfficial", "refreshTotal", {
-    name: game.i18n.localize("FateCoreOfficial.RefreshTotalName"),
-    hint: game.i18n.localize("FateCoreOfficial.RefreshTotalHint"),
+game.settings.register("fate-core-official", "refreshTotal", {
+    name: game.i18n.localize("fate-core-official.RefreshTotalName"),
+    hint: game.i18n.localize("fate-core-official.RefreshTotalHint"),
     scope: "world",
     config: true,
     type: Number,
     default:3,
     onChange: () =>{
         for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
+            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
                 ui.windows[app]?.render(false);
             }
         }
     }
 });
 
-game.settings.register("FateCoreOfficial","freeStunts", {
-    name:game.i18n.localize("FateCoreOfficial.FreeStunts"),
-    hint:game.i18n.localize("FateCoreOfficial.FreeStuntsHint"),
+game.settings.register("fate-core-official","freeStunts", {
+    name:game.i18n.localize("fate-core-official.FreeStunts"),
+    hint:game.i18n.localize("fate-core-official.FreeStuntsHint"),
     scope:"world",
     config:true,
     type:Number,
@@ -534,7 +534,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
     default:3,
     onChange: () =>{
         for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
+            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
                 ui.windows[app]?.render(false);
             }
         }
@@ -542,9 +542,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
 })
 
       //Register a setting for the game's current skill total
-      game.settings.register("FateCoreOfficial", "skillTotal", {
-        name: game.i18n.localize("FateCoreOfficial.SkillPointTotal"),
-        hint: game.i18n.localize("FateCoreOfficial.SkillPointTotalHint"),
+      game.settings.register("fate-core-official", "skillTotal", {
+        name: game.i18n.localize("fate-core-official.SkillPointTotal"),
+        hint: game.i18n.localize("fate-core-official.SkillPointTotalHint"),
         scope: "world",
         config: true,
         type: Number,
@@ -552,16 +552,16 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:20,
         onChange: () =>{
             for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
                     ui.windows[app]?.render(false);
                 }
             }
         }
     });
 
-    game.settings.register("FateCoreOfficial","enforceSkillTotal", {
-        name: game.i18n.localize("FateCoreOfficial.EnforceSkillTotal"),
-        hint: game.i18n.localize("FateCoreOfficial.EnforceSkillTotalHint"),
+    game.settings.register("fate-core-official","enforceSkillTotal", {
+        name: game.i18n.localize("fate-core-official.EnforceSkillTotal"),
+        hint: game.i18n.localize("fate-core-official.EnforceSkillTotalHint"),
         scope:"world",
         config:true,
         type: Boolean,
@@ -569,16 +569,16 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:true,
         onChange: () =>{
             for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
                     ui.windows[app]?.render(false);
                 }
             }
         }
     })
 
-    game.settings.register("FateCoreOfficial","enforceColumn", {
-        name: game.i18n.localize("FateCoreOfficial.EnforceColumn"),
-        hint: game.i18n.localize("FateCoreOfficial.EnforceColumnHint"),
+    game.settings.register("fate-core-official","enforceColumn", {
+        name: game.i18n.localize("fate-core-official.EnforceColumn"),
+        hint: game.i18n.localize("fate-core-official.EnforceColumnHint"),
         scope:"world",
         config:true,
         type: Boolean,
@@ -586,7 +586,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:true,
         onChange: () =>{
             for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "FateCoreOfficial"){
+                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
                     ui.windows[app]?.render(false);
                 }
             }
@@ -594,15 +594,15 @@ game.settings.register("FateCoreOfficial","freeStunts", {
     })
     
     let skill_choices = {};
-    let skills = game.settings.get("FateCoreOfficial", "skills")
+    let skills = game.settings.get("fate-core-official", "skills")
     
     skill_choices["None"]="None";
     skill_choices["Disable"]="Disable";
     for (let skill in skills){skill_choices[skill]=skill};
 
-    game.settings.register("FateCoreOfficial","init_skill", {
-        name:game.i18n.localize("FateCoreOfficial.initiativeSkill"),
-        hint:game.i18n.localize("FateCoreOfficial.initiativeSetting"),
+    game.settings.register("fate-core-official","init_skill", {
+        name:game.i18n.localize("fate-core-official.initiativeSkill"),
+        hint:game.i18n.localize("fate-core-official.initiativeSetting"),
         "scope":"world",
         "config":true,
         "restricted":true,
@@ -611,38 +611,38 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         choices:skill_choices
     })
 
-    game.settings.register("FateCoreOfficial","modifiedRollDefault", {
-        name:game.i18n.localize("FateCoreOfficial.modifiedRollDefault"),
-        hint:game.i18n.localize("FateCoreOfficial.modifiedRollDefaultExplainer"),
+    game.settings.register("fate-core-official","modifiedRollDefault", {
+        name:game.i18n.localize("fate-core-official.modifiedRollDefault"),
+        hint:game.i18n.localize("fate-core-official.modifiedRollDefaultExplainer"),
         scope:"world",
         config:"true",
         type:Boolean,
         default:false
     })
 
-    game.settings.register("FateCoreOfficial","sheet_template", {
-        name:game.i18n.localize("FateCoreOfficial.DefaultSheetTemplateName"),
-        hint:game.i18n.localize("FateCoreOfficial.DefaultSheetTemplateHint"),
+    game.settings.register("fate-core-official","sheet_template", {
+        name:game.i18n.localize("fate-core-official.DefaultSheetTemplateName"),
+        hint:game.i18n.localize("fate-core-official.DefaultSheetTemplateHint"),
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/FateCoreOfficial/templates/FateCoreOfficialSheet.html'
+        default:'systems/fate-core-official/templates/fate-core-officialSheet.html'
     })
     
 
-    game.settings.register("FateCoreOfficial","limited_sheet_template", {
-        name:game.i18n.localize("FateCoreOfficial.DefaultLimitedSheetTemplateName"),
-        hint:game.i18n.localize("FateCoreOfficial.DefaultLimitedSheetTemplateHint"),
+    game.settings.register("fate-core-official","limited_sheet_template", {
+        name:game.i18n.localize("fate-core-official.DefaultLimitedSheetTemplateName"),
+        hint:game.i18n.localize("fate-core-official.DefaultLimitedSheetTemplateHint"),
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/FateCoreOfficial/templates/FateCoreOfficialSheet.html'
+        default:'systems/fate-core-official/templates/fate-core-officialSheet.html'
     })
 
-    game.settings.register ("FateCoreOfficial","PlayerThings", {
-        name:game.i18n.localize("FateCoreOfficial.AllowPlayerThingCreation"),
-        label:game.i18n.localize("FateCoreOfficial.ThingCreationLabel"),
-        hint:game.i18n.localize("FateCoreOfficial.ThingCreationHint"),
+    game.settings.register ("fate-core-official","PlayerThings", {
+        name:game.i18n.localize("fate-core-official.AllowPlayerThingCreation"),
+        label:game.i18n.localize("fate-core-official.ThingCreationLabel"),
+        hint:game.i18n.localize("fate-core-official.ThingCreationHint"),
         type:Boolean,
         scope:"world",
         config:true,
@@ -650,10 +650,10 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:true
     });
 
-    game.settings.register ("FateCoreOfficial","DeleteOnTransfer", {
-        name:game.i18n.localize("FateCoreOfficial.DeleteOnTransfer"),
-        label:game.i18n.localize("FateCoreOfficial.DeleteOnTransferLabel"),
-        hint:game.i18n.localize("FateCoreOfficial.DeleteOnTransferHint"),
+    game.settings.register ("fate-core-official","DeleteOnTransfer", {
+        name:game.i18n.localize("fate-core-official.DeleteOnTransfer"),
+        label:game.i18n.localize("fate-core-official.DeleteOnTransferLabel"),
+        hint:game.i18n.localize("fate-core-official.DeleteOnTransferHint"),
         type:Boolean,
         scope:"world",
         config:true,
@@ -661,9 +661,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:true
     });
 
-    game.settings.register("FateCoreOfficial","confirmDeletion", {
-        name: game.i18n.localize("FateCoreOfficial.ConfirmDeletionName"),
-        hint:game.i18n.localize("FateCoreOfficial.ConfirmDeletionHint"),
+    game.settings.register("fate-core-official","confirmDeletion", {
+        name: game.i18n.localize("fate-core-official.ConfirmDeletionName"),
+        hint:game.i18n.localize("fate-core-official.ConfirmDeletionHint"),
         scope:"user",
         config:true,
         type:Boolean,
@@ -671,16 +671,16 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:false
     });
 
-    game.settings.register("FateCoreOfficial","drawingsOnTop", {
-        name:game.i18n.localize("FateCoreOfficial.DrawingsOnTop"),
-        hint:game.i18n.localize("FateCoreOfficial.DrawingsOnTopHint"),
+    game.settings.register("fate-core-official","drawingsOnTop", {
+        name:game.i18n.localize("fate-core-official.DrawingsOnTop"),
+        hint:game.i18n.localize("fate-core-official.DrawingsOnTopHint"),
         scope:"world",
         config:"true",
         type:Boolean,
         default:false
     })
 
-    game.settings.register("FateCoreOfficial","fu_actor_avatars", {
+    game.settings.register("fate-core-official","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",
         hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
         scope:"world",
@@ -689,7 +689,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         type:Boolean
     })
 
-    game.settings.register("FateCoreOfficial","fu_combatants_only", {
+    game.settings.register("fate-core-official","fu_combatants_only", {
         name:"Display information only for combatants in the current 'encounter' rather than all tokens?",
         hint:"Toggle between display of all tokens or just active combatants in Fate Utilities",
         scope:"user",
@@ -698,7 +698,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         type:Boolean
     })
 
-    game.settings.register("FateCoreOfficial", "run_once", {
+    game.settings.register("fate-core-official", "run_once", {
         name: "Run Once?",
         hint:"Pops up a brief tutorial message on first load of a world with this system",
         scope:"world",
@@ -708,7 +708,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
     })
 
     game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["FateCoreOfficial","Thing", "ModularFate"]
+    game.system.entityTypes.Actor = ["fate-core-official","Thing", "ModularFate"]
 
     game.system.apps= {
         actor:[],
@@ -720,14 +720,14 @@ game.settings.register("FateCoreOfficial","freeStunts", {
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet("FateCoreOfficial", FateCoreOfficialCharacter, { types: ["FateCoreOfficial", "ModularFate"], makeDefault: true, label:game.i18n.localize("FateCoreOfficial.FateCoreOfficialCharacter") });
-    Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("FateCoreOfficial.Thing")});
+    Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official", "ModularFate"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
+    Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
 
     // Register Item sheets
     Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
 
-    game.settings.register("FateCoreOfficial", "gameTime", {
-        name: game.i18n.localize("FateCoreOfficial.GameTime"),
+    game.settings.register("fate-core-official", "gameTime", {
+        name: game.i18n.localize("fate-core-official.GameTime"),
         scope:"world",
         config:false,
         type:String,
@@ -735,8 +735,8 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:""
     })
     
-    game.settings.register("FateCoreOfficial", "gameNotes", {
-        name: game.i18n.localize("FateCoreOfficial.GameNotes"),
+    game.settings.register("fate-core-official", "gameNotes", {
+        name: game.i18n.localize("fate-core-official.GameNotes"),
         scope:"world",
         config:false,
         type:String,
@@ -744,8 +744,8 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:""
     })
 
-    game.settings.register("FateCoreOfficial", "gameAspects", {
-        name: game.i18n.localize("FateCoreOfficial.GameTime"),
+    game.settings.register("fate-core-official", "gameAspects", {
+        name: game.i18n.localize("fate-core-official.GameTime"),
         scope:"world",
         config:false,
         type:Object,
@@ -753,7 +753,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:[]
     })
 
-    game.settings.register("FateCoreOfficial", "fuFontSize", {
+    game.settings.register("fate-core-official", "fuFontSize", {
         name: "Fate Utilities Font Size",
         scope:"user",
         config:false,
@@ -762,9 +762,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:10 //Size in points (pt)
     })
 
-    game.settings.register("FateCoreOfficial", "aspectwidth", {
-        name: game.i18n.localize("FateCoreOfficial.aspectWidth"),
-        hint: game.i18n.localize("FateCoreOfficial.AspectLabelWidth"),
+    game.settings.register("fate-core-official", "aspectwidth", {
+        name: game.i18n.localize("fate-core-official.aspectWidth"),
+        hint: game.i18n.localize("fate-core-official.AspectLabelWidth"),
         scope: "world",
         config: true,
         type: Number,
@@ -776,9 +776,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:12
     });
 
-    game.settings.register("FateCoreOfficial", "fuAspectLabelSize", {
-        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelSizeName"),
-        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelSizeHint"),
+    game.settings.register("fate-core-official", "fuAspectLabelSize", {
+        name: game.i18n.localize("fate-core-official.fuAspectLabelSizeName"),
+        hint:game.i18n.localize("fate-core-official.fuAspectLabelSizeHint"),
         scope:"world",
         config:false,
         type:Number,
@@ -786,9 +786,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
         default:0 
     })
 
-    game.settings.register("FateCoreOfficial","fuAspectLabelFont", {
-        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelFont"),
-        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelFontHint"),
+    game.settings.register("fate-core-official","fuAspectLabelFont", {
+        name: game.i18n.localize("fate-core-official.fuAspectLabelFont"),
+        hint:game.i18n.localize("fate-core-official.fuAspectLabelFontHint"),
         scope:"world",
         config:false,
         type:String,
@@ -798,9 +798,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
     })
 
     // Text colour
-    game.settings.register("FateCoreOfficial","fuAspectLabelTextColour", {
-        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelTextColour"),
-        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelTextColourHint"),
+    game.settings.register("fate-core-official","fuAspectLabelTextColour", {
+        name: game.i18n.localize("fate-core-official.fuAspectLabelTextColour"),
+        hint:game.i18n.localize("fate-core-official.fuAspectLabelTextColourHint"),
         scope:"world",
         config:false,
         type:String,
@@ -809,9 +809,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
     })
 
     //BG Colour
-    game.settings.register("FateCoreOfficial","fuAspectLabelFillColour", {
-        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelFillColour"),
-        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelFillColourHint"),
+    game.settings.register("fate-core-official","fuAspectLabelFillColour", {
+        name: game.i18n.localize("fate-core-official.fuAspectLabelFillColour"),
+        hint:game.i18n.localize("fate-core-official.fuAspectLabelFillColourHint"),
         scope:"world",
         config:false,
         restricted:true,
@@ -821,9 +821,9 @@ game.settings.register("FateCoreOfficial","freeStunts", {
     })
 
     // Border colour
-    game.settings.register("FateCoreOfficial","fuAspectLabelBorderColour", {
-        name: game.i18n.localize("FateCoreOfficial.fuAspectLabelBorderColour"),
-        hint:game.i18n.localize("FateCoreOfficial.fuAspectLabelBorderColourHint"),
+    game.settings.register("fate-core-official","fuAspectLabelBorderColour", {
+        name: game.i18n.localize("fate-core-official.fuAspectLabelBorderColour"),
+        hint:game.i18n.localize("fate-core-official.fuAspectLabelBorderColourHint"),
         scope:"world",
         config:false,
         restricted:true,
@@ -835,7 +835,7 @@ game.settings.register("FateCoreOfficial","freeStunts", {
 });
 
 Combatant.prototype._getInitiativeFormula = function () {
-    let init_skill = game.settings.get("FateCoreOfficial","init_skill");
+    let init_skill = game.settings.get("fate-core-official","init_skill");
     if (init_skill === "None" || init_skill === "Disable") {
         return "1d0";
     }else {
@@ -853,7 +853,7 @@ class CustomDrawingsLayer extends DrawingsLayer {
 }
 
 Hooks.on("init", () => {
-    if (game.settings.get ("FateCoreOfficial", "drawingsOnTop")){
+    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         // Force Canvas to use the new DrawingsLayer
         const existingLayers = Canvas.layers;
         existingLayers.drawings = CustomDrawingsLayer;
@@ -862,7 +862,7 @@ Hooks.on("init", () => {
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {
-    if (game.settings.get ("FateCoreOfficial", "drawingsOnTop")){
+    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         controls.find(c => c.name === "drawings").layer = "CustomDrawingsLayer";
     }
 })

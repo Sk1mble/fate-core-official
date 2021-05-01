@@ -1,6 +1,6 @@
 import { ExtraSheet } from "./ExtraSheet.js";
 
-export class FateCoreOfficialCharacter extends ActorSheet {
+export class fcoCharacter extends ActorSheet {
 
     async close(options){
         this.editing = false;
@@ -34,8 +34,8 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     }
 
     get template() {
-        let template = game.settings.get("FateCoreOfficial","sheet_template");
-        let limited_template = game.settings.get("FateCoreOfficial","limited_sheet_template");
+        let template = game.settings.get("fate-core-official","sheet_template");
+        let limited_template = game.settings.get("fate-core-official","limited_sheet_template");
 
         if (template != undefined & !this.actor.limited){
             return template;
@@ -43,7 +43,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             if (limited_template != undefined & this.actor.limited){
                 return limited_template;
             } else {
-                return 'systems/FateCoreOfficial/templates/FateCoreOfficialSheet.html';
+                return 'systems/fate-core-official/templates/fate-core-officialSheet.html';
             }
         }
     }
@@ -107,15 +107,15 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             tracks_button.on("click", event => this._onTracks_click(event, html));
 
             const bio = html.find(`div[id='${this.object.id}_biography']`)
-            FateCoreOfficialConstants.getPen(`${this.object.id}_biography`);
+            fcoConstants.getPen(`${this.object.id}_biography`);
             bio.on("focus",event => this._onBioInput(event, html));
 
             const notes = html.find (`div[id='${this.object.id}_notes']`);
-            FateCoreOfficialConstants.getPen(`${this.object.id}_notes`);
+            fcoConstants.getPen(`${this.object.id}_notes`);
             notes.on("focus", event => this._onNotesInput(event, html));
 
             const desc = html.find(`div[id='${this.object.id}_description']`)
-            FateCoreOfficialConstants.getPen(`${this.object.id}_description`);
+            fcoConstants.getPen(`${this.object.id}_description`);
             desc.on("focus",event => this._onDescInput(event, html));
             bio.on("blur", event => this._onBioFocusOut(event, html));
             desc.on("blur", event => this._onDescFocusOut(event, html));
@@ -178,7 +178,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                 `<table style="background-color:transparent; border:none">
                                     <tr>
                                         <td>
-                                            ${game.i18n.localize("FateCoreOfficial.name")}
+                                            ${game.i18n.localize("fate-core-official.name")}
                                         </td>
                                         <td>
                                             <input id="${this.document.id}_choose_default_name" type="text"></input>
@@ -186,7 +186,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                     </tr>
                                     <tr>
                                         <td>
-                                            ${game.i18n.localize("FateCoreOfficial.description")}
+                                            ${game.i18n.localize("fate-core-official.description")}
                                         </td>
                                         <td>
                                             <input id = "${this.document.id}_choose_default_description" type="text"></input>
@@ -194,7 +194,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                     </tr>
                                 </table>`
                     let d = new Dialog({
-                    title: game.i18n.localize("FateCoreOfficial.pickADefaultName"),
+                    title: game.i18n.localize("fate-core-official.pickADefaultName"),
                     content: content,
                     buttons: {
                         ok: {
@@ -219,21 +219,21 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                 let f = new FateCharacterDefaults();
                 let options = f.defaults.map(d => `<option>${d}</option>`).join("\n");
                 let content = `
-                <h2>${game.i18n.localize("FateCoreOfficial.applyDefault")}</h2>
+                <h2>${game.i18n.localize("fate-core-official.applyDefault")}</h2>
                 <select style="width:100%" id="${this.document.id}_select_default">
                                     ${options}
                 </select>
                 <table style="border:none, background-color:transparent">
                             <table style="border:none, background-color:transparent">
                                 <th style="width:60%; text-align:left">
-                                    ${game.i18n.localize("FateCoreOfficial.item")}
+                                    ${game.i18n.localize("fate-core-official.item")}
                                 </th>
                                 <th style="width:40%; text-align:left">
-                                    ${game.i18n.localize("FateCoreOfficial.applyFromDefault")}
+                                    ${game.i18n.localize("fate-core-official.applyFromDefault")}
                                 </th>
                                 <tr>
                                     <td style="width:60%; text-align:left">
-                                        ${game.i18n.localize("FateCoreOfficial.avatar")}
+                                        ${game.i18n.localize("fate-core-official.avatar")}
                                     </td>
                                     <td style="width:40%; text-align:left">
                                         <i id="${this.document.id}_def_avatar" class="def_toggle fas fa-toggle-on"></i>
@@ -241,7 +241,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                 </tr>
                                 <tr>
                                     <td style="width:60%; text-align:left">
-                                        ${game.i18n.localize("FateCoreOfficial.tracks")}
+                                        ${game.i18n.localize("fate-core-official.tracks")}
                                     </td>
                                     <td style="width:40%; text-align:left">
                                         <i id="${this.document.id}_def_tracks" class="def_toggle fas fa-toggle-on"></i>
@@ -249,7 +249,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                 </tr>
                                 <tr>
                                     <td style="width:60%; text-align:left">
-                                        ${game.i18n.localize("FateCoreOfficial.aspects")}
+                                        ${game.i18n.localize("fate-core-official.aspects")}
                                     </td>
                                     <td style="width:40%; text-align:left">
                                         <i id="${this.document.id}_def_aspects" class="def_toggle fas fa-toggle-on"></i>
@@ -257,7 +257,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                 </tr>
                                 <tr>
                                     <td style="width:60%; text-align:left">
-                                        ${game.i18n.localize("FateCoreOfficial.stunts")}
+                                        ${game.i18n.localize("fate-core-official.stunts")}
                                     </td>
                                     <td style="width:40%; text-align:left">
                                         <i id="${this.document.id}_def_stunts" class="def_toggle fas fa-toggle-on"></i>
@@ -265,7 +265,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                 </tr>
                                 <tr>
                                     <td style="width:60%; text-align:left">
-                                        ${game.i18n.localize("FateCoreOfficial.extras")}
+                                        ${game.i18n.localize("fate-core-official.extras")}
                                     </td>
                                     <td style="width:40%; text-align:left">
                                         <i id="${this.document.id}_def_extras" class="def_toggle fas fa-toggle-on"></i>
@@ -273,20 +273,20 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                 </tr>
                                 <tr>
                                     <td style="width:60%; text-align:left">
-                                        ${game.settings.get("FateCoreOfficial","skillsLabel")}
+                                        ${game.settings.get("fate-core-official","skillsLabel")}
                                     </td>
                                     <td style="width:40%; text-align:left">
                                         <i id="${this.document.id}_def_skills" class="def_toggle fas fa-toggle-on"></i>
                                     </td>
                                 </tr>
                             </table>
-                            <h2 style="text-align:center"><i id="${this.document.id}_def_overwrite" class="def_toggle fas fa-toggle-on"></i> <b id="def_mo">${game.i18n.localize("FateCoreOfficial.merge")}</b></h2>
+                            <h2 style="text-align:center"><i id="${this.document.id}_def_overwrite" class="def_toggle fas fa-toggle-on"></i> <b id="def_mo">${game.i18n.localize("fate-core-official.merge")}</b></h2>
                         </td>
                     </row>
                 </table>
                 `
                 let d = await new Dialog({
-                    title: game.i18n.localize("FateCoreOfficial.applyDefaultOptions"),
+                    title: game.i18n.localize("fate-core-official.applyDefaultOptions"),
                     content: content,
                     buttons: {
                         ok: {
@@ -322,14 +322,14 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                 let content = "";
     
                                 if (merge){
-                                    prompt = `${game.i18n.localize("FateCoreOfficial.merge")} from '${default_name}' default`;
-                                    content = game.i18n.localize("FateCoreOfficial.proceedToMerge");
+                                    prompt = `${game.i18n.localize("fate-core-official.merge")} from '${default_name}' default`;
+                                    content = game.i18n.localize("fate-core-official.proceedToMerge");
                                 } 
                                 if (!merge) {
-                                    prompt = `${game.i18n.localize("FateCoreOfficial.overwrite")} with '${default_name}' default`
-                                    content = game.i18n.localize("FateCoreOfficial.proceedToOverwrite");
+                                    prompt = `${game.i18n.localize("fate-core-official.overwrite")} with '${default_name}' default`
+                                    content = game.i18n.localize("fate-core-official.proceedToOverwrite");
                                 }
-                                let proceed = await FateCoreOfficialConstants.awaitYesNoDialog(prompt, content);
+                                let proceed = await fcoConstants.awaitYesNoDialog(prompt, content);
                                 if (proceed == "yes") {
                                     await f.applyDefault(this.document, default_name, options);
                                 }
@@ -547,12 +547,12 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     async _onSkillR(event,html){
         let name = event.target.id;
         let skill = this.actor.data.data.skills[name];
-        FateCoreOfficialConstants.awaitOKDialog(game.i18n.localize("FateCoreOfficial.SkillDetails"),`
+        fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
                                             <table cellspacing ="4" cellpadding="4" border="1">
                                                 <h2>${skill.name}</h2>
                                                 <tr>
                                                     <td style="width:400px;">
-                                                        <b>${game.i18n.localize("FateCoreOfficial.Description")}:</b>
+                                                        <b>${game.i18n.localize("fate-core-official.Description")}:</b>
                                                     </td>
                                                     <td style="width:2000px; padding-left:5px">
                                                         ${skill.description}
@@ -560,7 +560,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>${game.i18n.localize("FateCoreOfficial.Overcome")}:</b>
+                                                        <b>${game.i18n.localize("fate-core-official.Overcome")}:</b>
                                                     </td>
                                                     <td style="width:2000px; padding-left:5px">
                                                         ${skill.overcome}
@@ -568,7 +568,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                    <td>
-                                                        <b>${game.i18n.localize("FateCoreOfficial.CAA")}:</b>
+                                                        <b>${game.i18n.localize("fate-core-official.CAA")}:</b>
                                                     </td>
                                                     <td style="width:2000px; padding-left:5px">
                                                         ${skill.caa}
@@ -576,7 +576,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>${game.i18n.localize("FateCoreOfficial.Attack")}:</b>
+                                                        <b>${game.i18n.localize("fate-core-official.Attack")}:</b>
                                                     </td>
                                                     <td style="width:2000px; padding-left:5px">
                                                         ${skill.attack}
@@ -584,7 +584,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <b>${game.i18n.localize("FateCoreOfficial.Defend")}:</b>
+                                                        <b>${game.i18n.localize("fate-core-official.Defend")}:</b>
                                                     </td>
                                                     <td style="width:2000px; padding-left:5px">
                                                         ${skill.defend}
@@ -625,10 +625,10 @@ export class FateCoreOfficialCharacter extends ActorSheet {
 
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
-        let db = duplicate(game.settings.get("FateCoreOfficial","stunts"));
+        let db = duplicate(game.settings.get("fate-core-official","stunts"));
         db[name]=this.object.data.data.stunts[name];
-        await game.settings.set("FateCoreOfficial","stunts",db);
-        ui.notifications.info(game.i18n.localize("FateCoreOfficial.Added")+" "+name+" "+game.i18n.localize("FateCoreOfficial.ToTheStuntDatabase"));
+        await game.settings.set("fate-core-official","stunts",db);
+        ui.notifications.info(game.i18n.localize("fate-core-official.Added")+" "+name+" "+game.i18n.localize("fate-core-official.ToTheStuntDatabase"));
     }
 
     async _stunt_db_click(event, html){
@@ -647,7 +647,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         let skill = items[1];
         let bonus = parseInt(items[2]);
 
-        let ladder = FateCoreOfficialConstants.getFateLadder();
+        let ladder = fcoConstants.getFateLadder();
         let rank = 0;
         if (skill == "Special"){
             // We need to pop up a dialog to get a skill to roll.
@@ -655,7 +655,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             for (let x in this.object.data.data.skills){
                 skills.push(this.object.data.data.skills[x].name);
             }
-            let sk = await FateCoreOfficialConstants.getInputFromList (game.i18n.localize("FateCoreOfficial.select_a_skill"), skills);
+            let sk = await fcoConstants.getInputFromList (game.i18n.localize("fate-core-official.select_a_skill"), skills);
             skill = sk;
             rank = this.object.data.data.skills[skill].rank;
         } else {
@@ -672,9 +672,9 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         msg.alias = this.object.name;
 
         roll.toMessage({
-            flavor: `<h1>${skill}</h1>${game.i18n.localize("FateCoreOfficial.RolledBy")}: ${game.user.name}<br>
-            ${game.i18n.localize("FateCoreOfficial.SkillRank")}: ${rank} (${rung})<br> 
-            ${game.i18n.localize("FateCoreOfficial.Stunt")}: ${name} (+${bonus})`,
+            flavor: `<h1>${skill}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+            ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})<br> 
+            ${game.i18n.localize("fate-core-official.Stunt")}: ${name} (+${bonus})`,
             speaker: msg
         });
     }
@@ -736,14 +736,14 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     }    
 
     async _on_extras_delete(event, html){
-        let del = await FateCoreOfficialConstants.confirmDeletion();
+        let del = await fcoConstants.confirmDeletion();
         if (del){
             await this.actor.deleteEmbeddedDocuments("Item",[event.target.id.split("_")[0]]);
         }
     }
 
     async _onDelete(event, html){
-        let del = await FateCoreOfficialConstants.confirmDeletion();
+        let del = await fcoConstants.confirmDeletion();
         if (del){
             let name = event.target.id.split("_")[0];
             await this.object.update({"data.stunts":{[`-=${name}`]:null}});
@@ -768,7 +768,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         let tracks = duplicate(this.object.data.data.tracks);
         let track = tracks[event.target.innerHTML]
         let notes = track.notes;
-        let text = await FateCoreOfficialConstants.updateText( game.i18n.localize("FateCoreOfficial.TrackNotesFor")+" "+track.name +" "+game.i18n.localize("FateCoreOfficial.on")+" "+this.actor.name, notes);
+        let text = await fcoConstants.updateText( game.i18n.localize("fate-core-official.TrackNotesFor")+" "+track.name +" "+game.i18n.localize("fate-core-official.on")+" "+this.actor.name, notes);
         await this.object.update({
             [`data.tracks.${event.target.innerHTML}.notes`]: text
         })
@@ -798,7 +798,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     async _onStunts_click(event, html) {
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
-            "name":game.i18n.localize("FateCoreOfficial.NewStunt"),
+            "name":game.i18n.localize("fate-core-official.NewStunt"),
             "linked_skill":"None",
             "description":"",
             "refresh_cost":1,
@@ -867,8 +867,8 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     async _onSkill_name(event, html) {
 
         let umr = false;
-        if (event.shiftKey && !game.settings.get("FateCoreOfficial","modifiedRollDefault")) umr = true;
-        if (!event.shiftKey && game.settings.get("FateCoreOfficial","modifiedRollDefault")) umr = true;
+        if (event.shiftKey && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+        if (!event.shiftKey && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
 
         if (umr){
            let mrd = new ModifiedRollDialog(this.actor, event.target.id);
@@ -883,7 +883,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             let skill = this.object.data.data.skills[event.target.id];
             let rank = skill.rank;
             let r = new Roll(`4dF + ${rank}`);
-            let ladder = FateCoreOfficialConstants.getFateLadder();
+            let ladder = fcoConstants.getFateLadder();
             let rankS = rank.toString();
             let rung = ladder[rankS];
             let roll = await r.roll();
@@ -892,8 +892,8 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             msg.alias = this.object.name;
 
             roll.toMessage({
-                flavor: `<h1>${skill.name}</h1>${game.i18n.localize("FateCoreOfficial.RolledBy")}: ${game.user.name}<br>
-                        ${game.i18n.localize("FateCoreOfficial.SkillRank")}: ${rank} (${rung})`,
+                flavor: `<h1>${skill.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+                        ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})`,
                 speaker: msg
             });
         }
@@ -935,7 +935,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         sheetData.paidExtras = 0;   
 
         sheetData.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
-        sheetData.freeStunts = game.settings.get("FateCoreOfficial", "freeStunts");
+        sheetData.freeStunts = game.settings.get("fate-core-official", "freeStunts");
 
         //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value        
         let tracks = sheetData.data.tracks; // Removed duplicate() here as we don't write to the tracks data, just read from it.
@@ -965,20 +965,20 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         if (isPlayer) {
             // Refresh spent + refresh should = the game's refresh.
             let checkSpent = sheetData.data.details.fatePoints.refresh + sheetData.refreshSpent;
-            let worldRefresh = game.settings.get("FateCoreOfficial", "refreshTotal");
+            let worldRefresh = game.settings.get("fate-core-official", "refreshTotal");
             let checkWorld = worldRefresh - sheetData.data.details.fatePoints.refresh;
 
-            let message = game.i18n.localize("FateCoreOfficial.SheetDoesNotAddUp")
+            let message = game.i18n.localize("fate-core-official.SheetDoesNotAddUp")
             if (checkWorld < 0) {
-                message += game.i18n.localize("FateCoreOfficial.RefreshGreaterThanGameRefresh")
+                message += game.i18n.localize("fate-core-official.RefreshGreaterThanGameRefresh")
                 error = true;
             }
             if (checkSpent > worldRefresh) {
                 if (error) {
-                    message += game.i18n.localize("FateCoreOfficial.AndSpentRefreshPlusRefreshGreaterThanGameRefresh")
+                    message += game.i18n.localize("fate-core-official.AndSpentRefreshPlusRefreshGreaterThanGameRefresh")
                 } 
                 else {
-                    message += game.i18n.localize("FateCoreOfficial.SpentRefreshPlusRefreshGreaterThanGameRefresh")
+                    message += game.i18n.localize("fate-core-official.SpentRefreshPlusRefreshGreaterThanGameRefresh")
                     error = true;
                 }
             }
@@ -988,7 +988,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         }
         const unordered_skills = sheetData.data.skills;
         const ordered_skills = {};
-        let sorted_by_rank = FateCoreOfficialConstants.sortByRank(unordered_skills);
+        let sorted_by_rank = fcoConstants.sortByRank(unordered_skills);
 
         // Sort the skills to display them on the character sheet.
         Object.keys(unordered_skills).sort().forEach(function(key) {
@@ -996,7 +996,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         }); //You can use this code to sort a JSON object by creating a replacement object.
         sheetData.ordered_skills = ordered_skills;
         sheetData.sorted_by_rank = sorted_by_rank;
-        sheetData.gameRefresh = game.settings.get("FateCoreOfficial", "refreshTotal");
+        sheetData.gameRefresh = game.settings.get("fate-core-official", "refreshTotal");
 
         let skillTotal = 0;
 
@@ -1015,11 +1015,11 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         }
 
         sheetData.skillTotal = skillTotal;
-        let skills_label = game.settings.get("FateCoreOfficial", "skillsLabel");
-        sheetData.skillsLabel = skills_label || game.i18n.localize("FateCoreOfficial.defaultSkillsLabel");
-        sheetData.ladder = FateCoreOfficialConstants.getFateLadder();
+        let skills_label = game.settings.get("fate-core-official", "skillsLabel");
+        sheetData.skillsLabel = skills_label || game.i18n.localize("fate-core-official.defaultSkillsLabel");
+        sheetData.ladder = fcoConstants.getFateLadder();
         sheetData.sortByRank = this.sortByRank;
-        sheetData.gameSkillPoints = game.settings.get("FateCoreOfficial", "skillTotal")
+        sheetData.gameSkillPoints = game.settings.get("fate-core-official", "skillTotal")
         sheetData.GM = game.user.isGM;
 
         let track_categories = sheetData.data.tracks;
@@ -1043,7 +1043,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         if (data.type == "stunt"){
             let old = actor.data.data.stunts[data.dragged.name];
             if (old) {
-                let answer = await FateCoreOfficialConstants.awaitYesNoDialog(game.i18n.localize("FateCoreOfficial.overwrite_element"), game.i18n.localize("FateCoreOfficial.exists"));
+                let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
             await actor.update({"data.stunts":{[data.dragged.name]:data.dragged}});
@@ -1051,7 +1051,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         if (data.type == "aspect"){
             let old = actor.data.data.aspects[data.dragged.name];
             if (old) {
-                let answer = await FateCoreOfficialConstants.awaitYesNoDialog(game.i18n.localize("FateCoreOfficial.overwrite_element"), game.i18n.localize("FateCoreOfficial.exists"));
+                let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
             if (!data.shift_down){
@@ -1063,7 +1063,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         if (data.type == "skill"){
             let old = actor.data.data.skills[data.dragged.name];
             if (old) {
-                let answer = await FateCoreOfficialConstants.awaitYesNoDialog(game.i18n.localize("FateCoreOfficial.overwrite_element"), game.i18n.localize("FateCoreOfficial.exists"));
+                let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
             if (!data.shift_down){
@@ -1090,7 +1090,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
             }
             let old = actor.data.data.tracks[track.name];
             if (old) {
-                let answer = await FateCoreOfficialConstants.awaitYesNoDialog(game.i18n.localize("FateCoreOfficial.overwrite_element"), game.i18n.localize("FateCoreOfficial.exists"));
+                let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
             await actor.update({"data.tracks":{[track.name]:track}});

@@ -1,12 +1,12 @@
 <form id="ShowCharacter" style="font-family:Montserrat">
-    <p style="font-weight:bold">{{localize 'FateCoreOfficial.PickATokenOrActor'}}:</p>
+    <p style="font-weight:bold">{{localize 'fate-core-official.PickATokenOrActor'}}:</p>
     <span style="width:25%; padding:5px">
-        {{localize 'FateCoreOfficial.Character'}}:
+        {{localize 'fate-core-official.Character'}}:
     </span>
     <span style="width:75%; padding:5px">
         <select id="character">
             <option disabled="disabled">
-                {{localize 'FateCoreOfficial.Tokens'}}
+                {{localize 'fate-core-official.Tokens'}}
             </option>
             {{#each tokens}}
                 <option value = "token_{{this.id}}">
@@ -14,7 +14,7 @@
                 </option>
             {{/each}}
             <option disabled="disabled">
-                {{localize 'FateCoreOfficial.Actors'}}
+                {{localize 'fate-core-official.Actors'}}
             </option>
             {{#each actors}}
                 <option value = "actor_{{this.id}}">
@@ -24,8 +24,8 @@
         </select>
     </span><p/>
     <span>
-        <p style="font-weight:bold">{{localize 'FateCoreOfficial.PickWhoToShowTo'}}:</p>
-        <button type="button" id="all_players">{{localize 'FateCoreOfficial.SelectAll'}}</button><p/>
+        <p style="font-weight:bold">{{localize 'fate-core-official.PickWhoToShowTo'}}:</p>
+        <button type="button" id="all_players">{{localize 'fate-core-official.SelectAll'}}</button><p/>
     </span>
     {{#each users}}
     {{#if this.active}}
@@ -38,58 +38,58 @@
         {{/if}}
     {{/each}}
     <span>
-        <p style="font-weight:bold">{{localize 'FateCoreOfficial.PickWhatToShow'}}:</p>
-        <button type="button" id="all_elements">{{localize 'FateCoreOfficial.SelectAll'}}</button><p/>
+        <p style="font-weight:bold">{{localize 'fate-core-official.PickWhatToShow'}}:</p>
+        <button type="button" id="all_elements">{{localize 'fate-core-official.SelectAll'}}</button><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="avatar"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Avatar'}}
+                {{localize 'fate-core-official.Avatar'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="biography"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Biography'}}
+                {{localize 'fate-core-official.Biography'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="description"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Description'}}
+                {{localize 'fate-core-official.Description'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="aspects"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Aspects'}}
+                {{localize 'fate-core-official.Aspects'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="skills"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Skills'}}
+                {{localize 'fate-core-official.Skills'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="tracks"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Tracks'}}
+                {{localize 'fate-core-official.Tracks'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="stunts"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Stunts'}}
+                {{localize 'fate-core-official.Stunts'}}
             </span><p/>
             <span style="width:25%; padding:5px">
                 <input type="checkbox" class="element_select" id="extras"/>
             </span>
             <span style="width:75%; padding:5px">
-                {{localize 'FateCoreOfficial.Extras'}}
+                {{localize 'fate-core-official.Extras'}}
             </span><p/>
     </span>
     <span>
-        <button type="button" id="show_button">{{localize 'FateCoreOfficial.ShowNow'}}</button>
+        <button type="button" id="show_button">{{localize 'fate-core-official.ShowNow'}}</button>
     </span>
 </form>

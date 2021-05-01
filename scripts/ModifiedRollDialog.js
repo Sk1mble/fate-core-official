@@ -1,10 +1,10 @@
 class ModifiedRollDialog extends Application {
     static get defaultOptions(){
         const options = super.defaultOptions;
-        options.template = "systems/FateCoreOfficial/templates/ModifiedRollDialog.html";
+        options.template = "systems/fate-core-official/templates/ModifiedRollDialog.html";
         options.width = "auto";
         options.height = "auto";
-        options.title = game.i18n.localize("FateCoreOfficial.ModifiedRoll");
+        options.title = game.i18n.localize("fate-core-official.ModifiedRoll");
         options.resizable = false;
         return options 
     } // End getDefaultOptions
@@ -37,17 +37,17 @@ class ModifiedRollDialog extends Application {
         total_modifier += parseInt(skill_rank);
         let modifier_text = "";
         if (modifier > 0){
-            modifier_text= `${game.i18n.localize("FateCoreOfficial.Modifier")}: +${modifier} (${description})<br>`
+            modifier_text= `${game.i18n.localize("fate-core-official.Modifier")}: +${modifier} (${description})<br>`
         }
         if (modifier < 0){
-            modifier_text= `${game.i18n.localize("FateCoreOfficial.Modifier")}: -${modifier} (${description})<br>`
+            modifier_text= `${game.i18n.localize("fate-core-official.Modifier")}: -${modifier} (${description})<br>`
         }
 
-        if (second_skill != game.i18n.localize("FateCoreOfficial.None")){
+        if (second_skill != game.i18n.localize("fate-core-official.None")){
             second_skill_rank = this.actor.data.data.skills[second_skill].rank;
-            let ladder = FateCoreOfficialConstants.getFateLadder();
+            let ladder = fcoConstants.getFateLadder();
             let rs2 = ladder[`${second_skill_rank.toString()}`];
-            second_skill_text = `${game.i18n.localize("FateCoreOfficial.SecondSkill")}: ${second_skill} ${game.i18n.localize("FateCoreOfficial.atRank")} ${second_skill_rank} (${rs2})`
+            second_skill_text = `${game.i18n.localize("fate-core-official.SecondSkill")}: ${second_skill} ${game.i18n.localize("fate-core-official.atRank")} ${second_skill_rank} (${rs2})`
             total_modifier += parseInt(second_skill_rank);
         }
 
@@ -57,7 +57,7 @@ class ModifiedRollDialog extends Application {
             if (stunts[i].checked){
                 let s_name = stunts[i].id.split("_")[1]
                 let s_modifier = this.actor.data.data.stunts[s_name].bonus;
-                stunt_text += game.i18n.localize("FateCoreOfficial.Stunt")+": "+ s_name + " (+" + s_modifier + ")<br>"
+                stunt_text += game.i18n.localize("fate-core-official.Stunt")+": "+ s_name + " (+" + s_modifier + ")<br>"
                 total_modifier += parseInt(s_modifier);
             }
         }
@@ -68,11 +68,11 @@ class ModifiedRollDialog extends Application {
         let msg = ChatMessage.getSpeaker(this.actor)
         msg.alias = this.actor.name;
 
-        let ladder = FateCoreOfficialConstants.getFateLadder();
+        let ladder = fcoConstants.getFateLadder();
         let rs = ladder[`${skill_rank.toString()}`];
         roll.toMessage({
             flavor: `<h1>${this.skill_name}</h1>Rolled by: ${game.user.name}<br>
-            ${game.i18n.localize("FateCoreOfficial.Skill_Rank")}: ${skill_rank} (${rs})<br>
+            ${game.i18n.localize("fate-core-official.Skill_Rank")}: ${skill_rank} (${rs})<br>
             ${modifier_text}
             ${stunt_text}
             ${second_skill_text}`,
@@ -83,7 +83,7 @@ class ModifiedRollDialog extends Application {
     }
 
     getData (){
-        this.options.title = `${game.i18n.localize("FateCoreOfficial.Modified")} ${this.skill_name} ${game.i18n.localize("FateCoreOfficial.rollFor")} ${this.actor.name}`
+        this.options.title = `${game.i18n.localize("fate-core-official.Modified")} ${this.skill_name} ${game.i18n.localize("fate-core-official.rollFor")} ${this.actor.name}`
         this.actor.activeSkill=this.skill_name;
         return this.actor;
     }

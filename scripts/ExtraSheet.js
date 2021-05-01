@@ -2,7 +2,7 @@ export class ExtraSheet extends ItemSheet {
 
     constructor (...args){
         super(...args);
-        this.options.title = `${game.i18n.localize("FateCoreOfficial.Extra")}: ${this.object.name}`
+        this.options.title = `${game.i18n.localize("fate-core-official.Extra")}: ${this.object.name}`
         this.track_category = "All";
     }
 
@@ -24,7 +24,7 @@ export class ExtraSheet extends ItemSheet {
         data.stunts = this.object.data.data.stunts;
         data.aspects = this.object.data.data.aspects;
         data.skills = this.object.data.data.skills;
-        data.ladder = FateCoreOfficialConstants.getFateLadder();
+        data.ladder = fcoConstants.getFateLadder();
         let track_categories = this.object.data.data.tracks;
         let cats = new Set();
         for (let c in track_categories){
@@ -35,10 +35,10 @@ export class ExtraSheet extends ItemSheet {
         data.category = this.track_category;
         data.track_categories = track_categories;
         data.tracks = this.object.data.data.tracks;
-        let skills_label = game.settings.get("FateCoreOfficial", "skillsLabel");
-        data.skillsLabel = skills_label || game.i18n.localize("FateCoreOfficial.defaultSkillsLabel");
+        let skills_label = game.settings.get("fate-core-official", "skillsLabel");
+        data.skillsLabel = skills_label || game.i18n.localize("fate-core-official.defaultSkillsLabel");
 
-        data.dataTemplate = () => `systems/FateCoreOfficial/templates/ExtraSheet.html`;
+        data.dataTemplate = () => `systems/fate-core-official/templates/ExtraSheet.html`;
         data.GM=game.user.isGM;
         if (this.object?.data?.data?.contents != undefined && !jQuery.isEmptyObject(this.object?.data?.data?.contents))
         {
@@ -75,7 +75,7 @@ export class ExtraSheet extends ItemSheet {
         
         // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
         //First, Create Pen editor
-        FateCoreOfficialConstants.getPen(`${this.document.id}_descValue`);
+        fcoConstants.getPen(`${this.document.id}_descValue`);
         //Get reference to field so we can update extra on change
         const desc = $(`#${this.document.id}_descValue`);
         //Update the extra when the field loses focus.
@@ -86,12 +86,12 @@ export class ExtraSheet extends ItemSheet {
         // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
         
         //First, Create Pen editors
-        FateCoreOfficialConstants.getPen(`${this.document.id}_permValue`);
-        FateCoreOfficialConstants.getPen(`${this.document.id}_costsValue`);
-        FateCoreOfficialConstants.getPen(`${this.document.id}_overcomeValue`);
-        FateCoreOfficialConstants.getPen(`${this.document.id}_attackValue`);
-        FateCoreOfficialConstants.getPen(`${this.document.id}_createValue`);
-        FateCoreOfficialConstants.getPen(`${this.document.id}_defendValue`);
+        fcoConstants.getPen(`${this.document.id}_permValue`);
+        fcoConstants.getPen(`${this.document.id}_costsValue`);
+        fcoConstants.getPen(`${this.document.id}_overcomeValue`);
+        fcoConstants.getPen(`${this.document.id}_attackValue`);
+        fcoConstants.getPen(`${this.document.id}_createValue`);
+        fcoConstants.getPen(`${this.document.id}_defendValue`);
     
         input.on("focus", event => {
             if (this.editing == false) {
@@ -253,10 +253,10 @@ export class ExtraSheet extends ItemSheet {
 
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
-        let db = duplicate(game.settings.get("FateCoreOfficial","stunts"));
+        let db = duplicate(game.settings.get("fate-core-official","stunts"));
         db[name]=this.object.data.data.stunts[name];
-        await game.settings.set("FateCoreOfficial","stunts",db);
-        ui.notifications.info(`${game.i18n.localize("FateCoreOfficial.Added")} ${name} ${game.i18n.localize("FateCoreOfficial.ToTheStuntDatabase")}`);
+        await game.settings.set("fate-core-official","stunts",db);
+        ui.notifications.info(`${game.i18n.localize("fate-core-official.Added")} ${name} ${game.i18n.localize("fate-core-official.ToTheStuntDatabase")}`);
     }
 
     async _stunt_db_click(event, html){
@@ -272,8 +272,8 @@ export class ExtraSheet extends ItemSheet {
     async _onStunts_click(event, html) {
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
-            "name":game.i18n.localize("FateCoreOfficial.NewStunt"),
-            "linked_skill":game.i18n.localize("FateCoreOfficial.None"),
+            "name":game.i18n.localize("fate-core-official.NewStunt"),
+            "linked_skill":game.i18n.localize("fate-core-official.None"),
             "description":"",
             "refresh_cost":1,
             "overcome":false,
@@ -306,7 +306,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async _onDelete(event, html){
-        let del = await FateCoreOfficialConstants.confirmDeletion();
+        let del = await fcoConstants.confirmDeletion();
         if (del){
             let name = event.target.id.split("_")[0];
             await this.object.update({"data.stunts":{[`-=${name}`]:null}});
@@ -314,7 +314,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     get template (){
-        return 'systems/FateCoreOfficial/templates/ExtraSheet.html';
+        return 'systems/fate-core-official/templates/ExtraSheet.html';
     }
 
     async _on_boxes_change(html, event){
@@ -336,10 +336,10 @@ export class ExtraSheet extends ItemSheet {
     async close(...args){
         await super.close(...args);
         if (this.document.parent){
-            if (this.document.parent.type == "FateCoreOfficial" && this.document.data.data.active){
+            if (this.document.parent.type == "fate-core-official" && this.document.data.data.active){
                 await this.document.parent.updateFromExtra(this.document.data);
             } else {
-                if (this.document.parent.type == "FateCoreOfficial" && !this.document.data.data.active){
+                if (this.document.parent.type == "fate-core-official" && !this.document.data.data.active){
                     console.log(this.document.parent);
                     await this.document.parent.deactivateExtra(this.object)
                 }

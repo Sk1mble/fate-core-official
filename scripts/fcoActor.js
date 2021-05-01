@@ -1,4 +1,4 @@
-export class FateCoreOfficialActor extends Actor {
+export class fcoActor extends Actor {
 
     get visible(){
         if (this.type === "Thing" && game.system.showThings !== true){
@@ -230,7 +230,7 @@ export class FateCoreOfficialActor extends Actor {
         // This method takes skill and track data and returns corrected tracks enabled and disabled etc. according to the values of those skills
         // and the tracks' settings for enabling/disabling tracks according to skill ranks.
 
-        let categories = game.settings.get("FateCoreOfficial", "track_categories");
+        let categories = game.settings.get("fate-core-official", "track_categories");
         //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
         for (let t in tracks) {
             let track = tracks[t];

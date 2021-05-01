@@ -1,10 +1,10 @@
 <form class="mfate-sheet contenteditable" style="background: white; width:100%; height: 100%; border:none !important">
-    <img src = "/systems/FateCoreOfficial/assets/pbf.svg" style = "z-index:0; position:absolute; bottom:-5%; right:0%; height:200px; width:200px; padding:20px; opacity:0.6; border:none;"/>
+    <img src = "/systems/fate-core-official/assets/pbf.svg" style = "z-index:0; position:absolute; bottom:-5%; right:0%; height:200px; width:200px; padding:20px; opacity:0.6; border:none;"/>
     <div class="mfate-sheet__header">
         <div style="display:block; width:100%">
             <div style="display:flex; flex-direction:row"><img class="mfate-sheet__identity-avatar profile-img" width="100" height="auto" style="border:0; cursor: pointer;" id="avatar" data-edit="img" src="{{document.img}}"></img>
             <textarea class="mfate-sheet__identity-name" name="name" rows="1" data-edit="name">{{document.name}}</textarea></div>
-            <div style="display:flex; flex-direction:row"><div class="mfate-sheet__meta-label">{{localize 'FateCoreOfficial.pronouns'}}:</div><input type="text" class="cs_box" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>
+            <div style="display:flex; flex-direction:row"><div class="mfate-sheet__meta-label">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>
         </div>    
         <div class="mfate-sheet__header-right">
             <div class="mfate-sheet__meta">
@@ -13,30 +13,30 @@
                         <div style="display:block">
                             <input class="circle-input"
                             class="mfate-sheet__meta-value" style="text-align:center" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
-                            <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; min-width:75px; max-width:75px; width:75px">{{localize 'FateCoreOfficial.Current'}} </div>
+                            <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Current'}} </div>
                         </div>
                         <div style="display:block; padding-left:10px">
                             <input class="circle-input" 
                             class="mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="data.details.fatePoints.refresh" name="data.details.fatePoints.refresh" value="{{data.details.fatePoints.refresh}}"></input>
-                            <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; min-width:75px; max-width:75px; width:75px">{{localize 'FateCoreOfficial.Refresh'}} </div> 
+                            <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Refresh'}} </div> 
                         </div>
                     </div>
                 </div>
             </div>            
             <nav class="mfate-sheet__tabs-nav foo" style="margin-top:8px">
-                {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'FateCoreOfficial.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
-                <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'FateCoreOfficial.applyDefault'}}"><i class="fas fa-user-edit"></i></button>{{/if}}
+                {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
+                <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.applyDefault'}}"><i class="fas fa-user-edit"></i></button>{{/if}}
                 <a class="mfate-sheet__tabs-nav-link item active" data-tab="sheet">
-                    <span class="sr-only">{{localize 'FateCoreOfficial.CharacterSheet'}}</span>
-                    <b title="{{localize 'FateCoreOfficial.CharacterSheet'}}" class="fas fa-clipboard mfate-sheet__tabs-nav-icon"></b>
+                    <span class="sr-only">{{localize 'fate-core-official.CharacterSheet'}}</span>
+                    <b title="{{localize 'fate-core-official.CharacterSheet'}}" class="fas fa-clipboard mfate-sheet__tabs-nav-icon"></b>
                 </a>
                 <a class="mfate-sheet__tabs-nav-link item" data-tab="biography">
-                    <span class="sr-only">{{localize 'FateCoreOfficial.BiographyAndExtras'}}</span>
-                    <b title="{{localize 'FateCoreOfficial.BiographyAndExtras'}}" class="fas fa-portrait mfate-sheet__tabs-nav-icon"></b>
+                    <span class="sr-only">{{localize 'fate-core-official.BiographyAndExtras'}}</span>
+                    <b title="{{localize 'fate-core-official.BiographyAndExtras'}}" class="fas fa-portrait mfate-sheet__tabs-nav-icon"></b>
                 </a>
                 <a class="mfate-sheet__tabs-nav-link item" data-tab="notes">
-                    <span class="sr-only">{{localize 'FateCoreOfficial.Notes'}}</span>
-                    <b title="{{localize 'FateCoreOfficial.Notes'}}" class="fas fa-file-alt mfate-sheet__tabs-nav-icon"></b>
+                    <span class="sr-only">{{localize 'fate-core-official.Notes'}}</span>
+                    <b title="{{localize 'fate-core-official.Notes'}}" class="fas fa-file-alt mfate-sheet__tabs-nav-icon"></b>
                 </a>
             </nav>
         </div>
@@ -48,28 +48,28 @@
                 <div class="mfate-sheet__meta">
                     <div class="mfate-sheet__meta-column">
                         <div class="mfate-sheet__meta-item">
-                            <div class="mfate-sheet__meta-label">{{localize 'FateCoreOfficial.GameRefresh'}}: </div>
+                            <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.GameRefresh'}}: </div>
                             <input class="mfate-sheet__meta-value" style="width:3em; padding:0px" type="number " name="gameRefresh " disabled value="{{gameRefresh}}"></input>
                         </div>
                         <div class="mfate-sheet__meta-item">
-                            <div class="mfate-sheet__meta-label">{{localize 'FateCoreOfficial.SkillPoints'}}: </div>
+                            <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.SkillPoints'}}: </div>
                             <input class="mfate-sheet__meta-value" style="width:3em; padding:0px" type="number" name="skillTotal" disabled value="{{skillTotal}}"></input>
                         </div>
                         <div class="mfate-sheet__meta-item">
-                            <div class="mfate-sheet__meta-label">{{localize 'FateCoreOfficial.GameSkillTotal'}}: </div>
+                            <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.GameSkillTotal'}}: </div>
                             <input class="mfate-sheet__meta-value" style="width:3em; padding:0px" type="number" name="gameSkillPoints" disabled value="{{gameSkillPoints}}"></input>
 
                         </div>
                         <div class="mfate-sheet__meta-item">
-                            <div class="mfate-sheet__meta-label">{{localize 'FateCoreOfficial.RefreshSpent'}}: </div>
-                            <input class="mfate-sheet__meta-value" style="width:3em; padding:0px" type="number " name="refreshSpent " disabled style="width:75px " value="{{refreshSpent}} " title="{{localize 'FateCoreOfficial.SpentOnStunts'}}: {{paidStunts}} ({{localize 'FateCoreOfficial.TheGames'}} {{freeStunts}} {{localize 'FateCoreOfficial.FreeStuntsDeducted'}}); {{localize 'FateCoreOfficial.SpentOnTracks'}}: {{paidTracks}}; {{localize 'FateCoreOfficial.SpentOnExtras'}}: {{paidExtras}}"></input>
+                            <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.RefreshSpent'}}: </div>
+                            <input class="mfate-sheet__meta-value" style="width:3em; padding:0px" type="number " name="refreshSpent " disabled style="width:75px " value="{{refreshSpent}} " title="{{localize 'fate-core-official.SpentOnStunts'}}: {{paidStunts}} ({{localize 'fate-core-official.TheGames'}} {{freeStunts}} {{localize 'fate-core-official.FreeStuntsDeducted'}}); {{localize 'fate-core-official.SpentOnTracks'}}: {{paidTracks}}; {{localize 'fate-core-official.SpentOnExtras'}}: {{paidExtras}}"></input>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="mfate-notes" style="max-width:80%">
                 <div class="mfate-panel__header">
-                    <div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Notes'}}</div>
+                    <div class="mfate-panel__header-label">{{localize 'fate-core-official.Notes'}}</div>
                 </div>
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
                     <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
@@ -85,8 +85,8 @@
                         <div class="mfate-panel__header-label">{{ skillsLabel }}</div>
                         <!-- <button class="mfate-panel__header-button">Settings</button>
                             <button class="mfate-panel__header-button">Sort</button> -->
-                        <div name="sort_player_skills" i icon class="fas fa-sort mfate-panel__header-button" title="{{localize 'FateCoreOfficial.SwitchSort'}}"></div>
-                        <div title="{{localize 'FateCoreOfficial.OpenTheSkillEditor'}}" name="edit_player_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
+                        <div name="sort_player_skills" i icon class="fas fa-sort mfate-panel__header-button" title="{{localize 'fate-core-official.SwitchSort'}}"></div>
+                        <div title="{{localize 'fate-core-official.OpenTheSkillEditor'}}" name="edit_player_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
                     </div>
                     <div name="skills_body" id="skills_body" class="mfate-panel__body">
                         <ul class="mfate-skills-list">
@@ -124,12 +124,12 @@
                             <div class="mfate-panel__header" name="tracks_header">
                                 <b class="mfate-panel__header-label">Tracks</b>
                                 <select class="mfate-panel__header-select" id="track_category">
-                                    <option value="{{localize 'FateCoreOfficial.All'}}" {{#if (eq category "{{localize 'FateCoreOfficial.All'}}")}}selected{{/if}}>{{localize 'FateCoreOfficial.All'}}</option>
+                                    <option value="{{localize 'fate-core-official.All'}}" {{#if (eq category "{{localize 'fate-core-official.All'}}")}}selected{{/if}}>{{localize 'fate-core-official.All'}}</option>
                                     {{#each track_categories}}
                                         <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
                                     {{/each}}
                                 </select>
-                                <div title="{{localize 'FateCoreOfficial.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_player_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
+                                <div title="{{localize 'fate-core-official.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_player_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
                             </div>
                             <div name="tracks_body" id="tracks_body" style="scrollbar-width:thin">
                                 {{#each data.tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}} 
@@ -137,7 +137,7 @@
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
                                             <div name="track_name" style="font-family:Montserrat" class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
-                                                <button type="button" name="expandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_track'))}}icon class="fas fa-compress fu_button" title="{{localize 'FateCoreOfficial.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'FateCoreOfficial.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></button>
+                                                <button type="button" name="expandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_track'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></button>
                                                 <i style="font-style:normal; font-weight:bold; font-family: Montserrat; padding-left:5px">{{this.name}}</i>
                                             </div>
                                         </div>
@@ -150,7 +150,7 @@
                                                 <input type="checkbox" name="box" id="{{../name}}_{{@index}}_false" style="opacity:0;width:25px; height:25px; float:left;" checked="checked">
                                                     <span class="checkmark"></span>
                                                     <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px white;">
-                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'FateCoreOfficial.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
+                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'fate-core-official.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
                                                     </i>
                                                 </input>
                                             </label> {{else}}
@@ -158,7 +158,7 @@
                                                 <input type="checkbox" name="box" id="{{../name}}_{{@index}}_true" style="opacity:0; width:25px; height:25px; float:left;">
                                                     <span class="checkmark"></span>
                                                     <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">
-                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'FateCoreOfficial.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
+                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'fate-core-official.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
                                                     </i>
                                                 </input>
                                             </label>
@@ -177,7 +177,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{#if (expanded ../this.document (concat this.name '_track'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'FateCoreOfficial.Notes'}}:</div><textarea class="cs_box mfate-tracks-notes__input" type="text" name="data.tracks.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
+                                {{#if (expanded ../this.document (concat this.name '_track'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div><textarea class="cs_box mfate-tracks-notes__input" type="text" name="data.tracks.{{this.name}}.notes">{{this.notes}}</textarea>{{/if}}
                                 {{/if}}{{/if}}                                
                                 {{/each}}
                             <!--end of tracks body-->
@@ -193,7 +193,7 @@
                     <div class="mfate-panel__header">
                         <div class="mfate-panel__header-label">Aspects</div>
                         {{#if GM}}
-                        <div title="{{localize 'FateCoreOfficial.OpenTheAspectEditor'}}" name="edit_player_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
+                        <div title="{{localize 'fate-core-official.OpenTheAspectEditor'}}" name="edit_player_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
                         {{/if}}
                     </div>
 
@@ -201,10 +201,10 @@
                         {{#each data.aspects}}
 
                         <li name="aspect" class="mfate-aspects-list__item">
-                            <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'FateCoreOfficial.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'FateCoreOfficial.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
+                            <div id="{{this.name}}" name="{{this.name}}" title="{{this.description}}" class="mfate-aspects-list__label mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}"><button type="button" name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></button><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
                             {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
-                            {{#if (expanded ../this.document (concat this.name '_aspect'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'FateCoreOfficial.Notes'}}:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{this.notes}}</textarea>{{/if}}
+                            {{#if (expanded ../this.document (concat this.name '_aspect'))}}<div class="mfate_aspects-list__label">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div><textarea class="cs_box mfate-aspects-notes__input" type="text" name="data.aspects.{{this.name}}.notes" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{this.notes}}</textarea>{{/if}}
                         </li>
                         {{/each}}
                     </ul>
@@ -212,11 +212,11 @@
 
                 <div class="mfate-panel mfate-panel--stunts">
                     <div class="mfate-panel__header" name="stunts_header">
-                        <b class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Stunts'}}</b>
-                        <div class="i icon fas fa-expand mfate-panel__header-button" name="expandAllStunts" title="{{localize 'FateCoreOfficial.MaximiseAll'}}"></div>
-                        <div class="i icon fas fa-compress mfate-panel__header-button" name="compressAllStunts" title="{{localize 'FateCoreOfficial.MinimiseAll'}}"></div>
-                        <div title="{{localize 'FateCoreOfficial.ViewTheStuntDatabase'}}" name="stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
-                        <div class="fas fa-plus mfate-panel__header-button" title="{{localize 'FateCoreOfficial.AddANewStunt'}}" name="edit_player_stunts" i icon></div>
+                        <b class="mfate-panel__header-label">{{localize 'fate-core-official.Stunts'}}</b>
+                        <div class="i icon fas fa-expand mfate-panel__header-button" name="expandAllStunts" title="{{localize 'fate-core-official.MaximiseAll'}}"></div>
+                        <div class="i icon fas fa-compress mfate-panel__header-button" name="compressAllStunts" title="{{localize 'fate-core-official.MinimiseAll'}}"></div>
+                        <div title="{{localize 'fate-core-official.ViewTheStuntDatabase'}}" name="stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
+                        <div class="fas fa-plus mfate-panel__header-button" title="{{localize 'fate-core-official.AddANewStunt'}}" name="edit_player_stunts" i icon></div>
 
                     </div>
 
@@ -228,18 +228,18 @@
                                 <div class="mfate-stunts__row mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="stunt" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">
-                                            <button type="button" name="expandStunt" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_stunt'))}}icon class="fas fa-compress fu_button" title="{{localize 'FateCoreOfficial.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'FateCoreOfficial.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></button>
+                                            <button type="button" name="expandStunt" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_stunt'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></button>
                                             <i style="font-style:normal; padding-left:5px">{{this.name}} ({{this.linked_skill}})</i>
                                             {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon fu_button" name="delete_stunt" id="{{this.name}}_delete"></button> 
                                             {{/if}}
-                                            {{#if (eq this.linked_skill (localize 'FateCoreOfficial.none'))}}{{else}}                                            
+                                            {{#if (eq this.linked_skill (localize 'fate-core-official.none'))}}{{else}}                                            
                                             {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:7px; padding-left:9px" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                                             <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon fu_button"></button>                                            
                                             {{/if}}
                                             {{#if (eq this.extra_tag undefined)}}
                                             <button type="button" name="edit_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon fu_button" id="{{this.name}}_edit"></button> {{#if ../GM}}
-                                            <button type="button" name="db_stunt" title="{{localize 'FateCoreOfficial.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon fu_button" id="{{this.name}}_db"></button> {{/if}}
+                                            <button type="button" name="db_stunt" title="{{localize 'fate-core-official.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon fu_button" id="{{this.name}}_db"></button> {{/if}}
                                             {{else}}{{/if}}
                                         </div>
                                     </div>
@@ -273,8 +273,8 @@
         <div class="tab biography mfate-sheet__tab mfate-sheet__tab--secondary" id="biography_body" data-tab="biography">
             <div {{#if (expanded this.document '_description')}}class="mfate-description"{{else}}class="mfate-description-collapsed"{{/if}}>
                 <div class="mfate-panel__header">
-                    <div {{#if (expanded this.document '_description')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'FateCoreOfficial.Minimise'}}"{{else}}title="{{localize 'FateCoreOfficial.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandDescription""></div>
-                    <div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Description'}}</div>
+                    <div {{#if (expanded this.document '_description')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}title="{{localize 'fate-core-official.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandDescription""></div>
+                    <div class="mfate-panel__header-label">{{localize 'fate-core-official.Description'}}</div>
                 </div>
                 {{#if (expanded this.document '_description')}}
                 <div class="mfate-description__content long_text" id="{{this.document.id}}_description" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div>
@@ -282,8 +282,8 @@
             </div>
             <div {{#if (expanded this.document '_biography')}}class="mfate-biography"{{else}}class="mfate-biography-collapsed"{{/if}}>
                 <div class="mfate-panel__header">                        
-                        <div {{#if (expanded this.document '_biography')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'FateCoreOfficial.Minimise'}}" {{else}}title="{{localize 'FateCoreOfficial.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandBiography" title="{{localize 'FateCoreOfficial.Maximise'}}"></div>
-                    <div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Biography'}}</div>
+                        <div {{#if (expanded this.document '_biography')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'fate-core-official.Minimise'}}" {{else}}title="{{localize 'fate-core-official.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandBiography" title="{{localize 'fate-core-official.Maximise'}}"></div>
+                    <div class="mfate-panel__header-label">{{localize 'fate-core-official.Biography'}}</div>
                 </div>
                 {{#if (expanded this.document '_biography')}}
                 <div class="mfate-biography__content long_text" id="{{this.document.id}}_biography" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
@@ -291,10 +291,10 @@
             {{#if (expanded this.document '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}
                 <div class="mfate-panel__header" style="margin-bottom:5px">
                     <div class="mfate-panel__header-label">
-                        <div {{#if (expanded this.document '_extras')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'FateCoreOfficial.Minimise'}}" {{else}}title="{{localize 'FateCoreOfficial.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandExtrasPane" title="{{localize 'FateCoreOfficial.Maximise'}}"></div>{{localize 'FateCoreOfficial.Extras'}}
-                        {{#if (expanded this.document '_extras')}}<div title="{{localize 'FateCoreOfficial.AddANewExtra'}}" style="font-size:medium; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom:5px; float:right;" name="add_player_extra" i icon class="fas fa-plus mfate-panel__header-button"></div>{{/if}}
-                        {{#if (expanded this.document '_extras')}}<div class="i icon fas fa-expand mfate-panel__header-button" style="font-size:medium; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom:5px; float:right;" name="expandExtras" title="{{localize 'FateCoreOfficial.MaximiseAll'}}"></div>{{/if}}
-                        {{#if (expanded this.document '_extras')}}<div class="i icon fas fa-compress mfate-panel__header-button" style="font-size:medium; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom:5px; float:right;" name="compressExtras" title="{{localize 'FateCoreOfficial.MinimiseAll'}}"></div>{{/if}}                        
+                        <div {{#if (expanded this.document '_extras')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'fate-core-official.Minimise'}}" {{else}}title="{{localize 'fate-core-official.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandExtrasPane" title="{{localize 'fate-core-official.Maximise'}}"></div>{{localize 'fate-core-official.Extras'}}
+                        {{#if (expanded this.document '_extras')}}<div title="{{localize 'fate-core-official.AddANewExtra'}}" style="font-size:medium; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom:5px; float:right;" name="add_player_extra" i icon class="fas fa-plus mfate-panel__header-button"></div>{{/if}}
+                        {{#if (expanded this.document '_extras')}}<div class="i icon fas fa-expand mfate-panel__header-button" style="font-size:medium; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom:5px; float:right;" name="expandExtras" title="{{localize 'fate-core-official.MaximiseAll'}}"></div>{{/if}}
+                        {{#if (expanded this.document '_extras')}}<div class="i icon fas fa-compress mfate-panel__header-button" style="font-size:medium; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom:5px; float:right;" name="compressExtras" title="{{localize 'fate-core-official.MinimiseAll'}}"></div>{{/if}}                        
                     </div>
                 </div>
                 {{#if (expanded this.document '_extras')}}
@@ -304,11 +304,11 @@
                             {{#each items}}
                             <div name="item_header" draggable="true" id="{{../this.document.id}}_{{this.id}}" data-item="{{str this}}">
                             <div class = "fate-extras__row-header">
-                                <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'FateCoreOfficial.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'FateCoreOfficial.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></button>
+                                <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></button>
                                 &nbsp&nbsp{{{this.name}}}
                                 <button i icon class="fas fa-trash fate-extras__row-header-button fu_button" type="button" name="delete_extra" id="{{this.id}}_delete"></button>
                                 <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button fu_button" id="{{this.id}}_edit"></button>
-                                <button title="{{localize 'FateCoreOfficial.active'}}" name="extra_active" type="button" {{#if this.data.data.active}}i icon class="fas fa-toggle-on  fate-extras__row-header-button fu_button"{{else}}i icon class="fas fa-toggle-off  fate-extras__row-header-button fu_button"{{/if}} id="{{this.id}}_active"></button>
+                                <button title="{{localize 'fate-core-official.active'}}" name="extra_active" type="button" {{#if this.data.data.active}}i icon class="fas fa-toggle-on  fate-extras__row-header-button fu_button"{{else}}i icon class="fas fa-toggle-off  fate-extras__row-header-button fu_button"{{/if}} id="{{this.id}}_active"></button>
                             </div>
                             <div class="fate-extras__row-body">
                                         <div class="fate-extras__row-body-content">{{#unless (expanded ../this.document (concat this.id '_extra'))}}{{else}}{{{this.data.data.description.value}}}{{/unless}}</div>
