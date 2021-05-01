@@ -122,7 +122,7 @@ export class Thing extends ActorSheet {
         });
 
         input.on("keyup", event => {
-            if (event.keyCode === 13 && event.target.type != "textarea") {
+            if (event.keyCode === 13 && event.target.type == "input") {
                 input.blur();
             }
         })
@@ -280,12 +280,16 @@ export class Thing extends ActorSheet {
         return sheetData;
     }
 
-    async render (...args){
-        if (this.editing == false ){
-            super.render(...args);
-        } else {
-            this.renderBanked = true;
-        }
+    async _render(...args){
+        if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
+            if (!this.renderPending) {
+                    this.renderPending = true;
+                    setTimeout(() => {
+                        super._render(...args);
+                        this.renderPending = false;
+                    }, 0);
+            }
+        } else this.renderBanked = true;
     }
 }
 //preCreate[documentName](document:Document, data:object, options:object, userId:string) {}

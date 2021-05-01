@@ -1,9 +1,10 @@
 class EditPlayerStunts extends FormApplication {
 
-    constructor(actor, stunt){
+    constructor(actor, stunt, options){
         super(actor, stunt);
         this.actor = actor;
         this.stunt=duplicate(stunt);
+        this.new = options?.new;
 
         //This is a good place to set up some variables at the top level so we can access them with this.
         
@@ -36,11 +37,17 @@ class EditPlayerStunts extends FormApplication {
     } // End getDefaultOptions
 
     async _updateObject(event, formData){
-        console.log(formData);
-
         if (this.actor == null){ // This is a stunt in the database
             let stunts = duplicate(game.settings.get("FateCoreOfficial","stunts"));
-            if (formData["name"]!=this.stunt.name) {
+
+            if (this.new){
+                let count = 1;
+                for (let stunt in stunts){
+                    if (stunt.startsWith(formData["name"])) count++;
+                }
+                if (count >1) formData["name"] = this.stunt.name + " " + count;
+            }
+            if (formData["name"]!=this.stunt.name && !this.new) {
                 delete stunts[this.stunt.name];
             }
             for (let t in formData){
@@ -51,7 +58,15 @@ class EditPlayerStunts extends FormApplication {
             await game.settings.set("FateCoreOfficial","stunts",stunts);
             this.originator.render(false);
         } else {
-            if (formData["name"]!=this.stunt.name) {
+            if (this.new){
+                let count = 1;
+                for (let stunt in this.actor.data.data.stunts){
+                    if (stunt.startsWith(formData["name"])) count++;
+                }
+                if (count > 1) formData["name"] = this.stunt.name + " " + count;
+            }
+
+            if (formData["name"]!=this.stunt.name && !this.new) {
                 await this.object.update({"data.stunts":{[`-=${this.stunt.name}`]:null}});
             }
             
@@ -279,7 +294,7 @@ class StuntDB extends Application {
                 "defend":false,
                 "bonus":0
             }
-            let editor = new EditPlayerStunts(null, stunt);
+            let editor = new EditPlayerStunts(null, stunt, {new:true});
             editor.originator = this;
             editor.render(true);
         })
@@ -315,7 +330,7 @@ class StuntDB extends Application {
         //Edit the stunt editor so if the actor is null it knows to save the stunt to the stunt DB on exit rather than to an actor's sheet.
         let stunt_name = event.target.id.split("_")[0];
         let stunt = game.settings.get("FateCoreOfficial","stunts")[stunt_name];
-        let eps = new EditPlayerStunts(null, stunt).render(true);
+        let eps = new EditPlayerStunts(null, stunt, {new:false}).render(true);
         eps.originator = this;
     }
 

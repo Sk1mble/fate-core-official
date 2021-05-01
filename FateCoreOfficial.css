@@ -54,6 +54,49 @@
   text-transform: uppercase;
 }
 
+.long_text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text; 
+  user-select: text;
+}
+
+p {
+  user-select: inherit;
+}
+
+b {
+  user-select: inherit;
+}
+
+em {
+  user-select: inherit;
+}
+
+i {
+  user-select: inherit;
+}
+
+h1 {
+  user-select: inherit;
+}
+
+h2 {
+  user-select: inherit;
+}
+
+h3 {
+  user-select: inherit;
+}
+
+h4 {
+  user-select: inherit;
+}
+
+h5 {
+  user-select: inherit;
+}
+
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: inner-spin-button;
   }

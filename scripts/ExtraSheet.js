@@ -6,12 +6,12 @@ export class ExtraSheet extends ItemSheet {
         this.track_category = "All";
     }
 
-    async render(...args){
-        if (!this.object?.parent?.sheet?.editing && !this.editing){
+    async _render(...args){
+        if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
                     this.renderPending = true;
                     setTimeout(() => {
-                        super.render(...args);
+                        super._render(...args);
                         this.renderPending = false;
                     }, 0);
             }
@@ -99,16 +99,13 @@ export class ExtraSheet extends ItemSheet {
             }
         });
         input.on("blur", async event => {
-            this.editing = false
             if (this.renderBanked){
                 this.renderBanked = false;
                 await this._render(false);
             }
         });
         
-
         input.on("keyup", event => {
-            console.log(event.target.type)
             if (event.keyCode === 13 && event.target.type == "input") {
                 input.blur();
             }
@@ -285,7 +282,7 @@ export class ExtraSheet extends ItemSheet {
             "defend":false,
             "bonus":0
         }
-        let editor = new EditPlayerStunts(this.object, stunt);
+        let editor = new EditPlayerStunts(this.object, stunt, {new:true});
         editor.render(true);
         editor.setSheet(this);
         try {
@@ -298,7 +295,7 @@ export class ExtraSheet extends ItemSheet {
     async _onEdit (event, html){
         let name=event.target.id.split("_")[0];
 
-        let editor = new EditPlayerStunts(this.object, this.object.data.data.stunts[name]);
+        let editor = new EditPlayerStunts(this.object, this.object.data.data.stunts[name], {new:false});
         editor.render(true);
         editor.setSheet(this);
         try {

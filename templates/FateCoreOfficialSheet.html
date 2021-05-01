@@ -72,7 +72,7 @@
                     <div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Notes'}}</div>
                 </div>
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
-                    <div class="mfate-sheet-notes" contenteditable="true" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                    <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
                 </div>
             </div>
         </div>
@@ -276,18 +276,20 @@
                     <div {{#if (expanded this.document '_description')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'FateCoreOfficial.Minimise'}}"{{else}}title="{{localize 'FateCoreOfficial.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandDescription""></div>
                     <div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Description'}}</div>
                 </div>
-                {{#if (expanded this.document '_description')}}<div class="mfate-description__content long_text" id="{{this.document.id}}_description" contenteditable="true" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div>{{/if}}
-
+                {{#if (expanded this.document '_description')}}
+                <div class="mfate-description__content long_text" id="{{this.document.id}}_description" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div>
+                {{/if}}
             </div>
             <div {{#if (expanded this.document '_biography')}}class="mfate-biography"{{else}}class="mfate-biography-collapsed"{{/if}}>
                 <div class="mfate-panel__header">                        
                         <div {{#if (expanded this.document '_biography')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'FateCoreOfficial.Minimise'}}" {{else}}title="{{localize 'FateCoreOfficial.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandBiography" title="{{localize 'FateCoreOfficial.Maximise'}}"></div>
                     <div class="mfate-panel__header-label">{{localize 'FateCoreOfficial.Biography'}}</div>
                 </div>
-                {{#if (expanded this.document '_biography')}}<div class="mfate-biography__content long_text" id="{{this.document.id}}_biography" contenteditable="true" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
+                {{#if (expanded this.document '_biography')}}
+                <div class="mfate-biography__content long_text" id="{{this.document.id}}_biography" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
             </div>
             {{#if (expanded this.document '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}
-                <div class="mfate-panel__header">
+                <div class="mfate-panel__header" style="margin-bottom:5px">
                     <div class="mfate-panel__header-label">
                         <div {{#if (expanded this.document '_extras')}}class="i icon fas fa-compress mfate-panel__header-button" title="{{localize 'FateCoreOfficial.Minimise'}}" {{else}}title="{{localize 'FateCoreOfficial.Maximise'}}" class="i icon fas fa-expand mfate-panel__header-button"{{/if}} name="expandExtrasPane" title="{{localize 'FateCoreOfficial.Maximise'}}"></div>{{localize 'FateCoreOfficial.Extras'}}
                         {{#if (expanded this.document '_extras')}}<div title="{{localize 'FateCoreOfficial.AddANewExtra'}}" style="font-size:medium; padding-top:5px; padding-left:5px; padding-right:5px; padding-bottom:5px; float:right;" name="add_player_extra" i icon class="fas fa-plus mfate-panel__header-button"></div>{{/if}}

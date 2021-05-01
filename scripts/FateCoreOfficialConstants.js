@@ -25,15 +25,17 @@ class FateCoreOfficialConstants {
 
     static getPen (id){
         let editor = $(`#${id}`)[0];
-        var options = {
-            editor: editor, // {DOM Element} [required]
-            stay: false,
-            class: 'pen', // {String} class of the editor,
-            debug: false, // {Boolean} false by default
-            textarea: '<textarea name="content"></textarea>', // fallback for old browsers
-            linksInNewWindow: false // open hyperlinks in a new windows/tab
+        if (editor){
+            var options = {
+                editor: editor, // {DOM Element} [required]
+                stay: false,
+                class: 'pen', // {String} class of the editor,
+                debug: false, // {Boolean} false by default
+                textarea: '<textarea name="content"></textarea>', // fallback for old browsers
+                linksInNewWindow: false // open hyperlinks in a new windows/tab
+            }
+            return new Pen(options);
         }
-        return new Pen(options);
     }
 
     static awaitOKDialog(prompt, content, width, height){

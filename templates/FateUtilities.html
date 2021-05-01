@@ -261,7 +261,7 @@
                             </div>
                             <h2>{{localize 'FateCoreOfficial.SceneNotesTitle'}}</h2>
                             <div style="overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane;">
-                                <div {{#if GM}} class="contenteditable" contenteditable="true"{{else}}{{/if}} id="scene_notes" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
+                                <div id="scene_notes" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                             </div>
                         </div>                
                     </div><!--End Scene tab---------------------------------------------------->
@@ -361,7 +361,7 @@
                     <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="background-color:lightgray; padding:10px">
                             <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 150px);">
                                 <h2 style="vertical-align:top">{{localize 'FateCoreOfficial.DateAndTimeNotes'}}</h2>
-                                <textarea id="game_date_time" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid" type="text">{{this.game_time}}</textarea>
+                                <div id="game_date_time" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid">{{{this.game_time}}}</div>
                                 <!--Game Aspects-->
                                 <h2>{{localize 'FateCoreOfficial.gameAspects'}}</h2>
                                 
@@ -392,7 +392,7 @@
                                 <!--Game notes-->
                                 <h2 style="vertical-align:top">{{localize 'FateCoreOfficial.GameNotes'}}</h1>
                                     <div>
-                                        <div {{#if GM}}class="contenteditable" contenteditable="true"{{else}}{{/if}} id="game_notes" style="overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
+                                        <div id="game_notes" style="overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
                                     </div>
                             </div><!--End of game info tab container pane-->
                     </div><!--End game information tab-->

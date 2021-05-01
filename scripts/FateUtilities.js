@@ -27,6 +27,11 @@ class FateUtilities extends Application{
 
     activateListeners(html) {
         super.activateListeners(html);
+        if (game.user.isGM){
+            FateCoreOfficialConstants.getPen("game_notes");
+            FateCoreOfficialConstants.getPen("scene_notes");
+            FateCoreOfficialConstants.getPen("game_date_time");
+        }
 
         const addConflict = html.find('button[id="add_conflict"]');
         addConflict.on("click", async (event) => {
@@ -47,10 +52,10 @@ class FateUtilities extends Application{
             ui.combat.initialize({nextCombat});
         })
 
-        const input = html.find('input[type="text"], input[type="number"], textarea');
+        const input = html.find('input[type="text"], input[type="number"], .contenteditable');
 
         input.on("keyup", event => {
-            if (event.keyCode === 13 && event.target.type != "textarea") {
+            if (event.keyCode === 13 && event.target.type == "input") {
                 input.blur();
             }
         })
@@ -361,10 +366,10 @@ class FateUtilities extends Application{
             actor.update({[`data.tracks.${track}.notes`]:event.target.value});
         });
 
-        const game_date_time = html.find(("textarea[id='game_date_time']"));
-        game_date_time.on("change", event => {
-            game.settings.set("FateCoreOfficial", "gameTime", event.target.value);
-            game.socket.emit("system.FateCoreOfficial",{"render":true});
+        const game_date_time = html.find(("div[id='game_date_time']"));
+        game_date_time.on("blur", async event => {
+            await game.settings.set("FateCoreOfficial", "gameTime", event.target.innerHTML);
+            await game.socket.emit("system.FateCoreOfficial",{"render":true});
         })
 
         const game_notes = html.find(("div[id='game_notes']"));
@@ -1351,12 +1356,16 @@ async getData(){
     return data;
 }
 
-async render (...args){
-    if (this.editing == false && (this.selectingSkill == false || this.selectingSkill == undefined)){
-        await super.render(...args);
-    } else {
-        this.renderBanked = true;
-    }
+async _render(...args){
+    if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
+        if (!this.renderPending) {
+                this.renderPending = true;
+                setTimeout(() => {
+                    super._render(...args);
+                    this.renderPending = false;
+                }, 0);
+        }
+    } else this.renderBanked = true;
 }
 
 async renderMe(...args){

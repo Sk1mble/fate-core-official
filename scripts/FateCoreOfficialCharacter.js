@@ -156,7 +156,6 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                 }
             })
 
-            //const input = html.find("input");
             const input = html.find('input[type="text"], input[type="number"], textarea');
 
             const extra_active = html.find('button[name = "extra_active"]');
@@ -527,6 +526,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
                     this.editing = true;
                 }
             });
+
             input.on("blur", event => {
                 this.editing = false
                 if (this.renderBanked){
@@ -536,7 +536,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             });
 
             input.on("keyup", event => {
-                if (event.keyCode === 13 && event.target.type != "textarea") {
+                if (event.keyCode === 13 && event.target.type == "input") {
                     input.blur();
                 }
             })
@@ -680,21 +680,22 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     }
 
     async _onBioFocusOut (event, html){
+        this.editing = false;
         let bio = event.target.innerHTML;
         await this.object.update({"data.details.biography.value":bio})
-        this.editing = false;
     }
 
     async _onNotesFocusOut (event, html){
+        this.editing = false;
         let notes = event.target.innerHTML;
         await this.object.update({"data.details.notes.value":notes})
-        this.editing = false;
+        
     }
 
     async _onDescFocusOut (event, html){
+        this.editing = false;
         let desc = event.target.innerHTML;
         await this.object.update({"data.details.description.value":desc})
-        this.editing = false;
     }
 
     async _onBioInput(event, html){
@@ -709,12 +710,16 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         this.editing = true;
     }
 
-    async render (...args){
-        if (this.editing == false){
-            super.render(...args);
-        } else {
-            this.renderBanked = true;
-        }
+    async _render(...args){
+        if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
+            if (!this.renderPending) {
+                    this.renderPending = true;
+                    setTimeout(() => {
+                        super._render(...args);
+                        this.renderPending = false;
+                    }, 0);
+            }
+        } else this.renderBanked = true;
     }
 
     async _on_extras_click(event, html){
@@ -748,7 +753,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
     async _onEdit (event, html){
         let name=event.target.id.split("_")[0];
 
-        let editor = new EditPlayerStunts(this.actor, this.object.data.data.stunts[name]);
+        let editor = new EditPlayerStunts(this.actor, this.object.data.data.stunts[name], {new:false});
         editor.render(true);
         editor.setSheet(this);
         try {
@@ -803,7 +808,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
             "defend":false,
             "bonus":0
         }
-        let editor = new EditPlayerStunts(this.actor, stunt);
+        let editor = new EditPlayerStunts(this.actor, stunt, {new:true});
         editor.render(true);
         editor.setSheet(this);
         try {
@@ -920,6 +925,7 @@ export class FateCoreOfficialCharacter extends ActorSheet {
         const superData = super.getData();
         const sheetData = superData.data;
         sheetData.document = superData.actor;
+        sheetData.owner = superData.owner;
         let items = this.object.items.contents;
         items.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)); // Sort according to each item's sort parameter.
         sheetData.items = items;

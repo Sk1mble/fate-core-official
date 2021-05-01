@@ -1,7 +1,7 @@
 /*! Licensed under MIT, https://github.com/sofish/pen */
 
 /* basic reset */
-.pen, .pen-menu, .pen-input, .pen textarea{font:400 1em/1.45 Palatino, Optima, Georgia, serif;color:#331; padding:2px}
+.pen, .pen-menu, .pen-input, .pen textarea{font:400 1em/1.45 Montserrat;color:#331; padding-left:2px; padding-right:2px;}
 .pen:focus{outline:none;}
 .pen fieldset, img {border: 0;}
 .pen blockquote{padding-left:10px;margin-left:-14px;border-left:4px solid #1abf89;}
@@ -17,7 +17,7 @@
 .pen pre{white-space:pre-wrap;padding:0.85em;background:#f8f8f8;}
 
 /* block-level element margin */
-.pen p, .pen pre, .pen ul, .pen ol, .pen dl, .pen form, .pen table, .pen blockquote{margin-bottom:16px;}
+.pen p, .pen pre, .pen ul, .pen ol, .pen dl, .pen form, .pen table, .pen blockquote{margin-bottom:0px;}
 
 /* headers */
 .pen h1, .pen h2, .pen h3, .pen h4, .pen h5, .pen h6{margin-bottom:16px;font-weight:700;line-height:1.2;}
