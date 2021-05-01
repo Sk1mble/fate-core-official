@@ -244,7 +244,7 @@
                                 {{#each situation_aspects}}
                                     <div style="font-family:Montserrat; padding-top:10px; display:flex; flex-direction:row; align-items:center">
                                         <span style="width:100%;">
-                                            <input name="sit_aspect" type="text" value="{{this.name}}" id="{{@key}}_sit_aspect" {{#if this.linked}}disabled="disabled" title="{{localize 'FateCoreOfficial.aspectFromTrack'}}" {{/if}}{{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="font-size:{{../fontSize}}pt; width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
+                                            <input class="fu_aspect_box" name="sit_aspect" type="text" value="{{this.name}}" id="{{@key}}_sit_aspect" {{#if this.linked}}disabled="disabled" title="{{localize 'FateCoreOfficial.aspectFromTrack'}}" {{/if}}{{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="font-size:{{../fontSize}}pt; width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid"></input>
                                         </span>    
                                         <span style="padding-left:10px; width:120px">
                                             <input type="number" name="free_i" id="{{@key}}_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="font-size:{{../fontSize}}pt; width:75px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
@@ -261,7 +261,7 @@
                             </div>
                             <h2>{{localize 'FateCoreOfficial.SceneNotesTitle'}}</h2>
                             <div style="overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane;">
-                                <div id="scene_notes" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
+                                <div id="scene_notes" class="long_text" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                             </div>
                         </div>                
                     </div><!--End Scene tab---------------------------------------------------->
@@ -361,7 +361,7 @@
                     <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="background-color:lightgray; padding:10px">
                             <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 150px);">
                                 <h2 style="vertical-align:top">{{localize 'FateCoreOfficial.DateAndTimeNotes'}}</h2>
-                                <div id="game_date_time" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid">{{{this.game_time}}}</div>
+                                <div id="game_date_time" class="long_text" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid">{{{this.game_time}}}</div>
                                 <!--Game Aspects-->
                                 <h2>{{localize 'FateCoreOfficial.gameAspects'}}</h2>
                                 
@@ -372,7 +372,7 @@
                                     <div style="padding-top: 10px; font-family:Montserrat; font-size:{{../fontSize}}pt; display: flex; flex-direction: row; align-items:center">
                                         <button type="button" name="FUexpandGameAspect" style="vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress fu_button" title="{{localize 'FateCoreOfficial.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'FateCoreOfficial.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button>
                                         <span style="width:100%; padding-left:10px; vertical-align:middle">
-                                                <input name="game_aspect" type="text" value="{{this.name}}" id="{{@key}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid; vertical-align:middle;"></input>
+                                                <input name="game_aspect" class="fu_aspect_box" type="text" value="{{this.name}}" id="{{@key}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid; vertical-align:middle;"></input>
                                         </span>
                                         <span style="padding-left:10px; vertical-align:middle">
                                             <input type="number" name="game_a_free_i" id="{{@key}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; background-color:white; color:black; font-family:Montserrat; border-left:none; border-right:none; border-top:none; border-bottom:1px lightsteelblue solid" value="{{this.free_invokes}}"></input>
@@ -392,7 +392,7 @@
                                 <!--Game notes-->
                                 <h2 style="vertical-align:top">{{localize 'FateCoreOfficial.GameNotes'}}</h1>
                                     <div>
-                                        <div id="game_notes" style="overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
+                                        <div id="game_notes" class="long_text" style="overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
                                     </div>
                             </div><!--End of game info tab container pane-->
                     </div><!--End game information tab-->
