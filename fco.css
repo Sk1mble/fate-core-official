@@ -54,6 +54,14 @@
   text-transform: uppercase;
 }
 
+#FateUtilities .window-content{
+      padding: 0;
+}
+
+.fate .window-content {
+  padding: 0;
+}
+
 .long_text {
   -webkit-user-select: text;
   -moz-user-select: text;

@@ -113,6 +113,7 @@ class EditPlayerAspects extends FormApplication{
         options.closeOnSubmit = false;
         options.id = "PlayerAspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = true;
+        options.classes = options.classes.concat(['fate']);
         return options;
     }
 

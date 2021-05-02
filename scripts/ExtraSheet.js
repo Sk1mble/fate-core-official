@@ -324,7 +324,7 @@ export class ExtraSheet extends ItemSheet {
     }
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.classes = options.classes.concat(['fate', 'item']);
+        options.classes = options.classes.concat(['fate', 'item', 'fcoExtra']);
         options.width = 850;
         options.height = 850;
         options.resizable = true;

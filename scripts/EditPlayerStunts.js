@@ -33,6 +33,7 @@ class EditPlayerStunts extends FormApplication {
         options.closeOnSubmit = true;
         options.id = "PlayerStuntSetup";
         options.resizable = true;
+        options.classes = options.classes.concat(['fate']);
         return options 
     } // End getDefaultOptions
 

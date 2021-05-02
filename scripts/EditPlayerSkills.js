@@ -56,6 +56,7 @@ class EditPlayerSkills extends FormApplication{
         options.resizable = true;
         options.scrollY=["#skills_editor"];
         options.width = "auto";  
+        options.classes = options.classes.concat(['fate']);
         return options;
     }
 

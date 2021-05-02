@@ -26,6 +26,7 @@ class EditPlayerTracks extends FormApplication {
         options.closeOnSubmit = false;
         options.id = "PlayerTrackSetup";
         options.resizable = true;
+        options.classes = options.classes.concat(['fate']);
         return options 
     } // End getDefaultOptions
 

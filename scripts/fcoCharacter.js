@@ -17,6 +17,7 @@ export class fcoCharacter extends ActorSheet {
         options.width = "1000"
         options.height = "1000"
         options.scrollY = ["#skills_body", "#aspects_body","#tracks_body", "#stunts_body", "#biography_body", "#notes_body"]
+        options.classes = options.classes.concat(['fcoSheet']);
         mergeObject(options, {
             tabs: [
                 {
