@@ -32,7 +32,7 @@
 	"manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/master/system.json",
 	"download": "https://github.com/Sk1mble/fate-core-official/archive/v3.1.10.zip",
 	"socket":true,
-	"lang":[
+	"languages":[
 		{
 			"lang":"en",
 			"name":"English",

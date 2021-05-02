@@ -1370,7 +1370,7 @@ async _render(...args){
 
 async renderMe(...args){
     let tab = this._tabs[0].active;
-
+    
     if (args[0][1]?.flags?.fate-core-official?.rolls != undefined){
         // It was a roll.
         if (tab !== "rolls"){
