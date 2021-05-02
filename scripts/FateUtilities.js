@@ -22,7 +22,7 @@ class FateUtilities extends Application{
 
     _onResize(event){
         super._onResize(event);
-        this.render(false);
+        this._render(false);
     }
 
     activateListeners(html) {
@@ -69,7 +69,7 @@ class FateUtilities extends Application{
        input.on("blur", event => {
            if (this.renderBanked){
                 this.renderBanked = false;
-                this.render(false);
+                this._render(false);
             }
             this.editing = false;
         });
@@ -85,7 +85,7 @@ class FateUtilities extends Application{
                 ui.notifications.info("")
             }
             await game.settings.set ("fate-core-official","fuFontSize",font);
-            await this.render(false);
+            await this._render(false);
         })
 
         fontDown.on("click", async event => {
@@ -95,7 +95,7 @@ class FateUtilities extends Application{
                 font = 4;
             }
             await game.settings.set ("fate-core-official","fuFontSize",font);
-            await this.render(false);
+            await this._render(false);
         })
 
         const iseAspects = html.find("button[name='iseAspects']");
@@ -106,12 +106,12 @@ class FateUtilities extends Application{
 
         maximiseAspects.on("click", event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.aspectsMaximised = true);
-            this.render(false);
+            this._render(false);
         })
 
         minimiseAspects.on("click", event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.aspectsMaximised = false);
-            this.render(false);
+            this._render(false);
         })
 
         const maximiseTracks = html.find("button[id='maximiseAllTracks']");
@@ -119,12 +119,12 @@ class FateUtilities extends Application{
 
         maximiseTracks.on("click", event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.tracksMaximised = true);
-            this.render(false);
+            this._render(false);
         })
 
         minimiseTracks.on("click", event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.tracksMaximised = false);
-            this.render(false);
+            this._render(false);
         })
 
         const iseTracks = html.find("button[name='iseTracks']");
@@ -147,7 +147,7 @@ class FateUtilities extends Application{
             } else {
                 game.user.expanded[key] = false;
             }
-            this.render(false);
+            this._render(false);
         })
 
         const fu_combatants_toggle = html.find("i[id='toggle_fu_combatants']");
@@ -158,7 +158,7 @@ class FateUtilities extends Application{
             } else {
                 await game.settings.set("fate-core-official","fu_combatants_only",true);
             }
-            this.render(false);
+            this._render(false);
         })
 
         const expandGameAspectNotes = html.find("button[name='FUexpandGameAspect']");
@@ -176,7 +176,7 @@ class FateUtilities extends Application{
             } else {
                 game.user.expanded[key] = false;
             }
-            this.render(false);
+            this._render(false);
         })
 
         const FUGameAspectNotes = html.find("textarea[name='FUGameAspectNotesText']");
@@ -198,7 +198,7 @@ class FateUtilities extends Application{
             aspect.name = event.target.value;
             await game.settings.set("fate-core-official","gameAspects",aspects);
             await game.socket.emit("system.fate-core-official",{"render":true});
-            this.render(false);
+            this._render(false);
         })
 
 
@@ -220,27 +220,27 @@ class FateUtilities extends Application{
             } else {
                 game.user.expanded[key] = false;
             }
-            this.render(false);
+            this._render(false);
         })
 
         const rollTab = html.find("a[data-tab='rolls']");
         rollTab.on("click", event => {
             if (this.delayedRender){
-                this.render(false);
+                this._render(false);
             }
         })
 
         const sceneTab = html.find("a[data-tab='scene']");
         sceneTab.on("click", event => {
             if (this.delayedRender){
-                this.render(false);
+                this._render(false);
             }
         })
 
         const gameInfoTab = html.find("a[data-tab='game_info']");
         gameInfoTab.on("click", event => {
             if (this.delayedRender){
-                this.render(false);
+                this._render(false);
             }
         })
 
@@ -259,7 +259,7 @@ class FateUtilities extends Application{
         const category_select = html.find("select[id='category_select']")
         category_select.on("change", event => {
                 this.category = category_select[0].value;
-                this.render(false);
+                this._render(false);
         })
         const track_name = html.find("div[name='track_name']");
         const box = html.find("input[name='box']");
@@ -343,7 +343,7 @@ class FateUtilities extends Application{
 
         select.on("blur", event => {
             this.selectingSkill = false;
-            this.render(false);
+            this._render(false);
         })
 
         const FUAspectNotes = html.find("textarea[name ='FUAspectNotesText']");
@@ -454,7 +454,7 @@ class FateUtilities extends Application{
             game_aspects.splice(game_aspects.findIndex(sit => sit.name == name),1);
             await game.settings.set("fate-core-official","gameAspects",game_aspects);
             game.socket.emit("system.fate-core-official",{"render":true});
-            this.render(false);
+            this._render(false);
         }
     }
 
@@ -473,7 +473,7 @@ class FateUtilities extends Application{
         game_aspects.push(aspect);
         await game.settings.set("fate-core-official","gameAspects",game_aspects);
         game.socket.emit("system.fate-core-official",{"render":true});
-        this.render(false);
+        this._render(false);
     }
 
     async _game_a_free_i_button(event,html){
@@ -507,7 +507,7 @@ class FateUtilities extends Application{
                 token.tracksMaximised = true;
             }
         }
-        await this.render(false);
+        await this._render(false);
     }
 
     async tokenNameChange(event, html){
@@ -594,7 +594,7 @@ class FateUtilities extends Application{
                 });
         }
         this.selectingSkill = false;
-        this.render(false);
+        this._render(false);
     }
 
     async _notesFocusOut(event, html){
@@ -783,7 +783,7 @@ class FateUtilities extends Application{
                     await game.settings.set("fate-core-official","fu_actor_avatars",false);
                 }
             }
-            this.render(false);
+            this._render(false);
             game.socket.emit("system.fate-core-official",{"render":true});
         }
     }
@@ -1357,8 +1357,10 @@ async getData(){
 }
 
 async _render(...args){
-    if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
+    if (!this.editing && !window.getSelection().toString()){
+        //await super._render(...args);
         if (!this.renderPending) {
+            console.log("Should be rendering");
                 this.renderPending = true;
                 setTimeout(() => {
                     super._render(...args);
@@ -1371,7 +1373,7 @@ async _render(...args){
 async renderMe(...args){
     let tab = this._tabs[0].active;
     
-    if (args[0][1]?.flags?.fate-core-official?.rolls != undefined){
+    if (args[0][1]?.flags?.["fate-core-official"]?.rolls != undefined){
         // It was a roll.
         if (tab !== "rolls"){
             // change a boolean to remind us to update FateUtilities once the tab is changed, but don't re-render
@@ -1405,7 +1407,7 @@ async renderMe(...args){
     if (!this.renderPending) {
         this.renderPending = true;
         setTimeout(() => {
-          this.render(false);
+          this._render(false);
           this.delayedRender = false;
           this.renderPending = false;
         }, 0);

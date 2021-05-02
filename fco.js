@@ -35,8 +35,6 @@ import { fcoActor } from "./scripts/fcoActor.js"
 import { fcoExtra } from "./scripts/fcoExtra.js"
 
 Hooks.on("preCreateActor", async (actor, data, options, userId) => {
-    console.log("Firing preCreateActor")
-
     if (actor.type == "Thing"){
         if (!options.thing){
             ui.notifications.error(game.i18n.localize("fate-core-official.CantCreateThing"));
@@ -53,7 +51,7 @@ Hooks.on("preCreateActor", async (actor, data, options, userId) => {
         }
     }
 
-    if (actor.type == "ModularFate"){
+    if (actor.type == "ModularFate" || actor.tyoe == "FateCoreOfficial"){
         data.type = "fate-core-official";
     }
 
@@ -238,22 +236,35 @@ Hooks.once('ready', async function () {
         let flags1 = doc.data.flags["ModularFate"];
         let flags2 = doc.data.flags["FateCoreOfficial"];
         if ( flags1 ) {
-            await doc.update({"flags.fate-core-official": flags}, {recursive: false});
+            await doc.update({"flags.fate-core-official": flags1}, {recursive: false});
             await doc.update({"flags.-=ModularFate": null});
         }
         if ( flags2 ) {
-            await doc.update({"flags.fate-core-official": flags}, {recursive: false});
+            await doc.update({"flags.fate-core-official": flags2}, {recursive: false});
             await doc.update({"flags.-=FateCoreOfficial": null});
         }
     }
 
     // Actors
+    game.actors.contents.forEach(async doc =>{
+        await changeFlags(doc);
+    })
 
     // Scenes & Token actors
+    game.scenes.contents.forEach(async doc => {
+        await changeFlags(doc);
+        doc.tokens.contents.forEach(async tok => {
+            await changeFlags(tok);
+        })
+    })
 
-    // Combats
-
-    // Combatants
+    // Combats & combatants
+    game.combats.contents.forEach(async doc => {
+        await changeFlag (doc);
+        doc.combatants.contents.forEach(async com =>{
+            await changeFlag (dom);
+        })
+    })
                 
     if (game.settings.get("fate-core-official","run_once") == false){
         if (game.user.isGM){
@@ -745,7 +756,7 @@ game.settings.register("fate-core-official","freeStunts", {
     })
 
     game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["FateCoreOfficial", "fate-core-official","Thing", "ModularFate"]
+    game.system.entityTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
 
     game.system.apps= {
         actor:[],
@@ -880,29 +891,11 @@ Combatant.prototype._getInitiativeFormula = function () {
     }
 }
 
-// Custom drawings layer with different z index
-class CustomDrawingsLayer extends DrawingsLayer {
-    static get layerOptions() {
-        const options = super.layerOptions;
-        options.zIndex = 350;
-        return options;
-    }
-}
-
-Hooks.on("init", () => {
+Hooks.once('init', () => {
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
-        // Force Canvas to use the new DrawingsLayer
-        const existingLayers = Canvas.layers;
-        existingLayers.drawings = CustomDrawingsLayer;
-        Object.defineProperty(Canvas, "layers", { get: () => existingLayers });
+        CONFIG.Canvas.layers.drawings.layerOptions.zIndex = 350;
     }
 });
-
-Hooks.on("getSceneControlButtons", (controls) => {
-    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
-        controls.find(c => c.name === "drawings").layer = "CustomDrawingsLayer";
-    }
-})
 
 Handlebars.registerHelper("add1", function(value) {
     return value+1;
