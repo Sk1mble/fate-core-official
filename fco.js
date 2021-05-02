@@ -208,6 +208,18 @@ async function initialisefcoCharacter (actor) {
     return working_data;
 }
 
+Hooks.once('ready', () => {
+    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
+        canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+    }
+});
+
+Hooks.on('getSceneControlButtons', function(hudButtons){
+    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
+        canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+    }
+});
+
 Hooks.once('ready', async function () {
     //Convert any straggling ModularFate actors to fate-core-official actors.
     let updates = [];
@@ -220,15 +232,20 @@ Hooks.once('ready', async function () {
 
     //First, settings.
     const systemSettings = [];
-    for ( let s of game.data.settings ) {
-        if ( s.key.startsWith("ModularFate.") ) {
-            systemSettings.push({_id: s._id, key: s.key.replace("ModularFate.", "fate-core-official.")});
+    try {
+        for ( let s of game.data.settings ) {
+            if ( s.key.startsWith("ModularFate.") ) {
+                systemSettings.push({_id: s._id, key: s.key.replace("ModularFate.", "fate-core-official.")});
+            }
+            if ( s.key.startsWith("FateCoreOfficial.") ) {
+                systemSettings.push({_id: s._id, key: s.key.replace("FateCoreOfficial.", "fate-core-official.")});
+            }
         }
-        if ( s.key.startsWith("FateCoreOfficial.") ) {
-            systemSettings.push({_id: s._id, key: s.key.replace("FateCoreOfficial.", "fate-core-official.")});
-        }
+        await Setting.updateDocuments(systemSettings);
     }
-    await Setting.updateDocuments(systemSettings);
+    catch (error){
+        //Do nothing, just don't stop what you're doing!
+    }
 
     // Now flags, let us write a convenience function
 
@@ -890,12 +907,6 @@ Combatant.prototype._getInitiativeFormula = function () {
         return `1d0+${this.actor.data.data.skills[init_skill].rank}`;
     }
 }
-
-Hooks.once('init', () => {
-    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
-        CONFIG.Canvas.layers.drawings.layerOptions.zIndex = 350;
-    }
-});
 
 Handlebars.registerHelper("add1", function(value) {
     return value+1;
