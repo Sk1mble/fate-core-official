@@ -63,45 +63,39 @@ export class Thing extends ActorSheet {
         })
 
         takeContainer.on("click", async event => {
-            let character = game.user.character;
+            const character = game.user.character;
+            if ( !character ) return ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
+          
+            // Create the container item if it does not already exist
+            let container = new Item({name: this.actor.name, "description": this.actor.data.description, "type": "Extra"});
 
-            if (character != undefined && character != null){
-                let container;
-        
-                if (jQuery.isEmptyObject(this.actor.data.data.container.extra)){
-                    container = await (this.actor.createEmbeddedDocuments("Item",[{"name":this.actor.name,"description":this.actor.data.description,"type":"Extra"}]));
-                    await this.actor.update({"data.data.container.extra":container})
-                    await this.actor.deleteEmbeddedDocuments("Item", [container.id]);                
-                    container = new Item(this.actor.data.data.container.extra);
-                } else {
-                    container = new Item(this.actor.data.data.container.extra);
-                }
+            if ( foundry.utils.isObjectEmpty(this.actor.data.data.container.extra) ) {
+              await this.actor.update({"data.data.container.extra": container.toObject()});
+            } else container = new Item(duplicate(this.actor.data.data.container.extra));
 
-                let contents = {};
-                contents.locked = this.actor.data.data.container.locked;
-                contents.security = this.actor.data.data.container.security;
-                contents.extras=[];
-
-                this.actor.items.contents.forEach(item => {
-                    contents.extras.push(item.data.toJSON());
-                })
-                let finalData = duplicate(container.data);
-                finalData.data.contents = duplicate(contents);
-                let it = await character.createEmbeddedDocuments("Item",[finalData]);
-                
-                if (game.user.isGM){
-                    let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
-                    t.delete();
-                    this.actor.sheet.close({"force":true});
-                } else {
-                    let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
-                    game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
-                    this.actor.sheet.close({"force":true});
-                }                
+            // Populate the container contents
+            container.data.update({"data.contents": {
+              locked: this.actor.data.data.container.locked,
+              security: this.actor.data.data.container.security,
+              extras: this.actor.items.map(i => i.toObject())
+            }});
+          
+            // Create the container item on the character
+            const it = await Item.create(container.toObject(), {parent: character});
+          
+            // Delete tokens
+            const tokens = this.actor.getActiveTokens();
+            const tokenIds = tokens.map(t => t.id);
+            if ( game.user.isGM ) {
+              await canvas.scene.deleteEmbeddedDocuments("Token", tokenIds);
             } else {
-                ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
+              game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "tokens":tokenIds});
             }
+          
+            // Close the actor sheet
+            this.actor.sheet.close({force: true});
         })
+		
 
         const expandExtra = html.find("button[name='expandExtra']");
 
