@@ -214,9 +214,46 @@ Hooks.once('ready', async function () {
     //Convert any straggling ModularFate actors to fate-core-official actors.
     let updates = [];
     game.actors.contents.forEach(actor => {
-        if (actor.type == "ModularFate") updates.push({_id:actor.id, type:"fate-core-official"})
+        if (actor.type == "ModularFate" || actor.type == "FateCoreOfficial") updates.push({_id:actor.id, type:"fate-core-official"})
     });
     await Actor.updateDocuments(updates)
+
+    // We need to port any and all settings over from ModularFate/Fate Core Official and any or all flags.
+
+    //First, settings.
+    const systemSettings = [];
+    for ( let s of game.data.settings ) {
+        if ( s.key.startsWith("ModularFate.") ) {
+            systemSettings.push({_id: s._id, key: s.key.replace("ModularFate.", "fate-core-official.")});
+        }
+        if ( s.key.startsWith("FateCoreOfficial.") ) {
+            systemSettings.push({_id: s._id, key: s.key.replace("FateCoreOfficial.", "fate-core-official.")});
+        }
+    }
+    await Setting.updateDocuments(systemSettings);
+
+    // Now flags, let us write a convenience function
+
+    async function changeFlags(doc){
+        let flags1 = doc.data.flags["ModularFate"];
+        let flags2 = doc.data.flags["FateCoreOfficial"];
+        if ( flags1 ) {
+            await doc.update({"flags.fate-core-official": flags}, {recursive: false});
+            await doc.update({"flags.-=ModularFate": null});
+        }
+        if ( flags2 ) {
+            await doc.update({"flags.fate-core-official": flags}, {recursive: false});
+            await doc.update({"flags.-=FateCoreOfficial": null});
+        }
+    }
+
+    // Actors
+
+    // Scenes & Token actors
+
+    // Combats
+
+    // Combatants
                 
     if (game.settings.get("fate-core-official","run_once") == false){
         if (game.user.isGM){
@@ -708,7 +745,7 @@ game.settings.register("fate-core-official","freeStunts", {
     })
 
     game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["fate-core-official","Thing", "ModularFate"]
+    game.system.entityTypes.Actor = ["FateCoreOfficial", "fate-core-official","Thing", "ModularFate"]
 
     game.system.apps= {
         actor:[],
@@ -720,7 +757,7 @@ game.settings.register("fate-core-official","freeStunts", {
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
     Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official", "ModularFate"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
+    Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official", "FateCoreOfficial", "ModularFate"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
     Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
 
     // Register Item sheets
