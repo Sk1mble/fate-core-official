@@ -71,11 +71,9 @@ export class Thing extends ActorSheet {
                 if (jQuery.isEmptyObject(this.actor.data.data.container.extra)){
                     container = await (this.actor.createEmbeddedDocuments("Item",[{"name":this.actor.name,"description":this.actor.data.description,"type":"Extra"}]));
                     await this.actor.update({"data.data.container.extra":container})
-                    await this.actor.deleteEmbeddedDocuments("Item", [container.id]);
-                
+                    await this.actor.deleteEmbeddedDocuments("Item", [container.id]);                
                     container = new Item(this.actor.data.data.container.extra);
                 } else {
-                    // console.log(this.actor.data.data.container.extra)
                     container = new Item(this.actor.data.data.container.extra);
                 }
 
@@ -83,12 +81,14 @@ export class Thing extends ActorSheet {
                 contents.locked = this.actor.data.data.container.locked;
                 contents.security = this.actor.data.data.container.security;
                 contents.extras=[];
+
                 this.actor.items.contents.forEach(item => {
                     contents.extras.push(item.data.toJSON());
                 })
-                container.data.data.contents = contents;
-                await character.createEmbeddedDocuments("Item",[container.data]);
-
+                let finalData = duplicate(container.data);
+                finalData.data.contents = duplicate(contents);
+                let it = await character.createEmbeddedDocuments("Item",[finalData]);
+                
                 if (game.user.isGM){
                     let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === this.actor.id);
                     t.delete();
@@ -359,7 +359,9 @@ async function checkContainer (actor){
         actor.updatePending = true;
         setTimeout(() => {
             if (actor.items.contents.length === 1 && actor.data.data?.container?.isContainer){
-                actor.deleteEmbeddedDocuments("Item", [actor.items.contents[0].id]);
+                if (actor.items.contents[0].name == actor.data.data.container.extra.name){
+                    actor.deleteEmbeddedDocuments("Item", [actor.items.contents[0].id]);
+                }
             }
         
             if (actor.data.data.container.isContainer === false && actor.items.contents.length === 0){
