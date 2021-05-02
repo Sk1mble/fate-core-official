@@ -4,7 +4,7 @@
         <div style="display:block; width:100%">
             <div style="display:flex; flex-direction:row"><img class="mfate-sheet__identity-avatar profile-img" width="100" height="auto" style="border:0; cursor: pointer;" id="avatar" data-edit="img" src="{{document.img}}"></img>
             <textarea class="mfate-sheet__identity-name" name="name" rows="1" data-edit="name">{{document.name}}</textarea></div>
-            <div style="display:flex; flex-direction:row"><div class="mfate-sheet__meta-label">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>
+            {{#if this.showPronouns}}<div style="display:flex; flex-direction:row"><div class="mfate-sheet__meta-label">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>{{/if}}
         </div>    
         <div class="mfate-sheet__header-right">
             <div class="mfate-sheet__meta">

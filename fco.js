@@ -210,13 +210,22 @@ async function initialisefcoCharacter (actor) {
 
 Hooks.once('ready', () => {
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
-        canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+        try {
+            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+        } catch {
+            // This just means that the layers aren't instantiated yet.
+        }
     }
 });
 
 Hooks.on('getSceneControlButtons', function(hudButtons){
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
-        canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+        try {
+            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+        }
+        catch {
+            // This just means that the layers aren't instantiated yet.
+        }
     }
 });
 
@@ -656,6 +665,16 @@ game.settings.register("fate-core-official","freeStunts", {
                 }
             }
         }
+    })
+
+    game.settings.register("fate-core-official","showPronouns", {
+        name: game.i18n.localize("fate-core-official.showPronouns"),
+        hint: game.i18n.localize("fate-core-official.showPronounsHint"),
+        scope:"user",
+        config:true,
+        type: Boolean,
+        restricted:false,
+        default:true,
     })
     
     let skill_choices = {};

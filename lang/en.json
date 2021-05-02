@@ -1,5 +1,7 @@
 {
    "fate-core-official.pronouns":"Pronouns",
+   "fate-core-official.showPronouns":"Show pronouns on character sheets?",
+   "fate-core-official.showPronounsHint":"Show or hide the pronouns field on character sheets. This only",
    "fate-core-official.fcoCharacter":"Fate Character",
    "fate-core-official.Thing":"Thing Sheet",
    "fate-core-official.ignoreCase":"Case sensitive filter?",

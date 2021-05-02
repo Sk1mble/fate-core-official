@@ -6,13 +6,13 @@ export class fcoExtra extends Item {
             if (arg.type == "Extra") itemData = duplicate (arg);
         })
         if (!itemData) return;
-        if (this?.parent) await this.parent.updateFromExtra (duplicate(itemData));
+        if (this?.parent && this?.parent?.type == "fate-core-official") await this.parent.updateFromExtra (duplicate(itemData));
         super._preCreate(...args)
     }
 
     async _preDelete(...args){
         let itemData;
-        if (this?.parent) await this.parent.deactivateExtra (this);
+        if (this?.parent && this?.parent?.type == "fate-core-official") await this.parent.deactivateExtra (this);
         super._preDelete(...args)
     }
 

@@ -926,6 +926,7 @@ export class fcoCharacter extends ActorSheet {
         const sheetData = superData.data;
         sheetData.document = superData.actor;
         sheetData.owner = superData.owner;
+        sheetData.showPronouns = game.settings.get("fate-core-official", "showPronouns");
         let items = this.object.items.contents;
         items.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)); // Sort according to each item's sort parameter.
         sheetData.items = items;
