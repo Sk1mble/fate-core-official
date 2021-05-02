@@ -49,7 +49,7 @@ class EditPlayerTracks extends FormApplication {
                         setTimeout(() => {
                         this.render(false);
                         this.renderPending = false;
-                        }, 0);
+                        }, 5);
                     }
             }
         }
@@ -63,7 +63,7 @@ class EditPlayerTracks extends FormApplication {
                         setTimeout(() => {
                         this.render(false);
                         this.renderPending = false;
-                        }, 0);
+                        }, 5);
                     }
             }
         }       

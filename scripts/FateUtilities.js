@@ -1358,14 +1358,13 @@ async getData(){
 
 async _render(...args){
     if (!this.editing && !window.getSelection().toString()){
-        //await super._render(...args);
+        await super._render(...args);
         if (!this.renderPending) {
-            console.log("Should be rendering");
                 this.renderPending = true;
-                setTimeout(() => {
-                    super._render(...args);
+                await setTimeout(async () => {
+                    await super._render(...args);
                     this.renderPending = false;
-                }, 0);
+                }, 5);
         }
     } else this.renderBanked = true;
 }

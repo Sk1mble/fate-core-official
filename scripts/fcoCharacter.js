@@ -717,7 +717,7 @@ export class fcoCharacter extends ActorSheet {
                     setTimeout(() => {
                         super._render(...args);
                         this.renderPending = false;
-                    }, 0);
+                    }, 5);
             }
         } else this.renderBanked = true;
     }

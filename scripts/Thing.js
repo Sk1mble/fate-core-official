@@ -287,7 +287,7 @@ export class Thing extends ActorSheet {
                     setTimeout(() => {
                         super._render(...args);
                         this.renderPending = false;
-                    }, 0);
+                    }, 5);
             }
         } else this.renderBanked = true;
     }
@@ -370,7 +370,7 @@ async function checkContainer (actor){
                 }
             }
             actor.updatePending = false;
-        }, 0);
+        }, 5);
     }
 }
 

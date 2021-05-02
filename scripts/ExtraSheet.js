@@ -13,7 +13,7 @@ export class ExtraSheet extends ItemSheet {
                     setTimeout(() => {
                         super._render(...args);
                         this.renderPending = false;
-                    }, 0);
+                    }, 5);
             }
         } else this.renderBanked = true;
     }
