@@ -1,3 +1,9 @@
+# Version 3.1.12
+  * Implemented a new Countdown feature that can be found in the scene tab.
+  * Although it's in the scene tab, countdowns are global because they can apply across multiple scenes.
+  * Countdowns can be hidden from players, hidden except for boxes, or fully visible. 
+  * The show boxes setting is a good way to build tension!
+
 # Version 3.1.11
   * CSS tweaks
   * Bug fix in Thing handling

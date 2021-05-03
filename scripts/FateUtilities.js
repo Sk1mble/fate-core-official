@@ -31,7 +31,18 @@ class FateUtilities extends Application{
             fcoConstants.getPen("game_notes");
             fcoConstants.getPen("scene_notes");
             fcoConstants.getPen("game_date_time");
+            const countdowns = $('.cd_datum');
+            countdowns.on('blur', event => this._on_cd_blur(event, html));
+            countdowns.on('focus', event => {this.editing = true;})
+            for (let c of countdowns){
+                fcoConstants.getPen(c.id);
+            }
         }
+        const cd_del = html.find('button[name="delete_cd"]');
+        cd_del.on('click', event => this._on_delete_cd(event, html));
+
+        const toggle_cd_visibility = html.find('button[name="toggle_cd_visibility"]');
+        toggle_cd_visibility.on('click', event => this._on_toggle_cd_visibility(event, html));
 
         const addConflict = html.find('button[id="add_conflict"]');
         addConflict.on("click", async (event) => {
@@ -263,6 +274,9 @@ class FateUtilities extends Application{
         })
         const track_name = html.find("div[name='track_name']");
         const box = html.find("input[name='box']");
+        const cd_box = html.find("input[name='cd_box']");
+        cd_box.on('click', event => this._on_cd_box_click(event, html));
+
         box.on("click", event => this._on_click_box(event, html));
         //track_name.on("click", event => this._on_track_name_click(event, html));
         const track_aspect = html.find("input[name='track_aspect']");
@@ -397,6 +411,11 @@ class FateUtilities extends Application{
         fuLabelSettings.on('click', async event => {
             new FUAspectLabelClass().render(true);
         })
+
+        const addCountdown = html.find('button[id="add_countdown"]');
+        addCountdown.on('click', async event => {
+            new acd(this).render(true);
+        })
     }
 
     async _sit_aspect_change(event, html){
@@ -495,7 +514,7 @@ class FateUtilities extends Application{
                 token.aspectsMaximised = true;
             }
         }
-        await this.render(false);
+        await this._render(false);
     }
 
     async iseTrack(event, html){
@@ -1115,6 +1134,98 @@ class FateUtilities extends Application{
         })
     }
 
+    async _on_cd_box_click(event, html){
+        let countdowns = game.settings.get("fate-core-official","countdowns");
+        let data = event.target.id.split("_");
+        let key = data[0];
+        let box = data[1]
+        let checked = event.target.checked;
+        let countdown = countdowns[key];
+        countdown.boxes[box] = checked;
+        await game.settings.set("fate-core-official","countdowns",countdowns);
+        await game.socket.emit("system.fate-core-official",{"render":true});
+        await this._render(false);
+    }
+
+    async _on_delete_cd(event, html){
+        let del = await fcoConstants.confirmDeletion();
+        if (del){
+            let data = event.target.id.split("_");
+            let countdowns = game.settings.get("fate-core-official", "countdowns");
+            delete countdowns[data[0]];
+            await game.settings.set("fate-core-official", "countdowns", countdowns);
+            await game.socket.emit("system.fate-core-official",{"render":true});
+            await this._render(false);
+        }
+    }
+
+    async _on_toggle_cd_visibility(event, html){
+        this.editing = false;
+        let data = event.target.id.split("_");
+        let countdowns = game.settings.get("fate-core-official", "countdowns");
+        let countdown = countdowns[data[0]];
+        let vis = countdown.visible;
+        // Valid values are visible, hidden, show_boxes
+        if (vis == "hidden") countdown.visible = "show_boxes";
+        if (vis == "show_boxes") countdown.visible = "visible";
+        if (vis == "visible") countdown.visible = "hidden";
+
+        await game.settings.set("fate-core-official", "countdowns", countdowns);
+        await game.socket.emit("system.fate-core-official",{"render":true});
+        await this._render(false);
+    }
+
+    // Change name/desc on losing focus to editable divs
+    async _on_cd_blur(event, html){
+        let data = event.target.id.split("_");
+        let sel = window.getSelection().toString();
+        if (sel == ""){
+            // No selected text so go off and make the changes
+             if (data[1]== "name"){
+                this.editing = false;
+                let countdowns = game.settings.get("fate-core-official", "countdowns");
+                let countdown = countdowns[data[0]];
+                if (countdown.name != event.target.innerHTML){
+                    let oldname = countdown.name;
+                    let newname = event.target.innerHTML;
+                    let testname = newname.replace(/<[^>]+>/g, '');
+                    if (testname == ""){
+                        event.target.innerHTML=oldname;
+                        return ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
+                    }
+                    let newCountdown = duplicate(countdown);
+                    newCountdown.name = newname;
+                    delete countdowns[fcoConstants.getKey(countdown.name)];
+                    countdowns[fcoConstants.getKey(newname)]=newCountdown;
+                    await game.settings.set("fate-core-official","countdowns", countdowns);
+                    await game.socket.emit("system.fate-core-official",{"render":true});
+                    await this._render(false);
+                }
+             }
+             if (data[1] == "desc"){
+                this.editing = false;
+                let countdowns = game.settings.get("fate-core-official", "countdowns");
+                let countdown = countdowns[data[0]];
+                countdown.description = event.target.innerHTML;
+                await game.settings.set("fate-core-official", "countdowns", countdowns);
+                await game.socket.emit("system.fate-core-official",{"render":true});
+                await this._render(false);
+             }
+        }
+    }
+
+    async addCountdown (countdown){
+
+    }
+
+    async delCountdown (countdown){
+        let countdowns = game.settings.get("fate-core-official", "countdowns")
+        delete countdowns[data[0]];
+            await game.settings.set("fate-core-official", "countdowns", countdowns);
+            await game.socket.emit("system.fate-core-official",{"render":true});
+            await this._render(false);
+    }
+
 
     async _on_track_name_click(event, html) {
         // Launch a simple application that returns us some nicely formatted text.
@@ -1200,7 +1311,7 @@ class FateUtilities extends Application{
         options.title = game.i18n.localize("fate-core-official.FateUtilities");
         options.id = "FateUtilities"; // CSS id if you want to override default behaviors
         options.resizable = true;
-        options.scrollY=["#aspects", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane"]
+        options.scrollY=["#aspects", "#cd_panel", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane"]
 
         mergeObject(options, {
             tabs: [
@@ -1337,14 +1448,29 @@ async getData(){
         data.all_tokens = data.all_tokens.filter(t=>combatTokens.indexOf(t) != -1);
     }
     data.numConflicts = game.combats.contents.filter(c => c.data.scene == game.scenes.viewed.id).length;
+    
+    let countdowns = game.settings.get("fate-core-official", "countdowns")
+    if (countdowns?.keys?.length < 1){
+        data.countdowns = "none";
+    }
+    else {
+        let cd_a = [];
+        for (let cd in countdowns){
+            cd_a.push(countdowns[cd]);
+        }
+        fcoConstants.sort_name(cd_a);
 
-    let aspectsHeight = situation_aspects.length * 45;
+        data.countdowns = cd_a;
+        data.cdownheight = Object.keys(data.countdowns).length*50;
+        if (data.cdownheight > 200) data.cdownheight = 200;
+    }
+    let aspectsHeight = situation_aspects.length * 45 ;
 
-    data.fuPaneHeight = (this.position.height - 250) / 2;
+    data.fuPaneHeight = (this.position.height - 250) / 2; // Aspect pane height
 
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
-    data.fuNotesHeight = (this.position.height - 220) / 2 - 35 + modifier;
+    data.fuNotesHeight = (this.position.height - 220) / 2 - 35 + modifier - data.cdownheight - 25;
 
     data.gameAspectsHeight = 180;
     let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 45;
@@ -1352,6 +1478,7 @@ async getData(){
     data.gameNotesHeight = (this.position.height - 525) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
+
     
     return data;
 }
@@ -1434,6 +1561,53 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
                 });
             }
 })
+
+class acd extends FormApplication {
+    constructor(fu) {
+        super();
+        this.fu = fu;
+    }
+
+    static get defaultOptions (){
+        const options = super.defaultOptions;
+        options.template = "systems/fate-core-official/templates/new_cd_dialog.html";
+        options.closeOnSubmit = true;
+        options.submitOnClose = false;
+        options.title = game.i18n.localize("fate-core-official.addCountdown");
+        return options;
+    }
+
+    async _updateObject (event, data){
+        let box_values = [];
+        if (data.boxes < 3) data.boxes = 3;
+        if (data.boxes > 20) data.boxes = 20;
+
+        for (let i = 0; i < data.boxes; i++){
+            box_values.push(false);
+        }
+
+        let countdown = {
+            name:data.name,
+            description:data.description,
+            boxes:box_values,
+            visible:data.visible
+        }
+        let countdowns = await duplicate(game.settings.get("fate-core-official","countdowns"));
+        let safeName = fcoConstants.getKey(countdown.name); 
+        countdowns[safeName]=countdown;
+        await game.settings.set("fate-core-official","countdowns",countdowns);
+        await game.socket.emit("system.fate-core-official",{"render":true});
+        this.fu.render(false);
+    }
+
+    activateListeners(html){
+        super.activateListeners(html);
+        fcoConstants.getPen("cd_description");
+        fcoConstants.getPen("cd_name");
+        const save = $('#cd_dialog_save');
+        save.on('click', (event, html) => this.submit());
+    }
+}
 
 class TimedEvent extends Application {
 
@@ -1665,7 +1839,7 @@ Hooks.once('ready', async function () {
             if (FU != undefined){
                 let tab = FU._tabs[0].active;
 
-                if (tab !== "game_info"){
+                if (tab !== "game_info" && tab !== "scene"){
                     FU.delayedRender = true; 
                     return;
                 } else {

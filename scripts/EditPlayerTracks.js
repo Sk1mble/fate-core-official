@@ -242,7 +242,6 @@ class EditPlayerTracks extends FormApplication {
                 ok: {
                     label: game.i18n.localize("fate-core-official.Save"),
                     callback: (html) => {
-                        //Todo: code to save goes here;
                         let newTrack = {};
                         newTrack.category=html.find("select[id='category']")[0].value;
                         newTrack.name=html.find("input[id='name']")[0].value.split(".").join("․");

@@ -840,6 +840,15 @@ game.settings.register("fate-core-official","freeStunts", {
         default:[]
     })
 
+    game.settings.register("fate-core-official", "countdowns", {
+        name: "countdowns",
+        scope:"world",
+        config:false,
+        type:Object,
+        restricted:true,
+        default:{}
+    })
+
     game.settings.register("fate-core-official", "fuFontSize", {
         name: "Fate Utilities Font Size",
         scope:"user",
@@ -929,6 +938,10 @@ Combatant.prototype._getInitiativeFormula = function () {
         return `1d0+${this.actor.data.data.skills[init_skill].rank}`;
     }
 }
+
+Handlebars.registerHelper("fco_getKey", function(value) {
+    return fcoConstants.getKey(value);
+});
 
 Handlebars.registerHelper("add1", function(value) {
     return value+1;
