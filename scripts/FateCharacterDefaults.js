@@ -480,6 +480,12 @@ class ManageDefaults extends FormApplication {
             let def = await f.getDefault(event.target.getAttribute("Data-default_name"));
             let prompt = game.i18n.localize("fate-core-official.defaultCharacterFramework")+ " " + def.default_name;
             let presentation = await f.presentDefault(def.default_name);
+            let actorLink;
+            if (presentation.actorLink){
+                actorLink = '<i class = "far fa-check-square fa-2x" title="On"/>';
+            } else {
+                actorLink = '<i class = "far fa-square fa-2x" title="Off"/>';
+            }
             let content = `
                 <div style="max-height:100em; max-width:50em; scroll-y:auto">
                     <table style="background-color:transparent; border:0px; text-align:left; vertical-align:middle">
@@ -499,7 +505,7 @@ class ManageDefaults extends FormApplication {
                         </tr>
                         <tr>
                             <td>
-                            ${game.i18n.localize("fate-core-official.token")}
+                                ${game.i18n.localize("fate-core-official.token")}
                             </td>
                             <td>
                             <img style="width:50px; height:auto" title = "${presentation.img}" src="${presentation.token_img}"/>
@@ -510,7 +516,7 @@ class ManageDefaults extends FormApplication {
                                 ${game.i18n.localize("fate-core-official.actorLink")}
                             </td>
                             <td>
-                                ${presentation.actorLink}
+                                ${actorLink}
                             </td>
                         </tr>
                         <tr>
