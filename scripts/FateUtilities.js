@@ -1214,19 +1214,6 @@ class FateUtilities extends Application{
         }
     }
 
-    async addCountdown (countdown){
-
-    }
-
-    async delCountdown (countdown){
-        let countdowns = game.settings.get("fate-core-official", "countdowns")
-        delete countdowns[data[0]];
-            await game.settings.set("fate-core-official", "countdowns", countdowns);
-            await game.socket.emit("system.fate-core-official",{"render":true});
-            await this._render(false);
-    }
-
-
     async _on_track_name_click(event, html) {
         // Launch a simple application that returns us some nicely formatted text.
         //First, get the token
