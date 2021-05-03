@@ -57,6 +57,7 @@
     "fate-core-official.description":"Description:",
     "fate-core-official.baseDefaults":{
         "fate-core":{
+           "actorLink":true,
            "stunts":{
               
            },
@@ -459,6 +460,7 @@
            "default_description":"Fate Core Standard Character"
         },
         "fate-condensed":{
+           "actorLink":true,
            "stunts":{
               
            },
@@ -873,6 +875,7 @@
            "default_description":"Fate Condensed Standard Character"
         },
         "fate-accelerated":{
+           "actorLink":true,
            "stunts":{
               
            },
@@ -1054,6 +1057,7 @@
            "default_description":"Fate Accelerated Standard Character"
         },
         "dresden-files-accelerated":{
+           "actorLink":true,
            "stunts":{
               
            },

@@ -77,7 +77,7 @@ class FateCharacterDefaults {
         //Returns the details of the default as an array with a human-readable format.
         //Used to present the default at the presentation layer so GM can get an idea of what the settings are for that template.
         let d = await duplicate(await this.getDefault(default_name));
-        console.log(d);
+        
         let output = {};
 
         output.img = d.img;

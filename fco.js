@@ -296,9 +296,9 @@ Hooks.once('ready', async function () {
     if (game.settings.get("fate-core-official","run_once") == false){
         if (game.user.isGM){
             fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.WelcomeTitle"),game.i18n.localize("fate-core-official.WelcomeText"),500,250);
-            game.settings.set("fate-core-official","run_once", true);
-            console.log(game.i18n.localize("fate-core-official.baseDefaults"));
-            game.settings.set("fate-core-official","defaults",game.i18n.localize("fate-core-official.baseDefaults"))
+            await game.settings.set("fate-core-official","run_once", true);
+            await game.settings.set("fate-core-official","defaults",game.i18n.localize("fate-core-official.baseDefaults"))
+            await ui.sidebar.render(false);
         }
     }
 })
