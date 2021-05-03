@@ -129,7 +129,7 @@ class fcoConstants {
         return new Promise(resolve => {
             new Dialog({
                 title: prompt,
-                content: '<div align="center"><input id="dialog_box" style="width:375px" autofocus></input></div>',
+                content: '<div align="center"><input id="dialog_box" style="width:375px; margin:5px" autofocus></input></div>',
                 buttons: {
                     ok: {
                         label: game.i18n.localize("fate-core-official.OK"),

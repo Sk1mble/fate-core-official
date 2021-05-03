@@ -9,6 +9,11 @@ export class fcoActor extends Actor {
         }
     }
 
+    // Override the standard createDialog to just spawn a character called 'New Actor'.
+    static async createDialog (...args){
+        Actor.create({"name":"New Character", "type":"fate-core-official"});
+    }
+
     async updateFromExtra(itemData) {
         let actor = this;
         actor.sheet.editing = true;

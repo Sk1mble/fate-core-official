@@ -1,3 +1,8 @@
+# Version 3.1.13
+  * ActorLink value now stored when you save a template.
+  * ActorLink set to true by default for new characters other than created from templates
+  * Overridden actor creation dialog means you don't have to give a name or pick a character type (There is only one valid character type so no need for a dialog)
+
 # Version 3.1.12
   * Implemented a new Countdown feature that can be found in the scene tab.
   * Although it's in the scene tab, countdowns are global because they can apply across multiple scenes.

@@ -1,4 +1,9 @@
 {
+   "fate-core-official.actorLink":"Actor Link?",
+   "fate-core-official.system_settings":"System Settings",
+   "fate-core-official.create_from_default":"Create character from this default framework",
+   "fate-core-official.manage_defaults":"Manage Defaults",
+   "fate-core-official.pick_name":"Actor name?",
    "fate-core-official.switch_hidden":"Switch to HIDDEN",
    "fate-core-official.switch_visible":"Switch to VISIBLE",
    "fate-core-official.switch_boxes":"Switch to BOXES SHOWN",

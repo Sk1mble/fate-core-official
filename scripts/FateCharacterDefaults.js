@@ -82,6 +82,7 @@ class FateCharacterDefaults {
 
         output.img = d.img;
         output.token_img = d.token_img;
+        output.actorLink = d.actorLink;
         output.default_name = d.default_name;
         output.default_description = d.default_description;
         let stunt_names = [];
@@ -235,6 +236,8 @@ class FateCharacterDefaults {
         //Let's apply the actor's avatar to the default, too.
         character_default.img = data.img;
         character_default.token_img = data.token.img;
+        
+        character_default.actorLink = data.token.actorLink;
 
         //This is important; it's the value which is used to grab the default out of the settings.
         character_default.default_name = default_name;
@@ -254,12 +257,13 @@ class FateCharacterDefaults {
             return; // This is not a proper character default.
         }
         // This method creates a character of the given name from the character default that's fed to it.
+
         const actor_data = {
             name:name,
             type:"fate-core-official",
             items:character_default.extras,
             img:character_default.img,
-            token:{img:character_default.token_img},
+            token:{img:character_default.token_img, actorLink:character_default.actorLink},
             data:{
                 details:{fatePoints:{refresh:"0", current:"0"}},
                 skills:character_default.skills,
@@ -338,7 +342,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
 
     const targetElement = html.find('ol[class="directory-list"]');
     const f = new FateCharacterDefaults();
-    let standard = "<option selected = 'selected'>fate-core-official</option>\n"
+    let standard = `<option value = "fate-core-official" selected = 'selected'>${game.i18n.localize("fate-core-official.system_settings")}</option>\n`
     let blank = "<option>Blank</option>\n"
     let defaults = f.defaults.map(d => `<option>${d}</option>`).join("\n");
     let options = standard+blank+defaults;
@@ -347,10 +351,10 @@ Hooks.on("renderSidebarTab", (app, html) => {
             <input type="text" value = "New Character" style="background-color:#f0f0e0; width:35%; height:25px;" id="MF_actor_to_create">
             <select style="width:35%; height:25px; background-color:#f0f0e0;" id="MF_default_to_use">${options}
             </select>
-            <button type="button" style="width:10%; height:35px" id="create_from_default">
+            <button type="button" style="width:10%; height:35px" id="create_from_default" title="${game.i18n.localize("fate-core-official.create_from_default")}">
             <i class="fas fa-user-check"></i>
             </button>
-            <button type="button" style="width:10%; height:35px" id="manage_defaults">
+            <button type="button" style="width:10%; height:35px" id="manage_defaults" title="${game.i18n.localize("fate-core-official.manage_defaults")}">
             <i class="fas fa-users-cog"></i>
             </button>
         </div>
@@ -374,13 +378,14 @@ Hooks.on("renderSidebarTab", (app, html) => {
             let actorData = {
                 "name":actor_name,
                 "type":"fate-core-official",
-                "data.details.fatePoints.refresh":"0"
+                "data.details.fatePoints.refresh":"0",
+                "token.actorLink":true
              }
              await Actor.create(actorData, {"renderSheet":true});
              return;
         }
         if (default_name === "fate-core-official"){
-            await Actor.create({"name":actor_name, "type":"fate-core-official"},{renderSheet:true});
+            await Actor.create({"name":actor_name, "type":"fate-core-official", "token.actorLink":true},{renderSheet:true});
             return;
         }
 
@@ -498,6 +503,14 @@ class ManageDefaults extends FormApplication {
                             </td>
                             <td>
                             <img style="width:50px; height:auto" title = "${presentation.img}" src="${presentation.token_img}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ${game.i18n.localize("fate-core-official.actorLink")}
+                            </td>
+                            <td>
+                                ${presentation.actorLink}
                             </td>
                         </tr>
                         <tr>

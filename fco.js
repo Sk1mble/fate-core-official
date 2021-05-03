@@ -34,18 +34,16 @@ import { Thing } from "./scripts/Thing.js"
 import { fcoActor } from "./scripts/fcoActor.js"
 import { fcoExtra } from "./scripts/fcoExtra.js"
 
-Hooks.on("preCreateActor", async (actor, data, options, userId) => {
+Hooks.on("preCreateActor", (actor, data, options, userId) => {
     if (data.type == "Thing"){
-        
         if (!options.thing){
             ui.notifications.error(game.i18n.localize("fate-core-official.CantCreateThing"));
-            data.type="fate-core-official";
-            options.temporary = true;
-            options.renderSheet = false;
-            return false;
+            return false
         }
     }
+});
 
+Hooks.on("preCreateActor", async (actor, data, options, userId) => {
     if (data.type == "ModularFate" || actor.type == "FateCoreOfficial"){
         data.type = "fate-core-official";
     }
@@ -54,7 +52,7 @@ Hooks.on("preCreateActor", async (actor, data, options, userId) => {
         if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
             if (actor?.data?.data?.details?.fatePoints?.refresh === ""){
                 let modified_data = await initialisefcoCharacter(actor);
-                data.data = modified_data.data;            
+                data.data = modified_data.data;
             }
         }
     }
