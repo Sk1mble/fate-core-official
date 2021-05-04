@@ -1465,9 +1465,34 @@ async getData(){
     data.gameNotesHeight = (this.position.height - 525) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
-
     
     return data;
+}
+
+
+
+static async createCountdown (data){
+    /**
+     * Assign the project to an employee.
+     * @param {Object} data - The parameters for the countdown to create
+     * @param {array} data.boxes - Array of booleans representing the boxes for this countdown
+     * @param {string} data.name - The countdown's name
+     * @param {string} data.description - The countdown's description; usually includes triggers and outcome
+     * @param {string} data.visible - Can be one of hidden, visible, or show_boxes
+     */
+
+    let countdown = {
+        name:data.name,
+        description:data.description,
+        boxes:data.boxes,
+        visible:data.visible
+    }
+    let countdowns = await duplicate(game.settings.get("fate-core-official","countdowns"));
+    let safeName = fcoConstants.getKey(countdown.name); 
+    countdowns[safeName]=countdown;
+    await game.settings.set("fate-core-official","countdowns",countdowns);
+    await game.socket.emit("system.fate-core-official",{"render":true});
+    this.fu.render(false);
 }
 
 async _render(...args){
@@ -1579,6 +1604,7 @@ class acd extends FormApplication {
             boxes:box_values,
             visible:data.visible
         }
+        
         let countdowns = await duplicate(game.settings.get("fate-core-official","countdowns"));
         let safeName = fcoConstants.getKey(countdown.name); 
         countdowns[safeName]=countdown;
