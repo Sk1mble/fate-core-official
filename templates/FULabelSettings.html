@@ -29,7 +29,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectLabelTextColourHint'}}</div>
             </td>
             <td>
-                <input type="color" style="width:5em" name="fu_text_color" value="{{this.textColour}}"
+                {{colorPicker name="fu_text_color" value = this.textColour}}
             </td>
         </tr>
         <tr>
@@ -38,7 +38,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectLabelFillColourHint'}}</div>
             </td>
             <td>
-                <input type="color" style="width:5em" name="fu_fill_color" value="{{this.fillColour}}"
+                {{colorPicker name="fu_fill_color" value = this.fillColour}}
             </td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectLabelBorderColourHint'}}</div>
             </td>
             <td>
-                <input type="color" style="width:5em" name="fu_border_color" value="{{this.borderColour}}"
+                {{colorPicker name="fu_border_color" value = this.borderColour}}
             </td>
         </tr>
         <tr>

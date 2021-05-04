@@ -1731,6 +1731,7 @@ class FUAspectLabelClass extends FormApplication {
     }
 
     async _updateObject(event, formData){
+        console.log(formData);
         let font = formData.fu_label_font;
         let size = formData.fu_font_size;
         let text = formData.fu_text_color;
@@ -1758,6 +1759,7 @@ class FUAspectLabelClass extends FormApplication {
     }
 
     async activateListeners(html){
+        super.activateListeners(html);
         $('#save_fu_label_settings').on('click', async event => {
             this.submit();
         })
