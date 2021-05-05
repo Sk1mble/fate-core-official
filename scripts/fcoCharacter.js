@@ -97,6 +97,15 @@ export class fcoCharacter extends ActorSheet {
                 await item.sheet.render(true);
             })
 
+            const gm_notes = html.find(`i[id="${this.document.id}_toggle_gm_notes"]`);
+            gm_notes.on("click", async event => {
+                if (this.document.data.data.details.notes.GM){
+                    await this.document.update({"data.details.notes.GM":false});
+                } else {
+                    await this.document.update({"data.details.notes.GM":true});
+                }
+            })
+
             extras_button.on("click", event => this._on_extras_click(event, html));
             extras_edit.on("click", event => this._on_extras_edit_click(event, html));
             extras_delete.on("click", event => this._on_extras_delete(event, html));

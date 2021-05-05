@@ -69,10 +69,16 @@
             </div>
             <div class="mfate-notes" style="max-width:80%">
                 <div class="mfate-panel__header">
-                    <div class="mfate-panel__header-label">{{localize 'fate-core-official.Notes'}}</div>
+                    <div class="mfate-panel__header-label">{{localize 'fate-core-official.Notes'}}{{#if GM}}{{#if data.details.notes.GM}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-on mfate-panel__header-button"></i>{{else}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-off mfate-panel__header-button"></i>{{/if}}<span style="font-size:x-small">GM Only?</span>{{/if}}</div>
                 </div>
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
-                    <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                    {{#if data.details.notes.GM}}
+                        {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                            {{else}}<div>These notes are for the GM's eyes only...</div>
+                        {{/if}}
+                    {{else}}
+                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                    {{/if}}
                 </div>
             </div>
         </div>

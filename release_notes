@@ -1,3 +1,6 @@
+# Version 3.1.14
+  * Added an option to make the notes on a character visible to GMs only.
+
 # Version 3.1.13
   * ActorLink value now stored when you save a template.
   * ActorLink set to true by default for new characters other than created from templates
