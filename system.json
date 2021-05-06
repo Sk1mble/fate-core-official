@@ -20,7 +20,8 @@
 					"./scripts/FateCharacterImporter.js",
 					"./scripts/FateCharacterDefaults.js",
 					"./scripts/Pen/pen.js",
-					"./scripts/Pen/markdown.js"
+					"./scripts/Pen/markdown.js",
+					"./scripts/purify.min.js"
 				],
 	"styles": ["fco.css","mfate-sheet.css", "./scripts/Pen/pen.css"],
 	"packs": [],
