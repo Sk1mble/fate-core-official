@@ -270,6 +270,24 @@ class fcoConstants {
         output.freeStunts = game.settings.get("fate-core-official","freeStunts");
         output.refreshTotal = game.settings.get("fate-core-official","refreshTotal");
         output.track_categories = game.settings.get("fate-core-official","track_categories");
+        output.defaults = game.settings.get("fate-core-official", "defaults");
+        output.enforceSkillTotal = game.settings.get("fate-core-official", "enforceSkillTotal");
+        output.enforceColumn = game.settings.get("fate-core-official", "enforceColumn");
+        output.init_skill = game.settings.get("fate-core-official", "init_skill");
+        output.modifiedRollDefault = game.settings.get("fate-core-official", "modifiedRollDefault")
+        output.sheet_template = game.settings.get("fate-core-official", "sheet_template")
+        output.limited_sheet_template = game.settings.get("fate-core-official", "limited_sheet_template")
+        output.playerThings = game.settings.get("fate-core-official", "PlayerThings")
+        output.DeleteOnTransfer = game.settings.get("fate-core-official", "DeleteOnTransfer")
+        output.drawingsOnTop = game.settings.get("fate-core-official", "drawingsOnTop")
+        output.fuFontSize = game.settings.get("fate-core-official", "fuFontSize")
+        output.aspectWidth = game.settings.get("fate-core-official", "aspectwidth")
+        output.fuAspectLabelSize = game.settings.get("fate-core-official", "fuAspectLabelSize")
+        output.fuAspectLabelFont = game.settings.get("fate-core-official", "fuAspectLabelFont")
+        output.fuAspectLabelTextColor = game.settings.get("fate-core-official", "fuAspectLabelTextColour")
+        output.fuAspectLabelFillColour = game.settings.get("fate-core-official", "fuAspectLabelFillColour")
+        output.fuAspectLabelBorderColour = game.settings.get("fate-core-official", "fuAspectLabelBorderColour")
+        output.skillsLabel = game.settings.get("fate-core-official", "skillsLabel")
         return JSON.stringify(output);
     }
 
@@ -289,18 +307,48 @@ class fcoConstants {
             }).render(true)
         });
     }
-
+    
+    // I'll need this code to get file data
+    //let f = await fetch("/systems/dnd5e/system.json")
+    //let j = await f.json()
+    
+    static async getJSON(filename){
+        let f = await fetch(filename)
+        let j = await f.json()
+        return j;
+    }
+    
     static async importSettings (input){
+        if (input.constructor === String) input = await JSON.parse(input);
+
         //This function parses a text string in JSON notation containing all of the game's settings and writes those settings to System.settings.
-        input = JSON.parse(input);
-        await game.settings.set("fate-core-official","stunts",input.stunts);
-        await game.settings.set("fate-core-official","skills",input.skills);
-        await game.settings.set("fate-core-official","skillTotal",input.skillTotal);
-        await game.settings.set("fate-core-official","tracks",input.tracks);
-        await game.settings.set("fate-core-official","aspects",input.aspects);
-        await game.settings.set("fate-core-official","freeStunts",input.freeStunts);
-        await game.settings.set("fate-core-official","refreshTotal",input.refreshTotal);
-        await game.settings.set("fate-core-official","track_categories",input.track_categories);
+        await game.settings.set("fate-core-official","stunts",input?.stunts);
+        await game.settings.set("fate-core-official","skills",input?.skills);
+        await game.settings.set("fate-core-official","skillTotal",input?.skillTotal);
+        await game.settings.set("fate-core-official","tracks",input?.tracks);
+        await game.settings.set("fate-core-official","aspects",input?.aspects);
+        await game.settings.set("fate-core-official","freeStunts",input?.freeStunts);
+        await game.settings.set("fate-core-official","refreshTotal",input?.refreshTotal);
+        await game.settings.set("fate-core-official","track_categories",input?.track_categories);
+        await game.settings.set("fate-core-official", "defaults", input?.defaults) 
+        await game.settings.set("fate-core-official", "enforceSkillTotal", input?.enforceSkillTotal);
+        await game.settings.set("fate-core-official", "enforceColumn", input?.enforceColumn);
+        await game.settings.set("fate-core-official", "init_skill", input?.init_skill);
+        await game.settings.set("fate-core-official", "modifiedRollDefault", input?.modifiedRollDefault);
+        await game.settings.set("fate-core-official", "sheet_template", input?.sheet_template);
+        await game.settings.set("fate-core-official", "limited_sheet_template", input?.limited_sheet_template);
+        await game.settings.set("fate-core-official", "PlayerThings", input.PlayerThings)
+        await game.settings.set("fate-core-official", "DeleteOnTransfer", input.DeleteOnTransfer)
+        await game.settings.set("fate-core-official", "drawingsOnTop", input.drawingsOnTop)
+        await game.settings.set("fate-core-official", "fuFontSize", input.fuFontSize)
+        await game.settings.set("fate-core-official", "aspectwidth", input.aspectWidth)
+        await game.settings.set("fate-core-official", "fuAspectLabelSize", input.fuAspectLabelSize)
+        await game.settings.set("fate-core-official", "fuAspectLabelFont", input.fuAspectLabelFont)
+        await game.settings.set("fate-core-official", "fuAspectLabelTextColour", input.fuAspectLabelTextColor)
+        await game.settings.set("fate-core-official", "fuAspectLabelFillColour", input.fuAspectLabelFillColour)
+        await game.settings.set("fate-core-official", "fuAspectLabelBorderColour", input.fuAspectLabelBorderColour)
+        await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel)
+        await ui.sidebar.render(false);
     }
 
     static async getMFSettings(){

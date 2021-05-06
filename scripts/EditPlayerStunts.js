@@ -9,7 +9,7 @@ class EditPlayerStunts extends FormApplication {
         //This is a good place to set up some variables at the top level so we can access them with this.
         
         if (this.actor == null){
-            this.options.title=`${game.i18n.localize("fate-core-official.ExtraStuntEditor")}}`
+            this.options.title=`${game.i18n.localize("fate-core-official.dbStuntEditor")}`
         } else {
             if (this?.actor?.type == "Extra"){
                 this.options.title=`${game.i18n.localize("fate-core-official.ExtraStuntEditor")} ${this.object.name}`

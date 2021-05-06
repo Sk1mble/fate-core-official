@@ -1,3 +1,9 @@
+# Version 3.1.15
+  * Characters with refresh 0 now have all but the Notes field hidden; ideal for map markers etc.
+  * To enable the other sheet fields, just set refresh to a number other than 0.
+  * The world import/export feature now exports more settings than before including character defaults, and can read in from a JSON file.
+  * Added a method to fcoConstants to allow a JSON file to be read in
+
 # Version 3.1.14
   * Added an option to make the notes on a character visible to GMs only.
 
