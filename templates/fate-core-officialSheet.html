@@ -10,11 +10,13 @@
             <div class="mfate-sheet__meta">
                 <div class="mfate-sheet__meta-column">
                     <div class="mfate-sheet__meta-item" style="display:flex; flex-direction:row; padding-left:10px">
+                        {{#if (gt data.details.fatePoints.refresh 0)}}
                         <div style="display:block">
                             <input class="circle-input"
                             class="mfate-sheet__meta-value" style="text-align:center" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
                             <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Current'}} </div>
                         </div>
+                        {{/if}}
                         <div style="display:block; padding-left:10px">
                             <input class="circle-input" 
                             class="mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="data.details.fatePoints.refresh" name="data.details.fatePoints.refresh" value="{{data.details.fatePoints.refresh}}"></input>
@@ -46,7 +48,8 @@
 
     <section class="sheet-body">
         <div class = "tab notes mfate-sheet__tab mfate-sheet__tab--main" name="notes" data-tab="notes" style="font-style:normal; max-width:100%; padding-bottom:6px; padding-left:6px; padding-right:6px">
-           <div>
+            {{#if (gt data.details.fatePoints.refresh 0)}}
+            <div>
                 <div class="mfate-sheet__meta">
                     <div class="mfate-sheet__meta-column">
                         <div class="mfate-sheet__meta-item">
@@ -69,6 +72,7 @@
                     </div>
                 </div>
             </div>
+            {{/if}}
             <div class="mfate-notes" style="max-width:80%">
                 <div class="mfate-panel__header">
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Notes'}}{{#if GM}}{{#if data.details.notes.GM}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-on mfate-panel__header-button"></i>{{else}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-off mfate-panel__header-button"></i>{{/if}}<span style="font-size:x-small">GM Only?</span>{{/if}}</div>
