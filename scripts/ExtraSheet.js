@@ -80,7 +80,7 @@ export class ExtraSheet extends ItemSheet {
         const desc = $(`#${this.document.id}_descValue`);
         //Update the extra when the field loses focus.
         desc.on("blur", async event => {
-            await this.document.update({"data.description.value":event.target.innerHTML})
+            await this.document.update({"data.description.value":DOMPurify.sanitize(event.target.innerHTML)})
         })
         //That's the description field; still to come permissions, costs, caa, attack,overcome, defend
         // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
@@ -138,13 +138,13 @@ export class ExtraSheet extends ItemSheet {
 
         const permissions = html.find(`div[id='${this.document.id}_permValue']`);
         permissions.on("blur", async event => {
-            let permissions = event.target.innerHTML;
+            let permissions = DOMPurify.sanitize(event.target.innerHTML);
             await this.document.update({"data.permissions":permissions});
         })
 
         const costs = html.find(`div[id='${this.document.id}_costsValue']`);
         costs.on("blur", async event => {
-            let costs = event.target.innerHTML;
+            let costs = DOMPurify.sanitize(event.target.innerHTML);
             await this.document.update({"data.costs":costs});
         })
 
@@ -156,31 +156,31 @@ export class ExtraSheet extends ItemSheet {
 
         const description = html.find(`div[id='${this.document.id}_descValue']`);
         description.on("blur", async event => {
-            let text = event.target.innerHTML;
+            let text =  DOMPurify.sanitize(event.target.innerHTML);
             await this.document.update({"data.description.value":text});
         })
 
         const overcome = html.find(`div[id='${this.document.id}_overcomeValue']`);
         overcome.on("blur", async event => {
-            let text = event.target.innerHTML;
+            let text = DOMPurify.sanitize(event.target.innerHTML);
             await this.document.update({"data.actions.overcome":text});
         })
 
         const create = html.find(`div[id='${this.document.id}_createValue']`);
         create.on("blur", async event => {
-            let text = event.target.innerHTML;
+            let text = DOMPurify.sanitize(event.target.innerHTML);
             await this.document.update({"data.actions.create":text});
         })
 
         const attack = html.find(`div[id='${this.document.id}_attackValue']`);
         attack.on("blur", async event => {
-            let text = event.target.innerHTML;
+            let text = DOMPurify.sanitize(event.target.innerHTML);
             await this.document.update({"data.actions.attack":text});
         })
 
         const defend = html.find(`div[id='${this.document.id}_defendValue']`);
         defend.on("blur", async event => {
-            let text = event.target.innerHTML;
+            let text = DOMPurify.sanitize(event.target.innerHTML);
             await this.document.update({"data.actions.defend":text});
         })
 
@@ -319,7 +319,7 @@ export class ExtraSheet extends ItemSheet {
 
     async _on_boxes_change(html, event){
         ////console.log(event.target.value)
-        let num = parseInt(event.target.innerHTML);
+        let num = parseInt(DOMPurify.sanitize(event.target.innerHTML));
         ////console.log(num);
     }
     static get defaultOptions() {

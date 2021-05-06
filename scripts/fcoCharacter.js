@@ -691,20 +691,20 @@ export class fcoCharacter extends ActorSheet {
 
     async _onBioFocusOut (event, html){
         this.editing = false;
-        let bio = event.target.innerHTML;
+        let bio = DOMPurify.sanitize(event.target.innerHTML);
         await this.object.update({"data.details.biography.value":bio})
     }
 
     async _onNotesFocusOut (event, html){
         this.editing = false;
-        let notes = event.target.innerHTML;
+        let notes = DOMPurify.sanitize(event.target.innerHTML);
         await this.object.update({"data.details.notes.value":notes})
         
     }
 
     async _onDescFocusOut (event, html){
         this.editing = false;
-        let desc = event.target.innerHTML;
+        let desc = DOMPurify.sanitize(event.target.innerHTML);
         await this.object.update({"data.details.description.value":desc})
     }
 
@@ -776,11 +776,11 @@ export class fcoCharacter extends ActorSheet {
     async _on_track_name_click(event, html) {
         // Launch a simple application that returns us some nicely formatted text.
         let tracks = duplicate(this.object.data.data.tracks);
-        let track = tracks[event.target.innerHTML]
+        let track = tracks[DOMPurify.sanitize(event.target.innerHTML)]
         let notes = track.notes;
         let text = await fcoConstants.updateText( game.i18n.localize("fate-core-official.TrackNotesFor")+" "+track.name +" "+game.i18n.localize("fate-core-official.on")+" "+this.actor.name, notes);
         await this.object.update({
-            [`data.tracks.${event.target.innerHTML}.notes`]: text
+            [`data.tracks.${DOMPurify.sanitize(event.target.innerHTML)}.notes`]: text
         })
     }
 

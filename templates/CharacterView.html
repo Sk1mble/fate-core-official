@@ -2,7 +2,7 @@
     <h1>{{name}}</h1>
     {{#if (eq avatar undefined)}}{{else}}<img style="width:200px; height:auto" src = "{{avatar}}"/><p/>{{/if}}
     {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'fate-core-official.Biography'}}</h2>{{{biography.value}}}</div><p/>{{/if}}
-    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'fate-core-official.Description'}}</h2>{{{description.value}}}</div><p/>{{/if}}
+    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'fate-core-official.Description'}}</h2>{{{enr description.value}}}</div><p/>{{/if}}
     {{#if (eq aspects undefined)}}{{else}}<h2>{{localize 'fate-core-official.Aspects'}}</h2>
     <table style="border:none; background:none">
     {{#each aspects}}

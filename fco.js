@@ -937,6 +937,11 @@ Combatant.prototype._getInitiativeFormula = function () {
     }
 }
 
+// Return enriched text WITH secret blocks if the user is GM and otherwise WITHOUT
+Handlebars.registerHelper("enr", function(value) {
+    return TextEditor.enrichHTML(value, game.user.isGM, true, false, false)
+})
+
 Handlebars.registerHelper("fco_getKey", function(value) {
     return fcoConstants.getKey(value);
 });

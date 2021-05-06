@@ -239,7 +239,7 @@ class EditAspect extends FormApplication{
     async _onSaveButton(event,html){
         //Get the name and description of the aspect
         let name = html.find("input[id='edit_aspect_name']")[0].value.split(".").join("․").trim();
-        let description = html.find("div[id='edit_aspect_description']")[0].innerHTML;
+        let description = DOMPurify.sanitize(html.find("div[id='edit_aspect_description']")[0].innerHTML);
         let aspects=game.settings.get("fate-core-official","aspects");
         let newAspect = {"name":name, "description":description};
         var existing = false;

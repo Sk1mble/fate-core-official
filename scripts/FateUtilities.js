@@ -382,7 +382,7 @@ class FateUtilities extends Application{
 
         const game_date_time = html.find(("div[id='game_date_time']"));
         game_date_time.on("blur", async event => {
-            await game.settings.set("fate-core-official", "gameTime", event.target.innerHTML);
+            await game.settings.set("fate-core-official", "gameTime", DOMPurify.sanitize(event.target.innerHTML));
             await game.socket.emit("system.fate-core-official",{"render":true});
         })
 
@@ -393,7 +393,7 @@ class FateUtilities extends Application{
         })
 
         game_notes.on("blur", event => {
-            game.settings.set("fate-core-official", "gameNotes", event.target.innerHTML);
+            game.settings.set("fate-core-official", "gameNotes", DOMPurify.sanitize(event.target.innerHTML));
             game.socket.emit("system.fate-core-official",{"render":true});
             this.editing = false;
         })
@@ -617,7 +617,7 @@ class FateUtilities extends Application{
     }
 
     async _notesFocusOut(event, html){
-        let notes = html.find("div[id='scene_notes']")[0].innerHTML
+        let notes = DOMPurify.sanitize(html.find("div[id='scene_notes']")[0].innerHTML);
         game.scenes.viewed.setFlag("fate-core-official","sceneNotes",notes);
         this.editing=false;
     }
@@ -1187,7 +1187,7 @@ class FateUtilities extends Application{
                 let countdown = countdowns[data[0]];
                 if (countdown.name != event.target.innerHTML){
                     let oldname = countdown.name;
-                    let newname = event.target.innerHTML;
+                    let newname = DOMPurify.sanitize(event.target.innerHTML);
                     let testname = newname.replace(/<[^>]+>/g, '');
                     if (testname == ""){
                         event.target.innerHTML=oldname;
@@ -1206,7 +1206,7 @@ class FateUtilities extends Application{
                 this.editing = false;
                 let countdowns = game.settings.get("fate-core-official", "countdowns");
                 let countdown = countdowns[data[0]];
-                countdown.description = event.target.innerHTML;
+                countdown.description = DOMPurify.sanitize(event.target.innerHTML);
                 await game.settings.set("fate-core-official", "countdowns", countdowns);
                 await game.socket.emit("system.fate-core-official",{"render":true});
                 await this._render(false);
@@ -1220,11 +1220,11 @@ class FateUtilities extends Application{
         let token_id = event.target.id;
         let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
         let tracks = duplicate(token.actor.data.data.tracks);
-        let track = tracks[event.target.innerHTML]
+        let track = tracks[DOMPurify.sanitize(event.target.innerHTML)]
         let notes = track.notes;
         let text =  await fcoConstants.updateText(game.i18n.localize("fate-core-official.TrackNotes"), notes);
         token.actor.update({
-            [`data.tracks.${event.target.innerHTML}.notes`]: text
+            [`data.tracks.${DOMPurify.sanitize(event.target.innerHTML)}.notes`]: text
         })
     }
 
