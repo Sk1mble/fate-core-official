@@ -1,4 +1,4 @@
-# Version 3.1.17
+# Version 3.1.17 & 3.1.18 (Bugfix)
   * Built in support for storing scene flag data so map pins and scene journal links are not lost on import from compendia.
   * To store the flags, either use the macro or run fcoConstants.index_journals before exporting the scenes to a compendium
   * The system is built to restore from this flag (if found) during installation of a module, but this can also be done manually with 
