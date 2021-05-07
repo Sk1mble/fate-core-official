@@ -299,7 +299,7 @@ Hooks.once('ready', async function () {
     if (game.settings.get("fate-core-official","run_once") == false){
         const ehmodules = [];
         game.modules.forEach(m => {
-            if (m?.data?.system?.indexOf("fate-core-official") !== -1){
+            if (m?.data?.system?.indexOf("fate-core-official") !== -1 && (m.data.author.startsWith("Evil Hat Productions") || m.data.author.startsWith("Richard Bellingham"))){
                 ehmodules.push(m);
             }
         })
@@ -337,11 +337,15 @@ Hooks.once('ready', async function () {
                     game.settings.set("fate-core-official", "installing", module);
                     // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
                     let mc = game.settings.get("core","moduleConfiguration");
-                    if (mc[module] == true) this.installModule(module)
+                    if (mc[module] == true) {
+                        this.installModule(module);
+                        this.close();
+                    }
                     else {
                         mc[module]=true;
                         await game.settings.set("core", "moduleConfiguration", mc);
                     }
+                    
                 })
             }
 
@@ -364,7 +368,7 @@ Hooks.once('ready', async function () {
                 let module = await game.modules.get(module_name);
                 let packs = Array.from(module.packs);
                 for (let pack of packs){
-                    if (!pack.name.includes("FateX")){
+                    if (!pack.name.includes("fatex")){
                         let cc = new CompendiumCollection (pack);
                         await cc.importAll();
                     }
@@ -373,21 +377,30 @@ Hooks.once('ready', async function () {
                 // Set installing and run_once to the appropriate post-install values
                 await game.settings.set("fate-core-official", "run_once", true);
                 await game.settings.set("fate-core-official", "installing", "none");
-                //TODO: Set the 'welcome' scene we grabbed from the scenes compendium to active
-                let scene = game.scenes.getName("Welcome");
-                if (scene) scene.activate();
+               
                 // Relink all tokens with actor link with their related entities (we'll need to be sure that any linked tokens have a 1:1 relationship with actors for our world setups)
-                
-                for (let scene of Array.from(game.scenes)){
-                    let update = [];
-                    for (let token of scene.tokens.contents){
-                        let match_id = game.actors.getName(token.name)?.id;
-                        if (match_id) {
-                            update.push({_id:token.id, actorId:match_id})
-                        }
+                await fcoConstants.relink_after_compendia();
+
+                // Finally, set the actors and journal entries in this module's public folders to have observer permissions for all players.
+                let labels = game.modules.get(module_name).packs.map(p => p.label);
+                let public_folders = labels.filter(label => label.toLowerCase().indexOf("public") != -1);
+                public_folders = public_folders.concat(labels.filter(label => label.toLowerCase().indexOf("player character") != -1))
+                for (let folder of public_folders){
+                    let update = []
+                    let content = Array.from(game.folders.getName(folder).content);
+                    let docType = content[0]?.constructor.name;
+                    for (let c of content){
+                        update.push({_id:c.id, "permission.default":CONST.ENTITY_PERMISSIONS.OBSERVER});
                     }
-                    await scene.updateEmbeddedDocuments("Token", update);
+                    if (docType){
+                        const cls = getDocumentClass(docType);
+                        await cls.updateDocuments(update);
+                    }
                 }
+
+                 // Set the 'welcome' scene we grabbed from the scenes compendium to active
+                 let scene = game.scenes.getName("Welcome");
+                 if (scene) await scene.activate();
             }
         }
 
@@ -492,6 +505,7 @@ Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = fcoActor;
     CONFIG.Item.documentClass = fcoExtra;
     CONFIG.fontFamilies.push("Montserrat");
+    CONFIG.fontFamilies.push("Jost");
 
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.
     game.settings.register("fate-core-official", "defaultSkills", {

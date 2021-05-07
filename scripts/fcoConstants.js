@@ -288,7 +288,7 @@ class fcoConstants {
         output.fuAspectLabelFillColour = game.settings.get("fate-core-official", "fuAspectLabelFillColour")
         output.fuAspectLabelBorderColour = game.settings.get("fate-core-official", "fuAspectLabelBorderColour")
         output.skillsLabel = game.settings.get("fate-core-official", "skillsLabel")
-        return JSON.stringify(output);
+        return JSON.stringify(output, null, 5);
     }
 
     static async getSettings (){
@@ -363,6 +363,74 @@ class fcoConstants {
 
     static getKey(text){
         return text.hashCode();
+    }
+
+    static async index_journals(){
+        // First we store the linkages between journals and map pins and journals and scenes.
+        let scenes = Array.from(game.scenes);
+        for (let scene of scenes){
+            let s_index = {};
+            s_index["scene_journal"] = scene.journal?.name;
+
+            let notes = Array.from(scene.notes);
+            for (let note of notes){
+                let name = game.journal.get(note.data.entryId).name;
+                s_index[note.data.entryId] = name;
+            }
+            await scene.setFlag("fate-core-official","s_index", s_index);
+        }
+        //Now we store a flag on every journal entry with its current reference so that we can re-map after importing.
+        let journals = Array.from(game.journal);
+        for (let journal of journals){
+            journal.setFlag("fate-core-official","oldId",journal.id);
+        }
+    }
+
+    static async relink_after_compendia (){
+        for (let scene of Array.from(game.scenes)){
+            let update = [];
+            for (let token of scene.tokens.contents){
+                let match_id = game.actors.getName(token.name)?.id;
+                if (match_id) {
+                    update.push({_id:token.id, actorId:match_id})
+                }
+            }
+            await scene.updateEmbeddedDocuments("Token", update);
+            // Now let us link to the journal for the scene and map pins. 
+            // These must have been stored in the scenes BEFORE being put in the compendia.
+            // The macro to do this is called "Index Scene Journals"
+            let s_index = scene.getFlag("fate-core-official", "s_index");
+            if (s_index){
+                if (s_index["scene_journal"]){
+                    await scene.update({journal:game.journal.getName(s_index["scene_journal"]).id});
+                }
+            }
+            let notes = Array.from(scene.notes);
+            update = [];
+            for (let note of notes){
+                console.log(note);
+                let id = game.journal.getName(s_index[note.data.entryId])?.id;
+                if (id){
+                    update.push({"_id":note.id, "entryId":id});
+                }
+            }
+            if (update.length > 0){
+                await scene.updateEmbeddedDocuments("Note", update);
+            }
+        }
+        // Now to re-link the journal text
+        let journals = Array.from(game.journal);
+        for (let journal of journals){
+            let text = journal.data.content;
+            for (let j3 of journals){
+                let oldId = j3.getFlag("fate-core-official","oldId");
+                if (text.indexOf(oldId)==-1) continue;
+                let newId = j3.id;
+                let regex = new RegExp(oldId, 'g');
+                text = text.replace(regex, newId);
+            }
+            await journal.update({content:text});
+        }
     }
 } 
 

@@ -156,14 +156,14 @@ class FateCharacterDefaults {
     async exportDefaults(list_to_export){
         // Return a string of the chosen defaults to export. If no array of default_name values given, return all defaults.
         if (! list_to_export){
-            return JSON.stringify(game.settings.get("fate-core-official","defaults"));
+            return JSON.stringify(game.settings.get("fate-core-official","defaults"),null,5);
         } else {
             let to_export = {};
             let existing_defaults = duplicate (game.settings.get("fate-core-official", "defaults"));
             for (let d of list_to_export){
                 to_export[this.getSafeName(d)]=existing_defaults[this.getSafeName(d)];
             }
-            return JSON.stringify(to_export);
+            return JSON.stringify(to_export, null, 5);
         }
     }
 

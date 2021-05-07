@@ -90,7 +90,7 @@ class AspectSetup extends FormApplication{
         let aspects = game.settings.get("fate-core-official","aspects");
         let slb = html.find("select[id='aspectListBox']")[0].value;
         let sk = aspects[slb];
-        let aspect_text = `{"${slb}":${JSON.stringify(sk)}}`
+        let aspect_text = `{"${slb}":${JSON.stringify(sk, null, 5)}}`
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyPasteToSaveAspect"), 
@@ -102,7 +102,7 @@ class AspectSetup extends FormApplication{
 
     async _onExportAspects(event, html){
         let aspects = game.settings.get("fate-core-official","aspects");
-        let aspects_text = JSON.stringify(aspects);
+        let aspects_text = JSON.stringify(aspects, null, 5);
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyPasteToSaveAspects"), 

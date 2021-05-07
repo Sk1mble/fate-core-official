@@ -1,4 +1,15 @@
 @font-face {
+  font-family:"Jost";
+  src: url("fonts/Jost-variable.ttf");
+}
+
+@font-face {
+  font-family:"Jost";
+  src: url("fonts/Jost-italic.ttf");
+  font-style: italic;
+}
+
+@font-face {
   font-family: "Montserrat";
   src: url("fonts/Montserrat-Regular.otf");
 }

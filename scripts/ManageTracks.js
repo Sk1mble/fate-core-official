@@ -190,7 +190,7 @@ class EditTracks extends FormApplication {
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectATrackToCopyFirst"));
         }
         else {
-            let track = `{"${name}":${JSON.stringify(this.tracks[name])}}`;
+            let track = `{"${name}":${JSON.stringify(this.tracks[name], null, 5)}}`;
             new Dialog({
                 title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${track}</textarea></div>`,
@@ -447,7 +447,7 @@ class TrackSetup extends FormApplication{
 
     async _exportTracks(event, html){
         let tracks = game.settings.get("fate-core-official","tracks");
-        let tracks_text = JSON.stringify(tracks);
+        let tracks_text = JSON.stringify(tracks, null, 5);
      
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveWorldTracks"),

@@ -303,7 +303,7 @@ class StuntDB extends Application {
 
     async _onExportStunts(event, html){
  
-        let stunt_text = JSON.stringify(game.settings.get("fate-core-official","stunts"));
+        let stunt_text = JSON.stringify(game.settings.get("fate-core-official","stunts"),null,5);
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunts"), 
@@ -316,7 +316,7 @@ class StuntDB extends Application {
     async _onExportStunt(event, html){
         let stunt = event.target.id.split("_")[0];
 
-        let stunt_text = `{"${stunt}":${JSON.stringify(game.settings.get("fate-core-official","stunts")[stunt])}}`;
+        let stunt_text = `{"${stunt}":${JSON.stringify(game.settings.get("fate-core-official","stunts")[stunt],null,5)}}`;
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunt"), 

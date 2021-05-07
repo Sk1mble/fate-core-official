@@ -106,7 +106,7 @@ class SkillSetup extends FormApplication{
         let skills = game.settings.get("fate-core-official","skills");
         let slb = html.find("select[id='skillListBox']")[0].value;
         let sk = skills[slb];
-        let skill_text = `{"${slb}":${JSON.stringify(sk)}}`
+        let skill_text = `{"${slb}":${JSON.stringify(sk, null, 5)}}`
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkill"),
@@ -118,7 +118,7 @@ class SkillSetup extends FormApplication{
 
     async _onExportSkills(event, html){
         let skills = game.settings.get("fate-core-official","skills");
-        let skills_text = JSON.stringify(skills);
+        let skills_text = JSON.stringify(skills, null, 5);
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkills"), 
