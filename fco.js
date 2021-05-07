@@ -378,24 +378,22 @@ Hooks.once('ready', async function () {
                 await game.settings.set("fate-core-official", "run_once", true);
                 await game.settings.set("fate-core-official", "installing", "none");
                
-                // Relink all tokens with actor link with their related entities (we'll need to be sure that any linked tokens have a 1:1 relationship with actors for our world setups)
+                // Relink all tokens with actor link with their related entities (we'll need to be sure that any linked tokens have a 1:1 relationship with actors for our world setups) and set up permissions on public folders
                 await fcoConstants.relink_after_compendia();
 
                 // Finally, set the actors and journal entries in this module's public folders to have observer permissions for all players.
                 let labels = game.modules.get(module_name).packs.map(p => p.label);
                 let public_folders = labels.filter(label => label.toLowerCase().indexOf("public") != -1);
-                public_folders = public_folders.concat(labels.filter(label => label.toLowerCase().indexOf("player character") != -1))
+                public_folders = public_folders.concat(labels.filter(label => label.toLowerCase().indexOf("player characters") != -1))
                 for (let folder of public_folders){
                     let update = []
                     let content = Array.from(game.folders.getName(folder).content);
-                    let docType = content[0]?.constructor.name;
+                    console.log(game.folders.getName(folder).data.type)
+                    const cls = getDocumentClass(game.folders.getName(folder)?.data?.type);
                     for (let c of content){
                         update.push({_id:c.id, "permission.default":CONST.ENTITY_PERMISSIONS.OBSERVER});
                     }
-                    if (docType){
-                        const cls = getDocumentClass(docType);
-                        await cls.updateDocuments(update);
-                    }
+                    await cls?.updateDocuments(update);
                 }
 
                  // Set the 'welcome' scene we grabbed from the scenes compendium to active
