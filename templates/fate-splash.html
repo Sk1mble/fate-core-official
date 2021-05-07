@@ -1,0 +1,30 @@
+<form style="padding:10px; font-family:Montserrat; background-image: url('/systems/fate-core-official/assets/splash.jpg');">
+<div>
+    <div style= "max-height:{{this.h}}px height:{{this.h}}px; width:{{this.w}}px max-width:{{this.w}}px; padding:25px;">
+        <b style="font-size:24pt; color:white">WELCOME TO FATE CORE SYSTEM!</b><p/>
+        {{#if (gt this.num_modules 0)}}
+        <b style="font-size:14pt; color:white">
+            {{{localize 'fate-core-official.WelcomeTextWithModules'}}}</b>
+        <div style="overflow-y:auto; max-height:{{this.mh}}px">
+            <table style="background:transparent; border:none;">
+            {{#each this.ehmodules}}
+                <tr>
+                    <td style="width:200px; vertical-align:top; padding:25px">
+                        <button type="button" title="{{localize 'fate-core-official.clickToSetup'}} {{this.data.title}}" name="eh_install" id="install_{{this.data.name}}" style="width:260px; height:260px; border:none; background: url('/modules/{{this.data.name}}/art/thumb.jpg') scroll no-repeat center center; background-size:260px 260px">
+                    </td>
+                    <td>
+                        <span style="font-size:11pt; color:white">{{{enr this.data.description}}}</span>
+                    </td>
+                </tr>      
+            {{/each}}
+            </table>
+        </div>
+        {{else}}
+        <b style="font-size:16pt; color:white">{{{localize 'fate-core-official.WelcomeTextWithoutModules'}}} </b>
+        {{/if}}        
+    </div>
+    <div>
+        <button type="button" id="fco_continue_button" style="margin-left:25%; width:50%; margin-right:25%; height:2em; font-size:16pt; color:black; font-weight:bold; background-color:white; border:none">CONTINUE</button>
+    </div>
+</div>
+</form>

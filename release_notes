@@ -1,3 +1,10 @@
+# Version 3.1.16
+  * Evil Hat official content deployment tool prepared. Requirements that must be met in a module to be successfully set up are:
+  ** There must be a thumbnail image in /module/[module-name]/art/thumb.jpg.
+  *** It's assumed that this thumbnail is 260px by 260px.
+  * There must be a setup.json file in /module/[module name]/json/setup.json" This is an export of all the world's settings.
+  * Ensure all actor names are unique
+
 # Version 3.1.15
   * Characters with refresh 0 now have all but the Notes field hidden; ideal for map markers etc.
   * To enable the other sheet fields, just set refresh to a number other than 0.

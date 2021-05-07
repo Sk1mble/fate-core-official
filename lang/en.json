@@ -1,4 +1,5 @@
 {
+   "fate-core-official.clickToSetup":"Click to setup",
    "fate-core-official.actorLink":"Actor Link?",
    "fate-core-official.system_settings":"System Settings",
    "fate-core-official.create_from_default":"Create character from this default framework",
@@ -1579,8 +1580,9 @@
     "fate-core-official.CannotDeleteThe":"Can't delete the",
     "fate-core-official.CategoryThatCannotDelete":"category as it's needed by the system.",
     "fate-core-official.PleaseSelectACategoryFirst":"Please select a category first.",
-    "fate-core-official.WelcomeTitle":"Welcome to the Modular Fate System!",
-    "fate-core-official.WelcomeText":"Welcome! Head on over to the System options in Foundry's Settings menu to get everything set up. Use the options to pre-load default skills, aspects, and tracks from Core, Condensed or Accelerated and then customise them, or you can start completely from scratch - it's up to you!<p/>Any character created will be initialised using those settings, so it's best not to create any characters until you've finished setting up your game.<p/> Have fun!",
+    "fate-core-official.WelcomeTitle":"Welcome to the Fate Core System!",
+    "fate-core-official.WelcomeTextWithModules":"Pick a Fate Core module for this world and we'll set it up for you with one click!<p/>OR<p/>Click 'Continue' and use the System options in the Foundry Settings menu to:<p/><ul style='color:white; font-size:18pt'><li>Pre-load default skills, aspects, and tracks</li><li>Select stats and mechanics from Fate Core, Accelerated, and Condensed</li><li>Customize all of the above</li><li>Scrap it all and start from scratch!</li></ul><p/>If you change your mind later, use the 'Setup' macro in a module's compendium, or create a new world!",
+    "fate-core-official.WelcomeTextWithoutModules":"You don't have any Fate Core modules installed, so click 'Continue' and use the System options in the Foundry Settings menu to:<p/><ul style='color:white; font-size:18pt'><li>Pre-load default skills, aspects, and tracks</li><li>Select stats and mechanics from Fate Core, Accelerated, and Condensed</li><li>Customize all of the above</li><li>Scrap it all and start from scratch!</li></ul><p/>If you change your mind later, use the 'Setup' macro in a module's compendium, or create a new world!",
     "fate-core-official.DefaultSheetTemplateName":"Default Sheet Template",
     "fate-core-official.DefaultSheetTemplateHint":"Give a path to a custom character sheet template here to override the standard sheet.",
     "fate-core-official.DefaultLimitedSheetTemplateName":"Default Limited Sheet Template",

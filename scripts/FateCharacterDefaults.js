@@ -258,6 +258,7 @@ class FateCharacterDefaults {
         }
         // This method creates a character of the given name from the character default that's fed to it.
 
+        let refresh = game.settings.get("fate-core-official","refreshTotal");
         const actor_data = {
             name:name,
             type:"fate-core-official",
@@ -265,7 +266,7 @@ class FateCharacterDefaults {
             img:character_default.img,
             token:{img:character_default.token_img, actorLink:character_default.actorLink},
             data:{
-                details:{fatePoints:{refresh:"0", current:"0"}},
+                details:{fatePoints:{refresh:refresh, current:refresh}},
                 skills:character_default.skills,
                 stunts:character_default.stunts,
                 aspects:character_default.aspects,

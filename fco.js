@@ -292,14 +292,122 @@ Hooks.once('ready', async function () {
             await changeFlag (dom);
         })
     })
-                
+
+
+    // The code for initialising a new world with the content of a module pack goes here.
+    // The fallback position is to display a similar message to the existing one.            
     if (game.settings.get("fate-core-official","run_once") == false){
+        const ehmodules = [];
+        game.modules.forEach(m => {
+            if (m?.data?.system?.indexOf("fate-core-official") !== -1){
+                ehmodules.push(m);
+            }
+        })
+        console.log(ehmodules);
+
+        class fate_splash extends FormApplication {
+            constructor(...args){
+                super(...args);
+            }
+
+            static get defaultOptions (){
+                let h = window.innerHeight;
+                let w = window.innerWidth;
+                let options = super.defaultOptions;
+                options.template = "systems/fate-core-official/templates/fate-splash.html"
+                options.width = w/2+15;
+                options.height = h-50;
+                options.title = "New World Setup"
+                return options;
+            }
+
+            activateListeners(html){
+                super.activateListeners(html);
+                const cont = html.find('button[id="fco_continue_button"]');
+                cont.on('click', async event => {
+                    await game.settings.set("fate-core-official","run_once",true);
+                    await game.settings.set("fate-core-official","defaults",game.i18n.localize("fate-core-official.baseDefaults"))
+                    await ui.sidebar.render(false);
+                    this.close();
+                })
+
+                const install = html.find('button[name="eh_install"]');
+                install.on('click', async event => {
+                    let module = event.target.id.split("_")[1];
+                    game.settings.set("fate-core-official", "installing", module);
+                    // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
+                    let mc = game.settings.get("core","moduleConfiguration");
+                    if (mc[module] == true) this.installModule(module)
+                    else {
+                        mc[module]=true;
+                        await game.settings.set("core", "moduleConfiguration", mc);
+                    }
+                })
+            }
+
+           async getData(){
+                let data = super.getData();
+                data.ehmodules = ehmodules;
+                data.num_modules = ehmodules.length;
+                data.h = window.innerHeight /2;
+                data.w = window.innerWidth /2;
+                data.mh = data.h/1.1;
+                return data;
+            }
+
+            async installModule(module_name){
+                // Load the world settings from setup.json and install them
+                let setup = await fcoConstants.getJSON(`/modules/${module_name}/json/setup.json`);
+                await fcoConstants.importSettings(setup);
+    
+                // Grab all of the compendium pack data for the module
+                let module = await game.modules.get(module_name);
+                let packs = Array.from(module.packs);
+                for (let pack of packs){
+                    if (!pack.name.includes("FateX")){
+                        let cc = new CompendiumCollection (pack);
+                        await cc.importAll();
+                    }
+                }
+
+                // Set installing and run_once to the appropriate post-install values
+                await game.settings.set("fate-core-official", "run_once", true);
+                await game.settings.set("fate-core-official", "installing", "none");
+                //TODO: Set the 'welcome' scene we grabbed from the scenes compendium to active
+                let scene = game.scenes.getName("Welcome");
+                if (scene) scene.activate();
+                // Relink all tokens with actor link with their related entities (we'll need to be sure that any linked tokens have a 1:1 relationship with actors for our world setups)
+                
+                for (let scene of Array.from(game.scenes)){
+                    let update = [];
+                    for (let token of scene.tokens.contents){
+                        let match_id = game.actors.getName(token.name)?.id;
+                        if (match_id) {
+                            update.push({_id:token.id, actorId:match_id})
+                        }
+                    }
+                    await scene.updateEmbeddedDocuments("Token", update);
+                }
+            }
+        }
+
+        if (game.user.isGM){
+            if (game.settings.get("fate-core-official","installing") === "none") {
+                let f = new fate_splash().render(true);
+            } else {
+                new fate_splash().installModule(game.settings.get("fate-core-official","installing"))
+            }
+        }
+        
+        /*
+        // We can now access all packs of these modules with their packs attribute, and presumably import from there.
         if (game.user.isGM){
             fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.WelcomeTitle"),game.i18n.localize("fate-core-official.WelcomeText"),500,250);
             await game.settings.set("fate-core-official","run_once", true);
             await game.settings.set("fate-core-official","defaults",game.i18n.localize("fate-core-official.baseDefaults"))
             await ui.sidebar.render(false);
         }
+        */
     }
 })
 
@@ -785,11 +893,19 @@ game.settings.register("fate-core-official","freeStunts", {
 
     game.settings.register("fate-core-official", "run_once", {
         name: "Run Once?",
-        hint:"Pops up a brief tutorial message on first load of a world with this system",
+        hint:"Display a splash screen for basic orientation that offers to initialise the world.",
         scope:"world",
         config:false,
         type: Boolean,
         default:false
+    })
+
+    game.settings.register("fate-core-official", "installing", {
+        name: "Store the system we were in the process of installing before the last refresh. Required in order for an installation to proceed after we enable a module.",
+        scope: "world",
+        config:false,
+        type: String, //the name of the module or system we were installing
+        default:"none"
     })
 
     game.system.entityTypes.Item = ["Extra"];
@@ -939,7 +1055,7 @@ Combatant.prototype._getInitiativeFormula = function () {
 
 // Return enriched text WITH secret blocks if the user is GM and otherwise WITHOUT
 Handlebars.registerHelper("enr", function(value) {
-    return TextEditor.enrichHTML(value, game.user.isGM, true, false, false)
+    return DOMPurify.sanitize(TextEditor.enrichHTML(value, game.user.isGM, true, false, false));
 })
 
 Handlebars.registerHelper("fco_getKey", function(value) {

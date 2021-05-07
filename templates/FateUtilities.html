@@ -278,10 +278,10 @@
                             {{#if (eq this.visible 'visible')}}
                             <tr>
                                 <td style="width:25%; padding-right:10px; vertical-align:top;">
-                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{enr this.name}}}</div>
                                 </td>
                                 <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{enr this.description}}}</div>
                                 </td>
                                 <td style="width:25%">
                                     {{#each this.boxes}}
@@ -295,7 +295,7 @@
                                 {{#if ../GM}}
                                 <td style="width:10%; text-align:center">
                                     <button type="button" name="toggle_cd_visibility" title="{{localize 'fate-core-official.switch_hidden'}}" id="{{fco_getKey this.name}}_visibility" style="font-size:xx-small; width:25px; height:25px" class="fas fa-eye"></button>
-                                    <button type="button" name="delete_cd" id="{{{fco_getKey this.name}}}_delete" style="margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
+                                    <button type="button" name="delete_cd" id="{{{enr fco_getKey this.name}}}_delete" style="margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
                                     <br/>{{localize 'fate-core-official.visible'}}
                                 </td>
                                 {{/if}}
@@ -323,10 +323,10 @@
                             {{#if ../GM}}
                             <tr>
                                 <td style="width:25%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{enr this.name}}}</div>
                                 </td>
                                 <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{enr this.description}}}</div>
                                 </td>
                                 <td style="width:25%;">
                                     {{#each this.boxes}}
@@ -339,7 +339,7 @@
                                 </td>
                                 <td style="width:10%; text-align:center">
                                     <button type="button" name="toggle_cd_visibility" title="{{localize 'fate-core-official.switch_boxes'}}" id="{{fco_getKey this.name}}_visibility" style="font-size:xx-small; width:25px; height:25px" class="fas fa-eye"></button>
-                                    <button type="button" name="delete_cd" id="{{{fco_getKey this.name}}}_delete" style="margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
+                                    <button type="button" name="delete_cd" id="{{{enr fco_getKey this.name}}}_delete" style="margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
                                     <br/>{{localize 'fate-core-official.hidden'}}
                                 </td>
                             </tr>
@@ -373,10 +373,10 @@
                             {{#if ../GM}}
                             <tr>
                                 <td style="width:25%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{enr this.name}}}</div>
                                 </td>
                                 <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                                    <div class="cd_datum" style="cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{enr this.description}}}</div>
                                 </td>
                                 <td style="width:25%">
                                     {{#each this.boxes}}
@@ -389,7 +389,7 @@
                                 </td>
                                 <td style="width:10%; text-align:center">
                                     <button type="button" name="toggle_cd_visibility" id="{{fco_getKey this.name}}_visibility" title="{{localize 'fate-core-official.switch_visible'}}" style="font-size:xx-small; width:25px; height:25px" class="fas fa-eye"></button>
-                                    <button type="button" name="delete_cd" id="{{{fco_getKey this.name}}}_delete" style="margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
+                                    <button type="button" name="delete_cd" id="{{{enr fco_getKey this.name}}}_delete" style="margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
                                     <br/>{{localize 'fate-core-official.show_boxes'}}
                                 </td>
                             </tr>
@@ -405,7 +405,7 @@
                             </div> 
                             <h2>{{localize 'fate-core-official.SceneNotesTitle'}}</h2>
                             <div style="overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane;">
-                                <div id="scene_notes" class="long_text" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
+                                <div id="scene_notes" class="long_text" style="font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{enr this.notes}}}</div>
                             </div>    
                         </div>        
                     </div><!--End Scene tab---------------------------------------------------->
@@ -439,7 +439,7 @@
                                 <div name="fu_roll">{{this.speaker}}</div>
                             </td>
                             <td style="border:2px solid black; font-size:{{../fontSize}}pt">
-                                {{{this.flavor}}}
+                                {{{enr this.flavor}}}
                             </td>
                             <td style="font-size:{{add5 ../fontSize}}pt; text-align:center; border:2px solid black;">
                                 {{#each this.dice}}
@@ -505,7 +505,7 @@
                     <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="background-color:lightgray; padding:10px">
                             <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 150px);">
                                 <h2 style="vertical-align:top">{{localize 'fate-core-official.DateAndTimeNotes'}}</h2>
-                                <div id="game_date_time" class="long_text" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid; max-height:3em; overflow-y:auto">{{{this.game_time}}}</div>
+                                <div id="game_date_time" class="long_text" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid; max-height:3em; overflow-y:auto">{{{enr this.game_time}}}</div>
                                 <!--Game Aspects-->
                                 <h2>{{localize 'fate-core-official.gameAspects'}}</h2>
                                 
@@ -536,7 +536,7 @@
                                 <!--Game notes-->
                                 <h2 style="vertical-align:top">{{localize 'fate-core-official.GameNotes'}}</h1>
                                     <div>
-                                        <div id="game_notes" class="long_text" style="overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
+                                        <div id="game_notes" class="long_text" style="overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{enr this.game_notes}}}</div>
                                     </div>
                             </div><!--End of game info tab container pane-->
                     </div><!--End game information tab-->

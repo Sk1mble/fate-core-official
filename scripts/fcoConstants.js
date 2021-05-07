@@ -361,7 +361,6 @@ class fcoConstants {
             }            
     }
 
-
     static getKey(text){
         return text.hashCode();
     }
