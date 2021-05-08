@@ -384,7 +384,7 @@ Hooks.once('ready', async function () {
                 // Finally, set the actors and journal entries in this module's public folders to have observer permissions for all players.
                 let labels = game.modules.get(module_name).packs.map(p => p.label);
                 let public_folders = labels.filter(label => label.toLowerCase().indexOf("public") != -1);
-                public_folders = public_folders.concat(labels.filter(label => label.toLowerCase().indexOf("player characters") != -1))
+                public_folders = public_folders.concat(labels.filter(label => label.toLowerCase().indexOf("player character") != -1))
                 for (let folder of public_folders){
                     let update = []
                     let content = Array.from(game.folders.getName(folder).content);

@@ -379,11 +379,13 @@ class fcoConstants {
             }
             await scene.setFlag("fate-core-official","s_index", s_index);
         }
+        /* No longer needed as we are linking by name.
         //Now we store a flag on every journal entry with its current reference so that we can re-map after importing.
         let journals = Array.from(game.journal);
         for (let journal of journals){
             journal.setFlag("fate-core-official","oldId",journal.id);
         }
+        */
     }
 
     static async relink_after_compendia (){
@@ -398,7 +400,7 @@ class fcoConstants {
             await scene.updateEmbeddedDocuments("Token", update);
             // Now let us link to the journal for the scene and map pins. 
             // These must have been stored in the scenes BEFORE being put in the compendia.
-            // The macro to do this is called "Index Scene Journals"
+            // The command for this is fcoConstants.index_journals();
             let s_index = scene.getFlag("fate-core-official", "s_index");
             if (s_index){
                 if (s_index["scene_journal"]){
@@ -418,6 +420,9 @@ class fcoConstants {
                 await scene.updateEmbeddedDocuments("Note", update);
             }
         }
+
+        /* Unnecessary now we're linking via name rather than ID. 
+        //Kept here in case I need it for something else later.
         // Now to re-link the journal text
         let journals = Array.from(game.journal);
         for (let journal of journals){
@@ -431,6 +436,7 @@ class fcoConstants {
             }
             await journal.update({content:text});
         }
+        */
     }
 } 
 
