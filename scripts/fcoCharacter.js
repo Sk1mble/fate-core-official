@@ -118,7 +118,34 @@ export class fcoCharacter extends ActorSheet {
 
             const bio = html.find(`div[id='${this.object.id}_biography']`)
             fcoConstants.getPen(`${this.object.id}_biography`);
-            bio.on("focus",event => this._onBioInput(event, html));
+            //bio.on("focus",event => this._onBioInput(event, html));
+
+                //<div class="mfate-biography__content long_text" id="{{this.document.id}}_biography_rich">{{{enr data.details.biography.value}}}</div>
+    //            <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
+
+            const showyBio = html.find(`div[id='${this.document.id}_biography_rich']`)
+            showyBio.on('click', async event => {
+                this.editing = true;
+                $(`#${this.object.id}_biography_rich`).css('display', 'none');
+                $(`#${this.object.id}_biography`).css('display', 'block');
+                $(`#${this.object.id}_biography`).focus();
+            })
+
+            const showyDesc = html.find(`div[id='${this.document.id}_description_rich']`)
+            showyDesc.on('click', async event => {
+                this.editing = true;
+                $(`#${this.object.id}_description_rich`).css('display', 'none');
+                $(`#${this.object.id}_description`).css('display', 'block');
+                $(`#${this.object.id}_description`).focus();
+            })
+
+            const showyNotes = html.find(`div[id='${this.document.id}_notes_rich']`)
+            showyNotes.on('click', async event => {
+                this.editing = true;
+                $(`#${this.object.id}_notes_rich`).css('display', 'none');
+                $(`#${this.object.id}_notes`).css('display', 'block');
+                $(`#${this.object.id}_notes`).focus();
+            })
 
             const notes = html.find (`div[id='${this.object.id}_notes']`);
             fcoConstants.getPen(`${this.object.id}_notes`);
@@ -690,22 +717,36 @@ export class fcoCharacter extends ActorSheet {
     }
 
     async _onBioFocusOut (event, html){
-        this.editing = false;
-        let bio = DOMPurify.sanitize(event.target.innerHTML);
-        await this.object.update({"data.details.biography.value":bio})
+        if (!window.getSelection().toString()){
+            let bio = DOMPurify.sanitize(event.target.innerHTML);
+            await this.object.update({"data.details.biography.value":bio})
+            $(`#${this.object.id}_biography`).css('display', 'none');
+            $(`#${this.object.id}_biography_rich`).css('display', 'block');
+            this.editing = false;
+            await this._render(false);
+        }
     }
 
     async _onNotesFocusOut (event, html){
-        this.editing = false;
-        let notes = DOMPurify.sanitize(event.target.innerHTML);
-        await this.object.update({"data.details.notes.value":notes})
-        
+        if (!window.getSelection().toString()){
+            let notes = DOMPurify.sanitize(event.target.innerHTML);
+            await this.object.update({"data.details.notes.value":notes})
+            $(`#${this.object.id}_notes`).css('display', 'none');
+            $(`#${this.object.id}_notes_rich`).css('display', 'block');
+            this.editing = false;
+            await this._render(false);
+        }
     }
 
     async _onDescFocusOut (event, html){
-        this.editing = false;
-        let desc = DOMPurify.sanitize(event.target.innerHTML);
-        await this.object.update({"data.details.description.value":desc})
+        if (!window.getSelection().toString()){
+            let desc = DOMPurify.sanitize(event.target.innerHTML);
+            await this.object.update({"data.details.description.value":desc});
+            $(`#${this.object.id}_description`).css('display', 'none');
+            $(`#${this.object.id}_description_rich`).css('display', 'block');
+            this.editing = false;
+            await this._render(false);
+        }
     }
 
     async _onBioInput(event, html){

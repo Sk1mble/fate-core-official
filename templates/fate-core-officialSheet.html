@@ -79,11 +79,13 @@
                 </div>
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
                     {{#if data.details.notes.GM}}
-                        {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr data.details.notes.value}}}</div>
+                        {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="display:none; max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                                  <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich"style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr data.details.notes.value}}}</div>
                             {{else}}<div>These notes are for the GM's eyes only...</div>
                         {{/if}}
                     {{else}}
-                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr data.details.notes.value}}}</div>
+                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="display:none; max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr data.details.notes.value}}}</div>
+                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich"style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr data.details.notes.value}}}</div>
                     {{/if}}
                 </div>
             </div>
@@ -289,7 +291,8 @@
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Description'}}</div>
                 </div>
                 {{#if (expanded this.document '_description')}}
-                <div class="mfate-description__content long_text" id="{{this.document.id}}_description" name="data.details.description.value" data-edit="data.details.description.value">{{{enr data.details.description.value}}}</div>
+                <div class="mfate-description__content long_text" style="display:none" id="{{this.document.id}}_description" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div>
+                <div class="mfate-description__content long_text" id="{{this.document.id}}_description_rich">{{{enr data.details.description.value}}}</div>
                 {{/if}}
             </div>
             <div {{#if (expanded this.document '_biography')}}class="mfate-biography"{{else}}class="mfate-biography-collapsed"{{/if}}>
@@ -298,7 +301,8 @@
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Biography'}}</div>
                 </div>
                 {{#if (expanded this.document '_biography')}}
-                <div class="mfate-biography__content long_text" id="{{this.document.id}}_biography" data-edit="data.details.biography.value" name="data.details.biography.value">{{{enr data.details.biography.value}}}</div>{{/if}}
+                <div class="mfate-biography__content long_text" id="{{this.document.id}}_biography_rich">{{{enr data.details.biography.value}}}</div>
+                <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
             </div>
             {{#if (expanded this.document '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}
                 <div class="mfate-panel__header" style="margin-bottom:5px">

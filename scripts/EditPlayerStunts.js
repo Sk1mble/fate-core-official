@@ -99,8 +99,26 @@ class EditPlayerStunts extends FormApplication {
             textarea: '<textarea name="content"></textarea>', // fallback for old browsers
             linksInNewWindow: false // open hyperlinks in a new windows/tab
         }
-        return new Pen(options);
 
+        const description_rich = html.find("div[id='edit_stunt_desc_rich']");
+
+        description_rich.on('click', async event => {
+            $("#edit_stunt_desc_rich").css('display', 'none');
+            $("#edit_stunt_desc").css('display', 'block');
+            $("#edit_stunt_desc").focus();
+        })
+
+        const stunt_desc = html.find("div[id='edit_stunt_desc']");
+        stunt_desc.on ('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_stunt_desc').css('display', 'none');
+                $('#edit_stunt_desc_rich')[0].innerHTML = desc;    
+                $('#edit_stunt_desc_rich').css('display', 'block');
+            }
+        })
+        
+        return new Pen(options);
     } //End activateListeners
 
     async _onSaveButton(event, html){
