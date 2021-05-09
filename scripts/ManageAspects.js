@@ -218,7 +218,8 @@ class EditAspect extends FormApplication{
             if (this.aspect==undefined){
                 this.aspect={
                     "name":"",
-                    "description":""
+                    "description":"",
+                    "notes":""
                 }
             }
         }
@@ -260,7 +261,7 @@ class EditAspect extends FormApplication{
         let name = html.find("input[id='edit_aspect_name']")[0].value.split(".").join("․").trim();
         let description = DOMPurify.sanitize(html.find("div[id='edit_aspect_description']")[0].innerHTML);
         let aspects=game.settings.get("fate-core-official","aspects");
-        let newAspect = {"name":name, "description":description};
+        let newAspect = {"name":name, "description":description, "notes":""};
         var existing = false;
 
         //First check if we already have an aspect by that name, or the aspect is blank; if so, throw an error.

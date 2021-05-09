@@ -40,7 +40,7 @@ class EditPlayerAspects extends FormApplication{
 
         for (let aspect in this.aspects){
             let id = `aspect_description_${fcoConstants.getKey(aspect)}`;
-            let id2 = `aspect_notes_${fcoConstants.getKey(aspect)}`;
+            let id2 = `notes_${fcoConstants.getKey(aspect)}`;
             fcoConstants.getPen(id);
             fcoConstants.getPen(id2);
 
@@ -53,7 +53,7 @@ class EditPlayerAspects extends FormApplication{
     
             $(`#${id}`).on('blur', event => {
                 if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(event.target.innerHTML);
+                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
                     $(`#${id}`).css('display', 'none');
                     $(`#${id}_rich`)[0].innerHTML = desc;    
                     $(`#${id}_rich`).css('display', 'block');
@@ -61,26 +61,26 @@ class EditPlayerAspects extends FormApplication{
                     this.aspects[name].description=event.target.innerHTML;
                 }
             })
+        
+            $(`#${id2}_rich`).on('click', event => {
+                console.log("Click")
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                $(`#${id2}_rich`).css('display', 'none');
+                $(`#${id2}`).css('display', 'block');
+                $(`#${id2}`).focus();
+            })
+    
+            $(`#${id2}`).on('blur', event => {
+                if (!window.getSelection().toString()){
+                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                    $(`#${id2}`).css('display', 'none');
+                    $(`#${id2}_rich`)[0].innerHTML = desc;    
+                    $(`#${id2}_rich`).css('display', 'block');
+                    let name = event.target.getAttribute("name").split("_")[1];
+                    this.aspects[name].notes=event.target.innerHTML;
+                }
+            })    
         }
-
-        $(`#${id2}_rich`).on('click', event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $(`#${id2}_rich`).css('display', 'none');
-            $(`#${id2}`).css('display', 'block');
-            $(`#${id2}`).focus();
-        })
-
-        $(`#${id}`).on('blur', event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(event.target.innerHTML);
-                $(`#${id2}`).css('display', 'none');
-                $(`#${id2}_rich`)[0].innerHTML = desc;    
-                $(`#${id2}_rich`).css('display', 'block');
-                let name = event.target.getAttribute("name").split("_")[1];
-                this.aspects[name].notes=event.target.innerHTML;
-            }
-        })
-
     }
 
     async _on_name_change(event, html){
@@ -156,6 +156,11 @@ class EditPlayerAspects extends FormApplication{
     async getData(){
         let current = duplicate(this.object.data.data.aspects);
         let updated = this.aspects;
+        for (let aspect in current){
+            if (current[aspect].notes == undefined){
+                current[aspect].notes = "";
+            }
+        }
         for (let aspect in current){
             if (updated[aspect] == undefined){
                 delete current[aspect];

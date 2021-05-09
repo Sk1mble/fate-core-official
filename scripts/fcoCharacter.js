@@ -120,7 +120,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(event.target.innerHTML);
+                        let desc = DOMPurify.sanitize(TextEditor.enrichHtml(event.target.innerHTML));
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
@@ -130,10 +130,14 @@ export class fcoCharacter extends ActorSheet {
 
             let aspects = this.object.data.data.aspects;
             for (let aspect in aspects){
+                if (aspects[aspect].notes == undefined){
+                    aspects[aspect].notes = "";
+                }
                 let id = fcoConstants.getKey(aspects[aspect].name)+"_aspect_notes";
                 fcoConstants.getPen(id);
 
                 $(`#${id}_rich`).on("click", event => {
+                    if (event.target.outerHTML.startsWith("<a data")) return;
                     $(`#${id}_rich`).css('display', 'none');
                     $(`#${id}`).css('display', 'block');
                     $(`#${id}`).focus();
@@ -141,7 +145,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(event.target.innerHTML);
+                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');

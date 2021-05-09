@@ -150,24 +150,38 @@ export class ExtraSheet extends ItemSheet {
                     let data = DOMPurify.sanitize(event.target.innerHTML);
                     if (field == "descValue"){
                         await this.document.update({"data.description.value":data});
+                        this.editing = false;
+                        await this._render(false);
                     }
                     if (field == "overcomeValue"){
                         await this.document.update({"data.actions.overcome":data});
+                        this.editing = false;
+                        await this._render(false);
                     }
                     if (field == "permValue"){
                         await this.document.update({"data.permissions":data});
+                        this.editing = false;
+                        await this._render(false);
                     }
                     if (field == "costsValue"){
                         await this.document.update({"data.costs":data});
+                        this.editing = false;
+                        await this._render(false);
                     }
                     if (field == "createValue"){
                         await this.document.update({"data.actions.create":data});
+                        this.editing = false;
+                        await this._render(false);
                     }
                     if (field == "attackValue"){
                         await this.document.update({"data.actions.attack":data});
+                        this.editing = false;
+                        await this._render(false);
                     }
                     if (field == "defendValue"){
                         await this.document.update({"data.actions.defend":data});
+                        this.editing = false;
+                        await this._render(false)
                     }
                 }
             })
