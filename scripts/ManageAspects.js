@@ -233,6 +233,25 @@ class EditAspect extends FormApplication{
         const saveButton = html.find("button[id='edit_aspect_save_changes']");
         saveButton.on("click", event => this._onSaveButton(event, html));
         fcoConstants.getPen("edit_aspect_description");
+
+        const description_rich = html.find("div[id='edit_aspect_description_rich']");
+
+        description_rich.on('click', async event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_aspect_description_rich").css('display', 'none');
+            $("#edit_aspect_description").css('display', 'block');
+            $("#edit_aspect_description").focus();
+        })
+
+        const aspect_desc = html.find("div[id='edit_aspect_description']");
+        aspect_desc.on ('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_aspect_description').css('display', 'none');
+                $('#edit_aspect_description_rich')[0].innerHTML = desc;    
+                $('#edit_aspect_description_rich').css('display', 'block');
+            }
+        })
     }
         
     //Here are the event listener functions.

@@ -118,13 +118,10 @@ export class fcoCharacter extends ActorSheet {
 
             const bio = html.find(`div[id='${this.object.id}_biography']`)
             fcoConstants.getPen(`${this.object.id}_biography`);
-            //bio.on("focus",event => this._onBioInput(event, html));
-
-                //<div class="mfate-biography__content long_text" id="{{this.document.id}}_biography_rich">{{{enr data.details.biography.value}}}</div>
-    //            <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
 
             const showyBio = html.find(`div[id='${this.document.id}_biography_rich']`)
             showyBio.on('click', async event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
                 this.editing = true;
                 $(`#${this.object.id}_biography_rich`).css('display', 'none');
                 $(`#${this.object.id}_biography`).css('display', 'block');
@@ -133,6 +130,7 @@ export class fcoCharacter extends ActorSheet {
 
             const showyDesc = html.find(`div[id='${this.document.id}_description_rich']`)
             showyDesc.on('click', async event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
                 this.editing = true;
                 $(`#${this.object.id}_description_rich`).css('display', 'none');
                 $(`#${this.object.id}_description`).css('display', 'block');
@@ -141,6 +139,7 @@ export class fcoCharacter extends ActorSheet {
 
             const showyNotes = html.find(`div[id='${this.document.id}_notes_rich']`)
             showyNotes.on('click', async event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
                 this.editing = true;
                 $(`#${this.object.id}_notes_rich`).css('display', 'none');
                 $(`#${this.object.id}_notes`).css('display', 'block');
@@ -149,11 +148,9 @@ export class fcoCharacter extends ActorSheet {
 
             const notes = html.find (`div[id='${this.object.id}_notes']`);
             fcoConstants.getPen(`${this.object.id}_notes`);
-            notes.on("focus", event => this._onNotesInput(event, html));
 
             const desc = html.find(`div[id='${this.object.id}_description']`)
             fcoConstants.getPen(`${this.object.id}_description`);
-            desc.on("focus",event => this._onDescInput(event, html));
             bio.on("blur", event => this._onBioFocusOut(event, html));
             desc.on("blur", event => this._onDescFocusOut(event, html));
             notes.on("blur", event => this._onNotesFocusOut(event, html));
@@ -747,18 +744,6 @@ export class fcoCharacter extends ActorSheet {
             this.editing = false;
             await this._render(false);
         }
-    }
-
-    async _onBioInput(event, html){
-        this.editing = true;
-    }
-
-    async _onNotesInput(event, html) {
-        this.editing = true;
-    }
-
-    async _onDescInput(event, html){
-        this.editing = true;
     }
 
     async _render(...args){

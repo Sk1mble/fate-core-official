@@ -136,52 +136,47 @@ export class ExtraSheet extends ItemSheet {
             await this.document.update({"name":newName});
         })
 
-        const permissions = html.find(`div[id='${this.document.id}_permValue']`);
-        permissions.on("blur", async event => {
-            let permissions = DOMPurify.sanitize(event.target.innerHTML);
-            await this.document.update({"data.permissions":permissions});
-        })
+        let fields = ["descValue", "overcomeValue", "permValue", "costsValue", "createValue", "attackValue", "defendValue"];
+        for (let field of fields){
+            $(`#${this.document.id}_${field}_rich`).on('click', event => {
+                if (event.target.outerHTML.startsWith ("<a data")) return;
+                $(`#${this.document.id}_${field}_rich`).css('display', 'none');
+                $(`#${this.document.id}_${field}`).css('display', 'block');
+                $(`#${this.document.id}_${field}`).focus();
+            })
 
-        const costs = html.find(`div[id='${this.document.id}_costsValue']`);
-        costs.on("blur", async event => {
-            let costs = DOMPurify.sanitize(event.target.innerHTML);
-            await this.document.update({"data.costs":costs});
-        })
+            $(`#${this.document.id}_${field}`).on('blur', async event => {
+                if (!window.getSelection().toString()){
+                    let data = DOMPurify.sanitize(event.target.innerHTML);
+                    if (field == "descValue"){
+                        await this.document.update({"data.description.value":data});
+                    }
+                    if (field == "overcomeValue"){
+                        await this.document.update({"data.actions.overcome":data});
+                    }
+                    if (field == "permValue"){
+                        await this.document.update({"data.permissions":data});
+                    }
+                    if (field == "costsValue"){
+                        await this.document.update({"data.costs":data});
+                    }
+                    if (field == "createValue"){
+                        await this.document.update({"data.actions.create":data});
+                    }
+                    if (field == "attackValue"){
+                        await this.document.update({"data.actions.attack":data});
+                    }
+                    if (field == "defendValue"){
+                        await this.document.update({"data.actions.defend":data});
+                    }
+                }
+            })
+        }
 
         const refresh = html.find("input[name='data.refresh']");
         refresh.on("change", async event => {
             let r = parseInt(event.target.value);
             await this.document.update({"data.refresh":r});
-        })
-
-        const description = html.find(`div[id='${this.document.id}_descValue']`);
-        description.on("blur", async event => {
-            let text =  DOMPurify.sanitize(event.target.innerHTML);
-            await this.document.update({"data.description.value":text});
-        })
-
-        const overcome = html.find(`div[id='${this.document.id}_overcomeValue']`);
-        overcome.on("blur", async event => {
-            let text = DOMPurify.sanitize(event.target.innerHTML);
-            await this.document.update({"data.actions.overcome":text});
-        })
-
-        const create = html.find(`div[id='${this.document.id}_createValue']`);
-        create.on("blur", async event => {
-            let text = DOMPurify.sanitize(event.target.innerHTML);
-            await this.document.update({"data.actions.create":text});
-        })
-
-        const attack = html.find(`div[id='${this.document.id}_attackValue']`);
-        attack.on("blur", async event => {
-            let text = DOMPurify.sanitize(event.target.innerHTML);
-            await this.document.update({"data.actions.attack":text});
-        })
-
-        const defend = html.find(`div[id='${this.document.id}_defendValue']`);
-        defend.on("blur", async event => {
-            let text = DOMPurify.sanitize(event.target.innerHTML);
-            await this.document.update({"data.actions.defend":text});
         })
 
         const countSkills = html.find("input[name='data.countSkills']");
@@ -210,6 +205,7 @@ export class ExtraSheet extends ItemSheet {
             await this.document.update({[field]:value});
         })
     }
+    
 
     async _onTracks_click(event, html) {
         //Launch the EditPlayerTracks FormApplication.

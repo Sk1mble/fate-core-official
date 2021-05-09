@@ -20,8 +20,8 @@
                 <label for"description" style="font-family:Montserrat; font-weight:bold">{{localize 'fate-core-official.AspectDescription'}}:</label>
             </td>
             <td>
-                <textarea rows="2" class="aspect_description" name="description_{{this.name}}" style="background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{this.description}}
-                </textarea>
+                <div class="aspect_description_rich" id="aspect_description_{{fco_getKey this.name}}_rich" style="min-height:1.5em; background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{{enr this.description}}}</div>
+                <div class="aspect_description" id="aspect_description_{{fco_getKey this.name}}" name="description_{{this.name}}" style="display:none; background-color: white; border:1px solid lightsteelblue; width:500px; font-family:Montserrat">{{{this.description}}}</div>
             </td>
         </tr>
         <tr>

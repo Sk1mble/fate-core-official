@@ -170,6 +170,57 @@ class EditTracks extends FormApplication {
         fcoConstants.getPen("edit_track_when_marked");
         fcoConstants.getPen("edit_track_when_recovers");
 
+        $('#edit_track_when_recovers_rich').on("click", event => {
+            
+            console.log(event.target)
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_track_when_recovers_rich").css('display', 'none');
+            $("#edit_track_when_recovers").css('display', 'block');
+            $("#edit_track_when_recovers").focus();
+        })
+        
+        $('#edit_track_when_recovers').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                $('#edit_track_when_recovers').css('display', 'none');
+                $('#edit_track_when_recovers_rich')[0].innerHTML = desc;    
+                $('#edit_track_when_recovers_rich').css('display', 'block');
+            }
+        })
+
+        $('#edit_track_when_marked_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_track_when_marked_rich").css('display', 'none');
+            $("#edit_track_when_marked").css('display', 'block');
+            $("#edit_track_when_marked").focus();
+        })
+        
+        $('#edit_track_when_marked').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_track_when_marked').css('display', 'none');
+                $('#edit_track_when_marked_rich')[0].innerHTML = desc;    
+                $('#edit_track_when_marked_rich').css('display', 'block');
+            }
+        })
+
+        $('#edit_track_description_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_track_description_rich").css('display', 'none');
+            $("#edit_track_description").css('display', 'block');
+            $("#edit_track_description").focus();
+        })
+        
+        $('#edit_track_description').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_track_description').css('display', 'none');
+                $('#edit_track_description_rich')[0].innerHTML = desc;    
+                $('#edit_track_description_rich').css('display', 'block');
+            }
+        })
+
     }
     //Here are the event listener functions.
 

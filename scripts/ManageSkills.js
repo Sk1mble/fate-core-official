@@ -290,6 +290,86 @@ class EditSkill extends FormApplication{
         fcoConstants.getPen("edit_skill_caa");
         fcoConstants.getPen("edit_skill_attack");
         fcoConstants.getPen("edit_skill_defend");
+
+        const description_rich = html.find('#edit_skill_description_rich');
+        description_rich.on("click", event => {
+            $("#edit_skill_description_rich").css('display', 'none');
+            $("#edit_skill_description").css('display', 'block');
+            $("#edit_skill_description").focus();
+        })
+
+        const skill_description = html.find("div[id='edit_skill_description']");
+        skill_description.on ('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_skill_description').css('display', 'none');
+                $('#edit_skill_description_rich')[0].innerHTML = desc;    
+                $('#edit_skill_description_rich').css('display', 'block');
+            }
+        })
+
+        $('#edit_skill_overcome_rich').on("click", event => {
+            $("#edit_skill_overcome_rich").css('display', 'none');
+            $("#edit_skill_overcome").css('display', 'block');
+            $("#edit_skill_overcome").focus();
+        })
+        
+        $('#edit_skill_overcome').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_skill_overcome').css('display', 'none');
+                $('#edit_skill_overcome_rich')[0].innerHTML = desc;    
+                $('#edit_skill_overcome_rich').css('display', 'block');
+            }
+        })
+        
+        $('#edit_skill_caa_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_skill_caa_rich").css('display', 'none');
+            $("#edit_skill_caa").css('display', 'block');
+            $("#edit_skill_caa").focus();
+        })
+        
+        $('#edit_skill_caa').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_skill_caa').css('display', 'none');
+                $('#edit_skill_caa_rich')[0].innerHTML = desc;    
+                $('#edit_skill_caa_rich').css('display', 'block');
+            }
+        })
+
+        $('#edit_skill_attack_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $('#edit_skill_attack_rich').css('display', 'none');
+            $('#edit_skill_attack').css('display', 'block');
+            $('#edit_skill_attack').focus();
+        })
+        
+        $('#edit_skill_attack').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_skill_attack').css('display', 'none');
+                $('#edit_skill_attack_rich')[0].innerHTML = desc;    
+                $('#edit_skill_attack_rich').css('display', 'block');
+            }
+        })
+
+        $('#edit_skill_defend_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_skill_defend_rich").css('display', 'none');
+            $("#edit_skill_defend").css('display', 'block');
+            $("#edit_skill_defend").focus();
+        })
+        
+        $('#edit_skill_defend').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                $('#edit_skill_defend').css('display', 'none');
+                $('#edit_skill_defend_rich')[0].innerHTML = desc;    
+                $('#edit_skill_defend_rich').css('display', 'block');
+            }
+        })
     }
         
     //Here are the event listener functions.

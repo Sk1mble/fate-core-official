@@ -32,14 +32,35 @@ class EditPlayerAspects extends FormApplication{
         const name = html.find("input[class='aspect_name']")
         name.on("change", event => this._on_name_change(event, html));
 
-        const desc = html.find("textarea[class='aspect_description']")
-        desc.on("change", event => this._on_desc_change(event, html));
-
         const value = html.find("textarea[class='aspect_value']")
         value.on("change", event => this._on_value_change(event, html));
 
         const notes = html.find("textarea[class='aspect_notes']");
         notes.on("change", event => this._on_notes_change(event, html));
+
+        for (let aspect in this.aspects){
+            let id = `aspect_description_${fcoConstants.getKey(aspect)}`;
+            fcoConstants.getPen(id);
+
+            $(`#${id}_rich`).on('click', event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                $(`#${id}_rich`).css('display', 'none');
+                $(`#${id}`).css('display', 'block');
+                $(`#${id}`).focus();
+            })
+    
+            $(`#${id}`).on('blur', event => {
+                if (!window.getSelection().toString()){
+                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                    $(`#${id}`).css('display', 'none');
+                    $(`#${id}_rich`)[0].innerHTML = desc;    
+                    $(`#${id}_rich`).css('display', 'block');
+                    console.log(event.target.getAttribute("name"));
+                    let name = event.target.getAttribute("name").split("_")[1];
+                    this.aspects[name].description=event.target.innerHTML;
+                }
+            })
+        }
     }
 
     async _on_name_change(event, html){
@@ -54,11 +75,6 @@ class EditPlayerAspects extends FormApplication{
         delete this.aspects[name]
         this.aspects[newName]=newAspect;
         this.render(false);
-    }
-
-    async _on_desc_change(event, html){
-        let name = event.target.name.split("_")[1];
-        this.aspects[name].description=event.target.value;
     }
 
     async _on_value_change(event, html){

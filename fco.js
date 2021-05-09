@@ -1070,6 +1070,10 @@ Handlebars.registerHelper("enr", function(value) {
     return DOMPurify.sanitize(TextEditor.enrichHTML(value, game.user.isGM, true, false, false));
 })
 
+Handlebars.registerHelper("fco_strip", function (value) {
+    return value.replace(/(<([^>]+)>)/gi, "")
+})
+
 Handlebars.registerHelper("fco_getKey", function(value) {
     return fcoConstants.getKey(value);
 });

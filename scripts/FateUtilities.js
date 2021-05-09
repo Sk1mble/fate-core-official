@@ -1150,8 +1150,11 @@ class FateUtilities extends Application{
     async _on_delete_cd(event, html){
         let del = await fcoConstants.confirmDeletion();
         if (del){
+            console.log(event.target.id);
             let data = event.target.id.split("_");
             let countdowns = game.settings.get("fate-core-official", "countdowns");
+            console.log(data)
+            console.log(countdowns[data[0]]);
             delete countdowns[data[0]];
             await game.settings.set("fate-core-official", "countdowns", countdowns);
             await game.socket.emit("system.fate-core-official",{"render":true});
@@ -1598,8 +1601,11 @@ class acd extends FormApplication {
             box_values.push(false);
         }
 
+        let name = data.name;
+        if (name == "") name = "New Countdown"
+
         let countdown = {
-            name:data.name,
+            name:name,
             description:data.description,
             boxes:box_values,
             visible:data.visible
