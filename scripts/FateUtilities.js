@@ -212,16 +212,27 @@ class FateUtilities extends Application{
             this._render(false);
         })
 
+        const trackNotesRich = html.find('div[name="FUTrackNotesText_rich"]');
+        trackNotesRich.on("click", event => {
+            let disabled = event.target.getAttribute("data-disabled");
+            let id = event.target.id.split("_rich").join("");
+            let richid = event.target.id;
+            if (disabled == "false"){
+                fcoConstants.getPen(id)
+                $(`#${richid}`).css('display', 'none');
+                $(`#${id}`).css('display', 'block');
+                $(`#${id}`).focus();
+            }
+        })
 
         const expandTrackNotes = html.find("div[name='FUexpandTrack']");
         
-        expandTrackNotes.on("click", event => {
+        expandTrackNotes.on("click", async event => {
             let details = event.target.id.split("_");
             let token_id = details[0];
-            let track = details[1];
+            let track = event.target.getAttribute("data-name");
             let token = game.scenes.viewed.tokens.contents.find(t => t.id == token_id);
             let key = token.actor.id+track+"_track";
-        
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
             }
@@ -231,7 +242,7 @@ class FateUtilities extends Application{
             } else {
                 game.user.expanded[key] = false;
             }
-            this._render(false);
+            await this.render(false);
         })
 
         const rollTab = html.find("a[data-tab='rolls']");
@@ -370,14 +381,17 @@ class FateUtilities extends Application{
             actor.update({[`data.aspects.${aspect}.notes`]:event.target.value});
         });
 
-        const FUTrackNotesText = html.find("textarea[name ='FUTrackNotesText']");
-        FUTrackNotesText.on("change", event => {
-            let details = event.target.id.split("_");
-            let token_id = details[0];
-            let track = details[1];
-            let token = game.scenes.viewedgame.scenes.viewed.getEmbeddedDocument("Token", token_id);
-            let actor = token.actor;
-            actor.update({[`data.tracks.${track}.notes`]:event.target.value});
+        const FUTrackNotesText = html.find("div[name ='FUTrackNotesText']");
+        
+        FUTrackNotesText.on("blur", async event => {
+            if (!window.getSelection().toString()){
+                let text = DOMPurify.sanitize(event.target.innerHTML);
+                let token_id = event.target.getAttribute("data-tokenid")
+                let track = event.target.getAttribute("data-name");//This is a much better way of accessing data than splitting the id.
+                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
+                let actor = token.actor;
+                await actor.update({[`data.tracks.${track}.notes`]:text});
+            }
         });
 
         const game_date_time = html.find(("div[id='game_date_time']"));
@@ -1150,11 +1164,8 @@ class FateUtilities extends Application{
     async _on_delete_cd(event, html){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            console.log(event.target.id);
             let data = event.target.id.split("_");
             let countdowns = game.settings.get("fate-core-official", "countdowns");
-            console.log(data)
-            console.log(countdowns[data[0]]);
             delete countdowns[data[0]];
             await game.settings.set("fate-core-official", "countdowns", countdowns);
             await game.socket.emit("system.fate-core-official",{"render":true});
@@ -1737,7 +1748,6 @@ class FUAspectLabelClass extends FormApplication {
     }
 
     async _updateObject(event, formData){
-        console.log(formData);
         let font = formData.fu_label_font;
         let size = formData.fu_font_size;
         let text = formData.fu_text_color;

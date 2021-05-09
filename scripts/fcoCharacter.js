@@ -106,6 +106,49 @@ export class fcoCharacter extends ActorSheet {
                 }
             })
 
+            let tracks = this.object.data.data.tracks;
+            for (let track in tracks){
+                let id = fcoConstants.getKey(tracks[track].name)+"_track_notes";
+                fcoConstants.getPen(id);
+
+                $(`#${id}_rich`).on("click", event => {
+
+                    $(`#${id}_rich`).css('display', 'none');
+                    $(`#${id}`).css('display', 'block');
+                    $(`#${id}`).focus();
+                })
+                
+                $(`#${id}`).on('blur', async event => {
+                    if (!window.getSelection().toString()){
+                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                        $(`#${id}`).css('display', 'none');
+                        $(`#${id}_rich`)[0].innerHTML = desc;    
+                        $(`#${id}_rich`).css('display', 'block');
+                    }
+                })
+            }
+
+            let aspects = this.object.data.data.aspects;
+            for (let aspect in aspects){
+                let id = fcoConstants.getKey(aspects[aspect].name)+"_aspect_notes";
+                fcoConstants.getPen(id);
+
+                $(`#${id}_rich`).on("click", event => {
+                    $(`#${id}_rich`).css('display', 'none');
+                    $(`#${id}`).css('display', 'block');
+                    $(`#${id}`).focus();
+                })
+                
+                $(`#${id}`).on('blur', async event => {
+                    if (!window.getSelection().toString()){
+                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                        $(`#${id}`).css('display', 'none');
+                        $(`#${id}_rich`)[0].innerHTML = desc;    
+                        $(`#${id}_rich`).css('display', 'block');
+                    }
+                })
+            }
+
             extras_button.on("click", event => this._on_extras_click(event, html));
             extras_edit.on("click", event => this._on_extras_edit_click(event, html));
             extras_delete.on("click", event => this._on_extras_delete(event, html));
@@ -145,6 +188,8 @@ export class fcoCharacter extends ActorSheet {
                 $(`#${this.object.id}_notes`).css('display', 'block');
                 $(`#${this.object.id}_notes`).focus();
             })
+
+
 
             const notes = html.find (`div[id='${this.object.id}_notes']`);
             fcoConstants.getPen(`${this.object.id}_notes`);
