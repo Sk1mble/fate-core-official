@@ -246,7 +246,7 @@ class EditAspect extends FormApplication{
         const aspect_desc = html.find("div[id='edit_aspect_description']");
         aspect_desc.on ('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
                 $('#edit_aspect_description').css('display', 'none');
                 $('#edit_aspect_description_rich')[0].innerHTML = desc;    
                 $('#edit_aspect_description_rich').css('display', 'block');

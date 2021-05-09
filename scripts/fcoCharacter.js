@@ -120,7 +120,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                        let desc = DOMPurify.sanitize(event.target.innerHTML);
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
@@ -141,7 +141,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                        let desc = DOMPurify.sanitize(event.target.innerHTML);
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');

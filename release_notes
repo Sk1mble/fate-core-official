@@ -1,3 +1,7 @@
+# Version 3,1,19
+  * All the long-text fields in the system (I think!) are now safe to use links in the style of @Actor[Skimble]
+  *... without them becoming hard-coded Foundry links by ID. This enables us to link by name willy nilly across the system without risk (Except that name links will break if names are changed of course)
+
 # Version 3.1.17 & 3.1.18 (Bugfix)
   * Built in support for storing scene flag data so map pins and scene journal links are not lost on import from compendia.
   * To store the flags, either use the macro or run fcoConstants.index_journals before exporting the scenes to a compendium

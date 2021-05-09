@@ -181,7 +181,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_when_recovers').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $('#edit_track_when_recovers').css('display', 'none');
                 $('#edit_track_when_recovers_rich')[0].innerHTML = desc;    
@@ -198,7 +198,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_when_marked').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
                 $('#edit_track_when_marked').css('display', 'none');
                 $('#edit_track_when_marked_rich')[0].innerHTML = desc;    
                 $('#edit_track_when_marked_rich').css('display', 'block');
@@ -214,7 +214,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_description').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
                 $('#edit_track_description').css('display', 'none');
                 $('#edit_track_description_rich')[0].innerHTML = desc;    
                 $('#edit_track_description_rich').css('display', 'block');

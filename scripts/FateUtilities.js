@@ -37,6 +37,38 @@ class FateUtilities extends Application{
             for (let c of countdowns){
                 fcoConstants.getPen(c.id);
             }
+
+            const countdowns_rich = $('.cd_datum_rich');
+            countdowns_rich.on('click', async event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                let id = event.currentTarget.id.split("_rich").join("");
+                $(`#${id}_rich`).css('display', 'none');
+                $(`#${id}`).css('display', 'block');
+                $(`#${id}`).focus();
+            })
+
+            const game_notes_rich = $('#game_notes_rich');
+            game_notes_rich.on('click', event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                $('#game_notes_rich').css('display', 'none');
+                $('#game_notes').css('display', 'block');
+                $('#game_notes').focus();
+            })
+            const scene_notes_rich = $('#scene_notes_rich');
+            scene_notes_rich.on('click', event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                $('#scene_notes_rich').css('display', 'none');
+                $('#scene_notes').css('display', 'block');
+                $('#scene_notes').focus();
+            })
+            const game_date_time_rich = $('#game_date_time_rich');
+            game_date_time_rich.on('click', event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                $('#game_date_time_rich').css('display', 'none');
+                $('#game_date_time').css('display', 'block');
+                $('#game_date_time').focus();
+            })
+
         }
         const cd_del = html.find('button[name="delete_cd"]');
         cd_del.on('click', event => this._on_delete_cd(event, html));
@@ -191,7 +223,7 @@ class FateUtilities extends Application{
         })
 
         const FUGameAspectNotes = html.find("textarea[name='FUGameAspectNotesText']");
-        FUGameAspectNotes.on("change", event => {
+        FUGameAspectNotes.on("a", event => {
             let details = event.target.id.split("_");
             let aspectName = details[1];
             let aspects = duplicate(game.settings.get("fate-core-official", "gameAspects"));
@@ -214,15 +246,13 @@ class FateUtilities extends Application{
 
         const trackNotesRich = html.find('div[name="FUTrackNotesText_rich"]');
         trackNotesRich.on("click", event => {
-            let disabled = event.target.getAttribute("data-disabled");
-            let id = event.target.id.split("_rich").join("");
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            let id = event.currentTarget.id.split("_rich").join("");
             let richid = event.target.id;
-            if (disabled == "false"){
-                fcoConstants.getPen(id)
-                $(`#${richid}`).css('display', 'none');
-                $(`#${id}`).css('display', 'block');
-                $(`#${id}`).focus();
-            }
+            fcoConstants.getPen(id)
+            $(`#${richid}`).css('display', 'none');
+            $(`#${id}`).css('display', 'block');
+            $(`#${id}`).focus();
         })
 
         const expandTrackNotes = html.find("div[name='FUexpandTrack']");
@@ -371,14 +401,28 @@ class FateUtilities extends Application{
             this._render(false);
         })
 
-        const FUAspectNotes = html.find("textarea[name ='FUAspectNotesText']");
-        FUAspectNotes.on("change", event => {
-            let details = event.target.id.split("_");
-            let token_id = details[0];
-            let aspect = details[1];
-            let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
-            let actor = token.actor;
-            actor.update({[`data.aspects.${aspect}.notes`]:event.target.value});
+        const FUAspectNotes_rich = html.find("div[name='FUAspectNotesText_rich']");
+        FUAspectNotes_rich.on('click', event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            let id = event.currentTarget.id.split("_rich").join("");
+            fcoConstants.getPen(id);
+            $(`#${id}_rich`).css('display', 'none');
+            $(`#${id}`).css('display', 'block');
+            $(`#${id}`).focus();
+        })
+
+        const FUAspectNotes = html.find("div[name ='FUAspectNotesText']");
+        FUAspectNotes.on("blur", async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
+                let token_id = event.target.getAttribute("data-tokenid");
+                let aspect = event.target.getAttribute("data-name");
+                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
+                let actor = token.actor;
+                await actor.update({[`data.aspects.${aspect}.notes`]:desc});
+                this.editing = false;
+                await this._render(false);
+            }
         });
 
         const FUTrackNotesText = html.find("div[name ='FUTrackNotesText']");
@@ -391,6 +435,8 @@ class FateUtilities extends Application{
                 let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
                 let actor = token.actor;
                 await actor.update({[`data.tracks.${track}.notes`]:text});
+                this.editing = false;
+                await this._render(false)
             }
         });
 
@@ -398,6 +444,8 @@ class FateUtilities extends Application{
         game_date_time.on("blur", async event => {
             await game.settings.set("fate-core-official", "gameTime", DOMPurify.sanitize(event.target.innerHTML));
             await game.socket.emit("system.fate-core-official",{"render":true});
+            this.editing = false;
+            await this._render(false);
         })
 
         const game_notes = html.find(("div[id='game_notes']"));
@@ -406,10 +454,11 @@ class FateUtilities extends Application{
             this.editing=true;
         })
 
-        game_notes.on("blur", event => {
-            game.settings.set("fate-core-official", "gameNotes", DOMPurify.sanitize(event.target.innerHTML));
-            game.socket.emit("system.fate-core-official",{"render":true});
+        game_notes.on("blur", async event => {
+            await game.settings.set("fate-core-official", "gameNotes", DOMPurify.sanitize(event.target.innerHTML));
+            await game.socket.emit("system.fate-core-official",{"render":true});
             this.editing = false;
+            await this._render(false);
         })
 
         const add_game_aspect = html.find("button[id='add_game_aspect']")
@@ -632,8 +681,9 @@ class FateUtilities extends Application{
 
     async _notesFocusOut(event, html){
         let notes = DOMPurify.sanitize(html.find("div[id='scene_notes']")[0].innerHTML);
-        game.scenes.viewed.setFlag("fate-core-official","sceneNotes",notes);
+        await game.scenes.viewed.setFlag("fate-core-official","sceneNotes",notes);
         this.editing=false;
+        await this._render(false);
     }
 
     async _fu_roll_button(event, html){
@@ -1213,7 +1263,6 @@ class FateUtilities extends Application{
                     countdowns[fcoConstants.getKey(newname)]=newCountdown;
                     await game.settings.set("fate-core-official","countdowns", countdowns);
                     await game.socket.emit("system.fate-core-official",{"render":true});
-                    await this._render(false);
                 }
              }
              if (data[1] == "desc"){
@@ -1223,8 +1272,8 @@ class FateUtilities extends Application{
                 countdown.description = DOMPurify.sanitize(event.target.innerHTML);
                 await game.settings.set("fate-core-official", "countdowns", countdowns);
                 await game.socket.emit("system.fate-core-official",{"render":true});
-                await this._render(false);
-             }
+            }
+            await this._render(false);
         }
     }
 

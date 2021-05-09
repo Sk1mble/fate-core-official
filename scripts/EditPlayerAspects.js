@@ -40,7 +40,9 @@ class EditPlayerAspects extends FormApplication{
 
         for (let aspect in this.aspects){
             let id = `aspect_description_${fcoConstants.getKey(aspect)}`;
+            let id2 = `aspect_notes_${fcoConstants.getKey(aspect)}`;
             fcoConstants.getPen(id);
+            fcoConstants.getPen(id2);
 
             $(`#${id}_rich`).on('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
@@ -51,16 +53,34 @@ class EditPlayerAspects extends FormApplication{
     
             $(`#${id}`).on('blur', event => {
                 if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                    let desc = DOMPurify.sanitize(event.target.innerHTML);
                     $(`#${id}`).css('display', 'none');
                     $(`#${id}_rich`)[0].innerHTML = desc;    
                     $(`#${id}_rich`).css('display', 'block');
-                    console.log(event.target.getAttribute("name"));
                     let name = event.target.getAttribute("name").split("_")[1];
                     this.aspects[name].description=event.target.innerHTML;
                 }
             })
         }
+
+        $(`#${id2}_rich`).on('click', event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $(`#${id2}_rich`).css('display', 'none');
+            $(`#${id2}`).css('display', 'block');
+            $(`#${id2}`).focus();
+        })
+
+        $(`#${id}`).on('blur', event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
+                $(`#${id2}`).css('display', 'none');
+                $(`#${id2}_rich`)[0].innerHTML = desc;    
+                $(`#${id2}_rich`).css('display', 'block');
+                let name = event.target.getAttribute("name").split("_")[1];
+                this.aspects[name].notes=event.target.innerHTML;
+            }
+        })
+
     }
 
     async _on_name_change(event, html){
