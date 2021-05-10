@@ -505,7 +505,94 @@ Hooks.once('init', async function () {
     CONFIG.fontFamilies.push("Montserrat");
     CONFIG.fontFamilies.push("Jost");
 
+    //Let's initialise the settings at the system level.
+    // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
+
+    game.settings.register("fate-core-official","tracks",{
+        name:"tracks",
+        hint:game.i18n.localize("fate-core-official.TrackManagerHint"),
+        scope:"world",
+        config:false,
+        type: Object,
+        default: {}
+    });
+    
+    game.settings.register("fate-core-official","track_categories",{
+        name:"track categories",
+        hint:game.i18n.localize("fate-core-official.TrackCategoriesHint"),
+        scope:"world",
+        config:false,
+        type: Object,
+        default:{"Combat":"Combat","Other":"Other"}
+    });
+
+    // Register the menu to setup the world's conditions etc.
+    game.settings.registerMenu("fate-core-official", "TrackSetup", {
+        name: game.i18n.localize("fate-core-official.SetupTracks"),
+        label: game.i18n.localize("fate-core-official.Setup"),      // The text label used in the button
+        hint: game.i18n.localize("fate-core-official.TrackSetupHint"),
+        type: TrackSetup,   // A FormApplication subclass which should be created
+        restricted: true    // Restrict this submenu to gamemaster only?
+      });
+
+    game.settings.register("fate-core-official", "aspects", {
+        name: "Aspects",
+        hint: "This is the list of aspects for this particular world.",
+        scope: "world",
+        config: false,
+        type: Object,
+        default:{}
+    });
+
+    // Register the menu to setup the world's aspect list.
+    game.settings.registerMenu("fate-core-official","AspectSetup", {
+        name:game.i18n.localize("fate-core-official.SetupAspects"),
+        label:game.i18n.localize("fate-core-official.Setup"),
+        hint:game.i18n.localize("fate-core-official.SetupAspectsHint"),
+        type:AspectSetup,
+        restricted:true
+    });
+
     // Register a setting for replacing the existing skill list with one of the pre-defined default sets.
+    //On init, we initialise all settings and settings menus for dealing with skills 
+    //We will be using this setting to store the world's list of skills.
+    game.settings.register("fate-core-official", "skills", {
+        name: "Skill list",
+        hint: "This is the list of skills for this particular world.",
+        scope: "world",
+        config: false,
+        type: Object,
+        default:{}
+    });
+
+    // Register a setting for storing character default templates
+    game.settings.register("fate-core-official", "defaults", {
+        name: "Character defaults",
+        hint: "Character defaults - sets of tracks, skills, stunts, etc. for ease of character creation for GMs.",
+        scope: "world",
+        config: false,
+        type: Object,
+        default:{}
+    });
+
+    game.settings.register("fate-core-official","stunts", {
+        name: "Stunts Database",
+        hint:"A list of approved stunts that can be added to characters",
+        scope:"world",
+        config:false,
+        type:Object,
+        default:{}
+    })
+
+    // Register the menu to setup the world's skill list.
+    game.settings.registerMenu("fate-core-official", "SkillSetup", {
+        name: game.i18n.localize("fate-core-official.SetupSkills"),
+        label: game.i18n.localize("fate-core-official.Setup"),      // The text label used in the button
+        hint: game.i18n.localize("fate-core-official.SetupSkillsHint"),
+        type: SkillSetup,   // A FormApplication subclass which should be created
+        restricted: true                   // Restrict this submenu to gamemaster only?
+      });
+
     game.settings.register("fate-core-official", "defaultSkills", {
         name: game.i18n.localize("fate-core-official.ReplaceSkills"),
         hint: game.i18n.localize("fate-core-official.ReplaceSkillsHint"),

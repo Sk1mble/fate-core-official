@@ -1,16 +1,3 @@
-// Register a game setting for storing character defaults
-
-Hooks.once('init', async function () {
-    game.settings.register("fate-core-official", "defaults", {
-        name: "Character defaults",
-        hint: "Character defaults - sets of tracks, skills, stunts, etc. for ease of character creation for GMs.",
-        scope: "world",
-        config: false,
-        type: Object,
-        default:{}
-    });
-})
-
 class FateCharacterDefaults {
 
     getSafeName(name){

@@ -11,37 +11,6 @@ Hooks.once('ready', async function () {
       });
 })
 
-Hooks.once('init', async function () {
-    //On init, we initialise all settings and settings menus for dealing with skills 
-    //We will be using this setting to store the world's list of skills.
-    game.settings.register("fate-core-official", "skills", {
-        name: "Skill list",
-        hint: "This is the list of skills for this particular world.",
-        scope: "world",
-        config: false,
-        type: Object,
-        default:{}
-    });
-
-    game.settings.register("fate-core-official","stunts", {
-        name: "Stunts Database",
-        hint:"A list of approved stunts that can be added to characters",
-        scope:"world",
-        config:false,
-        type:Object,
-        default:{}
-    })
-
-    // Register the menu to setup the world's skill list.
-    game.settings.registerMenu("fate-core-official", "SkillSetup", {
-        name: game.i18n.localize("fate-core-official.SetupSkills"),
-        label: game.i18n.localize("fate-core-official.Setup"),      // The text label used in the button
-        hint: game.i18n.localize("fate-core-official.SetupSkillsHint"),
-        type: SkillSetup,   // A FormApplication subclass which should be created
-        restricted: true                   // Restrict this submenu to gamemaster only?
-      });
-});
-
 // SkillSetup: This is the class called from the options to view and edit the skills.
 class SkillSetup extends FormApplication{
     constructor(...args){

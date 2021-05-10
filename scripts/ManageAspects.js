@@ -1,27 +1,3 @@
-Hooks.once('init', async function () {
-    //On init, we initialise all settings and settings menus and override the HUD as required.
-    //console.log(`Initializing manageAspects`);
-    //We will be using this setting to store the world's list of aspects.
-    
-    game.settings.register("fate-core-official", "aspects", {
-        name: "Aspects",
-        hint: "This is the list of aspects for this particular world.",
-        scope: "world",
-        config: false,
-        type: Object,
-        default:{}
-    });
-
-    // Register the menu to setup the world's aspect list.
-    game.settings.registerMenu("fate-core-official","AspectSetup", {
-        name:game.i18n.localize("fate-core-official.SetupAspects"),
-        label:game.i18n.localize("fate-core-official.Setup"),
-        hint:game.i18n.localize("fate-core-official.SetupAspectsHint"),
-        type:AspectSetup,
-        restricted:true
-    });
-});
-
 //AspectSetup: This is the class called from the options to view and edit the aspects.
 class AspectSetup extends FormApplication{
     constructor(...args){

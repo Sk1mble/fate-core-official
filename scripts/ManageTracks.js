@@ -1,35 +1,3 @@
-//This script is for establishing the world settings in relation to conditions,
-//stress and consequences.
-
-Hooks.once('init',async function(){
-    //Let's initialise the settings at the system level.
-    game.settings.register("fate-core-official","tracks",{
-        name:"tracks",
-        hint:game.i18n.localize("fate-core-official.TrackManagerHint"),
-        scope:"world",
-        config:false,
-        type: Object,
-        default: {}
-    });
-    game.settings.register("fate-core-official","track_categories",{
-        name:"track categories",
-        hint:game.i18n.localize("fate-core-official.TrackCategoriesHint"),
-        scope:"world",
-        config:false,
-        type: Object,
-        default:{"Combat":"Combat","Other":"Other"}
-    });
-
-    // Register the menu to setup the world's conditions etc.
-    game.settings.registerMenu("fate-core-official", "TrackSetup", {
-        name: game.i18n.localize("fate-core-official.SetupTracks"),
-        label: game.i18n.localize("fate-core-official.Setup"),      // The text label used in the button
-        hint: game.i18n.localize("fate-core-official.TrackSetupHint"),
-        type: TrackSetup,   // A FormApplication subclass which should be created
-        restricted: true    // Restrict this submenu to gamemaster only?
-      });
-});
-
 class EditLinkedSkills extends FormApplication {
     constructor (track){
         super(track);
