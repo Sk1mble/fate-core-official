@@ -1,3 +1,8 @@
+# Version 3.1.23
+  * Non-owner view of the character sheet has been much improved
+    - You can now click on the expand/contract buttons for tracks, stunts, and skills
+    - Any widgets that the viewer cannot interact with are now hidden to avoid confusion and provide a cleaner experience overall.
+
 # Version 3.1.22
   * All settings moved to fco.js to prevent them potentially being unavailable due to the order in which they are initialised.
   

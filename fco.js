@@ -299,7 +299,7 @@ Hooks.once('ready', async function () {
     if (game.settings.get("fate-core-official","run_once") == false){
         const ehmodules = [];
         game.modules.forEach(m => {
-            if (m?.data?.system?.indexOf("fate-core-official") !== -1 && (m.data.author.startsWith("Evil Hat Productions") || m.data.author.startsWith("Richard Bellingham"))){
+            if (m.data?.flags?.ehproduct == "Fate Core"){
                 ehmodules.push(m);
             }
         })
@@ -516,7 +516,7 @@ Hooks.once('init', async function () {
         type: Object,
         default: {}
     });
-    
+
     game.settings.register("fate-core-official","track_categories",{
         name:"track categories",
         hint:game.i18n.localize("fate-core-official.TrackCategoriesHint"),
@@ -1202,7 +1202,6 @@ Handlebars.registerHelper("undefined", function(value) {
 });
 
 Handlebars.registerHelper("expanded", function (actor, item){
-    if (!actor.isOwner) return true;
     let key;
     if (actor == "game"){
         key = "game"+item;

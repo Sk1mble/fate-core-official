@@ -67,15 +67,200 @@ export class fcoCharacter extends ActorSheet {
 
     //Here are the action listeners
     activateListeners(html) {
+        // The following functions need to be available to everyone, not just the owners
+        const expandAspect = html.find("i[name='expandAspect']"); //TODO: Change these expandy buttons to icons rather than a button.
+
+        expandAspect.on("click", event => {
+            let a = event.target.id.split("_")[0];
+            let aspect = this.actor.data.data.aspects[a];
+            let key = this.actor.id+aspect.name+"_aspect";
+    
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandTrack = html.find("i[name='expandTrack']");
+
+        expandTrack.on("click", event => {
+            let t = event.target.id.split("_")[0];
+            let track = this.object.data.data.tracks[t];
+            let key = this.actor.id+track.name+"_track";
+        
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandStunt = html.find("i[name='expandStunt']");
+
+        expandStunt.on("click", event => {
+            let s = event.target.id.split("_")[0];
+            let stunt = this.object.data.data.stunts[s];
+            let key = this.actor.id+stunt.name+"_stunt";
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandExtra = html.find("i[name='expandExtra']");
+
+        expandExtra.on("click", event => {
+            let e_id = event.target.id.split("_")[0];
+            let key = this.actor.id+e_id+"_extra";
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandExtraPane = html.find("div[name='expandExtrasPane']");
+        expandExtraPane.on("click", event=> {
+            let key = this.actor.id + "_extras";
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandBiography = html.find("div[name='expandBiography']");
+        expandBiography.on("click", event => {
+            let key = this.actor.id + "_biography";
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandDescription = html.find("div[name='expandDescription']");
+        expandDescription.on("click", event => {
+            let key = this.actor.id + "_description";
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                game.user.expanded[key] = true;
+            } else {
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+
+        const expandAllStunts = html.find("div[name='expandAllStunts']");
+        const compressAllStunts = html.find("div[name='compressAllStunts']")
+
+        expandAllStunts.on("click", event => {
+            let stunts = this.object.data.data.stunts;
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            for (let s in stunts){
+                let key = this.actor.id+s+"_stunt";
+                game.user.expanded[key] = true;
+            }
+            this.render(false);
+        })
+
+        compressAllStunts.on("click", event => {
+            let stunts = this.object.data.data.stunts;
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            for (let s in stunts){
+                let key = this.actor.id+s+"_stunt";
+                game.user.expanded[key] = false;
+            }
+            this.render(false);
+        })
+
+        const expandAllExtras = html.find("div[name='expandExtras']");
+        const compressAllExtras = html.find("div[name='compressExtras']")
+
+        expandAllExtras.on("click", event => {
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            this.actor.items.forEach(item => {
+                let key = this.actor.id+item.id+"_extra";
+                game.user.expanded[key] = true;
+            })  
+            this.render(false);
+        })
+
+        compressAllExtras.on("click", event => {
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            this.actor.items.contents.forEach(item => {
+                let key = this.actor.id+item.id+"_extra";
+                game.user.expanded[key] = false;
+            })
+            this.render(false);
+        })
+
+        const plug = $('.fa-plug');
+            plug.on("click", async event => {
+                let name = event.target.title;
+                let items = this.object.items;
+                let item = items.getName(name);
+                await item.sheet.render(true);
+            })
+
+        const skill_name = html.find("div[name='skill']");
+        skill_name.on("contextmenu", event=> this._onSkillR(event, html));
+        const sort = html.find("div[name='sort_player_skills'")
+        sort.on("click", event => this._onSortButton(event, html));
+
+        // These events are for the owners only.
         if (this.actor.isOwner){
+            skill_name.on("click", event => this._onSkill_name(event, html));
             const skillsButton = html.find("div[name='edit_player_skills']");;
             skillsButton.on("click", event => this._onSkillsButton(event, html));
-
-            const skill_name = html.find("div[name='skill']");
-            skill_name.on("contextmenu", event=> this._onSkillR(event, html));
-            skill_name.on("click", event => this._onSkill_name(event, html));
-            const sort = html.find("div[name='sort_player_skills'")
-            sort.on("click", event => this._onSortButton(event, html));
             
             const aspectButton = html.find("div[name='edit_player_aspects']");
             aspectButton.on("click", event => this._onAspectClick(event, html));
@@ -84,8 +269,6 @@ export class fcoCharacter extends ActorSheet {
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
             const track_name = html.find("div[name='track_name']");
-            //Deprecated in favour of inline notes for tracks.
-            //track_name.on("click", event => this._on_track_name_click(event, html));
 
             const delete_stunt = html.find("button[name='delete_stunt']");
             delete_stunt.on("click", event => this._onDelete(event,html));
@@ -98,13 +281,6 @@ export class fcoCharacter extends ActorSheet {
             const extras_button = html.find("div[name='add_player_extra']");
             const extras_edit = html.find ("button[name='edit_extra']");
             const extras_delete = html.find("button[name='delete_extra']");
-            const plug = $('.fa-plug');
-            plug.on("click", async event => {
-                let name = event.target.title;
-                let items = this.object.items;
-                let item = items.getName(name);
-                await item.sheet.render(true);
-            })
 
             const gm_notes = html.find(`i[id="${this.document.id}_toggle_gm_notes"]`);
             gm_notes.on("click", async event => {
@@ -201,8 +377,6 @@ export class fcoCharacter extends ActorSheet {
                 $(`#${this.object.id}_notes`).css('display', 'block');
                 $(`#${this.object.id}_notes`).focus();
             })
-
-
 
             const notes = html.find (`div[id='${this.object.id}_notes']`);
             fcoConstants.getPen(`${this.object.id}_notes`);
@@ -435,181 +609,6 @@ export class fcoCharacter extends ActorSheet {
                     event.target.classList.toggle("fa-toggle-on");
                     event.target.classList.toggle("fa-toggle-off");
                 })
-            })
-
-            const expandAspect = html.find("button[name='expandAspect']");
-
-            expandAspect.on("click", event => {
-                let a = event.target.id.split("_")[0];
-                let aspect = this.actor.data.data.aspects[a];
-                let key = this.actor.id+aspect.name+"_aspect";
-        
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                    game.user.expanded[key] = true;
-                } else {
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-            const expandTrack = html.find("button[name='expandTrack']");
-
-            expandTrack.on("click", event => {
-                let t = event.target.id.split("_")[0];
-                let track = this.object.data.data.tracks[t];
-                let key = this.actor.id+track.name+"_track";
-            
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                    game.user.expanded[key] = true;
-                } else {
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-            const expandStunt = html.find("button[name='expandStunt']");
-
-            expandStunt.on("click", event => {
-                let s = event.target.id.split("_")[0];
-                let stunt = this.object.data.data.stunts[s];
-                let key = this.actor.id+stunt.name+"_stunt";
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                    game.user.expanded[key] = true;
-                } else {
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-            const expandExtra = html.find("button[name='expandExtra']");
-
-            expandExtra.on("click", event => {
-                let e_id = event.target.id.split("_")[0];
-                let key = this.actor.id+e_id+"_extra";
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                    game.user.expanded[key] = true;
-                } else {
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-            const expandExtraPane = html.find("div[name='expandExtrasPane']");
-            expandExtraPane.on("click", event=> {
-                let key = this.actor.id + "_extras";
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                    game.user.expanded[key] = true;
-                } else {
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-            const expandBiography = html.find("div[name='expandBiography']");
-            expandBiography.on("click", event => {
-                let key = this.actor.id + "_biography";
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                    game.user.expanded[key] = true;
-                } else {
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-            const expandDescription = html.find("div[name='expandDescription']");
-            expandDescription.on("click", event => {
-                let key = this.actor.id + "_description";
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                    game.user.expanded[key] = true;
-                } else {
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-
-            const expandAllStunts = html.find("div[name='expandAllStunts']");
-            const compressAllStunts = html.find("div[name='compressAllStunts']")
-
-            expandAllStunts.on("click", event => {
-                let stunts = this.object.data.data.stunts;
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                for (let s in stunts){
-                    let key = this.actor.id+s+"_stunt";
-                    game.user.expanded[key] = true;
-                }
-                this.render(false);
-            })
-
-            compressAllStunts.on("click", event => {
-                let stunts = this.object.data.data.stunts;
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                for (let s in stunts){
-                    let key = this.actor.id+s+"_stunt";
-                    game.user.expanded[key] = false;
-                }
-                this.render(false);
-            })
-
-            const expandAllExtras = html.find("div[name='expandExtras']");
-            const compressAllExtras = html.find("div[name='compressExtras']")
-
-            expandAllExtras.on("click", event => {
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                this.actor.items.forEach(item => {
-                    let key = this.actor.id+item.id+"_extra";
-                    game.user.expanded[key] = true;
-                })  
-                this.render(false);
-            })
-
-            compressAllExtras.on("click", event => {
-                if (game.user.expanded == undefined){
-                    game.user.expanded = {};
-                }
-
-                this.actor.items.contents.forEach(item => {
-                    let key = this.actor.id+item.id+"_extra";
-                    game.user.expanded[key] = false;
-                })
-                this.render(false);
             })
 
             input.on("focus", event => {
