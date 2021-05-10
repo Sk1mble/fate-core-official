@@ -429,6 +429,7 @@
 }
 
 .mfate-aspects-notes__input {
+    margin-left:25px;
     font-size: 11px;
     min-height:75px;
     max-height:500px;
@@ -461,10 +462,11 @@
 }
 
 .mfate-tracks-notes__input {
+    margin-left:25px;
     font-size: 11px;
     min-height:75px;
     max-height:500px;
-    width: 100%;
+    width: 90%;
 }
 
 .mfate-tracks__item-label {
