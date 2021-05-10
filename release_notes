@@ -1,3 +1,6 @@
+# Version 3.1.22
+  * All settings moved to fco.js to prevent them potentially being unavailable due to the order in which they are initialised.
+  
 # Version 3.1.21
   * Sheets now default to having all items expanded for non-owners (as the expand buttons don't work for them)
   * Slight tweaks to layout of aspect and track notes
