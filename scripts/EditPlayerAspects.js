@@ -53,7 +53,7 @@ class EditPlayerAspects extends FormApplication{
     
             $(`#${id}`).on('blur', event => {
                 if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
                     $(`#${id}`).css('display', 'none');
                     $(`#${id}_rich`)[0].innerHTML = desc;    
                     $(`#${id}_rich`).css('display', 'block');
@@ -72,7 +72,7 @@ class EditPlayerAspects extends FormApplication{
     
             $(`#${id2}`).on('blur', event => {
                 if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                    let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}))
                     $(`#${id2}`).css('display', 'none');
                     $(`#${id2}_rich`)[0].innerHTML = desc;    
                     $(`#${id2}_rich`).css('display', 'block');

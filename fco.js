@@ -1067,7 +1067,8 @@ Combatant.prototype._getInitiativeFormula = function () {
 
 // Return enriched text WITH secret blocks if the user is GM and otherwise WITHOUT
 Handlebars.registerHelper("enr", function(value) {
-    return DOMPurify.sanitize(TextEditor.enrichHTML(value, game.user.isGM, true, false, false));
+    //enrichHTML(content, secrets, entities, links, rolls, rollData) → {string}
+    return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:game.user.isGM, entities:true}));
 })
 
 Handlebars.registerHelper("fco_strip", function (value) {

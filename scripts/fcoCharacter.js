@@ -120,7 +120,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(TextEditor.enrichHtml(event.target.innerHTML));
+                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}))
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
@@ -145,7 +145,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML));
+                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}))
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
