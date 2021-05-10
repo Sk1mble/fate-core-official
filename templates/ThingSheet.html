@@ -47,7 +47,7 @@
                     <button name="grab_extra" type="button" i icon class="fas fa-hand-paper  fate-extras__row-header-button fu_button" id="{{this.id}}_{{../this.document.id}}_grab" enabled="enabled"></button>
                 </div>
                 <div class="fate-extras__row-body">
-                            <div class="fate-extras__row-body-content">{{#unless (expanded ../this.document (concat this.id '_extra'))}}{{else}}{{{enr this.data.data.description.value}}}{{/unless}}</div>
+                            <div class="fate-extras__row-body-content">{{#unless (expanded ../this.document (concat this.id '_extra'))}}{{else}}{{{enr this.data.data.description.value this.document}}}{{/unless}}</div>
                 </div>
                 </div>
                 {{/each}}

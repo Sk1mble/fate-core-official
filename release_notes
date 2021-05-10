@@ -1,4 +1,7 @@
-# Version 3,1,19
+# Version 3.1.20
+  * Changes to the enrichment code so it shows owners secret blocks even if they aren't the GM
+  
+# Version 3.1,19
   * All the long-text fields in the system (I think!) are now safe to use links in the style of @Actor[Skimble]
   *... without them becoming hard-coded Foundry links by ID. This enables us to link by name willy nilly across the system without risk (Except that name links will break if names are changed of course)
 

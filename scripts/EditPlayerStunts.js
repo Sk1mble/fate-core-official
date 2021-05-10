@@ -193,6 +193,7 @@ class EditPlayerStunts extends FormApplication {
             }
         }
         data.gm = game.user.isGM;
+        data.actor = this.actor;
         return data
     } //End getData
 } //End EditPlayerStunts
