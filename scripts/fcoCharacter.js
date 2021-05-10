@@ -55,12 +55,14 @@ export class fcoCharacter extends ActorSheet {
         this.first_run = true;
         this.editing = false;
         this.track_category="All";
+    }
+
+    get title(){
         let mode = "";
         if (!this.isEditable) mode = " ("+game.i18n.localize ("fate-core-official.viewOnly")+")";
         let token = ""; 
         if (this.object.isToken) token = "[Token] "
-        this.options.title = token + this.object.name + mode;
-        console.log(this.options.title);
+        return token + this.object.name + mode;
     }
 
     //Here are the action listeners

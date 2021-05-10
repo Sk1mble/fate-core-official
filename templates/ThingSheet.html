@@ -3,7 +3,7 @@
         <table style="background-color:white; border:none; width:100px"><tr><td><img class="mfate-sheet_extra-avatar" width="100" height="auto" style="padding:0px; border:0;" id="avatar" src="{{document.img}}"></img></td></tr></table>
         <textarea class="mfate-sheet__identity-name" rows="2" disabled="disabled" style="width:70%">{{document.name}}</textarea>
         <span style="vertical-align:middle; width:30%">
-            <div>Container?</div>
+            <div {{#unless this.GM}} style="opacity:0.6" {{/unless}}>{{localize 'fate-core-official.container'}}</div>
             <div>
                 <input type="checkbox" name="data.container.isContainer" {{#if data.container.isContainer}}checked="checked"{{/if}}{{#if (gt numExtras 1)}}disabled="disabled"{{/if}}{{#if (gt numExtras 0)}}{{#if data.container.isContainer}} disabled="disabled"{{/if}}{{/if}} {{#unless this.GM}}disabled="disabled"{{/unless}}></input> 
             </div>

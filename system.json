@@ -2,7 +2,7 @@
 	"name": "fate-core-official",
 	"title": "Fate Core Official",
 	"description": "The Evil Hat approved implementation of Fate Core for Foundry designed to support skills, extras, approaches, conditions, standard stress, and 1-point stress.",
-	"version": "3.1.20",
+	"version": "3.1.21",
 	"author": "Richard Bellingham",
 	"esmodules": ["fco.js"],
 	"scripts": [
@@ -28,10 +28,10 @@
 	"gridDistance": 1,
 	"gridUnits": "",
 	"minimumCoreVersion": "0.8.2",
-	"compatibleCoreVersion": "0.8.2",
+	"compatibleCoreVersion": "0.8.3",
 	"url": "https://github.com/Sk1mble/fate-core-official",
 	"manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/master/system.json",
-	"download": "https://github.com/Sk1mble/fate-core-official/archive/v3.1.20.zip",
+	"download": "https://github.com/Sk1mble/fate-core-official/archive/v3.1.21.zip",
 	"socket":true,
 	"languages":[
 		{

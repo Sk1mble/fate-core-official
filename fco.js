@@ -1115,6 +1115,7 @@ Handlebars.registerHelper("undefined", function(value) {
 });
 
 Handlebars.registerHelper("expanded", function (actor, item){
+    if (!actor.isOwner) return true;
     let key;
     if (actor == "game"){
         key = "game"+item;

@@ -17,6 +17,12 @@ export class ExtraSheet extends ItemSheet {
             }
         } else this.renderBanked = true;
     }
+    
+    get title(){
+        let mode = "";
+        if (!this.isEditable) mode = " ("+game.i18n.localize ("fate-core-official.viewOnly")+")";
+        return this.object.name + mode;
+    }
 
     async getData() {        
         const data = this.document.data;
@@ -51,6 +57,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     activateListeners(html){
+        if (!this.isEditable) return;
         super.activateListeners(html);
         const delete_stunt = html.find("button[name='delete_item_stunt']");
         delete_stunt.on("click", event => this._onDelete(event,html));
@@ -72,7 +79,7 @@ export class ExtraSheet extends ItemSheet {
         tracks_button.on("click", event => this._onTracks_click(event, html));
 
         const input = html.find('input[type="text"], input[type="number"], div[name="textIn"], textarea');
-        
+
         // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
         //First, Create Pen editor
         fcoConstants.getPen(`${this.document.id}_descValue`);
