@@ -18,6 +18,7 @@ export class fcoCharacter extends ActorSheet {
         options.height = "1000"
         options.scrollY = ["#skills_body", "#aspects_body","#tracks_body", "#stunts_body", "#biography_body", "#notes_body"]
         options.classes = options.classes.concat(['fcoSheet']);
+        //options.viewPermission = 1; //This allows us to explicitly override the level of permissions needed to see the sheet.
         mergeObject(options, {
             tabs: [
                 {
@@ -54,6 +55,12 @@ export class fcoCharacter extends ActorSheet {
         this.first_run = true;
         this.editing = false;
         this.track_category="All";
+        let mode = "";
+        if (!this.isEditable) mode = " ("+game.i18n.localize ("fate-core-official.viewOnly")+")";
+        let token = ""; 
+        if (this.object.isToken) token = "[Token] "
+        this.options.title = token + this.object.name + mode;
+        console.log(this.options.title);
     }
 
     //Here are the action listeners

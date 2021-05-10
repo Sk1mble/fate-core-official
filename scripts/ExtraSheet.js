@@ -350,7 +350,7 @@ export class ExtraSheet extends ItemSheet {
                 await this.document.parent.updateFromExtra(this.document.data);
             } else {
                 if (this.document.parent.type == "fate-core-official" && !this.document.data.data.active){
-                    console.log(this.document.parent);
+                    //console.log(this.document.parent);
                     await this.document.parent.deactivateExtra(this.object)
                 }
                 

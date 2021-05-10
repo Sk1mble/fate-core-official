@@ -303,7 +303,7 @@ Hooks.once('ready', async function () {
                 ehmodules.push(m);
             }
         })
-        console.log(ehmodules);
+        //console.log(ehmodules);
 
         class fate_splash extends FormApplication {
             constructor(...args){
@@ -388,7 +388,7 @@ Hooks.once('ready', async function () {
                 for (let folder of public_folders){
                     let update = []
                     let content = Array.from(game.folders.getName(folder).content);
-                    console.log(game.folders.getName(folder).data.type)
+                    //console.log(game.folders.getName(folder).data.type)
                     const cls = getDocumentClass(game.folders.getName(folder)?.data?.type);
                     for (let c of content){
                         update.push({_id:c.id, "permission.default":CONST.ENTITY_PERMISSIONS.OBSERVER});

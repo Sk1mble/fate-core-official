@@ -410,7 +410,7 @@ class fcoConstants {
             let notes = Array.from(scene.notes);
             update = [];
             for (let note of notes){
-                console.log(note);
+                //console.log(note);
                 let id = game.journal.getName(s_index[note.data.entryId])?.id;
                 if (id){
                     update.push({"_id":note.id, "entryId":id});
