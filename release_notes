@@ -1,3 +1,7 @@
+# Version 4.0.0
+  * First release of Fate Core Official!
+  * Fixed a bug that meant non-PC world skills became marked as PC skills after being added to and then deleted from a PC.
+
 # Version 3.1.23
   * Non-owner view of the character sheet has been much improved
     - You can now click on the expand/contract buttons for tracks, stunts, and skills

@@ -409,16 +409,6 @@ Hooks.once('ready', async function () {
                 new fate_splash().installModule(game.settings.get("fate-core-official","installing"))
             }
         }
-        
-        /*
-        // We can now access all packs of these modules with their packs attribute, and presumably import from there.
-        if (game.user.isGM){
-            fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.WelcomeTitle"),game.i18n.localize("fate-core-official.WelcomeText"),500,250);
-            await game.settings.set("fate-core-official","run_once", true);
-            await game.settings.set("fate-core-official","defaults",game.i18n.localize("fate-core-official.baseDefaults"))
-            await ui.sidebar.render(false);
-        }
-        */
     }
 })
 

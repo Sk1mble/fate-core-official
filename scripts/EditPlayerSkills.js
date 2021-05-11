@@ -471,7 +471,7 @@ class EditGMSkills extends FormApplication{
     async getData(){
         this.player_skills=duplicate(this.object.data.data.skills);
 
-        let world_skills=game.settings.get("fate-core-official","skills");
+        let world_skills=duplicate(game.settings.get("fate-core-official","skills"));
         let present = [];
         let absent = [];
         let non_pc_world_skills=[];
