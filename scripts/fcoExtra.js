@@ -6,8 +6,11 @@ export class fcoExtra extends Item {
             if (arg.type == "Extra") itemData = duplicate (arg);
         })
         if (!itemData) return;
-        if (this?.parent && this?.parent?.type == "fate-core-official") await this.parent.updateFromExtra (duplicate(itemData));
-        super._onCreate(...args)
+        if (this?.parent && this?.parent?.type == "fate-core-official") {
+            await this.parent.updateFromExtra (duplicate(itemData));
+            await this.parent.render(false);
+        }
+        await super._onCreate(...args)
     }
 
     async _preDelete(...args){
