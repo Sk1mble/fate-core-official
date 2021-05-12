@@ -297,7 +297,6 @@ export class fcoCharacter extends ActorSheet {
                 fcoConstants.getPen(id);
 
                 $(`#${id}_rich`).on("click", event => {
-
                     $(`#${id}_rich`).css('display', 'none');
                     $(`#${id}`).css('display', 'block');
                     $(`#${id}`).focus();

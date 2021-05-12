@@ -102,6 +102,10 @@ class EditPlayerStunts extends FormApplication {
 
         const description_rich = html.find("div[id='edit_stunt_desc_rich']");
 
+        description_rich.on('focus', async event => {
+            description_rich.trigger("click")    ;
+        })
+
         description_rich.on('click', async event => {
             $("#edit_stunt_desc_rich").css('display', 'none');
             $("#edit_stunt_desc").css('display', 'block');

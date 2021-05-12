@@ -95,6 +95,11 @@ class EditPlayerTracks extends FormApplication {
         numberbox.on("change", event => this._numChange(event, html));
         const checkbox = html.find("input[type='checkbox']");
         checkbox.on("click", event => this._check(event,html));
+        const edit = html.find("button[name='edit_entity_tracks']");
+        edit.on('click', async event => {
+            let e = new EditEntityTrack(this.object.data.data.tracks[event.target.id], this.object).render(true);
+            e.origin = this;
+        })
     } //End activateListeners
 
     // Here are the action functions

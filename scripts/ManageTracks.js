@@ -1,3 +1,328 @@
+//EditEntityTrack is for editing the specifics of a track already on a character or extra.
+class EditEntityTrack extends FormApplication {
+    constructor (track, entity){
+        // track is the entity's track being edited, entity is a reference to the actor or extra
+        super(track, entity);
+        this.track = duplicate(track);
+        this.entity = entity;
+        this.originalName = track.name;
+    }
+
+    getData(){
+        const templateData = {
+            track:this.track,
+            skills:duplicate(this.entity.data.data.skills),
+            entity:this.entity
+        }
+        return templateData;
+    }
+    static get defaultOptions() {
+        const options = super.defaultOptions;
+        options.template = "systems/fate-core-official/templates/EditEntityTrack.html"; 
+    
+        //Define the FormApplication's options
+        options.width = "1000";
+        options.height = "auto";
+        options.title = game.i18n.localize("fate-core-official.EntityTrackEditor");
+        options.closeOnSubmit = true;
+        options.submitOnClose = true;
+        options.id = "EditEntityTrack"; // CSS id if you want to override default behaviors
+        options.resizable = true;
+        return options;
+    }
+    async _updateObject(){
+        // Method for saving out the track once finished goes here. Called on submit();
+
+    }
+
+    //Here are the action listeners
+    activateListeners(html) {
+        super.activateListeners(html);
+        const saveTrackButton = html.find("button[id='save_entity_track']");
+        const edit_entity_linked_skillsButton = html.find("button[id='edit_entity_linked_skills']");
+        const copy_track = html.find("button[id='copy_entity']");
+        const export_track = html.find("button[id='exportEntityTrack']");
+
+        const track_label_select = html.find("select[id='entity_track_label_select']");
+        track_label_select.on("change", event => this._on_track_label_select(event, html))
+        saveTrackButton.on("click", event => this._onSaveTrackButton(event, html));
+        edit_entity_linked_skillsButton.on("click", event => {this._edit_entity_linked_skillsButtonClick(event, html)});
+        copy_track.on("click", event => this._onCopyTrackButton(event, html));
+        export_track.on("click", event => this._onExportTrack(event, html));
+        fcoConstants.getPen("edit_entity_track_description");
+        fcoConstants.getPen("edit_entity_track_when_marked");
+        fcoConstants.getPen("edit_entity_track_when_recovers");
+
+        $('#edit_entity_track_when_recovers_rich').on("focus", event => {
+            $('#edit_entity_track_when_recovers_rich').trigger("click");
+        })
+
+        $('#edit_entity_track_when_recovers_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_entity_track_when_recovers_rich").css('display', 'none');
+            $("#edit_entity_track_when_recovers").css('display', 'block');
+            $("#edit_entity_track_when_recovers").focus();
+        })
+        
+        $('#edit_entity_track_when_recovers').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                $('#edit_entity_track_when_recovers').css('display', 'none');
+                $('#edit_entity_track_when_recovers_rich')[0].innerHTML = desc;    
+                $('#edit_entity_track_when_recovers_rich').css('display', 'block');
+            }
+        })
+
+        $('#edit_entity_track_when_marked_rich').on("focus", event => {
+            $('#edit_entity_track_when_marked_rich').trigger("click");
+        })
+
+        $('#edit_entity_track_when_marked_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_entity_track_when_marked_rich").css('display', 'none');
+            $("#edit_entity_track_when_marked").css('display', 'block');
+            $("#edit_entity_track_when_marked").focus();
+        })
+        
+        $('#edit_entity_track_when_marked').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
+                $('#edit_entity_track_when_marked').css('display', 'none');
+                $('#edit_entity_track_when_marked_rich')[0].innerHTML = desc;    
+                $('#edit_entity_track_when_marked_rich').css('display', 'block');
+            }
+        })
+
+        $('#edit_entity_track_description_rich').on("focus", event => {
+            $('#edit_entity_track_description_rich').trigger("click");
+        })
+        $('#edit_entity_track_description_rich').on("click", event => {
+            if (event.target.outerHTML.startsWith("<a data")) return;
+            $("#edit_entity_track_description_rich").css('display', 'none');
+            $("#edit_entity_track_description").css('display', 'block');
+            $("#edit_entity_track_description").focus();
+        })
+        
+        $('#edit_entity_track_description').on('blur', async event => {
+            if (!window.getSelection().toString()){
+                let desc = DOMPurify.sanitize(event.target.innerHTML);
+                $('#edit_entity_track_description').css('display', 'none');
+                $('#edit_entity_track_description_rich')[0].innerHTML = desc;    
+                $('#edit_entity_track_description_rich').css('display', 'block');
+            }
+        })
+    }
+
+    //Here are the event listener functions.
+
+    async _on_track_label_select(event, html){
+        if (event.target.value != "escalating" && event.target.value != "none"){
+            document.getElementById("entity_track_custom_label").hidden = false
+            $("#entity_track_custom_label").val("");
+        }
+        else {
+            document.getElementById("entity_track_custom_label").hidden = true
+            $("#entity_track_custom_label").val("");
+        }
+    }
+
+    async _onExportTrack (event, html){
+        let output = JSON.stringify(this.track, null, 5);
+        
+        new Dialog({
+            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${output}</textarea></div>`,
+            buttons: {
+            },
+        }).render(true);
+    }
+
+    async _onCopyTrackButton (event, html){
+        // Copy this track to the existing actor with the name provided. If it already exists, create with 'copy' appended.
+        let name = this.track.name;
+        let num = 1;
+        for (let t in this.entity.data.data.tracks){
+            if (t.startsWith (name)) num ++
+        }
+        this.track.name = this.track.name+" "+num;
+        await this.entity.update(
+            {
+                "data.tracks":{
+                    [this.track.name]:this.track
+                }
+            }
+        )
+        this.close();
+    }
+
+    async _edit_entity_linked_skillsButtonClick(event, html){    
+        console.log("click")
+            let linked_skill_editor = new EditEntityLinkedSkills(this.track, this.entity);
+            linked_skill_editor.render(true);
+            try {
+                linked_skill_editor.bringToTop();
+            } catch  {
+                // Do nothing.
+            }
+    }
+
+    async _onSaveTrackButton(event,html){
+        let name = document.getElementById("edit_entity_track_name").value.split(".").join("․").trim();
+        let description = DOMPurify.sanitize(document.getElementById("edit_entity_track_description").innerHTML);
+        let recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
+        let aspect = document.getElementById("edit_entity_track_aspect").value;
+        let when_marked = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_marked").innerHTML);
+        let when_recovers = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_recovers").innerHTML);
+        let boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
+        let harm = parseInt(document.getElementById("edit_entity_track_harm").value);
+        let paid = document.getElementById("edit_entity_track_paid").checked;
+        let label = document.getElementById("entity_track_label_select").value;
+        let custom_label = document.getElementById("entity_track_custom_label").value;
+        if (label!="escalating" && label != "none") {
+            label=custom_label;
+        }
+
+        let track = this.track;
+        if (!name) name = "Unnamed Track";
+        track.name = name;
+
+        if (this.track.name != this.originalName) {
+            let num = 1;
+            for (let t in this.entity.data.data.tracks){
+                if (t.startsWith (name)) num ++
+            }
+            if (num > 1) this.track.name = this.track.name+" "+num;
+        }
+        track.description = description;
+        track.recovery_type = recovery_type;
+        
+        let aspect_name = this.track?.aspect?.name;
+        if (!aspect_name) aspect_name = "";
+
+        if (aspect == "no"){
+            track.aspect = "No";
+        }
+        if (aspect == "when_marked"){
+            track.aspect = {name:aspect_name, when_marked:true, as_name:false};
+        }
+        if (aspect == "as_name"){
+            track.aspect = {name:"", when_marked:false, as_name:true};
+        }
+        track.when_marked = when_marked;
+        track.recovery_conditions = when_recovers;
+        track.boxes=boxes;
+        track.harm_can_absorb=harm;
+        track.paid = paid;
+        track.label = label;
+
+        //If box_values < boxes, add
+        if (!track.box_values){
+            track.box_values = [];
+        }
+        if (track.box_values.length < track.boxes){
+            for (let i = 0; i <= (track.boxes - track.box_values.length); i++){
+                track.box_values.push(false);
+            }
+        }
+        //If box_values > boxes, trim
+        if (track.box_values.length > track.boxes){
+            for (let i = track.box_values.length; i > track.boxes; i--){
+                track.box_values.pop();
+            }
+        }
+
+        /*await this.entity.update({
+            "data.tracks":{
+                [track.name]:track
+            }
+        })*/
+        let tracks = duplicate(this.entity.data.data.tracks);
+        tracks [this.track.name] = this.track;
+        let final_tracks = await this.entity.setupTracks(this.entity.data.data.skills, tracks);
+        await this.entity.update({   
+                "data.tracks":final_tracks
+        })
+        this.origin.render(false);
+        this.close();
+    }
+}
+class EditEntityLinkedSkills extends FormApplication {
+    constructor (track, entity){
+        super(track, entity);
+        this.track = track;
+        this.entity = entity;
+    }
+    getData(){
+        const templateData = {
+            track:this.track,
+            skills:duplicate (this.entity.data.data.skills),
+            entity:this.entity
+        }
+        return templateData;
+    }
+    static get defaultOptions() {
+        const options = super.defaultOptions;
+        options.template = "systems/fate-core-official/templates/EditLinkedSkills.html"; 
+    
+        //Define the FormApplication's options
+        options.width = "1000";
+        options.height = "auto";
+        options.title = game.i18n.localize("fate-core-official.LinkedSkillEditor");
+        options.closeOnSubmit = false;
+        options.id = "EditLinkedSkills"; // CSS id if you want to override default behaviors
+        options.resizable = true;
+        return options;
+    }
+     //Here are the action listeners
+     activateListeners(html) {
+        super.activateListeners(html);
+        const deleteLinkedSkillButton = html.find("button[id='delete_linked_skill']");
+        const addLinkedSkillButton = html.find("button[id='add_linked_skill']");
+
+        deleteLinkedSkillButton.on("click", event => this._onDeleteLinkedSkillButton(event, html));
+        addLinkedSkillButton.on("click", event => this._onAddLinkedSkillButton(event,html));
+    }
+    //Here are the event listener functions.
+
+    async _onDeleteLinkedSkillButton(event, html){
+        let del = await fcoConstants.confirmDeletion();
+        if (del){
+             let toDelete = document.getElementById("linked_skills").value;
+            let track = this.track;
+            let linked_skills = track.linked_skills;
+    
+            for (let i = 0; i< linked_skills.length; i++){
+                let toCheck = `Skill: ${linked_skills[i].linked_skill}, Rank: ${linked_skills[i].rank}, Boxes: ${linked_skills[i].boxes}, Enables: ${linked_skills[i].enables}`;
+                if(toCheck == toDelete){
+                    linked_skills.splice(i,1);
+                }
+            }
+            this.render(false);
+        }
+    }
+
+    async _onAddLinkedSkillButton(){
+        let linked_skill = document.getElementById("skill_list").value;
+            let rank = parseInt(document.getElementById("skill_rank").value);
+            let boxes = parseInt(document.getElementById("added_boxes").value);
+            let enables = document.getElementById("edit_enables").checked;
+            
+            if (this.track.linked_skills==undefined){
+                this.track.linked_skills = []
+            }
+            this.track.linked_skills.push(
+                {
+                    "linked_skill":linked_skill,
+                    "rank":rank,
+                    "boxes":boxes,
+                    "enables":enables
+                }
+            )
+            this.render(false);
+    }
+}
+
 class EditLinkedSkills extends FormApplication {
     constructor (track){
         super(track);
@@ -138,9 +463,11 @@ class EditTracks extends FormApplication {
         fcoConstants.getPen("edit_track_when_marked");
         fcoConstants.getPen("edit_track_when_recovers");
 
+        $('#edit_track_when_recovers_rich').on("focus", event => {
+            $('#edit_track_when_recovers_rich').trigger("click");
+        })
+
         $('#edit_track_when_recovers_rich').on("click", event => {
-            
-            console.log(event.target)
             if (event.target.outerHTML.startsWith("<a data")) return;
             $("#edit_track_when_recovers_rich").css('display', 'none');
             $("#edit_track_when_recovers").css('display', 'block');
@@ -155,6 +482,10 @@ class EditTracks extends FormApplication {
                 $('#edit_track_when_recovers_rich')[0].innerHTML = desc;    
                 $('#edit_track_when_recovers_rich').css('display', 'block');
             }
+        })
+
+        $('#edit_track_when_marked_rich').on("focus", event => {
+            $('#edit_track_when_marked_rich').trigger("click");
         })
 
         $('#edit_track_when_marked_rich').on("click", event => {
@@ -173,6 +504,9 @@ class EditTracks extends FormApplication {
             }
         })
 
+        $('#edit_track_description_rich').on("focus", event => {
+            $('#edit_track_description_rich').trigger("click");
+        })
         $('#edit_track_description_rich').on("click", event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
             $("#edit_track_description_rich").css('display', 'none');
@@ -195,10 +529,11 @@ class EditTracks extends FormApplication {
     async _on_track_label_select(event, html){
         if (event.target.value == "custom"){
             document.getElementById("track_custom_label").hidden = false
+            $("#track_custom_label").val("");
         }
         else {
             document.getElementById("track_custom_label").hidden = true
-            document.getElementById("track.custom_label").value = "";
+            $("#track_custom_label").val("");
         }
     }
 

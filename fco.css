@@ -69,6 +69,10 @@
       padding: 0;
 }
 
+#EditEntityTrack .window-content {
+  padding: 0;
+}
+
 .fate .window-content {
   padding: 0;
 }

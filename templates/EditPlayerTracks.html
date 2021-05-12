@@ -24,6 +24,7 @@
                             <td>
                                 <button type="button" name = "{{../../cat}}_{{this.name}}" id="move_up" i icon class="fas fa-sort-up" style="width:25px; height:25px; background-color: white; color:black"></button>
                                 <button type="button" name = "{{../../cat}}_{{this.name}}"id="move_down" i icon class="fas fa-sort-down" style="width:25px; height:25px; background-color: white; color:black"></button>
+                                {{#if this.present}}<button type="button" name = "edit_entity_tracks" id="{{this.name}}" i icon class="fas fa-cogs" style="width:30px; height:25px; background-color: white; color:black"></button>{{/if}}
                             </td>
                 {{/if}}
                 </tr>

@@ -261,6 +261,9 @@ class EditSkill extends FormApplication{
         fcoConstants.getPen("edit_skill_defend");
 
         const description_rich = html.find('#edit_skill_description_rich');
+        description_rich.on("focus", event => {
+            description_rich.trigger("click");
+        })
         description_rich.on("click", event => {
             $("#edit_skill_description_rich").css('display', 'none');
             $("#edit_skill_description").css('display', 'block');
@@ -277,6 +280,10 @@ class EditSkill extends FormApplication{
             }
         })
 
+        $('#edit_skill_overcome_rich').on("focus", event => {
+            $('#edit_skill_overcome_rich').trigger("click");
+        })
+
         $('#edit_skill_overcome_rich').on("click", event => {
             $("#edit_skill_overcome_rich").css('display', 'none');
             $("#edit_skill_overcome").css('display', 'block');
@@ -290,6 +297,10 @@ class EditSkill extends FormApplication{
                 $('#edit_skill_overcome_rich')[0].innerHTML = desc;    
                 $('#edit_skill_overcome_rich').css('display', 'block');
             }
+        })
+
+        $('#edit_skill_caa_rich').on("focus", event => {
+            $('#edit_skill_caa_rich').trigger("click");
         })
         
         $('#edit_skill_caa_rich').on("click", event => {
@@ -308,6 +319,10 @@ class EditSkill extends FormApplication{
             }
         })
 
+        $('#edit_skill_attack_rich').on("focus", event => {
+            $('#edit_skill_attack_rich').trigger("click");
+        })
+
         $('#edit_skill_attack_rich').on("click", event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
             $('#edit_skill_attack_rich').css('display', 'none');
@@ -322,6 +337,10 @@ class EditSkill extends FormApplication{
                 $('#edit_skill_attack_rich')[0].innerHTML = desc;    
                 $('#edit_skill_attack_rich').css('display', 'block');
             }
+        })
+
+        $('#edit_skill_defend_rich').on("focus", event => {
+            $('#edit_skill_defend_rich').trigger("click");
         })
 
         $('#edit_skill_defend_rich').on("click", event => {

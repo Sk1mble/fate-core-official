@@ -4,7 +4,7 @@
         <div style="display:block; width:100%">
             <div style="display:flex; flex-direction:row"><img class="mfate-sheet__identity-avatar profile-img" width="100" height="auto" style="border:0; cursor: pointer;" id="avatar" data-edit="img" src="{{document.img}}"></img>
             <textarea class="mfate-sheet__identity-name" name="name" rows="1" data-edit="name">{{document.name}}</textarea></div>
-            {{#if this.showPronouns}}<div style="display:flex; flex-direction:row"><div class="mfate-sheet__meta-label">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>{{/if}}
+            {{#if this.showPronouns}}{{#if (gt data.details.fatePoints.refresh 0)}}<div style="display:flex; flex-direction:row"><div class="mfate-sheet__meta-label">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>{{/if}}{{/if}}
         </div>    
         <div class="mfate-sheet__header-right">
             <div class="mfate-sheet__meta">
@@ -80,12 +80,12 @@
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
                     {{#if data.details.notes.GM}}
                         {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="display:none; max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
-                                  <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich"style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr  data.details.notes.value this.document}}}</div>
+                                  <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr  data.details.notes.value this.document}}}</div>
                             {{else}}<div>These notes are for the GM's eyes only...</div>
                         {{/if}}
                     {{else}}
                         <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="min-height:100%; display:none; max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
-                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich"style="min-height:100%; max-width:100%; background-color:transparent !important">{{{enr  data.details.notes.value this.document}}}</div>
+                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="min-height:100%; max-width:100%; background-color:transparent !important">{{{enr  data.details.notes.value this.document}}}</div>
                     {{/if}}
                 </div>
             </div>
@@ -198,7 +198,7 @@
                                     </div>
                                 </div>
                                 {{#if (expanded ../this.document (concat this.name '_track'))}}<div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                    <div class="cs_box mfate-tracks-notes__input" style="min-height:1.5em" id="{{fco_getKey this.name}}_track_notes_rich">{{{enr this.notes ../this.document}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input" style="min-height:1.5em" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
                                     <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none; min-height:1.5em;" data-edit= "data.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes" name="data.tracks.{{this.name}}.notes">{{{this.notes}}}</div>
                                 {{/if}}
                                 {{/if}}{{/if}}                                
@@ -229,7 +229,7 @@
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (concat this.name '_aspect'))}}
                                 <div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="min-height:1.5em;" id="{{fco_getKey this.name}}_aspect_notes_rich" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{{enr this.notes ../this.document}}}</div>
+                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="min-height:1.5em;" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{{enr this.notes ../this.document}}}</div>
                                 <div class="cs_box mfate-aspects-notes__input contenteditable" style="min-height:1.5em; display:none;" data-edit="data.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="data.aspects.{{this.name}}.notes" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>
                                 {{/if}}
                         </li>
@@ -308,7 +308,7 @@
                 </div>
                 {{#if (expanded this.document '_description')}}
                 <div class="mfate-description__content long_text" style="display:none" id="{{this.document.id}}_description" name="data.details.description.value" data-edit="data.details.description.value">{{{data.details.description.value}}}</div>
-                <div class="mfate-description__content long_text" style="min-height:1.5em;" id="{{this.document.id}}_description_rich">{{{enr  data.details.description.value this.document}}}</div>
+                <div class="mfate-description__content long_text" style="min-height:1.5em;" id="{{this.document.id}}_description_rich" tabindex = "0">{{{enr  data.details.description.value this.document}}}</div>
                 {{/if}}
             </div>
             <div {{#if (expanded this.document '_biography')}}class="mfate-biography"{{else}}class="mfate-biography-collapsed"{{/if}}>
@@ -317,7 +317,7 @@
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Biography'}}</div>
                 </div>
                 {{#if (expanded this.document '_biography')}}
-                <div class="mfate-biography__content long_text" style="min-height:1.5em;" id="{{this.document.id}}_biography_rich">{{{enr data.details.biography.value this.document}}}</div>
+                <div class="mfate-biography__content long_text" style="min-height:1.5em;" id="{{this.document.id}}_biography_rich" tabindex = "0">{{{enr data.details.biography.value this.document}}}</div>
                 <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="data.details.biography.value" name="data.details.biography.value">{{{data.details.biography.value}}}</div>{{/if}}
             </div>
             {{#if (expanded this.document '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}

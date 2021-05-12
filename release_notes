@@ -1,3 +1,8 @@
+# Version 4.0.1
+  * Pronouns now hidden on blank characters (with Refresh 0).
+  * Powered by Fate logo no longer blocks clicks on elements in front of it.
+  * Added the ability to edit tracks on existing characters - this lets you copy, export to JSON, and change all attributes other than 'unique' and 'universal'.
+
 # Version 4.0.0
   * First release of Fate Core Official!
   * Fixed a bug that meant non-PC world skills became marked as PC skills after being added to and then deleted from a PC.

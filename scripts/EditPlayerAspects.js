@@ -44,6 +44,10 @@ class EditPlayerAspects extends FormApplication{
             fcoConstants.getPen(id);
             fcoConstants.getPen(id2);
 
+            $(`#${id}_rich`).on('focus', event => {
+                $(`#${id}_rich`).trigger("click");
+            })
+
             $(`#${id}_rich`).on('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $(`#${id}_rich`).css('display', 'none');
@@ -61,9 +65,11 @@ class EditPlayerAspects extends FormApplication{
                     this.aspects[name].description=event.target.innerHTML;
                 }
             })
+            $(`#${id2}_rich`).on('focus', event => {
+                $(`#${id2}_rich`).trigger("click");
+            })
         
             $(`#${id2}_rich`).on('click', event => {
-                console.log("Click")
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $(`#${id2}_rich`).css('display', 'none');
                 $(`#${id2}`).css('display', 'block');
