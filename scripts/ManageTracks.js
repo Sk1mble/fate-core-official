@@ -239,7 +239,11 @@ class EditEntityTrack extends FormApplication {
         })*/
         let tracks = duplicate(this.entity.data.data.tracks);
         tracks [this.track.name] = this.track;
-        let final_tracks = await this.entity.setupTracks(this.entity.data.data.skills, tracks);
+        let final_tracks = tracks;
+
+        if (this.entity.type == "fate-core-official") {
+            final_tracks = await this.entity.setupTracks(this.entity.data.data.skills, tracks);
+        }
         await this.entity.update({   
                 "data.tracks":final_tracks
         })
