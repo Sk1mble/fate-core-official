@@ -6,7 +6,7 @@
             <option {{#if (eq ../cat @key)}} selected="selected"{{/if}}>{{@key}}</option>
             {{/each}}
             </select>
-    <div name = "tracks_body" style="overflow-y:auto; width:400px; height:250px; border:none"><!--Begin body-->
+    <div id="edit_tracks_body" name = "tracks_body" style="overflow-y:auto; width:400px; height:250px; border:none"><!--Begin body-->
         <table style="background-color: white; border:none">
         {{#each tracks_by_category}}
             {{#each this}}

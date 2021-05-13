@@ -27,6 +27,7 @@ class EditPlayerTracks extends FormApplication {
         options.id = "PlayerTrackSetup";
         options.resizable = true;
         options.classes = options.classes.concat(['fate']);
+        options.scrollY = ["#edit_tracks_body"]; 
         return options 
     } // End getDefaultOptions
 
@@ -297,7 +298,6 @@ class EditPlayerTracks extends FormApplication {
     
     async _numChange (event, html){
         let name = event.target.id.split("_")[0]
-        let category = this.selected_category;
         this.tracks_by_category[this.selected_category][name].number = parseInt(event.target.value);
     }
 
@@ -311,14 +311,16 @@ class EditPlayerTracks extends FormApplication {
     async _save(event, html){
         //Work out which tracks in tracks_by_category are being added, and which deleted
         //We'll do this by finding the existing tracks in current working object and copying them to a new working object ready for output.
-
         let input = {};
         let output = {};
-
-        //Let's flatten tracks_by_category first.
-        for (let c in this.tracks_by_category){
-            for (let t in this.tracks_by_category[c]){
-                input[t]=this.tracks_by_category[c][t];
+        if (this.selected_category == "All"){
+            input = this.tracks_by_category["All"];
+        } else {
+            for (let c in this.tracks_by_category){
+                if (c == "All") continue;
+                for (let t in this.tracks_by_category[c]){
+                    input[t]=this.tracks_by_category[c][t];
+                }
             }
         }
      
@@ -347,7 +349,6 @@ class EditPlayerTracks extends FormApplication {
                             for (let i = 0; i < number - numCopies; i++){
                                 let dupeTrack = duplicate(input[t]);
                                 dupeTrack.parent = t;
-                                let name = dupeTrack.name;
                                 dupeTrack.name = dupeTrack.name+" "+(i+2)
                                 await this.prepareTrack(dupeTrack);
                                 output[dupeTrack.name]=dupeTrack;
@@ -382,7 +383,6 @@ class EditPlayerTracks extends FormApplication {
                 }
             }
         }
-        
         ui.notifications.info(game.i18n.localize("fate-core-official.CharacterTrackChangesSaved"))   
         //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
