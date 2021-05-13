@@ -281,6 +281,7 @@ class EditPlayerTracks extends FormApplication {
 
                         newTrack.toCopy=true;
                         this.tracks_by_category[newTrack.category][newTrack.name]=newTrack;
+                        this.tracks_by_category["All"][newTrack.name]=newTrack;
                         this.render(false);
                     }
                 }
@@ -296,6 +297,7 @@ class EditPlayerTracks extends FormApplication {
     
     async _numChange (event, html){
         let name = event.target.id.split("_")[0]
+        let category = this.selected_category;
         this.tracks_by_category[this.selected_category][name].number = parseInt(event.target.value);
     }
 
@@ -543,10 +545,11 @@ class EditPlayerTracks extends FormApplication {
         if (this.tracks_by_category == undefined){
             this.tracks_by_category = await duplicate(game.settings.get("fate-core-official","track_categories"));
              //Initialise the values from text (used in the category editor) to JSON objects (used here)
+            this.tracks_by_category["All"]={};
             for (let c in this.tracks_by_category){
                 this.tracks_by_category[c]={};
             }
-            
+
             //Let's get a working copy of this actor's track information. We will work with this throughout and only save it to the actor when we're finished.
             this.tracks = await duplicate(this.object.data.data.tracks);
             
@@ -561,6 +564,7 @@ class EditPlayerTracks extends FormApplication {
                             let track = await duplicate(this.tracks[t]);
                             track.present=true;
                             track.number=1;
+                            this.tracks_by_category["All"][t]=track;
                             this.tracks_by_category[track.category][t]=track;
                         }
                     }
@@ -571,6 +575,7 @@ class EditPlayerTracks extends FormApplication {
                         world_tracks[t].number = 1;
                         if (present < 0){
                             this.tracks_by_category[world_tracks[t].category][t]=world_tracks[t];
+                            this.tracks_by_category["All"][t]=world_tracks[t];
                         }
                     }
                 } catch(error){

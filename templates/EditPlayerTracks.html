@@ -2,9 +2,8 @@
     <div id = "header">
         Filter: <select id = "select_box" style="background-color: white; color:black; font-family:Montserrat">
             <option selected disabled value="{{localize 'fate-core-official.ChooseACategory'}}">{{localize 'fate-core-official.ChooseACategory'}}</option>
-            <option>All</option>
             {{#each tracks_by_category}}
-            <option>{{@key}}</option>
+            <option {{#if (eq ../cat @key)}} selected="selected"{{/if}}>{{@key}}</option>
             {{/each}}
             </select>
     <div name = "tracks_body" style="overflow-y:auto; width:400px; height:250px; border:none"><!--Begin body-->
@@ -28,21 +27,6 @@
                                 {{#if this.present}}<button type="button" name = "edit_entity_tracks" id="{{this.name}}" i icon class="fas fa-cogs" style="width:30px; height:25px; background-color: white; color:black"></button>{{/if}}
                             </td>
                 {{/if}}
-                    {{#if (eq ../../cat 'All')}}
-                    <td title ="{{this.description}}">
-                        <input type ="checkbox" id="{{this.name}}"
-                            title="{{this.description}}" 
-                            {{checked this.present}}
-                            {{checked this.toCopy}}
-                                {{#if this.universal}}
-                                {{/if}}></input></td>
-                                <td title="{{localize 'fate-core-official.RightClickForDetails'}}" name="nameField" id="{{this.name}}_nameField" style="font-family:Montserrat">{{this.name}}{{#if this.unique}}{{else}}{{#if (undefined this.parent)}}&nbsp&nbsp<input type="number" min="1" value="{{this.number}}" id="{{this.name}}_number" title="{{localize 'fate-core-official.NumberOfCopies'}}" style="color:black; background-color:white; border:1px solid lightsteelblue; font-family:Montserrat; width:40px;">{{else}}{{/if}}{{/if}}</td>
-                                <td>
-                                    <button type="button" name = "{{../../cat}}_{{this.name}}" id="move_up" i icon class="fas fa-sort-up" style="width:25px; height:25px; background-color: white; color:black"></button>
-                                    <button type="button" name = "{{../../cat}}_{{this.name}}"id="move_down" i icon class="fas fa-sort-down" style="width:25px; height:25px; background-color: white; color:black"></button>
-                                    {{#if this.present}}<button type="button" name = "edit_entity_tracks" id="{{this.name}}" i icon class="fas fa-cogs" style="width:30px; height:25px; background-color: white; color:black"></button>{{/if}}
-                                </td>
-                    {{/if}}
                 </tr>
                 {{else}}{{/if}}
             {{/each}}
