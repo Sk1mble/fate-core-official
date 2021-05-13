@@ -153,7 +153,7 @@
                             </div>
                             <div name="tracks_body" id="tracks_body" style="scrollbar-width:thin">
                                 {{#each data.tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}} 
-                                <div class="mfate-tracks__list">
+                                <div class="mfate-tracks__list" id ="track_{{this.name}}" title="{{this.recovery_type}}">
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
                                             <div name="track_name" style="font-family:Montserrat" class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">

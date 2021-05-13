@@ -1,3 +1,8 @@
+# Version 4.0.2
+  * Added an 'All' category to the character track editor so that you can manipulate the order of tracks etc. explicitly without being blocked by a category boundary.
+  * Added a right-click action to tracks on character sheets which will give a player-friendly display of info about the track
+  * Updated the skill information provided on right-click of a skill to look a bit smarter.
+
 # Version 4.0.1
   * Pronouns now hidden on blank characters (with Refresh 0).
   * Powered by Fate logo no longer blocks clicks on elements in front of it.

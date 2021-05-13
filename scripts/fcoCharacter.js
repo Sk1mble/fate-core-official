@@ -268,7 +268,66 @@ export class fcoCharacter extends ActorSheet {
             const box = html.find("input[name='box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
-            const track_name = html.find("div[name='track_name']");
+            const track_name = html.find("div[class='mfate-tracks__list']");
+            track_name.on("contextmenu", event => {
+                    let name = event.currentTarget.id.split("_")[1]
+                    let track = this.object.data.data.tracks[name];
+                    console.log(name);
+            
+                    let linked_skills_text =""
+                    if (track.linked_skills != undefined && track.linked_skills.length >0){
+                        for (let i = 0; i<track.linked_skills.length;i++)
+                        {
+                            let skill = track.linked_skills[i];
+                            linked_skills_text+=`Skill: ${skill.linked_skill}; Rank: ${skill.rank}; Boxes: ${skill.boxes}; Enables: ${skill.enables ? 'Yes':'No'}<br>`
+                        }
+                    }
+            
+                    let content = 
+                    `<div style="background-color:white">
+                    <h1 style="padding: 10px">${track.name} (${track.recovery_type})</h1>
+                    <table border="1" cellpadding="4" cellspacing="4" style="background-color:white;">
+                        <tr>
+                            <td width = "200px" style="padding:10px">
+                                ${game.i18n.localize("fate-core-official.Description")}:
+                            </td>
+                            <td style="padding:10px">
+                                ${track.description}
+                            </td>
+                        </tr>
+                        <tr>
+                        <tr>
+                            <td style="padding:10px">
+                                ${game.i18n.localize("fate-core-official.Boxes")}:<br>
+                                ${game.i18n.localize("fate-core-official.Harm")}:
+                            </td>
+                            <td style="padding:10px">
+                                ${track.boxes}<br>
+                                ${track.harm_can_absorb}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px">
+                                ${game.i18n.localize("fate-core-official.WhenMarked")}:
+                            </td>
+                            <td style="padding:10px">
+                                ${track.when_marked}
+                            </td>
+            
+                        </tr>
+                        <tr>
+                            <td style="padding:10px">
+                                ${game.i18n.localize("fate-core-official.HowRecover")}:
+                            </td>
+                            <td>
+                                ${track.recovery_conditions}
+                            </td>
+                        </tr>
+                    </table>
+                    </div>`
+            
+                    fcoConstants.awaitOKDialog(track.name, content, 1000);
+            })
 
             const delete_stunt = html.find("button[name='delete_stunt']");
             delete_stunt.on("click", event => this._onDelete(event,html));
@@ -638,34 +697,35 @@ export class fcoCharacter extends ActorSheet {
         let name = event.target.id;
         let skill = this.actor.data.data.skills[name];
         fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
-                                            <table cellspacing ="4" cellpadding="4" border="1">
-                                                <h2>${skill.name}</h2>
+                                            <div style="background-color:white">
+                                            <table cellspacing ="4" cellpadding="4" border="1" style="background-color:white">
+                                                <h2 style="padding:10px;">${skill.name}</h2>
                                                 <tr>
-                                                    <td style="width:400px;">
+                                                    <td style="width:400px; padding:10px">
                                                         <b>${game.i18n.localize("fate-core-official.Description")}:</b>
                                                     </td>
-                                                    <td style="width:2000px; padding-left:5px">
+                                                    <td style="width:2000px; padding:10px">
                                                         ${skill.description}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
+                                                    <td style="padding:10px;">
                                                         <b>${game.i18n.localize("fate-core-official.Overcome")}:</b>
                                                     </td>
-                                                    <td style="width:2000px; padding-left:5px">
+                                                    <td style="width:2000px;  padding:10px">
                                                         ${skill.overcome}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                   <td>
+                                                   <td style="padding:10px;">
                                                         <b>${game.i18n.localize("fate-core-official.CAA")}:</b>
                                                     </td>
-                                                    <td style="width:2000px; padding-left:5px">
+                                                    <td style="width:2000px;  padding:10px">
                                                         ${skill.caa}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
+                                                    <td style="padding:10px;">
                                                         <b>${game.i18n.localize("fate-core-official.Attack")}:</b>
                                                     </td>
                                                     <td style="width:2000px; padding-left:5px">
@@ -673,14 +733,15 @@ export class fcoCharacter extends ActorSheet {
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
+                                                    <td style="padding:10px;">
                                                         <b>${game.i18n.localize("fate-core-official.Defend")}:</b>
                                                     </td>
                                                     <td style="width:2000px; padding-left:5px">
                                                         ${skill.defend}
                                                     </td>
                                                 </tr>
-                                            </table>`,1000)
+                                            </table>
+                                            </div>`,1000)
     }
 
     async _on_item_drag (event, html){
