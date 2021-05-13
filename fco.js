@@ -345,7 +345,6 @@ Hooks.once('ready', async function () {
                         mc[module]=true;
                         await game.settings.set("core", "moduleConfiguration", mc);
                     }
-                    
                 })
             }
 
@@ -362,7 +361,9 @@ Hooks.once('ready', async function () {
             async installModule(module_name){
                 // Load the world settings from setup.json and install them
                 let setup = await fcoConstants.getJSON(`/modules/${module_name}/json/setup.json`);
+                let folders = await fcoConstants.getJSON(`/modules/${module_name}/json/folders.json`);
                 await fcoConstants.importSettings(setup);
+                await fcoConstants.createFolders(folders);
     
                 // Grab all of the compendium pack data for the module
                 let module = await game.modules.get(module_name);
@@ -370,35 +371,17 @@ Hooks.once('ready', async function () {
                 for (let pack of packs){
                     if (!pack.name.includes("fatex")){
                         let cc = new CompendiumCollection (pack);
-                        await cc.importAll();
+                        await fcoConstants.importAllFromPack(cc)
                     }
                 }
 
                 // Set installing and run_once to the appropriate post-install values
                 await game.settings.set("fate-core-official", "run_once", true);
                 await game.settings.set("fate-core-official", "installing", "none");
-               
-                // Relink all tokens with actor link with their related entities (we'll need to be sure that any linked tokens have a 1:1 relationship with actors for our world setups) and set up permissions on public folders
-                await fcoConstants.relink_after_compendia();
 
-                // Finally, set the actors and journal entries in this module's public folders to have observer permissions for all players.
-                let labels = game.modules.get(module_name).packs.map(p => p.label);
-                let public_folders = labels.filter(label => label.toLowerCase().indexOf("public") != -1);
-                public_folders = public_folders.concat(labels.filter(label => label.toLowerCase().indexOf("player character") != -1))
-                for (let folder of public_folders){
-                    let update = []
-                    let content = Array.from(game.folders.getName(folder).content);
-                    //console.log(game.folders.getName(folder).data.type)
-                    const cls = getDocumentClass(game.folders.getName(folder)?.data?.type);
-                    for (let c of content){
-                        update.push({_id:c.id, "permission.default":CONST.ENTITY_PERMISSIONS.OBSERVER});
-                    }
-                    await cls?.updateDocuments(update);
-                }
-
-                 // Set the 'welcome' scene we grabbed from the scenes compendium to active
-                 let scene = game.scenes.getName("Welcome");
-                 if (scene) await scene.activate();
+                // Set the 'welcome' scene we grabbed from the scenes compendium to active
+                let scene = game.scenes.getName("Welcome");
+                if (scene) await scene.activate();
             }
         }
 

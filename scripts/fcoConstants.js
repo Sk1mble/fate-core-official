@@ -365,78 +365,161 @@ class fcoConstants {
         return text.hashCode();
     }
 
-    static async index_journals(){
-        // First we store the linkages between journals and map pins and journals and scenes.
-        let scenes = Array.from(game.scenes);
-        for (let scene of scenes){
-            let s_index = {};
-            s_index["scene_journal"] = scene.journal?.name;
-
-            let notes = Array.from(scene.notes);
-            for (let note of notes){
-                let name = game.journal.get(note.data.entryId).name;
-                s_index[note.data.entryId] = name;
-            }
-            await scene.setFlag("fate-core-official","s_index", s_index);
-        }
-        /* No longer needed as we are linking by name.
-        //Now we store a flag on every journal entry with its current reference so that we can re-map after importing.
-        let journals = Array.from(game.journal);
-        for (let journal of journals){
-            journal.setFlag("fate-core-official","oldId",journal.id);
-        }
-        */
+    static async exportFolderStructure(){
+        let folders = [];
+        game.folders.forEach(f => folders.push(f));
+        let output = await JSON.stringify(folders, null, 5);
+        await saveDataToFile(output, "text/plain", "folders.json");
+    }
+    
+    static async createFolders(folders){
+        await Folder.createDocuments(folders, {keepId:true});
     }
 
-    static async relink_after_compendia (){
-        for (let scene of Array.from(game.scenes)){
-            let update = [];
-            for (let token of scene.tokens.contents){
-                let match_id = game.actors.getName(token.name)?.id;
-                if (match_id) {
-                    update.push({_id:token.id, actorId:match_id})
-                }
+    static async packModule (module){
+        // Export folders to folders.json
+        await this.exportFolderStructure();
+        // Export world settings to setup.json
+        let out = await this.exportSettings();
+        await saveDataToFile(out, "text/plain", "setup.json");
+        // Export all folder contents to the relevant compendium with {keepID:true}
+        // The assumption here is that there is exactly ONE compendium for each type of content
+        // If we breach this assumption, then the first compendium found for a given type will be populated with the given data
+        // And the others left blank.
+        // First, we find the compendium for the given module that meshes with each type of in-world entity.
+        // This requires the prototype module to be installed on the system so its compendiums are available.
+        let packStructure = {};
+        game.packs.forEach(pack => {
+            if (pack.metadata.package == module && pack.documentClass.documentName == "Actor"){
+                packStructure.actor = pack.collection;
             }
-            await scene.updateEmbeddedDocuments("Token", update);
-            // Now let us link to the journal for the scene and map pins. 
-            // These must have been stored in the scenes BEFORE being put in the compendia.
-            // The command for this is fcoConstants.index_journals();
-            let s_index = scene.getFlag("fate-core-official", "s_index");
-            if (s_index){
-                if (s_index["scene_journal"]){
-                    await scene.update({journal:game.journal.getName(s_index["scene_journal"]).id});
-                }
+            if (pack.metadata.package == module && pack.documentClass.documentName == "JournalEntry"){
+                packStructure.journal = pack.collection;
             }
-            let notes = Array.from(scene.notes);
-            update = [];
-            for (let note of notes){
-                //console.log(note);
-                let id = game.journal.getName(s_index[note.data.entryId])?.id;
-                if (id){
-                    update.push({"_id":note.id, "entryId":id});
-                }
+            if (pack.metadata.package == module && pack.documentClass.documentName == "RollTable"){
+                packStructure.table = pack.collection;
             }
-            if (update.length > 0){
-                await scene.updateEmbeddedDocuments("Note", update);
+            if (pack.metadata.package == module && pack.documentClass.documentName == "Macro"){
+                packStructure.macro = pack.collection;
             }
+            if (pack.metadata.package == module && pack.documentClass.documentName == "Playlist"){
+                packStructure.playlist = pack.collection;
+            }
+            if (pack.metadata.package == module && pack.documentClass.documentName == "Item"){
+                packStructure.item = pack.collection;
+            }
+            if (pack.metadata.package == module && pack.documentClass.documentName == "Scene"){
+                packStructure.scene = pack.collection;
+            }
+        })
+        
+        // Now comes the code to actually export the content into the various compendiums.
+        let imports = [];
+        let actors = await Array.from(game.actors);
+        for (let actor of actors){
+            imports.push(actor.toObject());
+        }
+        try {
+            await Actor.createDocuments(imports, {pack:packStructure.actor, keepId: true});
+        } catch (err) {
+            //Nothing to do, this just means there were duplicates.
         }
 
-        /* Unnecessary now we're linking via name rather than ID. 
-        //Kept here in case I need it for something else later.
-        // Now to re-link the journal text
-        let journals = Array.from(game.journal);
+        imports = [];
+        let journals = await Array.from(game.journal);
         for (let journal of journals){
-            let text = journal.data.content;
-            for (let j3 of journals){
-                let oldId = j3.getFlag("fate-core-official","oldId");
-                if (text.indexOf(oldId)==-1) continue;
-                let newId = j3.id;
-                let regex = new RegExp(oldId, 'g');
-                text = text.replace(regex, newId);
-            }
-            await journal.update({content:text});
+            imports.push(journal.toObject());
         }
-        */
+        try {
+            await JournalEntry.createDocuments(imports, {pack:packStructure.journal, keepId: true});
+        } catch (err) {
+
+        }
+
+        imports = [];
+        let tables = await Array.from(game.tables);
+        for (let table of tables){
+            imports.push(table.toObject());
+        }
+        try {
+            await RollTable.createDocuments(imports, {pack:packStructure.table, keepId: true});
+        } catch (err) {
+
+        }
+
+        imports = [];
+        let macros = await Array.from(game.macros);
+        for (let macro of macros){
+            imports.push(macro.toObject());
+        }
+        try {
+            await Macro.createDocuments(imports, {pack:packStructure.macro, keepId: true});
+        } catch (err) {
+
+        }
+
+        imports = [];
+        let playlists = await Array.from(game.playlists);
+        for (let playlist of playlists){
+            imports.push(playlist.toObject());
+        }
+        try {
+            await Playlist.createDocuments(imports, {pack:packStructure.playlist, keepId: true});
+        } catch (err) {
+
+        }
+
+        imports = [];
+        let items = await Array.from(game.items);
+        for (let item of items){
+            imports.push(item.toObject());
+        }
+        try {
+            await Item.createDocuments(imports, {pack:packStructure.item, keepId: true});
+        } catch (err) {
+
+        }
+
+        imports = [];
+        let scenes = await Array.from(game.scenes);
+        for (let scene of scenes){
+            imports.push(scene.toObject());
+        }
+        try {
+            await Scene.createDocuments(imports, {pack:packStructure.scene, keepId: true});
+        } catch (err) {
+
+        }
+    }
+
+    static async importAllFromPack(pack) {
+        // Load all content
+        const documents = await pack.getDocuments();
+    
+        // Prepare import data
+        const collection = game.collections.get(pack.documentName);
+        const createData = documents.map(doc => {
+          const data = doc.toObject();
+          return data;
+        })
+    
+        // Create World Documents in batches
+        const chunkSize = 100;
+        const nBatches = Math.ceil(createData.length / chunkSize);
+        let created = [];
+        for ( let n=0; n<nBatches; n++ ) {
+          const chunk = createData.slice(n*chunkSize, (n+1)*chunkSize);
+          const docs = await pack.documentClass.createDocuments(chunk, {keepId:true}); // Keep the ID - this is important.
+          created = created.concat(docs);
+        }
+    
+        // Notify of success
+        ui.notifications.info(game.i18n.format("COMPENDIUM.ImportAllFinish", {
+          number: created.length,
+          folder: "correct",
+          type: pack.documentName,
+        }));
+        return created;
     }
 } 
 
