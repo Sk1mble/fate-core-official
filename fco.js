@@ -382,6 +382,24 @@ Hooks.once('ready', async function () {
                 // Set the 'welcome' scene we grabbed from the scenes compendium to active
                 let scene = game.scenes.getName("Welcome");
                 if (scene) await scene.activate();
+
+                // Set this game's image to the world's default
+                console.log("About to try and set the world image")
+                //action: "editWorld"
+                //background: "modules/the-secrets-of-cats/art/world.webp"
+                //description: null
+                //name: "test"
+                //nextSession: null
+                //title: "test"
+
+                await fetch(foundry.utils.getRoute("setup"), {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      action: "editWorld",
+                      background: `modules/${module_name}/art/world.webp`, title:game.world.data.title, name:game.world.data.name, nextSession:null
+                    })
+                  });
             }
         }
 
