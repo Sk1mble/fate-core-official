@@ -1,3 +1,7 @@
+# Version 4.0.5
+  * Added comprehensive documentation to a system Journal compendium.
+  * Added a Macro system compendium with a couple of useful macros inside.
+  
 # Version 4.0.4
   * World image now set to a specific EH choice after initialising a world from the splash screen
   * Thumbnail for splash screen changed from jpg to webp.

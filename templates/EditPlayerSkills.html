@@ -19,7 +19,10 @@
         {{#if isExtra}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>
         {{else}}
         <button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyEditPlayerSkills'}}"></button>
-        {{/if}}{{/if}}
+        {{/if}}
+        {{else}}
+            {{#if isExtra}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>{{/if}}
+        {{/if}}
     </div>
 </div>
 </form>

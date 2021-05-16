@@ -1520,7 +1520,7 @@ async getData(){
 
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
-    data.fuNotesHeight = (this.position.height - 220) / 2 - 35 + modifier - data.cdownheight - 25;
+    data.fuNotesHeight = (this.position.height - 220) / 2 - 50 + modifier - data.cdownheight - 25;
 
     data.gameAspectsHeight = 180;
     let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 45;

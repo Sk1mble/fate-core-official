@@ -45,7 +45,7 @@ class fcoConstants {
         if (height === undefined){
             height = "auto";
         }
-        
+
         return new Promise(resolve => {
             new Dialog({
                 title: prompt,

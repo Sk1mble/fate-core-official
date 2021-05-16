@@ -232,11 +232,6 @@ class EditEntityTrack extends FormApplication {
             }
         }
 
-        /*await this.entity.update({
-            "data.tracks":{
-                [track.name]:track
-            }
-        })*/
         let tracks = duplicate(this.entity.data.data.tracks);
         tracks [this.track.name] = this.track;
         let final_tracks = tracks;
