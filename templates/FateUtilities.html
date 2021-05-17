@@ -415,7 +415,7 @@
                             </div> 
                             <h2>{{localize 'fate-core-official.SceneNotesTitle'}}</h2>
                             <div style="overflow-y:auto; font-family:Montserrat;" id="fu_scene_notes_pane;">
-                                <div id="scene_notes_rich" class="long_text" style="min-height:1.5em; font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{enr this.notes}}}</div>
+                                <div id="scene_notes_rich" class="long_text_rich" style="min-height:1.5em; font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{enr this.notes}}}</div>
                                 <div id="scene_notes" class="long_text" style="display:none; min-height:1.5em; font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white">{{{this.notes}}}</div>
                             </div>    
                         </div>        
@@ -516,7 +516,7 @@
                     <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="background-color:lightgray; padding:10px">
                             <div id="game_info_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 150px);">
                                 <h2 style="vertical-align:top">{{localize 'fate-core-official.DateAndTimeNotes'}}</h2>
-                                <div id="game_date_time_rich" class="long_text" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid; max-height:3em; overflow-y:auto">{{{enr this.game_time}}}</div>
+                                <div id="game_date_time_rich" class="long_text_rich" style="background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid; max-height:3em; overflow-y:auto">{{{enr this.game_time}}}</div>
                                 <div id="game_date_time" class="long_text" style="display:none; min-height:1.5em; background-color:white; font-size:{{fontSize}}pt; font-family:Montserrat; border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px lightsteelblue solid; max-height:3em; overflow-y:auto">{{{this.game_time}}}</div>
                                 <!--Game Aspects-->
                                 <h2>{{localize 'fate-core-official.gameAspects'}}</h2>
@@ -548,7 +548,7 @@
                                 <!--Game notes-->
                                 <h2 style="vertical-align:top">{{localize 'fate-core-official.GameNotes'}}</h1>
                                     <div>
-                                        <div id="game_notes_rich" class="long_text" style="min-height:1.5em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{enr this.game_notes}}}</div>
+                                        <div id="game_notes_rich" class="long_text_rich" style="min-height:1.5em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{enr this.game_notes}}}</div>
                                         <div id="game_notes" class="long_text" style="display:none; min-height:1.5em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:montserrat; border-left:none; border-right:none; border-top:none; border-bottom:solid 1px lightsteelblue; background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
                                     </div>
                             </div><!--End of game info tab container pane-->

@@ -43,16 +43,23 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
+Hooks.on("preUpdateActor", (actor, data, options, userId) => {
+    if (data.type == "ModularFate" || data.type == "FateCoreOfficial"){
+        if (game.user.id === userId || game.user == game.users.find(e => e.isGM && e.active)){
+            data.type="fate-core-official";
+        } 
+    }
+});
+
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
-    if (data.type == "ModularFate" || actor.type == "FateCoreOfficial"){
-        data.type = "fate-core-official";
+    if (data.type == "ModularFate" || data.type == "FateCoreOfficial"){
+        if (game.user.id === userId || game.user == game.users.find(e => e.isGM && e.active)) actor.data.update({type:"fate-core-official"})
     }
 
     if (data.type == "fate-core-official"){
-        if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
+        if (game.user.id === userId || game.user == game.users.find(e => e.isGM && e.active)){
             if (actor?.data?.data?.details?.fatePoints?.refresh === ""){
-                let modified_data = initialisefcoCharacter(actor);
-                data.data = modified_data.data;
+                actor.data.update(initialisefcoCharacter(actor));
             }
         }
     }
@@ -236,7 +243,7 @@ Hooks.once('ready', async function () {
     game.actors.contents.forEach(actor => {
         if (actor.type == "ModularFate" || actor.type == "FateCoreOfficial") updates.push({_id:actor.id, type:"fate-core-official"})
     });
-    await Actor.updateDocuments(updates)
+    if (game.user.isGM) await Actor.updateDocuments(updates)
 
     // We need to port any and all settings over from ModularFate/Fate Core Official and any or all flags.
 
@@ -251,7 +258,7 @@ Hooks.once('ready', async function () {
                 systemSettings.push({_id: s._id, key: s.key.replace("FateCoreOfficial.", "fate-core-official.")});
             }
         }
-        await Setting.updateDocuments(systemSettings);
+        if (game.user.isGM) await Setting.updateDocuments(systemSettings);
     }
     catch (error){
         //Do nothing, just don't stop what you're doing!
@@ -274,29 +281,30 @@ Hooks.once('ready', async function () {
 
     // Actors
     game.actors.contents.forEach(async doc =>{
-        await changeFlags(doc);
+        if (game.user.isGM) await changeFlags(doc);
     })
 
     // Scenes & Token actors
     game.scenes.contents.forEach(async doc => {
-        await changeFlags(doc);
+        if (game.user.isGM) await changeFlags(doc);
+
         doc.tokens.contents.forEach(async tok => {
-            await changeFlags(tok);
+            if (game.user.isGM) await changeFlags(tok);
         })
     })
 
     // Combats & combatants
     game.combats.contents.forEach(async doc => {
-        await changeFlag (doc);
+        if (game.user.isGM) await changeFlag (doc);
         doc.combatants.contents.forEach(async com =>{
-            await changeFlag (dom);
+            if (game.user.isGM) await changeFlag (dom);
         })
     })
 
 
     // The code for initialising a new world with the content of a module pack goes here.
     // The fallback position is to display a similar message to the existing one.            
-    if (game.settings.get("fate-core-official","run_once") == false){
+    if (game.settings.get("fate-core-official","run_once") == false && game.user.isGM){
         const ehmodules = [];
         game.modules.forEach(m => {
             if (m.data?.flags?.ehproduct == "Fate Core"){
@@ -1145,7 +1153,7 @@ Combatant.prototype._getInitiativeFormula = function () {
 
 // Return enriched text WITH secret blocks if the user is GM and otherwise WITHOUT
 Handlebars.registerHelper("enr", function(value, object) {
-    let secrets;
+    let secrets = false;
     if (object) secrets = object.isOwner;
     if (game.user.isGM) secrets = true;
     //enrichHTML(content, secrets, entities, links, rolls, rollData) → {string}

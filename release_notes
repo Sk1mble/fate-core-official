@@ -1,7 +1,13 @@
+# Version 4.0.6
+  * Fixed a bug with the enriched text editor; it was not correctly hiding secrets in some cases
+  * Wrapped various maintenance functions in isGM tests so users didn't get errors on connecting
+  * Verified compatibility with v0.8.4b
+  * Updated some of the documentation (Added right click to view track notes function)
+  
 # Version 4.0.5
   * Added comprehensive documentation to a system Journal compendium.
   * Added a Macro system compendium with a couple of useful macros inside.
-  
+
 # Version 4.0.4
   * World image now set to a specific EH choice after initialising a world from the splash screen
   * Thumbnail for splash screen changed from jpg to webp.

@@ -407,7 +407,14 @@ button:hover {
   font-size:10pt
 }
 
-.long_text:hover {
+.long_text_rich {
+  min-height:50px !important; 
+  background-color:white !important;
+  font-family:Montserrat !important;
+  font-size:10pt
+}
+
+.long_text_rich:hover {
   background-color: lightsteelblue !important;
 }
 
