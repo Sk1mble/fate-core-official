@@ -43,7 +43,7 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
-Hooks.on("preCreateActor", async (actor, data, options, userId) => {
+Hooks.on("preCreateActor", (actor, data, options, userId) => {
     if (data.type == "ModularFate" || actor.type == "FateCoreOfficial"){
         data.type = "fate-core-official";
     }
@@ -51,14 +51,14 @@ Hooks.on("preCreateActor", async (actor, data, options, userId) => {
     if (data.type == "fate-core-official"){
         if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
             if (actor?.data?.data?.details?.fatePoints?.refresh === ""){
-                let modified_data = await initialisefcoCharacter(actor);
+                let modified_data = initialisefcoCharacter(actor);
                 data.data = modified_data.data;
             }
         }
     }
 });
 
-async function initialisefcoCharacter (actor) {
+function initialisefcoCharacter (actor) {
 
     //Modifies the data of the supplied actor to add tracks, aspects, etc. from system settings, then returns the data.
     let working_data = actor.data.toJSON();
