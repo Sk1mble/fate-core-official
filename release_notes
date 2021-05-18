@@ -1,9 +1,12 @@
+# Version 4.0.7
+  * Minor character sheet improvements.
+  
 # Version 4.0.6
   * Fixed a bug with the enriched text editor; it was not correctly hiding secrets in some cases
   * Wrapped various maintenance functions in isGM tests so users didn't get errors on connecting
   * Verified compatibility with v0.8.4b
   * Updated some of the documentation (Added right click to view track notes function)
-  
+
 # Version 4.0.5
   * Added comprehensive documentation to a system Journal compendium.
   * Added a Macro system compendium with a couple of useful macros inside.
