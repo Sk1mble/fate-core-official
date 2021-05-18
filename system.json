@@ -2,7 +2,7 @@
 	"name": "fate-core-official",
 	"title": "Fate Core Official",
 	"description":"Grab your plasma rifles, spell components, and jetpacks! Name your game; Fate Core is the foundation that can make it happen. Fate Core is a flexible system that can support whatever worlds you dream up. Have you always wanted to play a post-apocalyptic spaghetti western with tentacle monsters? Swords and sorcery in space? Wish there was a game based on your favorite series of books, film, or television, but it never happened? Fate Core is your answer. <p/>Fate Core is a tabletop roleplaying game about proactive, capable people who lead dramatic lives. The type of drama they experience is up to you. But wherever they go, you can expect a fun storytelling experience full of twists…of fate.<p/>This Foundry system is supported by Evil Hat Productions and will allow you to build almost any character from a system that's Powered by Fate.", 
-	"version": "4.0.6",
+	"version": "4.0.7",
 	"author": "Richard Bellingham",
 	"esmodules": ["fco.js"],
 	"scripts": [
@@ -46,7 +46,7 @@
 	"compatibleCoreVersion": "0.8.4",
 	"url": "https://github.com/Sk1mble/fate-core-official",
 	"manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/master/system.json",
-	"download": "https://github.com/Sk1mble/fate-core-official/archive/v4.0.6.zip",
+	"download": "https://github.com/Sk1mble/fate-core-official/archive/v4.0.7.zip",
 	"socket":true,
 	"languages":[
 		{

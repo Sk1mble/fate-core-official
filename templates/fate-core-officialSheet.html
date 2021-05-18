@@ -10,25 +10,21 @@
         </div>    
         <div class="mfate-sheet__header-right">
             <div class="mfate-sheet__meta">
-                <div class="mfate-sheet__meta-column">
-                    <div class="mfate-sheet__meta-item" style="display:flex; flex-direction:row; padding-left:10px">
-                        {{#if (gt data.details.fatePoints.refresh 0)}}
-                        <div style="display:block">
+                {{#if (gt data.details.fatePoints.refresh 0)}}
+                        <div style="display:block;">
                             <input class="circle-input
-                            class="mfate-sheet__meta-value" style="text-align:center" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
+                            class="mfate-sheet__meta-value" style="text-align:center;" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
                             <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; font-size: 8pt; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Current'}} </div>
                         </div>
                         {{/if}}
-                        <div style="display:block; padding-left:10px; margin-right:100px">
+                        <div style="display:block; padding-left:10px; margin-right:50px;">
                             <input class="circle-input 
                             mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="data.details.fatePoints.refresh" name="data.details.fatePoints.refresh" value="{{data.details.fatePoints.refresh}}"></input>
                             <div class="mfate-sheet__meta-label" style="text-align:center; font-size:8pt; padding:0px; min-width:75px; max-width:75px; width:75px;">{{localize 'fate-core-official.Refresh'}} </div> 
                         </div>
-                    </div>
-                </div>
-                <img src = "/systems/fate-core-official/assets/pbf.svg" style = "pointer-events:none; width:175px; height:auto;"></img>
+                <img src = "/systems/fate-core-official/assets/pbf.svg" style = "pointer-events:none; width:160px; height:auto; margin-right:1px"></img>
             </div>            
-            <nav class="mfate-sheet__tabs-nav foo" style="margin-top:8px;">
+            <nav class="mfate-sheet__tabs-nav foo" style="margin-top:8px; margin-right:0px; margin-left:auto">
                 {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
                 <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.applyDefault'}}"><i class="fas fa-user-edit"></i></button>{{/if}}
                 {{#if (gt data.details.fatePoints.refresh 0)}}
