@@ -130,16 +130,16 @@
     min-width: 15em;
     max-width: 100em;
     border: 1px solid gray;
-    font-size: xx-large;
+    font-size: x-large;
     border: 0;
     resize: none;
-    font-family: Montserrat;
+    font-family: Jost;
     font-weight: bold;
     /* color: black; */
     color: #185CAB;
     /* text-shadow: 2px 2px 5px darkslategrey; */
     height: auto;
-    max-height: 88px;
+    max-height: 1.5em;
     background: none;
 }
 
@@ -147,11 +147,14 @@
     flex: 1;
     display: flex;
     width: 100%;
+    margin-right:0px;
     align-items: center;
 }
 
 .mfate-sheet__meta-column {
     display: table;
+    margin-right: 0px;
+    margin-left:auto;
     box-sizing: border-box;
 }
 
@@ -625,7 +628,6 @@
     text-align:center !important;
     font-size:2em !important;
     padding-left:18px !important;
-    text-align:center !important;
 }
 
 .circle-input:disabled {
@@ -639,7 +641,6 @@
     text-align:center !important;
     font-size:2em !important;
     padding-left:18px !important;
-    text-align:center! important;
 }
 
 .mfate-description__content,
@@ -689,6 +690,11 @@
     background: white;
     color: black;
     border: none;
+}
+
+.mfate-sheet__header-right {
+    margin-right:0px;
+    margin-left:auto;
 }
 
 .fate-extras__row-header {
