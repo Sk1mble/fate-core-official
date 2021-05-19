@@ -129,7 +129,7 @@ Hooks.once('ready', async function () {
     game.combats.contents.forEach(async doc => {
         if (game.user.isGM) await changeFlag (doc);
         doc.combatants.contents.forEach(async com =>{
-            if (game.user.isGM) await changeFlag (dom);
+            if (game.user.isGM) await changeFlag (com);
         })
     })
 
