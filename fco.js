@@ -106,6 +106,11 @@ Hooks.once('ready', async function () {
         }
     }
 
+    // Users
+    game.users.contents.forEach(async doc =>{
+        if (game.user.isGM) await changeFlags(doc);
+    })
+
     // Actors
     game.actors.contents.forEach(async doc =>{
         if (game.user.isGM) await changeFlags(doc);
