@@ -230,7 +230,7 @@
 
 .mfate-sheet__tabs-nav-icon {
     font-size: 1.5em;
-    padding: 2px 1em 1px;
+    padding: 7px 1em 1px;
     display: block;
 }
 
@@ -569,6 +569,8 @@
     font-family: Montserrat;
     font-size: 11px;
     padding: 5px;
+    margin-left:20px;
+    margin-right:0;
 }
 
 .mfate-stunts__row-footer {
@@ -578,6 +580,8 @@
 .mfate-stunts__row-footer-cell {
     font-family: Fate Core;
     font-size: large;
+    margin-left:20px;
+    maargin-right:0;
     /* padding-bottom: 20px; */
 }
 

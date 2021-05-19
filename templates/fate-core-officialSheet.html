@@ -1,7 +1,7 @@
 <form class="mfate-sheet contenteditable" style="background: white; width:100%; height: 100%; border:none !important">
     <div class="mfate-sheet__header">
         <div style="display:block; width:50%">
-            <div style="display:flex; flex-direction:row; width:100%"><img class="mfate-sheet__identity-avatar profile-img" width="150" height="auto" style="border:0; cursor: pointer;" id="avatar" data-edit="img" src="{{document.img}}"></img>
+            <div style="display:flex; flex-direction:row; width:100%"><img class="mfate-sheet__identity-avatar profile-img" width="150" height="auto" style="border:0; cursor: pointer; padding-right:5px" id="avatar" data-edit="img" src="{{document.img}}"></img>
                 <div style="display:flex; flex-direction:column; width:100%">
                     <textarea class="mfate-sheet__identity-name" name="name" rows="1" data-edit="name">{{document.name}}</textarea>
                         {{#if this.showPronouns}}{{#if (gt data.details.fatePoints.refresh 0)}}<div style="display:flex; flex-direction:row; margin-top:5px;"><div class="mfate-sheet__meta-label" style="font-family:Jost">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" style="width:10em" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>{{/if}}{{/if}}
@@ -14,15 +14,15 @@
                         <div style="display:block;">
                             <input class="circle-input
                             class="mfate-sheet__meta-value" style="text-align:center;" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
-                            <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; font-size: 8pt; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Current'}} </div>
+                            <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; padding-top:5px; font-size: 8pt; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Current'}} </div>
                         </div>
                         {{/if}}
                         <div style="display:block; padding-left:10px; margin-right:50px;">
                             <input class="circle-input 
                             mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="data.details.fatePoints.refresh" name="data.details.fatePoints.refresh" value="{{data.details.fatePoints.refresh}}"></input>
-                            <div class="mfate-sheet__meta-label" style="text-align:center; font-size:8pt; padding:0px; min-width:75px; max-width:75px; width:75px;">{{localize 'fate-core-official.Refresh'}} </div> 
+                            <div class="mfate-sheet__meta-label" style="text-align:center; font-size:8pt; padding:0px; padding-top:5px; min-width:75px; max-width:75px; width:75px;">{{localize 'fate-core-official.Refresh'}} </div> 
                         </div>
-                <img src = "/systems/fate-core-official/assets/pbf.svg" style = "pointer-events:none; width:160px; height:auto; margin-right:1px"></img>
+                <img src = "/systems/fate-core-official/assets/pbf.svg" style = "pointer-events:none; width:160px; height:auto; margin-bottom:15px; margin-right:1px"></img>
             </div>            
             <nav class="mfate-sheet__tabs-nav foo" style="margin-top:8px; margin-right:0px; margin-left:auto">
                 {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
@@ -334,15 +334,15 @@
                         <div class="fate-extras__row">
                             {{#each items}}
                             <div name="item_header" draggable="true" id="{{../this.document.id}}_{{this.id}}" data-item="{{str this}}">
-                            <div class = "fate-extras__row-header">
+                            <div class = "fate-extras__row-header" style="margin-left:5px; margin-right:5px">
                                 <i name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></i>
-                                &nbsp&nbsp{{{enr  this.name ../this.document}}}
+                                &nbsp{{{enr  this.name ../this.document}}}
                                 <button i icon class="fas fa-trash fate-extras__row-header-button fu_button" type="button" name="delete_extra" id="{{this.id}}_delete"></button>
                                 <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button fu_button" id="{{this.id}}_edit"></button>
                                 <button title="{{localize 'fate-core-official.active'}}" name="extra_active" type="button" {{#if this.data.data.active}}i icon class="fas fa-toggle-on  fate-extras__row-header-button fu_button"{{else}}i icon class="fas fa-toggle-off  fate-extras__row-header-button fu_button"{{/if}} id="{{this.id}}_active"></button>
                             </div>
                             <div class="fate-extras__row-body">
-                                        <div class="fate-extras__row-body-content">{{#unless (expanded ../this.document (concat this.id '_extra'))}}{{else}}{{{enr this.data.data.description.value ../this.document}}}{{/unless}}</div>
+                                        <div class="fate-extras__row-body-content style="margin-left:5px; margin-right:5px"">{{#unless (expanded ../this.document (concat this.id '_extra'))}}{{else}}{{{enr this.data.data.description.value ../this.document}}}{{/unless}}</div>
                             </div>
                         </div>
                             {{/each}}

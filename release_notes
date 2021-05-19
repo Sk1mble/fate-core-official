@@ -1,6 +1,9 @@
+# Version 4.0.8
+  * More minor and extremely pedantic character sheet improvements.
+  
 # Version 4.0.7
   * Minor character sheet improvements.
-  
+
 # Version 4.0.6
   * Fixed a bug with the enriched text editor; it was not correctly hiding secrets in some cases
   * Wrapped various maintenance functions in isGM tests so users didn't get errors on connecting
