@@ -1,6 +1,9 @@
+# Version 4.0.9
+  * Moved actor processing from creation hooks to the _onCreate method.
+
 # Version 4.0.8
   * More minor and extremely pedantic character sheet improvements.
-  
+
 # Version 4.0.7
   * Minor character sheet improvements.
 
