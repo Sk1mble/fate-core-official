@@ -612,6 +612,7 @@
     flex-grow:1;
     flex-shrink:1;
     min-height:20%;
+    max-height:95%;
 }
 
 .mfate-biography-collapsed {
