@@ -250,7 +250,7 @@
                             {{#if GM}}<button type="button" id="add_sit_aspect" style="width:auto; height:32px; font-size:{{fontSize}}pt">{{localize 'fate-core-official.AddNewAspect'}}</button>&nbsp<button type="button" id="fuAspectLabelSettings" title="{{localize 'fate-core-official.fuLabelSettingsHint'}}" i icon class="fas fa-palette" style="width:32px; height:32px"></button>
                             <button type="button" style="font-size:{{fontSize}}pt; width:auto; height:auto;" id="add_countdown">{{localize 'fate-core-official.addCountdown'}}</button> 
                             {{/if}}
-                            <div style="max-height:calc({{height}}px - 220px); overflow-y:auto">   
+                            <div style="max-height:calc({{height}}px - 160px); overflow-y:auto">   
                             <div id="fu_aspects_pane" style="overflow-y:auto; max-height:{{fuPaneHeight}}px">
                                 {{#each situation_aspects}}
                                     <div style="font-family:Montserrat; padding-top:10px; display:flex; flex-direction:row; align-items:center">
@@ -393,7 +393,7 @@
                                     {{#if this}}                        
                                         <label class="box"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px white;">{{add1 @index}}</i></label>
                                         {{else}}                          
-                                        <label class="box"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{add1 @index}}</i></input></label>
+                                        <label class="box"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="padding: opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{add1 @index}}</i></input></label>
                                     {{/if}}
                                     {{/each}}
                                 </td>
@@ -425,7 +425,7 @@
                     <!----------------------BEGIN Roll History Tab-->
                     <div name = "rolls" class="tab rolls" data-tab="rolls" style="background-color:lightgray; text-align:center; font-family:Montserrat; padding-top:10px; max-width:99%">
                         {{#if GM}}<button type="button" id="fu_clear_rolls" style="font-size:{{fontSize}}pt">{{localize 'fate-core-official.ClearAllRolls'}}</button>{{/if}}
-                        <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 175px);">
+                        <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 160px);">
                         <table style="background:none;">
                         <tr>
                             <th style="border:2px solid black; font-weight:bold; text-align:center; font-size:{{fontSize}}pt">
