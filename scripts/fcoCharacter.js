@@ -71,7 +71,6 @@ export class fcoCharacter extends ActorSheet {
         const expandAspect = html.find("i[name='expandAspect']"); //TODO: Change these expandy buttons to icons rather than a button.
 
         expandAspect.on("click", event => {
-            console.log("clicked");
             let a = event.target.id.split("_")[0];
             let aspect = this.actor.data.data.aspects[a];
             let key = this.actor.id+aspect.name+"_aspect";
