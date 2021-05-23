@@ -239,7 +239,10 @@ Hooks.once('ready', async function () {
                       action: "editWorld",
                       background: `modules/${module_name}/art/world.webp`, title:game.world.data.title, name:game.world.data.name, nextSession:null
                     })
-                  });
+                });
+
+                game.folders.forEach (folder => game.folders._expanded[folder.id] = true);
+                ui.sidebar.render(true);
             }
         }
 
