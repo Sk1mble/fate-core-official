@@ -995,8 +995,7 @@ export class fcoCharacter extends ActorSheet {
             await this.object.rollModifiedSkill(event.target.id);
         }
         else {
-            let skill = this.object.data.data.skills[event.target.id];
-            await this.object.rollSkill(skill);
+            await this.object.rollSkill(event.target.id);
         }
     }
 
