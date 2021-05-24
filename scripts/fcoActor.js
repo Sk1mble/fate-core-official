@@ -454,7 +454,7 @@ export class fcoActor extends Actor {
         roll.toMessage({
             flavor: `<h1>${skill}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
             ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})<br> 
-            ${game.i18n.localize("fate-core-official.Stunt")}: ${name} (+${bonus})`,
+            ${game.i18n.localize("fate-core-official.Stunt")}: ${stunt.name} (+${bonus})`,
             speaker: msg
         });
     }
