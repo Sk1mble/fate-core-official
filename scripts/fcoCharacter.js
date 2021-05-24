@@ -795,7 +795,7 @@ export class fcoCharacter extends ActorSheet {
     async _on_stunt_roll_click(event,html){
         let items = event.target.id.split("_");
         let name = items[0];
-        this.object.rolLStunt(name);
+        this.object.rollStunt(name);
     }
 
     async _onBioFocusOut (event, html){
