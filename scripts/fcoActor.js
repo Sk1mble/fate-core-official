@@ -422,6 +422,43 @@ export class fcoActor extends Actor {
             });
     }
     
+    async rollStunt(stunt){
+        let stunt = this.data.data.stunts[stunt];
+        let skill = stunt.linked_skill;
+        let bonus = parseInt(stunt.bonus);
+
+        let ladder = fcoConstants.getFateLadder();
+        let rank = 0;
+        if (skill == "Special"){
+            // We need to pop up a dialog to get a skill to roll.
+            let skills = [];
+            for (let x in this.object.data.data.skills){
+                skills.push(this.object.data.data.skills[x].name);
+            }
+            let sk = await fcoConstants.getInputFromList (game.i18n.localize("fate-core-official.select_a_skill"), skills);
+            skill = sk;
+            rank = this.object.data.data.skills[skill].rank;
+        } else {
+            rank = this.object.data.data.skills[skill].rank;
+        }
+
+        let rankS = rank.toString();
+        let rung = ladder[rankS];
+
+        let r = new Roll(`4dF + ${rank}+${bonus}`);
+        let roll = await r.roll();
+
+        let msg = ChatMessage.getSpeaker(this.object.actor)
+        msg.alias = this.object.name;
+
+        roll.toMessage({
+            flavor: `<h1>${skill}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+            ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})<br> 
+            ${game.i18n.localize("fate-core-official.Stunt")}: ${name} (+${bonus})`,
+            speaker: msg
+        });
+    }
+    
     async rollModifiedSkill (skillName) {
          let mrd = new ModifiedRollDialog(this, skillName);
             mrd.render(true);
