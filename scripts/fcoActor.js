@@ -432,14 +432,14 @@ export class fcoActor extends Actor {
         if (skill == "Special"){
             // We need to pop up a dialog to get a skill to roll.
             let skills = [];
-            for (let x in this.object.data.data.skills){
-                skills.push(this.object.data.data.skills[x].name);
+            for (let x in this.data.data.skills){
+                skills.push(this.data.data.skills[x].name);
             }
             let sk = await fcoConstants.getInputFromList (game.i18n.localize("fate-core-official.select_a_skill"), skills);
             skill = sk;
-            rank = this.object.data.data.skills[skill].rank;
+            rank = this.data.data.skills[skill].rank;
         } else {
-            rank = this.object.data.data.skills[skill].rank;
+            rank = this.data.data.skills[skill].rank;
         }
 
         let rankS = rank.toString();
@@ -448,8 +448,8 @@ export class fcoActor extends Actor {
         let r = new Roll(`4dF + ${rank}+${bonus}`);
         let roll = await r.roll();
 
-        let msg = ChatMessage.getSpeaker(this.object.actor)
-        msg.alias = this.object.name;
+        let msg = ChatMessage.getSpeaker(this.actor)
+        msg.alias = this.name;
 
         roll.toMessage({
             flavor: `<h1>${skill}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
