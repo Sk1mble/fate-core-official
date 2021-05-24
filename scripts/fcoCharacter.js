@@ -1027,7 +1027,7 @@ export class fcoCharacter extends ActorSheet {
            let mrd = new ModifiedRollDialog(this.actor, event.target.id);
             mrd.render(true);
             try {
-                editor.bringToTop();
+                mrd.bringToTop();
             } catch  {
                 // Do nothing.
             }
