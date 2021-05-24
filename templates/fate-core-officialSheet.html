@@ -262,13 +262,13 @@
                                                 <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon fu_button" name="delete_stunt" id="{{this.name}}_delete"></button> 
                                                 {{/if}}
                                                 {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:7px; padding-left:9px" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
-                                                {{#if (eq this.linked_skill (localize 'fate-core-official.None'))}}{{else}}                                            
-                                                    <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon fu_button"></button>                                            
-                                                {{/if}}
                                                 {{#if (eq this.extra_tag undefined)}}
                                                 <button type="button" name="edit_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon fu_button" id="{{this.name}}_edit"></button> {{#if ../GM}}
                                                     <button type="button" name="db_stunt" title="{{localize 'fate-core-official.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon fu_button" id="{{this.name}}_db"></button> {{/if}}
                                                 {{else}}{{/if}}
+                                                {{#if (eq this.linked_skill (localize 'fate-core-official.None'))}}{{else}}                                            
+                                                    <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon fu_button"></button>                                            
+                                                {{/if}}
                                             {{/if}}
                                         </div>
                                     </div>
