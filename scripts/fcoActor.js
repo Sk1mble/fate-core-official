@@ -401,6 +401,36 @@ export class fcoActor extends Actor {
         let etracks = actor.setupTracks(cskills, ctracks);
         await actor.update({"data.tracks":etracks});
     }
+    
+    rollSkill (skillName){
+            let actor = this;
+            let skill = actor.data.data.skills[skillName];
+            let rank = skill.rank;
+            let r = new Roll(`4dF + ${rank}`);
+            let ladder = fcoConstants.getFateLadder();
+            let rankS = rank.toString();
+            let rung = ladder[rankS];
+            let roll = await r.roll();
+
+            let msg = ChatMessage.getSpeaker(actor)
+            msg.alias = actor.name;
+
+            roll.toMessage({
+                flavor: `<h1>${skill.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+                        ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})`,
+                speaker: msg
+            });
+    }
+    
+    rollModifiedSkill (skillName) {
+         let mrd = new ModifiedRollDialog(this, skillName);
+            mrd.render(true);
+            try {
+                mrd.bringToTop();
+            } catch  {
+                // Do nothing.
+            }
+    }
 
     setupTracks (skills, tracks) {
         // This method takes skill and track data and returns corrected tracks enabled and disabled etc. according to the values of those skills
