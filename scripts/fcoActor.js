@@ -422,8 +422,8 @@ export class fcoActor extends Actor {
             });
     }
     
-    async rollStunt(stunt){
-        let stunt = this.data.data.stunts[stunt];
+    async rollStunt(stuntName){
+        let stunt = this.data.data.stunts[stuntName];
         let skill = stunt.linked_skill;
         let bonus = parseInt(stunt.bonus);
 
