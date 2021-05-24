@@ -402,7 +402,7 @@ export class fcoActor extends Actor {
         await actor.update({"data.tracks":etracks});
     }
     
-    rollSkill (skillName){
+    async rollSkill (skillName){
             let actor = this;
             let skill = actor.data.data.skills[skillName];
             let rank = skill.rank;
@@ -422,7 +422,7 @@ export class fcoActor extends Actor {
             });
     }
     
-    rollModifiedSkill (skillName) {
+    async rollModifiedSkill (skillName) {
          let mrd = new ModifiedRollDialog(this, skillName);
             mrd.render(true);
             try {
