@@ -752,7 +752,8 @@ game.settings.register("fate-core-official","freeStunts", {
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/fate-core-official/templates/fate-core-officialSheet.html'
+        default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
+        filePicker:true
     })
     
 
@@ -762,7 +763,8 @@ game.settings.register("fate-core-official","freeStunts", {
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/fate-core-official/templates/fate-core-officialSheet.html'
+        default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
+        filePicker:true
     })
 
     game.settings.register ("fate-core-official","PlayerThings", {

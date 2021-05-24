@@ -1,10 +1,14 @@
+# Version 4.0.14
+  * Modified handling of dice made with a roll like /r 4df[Reason]+2[explanation of modifiers] so that they are shown properly in Fate Utilities. 
+  * Added filePicker buttons to the options for the default sheet template.
+
 # Version 4.0.13
   * Moved the roll, modified roll, and stunt roll processes out to functions in the fco actor class to make them easier to use in macros.
   * Corrected an error on the character sheet where stunts with 'None' as the skill type were still showing the dice icon.
   
 # Version 4.0.12
   * Tweaks in preparation for launch of official content modules
-  
+
 # Version 4.0.11
   * Tweaked the dynamic sizing of the layout of the Scenes tab in Fate Utilities.
 

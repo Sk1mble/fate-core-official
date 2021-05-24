@@ -1874,6 +1874,14 @@ Hooks.on('createChatMessage', (message) => {
             let flavor = message.data.flavor;
             let formula = roll.formula;
             let total = roll.total;
+            if (!flavor) {
+                flavor = formula.replace(/ *\[[^\]]*]/g, '')+"<br/>";
+                roll.terms.forEach(term => {
+                    if (term.options.flavor){
+                        flavor += term.options.flavor+"<br/>"
+                    }
+                });
+            }
             let dice ="";
             let diceResult = message.roll.dice[0].values;
             if (diceResult == undefined){
