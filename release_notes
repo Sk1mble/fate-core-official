@@ -1,3 +1,7 @@
+# Version 4.0.13
+  * Moved the roll, modified roll, and stunt roll processes out to functions in the fco actor class to make them easier to use in macros.
+  * Corrected an error on the character sheet where stunts with 'None' as the skill type were still showing the dice icon.
+  
 # Version 4.0.12
   * Tweaks in preparation for launch of official content modules
   
