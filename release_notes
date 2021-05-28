@@ -1,3 +1,7 @@
+# Version 4.0.15
+  * Added a handy macro to the Fate Core Official macro compendium that lets a GM speak as any actor from a dialog (with rich text using ctrl-b etc. on Chrome) rather than having to click a token.
+  * Changed the installModule method to sort packs by entity type first; this means JournalEntries will always be before Scenes, and therefore map pins will have the correct hover text immediately.
+
 # Version 4.0.14
   * Modified handling of dice made with a roll like /r 4df[Reason]+2[explanation of modifiers] so that they are shown properly in Fate Utilities. 
   * Added filePicker buttons to the options for the default sheet template.

@@ -208,6 +208,9 @@ Hooks.once('ready', async function () {
                 // Grab all of the compendium pack data for the module
                 let module = await game.modules.get(module_name);
                 let packs = Array.from(module.packs);
+                //First we sort by entity - this is primarily because I want JournalEntries to be
+                //loaded before Scenes so that on first load the map pins aren't 'unknown'.
+                await fcoConstants.sort_key(packs, "entity");
                 for (let pack of packs){
                     if (!pack.name.includes("fatex")){
                         let cc = new CompendiumCollection (pack);
@@ -224,14 +227,6 @@ Hooks.once('ready', async function () {
                 if (scene) await scene.activate();
 
                 // Set this game's image to the world's default
-                console.log("About to try and set the world image")
-                //action: "editWorld"
-                //background: "modules/the-secrets-of-cats/art/world.webp"
-                //description: null
-                //name: "test"
-                //nextSession: null
-                //title: "test"
-
                 await fetch(foundry.utils.getRoute("setup"), {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json' },
