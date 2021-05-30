@@ -1,3 +1,6 @@
+# Version 4.0.16
+  * Changed the code that creates a character from a template so it won't fail if actor_link isn't defined in the template.
+
 # Version 4.0.15
   * Added a handy macro to the Fate Core Official macro compendium that lets a GM speak as any actor from a dialog (with rich text using ctrl-b etc. on Chrome) rather than having to click a token.
   * Changed the installModule method to sort packs by entity type first; this means JournalEntries will always be before Scenes, and therefore map pins will have the correct hover text immediately.
