@@ -351,16 +351,6 @@ class fcoConstants {
         await ui.sidebar.render(false);
     }
 
-    static async getMFSettings(){
-            let settings = game.user.getFlag("world", "oldSettings");
-            if (settings){
-                settings.forEach(async s =>{
-                    await game.settings.set("fate-core-official", s.key, s.data)
-                })
-                game.user.unsetFlag("world", "oldSettings");
-            }            
-    }
-
     static getKey(text){
         return text.hashCode();
     }

@@ -1344,9 +1344,10 @@ class FateUtilities extends Application{
     async _nextButton(event, html){
         let combatants = game.combat.combatants;
         let updates = [];
-        combatants.forEach(async comb => {
+
+        for (let comb of combatants){
             updates.push({"_id":comb.id, "flags.fate-core-official.hasActed":false})
-        })
+        }
         await game.combat.updateEmbeddedDocuments("Combatant", updates);
         game.combat.nextRound();
     }
@@ -1386,7 +1387,7 @@ async getData(){
     }
     
     const data = {};
-    if (game.combat==null || tracker_disabled){
+    if (game.combat==null || tracker_disabled || game?.combat?.data?.scene == null){
         data.conflict = false;
     } else {
         data.conflict = true;
@@ -1395,40 +1396,36 @@ async getData(){
         let c = game.combat.combatants;
         let tokens = [];
         let has_acted = [];
-        let tokenId = undefined;
+
         c.forEach(comb => {
-                tokenId= comb?.token?.id;
-                let foundToken = undefined;
-                let hidden = false;
-                let hasActed = false;
+            let foundToken = comb.token;
+            let hidden = false;
+            let hasActed = false;
 
-                if (tokenId != undefined){
-                    foundToken = game.scenes.viewed.getEmbeddedDocument("Token", tokenId);
-                }
+            if (foundToken == undefined){
+                return;
+            }
 
-                if (foundToken == undefined){
-                    return;
-                }
+            if (comb.defeated){
+                hidden = true;
+            }
 
-                if (comb.defeated){
-                    hidden = true;
-                }
+            if ((comb.hidden || foundToken.data.hidden) && !game.user.isGM){
+                hidden = true;
+            } 
 
-                if ((comb.hidden || foundToken.data.hidden) && !game.user.isGM){
-                    hidden = true;
-                } 
-
-                hasActed = comb.getFlag("fate-core-official","hasActed");                       
-                
-                if ((hasActed == undefined || hasActed == false) && hidden == false){
-                    tokens.push(foundToken)
+            hasActed = comb.getFlag("fate-core-official","hasActed");                       
+                    
+            if ((hasActed == undefined || hasActed == false) && hidden == false){
+                tokens.push(foundToken)
+            }
+            else {
+                if (hasActed == true && hidden == false){
+                    has_acted.push(foundToken);
                 }
-                else {
-                    if (hasActed == true && hidden == false){
-                        has_acted.push(foundToken);
-                    }
-                }
+            }
         })
+        
         fcoConstants.sort_key(has_acted,"name");
         fcoConstants.sort_key(tokens,"name");
         data.has_acted_tokens = has_acted;

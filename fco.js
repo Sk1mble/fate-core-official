@@ -107,31 +107,30 @@ Hooks.once('ready', async function () {
     }
 
     // Users
-    game.users.contents.forEach(async doc =>{
+    for (let doc of game.users){
         if (game.user.isGM) await changeFlags(doc);
-    })
+    }
 
     // Actors
-    game.actors.contents.forEach(async doc =>{
+    for (let doc of game.actors){
         if (game.user.isGM) await changeFlags(doc);
-    })
+    }
 
     // Scenes & Token actors
-    game.scenes.contents.forEach(async doc => {
+    for (let doc of game.scenes){
         if (game.user.isGM) await changeFlags(doc);
-
-        doc.tokens.contents.forEach(async tok => {
+        for (let tok of doc.tokens){
             if (game.user.isGM) await changeFlags(tok);
-        })
-    })
+        }
+    }
 
     // Combats & combatants
-    game.combats.contents.forEach(async doc => {
-        if (game.user.isGM) await changeFlag (doc);
-        doc.combatants.contents.forEach(async com =>{
-            if (game.user.isGM) await changeFlag (com);
-        })
-    })
+    for (let doc of game.combats) {
+        if (game.user.isGM) await changeFlags (doc);
+        for (let com of doc.combatants){
+            if (game.user.isGM) await changeFlags (com);
+        }
+    }
 
 
     // The code for initialising a new world with the content of a module pack goes here.

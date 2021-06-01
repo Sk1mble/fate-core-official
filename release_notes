@@ -1,3 +1,7 @@
+# Version 4.0.17
+  * Disabled the Fate Utilities conflict tracker when the scene for a combat has been set to null
+  * Refactored several .forEach calls to use for...of calls instead as these are async-safe.
+  
 # Version 4.0.16
   * Changed the code that creates a character from a template so it won't fail if actor_link isn't defined in the template.
 
