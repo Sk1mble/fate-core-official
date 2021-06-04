@@ -77,8 +77,33 @@ export class ExtraSheet extends ItemSheet {
         cat_select.on("change", event => this._cat_select_change (event, html));
         const tracks_button = html.find("div[name='edit_item_tracks']"); // Tracks, tracks, check
         tracks_button.on("click", event => this._onTracks_click(event, html));
+        
+        const ul_all_stunts = html.find('div[name="ul_all_extra_stunts"]');
+        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.data.data.stunts));
 
         const input = html.find('input[type="text"], input[type="number"], div[name="textIn"], textarea');
+
+        const mfdraggable = html.find('.mf_draggable');
+            mfdraggable.on("dragstart", event => {
+                if (game.user.isGM){
+                    let ident = "mf_draggable"
+                    let type = event.target.getAttribute("data-mfdtype");
+                    let origin = event.target.getAttribute("data-mfactorid");
+                    let dragged_name = event.target.getAttribute("data-mfname");
+                    let shift_down = keyboard.isDown("Shift");
+
+                    let dragged;
+                    if (type == "skill") dragged = this.document.data.data.skills[dragged_name];
+                    if (type == "stunt") dragged = this.document.data.data.stunts[dragged_name];
+                    if (type == "aspect") dragged = this.document.data.data.aspects[dragged_name];
+                    if (type == "track") dragged = this.document.data.data.tracks[dragged_name]
+                    let user = game.user.id;
+                    let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
+                    event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
+                }
+            })
+
+        $('.fcoExtra').on('drop', async event => await this.onDrop(event, html))
 
         // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
         //First, Create Pen editor
@@ -245,6 +270,73 @@ export class ExtraSheet extends ItemSheet {
         this.track_category = event.target.value;
         this.render(false);
     }
+
+    async onDrop(event, html){
+        if (this.document.isOwner){
+            let data = JSON.parse(event.originalEvent.dataTransfer.getData("text/plain"));
+            let extra = this.document;
+            //First check it's not from the same sheet
+            if (data.ident !== "mf_draggable") return;
+            if (extra.id == data.origin) return;
+                
+            if (data.type == "stunt"){
+                let old = extra.data.data.stunts[data.dragged.name];
+                if (old) {
+                    let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
+                    if (answer == "no") return
+                } 
+                await extra.update({"data.stunts":{[data.dragged.name]:data.dragged}});
+            }
+            if (data.type == "aspect"){
+                let old = extra.data.data.aspects[data.dragged.name];
+                if (old) {
+                    let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
+                    if (answer == "no") return
+                } 
+                if (!data.shift_down){
+                    data.dragged.value = "";
+                    data.dragged.notes = "";
+                }
+                await extra.update({"data.aspects":{[data.dragged.name]:data.dragged}});
+            }
+            if (data.type == "skill"){
+                let old = extra.data.data.skills[data.dragged.name];
+                if (old) {
+                    let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
+                    if (answer == "no") return
+                } 
+                if (!data.shift_down){
+                    data.dragged.rank = 0;
+                }
+                await extra.update({"data.skills":{[data.dragged.name]:data.dragged}});
+            }
+            if (data.type == "track"){
+                let track = data.dragged;
+                if (!data.shift_down){
+                    if (track?.aspect && track?.aspect !== "No"){
+                        track.aspect.name = "";
+                    }
+            
+                    if (track?.boxes > 0){
+                         for (let i = 0; i < track.box_values.length; i++){
+                            track.box_values[i] = false;
+                        }
+                    }
+            
+                    if (track?.notes){
+                        track.notes = "";
+                    }
+                }
+                let old = extra.data.data.tracks[track.name];
+                if (old) {
+                    let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
+                    if (answer == "no") return
+                } 
+                await extra.update({"data.tracks":{[track.name]:track}});
+            }
+        }
+    }
+    
 
     async _onSkillsButton(event, html) {
         //Launch the EditPlayerSkills FormApplication.

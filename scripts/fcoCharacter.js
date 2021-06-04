@@ -156,6 +156,9 @@ export class fcoCharacter extends ActorSheet {
             this.render(false);
         })
 
+        const ul_all_stunts = html.find('div[name="ul_all_stunts"]');
+        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.data.data.stunts));
+
         const expandBiography = html.find("div[name='expandBiography']");
         expandBiography.on("click", event => {
             let key = this.actor.id + "_biography";

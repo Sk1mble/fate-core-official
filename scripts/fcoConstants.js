@@ -355,6 +355,21 @@ class fcoConstants {
         return text.hashCode();
     }
 
+    static async ulStunts(stunts){
+        let db = await duplicate(game.settings.get("fate-core-official", "stunts"))
+
+        // First check for duplicates and permission to overwrite
+        for (let st in stunts){
+            if (db[st]){
+                let overwrite = fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"),`${game.i18n.localize("fate-core-official.stunt")} "${db[st].name}": `+game.i18n.localize("fate-core-official.exists"));
+                if (overwrite == "no") delete stunts[st];
+            }
+        }
+        // Now prepare the merge
+        let toSet = await foundry.utils.mergeObject(db, stunts);
+        game.settings.set("fate-core-official", "stunts", toSet);
+    }
+
     static async exportFolderStructure(){
         let folders = [];
         game.folders.forEach(f => folders.push(f));

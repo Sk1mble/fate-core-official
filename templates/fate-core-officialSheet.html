@@ -106,10 +106,10 @@
 
 
                             {{#if sortByRank}} {{#each sorted_by_rank}}
-                            <li class="mfate-skills-list__item mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
+                            <li class="mfate-skills-list__item">
                                 <div class="mfate-skills-list__number">{{this.rank}}</div>
                                 <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
-                                <div class="mfate-skills-list__skill-name" name="skill" id="{{this.name}}">
+                                <div class="mfate-skills-list__skill-name mf_draggable" name="skill" id="{{this.name}}" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
                                     {{this.name}} 
                                     {{#if ../this.document.isOwner}}
                                     <i id="{{this.name}}" style="float:right" icon class="fas fa-dice fu_button"></i>
@@ -118,10 +118,10 @@
                                 </div>
                             </li>
                             {{/each}} {{else}} {{#each ordered_skills}}
-                            <li class="mfate-skills-list__item mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
+                            <li class="mfate-skills-list__item">
                                 <div class="mfate-skills-list__number">{{this.rank}}</div>
                                 <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
-                                <div class="mfate-skills-list__skill-name" name="skill" id="{{this.name}}">
+                                <div class="mfate-skills-list__skill-name mf_draggable" name="skill" id="{{this.name}}" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
                                     {{this.name}}
                                     {{#if ../this.document.isOwner}}
                                     <i id="{{this.name}}" style="float:right" icon class="fas fa-dice fu_button"></i>
@@ -155,9 +155,9 @@
                                 <div class="mfate-tracks__list" id ="track_{{this.name}}" title="{{this.recovery_type}}">
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
-                                            <div name="track_name" style="font-family:Montserrat" class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
+                                            <div name="track_name" style="font-family:Montserrat">
                                                 <i name="expandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_track'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></i>
-                                                <i style="font-style:normal; font-weight:bold; font-family: Montserrat; padding-right:10px; padding-left:5px">{{this.name}}</i>
+                                                <i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; font-weight:bold; font-family: Montserrat; padding-right:10px; padding-left:5px">{{this.name}}</i>
                                             </div>
                                         </div>
                                         <!-- CHECKBOXES-->
@@ -223,7 +223,7 @@
                         {{#each data.aspects}}
 
                         <li name="aspect" class="mfate-aspects-list__item">
-                            <div id="{{this.name}}" name="{{this.name}}" title='{{{fco_strip (enr this.description)}}}' class="mfate-aspects-list__label mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}"><i name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></i><i style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
+                            <div id="{{this.name}}" name="{{this.name}}" title='{{{fco_strip (enr this.description)}}}' class="mfate-aspects-list__label "><i name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></i><i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; padding-left:5px">{{this.name}}</i></div>
                             {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (concat this.name '_aspect'))}}
@@ -243,6 +243,7 @@
                         <div class="i icon fas fa-compress mfate-panel__header-button" name="compressAllStunts" title="{{localize 'fate-core-official.MinimiseAll'}}"></div>
                         {{#if this.document.isOwner}}
                             <div title="{{localize 'fate-core-official.ViewTheStuntDatabase'}}" name="stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
+                            {{#if GM}}<div title="{{localize 'fate-core-official.uploadAllStunts'}}" name="ul_all_stunts" i icon class="fas fa-angle-double-up mfate-panel__header-button"></div>{{/if}}
                             <div class="fas fa-plus mfate-panel__header-button" title="{{localize 'fate-core-official.AddANewStunt'}}" name="edit_player_stunts" i icon></div>
                         {{/if}}
                     </div>
@@ -252,11 +253,11 @@
                         <div name="stunts_body mfate-stunts__body">
                             <div class="mfate-stunts__table">
                                 {{#each data.stunts}}
-                                <div class="mfate-stunts__row mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="stunt" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
+                                <div class="mfate-stunts__row">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">
                                             <i name="expandStunt" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_stunt'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></i>
-                                            <i style="font-style:normal; padding-left:5px">{{this.name}} ({{this.linked_skill}})</i>
+                                            <i style="font-style:normal; padding-left:5px" class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="stunt" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">{{this.name}} ({{this.linked_skill}})</i>
                                             {{#if ../this.document.isOwner}}
                                                 {{#if (eq this.extra_tag undefined)}}
                                                 <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon fu_button" name="delete_stunt" id="{{this.name}}_delete"></button> 
