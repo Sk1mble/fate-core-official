@@ -1,5 +1,5 @@
 # Version 4.0.18
-  * You can now drag elements like tracks, sunts, etc. from Extras to other Extras and to Actors and vice versa. Hold shift to tranfer with specific exicsitng data.
+  * You can now drag elements like tracks, stunts, etc. from Extras to other Extras and to Actors and vice versa. Hold shift to tranfer with specific existing data.
   * All transfers by dragging from actor/extra are now consistently handled by clicking on the NAME of the entity rather than the draggable area being somewhat vague.
   * Added a button (two up chevrons) to the Stunt header to upload all stunts from an actor or extra to the world's stunt database.
 
