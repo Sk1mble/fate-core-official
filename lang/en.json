@@ -1551,7 +1551,7 @@
     "fate-core-official.AdHocTracksNotUniversal":"By definition, ad-hoc tracks are not universal.",
     "fate-core-official.AspectWhenMarked":"Aspect when marked?",
     "fate-core-official.AspectAsName?":"Aspect as name?",
-    "fate-core-official.AdHocTracksDoNotUseLinkedSkills":"Ad-hoc tracks don't use linked skills; just set the values as required.",
+    "fate-core-official.AdHocTracksDoNotUseLinkedSkills":"To add or edit a linked skill for this ad-hoc track, use the track editor after creation.",
     "fate-core-official.AdHocTrackEditor":"Ad-hoc Track Editor",
     "fate-core-official.CharacterTrackChangesSaved":"Character track changes saved.",
     "fate-core-official.DetailsFor":"Details for",
