@@ -77,7 +77,7 @@ export class ExtraSheet extends ItemSheet {
         cat_select.on("change", event => this._cat_select_change (event, html));
         const tracks_button = html.find("div[name='edit_item_tracks']"); // Tracks, tracks, check
         tracks_button.on("click", event => this._onTracks_click(event, html));
-        
+
         const ul_all_stunts = html.find('div[name="ul_all_extra_stunts"]');
         ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.data.data.stunts));
 
@@ -449,7 +449,6 @@ export class ExtraSheet extends ItemSheet {
                 await this.document.parent.updateFromExtra(this.document.data);
             } else {
                 if (this.document.parent.type == "fate-core-official" && !this.document.data.data.active){
-                    //console.log(this.document.parent);
                     await this.document.parent.deactivateExtra(this.object)
                 }
                 

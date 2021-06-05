@@ -613,7 +613,6 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
             if (t.actor.isOwner && target.isOwner){
                 if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
                     if (!keyboard.isDown("Shift")){
-                        //console.log(data.data);
                         await t.actor.deleteEmbeddedDocuments("Item", [data.data._id]);
                     }
                 } else {

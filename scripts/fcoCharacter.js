@@ -380,7 +380,7 @@ export class fcoCharacter extends ActorSheet {
                     aspects[aspect].notes = "";
                 }
                 let id = fcoConstants.getKey(aspects[aspect].name)+"_aspect_notes";
-                fcoConstants.getPen(id);
+                if (!aspects[aspect].extra_tag) fcoConstants.getPen(id);
 
                 $(`#${id}_rich`).on("click", event => {
                     if (event.target.outerHTML.startsWith("<a data")) return;

@@ -1,3 +1,6 @@
+# Version 4.0.19
+  * Corrected unintended behaviour when editing a track on an extra, to ensure that the updates are actually applied to the character.
+
 # Version 4.0.18
   * You can now drag elements like tracks, stunts, etc. from Extras to other Extras and to Actors and vice versa. Hold shift to tranfer with specific existing data.
   * All transfers by dragging from actor/extra are now consistently handled by clicking on the NAME of the entity rather than the draggable area being somewhat vague.

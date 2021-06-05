@@ -214,7 +214,6 @@ export class fcoActor extends Actor {
                 if (!Array.isArray(stunts)){
                     for (let stunt in stunts){
                         stunts[stunt].extra_tag = extra_tag;
-                        //stunts[stunt].name = stunts[stunt].name+=" (Extra)";
                         stunts_output[stunts[stunt].name]=stunts[stunt];
                     }
                 }
@@ -225,7 +224,6 @@ export class fcoActor extends Actor {
                     for (let skill in skills){
                         let sk = duplicate(skills[skill])
                         sk.extra_tag = extra_tag;
-                        //sk.name = skills[skill].name+=" (Extra)";
                         skills_output[sk.name]=sk;
                     }
                 }
@@ -235,17 +233,14 @@ export class fcoActor extends Actor {
                 if (!Array.isArray(aspects)){
                     for (let aspect in aspects){
                         aspects[aspect].extra_tag = extra_tag;
-                        //aspects[aspect].name = aspects[aspect].name+=" (Extra)";
                         aspects_output[aspects[aspect].name]=aspects[aspect];
                     }
                 }
                 
                 let tracks = duplicate(extra.data.tracks);
-                
                 if (!Array.isArray(tracks)){
                     for (let track in tracks){
                         tracks[track].extra_tag = extra_tag;
-                        //tracks[track].name = tracks[track].name+=" (Extra)";
                         tracks_output[tracks[track].name]=tracks[track];
                     }        
                 }
@@ -266,14 +261,17 @@ export class fcoActor extends Actor {
                 if (track.extra_tag != undefined && track.extra_tag.extra_id == extra_id){
                     if (tracks_output[t] == undefined){
                         update_object[`data.tracks.-=${t}`] = null;
-                        //actor_tracks = duplicate(actor.data.data.tracks);
                     }
                 }
             }
     
             for (let track in tracks_output){
                 if (actor_tracks[track]!=undefined){
-                    delete(tracks_output[track]);
+                    for (let i = 0; i < tracks_output[track].box_values.length; i++){
+                        tracks_output[track].box_values[i] = actor_tracks[track]?.box_values[i];
+                    }
+                    if (actor_tracks[track].aspect?.when_marked) tracks_output[track].aspect.name = actor_tracks[track].aspect?.name;
+                    if (actor_tracks[track]?.notes) tracks_output[track].notes = actor_tracks[track].notes;
                 }
             }
             
@@ -313,15 +311,13 @@ export class fcoActor extends Actor {
                     }
                 }
             }
-    
-            await actor.update(update_object);
             actor.sheet.editing = false;
+            await actor.update(update_object);
 
             let final_stunts = mergeObject(actor.data.data.stunts, stunts_output, {"inPlace":false});
             let working_tracks = mergeObject(actor.data.data.tracks, tracks_output, {"inPlace":false});
             let final_skills = mergeObject(actor.data.data.skills, skills_output, {"inPlace":false});
             let final_aspects = mergeObject(actor.data.data.aspects, aspects_output, {"inPlace":false});
-
             let final_tracks = this.setupTracks (duplicate(final_skills), duplicate(working_tracks));
 
             await actor.update({    
