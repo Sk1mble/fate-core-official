@@ -477,8 +477,8 @@
                                             <tr>
                                                 <td>
                                                     <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus1" style="width:35px; height:35px" title="{{localize 'fate-core-official.PlusOneExplainer'}}">+1</button>
-                                                    <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="{{localize 'fate-core-official.FreePlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
-                                                    <button type="button" name="fu_roll_button" id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="{{localize 'fate-core-official.FreeRerollExplainer'}}" i icon class="fas fa-dice"></button>
+                                                    <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2free" style="width:35px; height:35px" title="{{localize 'fate-core-official.FreePlusTwoExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}"" i icon class="fas fa-plus"></button>
+                                                    <button type="button" name="fu_roll_button" id="roll_{{@key}}_reroll" style="width:35px; height:35px" title="{{localize 'fate-core-official.FreeRerollExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-dice"></button>
                                                 </td>
                                                 <td>
                                                     <button type="button" name="fu_roll_button" id="roll_{{@key}}_plus2fp" style="width:35px; height:35px" title="{{localize 'fate-core-official.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus"></button>

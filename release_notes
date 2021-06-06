@@ -1,3 +1,7 @@
+# Version 4.0.20
+  * GMs can now shift-click the free invoke buttons (+2 and reroll) in the Fate Utilities rolls tab in order to select which situation aspects have been invoked.
+  * This will reduce the free invokes on the relevant scene aspects accordingly.
+
 # Version 4.0.19
   * Corrected unintended behaviour when editing a track on an extra, to ensure that the updates are actually applied to the character.
 

@@ -1,4 +1,7 @@
 {
+   "fate-core-official.selectAspect":"Select aspect to invoke",
+   "fate-core-official.gmHoldShiftToSelectAspects":" (GM, hold shift to choose aspects)",
+   "fate-core-official.selectAspects":"Select aspects to invoke",
    "fate-core-official.uploadAllStunts":"Add all stunts from this entity to the Stunt Database for this world",
    "fate-core-official.container":"Container?",
    "fate-core-official.viewOnly":"View Only",
@@ -1608,6 +1611,7 @@
     "fate-core-official.SkillRank":"Skill rank",
     "fate-core-official.PlusOne":"Added Bonus: +1",
     "fate-core-official.FreeInvoke":"Free Invoke: +2",
+    "fate-core-official.FreeInvokes":"Free Invokes: ",
     "fate-core-official.FreeInvokeReroll":"Free Invoke: Reroll",
     "fate-core-official.NoGMFatePoints":"No GM fate points available for an invoke",
     "fate-core-official.NoFatePoints":"No fate points avaiable for an invoke",
