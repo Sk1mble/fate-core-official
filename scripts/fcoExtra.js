@@ -16,7 +16,6 @@ export class fcoExtra extends Item {
     async _preDelete(...args){
         let itemData;
         if (this?.parent && this?.parent?.type == "fate-core-official") {
-               this.data.active = false;
                await this.parent.deactivateExtra (this);
         }
         super._preDelete(...args)
