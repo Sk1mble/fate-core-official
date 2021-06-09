@@ -18,7 +18,7 @@ export class fcoExtra extends Item {
         if (this?.parent && this?.parent?.type == "fate-core-official") {
             if (userId == game.user.id) await this.parent.deactivateExtra (this, true);
         }
-        super._onDelete(...args)
+        super._onDelete(options, userId);
     }
 
     get active (){
