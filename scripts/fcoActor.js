@@ -210,6 +210,7 @@ export class fcoActor extends Actor {
     }
 
     async updateFromExtra(itemData) {
+        if (!itemData.data.active) return;
         let actor = this;
         actor.sheet.editing = true;
             let extra = duplicate(itemData);
