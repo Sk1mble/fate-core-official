@@ -78,6 +78,7 @@
 				"defend": ""
 			},
 			"countSkills": false,
+			"combineSkills": false,
 			"active":true,
 			"contents":{}
 		}

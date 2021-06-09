@@ -91,6 +91,7 @@
 				<!-- <button class="mfate-panel__header-button">Settings</button>
 					<button class="mfate-panel__header-button">Sort</button> -->
 					{{localize 'fate-core-official.CountSkills'}} <input name="data.countSkills" type="checkbox" {{#if this.data.countSkills}}checked="checked"{{/if}}></input>
+					&nbsp&nbsp{{localize 'fate-core-official.combineSkills'}} <input name="data.combineSkills" type="checkbox" {{#if this.data.combineSkills}}checked="checked"{{/if}}></input>
 				<div title="{{localize 'fate-core-official.OpenTheSkillEditor'}}" name="edit_item_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
 			</div>
 			<div name="skills_body" id="skills_body" class="mfate-panel__body">
@@ -101,6 +102,16 @@
 						<div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
 						<div class="mfate-skills-list__skill-name_item mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" name="skill" id="{{this.name}}">
 							{{this.name}}
+						</div>
+						<div>
+							{{#if ../this.document.isOwner}}
+								{{#if (eq ../this.document.data.data.countSkills false)}}
+									<i style="font-style:normal; padding-left:25px">Count?</i><input type="checkbox" class = "count_this_skill" data-skill="{{this.name}}" {{#if this.countMe}}checked = "checked"{{/if}}></input>	
+								{{/if}}
+								{{#if (eq ../this.document.data.data.combineSkills false)}}
+									<i style="font-style:normal; padding-left:25px">Combine?</i><input type="checkbox" class = "combine_this_skill" data-skill="{{this.name}}" {{#if this.combineMe}}checked = "checked"{{/if}}></input>
+								{{/if}}
+							{{/if}}
 						</div>
 					</li>
 					{{/each}}
@@ -161,8 +172,8 @@
                                 <div class="mfate-tracks__list">
                                     {{#each tracks}}{{#if (category ../category this.category)}}
                                     <div class="mfate-tracks__item">
-                                        <div class="mfate-tracks__item-label>
-                                            <div name="track_name" style="font-family:Montserrat" title="{{localize 'fate-core-official.ClickHereToEditTrackNotes'}} {{this.name}}">
+                                        <div class="mfate-tracks__item-label">
+                                            <div name="track_name" style="font-family:Montserrat"> 
                                                 <i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i>
                                             </div>
                                         </div>

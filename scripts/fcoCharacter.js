@@ -1103,18 +1103,16 @@ export class fcoCharacter extends ActorSheet {
         sheetData.gameRefresh = game.settings.get("fate-core-official", "refreshTotal");
 
         let skillTotal = 0;
-
+        // Exclude skills on extras which are not set to countMe/countSkills
         for (let s in ordered_skills) {
-            //Ignore any skills with an extra field where the associated extra's countSkills is false.
-            if (ordered_skills[s].extra_tag != undefined){
-                let extra_id = ordered_skills[s].extra_tag.extra_id;
-                let extra = sheetData.items.find(item=>item.id == extra_id);
-        
-                if (extra != undefined && extra.data.data.countSkills){
-                    skillTotal += ordered_skills[s].rank;    
+            skillTotal += ordered_skills[s].rank;
+        }
+
+        for (let extra of sheetData.items){
+            for (let sk in extra.data.data.skills){
+                if (extra.data.data.active && (!extra.data.data.countSkills && !extra.data.data.skills[sk].countMe)){
+                    skillTotal -= extra.data.data.skills[sk].rank;
                 }
-            }else {
-                skillTotal += ordered_skills[s].rank;
             }
         }
 

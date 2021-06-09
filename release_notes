@@ -1,3 +1,11 @@
+# Version 4.1.0
+  * Refactored Extras:
+    ** You can now add multiple skills, tracks, aspects etc. of the same name from different extras.
+    ** The additional extras will be given an index number to avoid potential confusion
+    ** You can selet the 'combine skills' option to join together all skills from any extras with this option enabled.
+    ** This will cause a combined rank to appear on the character sheet. You can only combine skills from extras this way, not skills innate to the character's sheet.
+    ** Attempting to combine skills from extras when a skill of the same name directly on the sheet will fail to work.
+  
 # Version 4.0.20
   * GMs can now shift-click the free invoke buttons (+2 and reroll) in the Fate Utilities rolls tab in order to select which situation aspects have been invoked.
   * This will reduce the free invokes on the relevant scene aspects accordingly.

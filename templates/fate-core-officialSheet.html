@@ -157,7 +157,7 @@
                                         <div class="mfate-tracks__item-label">
                                             <div name="track_name" style="font-family:Montserrat">
                                                 <i name="expandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.name '_track'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></i>
-                                                <i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; font-weight:bold; font-family: Montserrat; padding-right:10px; padding-left:5px">{{this.name}}</i>
+                                                <i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; font-weight:bold; font-family: Montserrat;">{{this.name}}</i>
                                             </div>
                                         </div>
                                         <!-- CHECKBOXES-->

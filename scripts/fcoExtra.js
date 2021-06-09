@@ -19,11 +19,60 @@ export class fcoExtra extends Item {
         super._preDelete(...args)
     }
 
-  /* Not used; updates from extras are handled on extra sheet close.  
-    async _preUpdate(...args){
-        let itemData = duplicate(this.data);
-
-        super._preUpdate(...args)
+    get active (){
+        return this.data.data.active;
     }
-  */  
+
+    get skills (){
+        return this.data.data.skills;
+    }
+
+    get stunts (){
+        return this.data.data.stunts;
+    }
+
+    get tracks (){
+        return this.data.data.tracks;
+    }
+
+    get aspects (){
+        return this.data.data.aspects;
+    }
+
+    get extraCost (){
+        let toReturn = {}
+        let paidTracks = 0;
+        let paidStunts = 0;
+        let refreshCost = this.data.data.refresh;
+        let skillCost = 0;
+
+        let tracks = this.data.data.tracks;
+        for (let track in tracks){
+            if (tracks[track].paid){
+                paidTracks ++;
+            }
+        }
+
+        let stunts = this.data.data.stunts;
+        for (let stunt in stunts){
+            paidStunts += stunts[stunt].refresh_cost;
+        }
+
+        toReturn.paidTracks = paidTracks;
+        toReturn.paidStunts = paidStunts;
+        toReturn.refreshCost = refreshCost;
+
+        let skills = this.data.data.skills;
+        if (this.data.data.countSkills){
+            for (let skill in skills){
+                skillCost += skills[skill].rank;
+            }
+        } else {
+            for (let skill in skills){
+                if (skills[skill].countMe) skillCost += skills[skill].rank;
+            }
+        }
+        toReturn.skillCost = skillCost;
+        return toReturn;
+    }
 }

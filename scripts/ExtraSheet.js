@@ -228,7 +228,27 @@ export class ExtraSheet extends ItemSheet {
         const countSkills = html.find("input[name='data.countSkills']");
         countSkills.on("change", async event => {
             let value = event.target.checked;
-            await this.document.update({"data.countSkills":value})
+            await this.document.update({"data.countSkills":value});
+        })
+
+        const combineSkills = html.find("input[name='data.combineSkills']");
+        combineSkills.on("change", async event => {
+            let value = event.target.checked;
+            await this.document.update({"data.combineSkills":value})
+        })
+
+        const countThisSkill = html.find("input[class='count_this_skill']");
+        countThisSkill.on('click', async event => {
+            let skill = duplicate(this.document.data.data.skills[event.target.getAttribute("data-skill")]);
+            skill.countMe = event.target.checked;
+            await this.document.update({"data.skills":{[`${skill.name}`]:skill}});
+        })
+
+        const combineThisSkill = html.find("input[class='combine_this_skill']");
+        combineThisSkill.on('click', async event => {
+            let skill = duplicate(this.document.data.data.skills[event.target.getAttribute("data-skill")]);
+            skill.combineMe = event.target.checked;
+            await this.document.update({"data.skills":{[`${skill.name}`]:skill}})
         })
 
         const active = html.find("input[name='data.active']");
