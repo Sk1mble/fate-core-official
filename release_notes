@@ -1,3 +1,6 @@
+# Version 4.1.1
+  * Bug fixes in new features IRO extras & extra skill combining.
+  
 # Version 4.1.0
   * Refactored Extras:
     ** You can now add multiple skills, tracks, aspects etc. of the same name from different extras.

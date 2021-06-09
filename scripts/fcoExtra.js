@@ -13,12 +13,12 @@ export class fcoExtra extends Item {
         await super._onCreate(...args)
     }
 
-    async _preDelete(...args){
-        let itemData;
+    async _onDelete(options, userId){
+        console.log(userId);
         if (this?.parent && this?.parent?.type == "fate-core-official") {
-               await this.parent.deactivateExtra (this);
+            if (userId == game.user.id) await this.parent.deactivateExtra (this, true);
         }
-        super._preDelete(...args)
+        super._onDelete(...args)
     }
 
     get active (){
