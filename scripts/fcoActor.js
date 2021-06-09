@@ -185,14 +185,30 @@ export class fcoActor extends Actor {
         return working_data;
     }
 
+    getHighest (data, test, extra_id){
+        let count = 1;
+        // Get the highest number on any item relating to this one.
+        for (let item in data){
             if (item.startsWith(test)){
+                if (data[item].extra_tag?.extra_id == extra_id){
+                    let num = parseInt(item.split(" ")[item.split(" ").length-1],10);
+                    if (num){
                         return num;
                     } else {
                         return 0;
                     }
                 }
+                let num = parseInt(item.split(" ")[item.split(" ").length-1],10);
                 if (num) {
                     count = num + 1;
+                } else {
+                    count ++;
+                }
+            }
+        }
+        return count;
+    }
+
     async updateFromExtra(itemData) {
         let actor = this;
         actor.sheet.editing = true;
