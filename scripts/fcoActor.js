@@ -405,6 +405,7 @@ export class fcoActor extends Actor {
         let actor = this;
         let itemData = item.data;
         if (deleting == undefined) deleting = true;
+        item.data.data.active = false;
 
         //Add a parameter - 'deleting' - if false, push the existing track on the actor back to the extra
         //before removing it - if the extra is toggled on and off, any tracks on the character that are partially
