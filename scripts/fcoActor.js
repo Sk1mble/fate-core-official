@@ -466,14 +466,14 @@ export class fcoActor extends Actor {
 
         actor.sheet.editing = false;
         await actor.update(updateObject);
-        // This is required in order to make sure we get the combined skills setup correctly
-        for (let extra of actor.items){
-            if (extra.id != item.id && extra.data.data.active) await actor.updateFromExtra(extra);
-        }
         let ctracks = duplicate(actor.data.data.tracks);
         let cskills = duplicate(actor.data.data.skills);
         let etracks = actor.setupTracks(cskills, ctracks);
         await actor.update({"data.tracks":etracks});
+        // This is required in order to make sure we get the combined skills setup correctly
+        for (let extra of actor.items){
+            if (extra.id != item.id && extra.data.data.active) await actor.updateFromExtra(extra);
+        }
     }
     
     async rollSkill (skillName){
