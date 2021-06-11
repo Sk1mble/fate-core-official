@@ -1641,14 +1641,15 @@ async getData(){
         fcoConstants.sort_name(cd_a);
 
         data.countdowns = cd_a;
-        data.cdownheight = Object.keys(data.countdowns).length*75;
-        if (data.cdownheight > 200) data.cdownheight = 200;
+        data.cdownheight = 0;
+        if (Object.keys(data.countdowns).length > 0) data.cdownheight = 200;
     }
     let aspectsHeight = situation_aspects.length * 45 ;
     data.fuPaneHeight = (this.position.height / 2) - 250; // Aspect pane height
 
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
+
     data.fuNotesHeight = (this.position.height) - 275 - data.cdownheight - data.fuPaneHeight + modifier;
 
     data.gameAspectsHeight = 180;
