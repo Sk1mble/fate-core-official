@@ -1,4 +1,6 @@
 {
+   "fate-core-official.deleteCategory":"Delete category?",
+   "fate-core-official.checkDeleteCategory":"- are you sure you want to delete this cateogry and the following tracks in it:",
    "fate-core-official.baseSkill":"Base skill:",
    "fate-core-official.selectAspect":"Select aspect to invoke",
    "fate-core-official.gmHoldShiftToSelectAspects":" (GM, hold shift to choose aspects)",

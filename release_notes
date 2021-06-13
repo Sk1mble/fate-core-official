@@ -1,3 +1,6 @@
+# Version 4.1.3
+  * Deleting a track category will now delete all tracks in that category... but you'll be asked first.
+
 # Version 4.1.2
   * Improved layout of FU scene notes tab when there are countdowns on the scene.
 

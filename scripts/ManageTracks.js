@@ -874,15 +874,38 @@ class TrackSetup extends FormApplication{
 
                     for (let cat in track_categories){
                         if (track_categories[cat].toUpperCase() == category.toUpperCase()){
-                        if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
-                            ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${category} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`)
-                        } else {
-                                    delete track_categories[cat];
-                                }
+                            if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
+                                ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${category} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`)
+                            } else {
+                                        let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
+                                        let toDelete = [];
+                                        for (let tr in tracks){
+                                            if (tracks[tr].category == cat) toDelete.push(tracks[tr])
+                                        }
+
+                                        if (toDelete.length == 0){
+                                            delete track_categories[cat];
+                                            await game.settings.set("fate-core-official","track_categories",track_categories);
+                                            this.render(false);
+                                        } else {
+                                            let content = `${cat} ${game.i18n.localize("fate-core-official.checkDeleteCategory")}<br/>`
+                                            for (let ttd of toDelete){
+                                                content += ttd.name + '<br/>'
+                                            }
+                                            let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.deleteCategory"), content);
+                                            if (del == "yes") {
+                                                delete track_categories[cat];
+                                                for (let ttd of toDelete){
+                                                    delete tracks[ttd.name];
+                                                }
+                                                await game.settings.set("fate-core-official","track_categories",track_categories);
+                                                await game.settings.set("fate-core-official", "tracks", tracks);
+                                                this.render(false);    
+                                            }
+                                        }
+                            }
                         } 
-                }
-                await game.settings.set("fate-core-official","track_categories",track_categories);
-                this.render(false);
+                    }
         }
     }
     
