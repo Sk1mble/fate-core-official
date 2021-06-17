@@ -1631,7 +1631,6 @@
 	"fate-core-official.CopyPasteToSaveAspects": "Copy & Paste this to save your world aspects",
 	"fate-core-official.PasteAspects": "Daten hier einfügen; ersetzt gleichnamige Aspekte",
 	"fate-core-official.SelectAnAspectFirst": "Wähle einen Aspekt aus, der zuerst kopiert werden soll",
-	"fate-core-official.Copy": "copy",
 	"fate-core-official.YouCannotHaveAnAspectWithABlankName": "Sie können keinen Aspekt mit einem leeren Namen haben",
 	"fate-core-official.AspectEditor": "AspectEditor",
 	"fate-core-official.SkillPointTotal": "Geschicklichkeitspunkte insgesamt",
@@ -1790,8 +1789,7 @@
 			"name": "Drive",
 			"description": "Bei der Fertigkeit \"Fahren\" dreht sich alles um das Bedienen von Fahrzeugen und Dingen, die sich schnell fortbewegen.\n\nWie bei den Fertigkeiten \"Handwerk\" hängt auch bei der Fertigkeit \"Fahren\" viel davon ab, wie viel Action in Fahrzeugen oder anderen Transportmitteln stattfinden soll und welche Art von Technologie in Ihrem Setting zur Verfügung steht.\n\n In einem technologiearmen Setting (wie \"Hearts of Steel\") könnte beispielsweise \"Fahren\" anstelle von \"Fahren\" verwendet werden, da die Haupttransportmittel auf Tieren basieren. Ein futuristisches Setting, das sich um Menschen in einer Weltraumoper dreht, könnte \"Fahren\" (für Autos), \"Pilot\" (für Raumschiffe) und \"Bedienen\" (für Panzer oder schwere Militärfahrzeuge) haben.\n\nVERSCHIEDENE FAHRZEUGE, VERSCHIEDENE FÄHIGKEITEN\nDer Ratschlag ist derselbe wie für \"Handwerk\" - machen Sie sich nicht verrückt mit dem Umgestalten dieser Fertigkeit, es sei denn, es macht einen echten, greifbaren Unterschied in Ihrem Spiel. Ziehen Sie insbesondere die Option in Betracht, eine Fertigkeit zu haben, die durch Stunts modifiziert wird (siehe \"Stunts bauen\").",
 			"überwinden": "Drive ist das Äquivalent zu \"Athletics\", wenn Sie sich in einem Fahrzeug befinden - Sie verwenden es, um Bewegungen trotz schwieriger Umstände, wie z. B. unwegsamem Gelände, geringem Spielraum oder Stuntfahren, erfolgreich auszuführen. Offensichtlich ist Drive auch reif für Wettkämpfe, insbesondere Verfolgungsjagden und Rennen.",
-			"caa": "Sie können Drive verwenden, um den besten Weg zu bestimmen, wie man mit einem Fahrzeug irgendwo hinkommt, und ein ausreichend guter Wurf könnte es Ihnen erlauben, Merkmale der Route zu erfahren, die als Aspekte ausgedrückt werden, oder zu erklären, dass Sie eine bequeme Abkürzung oder etwas Ähnliches kennen.",
-			"caa": "Sie können auch einfach die Beschreibung der Sportart lesen und sie dann zu einem Fahrzeug machen. Bei Vorteilen, die mit \"Antrieb\" erstellt werden, geht es oft darum, eine gute Positionierung zu erreichen, ein ausgefallenes Manöver durchzuführen (Hat jemand eine Fassrolle gemacht?) oder den Gegner in eine missliche Lage zu bringen.",
+			"caa": "Sie können Drive verwenden, um den besten Weg zu bestimmen, wie man mit einem Fahrzeug irgendwo hinkommt, und ein ausreichend guter Wurf könnte es Ihnen erlauben, Merkmale der Route zu erfahren, die als Aspekte ausgedrückt werden, oder zu erklären, dass Sie eine bequeme Abkürzung oder etwas Ähnliches kennen. Sie können auch einfach die Beschreibung der Sportart lesen und sie dann zu einem Fahrzeug machen. Bei Vorteilen, die mit \"Antrieb\" erstellt werden, geht es oft darum, eine gute Positionierung zu erreichen, ein ausgefallenes Manöver durchzuführen (Hat jemand eine Fassrolle gemacht?) oder den Gegner in eine missliche Lage zu bringen.",
 			"Angriff": "Drive wird normalerweise nicht als Angriffsfertigkeit verwendet (obwohl Stunts dies sicherlich ändern können). Wenn Sie ein Fahrzeug rammen wollen, können Sie mit \"Drive\" angreifen, aber Sie nehmen die gleichen Schadensverschiebungen in Kauf, die Sie verursachen.",
 			"verteidigen": "Das Vermeiden von Schaden an einem Fahrzeug in einem physischen Konflikt ist eine der häufigsten Verwendungen von Drive. Sie können es auch verwenden, um sich gegen Vorteile zu verteidigen, die gegen Sie geschaffen werden, oder um Aktionen von jemandem zu überwinden, der versucht, sich mit einem Fahrzeug an Ihnen vorbeizuschieben.",
 			"pc": true
@@ -3051,7 +3049,7 @@
 			"paid": false,
 			"label": "keine"
 		},
-		"Verletzt": {
+		"Hurt": {
 			"name": "Hurt",
 			"Kategorie": "Kampf",
 			"description": "Monster Hunter Track. Für Details siehe Seite 130 von Dresden Files Accelerated",
@@ -3066,7 +3064,7 @@
 			"paid": false,
 			"label": "keine"
 		},
-		"Verletzt": {
+		"Injured": {
 			"name": "Verletzt",
 			"Kategorie": "Kampf",
 			"description": "Walkürenbahn - siehe Seite 152 von Dresden Files Accelerated",
@@ -3081,7 +3079,7 @@
 			"bezahlt": false,
 			"label": "keine"
 		},
-		"Verwundet": {
+		"Wounded": {
 			"name": "Verwundet",
 			"Kategorie": "Kampf",
 			"description": "Monster Hunter Track, für Details siehe Seite 130 von Dresden Files Accelerated",
