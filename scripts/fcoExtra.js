@@ -13,17 +13,68 @@ export class fcoExtra extends Item {
         await super._onCreate(...args)
     }
 
-    async _preDelete(...args){
-        let itemData;
-        if (this?.parent && this?.parent?.type == "fate-core-official") await this.parent.deactivateExtra (this);
-        super._preDelete(...args)
+    async _onDelete(options, userId){
+        console.log(userId);
+        if (this?.parent && this?.parent?.type == "fate-core-official") {
+            if (userId == game.user.id) await this.parent.deactivateExtra (this, true);
+        }
+        super._onDelete(options, userId);
     }
 
-  /* Not used; updates from extras are handled on extra sheet close.  
-    async _preUpdate(...args){
-        let itemData = duplicate(this.data);
-
-        super._preUpdate(...args)
+    get active (){
+        return this.data.data.active;
     }
-  */  
+
+    get skills (){
+        return this.data.data.skills;
+    }
+
+    get stunts (){
+        return this.data.data.stunts;
+    }
+
+    get tracks (){
+        return this.data.data.tracks;
+    }
+
+    get aspects (){
+        return this.data.data.aspects;
+    }
+
+    get extraCost (){
+        let toReturn = {}
+        let paidTracks = 0;
+        let paidStunts = 0;
+        let refreshCost = this.data.data.refresh;
+        let skillCost = 0;
+
+        let tracks = this.data.data.tracks;
+        for (let track in tracks){
+            if (tracks[track].paid){
+                paidTracks ++;
+            }
+        }
+
+        let stunts = this.data.data.stunts;
+        for (let stunt in stunts){
+            paidStunts += stunts[stunt].refresh_cost;
+        }
+
+        toReturn.paidTracks = paidTracks;
+        toReturn.paidStunts = paidStunts;
+        toReturn.refreshCost = refreshCost;
+
+        let skills = this.data.data.skills;
+        if (this.data.data.countSkills){
+            for (let skill in skills){
+                skillCost += skills[skill].rank;
+            }
+        } else {
+            for (let skill in skills){
+                if (skills[skill].countMe) skillCost += skills[skill].rank;
+            }
+        }
+        toReturn.skillCost = skillCost;
+        return toReturn;
+    }
 }

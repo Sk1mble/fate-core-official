@@ -475,7 +475,9 @@
 .mfate-tracks__item-label {
     display: table-cell;
     vertical-align: top;
-    padding: 8px 0;
+    padding-left:15px;
+    padding-right:10px;
+    padding-top:5px;
     width:15em;
 }
 

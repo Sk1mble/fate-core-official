@@ -337,11 +337,66 @@ button:hover {
   width: 20px;
   background-color:none;
   transform:translate(-50%, -75%)
-    
 }
 
 /* Show the checkmark when checked */
 .box input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Countdown Checkbox - The container */
+.cdbox {
+  display: flex-row;
+  float:left;
+  position: relative;
+  padding-left: 0px;
+  margin-bottom: 2px;
+  margin-top: 0px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Create a custom checkbox */
+.cdcheckmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border: solid;
+  border-color:#2f3542;
+  border-width:3px;
+  background-color:white;
+}
+
+/* On mouse-over, add a grey background color */
+.cdbox:hover input ~ .cdcheckmark {
+  background-color: lightsteelblue;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.cdcheckmark:after {
+  font-family:Montserrat;
+  content: "X";
+  position: absolute;
+  top: 65%;
+  left: 65%;
+  font-weight:900;
+  font-size:20px;
+  display: none;
+  height: 22px;
+  width: 20px;
+  background-color:none;
+  transform:translate(-50%, -75%)
+    
+}
+
+/* Show the checkmark when checked */
+.cdbox input:checked ~ .cdcheckmark:after {
   display: block;
 }
 
@@ -404,7 +459,6 @@ button:hover {
   min-height:50px !important; 
   background-color:white !important;
   font-family:Montserrat !important;
-  overflow-y:auto;
   font-size:10pt
 }
 

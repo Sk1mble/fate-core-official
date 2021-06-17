@@ -28,7 +28,7 @@
 				<input type="number" name="data.refresh" min="0" style="background-color: white; border: solid lightsteelblue 1px; font-family:Montserrat; width:50px" value="{{data.refresh}}">
 				</input>
 				{{localize 'fate-core-official.active'}}
-				<input name="data.active" type="checkbox" id="{{this.active}}" {{#if this.data.active}}checked="checked"{{/if}}></input>
+				<input name="data.active" type="checkbox" {{#if this.data.active}}checked="checked"{{/if}}></input>
 			</td>
 		</tr>
 		<tr>
@@ -78,7 +78,7 @@
 				{{#each data.aspects}}
 
 				<li name="aspect" title="{{fco_strip this.description}}" class="mfate-aspects-list__item">
-					<div id="{{this.name}}" name="{{this.name}}" class="mfate-aspects-list__label">{{this.name}}</div>
+					<div id="{{this.name}}" name="{{this.name}}" class="mfate-aspects-list__label mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">{{this.name}}</div>
 					<!-- <input class="cs_box" type="text" id="{{this.name}}" name="data.aspects.{{this.name}}.value" value="{{{enr  this.value ../this.document}}}"></input> -->
 					<textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" name="data.aspects.{{this.name}}.value">{{this.value}}</textarea>
 				</li>
@@ -90,7 +90,8 @@
 				<div class="mfate-panel__header-label">{{ skillsLabel }}</div>
 				<!-- <button class="mfate-panel__header-button">Settings</button>
 					<button class="mfate-panel__header-button">Sort</button> -->
-					{{localize 'fate-core-official.CountSkills'}} <input name="data.countSkills" type="checkbox" id="{{this.countSkills}}" {{#if this.data.countSkills}}checked="checked"{{/if}}></input>
+					{{localize 'fate-core-official.CountSkills'}} <input name="data.countSkills" type="checkbox" {{#if this.data.countSkills}}checked="checked"{{/if}}></input>
+					&nbsp&nbsp{{localize 'fate-core-official.combineSkills'}} <input name="data.combineSkills" type="checkbox" {{#if this.data.combineSkills}}checked="checked"{{/if}}></input>
 				<div title="{{localize 'fate-core-official.OpenTheSkillEditor'}}" name="edit_item_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
 			</div>
 			<div name="skills_body" id="skills_body" class="mfate-panel__body">
@@ -99,8 +100,18 @@
 					<li class="mfate-skills-list__item">
 						<div class="mfate-skills-list__number">{{this.rank}}</div>
 						<div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
-						<div class="mfate-skills-list__skill-name_item" name="skill" id="{{this.name}}">
+						<div class="mfate-skills-list__skill-name_item mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" name="skill" id="{{this.name}}">
 							{{this.name}}
+						</div>
+						<div>
+							{{#if ../this.document.isOwner}}
+								{{#if (eq ../this.document.data.data.countSkills false)}}
+									<i style="font-style:normal; padding-left:25px">Count?</i><input type="checkbox" class = "count_this_skill" data-skill="{{this.name}}" {{#if this.countMe}}checked = "checked"{{/if}}></input>	
+								{{/if}}
+								{{#if (eq ../this.document.data.data.combineSkills false)}}
+									<i style="font-style:normal; padding-left:25px">Combine?</i><input type="checkbox" class = "combine_this_skill" data-skill="{{this.name}}" {{#if this.combineMe}}checked = "checked"{{/if}}></input>
+								{{/if}}
+							{{/if}}
 						</div>
 					</li>
 					{{/each}}
@@ -112,16 +123,16 @@
 			<div class="mfate-panel__header" name="stunts_header">
 				<b class="mfate-panel__header-label">{{localize 'fate-core-official.Stunts'}}</b>
 				<div title="{{localize 'fate-core-official.ViewTheStuntDatabase'}}" name="item_stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
+				{{#if GM}}<div title="{{localize 'fate-core-official.uploadAllStunts'}}" name="ul_all_extra_stunts" i icon class="fas fa-angle-double-up mfate-panel__header-button"></div>{{/if}}
 				<div class="fas fa-plus mfate-panel__header-button" title="{{localize 'fate-core-official.AddANewStunt'}}" name="edit_item_stunts" i icon></div>
 			</div>
 				<div name="stunts_body mfate-stunts__body" id="stunts_body">
 					<div class="mfate-stunts__table">
 						{{#each stunts}}
 						<div class="mfate-stunts__row">
-							<div class="mfate-stunts__row-header">
+							<div class="mfate-stunts__row-header mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="stunt" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
 								<div class="mfate-stunts__row-header-cell">
 									{{this.name}} ({{this.linked_skill}})
-
 									<button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon" name="delete_item_stunt" id="{{this.name}}_delete"></button> 
 									<button type="button" name="edit_item_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon" id="{{this.name}}_edit"></button> {{#if ../GM}}
 									<button type="button" name="item_db_stunt" title="{{localize 'fate-core-official.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon" id="{{this.name}}_db"></button> {{/if}}
@@ -162,8 +173,8 @@
                                     {{#each tracks}}{{#if (category ../category this.category)}}
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
-                                            <div name="track_name" style="font-family:Montserrat" title="{{localize 'fate-core-official.ClickHereToEditTrackNotes'}} {{this.name}}">
-                                                <i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i>
+                                            <div name="track_name" style="font-family:Montserrat"> 
+                                                <i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i>
                                             </div>
                                         </div>
                                     </div>

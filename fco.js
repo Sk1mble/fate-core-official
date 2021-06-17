@@ -107,31 +107,30 @@ Hooks.once('ready', async function () {
     }
 
     // Users
-    game.users.contents.forEach(async doc =>{
+    for (let doc of game.users){
         if (game.user.isGM) await changeFlags(doc);
-    })
+    }
 
     // Actors
-    game.actors.contents.forEach(async doc =>{
+    for (let doc of game.actors){
         if (game.user.isGM) await changeFlags(doc);
-    })
+    }
 
     // Scenes & Token actors
-    game.scenes.contents.forEach(async doc => {
+    for (let doc of game.scenes){
         if (game.user.isGM) await changeFlags(doc);
-
-        doc.tokens.contents.forEach(async tok => {
+        for (let tok of doc.tokens){
             if (game.user.isGM) await changeFlags(tok);
-        })
-    })
+        }
+    }
 
     // Combats & combatants
-    game.combats.contents.forEach(async doc => {
-        if (game.user.isGM) await changeFlag (doc);
-        doc.combatants.contents.forEach(async com =>{
-            if (game.user.isGM) await changeFlag (com);
-        })
-    })
+    for (let doc of game.combats) {
+        if (game.user.isGM) await changeFlags (doc);
+        for (let com of doc.combatants){
+            if (game.user.isGM) await changeFlags (com);
+        }
+    }
 
 
     // The code for initialising a new world with the content of a module pack goes here.
@@ -208,6 +207,9 @@ Hooks.once('ready', async function () {
                 // Grab all of the compendium pack data for the module
                 let module = await game.modules.get(module_name);
                 let packs = Array.from(module.packs);
+                //First we sort by entity - this is primarily because I want JournalEntries to be
+                //loaded before Scenes so that on first load the map pins aren't 'unknown'.
+                await fcoConstants.sort_key(packs, "entity");
                 for (let pack of packs){
                     if (!pack.name.includes("fatex")){
                         let cc = new CompendiumCollection (pack);
@@ -224,14 +226,6 @@ Hooks.once('ready', async function () {
                 if (scene) await scene.activate();
 
                 // Set this game's image to the world's default
-                console.log("About to try and set the world image")
-                //action: "editWorld"
-                //background: "modules/the-secrets-of-cats/art/world.webp"
-                //description: null
-                //name: "test"
-                //nextSession: null
-                //title: "test"
-
                 await fetch(foundry.utils.getRoute("setup"), {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json' },
@@ -239,7 +233,10 @@ Hooks.once('ready', async function () {
                       action: "editWorld",
                       background: `modules/${module_name}/art/world.webp`, title:game.world.data.title, name:game.world.data.name, nextSession:null
                     })
-                  });
+                });
+
+                game.folders.forEach (folder => game.folders._expanded[folder.id] = true);
+                ui.sidebar.render(true);
             }
         }
 
@@ -749,7 +746,8 @@ game.settings.register("fate-core-official","freeStunts", {
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/fate-core-official/templates/fate-core-officialSheet.html'
+        default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
+        filePicker:true
     })
     
 
@@ -759,7 +757,8 @@ game.settings.register("fate-core-official","freeStunts", {
         scope:"world",
         config:"true",
         type:String,
-        default:'systems/fate-core-official/templates/fate-core-officialSheet.html'
+        default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
+        filePicker:true
     })
 
     game.settings.register ("fate-core-official","PlayerThings", {

@@ -156,6 +156,9 @@ export class fcoCharacter extends ActorSheet {
             this.render(false);
         })
 
+        const ul_all_stunts = html.find('div[name="ul_all_stunts"]');
+        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.data.data.stunts));
+
         const expandBiography = html.find("div[name='expandBiography']");
         expandBiography.on("click", event => {
             let key = this.actor.id + "_biography";
@@ -377,7 +380,7 @@ export class fcoCharacter extends ActorSheet {
                     aspects[aspect].notes = "";
                 }
                 let id = fcoConstants.getKey(aspects[aspect].name)+"_aspect_notes";
-                fcoConstants.getPen(id);
+                if (!aspects[aspect].extra_tag) fcoConstants.getPen(id);
 
                 $(`#${id}_rich`).on("click", event => {
                     if (event.target.outerHTML.startsWith("<a data")) return;
@@ -795,39 +798,7 @@ export class fcoCharacter extends ActorSheet {
     async _on_stunt_roll_click(event,html){
         let items = event.target.id.split("_");
         let name = items[0];
-        let skill = items[1];
-        let bonus = parseInt(items[2]);
-
-        let ladder = fcoConstants.getFateLadder();
-        let rank = 0;
-        if (skill == "Special"){
-            // We need to pop up a dialog to get a skill to roll.
-            let skills = [];
-            for (let x in this.object.data.data.skills){
-                skills.push(this.object.data.data.skills[x].name);
-            }
-            let sk = await fcoConstants.getInputFromList (game.i18n.localize("fate-core-official.select_a_skill"), skills);
-            skill = sk;
-            rank = this.object.data.data.skills[skill].rank;
-        } else {
-            rank = this.object.data.data.skills[skill].rank;
-        }
-
-        let rankS = rank.toString();
-        let rung = ladder[rankS];
-
-        let r = new Roll(`4dF + ${rank}+${bonus}`);
-        let roll = await r.roll();
-
-        let msg = ChatMessage.getSpeaker(this.object.actor)
-        msg.alias = this.object.name;
-
-        roll.toMessage({
-            flavor: `<h1>${skill}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
-            ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})<br> 
-            ${game.i18n.localize("fate-core-official.Stunt")}: ${name} (+${bonus})`,
-            speaker: msg
-        });
+        this.object.rollStunt(name);
     }
 
     async _onBioFocusOut (event, html){
@@ -1024,31 +995,10 @@ export class fcoCharacter extends ActorSheet {
         if (!event.shiftKey && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
 
         if (umr){
-           let mrd = new ModifiedRollDialog(this.actor, event.target.id);
-            mrd.render(true);
-            try {
-                editor.bringToTop();
-            } catch  {
-                // Do nothing.
-            }
+            await this.object.rollModifiedSkill(event.target.id);
         }
         else {
-            let skill = this.object.data.data.skills[event.target.id];
-            let rank = skill.rank;
-            let r = new Roll(`4dF + ${rank}`);
-            let ladder = fcoConstants.getFateLadder();
-            let rankS = rank.toString();
-            let rung = ladder[rankS];
-            let roll = await r.roll();
-
-            let msg = ChatMessage.getSpeaker(this.object.actor)
-            msg.alias = this.object.name;
-
-            roll.toMessage({
-                flavor: `<h1>${skill.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
-                        ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})`,
-                speaker: msg
-            });
+            await this.object.rollSkill(event.target.id);
         }
     }
 
@@ -1153,18 +1103,16 @@ export class fcoCharacter extends ActorSheet {
         sheetData.gameRefresh = game.settings.get("fate-core-official", "refreshTotal");
 
         let skillTotal = 0;
-
+        // Exclude skills on extras which are not set to countMe/countSkills
         for (let s in ordered_skills) {
-            //Ignore any skills with an extra field where the associated extra's countSkills is false.
-            if (ordered_skills[s].extra_tag != undefined){
-                let extra_id = ordered_skills[s].extra_tag.extra_id;
-                let extra = sheetData.items.find(item=>item.id == extra_id);
-        
-                if (extra != undefined && extra.data.data.countSkills){
-                    skillTotal += ordered_skills[s].rank;    
+            skillTotal += ordered_skills[s].rank;
+        }
+
+        for (let extra of sheetData.items){
+            for (let sk in extra.data.data.skills){
+                if (extra.data.data.active && (!extra.data.data.countSkills && !extra.data.data.skills[sk].countMe)){
+                    skillTotal -= extra.data.data.skills[sk].rank;
                 }
-            }else {
-                skillTotal += ordered_skills[s].rank;
             }
         }
 

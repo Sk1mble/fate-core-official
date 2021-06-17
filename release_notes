@@ -1,3 +1,57 @@
+# Version 4.1.3
+  * Deleting a track category will now delete all tracks in that category... but you'll be asked first.
+
+# Version 4.1.2
+  * Improved layout of FU scene notes tab when there are countdowns on the scene.
+
+# Version 4.1.1
+  * Bug fixes in new features IRO extras & extra skill combining.
+  
+# Version 4.1.0
+  * Refactored Extras:
+    ** You can now add multiple skills, tracks, aspects etc. of the same name from different extras.
+    ** The additional extras will be given an index number to avoid potential confusion
+    ** You can selet the 'combine skills' option to join together all skills from any extras with this option enabled.
+    ** This will cause a combined rank to appear on the character sheet. You can only combine skills from extras this way, not skills innate to the character's sheet.
+    ** Attempting to combine skills from extras when a skill of the same name directly on the sheet will fail to work.
+  
+# Version 4.0.20
+  * GMs can now shift-click the free invoke buttons (+2 and reroll) in the Fate Utilities rolls tab in order to select which situation aspects have been invoked.
+  * This will reduce the free invokes on the relevant scene aspects accordingly.
+
+# Version 4.0.19
+  * Corrected unintended behaviour when editing a track on an extra, to ensure that the updates are actually applied to the character.
+
+# Version 4.0.18
+  * You can now drag elements like tracks, stunts, etc. from Extras to other Extras and to Actors and vice versa. Hold shift to tranfer with specific existing data.
+  * All transfers by dragging from actor/extra are now consistently handled by clicking on the NAME of the entity rather than the draggable area being somewhat vague.
+  * Added a button (two up chevrons) to the Stunt header to upload all stunts from an actor or extra to the world's stunt database.
+
+# Version 4.0.17
+  * Disabled the Fate Utilities conflict tracker when the scene for a combat has been set to null
+  * Refactored several .forEach calls to use for...of calls instead as these are async-safe.
+  
+# Version 4.0.16
+  * Changed the code that creates a character from a template so it won't fail if actor_link isn't defined in the template.
+
+# Version 4.0.15
+  * Added a handy macro to the Fate Core Official macro compendium that lets a GM speak as any actor from a dialog (with rich text using ctrl-b etc. on Chrome) rather than having to click a token.
+  * Changed the installModule method to sort packs by entity type first; this means JournalEntries will always be before Scenes, and therefore map pins will have the correct hover text immediately.
+
+# Version 4.0.14
+  * Modified handling of dice made with a roll like /r 4df[Reason]+2[explanation of modifiers] so that they are shown properly in Fate Utilities. 
+  * Added filePicker buttons to the options for the default sheet template.
+
+# Version 4.0.13
+  * Moved the roll, modified roll, and stunt roll processes out to functions in the fco actor class to make them easier to use in macros.
+  * Corrected an error on the character sheet where stunts with 'None' as the skill type were still showing the dice icon.
+  
+# Version 4.0.12
+  * Tweaks in preparation for launch of official content modules
+
+# Version 4.0.11
+  * Tweaked the dynamic sizing of the layout of the Scenes tab in Fate Utilities.
+
 # Version 4.0.10
   * Fixed a fairly severe layout issue with biography and other long notes fields taht was causing issues when they overflowed.
   
