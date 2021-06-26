@@ -1647,6 +1647,7 @@
     "fate-core-official.PasteAspects":"Paste data here; replaces aspects of same name",
     "fate-core-official.SelectAnAspectFirst":"Select an aspect to copy first",
     "fate-core-official.copy":"copy",
+    "fate-core-official.Copy":"Copy",
     "fate-core-official.YouCannotHaveAnAspectWithABlankName":"You cannot have an aspect with a blank name.",
     "fate-core-official.AspectEditor":"Aspect Editor",
     "fate-core-official.SkillPointTotal":"Skill Point Total",

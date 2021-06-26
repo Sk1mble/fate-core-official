@@ -228,7 +228,7 @@
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (concat this.name '_aspect'))}}
                                 <div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="min-height:1.5em;" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
+                                <div class="cs_box mfate-aspects-notes__input" style="min-height:1.5em;" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
                                 <div class="cs_box mfate-aspects-notes__input contenteditable" style="min-height:1.5em; display:none;" data-edit="data.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="data.aspects.{{this.name}}.notes" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
                                 {{/if}}
                         </li>

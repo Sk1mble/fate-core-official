@@ -268,6 +268,12 @@ export class fcoCharacter extends ActorSheet {
             const aspectButton = html.find("div[name='edit_player_aspects']");
             aspectButton.on("click", event => this._onAspectClick(event, html));
 
+            const t_notes = html.find('.mfate-tracks-notes__input.contenteditable');
+            const a_notes = html.find('.mfate-aspects-notes__input.contenteditable');
+
+            t_notes.on("blur", event => {this.updateNotes(event, html)})
+            a_notes.on("blur", event => {this.updateNotes(event, html)})
+
             const box = html.find("input[name='box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
@@ -823,6 +829,17 @@ export class fcoCharacter extends ActorSheet {
         }
     }
 
+    // This is required in order to ensure we update the data for track notes when changed.
+    async updateNotes (event, html){
+        if (!window.getSelection().toString()){
+            let text = DOMPurify.sanitize(event.target.innerHTML);            
+            let item = event.target.getAttribute("data-edit");//This is a much better way of accessing data than splitting the id.
+            await this.actor.update({[item]:text});
+            this.editing = false;
+            await this._render(false)
+        }
+    }
+    
     async _onDescFocusOut (event, html){
         if (!window.getSelection().toString()){
             let desc = DOMPurify.sanitize(event.target.innerHTML);
