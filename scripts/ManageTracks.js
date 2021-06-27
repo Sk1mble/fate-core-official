@@ -632,12 +632,15 @@ class EditTracks extends FormApplication {
             this.track=track;
             document.getElementById("edit_track_name").value=track.name;
             document.getElementById("edit_track_description").innerHTML=DOMPurify.sanitize(track.description);
+            document.getElementById("edit_track_description_rich").innerHTML=DOMPurify.sanitize(track.description);
             document.getElementById("edit_track_universal").checked=track.universal;
             document.getElementById("edit_track_unique").checked=track.unique;
             document.getElementById("edit_track_recovery_type").value=track.recovery_type;
             document.getElementById("edit_track_aspect").value=track.aspect;
             document.getElementById("edit_track_when_marked").innerHTML=DOMPurify.sanitize(track.when_marked);
+            document.getElementById("edit_track_when_marked_rich").innerHTML=DOMPurify.sanitize(track.when_marked);
             document.getElementById("edit_track_when_recovers").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
+            document.getElementById("edit_track_when_recovers_rich").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
             document.getElementById("edit_track_boxes").value=track.boxes;
             document.getElementById("edit_track_harm").value=track.harm_can_absorb;
             document.getElementById("edit_linked_skills").disabled=false;
