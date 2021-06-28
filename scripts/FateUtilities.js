@@ -708,7 +708,9 @@ class FateUtilities extends Application{
             let bonus = 2;
             let flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvoke")}`
             let aspectsInvoked = [];
-            let all_sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects"));
+            let asa = game.scenes.viewed.getFlag("fate-core-official", "situation_aspects");
+            if (!asa) asa = {};
+            let all_sit_aspects = duplicate(asa);
             if (keyboard.isDown("Shift") && game.user.isGM){
                // Add dialog here to pick aspect(s) being invoked.
                // Dialogue should display all situation aspects in current scene with number of free invokes;
@@ -791,7 +793,9 @@ class FateUtilities extends Application{
         if (action == "reroll"){
             let flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokeReroll")}`
 
-            let all_sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects"));
+            let asa = game.scenes.viewed.getFlag("fate-core-official", "situation_aspects");
+            if (!asa) asa = {};
+            let all_sit_aspects = duplicate(asa);
 
             let invokedAspect = undefined;
 

@@ -1,3 +1,6 @@
+# Version 4.1.7
+  * Fixed a bug; the free plus2 and reroll buttons were not working on scenes where situation aspects had not yet been defined.
+
 # Version 4.1.6
   * Fixed a bug; the full description, when marked and when recover values for tracks in the system track editor weren't populated immediately on changing track in the editor selection menu. 
 
