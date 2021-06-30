@@ -1,3 +1,6 @@
+# Version 4.1.9
+  * Added calculations in PrepareData so that any track with boxes can be presented as an attribute bar on a token.
+
 # Version 4.1.8
   * Added max and value to prepareData method of fcoActor so that fate points can be presented as a resource bar.
 
