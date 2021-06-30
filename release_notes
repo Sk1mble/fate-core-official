@@ -1,3 +1,6 @@
+# Version 4.1.8
+  * Added max and value to prepareData method of fcoActor so that fate points can be presented as a resource bar.
+
 # Version 4.1.7
   * Fixed a bug; the free plus2 and reroll buttons were not working on scenes where situation aspects had not yet been defined.
 

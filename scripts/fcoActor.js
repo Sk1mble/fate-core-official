@@ -549,6 +549,12 @@ export class fcoActor extends Actor {
         }
     }
 
+    prepareData(...args){
+        super.prepareData(...args);
+        this.data.data.details.fatePoints.max = this.data.data.details.fatePoints.refresh;
+        this.data.data.details.fatePoints.value = this.data.data.details.fatePoints.current;
+    }
+
     setupTracks (skills, tracks) {
         // This method takes skill and track data and returns corrected tracks enabled and disabled etc. according to the values of those skills
         // and the tracks' settings for enabling/disabling tracks according to skill ranks.
