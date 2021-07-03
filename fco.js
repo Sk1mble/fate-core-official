@@ -332,6 +332,7 @@ Hooks.once('init', async function () {
     CONFIG.Item.documentClass = fcoExtra;
     CONFIG.fontFamilies.push("Montserrat");
     CONFIG.fontFamilies.push("Jost");
+    CONFIG.fontFamilies.push("Fate");
 
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.

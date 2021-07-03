@@ -1367,9 +1367,16 @@ class FateUtilities extends Application{
         let countdown = countdowns[data[0]];
         let vis = countdown.visible;
         // Valid values are visible, hidden, show_boxes
-        if (vis == "hidden") countdown.visible = "show_boxes";
-        if (vis == "show_boxes") countdown.visible = "visible";
-        if (vis == "visible") countdown.visible = "hidden";
+
+        if (keyboard.isDown("Shift")){
+            if (vis == "hidden") countdown.visible = "visible";
+            if (vis == "show_boxes") countdown.visible = "hidden";
+            if (vis == "visible") countdown.visible = "show_boxes";
+        } else {
+            if (vis == "hidden") countdown.visible = "show_boxes";
+            if (vis == "show_boxes") countdown.visible = "visible";
+            if (vis == "visible") countdown.visible = "hidden";    
+        }
 
         await game.settings.set("fate-core-official", "countdowns", countdowns);
         await game.socket.emit("system.fate-core-official",{"render":true});

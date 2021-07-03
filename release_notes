@@ -1,3 +1,11 @@
+# Version 4.1.10
+  * Bugfix; prepareData was causing console errors for games with Things.
+  * New feature: Shift-clicking on the visibility toggle for a Countdown will cause the toggle to go backwards (from show boxes to hidden, from hidden to visible, from visible to show boxes)
+  * Fate Core glyph font added as a Font Family (Fate). You can edit anywhere that accepts HTML to use it for the overcome, defend etc. actions with A, O, D, and C like so:
+    <b style="font-family:Fate">O</b>
+    This will render with the Overcome symbol once you save the journal entry.
+    You can also render stress boxes with numbers 1 through 9, fate dice with +, - and 0, and a single stress box with b.
+
 # Version 4.1.9
   * Added calculations in PrepareData so that any track with boxes can be presented as an attribute bar on a token.
 

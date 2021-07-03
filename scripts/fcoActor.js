@@ -551,13 +551,15 @@ export class fcoActor extends Actor {
 
     prepareData(...args){
         super.prepareData(...args);
-        this.data.data.details.fatePoints.max = this.data.data.details.fatePoints.refresh;
-        this.data.data.details.fatePoints.value = this.data.data.details.fatePoints.current;
+        if (this.type == "fate-core-official"){
+            this.data.data.details.fatePoints.max = this.data.data.details.fatePoints.refresh;
+            this.data.data.details.fatePoints.value = this.data.data.details.fatePoints.current;
 
-        let tracks = this.data.data.tracks;
-        for (let track in tracks){
-            if (tracks[track].box_values){
-                this.data.data.details[track] = {max:tracks[track].box_values.length, value:tracks[track].box_values.length-tracks[track].box_values.filter(b => b).length};
+            let tracks = this.data.data.tracks;
+            for (let track in tracks){
+                if (tracks[track].box_values){
+                    this.data.data.details[track] = {max:tracks[track].box_values.length, value:tracks[track].box_values.length-tracks[track].box_values.filter(b => b).length};
+                }
             }
         }
     }

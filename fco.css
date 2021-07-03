@@ -1,4 +1,9 @@
 @font-face {
+  font-family:"Fate";
+  src:url("fonts/Fate Core Font.ttf");
+}
+
+@font-face {
   font-family:"Jost";
   src: url("fonts/Jost-variable.ttf");
 }
