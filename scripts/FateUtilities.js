@@ -1120,10 +1120,10 @@ class FateUtilities extends Application{
                     height: height,
                     fillType: CONST.DRAWING_FILL_TYPES.SOLID,
                     fillColor: game.settings.get("fate-core-official", "fuAspectLabelFillColour"),
-                    fillAlpha: 1,
+                    fillAlpha: game.settings.get("fate-core-official", "fuAspectLabelFillAlpha"),
                     strokeWidth: 4,
                     strokeColor: game.settings.get("fate-core-official", "fuAspectLabelBorderColour"),
-                    strokeAlpha: 1,
+                    strokeAlpha: game.settings.get("fate-core-official", "fuAspectLabelBorderAlpha"),
                     text: text,
                     fontFamily: font,
                     fontSize: size,
@@ -1943,12 +1943,16 @@ class FUAspectLabelClass extends FormApplication {
         let text = formData.fu_text_color;
         let fill = formData.fu_fill_color;
         let border = formData.fu_border_color;
+        let border_alpha = formData.fu_border_alpha;
+        let fill_alpha = formData.fu_fill_alpha;
 
         await game.settings.set("fate-core-official","fuAspectLabelFont", CONFIG.fontFamilies.indexOf(font));
         await game.settings.set("fate-core-official","fuAspectLabelSize", size);
         await game.settings.set("fate-core-official", "fuAspectLabelTextColour", text);
         await game.settings.set("fate-core-official", "fuAspectLabelFillColour", fill);
         await game.settings.set("fate-core-official", "fuAspectLabelBorderColour",border);
+        await game.settings.set("fate-core-official", "fuAspectLabelBorderAlpha",border_alpha);
+        await game.settings.set("fate-core-official", "fuAspectLabelFillAlpha",fill_alpha);
 
         this.close();
     }
@@ -1960,7 +1964,9 @@ class FUAspectLabelClass extends FormApplication {
                     fontSize:game.settings.get("fate-core-official", "fuAspectLabelSize"),
                     textColour:game.settings.get("fate-core-official","fuAspectLabelTextColour"),
                     fillColour:game.settings.get("fate-core-official","fuAspectLabelFillColour"),
-                    borderColour:game.settings.get("fate-core-official","fuAspectLabelBorderColour")
+                    borderColour:game.settings.get("fate-core-official","fuAspectLabelBorderColour"),
+                    borderAlpha:game.settings.get("fate-core-official","fuAspectLabelBorderAlpha"),
+                    fillAlpha:game.settings.get("fate-core-official", "fuAspectLabelFillAlpha")
                 }
     }
 

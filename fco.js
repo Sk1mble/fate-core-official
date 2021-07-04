@@ -916,6 +916,34 @@ game.settings.register("fate-core-official","freeStunts", {
         default:12
     });
 
+    game.settings.register("fate-core-official", "fuAspectLabelBorderAlpha", {
+        name: game.i18n.localize("fate-core-official.aspectBorderAlpha"),
+        hint: game.i18n.localize("fate-core-official.AspectBorderAlphaLabel"),
+        scope: "world",
+        config: true,
+        type: Number,
+        range: {
+            min: 0,
+            max: 1,
+            step: 0.1,
+        },
+        default:1
+    });
+
+    game.settings.register("fate-core-official", "fuAspectLabelFillAlpha", {
+        name: game.i18n.localize("fate-core-official.aspectFillAlpha"),
+        hint: game.i18n.localize("fate-core-official.AspectFillAlphaLabel"),
+        scope: "world",
+        config: true,
+        type: Number,
+        range: {
+            min: 0,
+            max: 1,
+            step: 0.1,
+        },
+        default:1
+    });
+
     game.settings.register("fate-core-official", "fuAspectLabelSize", {
         name: game.i18n.localize("fate-core-official.fuAspectLabelSizeName"),
         hint:game.i18n.localize("fate-core-official.fuAspectLabelSizeHint"),

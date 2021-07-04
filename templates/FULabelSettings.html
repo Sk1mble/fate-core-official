@@ -43,11 +43,29 @@
         </tr>
         <tr>
             <td>
+                {{localize 'fate-core-official.fuAspectFillAlpha'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectFillAlphaLabel'}}</div>
+            </td>
+            <td>
+                {{rangePicker name="fu_fill_alpha" value = this.fillAlpha max = "1" min = "0" step = "0.1"}}
+            </td>
+        </tr>
+        <tr>
+            <td>
                 {{localize 'fate-core-official.fuAspectLabelBorderColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectLabelBorderColourHint'}}</div>
             </td>
             <td>
                 {{colorPicker name="fu_border_color" value = this.borderColour}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.fuAspectBorderAlpha'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectBorderAlphaLabel'}}</div>
+            </td>
+            <td>
+                {{rangePicker name="fu_border_alpha" value = this.borderAlpha max = "1" min = "0" step = "0.1"}}
             </td>
         </tr>
         <tr>

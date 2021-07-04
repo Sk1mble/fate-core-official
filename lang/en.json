@@ -1,4 +1,8 @@
 {
+   "fate-core-official.fuAspectBorderAlpha":"FU Aspect Label Border solidity",
+   "fate-core-official.fuAspectBorderAlphaLabel":"How solid should the aspect label's border be?",
+   "fate-core-official.fuAspectFillAlpha":"FU Aspect Label Fill solidity",
+   "fate-core-official.fuAspectFillAlphaLabel":"How solid should the aspect label's fill be?",
    "fate-core-official.deleteCategory":"Delete category?",
    "fate-core-official.checkDeleteCategory":"- are you sure you want to delete this cateogry and the following tracks in it:",
    "fate-core-official.baseSkill":"Base skill:",
