@@ -511,7 +511,9 @@ class FateUtilities extends Application{
             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
             let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
             if (size === 0){
-                size = game.scenes.viewed.data.width*(1/100);
+                size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                if (size < 8) size = 8;
+                if (size > 256) size = 256;
             }
             let height = size * 2;
             let width = (text.length * size) / 1.5;
@@ -767,7 +769,9 @@ class FateUtilities extends Application{
                             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
                             let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
                             if (size === 0){
-                                size = game.scenes.viewed.data.width*(1/100);
+                                size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                                if (size < 8) size = 8;
+                                if (size > 256) size = 256;
                             }
                             let height = size * 2;
                             let width = (text.length * size) / 1.5;
@@ -838,7 +842,9 @@ class FateUtilities extends Application{
                         let size = game.settings.get("fate-core-official","fuAspectLabelSize");
                         let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
                         if (size === 0){
-                            size = game.scenes.viewed.data.width*(1/100);
+                            size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                            if (size < 8) size = 8;
+                            if (size > 256) size = 256;
                         }
                         let height = size * 2;
                         let width = (text.length * size) / 1.5;
@@ -1070,7 +1076,9 @@ class FateUtilities extends Application{
             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
             let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
             if (size === 0){
-                size = game.scenes.viewed.data.width*(1/100);
+                size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                if (size < 8) size = 8;
+                if (size > 256) size = 256;
             }
             let height = size * 2;
             let width = (text.length * size) / 1.5;
@@ -1107,11 +1115,13 @@ class FateUtilities extends Application{
                 let size = game.settings.get("fate-core-official","fuAspectLabelSize");
                 let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
                 if (size === 0){
-                    size = game.scenes.viewed.data.width*(1/100);
+                    size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                    if (size < 8) size = 8;
+                    if (size > 256) size = 256;
                 }
                 let height = size * 2;
                 let width = (text.length * size / 1.5);
-                DrawingDocument.create({
+                await DrawingDocument.create({
                     type: CONST.DRAWING_TYPES.RECTANGLE,
                     author: game.user.id,
                     x: x,
@@ -1130,6 +1140,7 @@ class FateUtilities extends Application{
                     textColor: game.settings.get("fate-core-official", "fuAspectLabelTextColour"),
                     points: []
                 }, {parent: game.scenes.viewed});   
+                await canvas.drawings.activate();
         }
         else {
             ui.notifications.error(game.i18n.localize("fate-core-official.AlreadyANoteForThatAspect"));
@@ -1298,7 +1309,9 @@ class FateUtilities extends Application{
             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
             let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
             if (size === 0){
-                size = game.scenes.viewed.data.width*(1/100);
+                size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                if (size < 8) size = 8;
+                if (size > 256) size = 256;
             }
             let height = size * 2;
             let width = (text.length * size) / 1.5;
@@ -1940,6 +1953,8 @@ class FUAspectLabelClass extends FormApplication {
     async _updateObject(event, formData){
         let font = formData.fu_label_font;
         let size = formData.fu_font_size;
+        if (size != 0 && size < 8) size = 8;
+        if (size > 256) size = 256;
         let text = formData.fu_text_color;
         let fill = formData.fu_fill_color;
         let border = formData.fu_border_color;

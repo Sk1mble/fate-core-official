@@ -1313,7 +1313,7 @@
     "fate-core-official.pocornSheetHint":"Left click to open this token's character sheet.",
     "fate-core-official.fuAspectLabelFont":"Fate Utilities Aspect Label Font",
     "fate-core-official.fuAspectLabelFontHint":"Sets the font to use on Fate Utilities Situation Aspect labels",
-    "fate-core-official.fuAspectLabelSizeHint":"Set the size of the text in aspect labels created from Fate Utilities. If 0, uses a percentage of the current scene height.",
+    "fate-core-official.fuAspectLabelSizeHint":"Set the size of the text in aspect labels created from Fate Utilities. (Minimum of 8, maximum of 256, or set to 0 to make text size relative to the current scene height.",
     "fate-core-official.fuAspectLabelSizeName":"Aspect Label Size",
     "fate-core-official.CantCreateThing":"You can't create a Thing directly, only by dragging an Extra to the map.",
     "fate-core-official.Contents":"Contents",

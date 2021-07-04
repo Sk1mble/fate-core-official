@@ -1,3 +1,8 @@
+# Version 4.1.11
+  * Added options for aspect labels to have editable fill and border alpha settings.
+  * Fixed a bug that allowed aspect label font sizes of <8 and >256, which were invalid
+  * Added behaviour so that the drawing layer is automatically selected when you add an aspect to the scene.
+
 # Version 4.1.10
   * Bugfix; prepareData was causing console errors for games with Things.
   * New feature: Shift-clicking on the visibility toggle for a Countdown will cause the toggle to go backwards (from show boxes to hidden, from hidden to visible, from visible to show boxes)
