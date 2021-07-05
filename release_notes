@@ -1,3 +1,6 @@
+# Version 4.1.12
+  * Minor tweak; shift-click menu on free invoke buttons for GMs will now only display a dialog if the current scene has aspects on it with free invokes.
+
 # Version 4.1.11
   * Added options for aspect labels to have editable fill and border alpha settings.
   * Fixed a bug that allowed aspect label font sizes of <8 and >256, which were invalid
