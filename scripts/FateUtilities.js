@@ -713,7 +713,7 @@ class FateUtilities extends Application{
             let asa = game.scenes.viewed.getFlag("fate-core-official", "situation_aspects");
             if (!asa) asa = {};
             let all_sit_aspects = duplicate(asa);
-            if (keyboard.isDown("Shift") && game.user.isGM){
+            if (keyboard.isDown("Shift") && game.user.isGM && asa.filter(as => as.free_invokes > 0).length > 0){
                // Add dialog here to pick aspect(s) being invoked.
                // Dialogue should display all situation aspects in current scene with number of free invokes;
                // We then need to harvest the number of invokes being used on each and set bonus accordingly.
@@ -803,7 +803,7 @@ class FateUtilities extends Application{
 
             let invokedAspect = undefined;
 
-            if (keyboard.isDown("Shift") && game.user.isGM){
+            if (keyboard.isDown("Shift") && game.user.isGM && asa.filter(as => as.free_invokes > 0).length > 0){
                 let options = ""
                 let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
