@@ -732,7 +732,7 @@ class FateUtilities extends Application{
                 for (let aspect of sit_aspects){
                     content += `<div style="display:flex; flex-direction:row"><div style="min-width:150px; padding:5px">${aspect.name}</div><div style="min-width:50px"><select class = "free_i_selector">${aspect.options}</select></div></div>`
                 }
-                content += `</div>`
+                content += `</div><br/>`
 
                let invokedAspects = await new Promise(resolve => {
                     new Dialog({
@@ -809,7 +809,7 @@ class FateUtilities extends Application{
                 for (let aspect of sit_aspects){
                     options +=`<option value="${aspect.name}">${aspect.name}</option>`
                 }                
-                let content =`<br/><div><select class="free_i_r_selector">${options}</select></div>`
+                let content =`<br/><div><select class="free_i_r_selector">${options}</select></div><br/>`
                let invokedAspects = await new Promise(resolve => {
                     new Dialog({
                         title: game.i18n.localize("fate-core-official.selectAspect"),
