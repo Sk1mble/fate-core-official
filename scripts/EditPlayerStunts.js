@@ -191,7 +191,7 @@ class EditPlayerStunts extends FormApplication {
             data.skills=game.settings.get("fate-core-official","skills");
         } else {
             if (this.actor.type=="Extra"){
-                data.skills=game.settings.get("fate-core-official","skills");
+                data.skills=mergeObject(this.actor.data.data.sklls, game.settings.get("fate-core-official","skills"), {inplace:false});
             } else {
                 data.skills=this.actor.data.data.skills;
             }
