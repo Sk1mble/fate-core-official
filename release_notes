@@ -1,3 +1,6 @@
+# Version 4.1.13
+  * You can now select a skill only on an extra to be enhanced by a stunt on the same extra.
+
 # Version 4.1.12
   * Minor tweak; shift-click menu on free invoke buttons for GMs will now only display a dialog if the current scene has aspects on it with free invokes.
 
