@@ -1,4 +1,8 @@
 {
+   "fate-core-official.modeToMinimal":"Sheet mode changed to minimal view",
+   "fate-core-official.modeToFull":"Sheet mode changed to full view",
+   "fate-core-official.modeToMinimal0":"Sheet mode changed to minimal view when refresh is 0",
+   "fate-core-official.changeSheetMode":"Change sheet display mode (Minimal -> Minimal at refresh 0 -> Full)",
    "fate-core-official.fuAspectBorderAlpha":"FU Aspect Label Border solidity",
    "fate-core-official.fuAspectBorderAlphaLabel":"How solid should the aspect label's border be?",
    "fate-core-official.fuAspectFillAlpha":"FU Aspect Label Fill solidity",
