@@ -8,7 +8,7 @@
   "flags": {},
   "version": "4.1.14",
   "minimumCoreVersion": "0.8.4",
-  "compatibleCoreVersion": "0.8.9",
+  "compatibleCoreVersion": "0.8.8",
   "scripts": [
     "./scripts/fcoConstants.js",
     "./scripts/ManageSkills.js",
