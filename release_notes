@@ -1,3 +1,6 @@
+# Version 4.1.14
+  * Added a new feature to change the behaviour of the minimal sheet view. I've added a little eye button to the sheet (for GMs only). It toggles between three states: Minimal view, minimal view at refresh 0, and full view regardless of refresh. Default behaviour is minimal view at refresh 0, but I wanted to give GMs the option to have player NPCs with refresh 0 that still have a full character sheet, etc.
+
 # Version 4.1.13
   * You can now select a skill only on an extra to be enhanced by a stunt on the same extra.
 

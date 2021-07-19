@@ -547,6 +547,28 @@ export class fcoCharacter extends ActorSheet {
                 }).render(true);
             })
 
+            const changeSheetMode = html.find("button[name='changeSheetMode']");
+            changeSheetMode.on('click', async event => {
+                // Cycle between the display options and tell the user what the new option is.
+                let current_mode = this.actor.data.data.details.sheet_mode;
+                if (current_mode == "minimal_at_refresh_0") {
+                    // Switch to full
+                    await this.actor.update({"data.details.sheet_mode":"full"})
+                    ui.notifications.info(game.i18n.localize("fate-core-official.modeToFull"))
+                }
+                if (current_mode == "minimal"){
+                    //Switch to minimal_at_refresh_0
+                    await this.actor.update({"data.details.sheet_mode":"minimal_at_refresh_0"})
+                    ui.notifications.info(game.i18n.localize("fate-core-official.modeToMinimal0"))
+
+                }
+                if (current_mode == "full"){
+                    // Switch to minimal
+                    await this.actor.update({"data.details.sheet_mode":"minimal"})
+                    ui.notifications.info(game.i18n.localize("fate-core-official.modeToMinimal"))
+                }
+            })
+
             const applyDefault = html.find("button[name='applyDefault']");
             applyDefault.on("click", async event => {
                 let f = new FateCharacterDefaults();
@@ -1046,6 +1068,17 @@ export class fcoCharacter extends ActorSheet {
         const sheetData = superData.data;
         sheetData.document = superData.actor;
         sheetData.owner = superData.owner;
+
+        // Determine sheet view mode:
+        // return minimal or full depending on:
+        // data.data.details.sheet_mode is set to minimal
+        // data.data.details.sheet_mode is set to minimal_at_refresh_0 and data.data.details.fatePoints.refresh is currently 0.
+        // Otherwise, return full.
+
+        sheetData.sheetMode = "full";
+        if (sheetData.data.details.sheet_mode == "minimal") sheetData.sheetMode = "minimal";
+        if (sheetData.data.details.sheet_mode == "minimal_at_refresh_0" && sheetData.data.details.fatePoints.refresh == 0) sheetData.sheetMode = "minimal";
+
         sheetData.showPronouns = game.settings.get("fate-core-official", "showPronouns");
         let items = this.object.items.contents;
         items.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)); // Sort according to each item's sort parameter.

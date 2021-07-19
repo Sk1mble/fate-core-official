@@ -20,7 +20,8 @@
 					"fatePoints": {
 						"current":"",
 						"refresh":""
-					}
+					},
+					"sheet_mode":"minimal_at_refresh_0"
 				},
 				"tracks":{},
 				"aspects":{},

@@ -4,13 +4,13 @@
             <div style="display:flex; flex-direction:row; width:100%"><img class="mfate-sheet__identity-avatar profile-img" width="150" height="auto" style="border:0; cursor: pointer; padding-right:5px" id="avatar" data-edit="img" src="{{document.img}}"></img>
                 <div style="display:flex; flex-direction:column; width:100%">
                     <textarea class="mfate-sheet__identity-name" name="name" rows="2" data-edit="name">{{document.name}}</textarea>
-                        {{#if this.showPronouns}}{{#if (gt data.details.fatePoints.refresh 0)}}<div style="display:flex; flex-direction:row; margin-top:5px;"><div class="mfate-sheet__meta-label" style="font-family:Jost">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" style="width:10em" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>{{/if}}{{/if}}
+                        {{#if this.showPronouns}}{{#if (eq this.sheetMode 'full')}}<div style="display:flex; flex-direction:row; margin-top:5px;"><div class="mfate-sheet__meta-label" style="font-family:Jost">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" style="width:10em" data-edit="data.details.pronouns.value" name="data.details.pronouns.value" value="{{data.details.pronouns.value}}"</input></div>{{/if}}{{/if}}
                 </div>
         </div>
         </div>    
         <div class="mfate-sheet__header-right">
             <div class="mfate-sheet__meta">
-                {{#if (gt data.details.fatePoints.refresh 0)}}
+                {{#if (eq this.sheetMode 'full')}}
                         <div style="display:block;">
                             <input class="circle-input
                             class="mfate-sheet__meta-value" style="text-align:center;" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
@@ -26,8 +26,9 @@
             </div>            
             <nav class="mfate-sheet__tabs-nav foo" style="margin-top:8px; margin-right:0px; margin-left:auto">
                 {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
-                <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.applyDefault'}}"><i class="fas fa-user-edit"></i></button>{{/if}}
-                {{#if (gt data.details.fatePoints.refresh 0)}}
+                <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.applyDefault'}}"><i class="fas fa-user-edit"></i></button>
+                <button type="button" name="changeSheetMode" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.changeSheetMode'}}"><i class="fas fa-eye"></i></button>{{/if}}
+                {{#if (eq this.sheetMode 'full')}}
                 <a class="mfate-sheet__tabs-nav-link item active" data-tab="sheet">
                     <span class="sr-only">{{localize 'fate-core-official.CharacterSheet'}}</span>
                     <b title="{{localize 'fate-core-official.CharacterSheet'}}" class="fas fa-clipboard mfate-sheet__tabs-nav-icon"></b>
@@ -47,7 +48,7 @@
 
     <section class="sheet-body">
         <div class = "tab notes mfate-sheet__tab mfate-sheet__tab--main" name="notes" data-tab="notes" style="font-style:normal; max-width:100%; padding-bottom:6px; padding-left:6px; padding-right:6px">
-            {{#if (gt data.details.fatePoints.refresh 0)}}
+            {{#if (eq this.sheetMode 'full')}}
             <div>
                 <div class="mfate-sheet__meta">
                     <div class="mfate-sheet__meta-column">
@@ -89,7 +90,7 @@
                 </div>
             </div>
         </div>
-        {{#if (gt data.details.fatePoints.refresh 0)}}
+        {{#if (eq this.sheetMode 'full')}}
         <div class="tab sheet mfate-sheet__tab mfate-sheet__tab--main" name="character_sheet" data-tab="sheet">
             <!-- PANELS START -->
             <div class="mfate-sheet__column">
