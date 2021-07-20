@@ -660,6 +660,7 @@ class FateUtilities extends Application{
                 r = new Roll(`4dF + ${rank}`);
             }
                 let roll = await r.roll();
+                roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
                 let name = game.user.name
 
                 let flavour;
@@ -721,9 +722,10 @@ class FateUtilities extends Application{
                 bonus = 0;
                 let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
+                    console.log(aspect);
                     let options = "";
                     for (let i = 0; i < parseInt(aspect.free_invokes, 10)+1; i++){
-                        options+=`<option value=${aspect.name}_${i}>${i}</option>`
+                        options+=`<option value="${aspect.name}_${i}">${i}</option>`
                     }
                     aspect.options = options;
                 }
@@ -750,7 +752,7 @@ class FateUtilities extends Application{
                     }).render(true);
                 });
                 let updates = [];
-                for (let aspect of invokedAspects){
+                for (let aspect of invokedAspects){                
                     let name = aspect.value.split("_")[0];
                     let num_invokes = aspect.value.split("_")[1];
                     if (num_invokes > 0){
@@ -858,6 +860,7 @@ class FateUtilities extends Application{
             }
             let r = new Roll ("4dF");
             let r2 = await r.roll();
+            r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
 
             let newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
             if (invokedAspect) newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")} (${invokedAspect})</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
@@ -937,6 +940,7 @@ class FateUtilities extends Application{
                     user.setFlag("fate-core-official","gmfatepoints",fps-1);
                     let r = new Roll ("4dF");
                     let r2 = await r.roll();
+                    r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
                     r2.toMessage({
                         flavor: `<h1>${game.i18n.localize("fate-core-official.PaidRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
                     });
@@ -968,6 +972,7 @@ class FateUtilities extends Application{
                         roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvokeReroll")}`
                         let r = new Roll ("4dF");
                         let r2 = await r.roll();
+                        r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
                         r2.toMessage({
                             flavor: `<h1>${game.i18n.localize("fate-core-official.PaidRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
                         });
@@ -1669,7 +1674,7 @@ async getData(){
         if (Object.keys(data.countdowns).length > 0) data.cdownheight = 200;
     }
     let aspectsHeight = situation_aspects.length * 45 ;
-    data.fuPaneHeight = (this.position.height / 2) - 250; // Aspect pane height
+    data.fuPaneHeight = (this.position.height / 2) - 225; // Aspect pane height
 
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
@@ -1679,7 +1684,7 @@ async getData(){
     data.gameAspectsHeight = 180;
     let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 45;
     if (gaModifier <0) gaModifier = 0;
-    data.gameNotesHeight = (this.position.height - 525) + gaModifier;
+    data.gameNotesHeight = (this.position.height -525) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
     

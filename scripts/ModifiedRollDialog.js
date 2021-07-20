@@ -64,6 +64,7 @@ class ModifiedRollDialog extends Application {
 
         let r = new Roll(`4dF + ${total_modifier}`);
         let roll = await r.roll();
+        roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
 
         let msg = ChatMessage.getSpeaker(this.actor)
         msg.alias = this.actor.name;

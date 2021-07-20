@@ -5,7 +5,7 @@
                 {{localize 'fate-core-official.Aspect'}}:
             </td>
             <td>
-                <input type="text" id ="edit_aspect_name" style="background: white; color: black; font-family:Arial;" value="{{aspect.name}}"></input>
+                <input name="name" type="text" id ="edit_aspect_name" style="background: white; color: black; font-family:Arial;" value="{{aspect.name}}"></input>
             </td>
         </tr>
         <tr>
@@ -14,7 +14,7 @@
             </td>
             <td>
                 <div contenteditable="true" id="edit_aspect_description_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family:Arial;">{{{enr  aspect.description}}}</div>
-                <div data-edit="aspect.description" contenteditable="true" id="edit_aspect_description" style="display:none; background: white; color: black; font-family:Arial;">{{{aspect.description}}}</div>
+                <div data-edit="description" contenteditable="true" id="edit_aspect_description" style="display:none; background: white; color: black; font-family:Arial;">{{{aspect.description}}}</div>
             </td>
         </tr>
         <tr>

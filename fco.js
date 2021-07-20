@@ -64,6 +64,10 @@ Hooks.on('getSceneControlButtons', function(hudButtons){
     }
 });
 
+Hooks.on('diceSoNiceReady', function() {
+    game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);
+})
+
 Hooks.once('ready', async function () {
     //Convert any straggling ModularFate actors to fate-core-official actors.
     let updates = [];

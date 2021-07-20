@@ -486,6 +486,7 @@ export class fcoActor extends Actor {
             let rankS = rank.toString();
             let rung = ladder[rankS];
             let roll = await r.roll();
+            roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
 
             let msg = ChatMessage.getSpeaker(actor)
             msg.alias = actor.name;
@@ -524,6 +525,7 @@ export class fcoActor extends Actor {
     
             let r = new Roll(`4dF + ${rank}+${bonus}`);
             let roll = await r.roll();
+            roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
     
             let msg = ChatMessage.getSpeaker(this.actor)
             msg.alias = this.name;

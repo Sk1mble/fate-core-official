@@ -1,3 +1,9 @@
+# Version 4.1.15
+  * Made a slight improvement to the layout of the Scene tab of Fate Utilities so there's more room for the notes tab.
+  * Added support for Dice So Nice special effects at specific Fate rolls (e.g. -4, +4, 0). This is not currently working, but I think this is a DSN bug. Waiting for feedback from developers.
+  * Hitting enter on the name field of a new aspect in the system aspect editor will save the aspect rather than dismissing it.
+  * Fixed a bug in the GM shift-click free invoke selection tool; aspects with spaces in their name were not working properly.
+
 # Version 4.1.14
   * Added a new feature to change the behaviour of the minimal sheet view. I've added a little eye button to the sheet (for GMs only). It toggles between three states: Minimal view, minimal view at refresh 0, and full view regardless of refresh. Default behaviour is minimal view at refresh 0, but I wanted to give GMs the option to have player NPCs with refresh 0 that still have a full character sheet, etc.
 
