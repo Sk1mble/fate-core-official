@@ -1,3 +1,9 @@
+# Version 4.1.16
+  * Added an option: Default Actor Permission (None, Limited, Observer, Owner). This defaults to None as per standard Foundry actor permissions. Any actor you create from the main create button or from the button to create from a template will be set to this permission level.
+  * Added an eye-with-slash icon next to the name of an actor in Fate Utilities where that actor's default permissions are set to 'None' - this is a reminder that players can't see that actor in Fate Utilities.
+  * Added a ghost icon next to the name of an actor in Fate Utilities where that actor's token is hidden - this is a reminder that players can't see that actor in Fate Utilities because of this.
+  * For consistency, owned characters (that is, PCs) which have default permissions of None are also now hidden from Fate Utilities for players (and will display an icon accordingly in the GM view)
+
 # Version 4.1.15
   * Made a slight improvement to the layout of the Scene tab of Fate Utilities so there's more room for the notes tab.
   * Added support for Dice So Nice special effects at specific Fate rolls (e.g. -4, +4, 0). This is not currently working, but I think this is a DSN bug. Waiting for feedback from developers.

@@ -35,7 +35,7 @@
                                     </td>
                                 </tr>
                                 {{/each}}
-                                {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}
+                                {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
                                 <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:black 2px solid"{{else}}class="{{this.id}}_fu" style="border-top:black 2px solid"{{/if}}>
                                     <td style="width:20px; vertical-align:top">
                                         <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
@@ -47,7 +47,9 @@
                                         {{/if}}
                                     </td>
                                     <td id="{{this.id}}_tokenNameA" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
-                                        {{this.name}}<br>
+                                        {{this.name}}
+                                        {{#if (eq this.actor.data.permission.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                        {{#if this.data.hidden}}<i class="fas fa-ghost"></i>{{/if}}<br>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
                                         {{#if this.isOwner}}
                                         <select title="{{localize 'fate-core-official.RollHelp'}}" class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px; font-size:{{../fontSize}}">
@@ -90,6 +92,7 @@
                                     </td>
                                 </tr>
                                 {{/if}}
+                                {{/if}}
                                 {{/each}}
                                 {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                                 <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:black 2px solid"{{else}}class="{{this.id}}_fu" style="border-top:black 2px solid"{{/if}}>
@@ -103,7 +106,10 @@
                                         {{/if}}
                                     </td>
                                     <td id="{{this.id}}_tokenNameA" title="Double click to change the name shown on this token" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
-                                        {{this.name}}<br>
+                                        {{this.name}}
+                                        {{#if (eq this.actor.data.permission.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                        {{#if this.data.hidden}}<i class="fas fa-ghost"></i>{{/if}}
+                                        <br>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
                                         {{#if this.isOwner}}
                                         <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px">
@@ -170,12 +176,14 @@
                         <div id="fu_tracks_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 210px)">
 
                         {{#each all_tokens}}
-                        {{#if this.actor.hasPlayerOwner}}
+                        {{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
                         <table class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
                             <tr style="border-top:2px black solid;">
                                 <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
                                     <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     {{this.name}}
+                                    {{#if (eq this.actor.data.permission.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                    {{#if this.data.hidden}}<i class="fas fa-ghost"></i>{{/if}}
                                 </td>
                             </tr>
                         {{#if (eq this.tracksMaximised false)}}{{else}}
@@ -204,6 +212,7 @@
                         {{/if}}
                         </table>
                         {{/if}}
+                        {{/if}}
                         {{/each}}<!--ENd all_tokens each-->
                         {{#each all_tokens}}
                         {{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
@@ -212,6 +221,8 @@
                                 <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:Montserrat; font-weight:bold">
                                     <button type="button" style="width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     {{this.name}}
+                                    {{#if (eq this.actor.data.permission.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                    {{#if this.data.hidden}}<i class="fas fa-ghost"></i>{{/if}}
                                 </td>
                             </tr>
                         {{#if (eq this.tracksMaximised false)}}{{else}}

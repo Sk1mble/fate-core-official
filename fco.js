@@ -745,6 +745,21 @@ game.settings.register("fate-core-official","freeStunts", {
         default:false
     })
 
+    game.settings.register("fate-core-official", "default_actor_permission", {
+        name: game.i18n.localize("fate-core-official.default_actor_permission"),
+        hint: game.i18n.localize("fate-core-official.default_actor_permission_hint"),
+        scope: "world",
+        config: true,
+        type: String,
+        choices:  {
+          NONE:"None",
+          LIMITED:"Limited",
+          OBSERVER:"Observer",
+          OWNER:"Owner"
+        },
+        default: "none"
+      });
+
     game.settings.register("fate-core-official","sheet_template", {
         name:game.i18n.localize("fate-core-official.DefaultSheetTemplateName"),
         hint:game.i18n.localize("fate-core-official.DefaultSheetTemplateHint"),

@@ -11,7 +11,7 @@ export class fcoActor extends Actor {
 
     // Override the standard createDialog to just spawn a character called 'New Actor'.
     static async createDialog (...args){
-        Actor.create({"name":"New Character", "type":"fate-core-official"});
+        Actor.create({"name":"New Character", "type":"fate-core-official", permission: {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]}});
     }
 
     async _preCreate(...args){
