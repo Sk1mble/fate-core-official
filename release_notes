@@ -1,3 +1,6 @@
+# Version 4.1.17
+  * Clicking the 'create a character' button inside an actor folder once again puts the created character in that folder rather than dumping it in the root of the characters folder.
+
 # Version 4.1.16
   * Added an option: Default Actor Permission (None, Limited, Observer, Owner). This defaults to None as per standard Foundry actor permissions. Any actor you create from the main create button or from the button to create from a template will be set to this permission level.
   * Added an eye-with-slash icon next to the name of an actor in Fate Utilities where that actor's default permissions are set to 'None' - this is a reminder that players can't see that actor in Fate Utilities.
