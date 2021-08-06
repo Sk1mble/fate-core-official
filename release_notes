@@ -1,3 +1,6 @@
+# Version 4.1.18
+  * Added settings for the Skills and Aspects pane minimum percentage heights on the character sheet. This allows each user to tweak the maximum height of these panes on the character sheet to suit their needs and their monitor size.
+
 # Version 4.1.17
   * Clicking the 'create a character' button inside an actor folder once again puts the created character in that folder rather than dumping it in the root of the characters folder.
 

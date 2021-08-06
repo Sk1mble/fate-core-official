@@ -46,17 +46,23 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
 Hooks.once('ready', () => {
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         try {
-            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 2000
         } catch {
             // This just means that the layers aren't instantiated yet.
         }
     }
+    let val = game.settings.get("fate-core-official","fco-aspects-pane-mheight");
+    document.documentElement.style.setProperty('--fco-aspects-pane-mheight', `${val}%`);
+    document.documentElement.style.setProperty('--fco-stunts-pane-mheight', `${100-val}%`);
+	val = game.settings.get("fate-core-official","fco-skills-pane-mheight");
+    document.documentElement.style.setProperty('--fco-skills-pane-mheight', `${val}%`);
+    document.documentElement.style.setProperty('--fco-tracks-pane-mheight', `${100-val}%`);
 });
 
 Hooks.on('getSceneControlButtons', function(hudButtons){
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         try {
-            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 350
+            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 2000
         }
         catch {
             // This just means that the layers aren't instantiated yet.
@@ -820,6 +826,44 @@ game.settings.register("fate-core-official","freeStunts", {
         config:"true",
         type:Boolean,
         default:false
+    })
+
+    game.settings.register("fate-core-official","fco-aspects-pane-mheight", {
+        name:game.i18n.localize("fate-core-official.fcoAspectPaneHeight"),
+        hint:game.i18n.localize("fate-core-official.fcoAspectPaneHeightHint"),
+        config:true,
+        type:Number,
+        default:40,
+        scope: "user",
+        range: {             // If range is specified, the resulting setting will be a range slider
+            min: 10,
+            max: 75,
+            step: 5
+          },
+        onChange: () =>{
+            let val = game.settings.get("fate-core-official","fco-aspects-pane-mheight");
+            document.documentElement.style.setProperty('--fco-aspects-pane-mheight', `${val}%`);
+            document.documentElement.style.setProperty('--fco-stunts-pane-mheight', `${100-val}%`);
+        }
+    })
+
+    game.settings.register("fate-core-official","fco-skills-pane-mheight", {
+        name:game.i18n.localize("fate-core-official.fcoSkillsPaneHeight"),
+        hint:game.i18n.localize("fate-core-official.fcoSkillsPaneHeightHint"),
+        config:true,
+        type:Number,
+        default:55,
+        scope: "user",
+        range: {             // If range is specified, the resulting setting will be a range slider
+            min: 10,
+            max: 75,
+            step: 5
+          },
+        onChange: () =>{
+            let val = game.settings.get("fate-core-official","fco-skills-pane-mheight");
+            document.documentElement.style.setProperty('--fco-skills-pane-mheight', `${val}%`);
+            document.documentElement.style.setProperty('--fco-tracks-pane-mheight', `${100-val}%`);
+        }
     })
 
     game.settings.register("fate-core-official","fu_actor_avatars", {

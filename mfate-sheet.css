@@ -35,28 +35,36 @@
     flex-flow: row wrap;
 }
 
+:root {
+    /* Can set these with e.g. document.documentElement.style.setProperty('--fco-skills-pane-mheight', '50%');*/
+    --fco-aspects-pane-mheight:40%;
+    --fco-skills-pane-mheight:55%;
+    --fco-tracks-pane-mheight:45%;
+    --fco-stunts-pane-mheight:60%;
+}
+
 .mfate-panel--skills {
     /* grid-area: skills; */
     /* flex: 1; */
-    max-height: 55%;
+    max-height: var(--fco-skills-pane-mheight);
     padding-right: 6px;
 }
 
 .mfate-panel--aspects {
     /* grid-area: aspects; */
-    max-height: 40%;
+    max-height: var(--fco-aspects-pane-mheight);
     padding-left: 6px;
 }
 
 .mfate-panel--tracks {
     /* grid-area: tracks; */
-    min-height: 45%;
+    min-height: var(--fco-tracks-pane-mheight);
     padding-right: 6px;
 }
 
 .mfate-panel--stunts {
     /* grid-area: stunts; */
-    min-height: 60%;
+    min-height: var(--fco-stunts-pane-mheight);
     padding-left: 6px;
 }
 

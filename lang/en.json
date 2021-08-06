@@ -1,4 +1,8 @@
 {
+   "fate-core-official.fcoAspectPaneHeight":"Aspect Pane % Height",
+   "fate-core-official.fcoAspectPaneHeightHint":"Set the MAXIMUM percentage height of the Aspects pane on the standard character sheet (default is 40%)",
+   "fate-core-official.fcoSkillsPaneHeight":"Skills Pane % Height",
+   "fate-core-official.fcoSkillsPaneHeightHint":"Set the MAXIMUM percentage height of the Skills pane on the standard character sheet (default is 55%)",
    "fate-core-official.default_actor_permission":"Default Actor Permission",
    "fate-core-official.default_actor_permission_hint":"Select the default permission level for new Actors",
    "fate-core-official.modeToMinimal":"Sheet mode changed to minimal view",
