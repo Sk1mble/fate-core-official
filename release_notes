@@ -1,3 +1,11 @@
+# Version 4.1.19
+  * Removed two settings for FU Aspect Labels that were meant to be only available from the separate options dialog in the Scene tab of FateUtilities.
+  * Moved the character sheet customisation options to a separate menu and added some additional settings, allowing each user to define:
+    ** The sheet header colour
+    ** The sheet accent colour (this is used for scroll bars and the borders of certain elements)
+    ** The sheet label colour (the text labels like 'skills' etc.)
+    ** Whether to use rounded header bars or notched header bars (notched bars look like those on the print Fate Core character sheet)
+
 # Version 4.1.18
   * Added settings for the Skills and Aspects pane minimum percentage heights on the character sheet. This allows each user to tweak the maximum height of these panes on the character sheet to suit their needs and their monitor size.
 

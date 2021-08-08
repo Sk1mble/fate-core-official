@@ -6,7 +6,7 @@
     display: grid;
     grid-template-areas: "header header" "content content";
     grid-template-rows: auto 1fr;
-    background: white;
+    /*background: white;*/
     width: 100%;
     height: 100%;
     border: none !important;
@@ -14,8 +14,8 @@
 }
 
 .mfate-sheet *::-webkit-scrollbar-thumb {
-    background: #6793c5;
-    border: 1px solid #6793c5;
+    background:var(--fco-accent-colour);
+    border: 1px solid var(--fco-accent-colour);
 }
 
 .mfate-sheet__header {
@@ -37,10 +37,15 @@
 
 :root {
     /* Can set these with e.g. document.documentElement.style.setProperty('--fco-skills-pane-mheight', '50%');*/
-    --fco-aspects-pane-mheight:40%;
-    --fco-skills-pane-mheight:55%;
-    --fco-tracks-pane-mheight:45%;
-    --fco-stunts-pane-mheight:60%;
+    --fco-aspects-pane-mheight:40%;                                                                         /*Done*/
+    --fco-skills-pane-mheight:55%;                                                                          /*Done*/
+    --fco-tracks-pane-mheight:45%;                                                                          /*Done*/
+    --fco-stunts-pane-mheight:60%;                                                                          /*Done*/
+    --fco-header-colour:#185CAB;
+    --fco-accent-colour:#6793c5;
+    --fco-label-colour:#FFFFFF;
+    --fco-header-notch: polygon(0% 0px, 0px 0%, 100% 0%, 100% 0px, 100% 100%, 100% 100%, 0px 100%, 0 100%); /*Done*/
+    --fco-border-radius:15px;                                                                               /*Done*/
 }
 
 .mfate-panel--skills {
@@ -144,7 +149,7 @@
     font-family: Jost;
     font-weight: bold;
     /* color: black; */
-    color: #185CAB;
+    color: var(--fco-header-colour);;
     /* text-shadow: 2px 2px 5px darkslategrey; */
     height: auto;
     max-height: 3.5em;
@@ -225,7 +230,7 @@
     border: 1px solid #ccc;
     border-radius: 3px 3px 0 0;
     margin-left: 3px;
-    background: white;
+    /*background: white;*/
 }
 
 .mfate-sheet__tabs-nav-link:not(.active) {
@@ -289,16 +294,17 @@
     display: flex;
 }
 
-.mfate-panel__header {
+.mfate-panel__header{
     display: flex;
     align-items: center;
     padding: 0 0 0 12px;
-    background: #185CAB;
-    color: white;
+    background: var(--fco-header-colour);;
+    color:var(--fco-label-colour);
     position: relative;
     overflow: hidden;
     min-height: 30px;
-    border-radius: 15px;
+    border-radius: var(--fco-border-radius);
+    clip-path: var(--fco-header-notch);
     margin-top: 10px;
 }
 
@@ -306,7 +312,7 @@
     min-height: 95%;
     max-height: 95%;
     overflow-y: auto;
-    background-color:white !important;
+    /*background-color:white !important;*/
     font-family:Montserrat !important;
     font-size:10pt;
 }
@@ -541,7 +547,7 @@
 }
 
 .mfate-stunts__table {
-    background: white;
+    /*background: white;*/
     color: black;
     border: none;
     display: flex;
@@ -636,9 +642,9 @@
 .circle-input {
     height: 75px !important; 
     width: 75px !important;
-    background-color: white !important;
+    /*background-color: white !important;*/
     border-radius: 50% !important;
-    border-color:#6793c5 !important;
+    border-color:var(--fco-accent-colour) !important;
     border-width:5px !important;
     text-align:center !important;
     font-size:2em !important;
@@ -648,10 +654,10 @@
 .circle-input:disabled {
     height: 75px !important;
     width: 75px !important;
-    background-color: white !important;
+    /*background-color: white !important;*/
     border:5px solid !important;
     border-radius: 50% !important;
-    border-color:#6793c5 !important;
+    border-color:var(--fco-accent-colour) !important;
     border-width:5px !important;
     text-align:center !important;
     font-size:2em !important;
@@ -702,7 +708,7 @@
 }
 
 .fate-extras__row {
-    background: white;
+    /*background: white;*/
     color: black;
     border: none;
 }
@@ -719,7 +725,7 @@
 
 .fate-extras__row-header-button {
     border: none;
-    background-color: white;
+    background-color: transparent;
     float: right;
     width: 22px;
     height: 22px;

@@ -1,0 +1,63 @@
+<form>
+    <table style="background-color:none; border:none; margin-left:10px; margin-right:10px; max-width:98%">
+        <tr>
+            <td>
+                {{localize 'fate-core-official.sheetHeaderColour'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.sheetHeaderColourHint'}}</div>
+            </td>
+            <td>
+                {{colorPicker name="sheet_header_colour" value = this.sheetHeaderColour}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.sheetAccentColour'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.sheetAccentColourHint'}}</div>
+            </td>
+            <td>
+                {{colorPicker name="sheet_accent_colour" value = this.sheetAccentColour}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.sheetLabelColour'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.sheetLabelColourHint'}}</div>
+            </td>
+            <td>
+                {{colorPicker name="sheet_label_colour" value = this.sheetLabelColour}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.notched-headers'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.notched-headers-hint'}}</div>
+            </td>
+            <td>
+                <input name="use_notched" type="checkbox" {{#if this.notch}}checked = "checked"{{/if}}></input>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.fcoAspectPaneHeight'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.fcoAspectPaneHeightHint'}}</div>
+            </td>
+            <td>
+                {{rangePicker name="fco_aspects_panel_height" value = this.aspectsHeight max = "90" min = "10" step = "5"}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.fcoSkillsPaneHeight'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.fcoSkillsPaneHeightHint'}}</div>
+            </td>
+            <td>
+                {{rangePicker name="fco_skills_panel_height" value = this.skillsHeight max = "90" min = "10" step = "5"}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <button type="button" id="save_sheet_settings" style="width:5em">{{localize 'fate-core-official.Save'}}</button>
+            </td>
+        </tr>
+    </table>
+</form>
