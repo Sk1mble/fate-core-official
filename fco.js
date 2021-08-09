@@ -75,7 +75,7 @@ function setupSheet(){
 Hooks.once('ready', () => {
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         try {
-            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 2000
+            game.canvas.drawings.setParent(game.canvas.interface);
         } catch {
             // This just means that the layers aren't instantiated yet.
         }
@@ -83,6 +83,7 @@ Hooks.once('ready', () => {
     setupSheet();
 });
 
+/*
 Hooks.on('getSceneControlButtons', function(hudButtons){
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         try {
@@ -93,6 +94,8 @@ Hooks.on('getSceneControlButtons', function(hudButtons){
         }
     }
 });
+I think this is now redundant.
+*/
 
 Hooks.on('diceSoNiceReady', function() {
     game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);

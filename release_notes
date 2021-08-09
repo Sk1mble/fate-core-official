@@ -1,3 +1,6 @@
+# Version 4.1.20
+  * The option to render the drawings layer on top of other layers is now working again. The drawing layer now exists in the Interface Layer group rather than the Primary Layer group when this option is enabled.
+
 # Version 4.1.19
   * Removed two settings for FU Aspect Labels that were meant to be only available from the separate options dialog in the Scene tab of FateUtilities.
   * Moved the character sheet customisation options to a separate menu and added some additional settings, allowing each user to define:
