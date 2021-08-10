@@ -2103,6 +2103,15 @@ Hooks.once('ready', async function () {
             }
         }
     })
+
+    game.socket.on("system.fate-core-official", onTop => {
+        if (onTop?.drawingsOnTop == true){
+                game.canvas.drawings.setParent(game.canvas.interface);
+        }
+        if (onTop?.drawingsOnTop == false){
+            game.canvas.drawings.setParent(game.canvas.primary);
+        }
+    })
 })
 
 async function updateRolls (rolls) {

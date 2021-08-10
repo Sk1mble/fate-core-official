@@ -857,9 +857,11 @@ game.settings.register("fate-core-official","freeStunts", {
             let val = game.settings.get("fate-core-official","drawingsOnTop");
             if (val) {
                 game.canvas.drawings.setParent(game.canvas.interface);
+                game.socket.emit("system.fate-core-official",{"drawingsOnTop":true})
             }
             else {
                 game.canvas.drawings.setParent(game.canvas.primary);
+                game.socket.emit("system.fate-core-official",{"drawingsOnTop":false})
             }
         }
     })
