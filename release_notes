@@ -1,3 +1,6 @@
+# Version 4.1.21
+  * A refresh is no longer required to switch drawings from the bottom layer to the top layer and vice versa.
+
 # Version 4.1.20
   * The option to render the drawings layer on top of other layers is now working again. The drawing layer now exists in the Interface Layer group rather than the Primary Layer group when this option is enabled.
 

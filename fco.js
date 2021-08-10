@@ -852,7 +852,16 @@ game.settings.register("fate-core-official","freeStunts", {
         scope:"world",
         config:"true",
         type:Boolean,
-        default:false
+        default:false,
+        onChange: () => {
+            let val = game.settings.get("fate-core-official","drawingsOnTop");
+            if (val) {
+                game.canvas.drawings.setParent(game.canvas.interface);
+            }
+            else {
+                game.canvas.drawings.setParent(game.canvas.primary);
+            }
+        }
     })
 
     game.settings.register("fate-core-official","fco-aspects-pane-mheight", {
