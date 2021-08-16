@@ -464,7 +464,8 @@ button:hover {
   min-height:50px !important; 
   background-color:white !important;
   font-family:Montserrat !important;
-  font-size:10pt
+  font-size:10pt;
+  overflow-y:auto;
 }
 
 .long_text_rich {

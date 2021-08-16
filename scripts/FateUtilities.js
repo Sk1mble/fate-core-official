@@ -2105,10 +2105,10 @@ Hooks.once('ready', async function () {
     })
 
     game.socket.on("system.fate-core-official", onTop => {
-        if (onTop?.drawingsOnTop == true){
+        if (onTop?.drawingsOnTop == true && game.canvas.ready){
                 game.canvas.drawings.setParent(game.canvas.interface);
         }
-        if (onTop?.drawingsOnTop == false){
+        if (onTop?.drawingsOnTop == false && game.canvas.ready){
             game.canvas.drawings.setParent(game.canvas.primary);
         }
     })

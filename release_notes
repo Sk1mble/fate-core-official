@@ -1,3 +1,8 @@
+# Version 4.1.23
+  * Setting to put drawings on top layer now checks to see if the canvas is active to prevent an error if it isn't.
+  * Added John Helmuth's pull request to make the 'continue without installing' button dynamic rather than fixed in height.
+  * Corrected scrollY behaviour on biography and notes fields on character sheet when editiing them.
+
 # Version 4.1.22
   * A refresh is no longer required FOR OTHER CONNECTED CLIENTS to switch drawings from the bottom layer to the top layer and vice versa.
 
