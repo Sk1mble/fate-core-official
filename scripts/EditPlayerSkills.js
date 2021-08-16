@@ -22,6 +22,7 @@ class EditPlayerSkills extends FormApplication{
                 this.sortByRank = true;
                 this.temp_presentation_skills=[];
                 this.sorted = false;
+                this.changed = false;
                 game.system.apps["actor"].push(this);
                 game.system.apps["item"].push(this);
     }
@@ -98,7 +99,14 @@ class EditPlayerSkills extends FormApplication{
     async close(...args){
         game.system.apps["actor"].splice(game.system.apps["actor"].indexOf(this),1); 
         game.system.apps["item"].splice(game.system.apps["item"].indexOf(this),1); 
-        await super.close(...args);
+
+        if (this.changed){
+            let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.abandonChangesQ"), game.i18n.localize("fate-core-official.abandonChanges"));
+            if (answer == "yes") await super.close(...args);
+        } else {
+            await super.close(...args);
+        }
+        
     }
 
     async checkSkills(p){
@@ -224,6 +232,12 @@ class EditPlayerSkills extends FormApplication{
        //Here are the action listeners
         activateListeners(html) {
         super.activateListeners(html);
+
+        const rankBoxes = html.find("input[class='rank_input']");
+        rankBoxes.on("change", event => {
+            this.changed = true;
+        })
+
         const skillButtons = html.find("button[class='skill_button']");
         skillButtons.on("click", event => this._onSkillButton(event, html));
         const saveButton = html.find("button[id='save_player_skills']")

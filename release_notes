@@ -1,3 +1,6 @@
+# Version 4.1.24
+  * Exiting the player skill editor without saving when changes have been made now asks if you to confirm that you wish to abandon changes.
+
 # Version 4.1.23
   * Setting to put drawings on top layer now checks to see if the canvas is active to prevent an error if it isn't.
   * Added John Helmuth's pull request to make the 'continue without installing' button dynamic rather than fixed in height.

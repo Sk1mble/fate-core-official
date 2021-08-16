@@ -1,4 +1,6 @@
 {
+   "fate-core-official.abandonChangesQ":"Abandon changes?",
+   "fate-core-official.abandonChanges":"Close without saving the changes you've made to this character's skills?",
    "fate-core-official.sheetHeaderColour":"Sheet Header Colour",
    "fate-core-official.sheetHeaderColourHint":"The colour used for headers like Skills, Stunts, etc. Default is #185CAB",
    "fate-core-official.sheetAccentColour":"Sheet Accent Colour",
