@@ -81,6 +81,7 @@ class EditPlayerSkills extends FormApplication{
         if (this.object.type=="Extra"){
             await this.object.update({"data.skills":this.player_skills}); 
             ui.notifications.info(game.i18n.localize("fate-core-official.ExtraSkillsSaved"));   
+            this.changed = false;
             this.close();
         } else {
             let isPlayer = this.object.hasPlayerOwner;
@@ -90,7 +91,8 @@ class EditPlayerSkills extends FormApplication{
             } else {
                 let tracks = this.object.setupTracks (duplicate(this.player_skills), duplicate(this.object.data.data.tracks));
                 await this.object.update({"data.tracks":tracks,"data.skills":this.player_skills}); 
-                ui.notifications.info(game.i18n.localize("fate-core-official.SkillsSaved"))
+                ui.notifications.info(game.i18n.localize("fate-core-official.SkillsSaved"));
+                this.changed = false;
                 this.close();
             }
         }

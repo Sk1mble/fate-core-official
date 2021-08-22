@@ -1,3 +1,6 @@
+# Version 4.1.25
+  * System now won't ask if you want to exit without saving changes when you click the 'save' button.
+
 # Version 4.1.24
   * Exiting the player skill editor without saving when changes have been made now asks if you to confirm that you wish to abandon changes.
 
