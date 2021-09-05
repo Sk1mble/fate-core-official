@@ -1,3 +1,6 @@
+# Version 4.1.26
+  * Finally fixed an annoying margin issue on the track info display obtained by right clicking a track on a character sheet.
+
 # Version 4.1.25
   * System now won't ask if you want to exit without saving changes when you click the 'save' button.
 
