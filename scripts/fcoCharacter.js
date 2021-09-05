@@ -328,7 +328,7 @@ export class fcoCharacter extends ActorSheet {
                             <td style="padding:10px">
                                 ${game.i18n.localize("fate-core-official.HowRecover")}:
                             </td>
-                            <td>
+                            <td style="padding:10px">
                                 ${track.recovery_conditions}
                             </td>
                         </tr>
