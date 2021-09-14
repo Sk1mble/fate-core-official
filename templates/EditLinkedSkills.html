@@ -5,7 +5,7 @@
             {{localize 'fate-core-official.LinkedSkills'}}:
         </td>
         <td>
-            <select id="linked_skills" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+            <select id="linked_skills" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
                 {{#each track.linked_skills}}
                     <option>
                         {{localize 'fate-core-official.Skill'}}: {{this.linked_skill}}, {{localize 'fate-core-official.Rank'}}: {{this.rank}}, {{localize 'fate-core-official.Boxes'}}: {{this.boxes}}, {{localize 'fate-core-official.Enables'}}: {{this.enables}}
@@ -19,12 +19,12 @@
             {{localize 'fate-core-official.AddLinkedSkill'}}:
         </td>
         <td>
-            <select id="skill_list" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+            <select id="skill_list" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
                 {{#each skills}}
                     <option>{{this.name}}</option>
                 {{/each}}
             </select>
-            {{localize 'fate-core-official.Rank'}}: <input type="number" id="skill_rank" value="0" style="background: white; color: black; font-family:Arial; width: 100px; height: 25px"/> {{localize 'fate-core-official.AddsBoxes'}}: <input type = number id="added_boxes" value="0" style="background: white; color: black; font-family:Arial; width: 100px; height: 25px"/> {{localize 'fate-core-official.Enables'}}?: <input type="checkbox" id="edit_enables"/><button type="button" id="add_linked_skill" style="height:30px; width:30px" i icon class="fas fa-plus"></button>
+            {{localize 'fate-core-official.Rank'}}: <input type="number" id="skill_rank" value="0" style="background: white; color: black; font-family: var(--fco-font-family); width: 100px; height: 25px"/> {{localize 'fate-core-official.AddsBoxes'}}: <input type = number id="added_boxes" value="0" style="background: white; color: black; font-family: var(--fco-font-family); width: 100px; height: 25px"/> {{localize 'fate-core-official.Enables'}}?: <input type="checkbox" id="edit_enables"/><button type="button" id="add_linked_skill" style="height:30px; width:30px" i icon class="fas fa-plus"></button>
         </td>
     </tr>
 </table>

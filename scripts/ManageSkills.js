@@ -79,7 +79,7 @@ class SkillSetup extends FormApplication{
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkill"),
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skill_text}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skill_text}</textarea></div>`,
             buttons: {
             },
         }).render(true);
@@ -91,7 +91,7 @@ class SkillSetup extends FormApplication{
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkills"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skills_text}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skills_text}</textarea></div>`,
             buttons: {
             },
         }).render(true);
@@ -101,7 +101,7 @@ class SkillSetup extends FormApplication{
         return new Promise(resolve => {
             new Dialog({
                 title: game.i18n.localize("fate-core-official.PasteSkills"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_skills"></textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_skills"></textarea></div>`,
                 buttons: {
                     ok: {
                         label: "Save",

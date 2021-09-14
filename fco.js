@@ -70,8 +70,20 @@ function setupSheet(){
     val = game.settings.get("fate-core-official","sheetLabelColour");
     document.documentElement.style.setProperty('--fco-label-colour', `${val}`);
 }
-    
 
+function setupFont(){
+    // Setup the system font according to the user's settings
+    let val = CONFIG.fontFamilies[game.settings.get("fate-core-official","fco-font-family")];
+    let override = game.settings.get("fate-core-official", "override-foundry-font");
+    if (override) {
+        document.documentElement.style.setProperty('--fco-foundry-font-family', "")
+        document.documentElement.style.setProperty('--fco-font-family', `${val}`);
+    } else {
+        document.documentElement.style.setProperty('--fco-font-family', `${val}`);
+        document.documentElement.style.setProperty('--fco-foundry-font-family', `${val}`);
+    }
+}
+    
 Hooks.once('ready', () => {
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         try {
@@ -81,21 +93,8 @@ Hooks.once('ready', () => {
         }
     }
     setupSheet();
+    setupFont();
 });
-
-/*
-Hooks.on('getSceneControlButtons', function(hudButtons){
-    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
-        try {
-            canvas.layers.find(l => l.name === 'DrawingsLayer').zIndex = 2000
-        }
-        catch {
-            // This just means that the layers aren't instantiated yet.
-        }
-    }
-});
-I think this is now redundant.
-*/
 
 Hooks.on('diceSoNiceReady', function() {
     game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);
@@ -629,7 +628,7 @@ Hooks.once('init', async function () {
  
                 new Dialog({
                     title: game.i18n.localize("fate-core-official.ExportSettingsDialogTitle"), 
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
+                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
                     buttons: {
                     },
                 }).render(true);
@@ -908,6 +907,37 @@ game.settings.register("fate-core-official","freeStunts", {
         type: CustomiseSheet,   // A FormApplication subclass which should be created
         restricted: false    // Restrict this submenu to gamemaster only?
       });
+
+    // System font (also overrides default Foundry font for consistency unless next setting is false)
+
+    game.settings.register("fate-core-official", "fco-font-family", {
+       name: game.i18n.localize("fate-core-official.fontFamilyName"),
+       label:game.i18n.localize("fate-core-official.fontFamilyLabel"),
+       hint:game.i18n.localize("fate-core-official.fontFamilyHint"),
+       type:String,
+       default:"Montserrat",
+       restricted:false,
+       scope:"user",
+       config:true,
+       choices:CONFIG.fontFamilies,
+       onChange:() => {
+           setupFont();
+       }
+    });
+
+    game.settings.register("fate-core-official", "override-foundry-font", {
+        name: game.i18n.localize("fate-core-official.overrideFontName"),
+        label:game.i18n.localize("fate-core-official.overrideFontLabel"),
+        hint:game.i18n.localize("fate-core-official.overrideFontHint"),
+        type:Boolean,
+        default:false,
+        restricted:false,
+        scope:"user",
+        config:true,
+        onChange:() => {
+            setupFont();
+        }
+     });
 
     game.settings.register("fate-core-official", "fco-notched-headers", {
         name: game.i18n.localize("fate-core-official.notched-headers"),

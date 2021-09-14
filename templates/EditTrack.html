@@ -1,6 +1,6 @@
 <form onsubmit="event.preventDefault();">
     <div align = "left"><h2>{{localize 'fate-core-official.EditingTracks'}} {{this.category}} {{localize 'fate-core-official.category'}}</h2></div>
-    <div><select id="track_select" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+    <div><select id="track_select" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
         <option>{{localize 'fate-core-official.NewTrack'}}</option>
         {{#each tracks}}
             <option>{{this.name}}</option>
@@ -14,7 +14,7 @@
                 {{localize 'fate-core-official.Name'}}:
             </td>
             <td>
-                <input type="text" id ="edit_track_name" style="background: white; color: black; font-family:Arial;"></input>
+                <input type="text" id ="edit_track_name" style="background: white; color: black; font-family: var(--fco-font-family);"></input>
             </td>
         </tr>
         <tr>
@@ -22,8 +22,8 @@
                 {{localize 'fate-core-official.Description'}}:
             </td>
             <td>
-                <div id ="edit_track_description_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family:Arial;"></div>
-                <div id ="edit_track_description" style="display:none; background: white; color: black; font-family:Arial;"></div>
+                <div id ="edit_track_description_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family: var(--fco-font-family);"></div>
+                <div id ="edit_track_description" style="display:none; background: white; color: black; font-family: var(--fco-font-family);"></div>
             </td>
         </tr>
         <tr>
@@ -54,7 +54,7 @@
                 {{localize 'fate-core-official.RecoveryType'}}
             </td>
             <td>
-                <select id="edit_track_recovery_type" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+                <select id="edit_track_recovery_type" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
                     <option>{{localize 'fate-core-official.Fleeting'}}</option>
                     <option>{{localize 'fate-core-official.Sticky'}}</option>
                     <option>{{localize 'fate-core-official.Lasting'}}</option>
@@ -66,7 +66,7 @@
                 {{localize 'fate-core-official.Aspect'}}:
             </td>
             <td>
-                <select id="edit_track_aspect" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px">
+                <select id="edit_track_aspect" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
                     <option>{{localize 'fate-core-official.No'}}</option>
                     <option>{{localize 'fate-core-official.NameAsAspect?'}}</option>
                     <option>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
@@ -78,8 +78,8 @@
                 {{localize 'fate-core-official.WhenMarked'}}
             </td>
             <td>
-                <div id ="edit_track_when_marked_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background: white; color: black; font-family:Arial;"></div>
-                <div id ="edit_track_when_marked" style="display:none; background: white; color: black; font-family:Arial;"></div>
+                <div id ="edit_track_when_marked_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background: white; color: black; font-family: var(--fco-font-family);"></div>
+                <div id ="edit_track_when_marked" style="display:none; background: white; color: black; font-family: var(--fco-font-family);"></div>
             </td>
         </tr>
         <tr>
@@ -87,8 +87,8 @@
                 {{localize 'fate-core-official.HowRecover'}}
             </td>
             <td>
-                <div id ="edit_track_when_recovers_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background: white; color: black; font-family:Arial;"></div>
-                <div id ="edit_track_when_recovers" style="display:none; background: white; color: black; font-family:Arial;"></div>
+                <div id ="edit_track_when_recovers_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background: white; color: black; font-family: var(--fco-font-family);"></div>
+                <div id ="edit_track_when_recovers" style="display:none; background: white; color: black; font-family: var(--fco-font-family);"></div>
             </td>
         </tr>
         <tr>
@@ -96,7 +96,7 @@
                 {{localize 'fate-core-official.Boxes'}}
             </td>
             <td>
-                <input type="number" id="edit_track_boxes" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> 
+                <input type="number" id="edit_track_boxes" value="0" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> 
             </td>
         </tr>
         <tr>
@@ -123,7 +123,7 @@
                 {{localize 'fate-core-official.Harm'}}:
             </td>
             <td>
-                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family:Arial; width: 300px; height: 25px"> {{localize 'fate-core-official.HowMuchHarm'}}
+                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> {{localize 'fate-core-official.HowMuchHarm'}}
             </td>
         </tr>
         <tr>

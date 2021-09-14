@@ -1,4 +1,4 @@
-<form id="CharacterView" style="font-family:Montserrat">
+<form id="CharacterView" style="font-family:var(--fco-font-family)">
     <h1>{{name}}</h1>
     {{#if (eq avatar undefined)}}{{else}}<img style="width:200px; height:auto" src = "{{avatar}}"/><p/>{{/if}}
     {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'fate-core-official.Biography'}}</h2>{{{enr  biography.value}}}</div><p/>{{/if}}
@@ -38,7 +38,7 @@
             {{#each tracks}}{{#if this.enabled}}
             <tr>
                 <td style="padding-bottom:10px; width:120px">
-                    <div name="track_name" style="font-family:Montserrat" title="{{localize 'fate-core-official.ClickHereToEditTrackNotes'}} {{this.name}}"><i style="font-style:normal; font-weight:bold; font-family: Montserrat">{{this.name}}</i></div>
+                    <div name="track_name" style="font-family:var(--fco-font-family)" title="{{localize 'fate-core-official.ClickHereToEditTrackNotes'}} {{this.name}}"><i style="font-style:normal; font-weight:bold; font-family: var(--fco-font-family)">{{this.name}}</i></div>
                 </td>
                 <td style="padding-bottom:10px">
                     {{#each this.box_values}}

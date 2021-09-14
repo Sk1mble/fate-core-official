@@ -169,7 +169,7 @@ class fcoConstants {
     return new Promise(resolve => {
         new Dialog({
             title: prompt, 
-            content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
             buttons: {
                 ok: {
                     label: game.i18n.localize("fate-core-official.Save"),
@@ -186,7 +186,7 @@ class fcoConstants {
         return new Promise(resolve => {
             new Dialog({
                 title: prompt, 
-                content: `<div style="background-color:white; color:black;"><textarea rows="1" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea rows="1" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
                 buttons: {
                     ok: {
                         label: game.i18n.localize("fate-core-official.Save"),
@@ -295,7 +295,7 @@ class fcoConstants {
         return new Promise(resolve => {
             new Dialog({
                 title: game.i18n.localize("fate-core-official.PasteDataToOverwrite"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_settings"></textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_settings"></textarea></div>`,
                 buttons: {
                     ok: {
                         label: game.i18n.localize("fate-core-official.Save"),

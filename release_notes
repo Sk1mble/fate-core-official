@@ -1,3 +1,8 @@
+# Version 4.1.27
+  * Provided two new settings: 
+    ** Setting 1 allows users to select a font they wish to use from the list of fonts installed in Foundry. This will set almost all text in Foundry to use that font unless setting 2 is set to true.
+    ** Setting 2 disables the above font override in respect of system fonts used in menus etc.
+
 # Version 4.1.26
   * Finally fixed an annoying margin issue on the track info display obtained by right clicking a track on a character sheet.
 

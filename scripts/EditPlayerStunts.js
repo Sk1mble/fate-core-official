@@ -330,7 +330,7 @@ class StuntDB extends Application {
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunts"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
         }).render(true);
@@ -343,7 +343,7 @@ class StuntDB extends Application {
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunt"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
         }).render(true);
@@ -362,7 +362,7 @@ class StuntDB extends Application {
         return new Promise(resolve => {
             new Dialog({
                 title: game.i18n.localize("fate-core-official.PasteOverStunts"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_stunt_db"></textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_stunt_db"></textarea></div>`,
                 buttons: {
                     ok: {
                         label: game.i18n.localize("fate-core-official.Save"),
