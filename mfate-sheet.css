@@ -45,8 +45,15 @@
     --fco-accent-colour:#6793c5;
     --fco-label-colour:#FFFFFF;
     --fco-header-notch: polygon(0% 0px, 0px 0%, 100% 0%, 100% 0px, 100% 100%, 100% 100%, 0px 100%, 0 100%); /*Done*/
-    --fco-border-radius:15px;                                                                               /*Done*/
+    --fco-border-radius:15px;    
+    --fco-font-family:Montserrat;   
+    --fco-foundry-font-family:Signika, Arial, sans-serif;                                                                        /*Done*/
 }
+
+.skill_button {
+    font-family:var(--fco-font-family);
+    padding-left:25px;
+  }
 
 .mfate-panel--skills {
     /* grid-area: skills; */
@@ -313,12 +320,12 @@
     max-height: 95%;
     overflow-y: auto;
     /*background-color:white !important;*/
-    font-family:Montserrat !important;
+    font-family: var(--fco-font-family) !important;
     font-size:10pt;
 }
 
 .mfate-panel__header-select {
-    font-family: Montserrat;
+    font-family: var(--fco-font-family);
     margin-right: 8px;
     background: rgba(255, 255, 255, 0.5);
 }
@@ -353,7 +360,7 @@
 
 .mfate-panel__header-label {
     font-size: 14pt;
-    font-family: Montserrat;
+    font-family: var(--fco-font-family);
     font-weight: bold;
     margin: 0 .5em 0 0;
     z-index: 1;
@@ -400,6 +407,7 @@
     display: table-cell;
     border-bottom: 1px solid lightsteelblue;
     padding: .3em .5em;
+    font-family: var(--fco-font-family);
 }
 
 .mfate-skills-list__number {
@@ -429,7 +437,7 @@
 }
 
 .mfate-aspects-list__label {
-    font-family: Montserrat;
+    font-family: var(--fco-font-family);
     font-weight: bold;
 }
 
@@ -441,8 +449,8 @@
 
 .mfate-aspects-list__input {
     font-size: 11px;
-    min-height:11px;
-    max-height:25px;
+    min-height:12px;
+    max-height:30px;
 }
 
 .mfate-aspects-notes__input {
@@ -542,7 +550,7 @@
 /*.mfate-stunts {}*/
 
 .mfate-stunts__body {
-    font-family: Montserrat;
+    font-family: var(--fco-font-family);
     scrollbar-width: thin;
 }
 
@@ -563,7 +571,7 @@
 
 .mfate-stunts__row-header-cell {
     font-weight: bold;
-    font-family: Montserrat;
+    font-family: var(--fco-font-family);
 }
 
 .mfate-stunts__row-header-icon {
@@ -582,7 +590,7 @@
 }
 
 .mfate-stunts__row-body {
-    font-family: Montserrat;
+    font-family: var(--fco-font-family);
     font-size: 11px;
     padding: 5px;
     margin-left:20px;
@@ -720,7 +728,7 @@
 
 .fate-extras__row-header {
     font-weight: bold;
-    font-family: Montserrat
+    font-family: var(--fco-font-family)
 }
 
 .fate-extras__row-header-button {
@@ -741,6 +749,6 @@
 
 .fate-extras__row-body-content {
     padding-bottom: 20px;
-    font-family: Montserrat;
+    font-family: var(--fco-font-family);
     padding-left:30px;
 }

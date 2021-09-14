@@ -65,8 +65,7 @@
 .fate.window-app .window-content h3 {
   margin: 0;
   border: none;
-  font-family: "Montserrat", "Arial", sans-serif;
-  font-weight: 900;
+  font-family: var(--fco-font-family);
   text-transform: uppercase;
 }
 
@@ -98,23 +97,17 @@
 
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: inner-spin-button;
-  }
-
-button {
-  border-radius: 0;
-  font-family: "Montserrat", "Arial", sans-serif;
-  border: 2px solid black;
 }
 
-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+body, button, label, select, input, textarea {
+  font-family:var(--fco-foundry-font-family);
 }
 
 #chat-log .message {
   border: 2px solid black;
   border-radius: 0;
   background: #c8c8c8;
-  font-family: "Montserrat", "Arial", sans-serif;
+  font-family: var(--fco-foundry-font-family);
 }
 #chat-log .message .message-header {
   color: black;
@@ -296,6 +289,7 @@ button:hover {
 
 /* The container */
 .box {
+  font-family:"Montserrat";
   display: flex-row;
   float:left;
   position: relative;
@@ -312,6 +306,7 @@ button:hover {
 
 /* Create a custom checkbox */
 .checkmark {
+  font-family:"Montserrat";
   position: absolute;
   top: 0;
   left: 0;
@@ -330,7 +325,7 @@ button:hover {
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
-  font-family:Montserrat;
+  font-family:"Montserrat";
   content: "X";
   position: absolute;
   top: 65%;
@@ -385,7 +380,7 @@ button:hover {
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .cdcheckmark:after {
-  font-family:Montserrat;
+  font-family:"Montserrat";
   content: "X";
   position: absolute;
   top: 65%;
@@ -407,7 +402,7 @@ button:hover {
 
 .cs_box {
   background-color:white !important;
-  font-family:Montserrat !important;
+  font-family:var(--fco-font-family) !important;
   border-top:none !important;
   border-radius:0 !important;
   border-right:none !important;
@@ -430,7 +425,7 @@ button:hover {
   padding:5px !important; 
   color:black !important; 
   background-color :white !important; 
-  font-family:Montserrat !important; 
+  font-family:var(--fco-font-family) !important; 
   border:none !important; 
   border-bottom: 1px solid lightsteelblue !important
 }
@@ -447,7 +442,7 @@ button:hover {
   padding:5px !important; 
   color:black !important; 
   background-color :white !important; 
-  font-family:Montserrat !important; 
+  font-family:var(--fco-font-family) !important; 
   border:none !important; 
   border-bottom: 1px solid lightsteelblue !important
 }
@@ -463,7 +458,7 @@ button:hover {
 .long_text {
   min-height:50px !important; 
   background-color:white !important;
-  font-family:Montserrat !important;
+  font-family:var(--fco-font-family) !important;
   font-size:10pt;
   overflow-y:auto;
 }
@@ -471,7 +466,7 @@ button:hover {
 .long_text_rich {
   min-height:50px !important; 
   background-color:white !important;
-  font-family:Montserrat !important;
+  font-family:var(--fco-font-family) !important;
   font-size:10pt;
   overflow-y:auto;
 }
