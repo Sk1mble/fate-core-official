@@ -915,7 +915,7 @@ game.settings.register("fate-core-official","freeStunts", {
        label:game.i18n.localize("fate-core-official.fontFamilyLabel"),
        hint:game.i18n.localize("fate-core-official.fontFamilyHint"),
        type:String,
-       default:"Montserrat",
+       default:CONFIG.fontFamilies.indexOf("Montserrat"),
        restricted:false,
        scope:"user",
        config:true,

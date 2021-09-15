@@ -1,4 +1,5 @@
 {
+   "fate-core-official.manualRollModifier":"Manually Modify Roll",
    "fate-core-official.overrideFontName":"Disable system font override?",
    "fate-core-official.overrideFontLabel":"Should we cancel overriding of the Foundry font?",
    "fate-core-official.overrideFontHint":"If true, the selected user font will apply only to Fate Core Official content.",
@@ -1486,6 +1487,7 @@
     "fate-core-official.PlusOneExplainer":"Add +1 (Usually from teamwork)",
     "fate-core-official.FreePlusTwoExplainer":"Add +2 with a Free Invoke",
     "fate-core-official.FreeRerollExplainer":"Reroll with a Free Invoke",
+    "fate-core-official.manualExplainer":"Manually adjust the roll value",
     "fate-core-official.PaidPlusTwoExplainer":"Add +2 with a Fate Point",
     "fate-core-official.PaidRerollExplainer":"Reroll with a Fate Point",
     "fate-core-official.ActionTracker":"Action Tracker",

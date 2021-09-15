@@ -1,3 +1,8 @@
+# Version 4.1.29
+  * Added a new feature to the Fate Utilities Roll tab; you can now click the tools icon to manually adjust a roll by a positive or negative number of your choice, with a text description.
+  * There is also a paid modifier button to modify the dice roll and spend a fate point.
+  * I also fixed a bug in v4.1.27's user setting to change the system font; it wasn't correctly allocating the font on first load for a user because it was setting the value of the setting to a string rather than a numeric index of the font on CONFIG.fontFamilies.
+
 # Version 4.1.28
   * Fixed a minor bug that was causing Fate Utilities to stop rendering when an added aspect was tabbed out of instead of clicking elsewhere in the window.
 

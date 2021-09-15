@@ -702,6 +702,108 @@ class FateUtilities extends Application{
         let rolls = duplicate(game.scenes.viewed.getFlag("fate-core-official","rolls"));
         let roll = rolls[index]
         
+        if (action == "manual" || action == "manualfp"){
+            // Render a dialog asking for the modifier and text description
+            let content = 
+            `<div>
+                <table border="none">
+                    <th style="text-align:left; padding-left:5px">
+                        Modifier
+                    </th>
+                    <th style="text-align:left; padding-left:5px">
+                        Description
+                    </th>
+                    <tr>
+                        <td style="text-align:left; padding-left:5px"> 
+                            <input type="number" style="background-color:white; max-width:5em" class="fco_manual_modifier" value="0">
+                            </input>
+                        </td>
+                        <td style="text-align:left; padding-left:5px">
+                            <input type="text" style="background-color:white;" class="fco_manual_description" value="">
+                            </input>
+                        </td>
+                    </tr>
+                </table>
+            </div>`
+
+            let modification = await new Promise(resolve => {
+                new Dialog({
+                    title: game.i18n.localize("fate-core-official.manualRollModifier"),
+                    content: content,
+                    buttons: {
+                        ok: {
+                            label: "OK",
+                            callback: () => {
+                                resolve({
+                                    modifier:$('.fco_manual_modifier')[0].value,
+                                    description:$('.fco_manual_description')[0].value
+                                })
+                            }
+                        }
+                    },
+                    default:"ok"
+                }).render(true);
+            });
+
+            //Find the right character and deduct one from their fate points
+            let user = game.users.contents.find(user => user.id == roll.user._id)
+
+            if (action == "manualfp"){
+                if (user.isGM){
+                    let fps = user.getFlag("fate-core-official","gmfatepoints");
+                    if (fps == 0 || fps == undefined){
+                        ui.notifications.error(game.i18n.localize("fate-core-official.NoGMFatePoints"))
+                    } else {
+                        user.setFlag("fate-core-official","gmfatepoints",fps-1);
+                        // Modify the dice result by the modifier & edit the flavour
+                        let m = parseInt (modification.modifier);
+                        roll.total+=m;
+                        let sign = ""
+                        if (m >= 0) sign = "+"; 
+                        roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
+                        game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    }
+                } else {
+                    let char = user.character;
+                    if (char.name == roll.speaker){
+                        let fps = char.data.data.details.fatePoints.current;
+                        if (fps == 0){
+                            ui.notifications.error(game.i18n.localize("fate-core-official.NoFatePoints"))
+                        } else {
+                            char.update({"data.details.fatePoints.current":fps-1})
+                            // Modify the dice result by the modifier & edit the flavour
+                            let m = parseInt (modification.modifier);
+                            roll.total+=m;
+                            let sign = ""
+                            if (m >= 0) sign = "+"; 
+                            roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
+                            if (game.user.isGM){
+                                game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                            } else {
+                                game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
+                            }
+                        }
+                    } else {
+                        ui.notifications.error(game.i18n.localize("fate-core-official.NotControllingCharacter"));
+                    }
+                }
+            } else {
+                // Modify the dice result by the modifier & edit the flavour
+                let m = parseInt (modification.modifier);
+                roll.total+=m;
+                let sign = ""
+                if (m >= 0) sign = "+"; 
+                roll.flavor+=`<br>Modifier: ${sign}${modification.modifier} (${modification.description})`
+            }
+
+            if (game.user.isGM){
+                game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+            } else {
+                //Create a socket call to update the scene's roll data
+                game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
+            }
+        }
+
         if (action == "plus1"){
             roll.total+=1;
             roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PlusOne")}`
@@ -728,7 +830,6 @@ class FateUtilities extends Application{
                 bonus = 0;
                 let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
-                    console.log(aspect);
                     let options = "";
                     for (let i = 0; i < parseInt(aspect.free_invokes, 10)+1; i++){
                         options+=`<option value="${aspect.name}_${i}">${i}</option>`
