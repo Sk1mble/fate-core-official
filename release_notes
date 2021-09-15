@@ -1,3 +1,6 @@
+# Version 4.1.28
+  * Fixed a minor bug that was causing Fate Utilities to stop rendering when an added aspect was tabbed out of instead of clicking elsewhere in the window.
+
 # Version 4.1.27
   * Provided two new settings: 
     ** Setting 1 allows users to select a font they wish to use from the list of fonts installed in Foundry. This will set almost all text in Foundry to use that font unless setting 2 is set to true.

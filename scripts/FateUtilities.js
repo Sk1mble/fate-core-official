@@ -96,6 +96,12 @@ class FateUtilities extends Application{
         })
 
         const input = html.find('input[type="text"], input[type="number"], .contenteditable');
+        
+        //Ensure that if a button is tabbed to or clicked, the window's selection is cleared to prevent any rendering issues.
+        const button = html.find('button[type="button"]');
+        button.on("focus", event => {
+            window.getSelection().removeAllRanges();
+        })
 
         input.on("keyup", event => {
             if (event.keyCode === 13 && event.target.type == "input") {
