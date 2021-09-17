@@ -1,3 +1,6 @@
+# Version 4.1.30
+  * Tweaked some localization strings to be a bit more user friendly.
+
 # Version 4.1.29
   * Added a new feature to the Fate Utilities Roll tab; you can now click the tools icon to manually adjust a roll by a positive or negative number of your choice, with a text description.
   * There is also a paid modifier button to modify the dice roll and spend a fate point.
