@@ -489,49 +489,10 @@ class FateUtilities extends Application{
 
     async _sit_aspect_change(event, html){
         let index = event.target.id.split("_")[0];
-        let aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
-        let aspect = aspects[index];
-
-        let drawing = undefined;
-        if (aspect.name != "") {
-            drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(aspect.name));
-        }
-        
+        let aspect = this.getSituationAspect(index);
         aspect.name = event.target.value;
-        let value = aspect.free_invokes;
-
-        if (aspect.name == ""){
-            if (drawing != undefined){
-                game.scenes.viewed.deleteEmbeddedDocuments ("Drawing", [drawing.id]);
-                return;
-            }
-        }
-
-        if (drawing != undefined){
-            let text;
-            if (value == 1){
-                text = aspect.name+` (${value} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
-            } else {
-                text = aspect.name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
-            }
-            let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
-            if (size === 0){
-                size = Math.floor(game.scenes.viewed.data.width*(1/100));
-                if (size < 8) size = 8;
-                if (size > 256) size = 256;
-            }
-            let height = size * 2;
-            let width = (text.length * size) / 1.5;
-            drawing.document.update({
-                "text":text,
-                width: width,
-                height: height,
-                fontFamily: font,
-            });
-        }
-
-        game.scenes.viewed.setFlag("fate-core-official", "situation_aspects",aspects);
+        aspect = await this.updateAspectDrawing(aspect)
+        await this.setSituationAspect(index, aspect);
         game.socket.emit("system.fate-core-official",{"render":true});
     }
 
@@ -1171,163 +1132,52 @@ class FateUtilities extends Application{
     async _free_i_button(event,html){
         let index=event.target.id.split("_")[0];
         let value=html.find(`input[id="${index}_free_invokes"]`)[0].value
-        let situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"))
-        let aspect = situation_aspects[index];
-        let name = aspect.name;
+        let aspect = this.getSituationAspect(index);
         aspect.free_invokes = value;
-        game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
         //Done: Add code to change number of free invokes showing on the scene note for this aspect, if it exists.
-        let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
-        if (drawing != undefined){
-            let text;
-            if (value == 1){
-                text = name+` (${value} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
-            } else {
-                text = name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
-            }
-            let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
-            if (size === 0){
-                size = Math.floor(game.scenes.viewed.data.width*(1/100));
-                if (size < 8) size = 8;
-                if (size > 256) size = 256;
-            }
-            let height = size * 2;
-            let width = (text.length * size) / 1.5;
-            drawing.document.update({
-                "text":text,
-                width: width,
-                height: height,
-                fontFamily: font,
-            });
-        }
+        await this.updateAspectDrawing(aspect);
+        this.setSituationAspect(index, aspect);
     }
 
     async _panToAspect(event, html){
         let index=event.target.id.split("_")[1];
-        let name = game.scenes.viewed.getFlag("fate-core-official","situation_aspects")[index].name;
-        let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
-        
-        if (drawing != undefined) {
-            let x = drawing.data.x;
-            let y = drawing.data.y;
-            canvas.animatePan({x:x, y:y});
-        }
-    }
-
-    async addAspectDrawing(value, name, x, y){
-        if (canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name))==undefined)
-        {
-            let text;
-            if (value == 1){
-                text = name+` (${value} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
-            } else {
-                text = name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
+        const aspect = this.getSituationAspect(index);
+        if (aspect && aspect?.drawing_id) {
+            const drawing = this.getAspectDrawing(aspect?.drawing_id);
+            if (drawing) {
+                const {x, y} = drawing.data;
+                await game.canvas.animatePan({x, y});
             }
-                let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-                let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
-                if (size === 0){
-                    size = Math.floor(game.scenes.viewed.data.width*(1/100));
-                    if (size < 8) size = 8;
-                    if (size > 256) size = 256;
-                }
-                let height = size * 2;
-                let width = (text.length * size / 1.5);
-                await DrawingDocument.create({
-                    type: CONST.DRAWING_TYPES.RECTANGLE,
-                    author: game.user.id,
-                    x: x,
-                    y: y,
-                    width: width,
-                    height: height,
-                    fillType: CONST.DRAWING_FILL_TYPES.SOLID,
-                    fillColor: game.settings.get("fate-core-official", "fuAspectLabelFillColour"),
-                    fillAlpha: game.settings.get("fate-core-official", "fuAspectLabelFillAlpha"),
-                    strokeWidth: 4,
-                    strokeColor: game.settings.get("fate-core-official", "fuAspectLabelBorderColour"),
-                    strokeAlpha: game.settings.get("fate-core-official", "fuAspectLabelBorderAlpha"),
-                    text: text,
-                    fontFamily: font,
-                    fontSize: size,
-                    textColor: game.settings.get("fate-core-official", "fuAspectLabelTextColour"),
-                    points: []
-                }, {parent: game.scenes.viewed});   
-                await canvas.drawings.activate();
-        }
-        else {
-            ui.notifications.error(game.i18n.localize("fate-core-official.AlreadyANoteForThatAspect"));
         }
     }
 
     async _addToScene(event, html){
         let index=event.target.id.split("_")[1];
-        let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
-        let name = game.scenes.viewed.getFlag("fate-core-official","situation_aspects")[index].name;
-        
-        this.addAspectDrawing(value, name, canvas.stage.pivot._x, canvas.stage.pivot._y);
+        if (index) {
+            await this.addAspectDrawing(index, canvas.stage.pivot._x, canvas.stage.pivot._y);
+        }
     }
 
     async _del_sit_aspect(event, html){
-        let del =   fcoConstants.confirmDeletion();
+        const del =   fcoConstants.confirmDeletion();
         if (del){
-            let id = event.target.id;
-            let index = id.split("_")[1];
-            let situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects"));
-            let name = situation_aspects[index].name;
-            situation_aspects.splice(index,1);
-            game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
-        
-            //If there's a note on the scene for this aspect, delete it
-            let drawing = undefined;
-
-            if (name !="") {
-                drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
-            }
-            if (drawing != undefined){
-                game.scenes.viewed.deleteEmbeddedDocuments("Drawing", [drawing.id]);
-            }
+            const index = event.target.id.split("_")[1];
+            await this.deleteSituationAspect(index);
         }
     }
 
     async _add_sit_aspect(event, html){
-        let situation_aspects = [];
-        let situation_aspect = {
-                                    "name":"",
-                                    "free_invokes":0
-                                };
-        try {
-            situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
-        } catch {
-        }                                
-        situation_aspects.push(situation_aspect);
-        game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
+        this.createSituationAspect("", 0);
     }
 
     async _add_sit_aspect_from_track(event, html){
-        let aspect = event.target.id.split("_")[1];
-        let name = event.target.id.split("_")[0];
-        let text = name + " ("+aspect+")";
-        let situation_aspects = [];
-        let situation_aspect = {
-                                    "name":text,
-                                    "free_invokes":1,
-                                    "linked":true
-                                };
-        try {
-            situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
-        } catch {
+        const [name, aspect] = event.target.id.split("_");
+        const aspect_index = this.getSituationAspectIndexByName(name);
+        if (aspect_index === -1) {
+            this.createSituationAspect(
+                `${name} (${aspect})`, 1, true
+            );
         }
-        let exists = false;
-        situation_aspects.forEach(aspect => {
-           if (aspect.name === text) {
-                exists = true;
-           } 
-        })
-        if (!exists){
-            situation_aspects.push(situation_aspect);
-            game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
-       } else {
-       }
     }
 
     async _saveNotes(event, html){
@@ -1384,56 +1234,18 @@ class FateUtilities extends Application{
         // See if this aspect exists in the list of game aspects and update it if so.
         let newText = `${text} (${token.actor.name})`;
 
-        let situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
-        let aspect = situation_aspects.find(aspect => aspect.name == previousText);
+        const aspect_index = this.getSituationAspectIndexByName(previousText);
 
-        if (aspect == undefined){
+        if (aspect_index === -1) {
             return;
         }
-        if (text == ""){
-            situation_aspects.splice(situation_aspects.indexOf(aspect),1);
-            await game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
-            let d = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(previousText));
-            try {
-                game.scenes.viewed.deleteEmbeddedDocuments("Drawing", [d.id])
-            } catch (err) {
-                //console.log(err);
-            }
-            return;
+        const aspect = this.getSituationAspect(aspect_index);
+        if (! text) {
+            this.deleteSituationAspect(aspect_index);
         }
         aspect.name = newText;
-
-        await game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
-
-        let drawing = undefined;
-        if (aspect.name != "") {
-            drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(previousText));
-        }
-
-        if (drawing != undefined){
-            let text;
-            let value = aspect.free_invokes;
-            if (value == 1){
-                text = aspect.name+` (${value} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
-            } else {
-                text = aspect.name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
-            }
-            let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
-            if (size === 0){
-                size = Math.floor(game.scenes.viewed.data.width*(1/100));
-                if (size < 8) size = 8;
-                if (size > 256) size = 256;
-            }
-            let height = size * 2;
-            let width = (text.length * size) / 1.5;
-            drawing.document.update({
-                "text":text,
-                width: width,
-                height: height,
-                fontFamily: font,
-            });
-        }
+        await this.updateAspectDrawing(aspect);
+        this.setSituationAspect(aspect_index, aspect);
     }
 
     async _on_click_box(event, html) {
@@ -1713,13 +1525,9 @@ async getData(){
         } 
     })
 
-    let situation_aspects = game?.scenes?.viewed?.getFlag("fate-core-official","situation_aspects")
-    if (situation_aspects == undefined){
-        situation_aspects = [];
-    }
-    situation_aspects = duplicate(situation_aspects);
-    
-    data.situation_aspects = situation_aspects;
+    data.situation_aspects = this.getSituationAspects();
+    let aspectsHeight = data.situation_aspects.length * 45 ;
+
     fcoConstants.sort_key(all_tokens, "name");
     data.all_tokens = all_tokens;
     data.GM=game.user.isGM;
@@ -1780,7 +1588,6 @@ async getData(){
         data.cdownheight = 0;
         if (Object.keys(data.countdowns).length > 0) data.cdownheight = 200;
     }
-    let aspectsHeight = situation_aspects.length * 45 ;
     data.fuPaneHeight = (this.position.height / 2) - 225; // Aspect pane height
 
     let modifier = data.fuPaneHeight - aspectsHeight;
@@ -1879,6 +1686,238 @@ async renderMe(...args){
           this.renderPending = false;
         }, 0);
       } 
+    }
+
+    /**
+     * Access and CRUD methods for situation aspects.
+     * TODO move these into a separate class somehow.
+     */
+
+    /**
+     * Gets all the situation aspects as an array.
+     * 
+     * @returns {{name: string, free_invokes: number, linked: boolean, drawing_id?: string }[]}
+     */
+    getSituationAspects() {
+        try {
+            const situation_aspects = game.scenes.viewed.getFlag("fate-core-official","situation_aspects") || [];
+            return duplicate(situation_aspects);
+        } catch(e) {}
+        return [];
+    }
+
+    /**
+     * Gets a situation aspect given the index for that aspect.
+     * 
+     * @param {number} aspect_index
+     * 
+     * @returns {{name: string, free_invokes: number, linked: boolean, drawing_id?: string}|undefined}
+     */
+    getSituationAspect(aspect_index) {
+        const situation_aspects = this.getSituationAspects();
+        return situation_aspects?.[aspect_index];
+    }
+
+    /**
+     * Gets the index for an aspect based on the aspect text.
+     * 
+     * @param {string} name
+     * @returns {number}
+     */
+    getSituationAspectIndexByName(name) {
+        const situation_aspects = this.getSituationAspects();
+        return situation_aspects.findIndex(aspect => aspect.name === name);
+    }
+
+    /**
+     * Creates a new Situation Aspect.
+     *
+     * @param {string} name
+     * @param {number} free_invokes
+     * @param {boolean} linked
+     *
+     * @returns {Promise<{name: string, free_invokes: number, linked: boolean, drawing_id?: string }>}
+     */
+    async createSituationAspect(name, free_invokes, linked = false) {
+        const situation_aspects = this.getSituationAspects();
+        const situation_aspect = {
+            name, free_invokes, linked
+        };
+        situation_aspects.push(situation_aspect);
+        await game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
+        return situation_aspect;
+    }
+
+    /**
+     * Updates a situation aspect in the database.
+     *
+     * @param {number} aspect_index
+     * @param {{name: string, free_invokes: number, linked: boolean, drawing_id?: string }} situation_aspect
+     *
+     * @returns {Promise<void>}
+     */
+    async setSituationAspect(aspect_index, situation_aspect) {
+        const situation_aspects = this.getSituationAspects();
+        situation_aspects[aspect_index] = situation_aspect;
+        await game.scenes.viewed.setFlag("fate-core-official","situation_aspects", situation_aspects);
+    }
+
+    /**
+     * Deletes a situation aspect from the database.
+     *
+     * @param {number} aspect_index
+     *
+     * @returns {Promise<void>}
+     */
+    async deleteSituationAspect(aspect_index) {
+        const situation_aspects = this.getSituationAspects();
+        const deleted_aspects = situation_aspects.splice(aspect_index, 1);
+        const deleted_aspect = deleted_aspects?.[0];
+        if (deleted_aspect?.drawing_id) {
+            const drawing = this.getAspectDrawing(deleted_aspect.drawing_id);
+            if (drawing) {
+                game.scenes.viewed.deleteEmbeddedDocuments ("Drawing", [deleted_aspect?.drawing_id]);
+            }
+        }
+        await game.scenes.viewed.setFlag("fate-core-official","situation_aspects", situation_aspects);
+    }
+
+    /**
+     * Methods dealing with Situation Aspects as drawings on the tabletop, i.e. as "notes".
+     *
+     * Aspect drawings are tied to the situation aspect data structure implemented above.
+     *
+     * TODO move these into a separate class somehow.
+     */
+
+    /**
+     * Gets an aspect drawing with the given ID.
+     *
+     * @param {string} drawing_id
+     * @returns {{DrawingDocument}}
+     */
+    getAspectDrawing(drawing_id) {
+        return canvas.drawings.getDocuments().get(drawing_id);
+    }
+
+    /**
+     * Adds an aspect drawing for a situation aspect identified by the aspect's index.
+     *
+     * @param {number} aspect_index
+     * @param {number} x
+     * @param {number} y
+     *
+     * @returns {Promise<{DrawingDocument}|null>}
+     */
+    async addAspectDrawing(aspect_index, x, y){
+        const situation_aspect = this.getSituationAspect(aspect_index);
+        if (situation_aspect) {
+            const drawing = this.getAspectDrawing(situation_aspect?.drawing_id);
+            if (! drawing) {
+                const default_drawing_params = this.defaultAspectDrawingParameters();
+                /**
+                 * @type {{size: *, width: number, text: string, fontFamily, height: number}}
+                 */
+                const aspect_drawing_params = this.aspectDrawingParameters(situation_aspect);
+                const aspect_drawing = await DrawingDocument.create({
+                    ...aspect_drawing_params,
+                    ...default_drawing_params,
+                    x,
+                    y
+                }, {parent: game.scenes.viewed});
+                if (aspect_drawing) {
+                    await canvas.drawings.activate();
+                    situation_aspect.drawing_id = aspect_drawing.id;
+                    await this.setSituationAspect(aspect_index, situation_aspect);
+                    return aspect_drawing;
+                }
+            } else {
+                ui.notifications.error(game.i18n.localize("fate-core-official.AlreadyANoteForThatAspect"));
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the default parameters for an Aspect drawing, to be passed to DrawingDocument constructor.
+     *
+     * @returns {{fillColor: *, strokeWidth: number, author: BufferSource, fillType: *, x: *, y: *, fillAlpha: *, type: *, strokeColor: *, strokeAlpha: *, textColor: *, points: *[]}}
+     */
+    defaultAspectDrawingParameters() {
+        const {_x: x, _y: y} = canvas.stage.pivot;
+        return {
+            type: CONST.DRAWING_TYPES.RECTANGLE,
+            author: game.user.id,
+            x,
+            y,
+            fillType: CONST.DRAWING_FILL_TYPES.SOLID,
+            fillColor: game.settings.get("fate-core-official", "fuAspectLabelFillColour"),
+            fillAlpha: game.settings.get("fate-core-official", "fuAspectLabelFillAlpha"),
+            strokeWidth: 4,
+            strokeColor: game.settings.get("fate-core-official", "fuAspectLabelBorderColour"),
+            strokeAlpha: game.settings.get("fate-core-official", "fuAspectLabelBorderAlpha"),
+            textColor: game.settings.get("fate-core-official", "fuAspectLabelTextColour"),
+            points: []
+        }
+    }
+
+    /**
+     * Returns the parameters for an Aspect drawing that are based on the linked situation aspect.
+     *
+     * @param {{name: string, free_invokes: number, linked: boolean, drawing_id?: string }} situation_aspect
+     *
+     * @returns {{fontFamily, size: *, width: number, text: string, height: number}}
+     */
+    aspectDrawingParameters(situation_aspect) {
+        const {name, free_invokes} = situation_aspect;
+        let text;
+        if (free_invokes === 1) {
+            text = name + ` (${free_invokes} ${game.i18n.localize("fate-core-official.freeinvoke")})`;
+        } else {
+            text = name + ` (${free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
+        }
+        let size = game.settings.get("fate-core-official", "fuAspectLabelSize");
+        let fontFamily = CONFIG.fontFamilies[game.settings.get("fate-core-official", "fuAspectLabelFont")];
+        if (size === 0) {
+            size = Math.floor(game.scenes.viewed.data.width * (1 / 100));
+            if (size < 8) size = 8;
+            if (size > 256) size = 256;
+        }
+        let height = size * 2;
+        let width = (text.length * size / 1.5);
+        return {
+            text,
+            size,
+            fontFamily,
+            height,
+            width,
+        };
+    }
+
+    /**
+     * Updates an aspect drawing on the tabletop with a linked, updated situation aspect.
+     *
+     * If the situation aspect has an empty title, the drawing is deleted andd the
+     *
+     * @param {{name: string, free_invokes: number, linked: boolean, drawing_id?: string }} situation_aspect
+     *
+     * @returns {Promise<{name: string, free_invokes: number, linked: boolean, drawing_id?: string }>}
+     */
+    async updateAspectDrawing(situation_aspect) {
+        const drawing = this.getAspectDrawing(situation_aspect?.drawing_id);
+        if (drawing){
+            if (! situation_aspect?.name) {
+                await game.scenes.viewed.deleteEmbeddedDocuments ("Drawing", [drawing.id]);
+                delete situation_aspect.drawing_id;
+            } else {
+                /**
+                 * @type {{size: *, width: number, text: string, fontFamily, height: number}}
+                 */
+                const aspect_drawing_params = this.aspectDrawingParameters(situation_aspect);
+                await drawing.update(aspect_drawing_params);
+            }
+        }
+        return situation_aspect;
     }
 }
 
@@ -2275,11 +2314,6 @@ Hooks.on('renderFateUtilities', function(){
 
 Hooks.on ('dropCanvasData', async (canvas, data) => {
     if (data.type =="situation_aspect") {
-        let aspect = game.scenes.viewed.getFlag("fate-core-official","situation_aspects")[data.aspect].name;
-        let value = data.value;
-        let x = data.x;
-        let y = data.y;
-        let f = new FateUtilities();
-        f.addAspectDrawing(value, aspect, x, y);
+        await new FateUtilities().addAspectDrawing(data.aspect, data.x, data.y);
     }
 })
