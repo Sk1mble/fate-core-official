@@ -58,7 +58,7 @@
     {{#each stunts}}
         <tr>
             <td width = 25%>{{this.name}}</td>
-            <td>{{this.description}}</td>
+            <td>{{{enr this.description}}}</td>
         </tr>
     {{/each}}
     </table>
@@ -69,7 +69,7 @@
     {{#each extras}}
         <tr>
             <td>{{this.name}}</td>
-            <td>{{{enr  this.data.description.value}}}</td>
+            <td>{{{enr this.data.description.value}}}</td>
         </tr>
     {{/each}}
     </table>

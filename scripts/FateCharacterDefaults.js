@@ -249,7 +249,7 @@ class FateCharacterDefaults {
 
         let a_link = false;
         if (character_default.actorLink) a_link = character_default.actorLink;
-        
+
         const actor_data = {
             name:name,
             type:"fate-core-official",

@@ -478,3 +478,15 @@ body, button, label, select, input, textarea {
 span.fas.inactive {
   opacity: 0.5;
 }
+
+.fate-font {
+  font-family:"Fate";
+  font-style:normal;
+  font-size:1.5em;
+}
+
+.fate-glyph {
+  font-family:"Fate";
+  font-style:normal;
+  font-size:2.5em;
+}

@@ -1,3 +1,8 @@
+# Version 4.2.01
+  * Tweaked for compatibility with version 9 prototype 2 (v9.224)
+  * Minor edit to characterview to render HTML in stunt descs.
+  * Thanks to John Helmuth for tracking down an issue relating to situation aspects with empty names. Fate Utilities now disables aspect manipulation fields until aspects have been given a name.
+
 # Version 4.1.30
   * Tweaked some localization strings to be a bit more user friendly.
 

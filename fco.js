@@ -1029,8 +1029,14 @@ game.settings.register("fate-core-official","freeStunts", {
         default:"none"
     })
 
-    game.system.entityTypes.Item = ["Extra"];
-    game.system.entityTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
+    if (isNewerVersion(game.version, '9.220')){
+        game.system.documentTypes.Item = ["Extra"];
+        game.system.documentTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
+    } else {
+        game.system.entityTypes.Item = ["Extra"];
+        game.system.entityTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
+    }
+    
 
     game.system.apps= {
         actor:[],

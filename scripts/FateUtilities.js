@@ -500,11 +500,21 @@ class FateUtilities extends Application{
         aspect.name = event.target.value;
         let value = aspect.free_invokes;
 
-        if (aspect.name == ""){
+        if (aspect.name == "") {
+            // As the aspect is blank, disable the free invokes field, pan to aspect button, and add note to canvas button.
+            $(`#${index}_free_invokes`).prop("disabled", true);
+            $(`#addToScene_${index}`).prop("disabled", true);
+            $(`#panToAspect_${index}`).prop("disabled", true);
+            
+            // If there's a drawing for this aspect, delete it now that the name is blank.
             if (drawing != undefined){
                 game.scenes.viewed.deleteEmbeddedDocuments ("Drawing", [drawing.id]);
                 return;
             }
+        } else {
+            $(`#${index}_free_invokes`).prop("disabled", false);
+            $(`#addToScene_${index}`).prop("disabled", false);
+            $(`#panToAspect_${index}`).prop("disabled", false);
         }
 
         if (drawing != undefined){
@@ -1786,12 +1796,12 @@ async getData(){
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
 
-    data.fuNotesHeight = (this.position.height) - 275 - data.cdownheight - data.fuPaneHeight + modifier;
+    data.fuNotesHeight = (this.position.height) - 350 - data.cdownheight - data.fuPaneHeight + modifier;
 
     data.gameAspectsHeight = 180;
     let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 45;
     if (gaModifier <0) gaModifier = 0;
-    data.gameNotesHeight = (this.position.height -525) + gaModifier;
+    data.gameNotesHeight = (this.position.height - 575) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
     
