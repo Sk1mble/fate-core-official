@@ -1,26 +1,26 @@
 <form class="editable" onsubmit="event.preventDefault();" style="background-color:white; color:black; padding:10px">
     <div id = "header">
-    <div name = "stunt_body" style="overflow-y:auto; width:710px; height:auto; border:lightsteelblue; border-width:2px; border-style:solid"><!--Begin body-->
+    <div name = "stunt_body" style="overflow-y:auto; width:710px; height:auto; border:var(--fco-foundry-interactable-color); border-width:2px; border-style:solid"><!--Begin body-->
         <table style="background-color: white; border:none; width:690px">    
             <tr>
                 <td style="font-family:var(--fco-font-family)" width="120">{{localize 'fate-core-official.Name'}}:</td>
-                <td colspan="2"><input style="background-color:white; color:black; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom: 1px solid lightsteelblue; width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
+                <td colspan="2"><input style="background-color:white; color:black; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom: 1px solid var(--fco-foundry-interactable-color); width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
             </tr>
             <tr>
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.LinkedSkill'}}:</td>                
-                <td colspan ="2"><select style="background-color: white; color:black; font-family:var(--fco-font-family); border:1px solid lightsteelblue" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>{{localize 'fate-core-official.None'}}</option><option>{{localize 'fate-core-official.Special'}}</option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
-                <i style="font-family:var(--fco-font-family); font-style:normal;">{{localize 'fate-core-official.Bonus'}}: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="color:black; background-color:white; border:solid 1px lightsteelblue; width:50px"></input></td>
+                <td colspan ="2"><select style="background-color: white; color:black; font-family:var(--fco-font-family); border:1px solid var(--fco-foundry-interactable-color)" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>{{localize 'fate-core-official.None'}}</option><option>{{localize 'fate-core-official.Special'}}</option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
+                <i style="font-family:var(--fco-font-family); font-style:normal;">{{localize 'fate-core-official.Bonus'}}: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="color:black; background-color:white; border:solid 1px var(--fco-foundry-interactable-color); width:50px"></input></td>
             </tr>
             <tr>
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.Description'}}:</td>
                 <td colspan="2">
-                    <div id="edit_stunt_desc" data-edit="description" contenteditable="true" name="description" style="min-height:1.5em; display:none; background-color:white; color:black; font-family:var(--fco-font-family); border: 1px solid lightsteelblue; width:500px;">{{{stunt.description}}}</div>
-                    <div id="edit_stunt_desc_rich" tabindex = "0" style="min-height: 1.5em; background-color:white; color:black; font-family:var(--fco-font-family); border: 1px solid lightsteelblue; width:500px;">{{{enr stunt.description this.actor}}}</div>
+                    <div id="edit_stunt_desc" data-edit="description" contenteditable="true" name="description" style="min-height:1.5em; display:none; background-color:white; color:black; font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:500px;">{{{stunt.description}}}</div>
+                    <div id="edit_stunt_desc_rich" tabindex = "0" style="min-height: 1.5em; background-color:white; color:black; font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:500px;">{{{enr stunt.description this.actor}}}</div>
                 </td>
             </tr>
             <tr>
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.RefreshCost'}}:</td>
-                <td><input type="number" min="0" name="refresh_cost" style="height:30px; width:50px; border:solid 1px lightsteelblue" value="{{stunt.refresh_cost}}"></input></td>
+                <td><input type="number" min="0" name="refresh_cost" style="height:30px; width:50px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.refresh_cost}}"></input></td>
                 <td>     
                     <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Overcome'}}">O</b>
                     <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.CAA'}}">C</b></input>

@@ -209,6 +209,7 @@ class StuntDB extends Application {
         this.filter = "";
         this.ignoreCase = false;
         this.actor=actor;
+        this.stunts=duplicate(game.settings.get("fate-core-official","stunts"));
     }    
 
     async getData(){
@@ -217,6 +218,7 @@ class StuntDB extends Application {
         }
         let data = {};
         let stunts = duplicate(game.settings.get("fate-core-official","stunts"));
+        this.stunts = stunts;
         let stuntsA = [];
     
         for (let stunt in stunts){
@@ -286,6 +288,22 @@ class StuntDB extends Application {
         edit_stunt.on("click", event => this._onEditStunt(event, html));
         const add_stunt = html.find("button[id='add_db_stunt']");
 
+        const mfdraggable = html.find('.mf_draggable');
+        mfdraggable.on("dragstart", event => {
+            if (game.user.isGM){
+                let ident = "mf_draggable"
+                let type = event.target.getAttribute("data-mfdtype");
+                let origin = event.target.getAttribute("data-mfactorid");
+                let dragged_name = event.target.getAttribute("data-mfname");
+                let shift_down = keyboard.isDown("Shift");
+
+                let dragged= this.stunts[dragged_name];
+                let user = game.user.id;
+                let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
+                event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
+            }
+        })
+
         const filter_stunts = $('#stunt_db_filter_box');
         filter_stunts.on('change', async event => {
             this.filter = event.target.value;
@@ -330,7 +348,7 @@ class StuntDB extends Application {
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunts"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
         }).render(true);
@@ -343,7 +361,7 @@ class StuntDB extends Application {
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunt"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
             buttons: {
             },
         }).render(true);
@@ -362,7 +380,7 @@ class StuntDB extends Application {
         return new Promise(resolve => {
             new Dialog({
                 title: game.i18n.localize("fate-core-official.PasteOverStunts"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="import_stunt_db"></textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_stunt_db"></textarea></div>`,
                 buttons: {
                     ok: {
                         label: game.i18n.localize("fate-core-official.Save"),

@@ -132,7 +132,7 @@ class EditEntityTrack extends FormApplication {
         
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${output}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${output}</textarea></div>`,
             buttons: {
             },
         }).render(true);
@@ -545,7 +545,7 @@ class EditTracks extends FormApplication {
             let track = `{"${name}":${JSON.stringify(this.tracks[name], null, 5)}}`;
             new Dialog({
                 title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${track}</textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${track}</textarea></div>`,
                 buttons: {
                 },
             }).render(true);
@@ -809,7 +809,7 @@ class TrackSetup extends FormApplication{
      
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveWorldTracks"),
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${tracks_text}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${tracks_text}</textarea></div>`,
             buttons: {
             },
         }).render(true);    
@@ -819,7 +819,7 @@ class TrackSetup extends FormApplication{
         return new Promise(resolve => {
             new Dialog({
                 title: game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="itracks"></textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="itracks"></textarea></div>`,
                 buttons: {
                     ok: {
                         label: game.i18n.localize("Save"),

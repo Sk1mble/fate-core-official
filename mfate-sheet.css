@@ -48,6 +48,7 @@
     --fco-border-radius:15px;    
     --fco-font-family:Montserrat;   
     --fco-foundry-font-family:Signika, Arial, sans-serif;                                                                        /*Done*/
+    --fco-foundry-interactable-color:lightsteelblue;
 }
 
 .skill_button {
@@ -123,7 +124,7 @@
 .mfate-sheet__header {
     display: flex;
     padding: 7px 7px 0;
-    /* background: lightgrey; */
+    /* background: var(--fco-foundry-interactable-color); */
     box-shadow: inset 0px -1px 0 0 #ccc;
 }
 
@@ -205,7 +206,7 @@
 }
 
 .mfate-sheet__meta-value:hover {
-    border-color: lightsteelblue;
+    border-color: var(--fco-foundry-interactable-color);
 }
 
 /*.mfate-sheet__meta-value[disabled] {
@@ -405,7 +406,7 @@
 .mfate-skills-list__skill-name,
 .mfate-skills-list__skill-name_item {
     display: table-cell;
-    border-bottom: 1px solid lightsteelblue;
+    border-bottom: 1px solid var(--fco-foundry-interactable-color);
     padding: .3em .5em;
     font-family: var(--fco-font-family);
 }
@@ -479,7 +480,7 @@
 }
 
 .mfate-tracks__item+.mfate-tracks__item {
-    box-shadow: inset 0 1px lightsteelblue;
+    box-shadow: inset 0 1px var(--fco-foundry-interactable-color);
 }
 
 .mfate-tracks__item>* {
@@ -564,7 +565,7 @@
 
 .mfate-stunts__row {
     padding: 10px 0;
-    border-bottom: 1px solid lightsteelblue;
+    border-bottom: 1px solid var(--fco-foundry-interactable-color);
     background-color:transparent;
     z-index:1;
 }

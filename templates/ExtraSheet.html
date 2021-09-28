@@ -6,26 +6,26 @@
 			 </tr>		
 		 <tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Name'}}:</td>
-			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:var(--fco-font-family);">{{this.document.name}}</textarea></td>
+			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{this.document.name}}</textarea></td>
 		 </tr>	
 		 <tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Permissions'}}:</td>
 			<td style="width:75%">
-				<div name="textIn" id="{{this.document.id}}_permValue_rich" style="min-height:1.5em; width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:var(--fco-font-family);">{{{enr data.permissions this.document}}}</div>
-				<div name="textIn" id="{{this.document.id}}_permValue" style="min-height:1.53m; display:none; width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:var(--fco-font-family);">{{{data.permissions}}}</div>
+				<div name="textIn" id="{{this.document.id}}_permValue_rich" style="min-height:1.5em; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{{enr data.permissions this.document}}}</div>
+				<div name="textIn" id="{{this.document.id}}_permValue" style="min-height:1.53m; display:none; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{{data.permissions}}}</div>
 			</td>
 		</tr>
 		<tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Costs'}}:</td>
 			<td style="width:75%">
-				<div name="textIn" id="{{this.document.id}}_costsValue_rich" style="min-height:1.5em; width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:var(--fco-font-family);">{{{enr data.costs this.document}}}</div>
-				<div name="textIn" id="{{this.document.id}}_costsValue" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid lightsteelblue 1px; font-family:var(--fco-font-family);">{{{data.costs}}}</div>
+				<div name="textIn" id="{{this.document.id}}_costsValue_rich" style="min-height:1.5em; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{{enr data.costs this.document}}}</div>
+				<div name="textIn" id="{{this.document.id}}_costsValue" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{{data.costs}}}</div>
 			</td>
 		</tr>
 		<tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.RefreshCost'}}:</td>
 			<td style="width:75%">
-				<input type="number" name="data.refresh" min="0" style="background-color: white; border: solid lightsteelblue 1px; font-family:var(--fco-font-family); width:50px" value="{{data.refresh}}">
+				<input type="number" name="data.refresh" min="0" style="background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family); width:50px" value="{{data.refresh}}">
 				</input>
 				{{localize 'fate-core-official.active'}}
 				<input name="data.active" type="checkbox" {{#if this.data.active}}checked="checked"{{/if}}></input>
@@ -34,35 +34,35 @@
 		<tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Description'}}:</td>
 			<td style="width:75%">
-				<div id="{{this.document.id}}_descValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid lightsteelblue 1px;  font-family:var(--fco-font-family);">{{{enr data.description.value this.document}}}</div>
-				<div id="{{this.document.id}}_descValue" name="textIn" style=" min-height:1.5em; display:none; width:100%; background-color: white; border: solid lightsteelblue 1px;  font-family:var(--fco-font-family);">{{{data.description.value}}}</div>
+				<div id="{{this.document.id}}_descValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px;  font-family:var(--fco-font-family);">{{{enr data.description.value this.document}}}</div>
+				<div id="{{this.document.id}}_descValue" name="textIn" style=" min-height:1.5em; display:none; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px;  font-family:var(--fco-font-family);">{{{data.description.value}}}</div>
 			</td>
 		</tr>
 		<tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">O</i> {{localize 'fate-core-official.Overcome'}}:</td>
 			<td style="width:75%">
-				<div id="{{this.document.id}}_overcomeValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.overcome this.document}}}</div>
-				<div id="{{this.document.id}}_overcomeValue" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{data.actions.overcome}}}</div>
+				<div id="{{this.document.id}}_overcomeValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.overcome this.document}}}</div>
+				<div id="{{this.document.id}}_overcomeValue" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{data.actions.overcome}}}</div>
 			</td>
 		<tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">C</i> {{localize 'fate-core-official.CAA'}}:</td>
 			<td style="width:75%">
-				<div id="{{this.document.id}}_createValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.create this.document}}}</div>
-				<div id="{{this.document.id}}_createValue" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{data.actions.create}}}</div>
+				<div id="{{this.document.id}}_createValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.create this.document}}}</div>
+				<div id="{{this.document.id}}_createValue" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{data.actions.create}}}</div>
 		</td>
 		</tr>
 		<tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">A</i> {{localize 'fate-core-official.Attack'}}:</td>
 			<td style="width:75%">
-				<div id="{{this.document.id}}_attackValue" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.attack this.document}}}</div>
-				<div id="{{this.document.id}}_attackValue_rich" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{data.actions.attack}}}</div>
+				<div id="{{this.document.id}}_attackValue" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.attack this.document}}}</div>
+				<div id="{{this.document.id}}_attackValue_rich" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{data.actions.attack}}}</div>
 			</td>
 		</tr>
 		<tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">D</i> {{localize 'fate-core-official.Defend'}}:</td>
 			<td style="width:75%">
-				<div id="{{this.document.id}}_defendValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.defend this.document}}}</div>
-				<div id="{{this.document.id}}_defendValue" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid lightsteelblue 1px; ; font-family:var(--fco-font-family);">{{{data.actions.defend}}}</div>
+				<div id="{{this.document.id}}_defendValue_rich" name="textIn" style="min-height:1.5em; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{enr data.actions.defend this.document}}}</div>
+				<div id="{{this.document.id}}_defendValue" name="textIn" style="min-height:1.5em; display:none; width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; ; font-family:var(--fco-font-family);">{{{data.actions.defend}}}</div>
 			</td>
 		</tr>
 		</table>

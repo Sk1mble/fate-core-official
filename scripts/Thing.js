@@ -281,7 +281,7 @@ export class Thing extends ActorSheet {
                     setTimeout(() => {
                         super._render(...args);
                         this.renderPending = false;
-                    }, 5);
+                    }, 50);
             }
         } else this.renderBanked = true;
     }

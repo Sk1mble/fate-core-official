@@ -1,3 +1,7 @@
+# Version 4.2.02
+  * Tweaked the debounce timing in my custom render functions to solve a render timing issue on character sheets.
+  * Added a button to the token layer (with the Fate Utilities and Show Character buttons) to display the stunt database without having to open a character sheet first (GM only). If you're the GM you can also drag and drop from the stunt database to a character or extra by clicking on the table cell containing the stunt's name.
+
 # Version 4.2.01
   * Tweaked for compatibility with version 9 prototype 2 (v9.224)
   * Minor edit to characterview to render HTML in stunt descs.

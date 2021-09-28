@@ -1842,7 +1842,7 @@ async _render(...args){
                 await setTimeout(async () => {
                     await super._render(...args);
                     this.renderPending = false;
-                }, 5);
+                }, 50);
         }
     } else this.renderBanked = true;
 }

@@ -708,10 +708,10 @@ export class fcoCharacter extends ActorSheet {
             });
 
             input.on("blur", event => {
-                this.editing = false
+                this.editing = false;
                 if (this.renderBanked){
                     this.renderBanked = false;
-                    this.render(false);
+                    this._render(false);
                 }
             });
 
@@ -880,9 +880,9 @@ export class fcoCharacter extends ActorSheet {
                     setTimeout(() => {
                         super._render(...args);
                         this.renderPending = false;
-                    }, 5);
+                    }, 50);
             }
-        } else this.renderBanked = true;
+        } else this.renderBanked = true;;
     }
 
     async _on_extras_click(event, html){

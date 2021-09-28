@@ -136,11 +136,11 @@ body, button, label, select, input, textarea {
 }
 
 .fu_controlled {
-  background-color:lightsteelblue !important;
+  background-color:var(--fco-foundry-interactable-color) !important;
 }
 
 .fu_uncontrolled {
-  background-color:lightgrey !important;
+  background-color:var(--fco-foundry-interactable-color) !important;
 }
 
 .fu_button:hover {
@@ -320,7 +320,7 @@ body, button, label, select, input, textarea {
 
 /* On mouse-over, add a grey background color */
 .box:hover input ~ .checkmark {
-  background-color: lightsteelblue;
+  background-color: var(--fco-foundry-interactable-color);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -375,7 +375,7 @@ body, button, label, select, input, textarea {
 
 /* On mouse-over, add a grey background color */
 .cdbox:hover input ~ .cdcheckmark {
-  background-color: lightsteelblue;
+  background-color: var(--fco-foundry-interactable-color);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -407,11 +407,11 @@ body, button, label, select, input, textarea {
   border-radius:0 !important;
   border-right:none !important;
   border-left:none !important;
-  border-bottom:1px solid lightsteelblue !important
+  border-bottom:1px solid var(--fco-foundry-interactable-color) !important
 }
 
 .cs_box:hover {
-  background-color: lightsteelblue !important;
+  background-color: var(--fco-foundry-interactable-color) !important;
 }
 
 .fu_aspect_box {
@@ -427,7 +427,7 @@ body, button, label, select, input, textarea {
   background-color :white !important; 
   font-family:var(--fco-font-family) !important; 
   border:none !important; 
-  border-bottom: 1px solid lightsteelblue !important
+  border-bottom: 1px solid var(--fco-foundry-interactable-color) !important
 }
 
 .aspect_box {
@@ -444,15 +444,15 @@ body, button, label, select, input, textarea {
   background-color :white !important; 
   font-family:var(--fco-font-family) !important; 
   border:none !important; 
-  border-bottom: 1px solid lightsteelblue !important
+  border-bottom: 1px solid var(--fco-foundry-interactable-color) !important
 }
 
 .aspect_box:hover {
-  background-color: lightsteelblue !important;
+  background-color: var(--fco-foundry-interactable-color) !important;
 }
 
 .fu_aspect_box:hover {
-  background-color: lightsteelblue !important;
+  background-color: var(--fco-foundry-interactable-color) !important;
 }
 
 .long_text {
@@ -472,7 +472,7 @@ body, button, label, select, input, textarea {
 }
 
 .long_text_rich:hover {
-  background-color: lightsteelblue !important;
+  background-color:var(--fco-foundry-interactable-color) !important;
 }
 
 span.fas.inactive {

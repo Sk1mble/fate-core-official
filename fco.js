@@ -363,6 +363,20 @@ Hooks.on('updateScene', (...args) => {
     })
 })
 
+Hooks.on('getSceneControlButtons', function(hudButtons)
+{
+    let hud = hudButtons.find(val => {return val.name == "token";})
+            if (hud && game.user.isGM){
+                hud.tools.push({
+                    name:"StuntDB",
+                    title:game.i18n.localize("fate-core-official.ViewTheStuntDatabase"),
+                    icon:"fas fa-book",
+                    onClick: ()=> {let sd = new StuntDB("none"); sd.render(true)},
+                    button:true
+                });
+            }
+})
+
 Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = fcoActor;
     CONFIG.Item.documentClass = fcoExtra;
@@ -628,7 +642,7 @@ Hooks.once('init', async function () {
  
                 new Dialog({
                     title: game.i18n.localize("fate-core-official.ExportSettingsDialogTitle"), 
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
+                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="export_settings">${text}</textarea></div>`,
                     buttons: {
                     },
                 }).render(true);
