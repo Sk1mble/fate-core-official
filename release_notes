@@ -1,3 +1,6 @@
+# Version 4.2.04
+  * Fixed a bug by removing the extra_tag from stunts when adding all stunts from a character to the stunt database.
+
 # Version 4.2.03
   * Added the ability to double-click on the names of stunts, skills, aspects, and tracks on extra and character sheets (and the stunt database) to post a summary of it into the OOC chat messages.
 
