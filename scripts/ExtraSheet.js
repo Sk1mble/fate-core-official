@@ -103,6 +103,57 @@ export class ExtraSheet extends ItemSheet {
                 }
             })
 
+            mfdraggable.on("dblclick", event => {
+                let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
+                let user = game.user;
+                let type = event.currentTarget.getAttribute("data-mfdtype");
+                let name = event.currentTarget.getAttribute("data-mfname");
+                let entity;
+                if (type == "skill") {
+                    entity = this.document.data.data.skills[name];
+                    content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Rank")}: </strong> ${entity.rank}<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>`
+                }
+                if (type == "stunt") {
+                    entity = this.document.data.data.stunts[name];
+                    content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name} (${game.i18n.localize("fate-core-official.Refresh")} ${entity.refresh_cost})<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${entity.description}<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Skill")}:</strong> ${entity.linked_skill}<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Bonus")}:</strong> ${entity.bonus}<br/>`;
+                    let actions = `<em style = "font-family:Fate; font-style:normal">`;
+                    if (entity.overcome) actions += 'O ';
+                    if (entity.caa) actions += 'C ';
+                    if (entity.attack) actions += 'A '
+                    if (entity.defend) actions += 'D';
+                    content += actions;
+                }
+                if (type == "aspect"){
+                    entity = this.document.data.data.aspects[name];
+                    content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Value")}: </strong> ${entity.value}<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
+                                <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
+                } 
+                if (type == "track") {
+                    entity = this.document.data.data.tracks[name];
+                    content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
+                                <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
+                                <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
+                    if (entity.aspect.when_marked) content += `<strong>${game.i18n.localize("fate-core-official.Aspect")}</strong>: ${entity.aspect.name}<br/>`
+                    if (entity.boxes > 0){
+                        content += `<em style="font-family:Fate; font-style:normal">`
+                        for (let i = 0; i < entity.box_values.length; i++){
+                            if (entity.box_values[i]) content += '.';
+                            if (!entity.box_values[i]) content += '1';
+                        }
+                        content += `<\em>`
+                    }
+                }
+
+                ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
+            })
+
         $('.fcoExtra').on('drop', async event => await this.onDrop(event, html))
 
         // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.

@@ -1,3 +1,6 @@
+# Version 4.2.03
+  * Added the ability to double-click on the names of stunts, skills, aspects, and tracks on extra and character sheets (and the stunt database) to post a summary of it into the OOC chat messages.
+
 # Version 4.2.02
   * Tweaked the debounce timing in my custom render functions to solve a render timing issue on character sheets.
   * Added a button to the token layer (with the Fate Utilities and Show Character buttons) to display the stunt database without having to open a character sheet first (GM only). If you're the GM you can also drag and drop from the stunt database to a character or extra by clicking on the table cell containing the stunt's name.

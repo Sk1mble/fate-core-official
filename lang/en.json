@@ -1,4 +1,6 @@
 {
+   "fate-core-official.sharedFrom":"Shared from {name}",
+   "fate-core-official.Value":"Value",
    "fate-core-official.manualRollModifier":"Manually Modify Roll",
    "fate-core-official.overrideFontName":"Disable system font override?",
    "fate-core-official.overrideFontLabel":"Should we cancel overriding of the Foundry font?",

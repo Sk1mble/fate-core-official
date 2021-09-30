@@ -304,6 +304,30 @@ class StuntDB extends Application {
             }
         })
 
+        mfdraggable.on("dblclick", event => {
+            let origin = event.target.getAttribute("data-mfactorid");
+            let content = `<strong>Shared from Stunt Database:</strong><br/><hr>`
+            let user = game.user;
+            let type = event.target.getAttribute("data-mfdtype");
+            
+            let name = event.target.getAttribute("data-mfname");
+            let entity;
+            if (type == "stunt") {
+                entity = this.stunts[name];
+                content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name} (${game.i18n.localize("fate-core-official.Refresh")} ${entity.refresh_cost})<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${entity.description}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Skill")}:</strong> ${entity.linked_skill}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Bonus")}:</strong> ${entity.bonus}<br/>`;
+                let actions = `<em style = "font-family:Fate; font-style:normal">`;
+                if (entity.overcome) actions += 'O ';
+                if (entity.caa) actions += 'C ';
+                if (entity.attack) actions += 'A '
+                if (entity.defend) actions += 'D';
+                content += actions;
+                ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
+            }
+        });
+
         const filter_stunts = $('#stunt_db_filter_box');
         filter_stunts.on('change', async event => {
             this.filter = event.target.value;
