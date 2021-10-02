@@ -1,3 +1,6 @@
+# Version 4.2.05
+  * Fixed a small bug that was causing the stunt DB filter command to fail in some cases if there was an issue with a malformed stunt in the database.
+
 # Version 4.2.04
   * Fixed a bug by removing the extra_tag from stunts when adding all stunts from a character to the stunt database.
 

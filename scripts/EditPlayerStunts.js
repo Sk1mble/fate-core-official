@@ -224,11 +224,11 @@ class StuntDB extends Application {
         for (let stunt in stunts){
             if (this.filter != ""){
                 if (this.ignoreCase){
-                    if ((stunts[stunt].name.toLowerCase()).includes(this.filter.toLowerCase()) || (stunts[stunt].linked_skill.toLowerCase()).includes(this.filter.toLowerCase()) || (stunts[stunt].description.toLowerCase()).includes(this.filter.toLowerCase())){
+                    if ((stunts[stunt]?.name?.toLowerCase())?.includes(this.filter.toLowerCase()) || (stunts[stunt]?.linked_skill?.toLowerCase()).includes(this.filter.toLowerCase()) || (stunts[stunt]?.description?.toLowerCase())?.includes(this.filter.toLowerCase())){
                         stuntsA.push(stunts[stunt]);
                     }
                 } else {
-                    if (stunts[stunt].name.includes(this.filter) || stunts[stunt].linked_skill.includes(this.filter) || stunts[stunt].description.includes(this.filter)){
+                    if (stunts[stunt]?.name?.includes(this.filter) || stunts[stunt]?.linked_skill?.includes(this.filter) || stunts[stunt]?.description?.includes(this.filter)){
                         stuntsA.push(stunts[stunt]);
                     }
                 }
