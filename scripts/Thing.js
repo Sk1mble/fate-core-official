@@ -21,6 +21,7 @@ export class Thing extends ActorSheet {
         options.width = "800"
         options.height = "1000"
         options.scrollY = ['#mthing-content']
+        options.classes = options.classes.concat(['fate']);
         return options;
     }
 
@@ -179,7 +180,47 @@ export class Thing extends ActorSheet {
         })
 
         const item = html.find("div[name='item_header']");
-        item.on("dragstart", event => this._on_item_drag (event, html));
+        item.on("dragstart", async event => this._on_item_drag (event, html));
+
+        item.on("dblclick", async event => {
+            let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
+            let user = game.user;
+            let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
+            item = duplicate(item.data);
+            
+            content += `<strong>${item.name}</strong><br/>
+                        <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
+                        <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${item.data.description.value}<br/>
+                        <strong>${game.i18n.localize("fate-core-official.Permissions")}:</strong> ${item.data.permissions}<br/>
+                        <strong>${game.i18n.localize("fate-core-official.Costs")}:</strong> ${item.data.costs}<br/>
+                        <strong>${game.i18n.localize("fate-core-official.Refresh")}:</strong> ${item.data.refresh}<br/>`
+
+            let items = [];
+            for (let aspect in item.data.aspects){
+                items.push(`${item.data.aspects[aspect].value}`)
+            }
+            content += `<strong>${game.i18n.localize("fate-core-official.Aspects")}: </strong>${items.join(", ")}<br/>`;
+            
+            items = [];                            
+            for (let skill in item.data.skills){
+                items.push (`${item.data.skills[skill].name} (${item.data.skills[skill].rank})`);
+            }
+            content += `<strong>${game.i18n.localize("fate-core-official.Skills")}: </strong>${items.join(", ")}<br/>`;
+
+            items = [];                            
+            for (let stunt in item.data.stunts){
+                items.push (item.data.stunts[stunt].name);
+            }
+            content += `<strong>${game.i18n.localize("fate-core-official.Stunts")}: </strong>${items.join(", ")}<br/>`;
+
+            items = [];                            
+            for (let track in item.data.tracks){
+                items.push (item.data.tracks[track].name);
+            }
+            content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
+
+            ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
+        })        
     }
 
     async _on_extras_grab(event, html){
@@ -205,7 +246,9 @@ export class Thing extends ActorSheet {
         let info = event.target.id.split("_");
         let item_id = info[1];
         let actor_id = info[0];
-        let item = JSON.parse(event.target.getAttribute("data-item"));
+        let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
+        item = duplicate(item.data);
+        
         let tokenId = undefined;
 
         if (this.actor?.token?.data?.actorLink === false){

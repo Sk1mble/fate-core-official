@@ -469,10 +469,12 @@ export class fcoCharacter extends ActorSheet {
             const item = html.find("div[class='item_header']");
             item.on("dragstart", event => this._on_item_drag (event, html));
 
-            item.on("dblclick", event => {
+            item.on("dblclick", async event => {
                 let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
                 let user = game.user;
-                let item = JSON.parse(event.currentTarget.getAttribute("data-item"));
+                let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
+                item = duplicate(item.data);
+                
                 content += `<strong>${item.name}</strong><br/>
                             <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
                             <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${item.data.description.value}<br/>
@@ -870,7 +872,9 @@ export class fcoCharacter extends ActorSheet {
         let info = event.target.id.split("_");
         let item_id = info[1];
         let actor_id = info[0];
-        let item = JSON.parse(event.target.getAttribute("data-item"));
+        let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
+        item = duplicate(item.data);
+        
         let tokenId = undefined;
 
         if (this.actor.isToken === true){

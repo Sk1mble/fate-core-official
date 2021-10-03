@@ -1,3 +1,8 @@
+# Version 4.2.07
+  * Added the .fate class to Thing sheets, removing the grey padding around the sheet window.
+  * Added the double-click function to share an Exta to chat from Thing character sheets.
+  * Changed drag/drop handlers to use fromUuid rather than encoding the entire item in the html data tag to improve efficiency.
+
 # Version 4.2.06
   * Prevented URL stripping on adding an item avatar IF the link provided is not a local link.
 

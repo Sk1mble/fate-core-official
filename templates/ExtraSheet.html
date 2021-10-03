@@ -6,7 +6,9 @@
 			 </tr>		
 		 <tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Name'}}:</td>
-			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{this.document.name}}</textarea></td>
+			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="width:100%; background-color: white; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{this.document.name}}</textarea>
+				<div class="fco-extra-r"></div>
+			</td>
 		 </tr>	
 		 <tr>
 			<td style="font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Permissions'}}:</td>
@@ -29,7 +31,6 @@
 				</input>
 				{{localize 'fate-core-official.active'}}
 				<input name="data.active" type="checkbox" {{#if this.data.active}}checked="checked"{{/if}}></input>
-				<div class="fco-extra-r"></div>
 			</td>
 		</tr>
 		<tr>
