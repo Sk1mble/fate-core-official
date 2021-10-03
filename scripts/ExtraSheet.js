@@ -205,7 +205,16 @@ export class ExtraSheet extends ItemSheet {
         new MutationObserver(function onSrcChange(MutationRecord){
             // Code to update avatar goes here
             target_id = MutationRecord[0].target.id.split("_")[0];
-            newsrc = (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
+
+            // If we strip the absolute path, it will break the link for a Foundry installation hosted on The Forge. 
+            // So let's not do that for remotely hosted installations.
+            // Otherwise though we want a local link, to prevent a file set on localhost from breaking if connecting from outside, or a move of dynamic DNS service breaking it.
+
+            if ((MutationRecord[0].target.src).includes("assets.forge-vtt.com")){
+                newsrc = MutationRecord[0].target.src;
+            } else {
+                newsrc = (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
+            }
             if (target_id == this_id){
                 doc.update({"img":newsrc});
             }

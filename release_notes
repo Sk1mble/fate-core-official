@@ -1,3 +1,6 @@
+# Version 4.2.06
+  * Prevented URL stripping on adding an image avatar IF the user is hosting on The Forge. Due to The Forge storing assets in a different path from the the main server path, relative links break.
+
 # Version 4.2.05
   * Fixed a small bug that was causing the stunt DB filter command to fail in some cases if there was an issue with a malformed stunt in the database.
 
