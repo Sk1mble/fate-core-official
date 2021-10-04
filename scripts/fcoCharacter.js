@@ -591,9 +591,11 @@ export class fcoCharacter extends ActorSheet {
                 if (item.data.data.active){
                     await item.update({"data.active":false},{render:false});
                     await this.document.deactivateExtra(item, false);
+                    this.render(false);
                 } else {
                     await item.update({"data.active":true},{render:false});
                     this.document.updateFromExtra(item);
+                    this.render(false);
                 }
             });
 

@@ -1,3 +1,6 @@
+# Version 4.2.08
+  * Added an explicit render call to the toggle extra button on the Fate character sheet, as it wasn't automatically rendering for token actors.
+
 # Version 4.2.07
   * Added the .fate class to Thing sheets, removing the grey padding around the sheet window.
   * Added the double-click function to share an Exta to chat from Thing character sheets.
