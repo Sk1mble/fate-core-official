@@ -1,3 +1,6 @@
+# Version 4.2.10 (Not yet released)
+  * Set Fate Utilities to ignore any combatant that's not of type 'fate-core-official' or 'Thing'.
+
 # Version 4.2.09
   * Set Fate Utilities to ignore any token that's not of type 'fate-core-official' so that Trigger Happy tokens (and anything else that adds tokens to the map) won't clog up Fate Utilities.
 
