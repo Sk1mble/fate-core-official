@@ -1127,6 +1127,22 @@ game.settings.register("fate-core-official","freeStunts", {
         default:12
     });
 
+    game.settings.register("fate-core-official", "fu-ignore-list", {
+        name: game.i18n.localize("fate-core-official.fu-ignore-list-name"),
+        hint: game.i18n.localize("fate-core-official.fu-ignore-list-hint"),
+        scope: "world",
+        config: true,
+        type: String,
+        default:"",
+        onChange:() => {
+            for (let app in ui.windows){
+                if (ui.windows[app]?.options?.id == "FateUtilities"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
+    });
+
     game.settings.register("fate-core-official", "fuAspectLabelBorderAlpha", {
         name: game.i18n.localize("fate-core-official.aspectBorderAlpha"),
         hint: game.i18n.localize("fate-core-official.AspectBorderAlphaLabel"),

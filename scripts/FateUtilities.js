@@ -1719,9 +1719,27 @@ async getData(){
     }
     data.notes = notes;
     game?.scenes?.viewed?.tokens?.contents?.forEach(token => {
-        if (token.actor != null && token.actor.data.type == "fate-core-official" && (token.data.hidden == false || game.user.isGM)){
+
+        let ignore = false;
+        if (token.actor == null) ignore = true;
+        if (token.actor.data.type !== "fate-core-official") ignore = true;
+        if (token.data.hidden == true && !game.user.isGM) ignore = true;
+    
+        // Check the FU ignore list
+        let ignore_list = game.settings.get("fate-core-official","fu-ignore-list");
+        
+        if (ignore_list){
+            let ignore_array = ignore_list.split(",");
+            for (let check of ignore_array){
+                if (token.actor.name.startsWith(check) || token.name.startsWith(check)){
+                    ignore = true;
+                }
+            }
+        }
+
+        if (!ignore){
             all_tokens.push(token)
-        } 
+        }
     })
 
     let situation_aspects = game?.scenes?.viewed?.getFlag("fate-core-official","situation_aspects")
@@ -1805,7 +1823,6 @@ async getData(){
     data.gameNotesHeight = (this.position.height - 575) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
-    
     return data;
 }
 
