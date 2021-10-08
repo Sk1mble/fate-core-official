@@ -1685,7 +1685,6 @@ async getData(){
                 return;
             }
 
-            console.log(comb.actor.data.type)
             if (comb.defeated || (comb.actor.data.type !== "fate-core-official" && comb.actor.data.type !== "Thing")){
                 hidden = true;
             }

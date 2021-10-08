@@ -1,5 +1,6 @@
 # Version 4.2.12
   * Added a new setting, "Fate Utilities Ignore List". This accepts a comma-separated string of prefixes; any tokens with a name or actor name starting with that prefix (e.g. (TH) for Trigger Happy) won't be shown in Fate Utilities.
+    NOTE: This doesn't work on combatants. Any token that's added to a conflict will show up unless it's already acted, hidden, defeated, or invisible.
 
 # Version 4.2.11
   * Edited behaviour on adding an extra to a character to ensure no change is made to the character unless the extra is set to Active when it is added.
