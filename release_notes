@@ -1,3 +1,6 @@
+# Version 4.2.09
+  * Set Fate Utilities to ignore any token that's not of type 'fate-core-official' so that Trigger Happy tokens (and anything else that adds tokens to the map) won't clog up Fate Utilities.
+
 # Version 4.2.08
   * Added an explicit render call to the toggle extra button on the Fate character sheet, as it wasn't automatically rendering for token actors.
 
