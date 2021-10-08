@@ -1,3 +1,6 @@
+# Version 4.2.11
+  * Edited behaviour on adding an extra to a character to ensure no change is made to the character unless the extra is set to Active when it is added.
+
 # Version 4.2.10
   * Set Fate Utilities to ignore any combatant that's not of type 'fate-core-official' or 'Thing'.
 

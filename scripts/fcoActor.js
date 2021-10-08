@@ -216,8 +216,15 @@ export class fcoActor extends Actor {
 
     async updateFromExtra(itemData) {
         let actor = this;
+        
+        if (!itemData.data.active && !itemData.data.data.active) {
+            // This currently adds the stuff to the character sheet even if active is false, which we do not want.
+            return;
+        }
+
         actor.sheet.editing = true;
             let extra = duplicate(itemData);
+            console.log(extra);
     
             //Find each aspect, skill, stunt, and track attached to each extra
             //Add an extra data item to the data type containing the id of the original item.
