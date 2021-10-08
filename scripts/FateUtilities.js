@@ -1680,9 +1680,22 @@ async getData(){
             let foundToken = comb.token;
             let hidden = false;
             let hasActed = false;
+            let ignore = false;
 
             if (foundToken == undefined){
                 return;
+            }
+
+            // Check the FU ignore list
+            let ignore_list = game.settings.get("fate-core-official","fu-ignore-list");
+            
+            if (ignore_list){
+                let ignore_array = ignore_list.split(",");
+                for (let check of ignore_array){
+                    if (foundToken.actor.name.startsWith(check) || foundToken.name.startsWith(check)){
+                        ignore = true;
+                    }
+                }
             }
 
             if (comb.defeated || (comb.actor.data.type !== "fate-core-official" && comb.actor.data.type !== "Thing")){
@@ -1695,11 +1708,11 @@ async getData(){
 
             hasActed = comb.getFlag("fate-core-official","hasActed");                       
                     
-            if ((hasActed == undefined || hasActed == false) && hidden == false){
+            if (!ignore && (hasActed == undefined || hasActed == false) && hidden == false){
                 tokens.push(foundToken)
             }
             else {
-                if (hasActed == true && hidden == false){
+                if (!ignore && hasActed == true && hidden == false){
                     has_acted.push(foundToken);
                 }
             }
