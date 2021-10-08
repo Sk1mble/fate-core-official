@@ -1,4 +1,4 @@
-# Version 4.2.10 (Not yet released)
+# Version 4.2.10
   * Set Fate Utilities to ignore any combatant that's not of type 'fate-core-official' or 'Thing'.
 
 # Version 4.2.09
