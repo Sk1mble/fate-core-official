@@ -1,3 +1,7 @@
+# Version 4.2.14
+  * Rolls modified from Fate Utilities now also modify the original roll chat message.
+  * Rerolls from Fate Utilities now show the original roll on the entry for the reroll.
+
 # Version 4.2.13
   * The new feature added in 4.2.12 now also applies to combatants.
 

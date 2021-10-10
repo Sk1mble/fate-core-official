@@ -711,6 +711,8 @@ class FateUtilities extends Application{
         let action = detail[2];
         let rolls = duplicate(game.scenes.viewed.getFlag("fate-core-official","rolls"));
         let roll = rolls[index]
+        let message;
+        if (roll.message_id) message = game.messages.get(roll.message_id)
         
         if (action == "manual" || action == "manualfp"){
             // Render a dialog asking for the modifier and text description
@@ -757,7 +759,6 @@ class FateUtilities extends Application{
 
             //Find the right character and deduct one from their fate points
             let user = game.users.contents.find(user => user.id == roll.user._id)
-
             if (action == "manualfp"){
                 if (user.isGM){
                     let fps = user.getFlag("fate-core-official","gmfatepoints");
@@ -772,6 +773,11 @@ class FateUtilities extends Application{
                         if (m >= 0) sign = "+"; 
                         roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
                         game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        if (message) {
+                            let mroll = duplicate(message.roll);
+                            mroll.total = roll.total;
+                            await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                        }
                     }
                 } else {
                     let char = user.character;
@@ -789,6 +795,11 @@ class FateUtilities extends Application{
                             roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
                             if (game.user.isGM){
                                 game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                                if (message) {
+                                    let mroll = duplicate(message.roll);
+                                    mroll.total = roll.total;
+                                    await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                                }
                             } else {
                                 game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
                             }
@@ -807,7 +818,13 @@ class FateUtilities extends Application{
             }
 
             if (game.user.isGM){
-                game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                if (message) {
+                    let mroll = duplicate(message.roll);
+                    mroll.total = roll.total;
+                    roll.roll = mroll;
+                    await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                }
             } else {
                 //Create a socket call to update the scene's roll data
                 game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
@@ -818,7 +835,13 @@ class FateUtilities extends Application{
             roll.total+=1;
             roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PlusOne")}`
             if (game.user.isGM){
-                game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                if (message) {
+                    let mroll = JSON.parse(message.data.roll);
+                    mroll.total = roll.total;
+                    roll.roll = mroll;
+                    await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                }
             } else {
                 //Create a socket call to update the scene's roll data
                 game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
@@ -904,8 +927,14 @@ class FateUtilities extends Application{
             }
             roll.total+=bonus;
             roll.flavor+=flavor;
-            if (game.user.isGM){ 
-                game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+            if (game.user.isGM){
+                if (message) {
+                    let mroll = JSON.parse(message.data.roll);
+                    mroll.total = roll.total;
+                    roll.roll = mroll;
+                    await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                } 
+                await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
             }
             else {
                 //Create a socket call to update the scene's roll data
@@ -914,7 +943,13 @@ class FateUtilities extends Application{
         }
 
         if (action == "reroll"){
-            let flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokeReroll")}`
+            let oldRoll= "";
+            for (let r of roll.dice){
+                if (r == -1) oldRoll += `<em style="font-family:fate; font-style:normal">-</em>`
+                if (r == -0) oldRoll += `<em style="font-family:fate; font-style:normal">0</em>`
+                if (r == 1) oldRoll += `<em style="font-family:fate; font-style:normal">+</em>`
+            }            
+            let flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokeReroll")} ${oldRoll}`
 
             let asa = game.scenes.viewed.getFlag("fate-core-official", "situation_aspects");
             if (!asa) asa = {};
@@ -1000,7 +1035,13 @@ class FateUtilities extends Application{
             }
             roll.total += r2.total;
             roll.flavor+=flavor;
+            roll.roll = r2;
             if (game.user.isGM){
+                if (message) {
+                    let mroll = duplicate(r2);
+                    mroll.total = roll.total;
+                    await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                }
                 game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
             } else {
                 //Create a socket call to update the scene's roll data
@@ -1021,6 +1062,14 @@ class FateUtilities extends Application{
                     user.setFlag("fate-core-official","gmfatepoints",fps-1);
                     roll.total+=2;
                     roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvoke")}`
+
+                    if (message) {
+                        let mroll = JSON.parse(message.data.roll);
+                        mroll.total = roll.total;
+                        roll.roll = mroll;
+                        console.log("about to update with "+ JSON.stringify(mroll));
+                        await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                    }
                     game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 }
             } else {
@@ -1034,6 +1083,13 @@ class FateUtilities extends Application{
                         roll.total+=2;
                         roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvoke")}`
                         if (game.user.isGM){
+                            if (message) {
+                                let mroll = JSON.parse(message.data.roll);
+                                mroll.total = roll.total;
+                                roll.roll = mroll;
+                                console.log("about to update with "+ JSON.stringify(mroll));
+                                await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                            }
                             game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                         } else {
                             game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
@@ -1048,6 +1104,12 @@ class FateUtilities extends Application{
         if (action == "rerollfp"){
             //Find the right character and deduct one from their fate points
             let user = game.users.contents.find(user => user.id == roll.user._id)
+            let oldRoll= "";
+            for (let r of roll.dice){
+                if (r == -1) oldRoll += `<em style="font-family:fate; font-style:normal">-</em>`
+                if (r == -0) oldRoll += `<em style="font-family:fate; font-style:normal">0</em>`
+                if (r == 1) oldRoll += `<em style="font-family:fate; font-style:normal">+</em>`
+            }            
 
             if (user.isGM){
                 let fps = user.getFlag("fate-core-official","gmfatepoints");
@@ -1075,7 +1137,13 @@ class FateUtilities extends Application{
                         }
                     }
                     roll.total += r2.total;
-                    roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvokeReroll")}`
+                    roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvokeReroll")} ${oldRoll}`
+                    roll.roll = duplicate(r2);
+                    if (message) {
+                        let mroll = duplicate(r2);
+                        mroll.total = roll.total;
+                        await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                    }
                     game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 }
             } else {
@@ -1086,7 +1154,7 @@ class FateUtilities extends Application{
                         ui.notifications.error(game.i18n.localize("fate-core-official.NoFatePoints"))
                     } else {
                         char.update({"data.details.fatePoints.current":fps-1})
-                        roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvokeReroll")}`
+                        roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvokeReroll")} ${oldRoll}`
                         let r = new Roll ("4dF");
                         let r2 = await r.roll();
                         r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
@@ -1100,7 +1168,13 @@ class FateUtilities extends Application{
                         roll.total -= oldDiceValue;
                         roll.dice = r2.dice[0].values;
                         roll.total += r2.total;
+                        roll.roll = duplicate(r2);
                         if (game.user.isGM){
+                            if (message) {
+                                let mroll = duplicate(r2);
+                                mroll.total = roll.total;
+                                await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                            }
                             game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                         } else {
                             game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
@@ -2189,6 +2263,7 @@ Hooks.on('createChatMessage', (message) => {
             let flavor = message.data.flavor;
             let formula = roll.formula;
             let total = roll.total;
+            let message_id = message.id;
             if (!flavor) {
                 flavor = formula.replace(/ *\[[^\]]*]/g, '')+"<br/>";
                 roll.terms.forEach(term => {
@@ -2214,12 +2289,14 @@ Hooks.on('createChatMessage', (message) => {
             rolls=duplicate(rolls);
             
             let mFRoll = {
+                "message_id":message_id,
                 "speaker":speaker,
                 "formula":formula,
                 "flavor":flavor,
                 "total":total,
                 "dice":diceResult,
-                "user":user
+                "user":user,
+                "roll":roll,
             }
             rolls.push(mFRoll);
 
@@ -2263,7 +2340,6 @@ Hooks.once('ready', async function () {
 
 async function updateRolls (rolls) {
     if (rolls.rolls != undefined && game.users.contents.find(user => user.active && user.isGM) == game.user){
-        
         let scene = game.scenes.get(rolls.scene._id);
         let currRolls = scene.getFlag("fate-core-official","rolls"); 
         if (currRolls == undefined){
@@ -2272,6 +2348,16 @@ async function updateRolls (rolls) {
         currRolls = duplicate(currRolls);
         let endRolls = mergeObject(currRolls, rolls.rolls);
         scene.setFlag("fate-core-official","rolls",endRolls);
+        for (let r of endRolls){
+            let message;
+            if (r.message_id) message = game.messages.get(r.message_id)
+            if (message) {
+                let mroll = duplicate(message.roll);
+                if (r.roll) mroll = r.roll;
+                mroll.total = r.total;
+                await message.update({flavor:r.flavor, content:r.total, roll:JSON.stringify(mroll)})
+            }
+        }
     }
 }
 

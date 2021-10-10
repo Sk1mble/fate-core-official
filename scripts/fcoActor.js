@@ -216,7 +216,7 @@ export class fcoActor extends Actor {
 
     async updateFromExtra(itemData) {
         let actor = this;
-        
+
         if (!itemData.data.active && !itemData.data.data.active) {
             // This currently adds the stuff to the character sheet even if active is false, which we do not want.
             return;
@@ -506,7 +506,7 @@ export class fcoActor extends Actor {
             roll.toMessage({
                 flavor: `<h1>${skill.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
                         ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})`,
-                speaker: msg
+                speaker: msg,
             });
         }
     }

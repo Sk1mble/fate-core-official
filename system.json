@@ -6,7 +6,7 @@
   "authors": [],
   "url": "https://github.com/Sk1mble/fate-core-official",
   "flags": {},
-  "version": "4.2.13",
+  "version": "4.2.14",
   "minimumCoreVersion": "0.8.4",
   "compatibleCoreVersion": "9.224",
   "scripts": [
@@ -69,7 +69,7 @@
   "dependencies": [],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/master/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.2.13.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.2.14.zip",
   "protected": false,
   "gridDistance": 1
 }
