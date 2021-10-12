@@ -2011,7 +2011,17 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
                     name:"FateUtilities",//Completed
                     title:game.i18n.localize("fate-core-official.LaunchFateUtilities"),
                     icon:"fas fa-theater-masks",
-                    onClick: async ()=> {let fu = new FateUtilities; await fu.render(true); $('#FateUtilities').css({zIndex: Math.min(++_maxZ, 9999)});},
+                    onClick: async ()=> {
+                        let fu = new FateUtilities;
+                        for (let app in ui.windows){
+                            if (ui.windows[app]?.options?.id == "FateUtilities"){
+                                fu = ui.windows[app]
+                                fu.maximize();
+                            }
+                        }
+                        await fu.render(true); 
+                        $('#FateUtilities').css({zIndex: Math.min(++_maxZ, 9999)});
+                    },
                     button:true
                 });
             }

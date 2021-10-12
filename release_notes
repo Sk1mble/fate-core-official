@@ -1,3 +1,6 @@
+# Version 4.2.15
+  * Fate Utilities, if minimised, will now maximise correctly if you click the icon to launch Fate Utilities rather than glitching out. 
+
 # Version 4.2.14
   * Rolls modified from Fate Utilities now also modify the original roll chat message.
   * Rerolls from Fate Utilities now show the original roll on the entry for the reroll.
