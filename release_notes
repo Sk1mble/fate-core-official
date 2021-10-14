@@ -1,3 +1,7 @@
+# Version 4.2.16
+  * Changed some further references to 'entity' in the code so the system works properly with v9.225 (developer preview 1 of version 9).
+  * The system's macro and journal compedium packs had 'type' added in addition to 'entity' for support of v9.225+
+
 # Version 4.2.15
   * Fate Utilities, if minimised, will now maximise correctly if you click the icon to launch Fate Utilities rather than glitching out. 
 

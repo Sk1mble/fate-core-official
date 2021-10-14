@@ -250,13 +250,20 @@ class FateCharacterDefaults {
         let a_link = false;
         if (character_default.actorLink) a_link = character_default.actorLink;
 
+        let perm;
+        if (isNewerVersion(game.version, '9.224')){
+            perm = {"default":CONST.DOCUMENT_PERMISSION_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
+        } else {
+            perm = {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]};
+        }
+
         const actor_data = {
             name:name,
             type:"fate-core-official",
             items:character_default.extras,
             img:character_default.img,
             token:{img:character_default.token_img, actorLink:a_link},
-            permission: {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]},
+            permission: perm,
             data:{
                 details:{fatePoints:{refresh:refresh, current:refresh}},
                 skills:character_default.skills,
@@ -332,7 +339,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
     if (!(app instanceof ActorDirectory) || !game.user?.isGM) {
         return;
     }
-
+    
     const targetElement = html.find('ol[class="directory-list"]');
     const f = new FateCharacterDefaults();
     let standard = `<option value = "fate-core-official" selected = 'selected'>${game.i18n.localize("fate-core-official.system_settings")}</option>\n`
@@ -367,19 +374,28 @@ Hooks.on("renderSidebarTab", (app, html) => {
         const default_name = html.find('select[id="MF_default_to_use"]')[0].value;
 
         if (! actor_name) actor_name = "New Character";
+
+        let perm;
+        if (isNewerVersion(game.version, '9.224')){
+            perm = {"default":CONST.DOCUMENT_PERMISSION_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
+        } else {
+            perm = {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]};
+        }
+
         if (default_name === "Blank"){
             let actorData = {
                 "name":actor_name,
                 "type":"fate-core-official",
-                "permission": {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]},
+                "permission": perm,
                 "data.details.fatePoints.refresh":"0",
                 "token.actorLink":true
              }
              await Actor.create(actorData, {"renderSheet":true});
              return;
         }
+
         if (default_name === "fate-core-official"){
-            await Actor.create({"name":actor_name, "type":"fate-core-official", permission: {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]}, "token.actorLink":true},{renderSheet:true});
+            await Actor.create({"name":actor_name, "type":"fate-core-official", permission: perm, "token.actorLink":true},{renderSheet:true});
             return;
         }
 

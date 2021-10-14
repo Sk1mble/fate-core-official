@@ -245,7 +245,13 @@ Hooks.once('ready', async function () {
                 let packs = Array.from(module.packs);
                 //First we sort by entity - this is primarily because I want JournalEntries to be
                 //loaded before Scenes so that on first load the map pins aren't 'unknown'.
-                await fcoConstants.sort_key(packs, "entity");
+
+                if (isNewerVersion(game.version, "9.224")){
+                    await fcoConstants.sort_key(packs, "type");
+                } else {
+                    await fcoConstants.sort_key(packs, "entity");
+                }
+
                 for (let pack of packs){
                     if (!pack.name.includes("fatex")){
                         let cc = new CompendiumCollection (pack);
@@ -1244,7 +1250,12 @@ Handlebars.registerHelper("enr", function(value, object) {
     if (object) secrets = object.isOwner;
     if (game.user.isGM) secrets = true;
     //enrichHTML(content, secrets, entities, links, rolls, rollData) → {string}
-    return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:secrets, entities:true}));
+    if (isNewerVersion(game.version, '9.224')){
+        return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:secrets, documents:true}));
+    } else {
+        return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:secrets, entities:true}));
+    }
+    
 })
 
 Handlebars.registerHelper("fco_strip", function (value) {

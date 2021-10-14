@@ -372,7 +372,12 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                        let desc;
+                        if (isNewerVersion(game.version, '9.224')){
+                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))                            
+                        } else {
+                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))    
+                        }
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
@@ -397,7 +402,12 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                        let desc;
+                        if (isNewerVersion(game.version, '9.224')){
+                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
+                        } else {
+                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                        }
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
