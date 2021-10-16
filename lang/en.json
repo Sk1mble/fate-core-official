@@ -3,6 +3,8 @@
    "fate-core-official.fu-ignore-list-hint":"A comma separated list of prefixes which denote a token is to be ignored when populating data for Fate Utilities",
    "fate-core-official.sharedFrom":"Shared from {name}",
    "fate-core-official.Value":"Value",
+   "fate-core-official.Discard":"Discard",
+   "fate-core-official.EditRaw":"Edit Raw HTML",
    "fate-core-official.manualRollModifier":"Manually Modify Roll",
    "fate-core-official.overrideFontName":"Disable system font override?",
    "fate-core-official.overrideFontLabel":"Should we cancel overriding of the Foundry font?",

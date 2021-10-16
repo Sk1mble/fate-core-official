@@ -1,3 +1,7 @@
+# Version 4.2.17
+  * Added a 'discard' button to the dialog used to update text to prevent an unresolved promise from hanging around when the dialog is used.
+  * Added ability to right click instead of left clicking to edit the raw html of the Description, Biography, and Notes fields of a character in a pop-up editor. Same functionality possibly to come for other rich text fields later.
+
 # Version 4.2.16
   * Changed some further references to 'entity' in the code so the system works properly with v9.225 (developer preview 1 of version 9).
   * The system's macro and journal compedium packs had 'type' added in addition to 'entity' for support of v9.225+

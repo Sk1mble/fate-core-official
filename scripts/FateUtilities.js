@@ -325,7 +325,6 @@ class FateUtilities extends Application{
         cd_box.on('click', event => this._on_cd_box_click(event, html));
 
         box.on("click", event => this._on_click_box(event, html));
-        //track_name.on("click", event => this._on_track_name_click(event, html));
         const track_aspect = html.find("input[name='track_aspect']");
         track_aspect.on("change", event => this._on_aspect_change(event, html));
 
@@ -1628,20 +1627,6 @@ class FateUtilities extends Application{
             }
             await this._render(false);
         }
-    }
-
-    async _on_track_name_click(event, html) {
-        // Launch a simple application that returns us some nicely formatted text.
-        //First, get the token
-        let token_id = event.target.id;
-        let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
-        let tracks = duplicate(token.actor.data.data.tracks);
-        let track = tracks[DOMPurify.sanitize(event.target.innerHTML)]
-        let notes = track.notes;
-        let text =  await fcoConstants.updateText(game.i18n.localize("fate-core-official.TrackNotes"), notes);
-        token.actor.update({
-            [`data.tracks.${DOMPurify.sanitize(event.target.innerHTML)}.notes`]: text
-        })
     }
 
     async _timed_event (event, html){

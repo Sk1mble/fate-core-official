@@ -437,6 +437,14 @@ export class fcoCharacter extends ActorSheet {
                 $(`#${this.object.id}_biography`).focus();
             })
 
+            showyBio.on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                if (text != "discarded") {
+                    this.editing = false;
+                    await this.object.update({"data.details.biography.value":text});
+                }
+            })
+
             const showyDesc = html.find(`div[id='${this.document.id}_description_rich']`)
             showyDesc.on('click', async event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
@@ -446,6 +454,14 @@ export class fcoCharacter extends ActorSheet {
                 $(`#${this.object.id}_description`).focus();
             })
 
+            showyDesc.on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                if (text != "discarded") {
+                    this.editing = false;
+                    await this.object.update({"data.details.description.value":text});
+                }
+            })
+
             const showyNotes = html.find(`div[id='${this.document.id}_notes_rich']`)
             showyNotes.on('click', async event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
@@ -453,6 +469,14 @@ export class fcoCharacter extends ActorSheet {
                 $(`#${this.object.id}_notes_rich`).css('display', 'none');
                 $(`#${this.object.id}_notes`).css('display', 'block');
                 $(`#${this.object.id}_notes`).focus();
+            })
+
+            showyNotes.on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                if (text != "discarded") {
+                    this.editing = false;
+                    await this.object.update({"data.details.notes.value":text});
+                }
             })
 
             const notes = html.find (`div[id='${this.object.id}_notes']`);
@@ -1031,17 +1055,6 @@ export class fcoCharacter extends ActorSheet {
         } catch  {
             // Do nothing.
         }
-    }
-
-    async _on_track_name_click(event, html) {
-        // Launch a simple application that returns us some nicely formatted text.
-        let tracks = duplicate(this.object.data.data.tracks);
-        let track = tracks[DOMPurify.sanitize(event.target.innerHTML)]
-        let notes = track.notes;
-        let text = await fcoConstants.updateText( game.i18n.localize("fate-core-official.TrackNotesFor")+" "+track.name +" "+game.i18n.localize("fate-core-official.on")+" "+this.actor.name, notes);
-        await this.object.update({
-            [`data.tracks.${DOMPurify.sanitize(event.target.innerHTML)}.notes`]: text
-        })
     }
 
     async _on_click_box(event, html) {

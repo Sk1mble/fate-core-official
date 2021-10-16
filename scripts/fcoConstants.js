@@ -176,8 +176,14 @@ class fcoConstants {
                     callback: () => {
                         resolve(document.getElementById("get_text_box").value)
                     }
+                },
+                discard: {
+                    label: game.i18n.localize("fate-core-official.Discard"),
+                    callback: () => {
+                        resolve("discarded")
+                    }
                 }
-            },
+            }
         }).render(true);
     });
     }
