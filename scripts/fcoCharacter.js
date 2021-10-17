@@ -274,6 +274,12 @@ export class fcoCharacter extends ActorSheet {
             t_notes.on("blur", event => {this.updateNotes(event, html)})
             a_notes.on("blur", event => {this.updateNotes(event, html)})
 
+            const t_notes2 = html.find('.mfate-tracks-notes__input').not('.contenteditable');
+            const a_notes2 = html.find('.mfate-aspects-notes__input').not('contenteditable');
+
+            t_notes2.on("contextmenu", event => {this.updateNotesHTML(event, html)});
+            a_notes2.on("contextmenu", event => {this.updateNotesHTML(event, html)});
+
             const box = html.find("input[name='box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
@@ -987,6 +993,17 @@ export class fcoCharacter extends ActorSheet {
         if (!window.getSelection().toString()){
             let text = DOMPurify.sanitize(event.target.innerHTML);            
             let item = event.target.getAttribute("data-edit");//This is a much better way of accessing data than splitting the id.
+            await this.actor.update({[item]:text});
+            this.editing = false;
+            await this._render(false)
+        }
+    }
+
+    async updateNotesHTML (event, html){ //This is the method that updates the notes for tracks/aspects when the raw HTML is edited.
+        let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+        if (text != "discarded") {
+            this.editing = false;
+            let item = event.currentTarget.getAttribute("data-edit");//This is a much better way of accessing data than splitting the id.
             await this.actor.update({[item]:text});
             this.editing = false;
             await this._render(false)

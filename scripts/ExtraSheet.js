@@ -240,6 +240,35 @@ export class ExtraSheet extends ItemSheet {
                 $(`#${this.document.id}_${field}`).focus();
             })
 
+            $(`#${this.document.id}_${field}_rich`).on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                if (text != "discarded") {
+                    this.editing = false;
+                    if (field == "descValue"){
+                        await this.document.update({"data.description.value":text});
+                    }
+                    if (field == "overcomeValue"){
+                        await this.document.update({"data.actions.overcome":text});                        
+                    }
+                    if (field == "permValue"){
+                        await this.document.update({"data.permissions":text});
+                    }
+                    if (field == "costsValue"){
+                        await this.document.update({"data.costs":text});
+                    }
+                    if (field == "createValue"){
+                        await this.document.update({"data.actions.create":text});
+                    }
+                    if (field == "attackValue"){
+                        await this.document.update({"data.actions.attack":text});
+                    }
+                    if (field == "defendValue"){
+                        await this.document.update({"data.actions.defend":text});
+                    }
+                    await this._render(false);
+                }
+            })
+
             $(`#${this.document.id}_${field}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
                     let data = DOMPurify.sanitize(event.target.innerHTML);

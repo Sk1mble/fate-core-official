@@ -1,3 +1,10 @@
+# Version 4.2.18
+  * Added right-click to edit raw html for aspect and track notes on an actor
+  * Added right-click to edit raw html for attack, overcome, permissions, and other fields on the sheet for an extra.
+  * Added right-click to edit stunt description html.
+  * Added right-click to edit aspect description & notes html on character sheet.
+  
+
 # Version 4.2.17
   * Added a 'discard' button to the dialog used to update text to prevent an unresolved promise from hanging around when the dialog is used.
   * Added ability to right click instead of left clicking to edit the raw html of the Description, Biography, and Notes fields of a character in a pop-up editor. Same functionality possibly to come for other rich text fields later.

@@ -20,7 +20,7 @@
                 <label for"description" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.AspectDescription'}}:</label>
             </td>
             <td>
-                <div class="aspect_description_rich" tabindex = "0" id="aspect_description_{{fco_getKey this.name}}_rich" tabindex = "0" style="min-height:1.5em; background-color: white; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{enr this.description}}}</div>
+                <div class="aspect_description_rich" name="description_{{this.name}}" tabindex = "0" id="aspect_description_{{fco_getKey this.name}}_rich" tabindex = "0" style="min-height:1.5em; background-color: white; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{enr this.description}}}</div>
                 <div class="aspect_description" id="aspect_description_{{fco_getKey this.name}}" name="description_{{this.name}}" style="display:none; background-color: white; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.description}}}</div>
             </td>
         </tr>
@@ -38,7 +38,7 @@
                 <label for"notes" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.Notes'}}:</label>
             </td>
             <td>
-                <div class="aspect_notes name="notes_{{this.name}}_rich" tabindex = "0" id="notes_{{fco_getKey this.name}}_rich" tabindex = "0" "data-name={{this.name}}" style="min-height:1.5em; background-color: white; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{enr this.notes}}}</div>
+                <div class="aspect_notes data-name="{{this.name}}" name="notes_{{this.name}}_rich" tabindex = "0" id="notes_{{fco_getKey this.name}}_rich" tabindex = "0" "data-name={{this.name}}" style="min-height:1.5em; background-color: white; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{enr this.notes}}}</div>
                 <div class="aspect_notes contenteditable" id="notes_{{fco_getKey this.name}}" name="notes_{{this.name}}" data-name="{{this.name}}"" style="display:none; min-height:1.5em; background-color: white; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.notes}}}</div>
             </td>
         </tr>

@@ -44,8 +44,8 @@ class EditPlayerAspects extends FormApplication{
             fcoConstants.getPen(id);
             fcoConstants.getPen(id2);
 
-            $(`#${id}_rich`).on('focus', event => {
-                $(`#${id}_rich`).trigger("click");
+            $(`#${id}_rich`).on('keyup', event => {
+                if (event.which == 9) $(`#${id}_rich`).trigger("click");
             })
 
             $(`#${id}_rich`).on('click', event => {
@@ -54,6 +54,28 @@ class EditPlayerAspects extends FormApplication{
                 $(`#${id}`).css('display', 'block');
                 $(`#${id}`).focus();
             })
+
+            if (this.object.isOwner){
+                $(`#${id}_rich`).on('contextmenu', async event => {
+                    let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML,true);
+                    if (text != "discarded") {
+                        $(`#${id}`)[0].innerHTML = text;   
+                        $(`#${id}_rich`)[0].innerHTML = text; 
+                        let name = event.currentTarget.getAttribute("name").split("_")[1];
+                        this.aspects[name].description=text;
+                    }
+                })
+
+                $(`#${id2}_rich`).on('contextmenu', async event => {
+                    let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML,true);
+                    if (text != "discarded") {
+                        $(`#${id2}`)[0].innerHTML = text;   
+                        $(`#${id2}_rich`)[0].innerHTML = text;  
+                        let name = event.currentTarget.getAttribute("name").split("_")[1];
+                        this.aspects[name].notes=text;
+                    }
+                })
+            }
     
             $(`#${id}`).on('blur', event => {
                 if (!window.getSelection().toString()){
@@ -71,8 +93,8 @@ class EditPlayerAspects extends FormApplication{
                     this.aspects[name].description=event.target.innerHTML;
                 }
             })
-            $(`#${id2}_rich`).on('focus', event => {
-                $(`#${id2}_rich`).trigger("click");
+            $(`#${id2}_rich`).on('keyup', event => {
+                if (event.which == 9) $(`#${id2}_rich`).trigger("click");
             })
         
             $(`#${id2}_rich`).on('click', event => {

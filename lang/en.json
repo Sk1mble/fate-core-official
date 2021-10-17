@@ -4,6 +4,7 @@
    "fate-core-official.sharedFrom":"Shared from {name}",
    "fate-core-official.Value":"Value",
    "fate-core-official.Discard":"Discard",
+   "fate-core-official.Apply":"Apply",
    "fate-core-official.EditRaw":"Edit Raw HTML",
    "fate-core-official.manualRollModifier":"Manually Modify Roll",
    "fate-core-official.overrideFontName":"Disable system font override?",
