@@ -3,7 +3,11 @@
   * Added right-click to edit raw html for attack, overcome, permissions, and other fields on the sheet for an extra.
   * Added right-click to edit stunt description html.
   * Added right-click to edit aspect description & notes html on character sheet.
-  
+  * Added right-click to edit aspect description on 'manage aspects' level.
+  * Added right-click to edit raw html for description, attack, overcome, etc. on 'manage skills' level.
+  * Added right-click to edit raw html for rich text elements in the tracks editors.
+  * Added right-click to edit raw html for all rich text elements in FateUtilities.
+
 
 # Version 4.2.17
   * Added a 'discard' button to the dialog used to update text to prevent an unresolved promise from hanging around when the dialog is used.

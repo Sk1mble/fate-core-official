@@ -261,13 +261,22 @@ class EditSkill extends FormApplication{
         fcoConstants.getPen("edit_skill_defend");
 
         const description_rich = html.find('#edit_skill_description_rich');
-        description_rich.on("focus", event => {
-            description_rich.trigger("click");
+        description_rich.on("keyup", event => {
+            if (event.which == 9) description_rich.trigger("click");
         })
+        
         description_rich.on("click", event => {
             $("#edit_skill_description_rich").css('display', 'none');
             $("#edit_skill_description").css('display', 'block');
             $("#edit_skill_description").focus();
+        })
+
+        description_rich.on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_skill_description_rich')[0].innerHTML = text;    
+                $('#edit_skill_description')[0].innerHTML = text;    
+            }
         })
 
         const skill_description = html.find("div[id='edit_skill_description']");
@@ -276,6 +285,8 @@ class EditSkill extends FormApplication{
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    $('#edit_skill_description_rich')[0].innerHTML = desc;    
+                    $('#edit_skill_description')[0].innerHTML = desc;    
                 } else {
                     desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
                 }
@@ -286,14 +297,22 @@ class EditSkill extends FormApplication{
             }
         })
 
-        $('#edit_skill_overcome_rich').on("focus", event => {
-            $('#edit_skill_overcome_rich').trigger("click");
+        $('#edit_skill_overcome_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_skill_overcome_rich').trigger("click");
         })
 
         $('#edit_skill_overcome_rich').on("click", event => {
             $("#edit_skill_overcome_rich").css('display', 'none');
             $("#edit_skill_overcome").css('display', 'block');
             $("#edit_skill_overcome").focus();
+        })
+
+        $('#edit_skill_overcome_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $("#edit_skill_overcome_rich")[0].innerHTML = text;    
+                $("#edit_skill_overcome")[0].innerHTML = text;    
+            }
         })
         
         $('#edit_skill_overcome').on('blur', async event => {
@@ -305,8 +324,16 @@ class EditSkill extends FormApplication{
             }
         })
 
-        $('#edit_skill_caa_rich').on("focus", event => {
-            $('#edit_skill_caa_rich').trigger("click");
+        $('#edit_skill_caa_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_skill_caa_rich').trigger("click");
+        })
+
+        $('#edit_skill_caa_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $("#edit_skill_caa_rich")[0].innerHTML = text;    
+                $("#edit_skill_caa")[0].innerHTML = text;    
+            }
         })
         
         $('#edit_skill_caa_rich').on("click", event => {
@@ -330,8 +357,16 @@ class EditSkill extends FormApplication{
             }
         })
 
-        $('#edit_skill_attack_rich').on("focus", event => {
-            $('#edit_skill_attack_rich').trigger("click");
+        $('#edit_skill_attack_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_skill_attack_rich').trigger("click");
+        })
+
+        $('#edit_skill_attack_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $("#edit_skill_attack_rich")[0].innerHTML = text;    
+                $("#edit_skill_attack")[0].innerHTML = text;    
+            }
         })
 
         $('#edit_skill_attack_rich').on("click", event => {
@@ -355,8 +390,16 @@ class EditSkill extends FormApplication{
             }
         })
 
-        $('#edit_skill_defend_rich').on("focus", event => {
-            $('#edit_skill_defend_rich').trigger("click");
+        $('#edit_skill_defend_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_skill_defend_rich').trigger("click");
+        })
+
+        $('#edit_skill_defend_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $("#edit_skill_defend_rich")[0].innerHTML = text;    
+                $("#edit_skill_defend")[0].innerHTML = text;    
+            }
         })
 
         $('#edit_skill_defend_rich').on("click", event => {

@@ -244,6 +244,18 @@ class EditAspect extends FormApplication{
             $("#edit_aspect_description").focus();
         })
 
+        description_rich.on('keyup', async event => {
+            if (event.which == 9) description_rich.trigger('click');
+        })
+
+        description_rich.on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_aspect_description_rich')[0].innerHTML = text;    
+                $('#edit_aspect_description')[0].innerHTML = text;    
+            }
+        })
+
         const aspect_desc = html.find("div[id='edit_aspect_description']");
         aspect_desc.on ('blur', async event => {
             if (!window.getSelection().toString()){

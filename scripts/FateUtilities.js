@@ -47,6 +47,19 @@ class FateUtilities extends Application{
                 $(`#${id}`).focus();
             })
 
+            countdowns_rich.on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+                if (text != "discarded") {
+                    for (let c of countdowns){
+                        if (event.currentTarget.id.startsWith(c.id)){
+                            c.innerHTML = text;
+                            event.currentTarget.innerHTML = text;
+                            $(`#${c.id}`).trigger('blur');
+                        }
+                    }
+                }
+            })
+
             const game_notes_rich = $('#game_notes_rich');
             game_notes_rich.on('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
@@ -54,6 +67,16 @@ class FateUtilities extends Application{
                 $('#game_notes').css('display', 'block');
                 $('#game_notes').focus();
             })
+
+            game_notes_rich.on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+                if (text != "discarded") {
+                    $('#game_notes')[0].innerHTML = text;
+                    event.currentTarget.innerHTML = text;
+                    $('#game_notes').trigger('blur');
+                }
+            })
+
             const scene_notes_rich = $('#scene_notes_rich');
             scene_notes_rich.on('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
@@ -61,12 +84,31 @@ class FateUtilities extends Application{
                 $('#scene_notes').css('display', 'block');
                 $('#scene_notes').focus();
             })
+
+            scene_notes_rich.on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+                if (text != "discarded") {
+                    $('#scene_notes')[0].innerHTML = text;
+                    event.currentTarget.innerHTML = text;
+                    $('#scene_notes').trigger('blur');
+                }
+            })
+
             const game_date_time_rich = $('#game_date_time_rich');
             game_date_time_rich.on('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $('#game_date_time_rich').css('display', 'none');
                 $('#game_date_time').css('display', 'block');
                 $('#game_date_time').focus();
+            })
+
+            game_date_time_rich.on('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+                if (text != "discarded") {
+                    $('#game_date_time')[0].innerHTML = text;
+                    event.currentTarget.innerHTML = text;
+                    $('#game_date_time').trigger('blur');
+                }
             })
 
         }
@@ -261,6 +303,16 @@ class FateUtilities extends Application{
             $(`#${id}`).focus();
         })
 
+        trackNotesRich.on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+            if (text != "discarded") {
+                let id = event.currentTarget.id.split("_rich").join("");
+                $(`#${id}`)[0].innerHTML = text;
+                event.currentTarget.innerHTML = text;
+                $(`#${id}`).trigger('blur');
+            }
+        })
+
         const expandTrackNotes = html.find("div[name='FUexpandTrack']");
         
         expandTrackNotes.on("click", async event => {
@@ -416,6 +468,16 @@ class FateUtilities extends Application{
             $(`#${id}`).focus();
         })
 
+        FUAspectNotes_rich.on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+            if (text != "discarded") {
+                let id = event.currentTarget.id.split("_rich").join("");
+                $(`#${id}`)[0].innerHTML = text;
+                event.currentTarget.innerHTML = text;
+                $(`#${id}`).trigger('blur');
+            }
+        })
+
         const FUAspectNotes = html.find("div[name ='FUAspectNotesText']");
         FUAspectNotes.on("blur", async event => {
             if (!window.getSelection().toString()){
@@ -447,7 +509,7 @@ class FateUtilities extends Application{
 
         const game_date_time = html.find(("div[id='game_date_time']"));
         game_date_time.on("blur", async event => {
-            await game.settings.set("fate-core-official", "gameTime", DOMPurify.sanitize(event.target.innerHTML));
+            await game.settings.set("fate-core-official", "gameTime", DOMPurify.sanitize(event.currentTarget.innerHTML));
             await game.socket.emit("system.fate-core-official",{"render":true});
             this.editing = false;
             await this._render(false);
@@ -460,7 +522,7 @@ class FateUtilities extends Application{
         })
 
         game_notes.on("blur", async event => {
-            await game.settings.set("fate-core-official", "gameNotes", DOMPurify.sanitize(event.target.innerHTML));
+            await game.settings.set("fate-core-official", "gameNotes", DOMPurify.sanitize(event.currentTarget.innerHTML));
             await game.socket.emit("system.fate-core-official",{"render":true});
             this.editing = false;
             await this._render(false);
@@ -1593,6 +1655,7 @@ class FateUtilities extends Application{
 
     // Change name/desc on losing focus to editable divs
     async _on_cd_blur(event, html){
+        console.log("blur triggered")
         let data = event.target.id.split("_");
         let sel = window.getSelection().toString();
         if (sel == ""){
@@ -2060,6 +2123,14 @@ class acd extends FormApplication {
         fcoConstants.getPen("cd_name");
         const save = $('#cd_dialog_save');
         save.on('click', (event, html) => this.submit());
+
+        $('#cd_description').on('contextmenu', async event => {
+            $('#cd_description').trigger('blur');
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
+            if (text != "discarded") {
+                $('#cd_description')[0].innerHTML = text;
+            }
+        })
     }
 }
 

@@ -53,8 +53,8 @@ class EditEntityTrack extends FormApplication {
         fcoConstants.getPen("edit_entity_track_when_marked");
         fcoConstants.getPen("edit_entity_track_when_recovers");
 
-        $('#edit_entity_track_when_recovers_rich').on("focus", event => {
-            $('#edit_entity_track_when_recovers_rich').trigger("click");
+        $('#edit_entity_track_when_recovers_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_entity_track_when_recovers_rich').trigger("click");
         })
 
         $('#edit_entity_track_when_recovers_rich').on("click", event => {
@@ -62,6 +62,14 @@ class EditEntityTrack extends FormApplication {
             $("#edit_entity_track_when_recovers_rich").css('display', 'none');
             $("#edit_entity_track_when_recovers").css('display', 'block');
             $("#edit_entity_track_when_recovers").focus();
+        })
+
+        $('#edit_entity_track_when_recovers_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_entity_track_when_recovers_rich')[0].innerHTML = text;    
+                $('#edit_entity_track_when_recovers')[0].innerHTML = text;    
+            }
         })
         
         $('#edit_entity_track_when_recovers').on('blur', async event => {
@@ -79,8 +87,16 @@ class EditEntityTrack extends FormApplication {
             }
         })
 
-        $('#edit_entity_track_when_marked_rich').on("focus", event => {
-            $('#edit_entity_track_when_marked_rich').trigger("click");
+        $('#edit_entity_track_when_marked_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_entity_track_when_marked_rich').trigger("click");
+        })
+
+        $('#edit_entity_track_when_marked_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_entity_track_when_marked_rich')[0].innerHTML = text;    
+                $('#edit_entity_track_when_marked')[0].innerHTML = text;    
+            }
         })
 
         $('#edit_entity_track_when_marked_rich').on("click", event => {
@@ -104,14 +120,22 @@ class EditEntityTrack extends FormApplication {
             }
         })
 
-        $('#edit_entity_track_description_rich').on("focus", event => {
-            $('#edit_entity_track_description_rich').trigger("click");
+        $('#edit_entity_track_description_rich').on("keyup", event => {
+                if (event.which == 9) $('#edit_entity_track_description_rich').trigger("click");
         })
         $('#edit_entity_track_description_rich').on("click", event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
             $("#edit_entity_track_description_rich").css('display', 'none');
             $("#edit_entity_track_description").css('display', 'block');
             $("#edit_entity_track_description").focus();
+        })
+
+        $('#edit_entity_track_description_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_entity_track_description_rich')[0].innerHTML = text;    
+                $('#edit_entity_track_description')[0].innerHTML = text;    
+            }
         })
         
         $('#edit_entity_track_description').on('blur', async event => {
@@ -476,8 +500,8 @@ class EditTracks extends FormApplication {
         fcoConstants.getPen("edit_track_when_marked");
         fcoConstants.getPen("edit_track_when_recovers");
 
-        $('#edit_track_when_recovers_rich').on("focus", event => {
-            $('#edit_track_when_recovers_rich').trigger("click");
+        $('#edit_track_when_recovers_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_track_when_recovers_rich').trigger("click");
         })
 
         $('#edit_track_when_recovers_rich').on("click", event => {
@@ -485,6 +509,14 @@ class EditTracks extends FormApplication {
             $("#edit_track_when_recovers_rich").css('display', 'none');
             $("#edit_track_when_recovers").css('display', 'block');
             $("#edit_track_when_recovers").focus();
+        })
+
+        $('#edit_track_when_recovers_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_track_when_recovers_rich')[0].innerHTML = text;    
+                $('#edit_track_when_recovers')[0].innerHTML = text;    
+            }
         })
         
         $('#edit_track_when_recovers').on('blur', async event => {
@@ -502,8 +534,8 @@ class EditTracks extends FormApplication {
             }
         })
 
-        $('#edit_track_when_marked_rich').on("focus", event => {
-            $('#edit_track_when_marked_rich').trigger("click");
+        $('#edit_track_when_marked_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_track_when_marked_rich').trigger("click");
         })
 
         $('#edit_track_when_marked_rich').on("click", event => {
@@ -511,6 +543,14 @@ class EditTracks extends FormApplication {
             $("#edit_track_when_marked_rich").css('display', 'none');
             $("#edit_track_when_marked").css('display', 'block');
             $("#edit_track_when_marked").focus();
+        })
+
+        $('#edit_track_when_marked_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_track_when_marked_rich')[0].innerHTML = text;    
+                $('#edit_track_when_marked')[0].innerHTML = text;    
+            }
         })
         
         $('#edit_track_when_marked').on('blur', async event => {
@@ -527,14 +567,22 @@ class EditTracks extends FormApplication {
             }
         })
 
-        $('#edit_track_description_rich').on("focus", event => {
-            $('#edit_track_description_rich').trigger("click");
+        $('#edit_track_description_rich').on("keyup", event => {
+            if (event.which == 9) $('#edit_track_description_rich').trigger("click");
         })
         $('#edit_track_description_rich').on("click", event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
             $("#edit_track_description_rich").css('display', 'none');
             $("#edit_track_description").css('display', 'block');
             $("#edit_track_description").focus();
+        })
+
+        $('#edit_track_description_rich').on('contextmenu', async event => {
+            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            if (text != "discarded") {
+                $('#edit_track_description_rich')[0].innerHTML = text;    
+                $('#edit_track_description')[0].innerHTML = text;    
+            }
         })
         
         $('#edit_track_description').on('blur', async event => {

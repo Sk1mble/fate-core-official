@@ -166,28 +166,28 @@ class fcoConstants {
     }
 
     static updateText(prompt, textToUpdate, apply){
-    let label = game.i18n.localize("fate-core-official.Save");
-    if (apply) label = game.i18n.localize("fate-core-official.Apply");
-    return new Promise(resolve => {
-        new Dialog({
-            title: prompt, 
-            content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
-            buttons: {
-                ok: {
-                    label: label,
-                    callback: () => {
-                        resolve(DOMPurify.sanitize(document.getElementById("get_text_box").value))
-                    }
-                },
-                discard: {
-                    label: game.i18n.localize("fate-core-official.Discard"),
-                    callback: () => {
-                        resolve("discarded")
+        let label = game.i18n.localize("fate-core-official.Save");
+        if (apply) label = game.i18n.localize("fate-core-official.Apply");
+        return new Promise(resolve => {
+            new Dialog({
+                title: prompt, 
+                content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
+                buttons: {
+                    ok: {
+                        label: label,
+                        callback: () => {
+                            resolve(DOMPurify.sanitize(document.getElementById("get_text_box").value))
+                        }
+                    },
+                    discard: {
+                        label: game.i18n.localize("fate-core-official.Discard"),
+                        callback: () => {
+                            resolve("discarded")
+                        }
                     }
                 }
-            }
-        }).render(true);
-    });
+            }).render(true);
+        });
     }
 
     static updateShortText(prompt, textToUpdate){
