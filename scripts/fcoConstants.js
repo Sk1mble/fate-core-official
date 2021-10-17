@@ -171,7 +171,7 @@ class fcoConstants {
         return new Promise(resolve => {
             new Dialog({
                 title: prompt, 
-                content: `<div style="background-color:white; color:black;"><textarea rows="10" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
+                content: `<div style="background-color:white; color:black;"><textarea style="min-height:600px; font-family:var(--fco-font-family); width:800px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
                 buttons: {
                     ok: {
                         label: label,
@@ -186,6 +186,10 @@ class fcoConstants {
                         }
                     }
                 }
+            },
+            {
+                width:820,
+                resizable:true
             }).render(true);
         });
     }
