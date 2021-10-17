@@ -156,7 +156,7 @@ class EditPlayerStunts extends FormApplication {
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
-                            }, 5);
+                            }, 50);
                         }
                     }
                 }
@@ -178,7 +178,7 @@ class EditPlayerStunts extends FormApplication {
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
-                            }, 0);
+                            }, 50);
                         }
                     }
                 }

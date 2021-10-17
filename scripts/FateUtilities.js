@@ -2039,7 +2039,7 @@ async renderMe(...args){
           this._render(false);
           this.delayedRender = false;
           this.renderPending = false;
-        }, 0);
+        }, 50);
       } 
     }
 }

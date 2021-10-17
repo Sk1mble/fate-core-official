@@ -227,7 +227,7 @@ class EditPlayerAspects extends FormApplication{
                         }, 50);
                     }
                 }    
-            }, 0);
+            }, 50);
         
     }
 }

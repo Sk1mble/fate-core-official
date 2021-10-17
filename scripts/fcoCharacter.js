@@ -1030,7 +1030,7 @@ export class fcoCharacter extends ActorSheet {
                         this.renderPending = false;
                     }, 50);
             }
-        } else this.renderBanked = true;;
+        } else this.renderBanked = true;
     }
 
     async _on_extras_click(event, html){

@@ -409,7 +409,7 @@ async function checkContainer (actor){
                 }
             }
             actor.updatePending = false;
-        }, 5);
+        }, 50);
     }
 }
 
