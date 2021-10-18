@@ -272,7 +272,7 @@ class EditSkill extends FormApplication{
         })
 
         description_rich.on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_skill_description_rich')[0].innerHTML = text;    
                 $('#edit_skill_description')[0].innerHTML = text;    
@@ -308,7 +308,7 @@ class EditSkill extends FormApplication{
         })
 
         $('#edit_skill_overcome_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $("#edit_skill_overcome_rich")[0].innerHTML = text;    
                 $("#edit_skill_overcome")[0].innerHTML = text;    
@@ -329,7 +329,7 @@ class EditSkill extends FormApplication{
         })
 
         $('#edit_skill_caa_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $("#edit_skill_caa_rich")[0].innerHTML = text;    
                 $("#edit_skill_caa")[0].innerHTML = text;    
@@ -362,7 +362,7 @@ class EditSkill extends FormApplication{
         })
 
         $('#edit_skill_attack_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $("#edit_skill_attack_rich")[0].innerHTML = text;    
                 $("#edit_skill_attack")[0].innerHTML = text;    
@@ -395,7 +395,7 @@ class EditSkill extends FormApplication{
         })
 
         $('#edit_skill_defend_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $("#edit_skill_defend_rich")[0].innerHTML = text;    
                 $("#edit_skill_defend")[0].innerHTML = text;    

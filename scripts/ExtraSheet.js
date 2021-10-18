@@ -241,7 +241,7 @@ export class ExtraSheet extends ItemSheet {
             })
 
             $(`#${this.document.id}_${field}_rich`).on('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
                 if (text != "discarded") {
                     this.editing = false;
                     if (field == "descValue"){

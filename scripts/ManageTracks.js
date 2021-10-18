@@ -65,7 +65,7 @@ class EditEntityTrack extends FormApplication {
         })
 
         $('#edit_entity_track_when_recovers_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_entity_track_when_recovers_rich')[0].innerHTML = text;    
                 $('#edit_entity_track_when_recovers')[0].innerHTML = text;    
@@ -92,7 +92,7 @@ class EditEntityTrack extends FormApplication {
         })
 
         $('#edit_entity_track_when_marked_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_entity_track_when_marked_rich')[0].innerHTML = text;    
                 $('#edit_entity_track_when_marked')[0].innerHTML = text;    
@@ -131,7 +131,7 @@ class EditEntityTrack extends FormApplication {
         })
 
         $('#edit_entity_track_description_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_entity_track_description_rich')[0].innerHTML = text;    
                 $('#edit_entity_track_description')[0].innerHTML = text;    
@@ -512,7 +512,7 @@ class EditTracks extends FormApplication {
         })
 
         $('#edit_track_when_recovers_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_track_when_recovers_rich')[0].innerHTML = text;    
                 $('#edit_track_when_recovers')[0].innerHTML = text;    
@@ -546,7 +546,7 @@ class EditTracks extends FormApplication {
         })
 
         $('#edit_track_when_marked_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_track_when_marked_rich')[0].innerHTML = text;    
                 $('#edit_track_when_marked')[0].innerHTML = text;    
@@ -557,9 +557,9 @@ class EditTracks extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:game.user.isGM, documents:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:game.user.isGM, entities:true}));
                 }
                 $('#edit_track_when_marked').css('display', 'none');
                 $('#edit_track_when_marked_rich')[0].innerHTML = desc;    
@@ -578,7 +578,7 @@ class EditTracks extends FormApplication {
         })
 
         $('#edit_track_description_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_track_description_rich')[0].innerHTML = text;    
                 $('#edit_track_description')[0].innerHTML = text;    

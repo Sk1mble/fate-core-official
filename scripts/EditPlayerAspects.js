@@ -57,7 +57,7 @@ class EditPlayerAspects extends FormApplication{
 
             if (this.object.isOwner){
                 $(`#${id}_rich`).on('contextmenu', async event => {
-                    let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML,true);
+                    let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
                     if (text != "discarded") {
                         $(`#${id}`)[0].innerHTML = text;   
                         $(`#${id}_rich`)[0].innerHTML = text; 
@@ -67,7 +67,7 @@ class EditPlayerAspects extends FormApplication{
                 })
 
                 $(`#${id2}_rich`).on('contextmenu', async event => {
-                    let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML,true);
+                    let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
                     if (text != "discarded") {
                         $(`#${id2}`)[0].innerHTML = text;   
                         $(`#${id2}_rich`)[0].innerHTML = text;  
@@ -81,9 +81,9 @@ class EditPlayerAspects extends FormApplication{
                 if (!window.getSelection().toString()){
                     let desc; 
                     if (isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}));
+                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true}));
                     } else {
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}));
+                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true}));
                     }
 
                     $(`#${id}`).css('display', 'none');

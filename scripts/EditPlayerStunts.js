@@ -107,7 +107,7 @@ class EditPlayerStunts extends FormApplication {
         })
 
         description_rich.on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_stunt_desc_rich')[0].innerHTML = text;
                 $('#edit_stunt_desc')[0].innerHTML = text;

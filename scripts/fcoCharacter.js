@@ -444,7 +444,7 @@ export class fcoCharacter extends ActorSheet {
             })
 
             showyBio.on('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
                 if (text != "discarded") {
                     this.editing = false;
                     await this.object.update({"data.details.biography.value":text});
@@ -461,7 +461,7 @@ export class fcoCharacter extends ActorSheet {
             })
 
             showyDesc.on('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
                 if (text != "discarded") {
                     this.editing = false;
                     await this.object.update({"data.details.description.value":text});
@@ -478,7 +478,7 @@ export class fcoCharacter extends ActorSheet {
             })
 
             showyNotes.on('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
                 if (text != "discarded") {
                     this.editing = false;
                     await this.object.update({"data.details.notes.value":text});
@@ -1000,7 +1000,7 @@ export class fcoCharacter extends ActorSheet {
     }
 
     async updateNotesHTML (event, html){ //This is the method that updates the notes for tracks/aspects when the raw HTML is edited.
-        let text = await fcoConstants.updateText("Edit raw HTML",event.target.innerHTML);
+        let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
         if (text != "discarded") {
             this.editing = false;
             let item = event.currentTarget.getAttribute("data-edit");//This is a much better way of accessing data than splitting the id.
@@ -1025,8 +1025,8 @@ export class fcoCharacter extends ActorSheet {
         if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
                     this.renderPending = true;
-                    setTimeout(() => {
-                        super._render(...args);
+                    setTimeout(async () => {
+                        await super._render(...args);
                         this.renderPending = false;
                     }, 50);
             }

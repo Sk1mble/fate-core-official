@@ -1,3 +1,6 @@
+# Version 4.2.19
+  * Amended 'event.target' to 'event.currentTarget' to fix an issue with the HTML editor in a few different places.
+
 # Version 4.2.18
   * Added right-click to edit raw html for aspect and track notes on an actor
   * Added right-click to edit raw html for attack, overcome, permissions, and other fields on the sheet for an extra.

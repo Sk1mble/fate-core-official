@@ -1655,7 +1655,6 @@ class FateUtilities extends Application{
 
     // Change name/desc on losing focus to editable divs
     async _on_cd_blur(event, html){
-        console.log("blur triggered")
         let data = event.target.id.split("_");
         let sel = window.getSelection().toString();
         if (sel == ""){

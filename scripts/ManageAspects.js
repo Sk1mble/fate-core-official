@@ -249,7 +249,7 @@ class EditAspect extends FormApplication{
         })
 
         description_rich.on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.target.innerHTML, true);
+            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 $('#edit_aspect_description_rich')[0].innerHTML = text;    
                 $('#edit_aspect_description')[0].innerHTML = text;    
