@@ -28,6 +28,12 @@
                     <input type="checkbox" name="defend" {{checked stunt.defend}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Defend'}}">D</b>                   
                 </td>
             </tr>
+            <tr>
+                <td>{{localize 'fate-core-official.Boxes'}}:</td>
+                <td>
+                    <input type="number" name="boxes" min="0" style="height:30px; width:50px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.boxes}}"></input>
+                </td>
+            </tr>
         </table>
     </div><!--End body-->
     <div id="buttons" style="width:400px">

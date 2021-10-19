@@ -344,6 +344,9 @@ export class fcoCharacter extends ActorSheet {
                     fcoConstants.awaitOKDialog(track.name, content, 1000);
             })
 
+            const stunt_box = html.find("input[name='stunt_box']");
+            stunt_box.on("click", event => this._on_click_stunt_box(event, html));
+
             const delete_stunt = html.find("button[name='delete_stunt']");
             delete_stunt.on("click", event => this._onDelete(event,html));
             const edit_stunt = html.find("button[name='edit_stunt']")
@@ -1093,6 +1096,17 @@ export class fcoCharacter extends ActorSheet {
         await this.object.update({
             ["data.tracks"]: tracks
         })
+    }
+
+    async _on_click_stunt_box(event, html){
+        let name = event.target.getAttribute("data-stunt");
+        let index = event.target.getAttribute("data-index");
+        let checked = event.target.checked;
+
+        let stunts = duplicate(this.object.data.data.stunts);
+        let stunt = stunts[name];
+        stunt.box_values[index] = checked;
+        await this.object.update({["data.stunts"]:stunts});
     }
 
     async _onStunts_click(event, html) {

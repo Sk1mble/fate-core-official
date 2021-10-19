@@ -439,7 +439,16 @@ export class fcoActor extends Actor {
                     trackUpdates[t] = track;
                 }
             }
-            await item.update({"data.tracks":trackUpdates},{renderSheet:false});
+            let stuntUpdates = duplicate(item.data.data.stunts);
+            for (let s in stuntUpdates){
+                let stunt = actor?.data?.data?.stunts[s];
+                if (stunt){
+                    stunt = duplicate(stunt);
+                    delete stunt.extra_tag;
+                    stuntUpdates[s] = stunt;
+                }
+            }
+            await item.update({"data.tracks":trackUpdates, "data.stunts":stuntUpdates},{renderSheet:false});
         }
         //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
     

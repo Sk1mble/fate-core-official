@@ -276,6 +276,15 @@
                                     </div>
                                     {{#unless (expanded ../this.document (concat this.name '_stunt'))}}{{else}}
                                     <div class="mfate-stunts__row-body">
+                                        <div>
+                                            {{#each this.box_values}}
+                                                {{#if this}}
+                                                        <input type="checkbox" name="stunt_box" data-index="{{@key}}" data-stunt="{{../this.name}}" style="width:25px; height:25px; float:left;" checked="checked"></input>
+                                                {{else}} 
+                                                        <input type="checkbox" name="stunt_box" data-index="{{@key}}" data-stunt="{{../this.name}}" style="width:25px; height:25px; float:left;"></input>
+                                                {{/if}}
+                                            {{/each}}
+                                        </div>
                                         <div>{{{enr  this.description ../this.document}}}</div>
                                     </div>
                                     <div class="mfate-stunts__row-footer">

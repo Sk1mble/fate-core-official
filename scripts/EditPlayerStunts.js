@@ -75,6 +75,22 @@ class EditPlayerStunts extends FormApplication {
                 this.stunt[t]=formData[t];
             }
             this.stunt.name=this.stunt.name.split(".").join("․");
+
+            let boxes = this.stunt.boxes;
+            let old_box_values = this.stunt.box_values;
+            let new_box_values = [];
+            if (boxes != 0){
+                if (!old_box_values) old_box_values = [];
+                for (let i = 0; i< boxes; i++){
+                    if (old_box_values[i]){
+                        new_box_values.push(old_box_values[i]);
+                    } else {
+                        new_box_values.push(false);
+                    }
+                }
+            }
+            
+            this.stunt.box_values = new_box_values;
             await this.actor.update({"data.stunts":{[this.stunt.name]:this.stunt}})
             if (this.object.type == "Extra"){
                 //code to render editplayerstunts.
