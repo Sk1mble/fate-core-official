@@ -1,3 +1,6 @@
+# Version 4.2.21
+  * Added 'await' on calls to _render methods to prevent a potential bug relating to the mutation observer on the avatar image.
+
 # Version 4.2.20
   * Added a 'boxes' field to the stunt editor, can be set from 0 up or left blank. If greater than 0, a number of checkboxes equal to 'boxes' will be rendered next to the expanded description of a stunt on a character sheet. This lets you keep track of uses per session, escalating stunts, etc. etc. without having to build a separate stress track into the character for keeping track of the stunt.
 

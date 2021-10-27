@@ -321,8 +321,8 @@ export class Thing extends ActorSheet {
         if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
                     this.renderPending = true;
-                    setTimeout(() => {
-                        super._render(...args);
+                    setTimeout(async () => {
+                        await super._render(...args);
                         this.renderPending = false;
                     }, 50);
             }
