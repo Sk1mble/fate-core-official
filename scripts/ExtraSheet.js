@@ -12,6 +12,31 @@ export class ExtraSheet extends ItemSheet {
                     this.renderPending = true;
                     setTimeout(async () => {
                         await super._render(...args);
+                        var avatar = document.querySelector('.mfate-sheet_extra-avatar')
+                        let doc = this.document;
+                        let newsrc;
+                        let target_id;
+                        let this_id = this.document.id;
+                        new MutationObserver(async function onSrcChange(MutationRecord){
+                            // Code to update avatar goes here
+                            target_id = MutationRecord[0].target.id.split("_")[0];
+
+                            // If we strip the absolute path, it will break the link for a Foundry installation hosted on The Forge, plus images directly hosted on websites etc. won't work. 
+                            // So let's not do that for remotely hosted installations.
+                            // Otherwise though we want a local link, to prevent a file set on localhost from breaking if connecting from outside, or a move of dynamic DNS service breaking it.
+
+                            let src = MutationRecord[0].target.src;
+
+                            if (src.startsWith(window.location.origin)){
+                                newsrc = (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
+                            } else {
+                                newsrc = src;
+                            }
+                    
+                            if (target_id == this_id){
+                                await doc.update({"img":newsrc});
+                            }
+                        }).observe(avatar,{attributes:true,attributeFilter:["src"]})
                         this.renderPending = false;
                     }, 50);
             }
@@ -195,34 +220,6 @@ export class ExtraSheet extends ItemSheet {
         })
 
         // Let's do this update ourselves. I know how to make my own code work without fricking stack overflow errors and recursions!
-        
-        var avatar = document.querySelector('.mfate-sheet_extra-avatar')
-        
-        let doc = this.document;
-        let newsrc;
-        let target_id;
-        let this_id = this.document.id;
-        new MutationObserver(function onSrcChange(MutationRecord){
-            // Code to update avatar goes here
-            target_id = MutationRecord[0].target.id.split("_")[0];
-
-            // If we strip the absolute path, it will break the link for a Foundry installation hosted on The Forge, plus images directly hosted on websites etc. won't work. 
-            // So let's not do that for remotely hosted installations.
-            // Otherwise though we want a local link, to prevent a file set on localhost from breaking if connecting from outside, or a move of dynamic DNS service breaking it.
-
-            let src = MutationRecord[0].target.src;
-
-            if (src.startsWith(window.location.origin)){
-                newsrc = (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
-            } else {
-                newsrc = src;
-            }
-            console.log(newsrc);
-            if (target_id == this_id){
-                doc.update({"img":newsrc});
-            }
-          })
-            .observe(avatar,{attributes:true,attributeFilter:["src"]})
 
         const name = html.find("textarea[name='name']");
     

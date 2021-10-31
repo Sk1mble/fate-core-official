@@ -1,3 +1,6 @@
+# Version 4.2.22
+  * Moved addition of mutationobserver for Extra avatar from activateListeners to end of overridden _render method, as this way we can guaratnee the avatar has been rendered _before_ we attempt to apply the listener.
+
 # Version 4.2.21
   * Added 'await' on calls to _render methods to prevent a potential bug relating to the mutation observer on the avatar image.
 
