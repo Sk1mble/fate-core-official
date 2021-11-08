@@ -1,3 +1,6 @@
+# Version 4.2.23
+  * Added a macro to the Fate Core Official macro compendium which allows the owner of a token to roll a track for the selected token.
+
 # Version 4.2.22
   * Moved addition of mutationobserver for Extra avatar from activateListeners to end of overridden _render method, as this way we can guaratnee the avatar has been rendered _before_ we attempt to apply the listener.
 
