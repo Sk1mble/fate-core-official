@@ -265,11 +265,20 @@ class FateCharacterImporter {
 
         // Import from Fari (only supports the newest version)
         //console.log(data);
+        let allSections;
+        let interimSections;
+
         if (data?.fariType?.toLowerCase() === "character") {
-            const allSections = data.pages.flatMap((page) => {
+            interimSections = data.pages.flatMap((page) => {
                 return page.sections;
             });
 
+            if (interimSections[0].left || interimSections [0].right){
+                allSections = interimSections[0].left.concat(interimSections[0].right)
+            } else {
+                allSections = interimSections;
+            }
+            
             //Assign aspects
             const aspectSection = allSections.find(
                 (section) => section.label.toLowerCase() === "aspects"
@@ -316,6 +325,7 @@ class FateCharacterImporter {
             const stuntSection = allSections.find (
                 (section) => section.label.toLowerCase().includes("stunts")
             );
+
             const rawStunts = stuntSection?.blocks.map((block) => {
                 return {
                     name: block.label,
