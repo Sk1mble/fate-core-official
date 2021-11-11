@@ -201,9 +201,11 @@ export class fcoActor extends Actor {
     getHighest (data, test, extra_id){
         let count = 1;
         // Get the highest number on any item relating to this one.
+        // data = aspects, stunts etc. test = aspect, stunt etc. name including integer if already applied
         for (let item in data){
             if (item.startsWith(test)){
                 if (data[item].extra_tag?.extra_id == extra_id){
+                    // The item on the character sheet is from the extra being investigated.
                     let num = parseInt(item.split(" ")[item.split(" ").length-1],10);
                     if (num){
                         return num;

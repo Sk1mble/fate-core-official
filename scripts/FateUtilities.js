@@ -1128,7 +1128,6 @@ class FateUtilities extends Application{
                         let mroll = JSON.parse(message.data.roll);
                         mroll.total = roll.total;
                         roll.roll = mroll;
-                        console.log("about to update with "+ JSON.stringify(mroll));
                         await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
                     }
                     game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
@@ -1148,7 +1147,6 @@ class FateUtilities extends Application{
                                 let mroll = JSON.parse(message.data.roll);
                                 mroll.total = roll.total;
                                 roll.roll = mroll;
-                                console.log("about to update with "+ JSON.stringify(mroll));
                                 await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
                             }
                             game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);

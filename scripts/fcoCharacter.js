@@ -287,7 +287,6 @@ export class fcoCharacter extends ActorSheet {
             track_name.on("contextmenu", event => {
                     let name = event.currentTarget.id.split("_")[1]
                     let track = this.object.data.data.tracks[name];
-                    console.log(name);
             
                     let linked_skills_text =""
                     if (track.linked_skills != undefined && track.linked_skills.length >0){

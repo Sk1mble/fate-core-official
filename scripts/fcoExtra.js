@@ -14,7 +14,6 @@ export class fcoExtra extends Item {
     }
 
     async _onDelete(options, userId){
-        console.log(userId);
         if (this?.parent && this?.parent?.type == "fate-core-official") {
             if (userId == game.user.id) await this.parent.deactivateExtra (this, true);
         }
