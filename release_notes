@@ -1,3 +1,9 @@
+# Version 4.2.24
+  * Amended FateCharacterImporter.js to accommodate the altered structure of the current version of Fari's character files.
+  * Minor bugfixes
+  * Removed some unneeded console.log lines.
+  * Added an ad-hoc dice rolling tool for GMs in the roll history tab of Fate Utilities.
+
 # Version 4.2.23
   * Added a macro to the Fate Core Official macro compendium which allows the owner of a token to roll a track for the selected token.
 

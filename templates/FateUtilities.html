@@ -435,7 +435,8 @@
 
                     <!----------------------BEGIN Roll History Tab-->
                     <div name = "rolls" class="tab rolls" data-tab="rolls" style="background-color:lightgray; text-align:center; font-family:var(--fco-font-family); padding-top:10px; max-width:99%">
-                        {{#if GM}}<button type="button" id="fu_clear_rolls" style="font-size:{{fontSize}}pt">{{localize 'fate-core-official.ClearAllRolls'}}</button>{{/if}}
+                        {{#if GM}}<button type="button" class="fas fa-trash fu_button" id="fu_clear_rolls" style="font-size:{{fontSize}}pt; border:2px; border-style:outset; width:50px; height:50px; background-color:white" title="{{localize 'fate-core-official.ClearAllRolls'}}"></button>
+                        <button type="button" title="{{localize 'fate-core-official.fu-adhoc-roll-button'}}" style="width:50px; height:50px; border:2px; border-style:outset; background-color:white" id="fu_ad_hoc_roll" class="fas fa-dice fu_button"></button>{{/if}}
                         <div id="fu_rolls_tab" style="background-color:lightgray; overflow-y:auto; max-height:calc({{height}}px - 160px);">
                         <table style="background:none;">
                         <tr>

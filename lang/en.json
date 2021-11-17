@@ -1,4 +1,13 @@
 {
+   "fate-core-official.fu-adhoc-roll-button":"Make an ad-hoc roll",
+   "fate-core-official.fu-adhoc-roll":"Ad-Hoc Roll",
+   "fate-core-official.fu-adhoc-roll-actor-name":"Actor Name:",
+   "fate-core-official.fu-adhoc-roll-skill-name":"Skill Name:",
+   "fate-core-official.fu-adhoc-roll-modifier":"Skill Rank & Modifiers:",
+   "fate-core-official.fu-adhoc-roll-description":"Description:",
+   "fate-core-official.fu-adhoc-roll-mysteriousEntity":"Mysterious Entity",
+   "fate-core-official.fu-adhoc-roll-mysteriousSkill":"Mysterious Skill",
+   "fate-core-official.fu-adhoc-roll-mysteriousReason":"Mysterious Reason",
    "fate-core-official.fu-ignore-list-name":"Fate Utilities Ignore List",
    "fate-core-official.fu-ignore-list-hint":"A comma separated list of prefixes which denote a token is to be ignored when populating data for Fate Utilities",
    "fate-core-official.sharedFrom":"Shared from {name}",

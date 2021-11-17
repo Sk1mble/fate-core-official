@@ -441,6 +441,9 @@ class FateUtilities extends Application{
         const fu_clear_rolls = html.find("button[id='fu_clear_rolls']");
         fu_clear_rolls.on("click", event => this._fu_clear_rolls(event, html));
 
+        const fu_adhoc_roll = html.find("button[id='fu_ad_hoc_roll']");
+        fu_adhoc_roll.on("click", event => this._fu_adhoc_roll(event, html));
+
         const fu_roll_button = html.find("button[name='fu_roll_button']");
         fu_roll_button.on("click",event => this._fu_roll_button(event, html));
 
@@ -1248,6 +1251,59 @@ class FateUtilities extends Application{
 
     async _fu_clear_rolls(event,html){
         game.scenes.viewed.unsetFlag("fate-core-official","rolls");
+    }
+
+    _fu_adhoc_roll(event, html){
+        let name = "";
+        let skill = ""; 
+        let modifier = 0;
+        let flavour = "";
+
+        let content = `<table style="border:none;">
+        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-actor-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-name"></input></td></tr>
+        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-skill-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-skill"></input></td></tr>
+        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-modifier")}</td><td><input style="background-color:white" type="number" id="fco-gmadhr-modifier"></input></td></tr>
+        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-description")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-flavour"></input></td></tr>
+        </tr></table>`;
+        let width = 400;
+        let height = 230;
+
+        new Dialog({
+                    title: game.i18n.localize("fate-core-official.fu-adhoc-roll"),
+                    content: content,
+                    buttons: {
+                        ok: {
+                            label: game.i18n.localize("fate-core-official.OK"),
+                            callback: async ()=> {
+                            // Do the stuff here
+                            name = $('#fco-gmadhr-name')[0].value;
+                            if (!name) name = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousEntity");
+                            skill = $('#fco-gmadhr-skill')[0].value;
+                            if (!skill) skill = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousSkill");
+                            modifier = $('#fco-gmadhr-modifier')[0].value;
+                            if (!modifier) modifier = 0;
+                            flavour = $('#fco-gmadhr-flavour')[0].value;
+                            if (!flavour) flavour = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousReason");
+
+                            let r = new Roll(`4dF + ${modifier}`);
+                            let roll = await r.roll();
+                            roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
+                            let msg = ChatMessage.getSpeaker(game.user)
+                            msg.alias = name;
+            
+                            roll.toMessage({
+                                flavor: `<h1>${skill}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+                                Skill Rank & Modifiers: ${modifier} <br>Description: ${flavour}`,
+                                speaker: msg
+                            });
+                            }
+                            }
+                        }
+                },
+                {
+                    width:width,
+                    height:height,
+                }).render(true);
     }
 
     async _on_avatar_click(event, html){
