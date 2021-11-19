@@ -577,6 +577,11 @@
                 {{#if conflict}}{{#unless combatants_only}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.notCombatantsOnly'}}" class="fu_toggle_off fas fa-fist-raised"></i>{{else}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.combatantsOnly'}}" class="fu_toggle_on fas fa-fist-raised"></i>{{/unless}}
                 ({{localize 'fate-core-official.Exchange'}} {{exchange}})</h2>
                     <table style="border:none; background-color:transparent">
+                    <tr>
+                        <td width="25px"><i class="fas fa-thumbtack fco-pin-conflict {{#if GM}}mfate-panel__header-button{{/if}}" {{#if pinned}}style="color:black"{{else}}style="color:grey"{{/if}} ></i></td><td>{{combatSceneName}}</td>
+                    </tr>
+                    </table>
+                    <table style="border:none; background-color:transparent">
                     {{#if GM}}
                     <tr>
                         <td>

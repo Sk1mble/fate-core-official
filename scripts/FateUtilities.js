@@ -47,6 +47,13 @@ class FateUtilities extends Application{
                 $(`#${id}`).focus();
             })
 
+            const pinConflict = $('.fco-pin-conflict');
+            pinConflict.on('click', async event => {
+                let pinned = game.combat.data.scene;
+                if (!pinned) await game.combat.update({scene:game.scenes.viewed.id});
+                if (pinned) await game.combat.update({scene:null});
+            })
+
             countdowns_rich.on('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
                 if (text != "discarded") {
@@ -128,6 +135,8 @@ class FateUtilities extends Application{
         const nextConflict = html.find('button[id="next_conflict"]');
         nextConflict.on("click", async (event) => {
             let combats = game.combats.contents.filter(c => c.data.scene == game.scenes.viewed.id);
+            let unpinnedCombats = game.combats.contents.filter (c => c.data.scene == null);
+            combats = combats.concat(unpinnedCombats);
             let combat = game.combats.viewed;
             let index = combats.indexOf(combat);
             index ++;
@@ -919,7 +928,15 @@ class FateUtilities extends Application{
             let asa = game.scenes.viewed.getFlag("fate-core-official", "situation_aspects");
             if (!asa) asa = {};
             let all_sit_aspects = duplicate(asa);
-            if (keyboard.isDown("Shift") && game.user.isGM && asa.filter(as => as.free_invokes > 0).length > 0){
+
+            let shift_down = false; 
+            if (isNewerVersion(game.version, "9.230")){
+                shift_down = game.system["fco-shifted"];    
+            } else {
+                shift_down = keyboard.isDown("Shift");
+            }
+            
+            if (shift_down && game.user.isGM && Object.keys(asa).length > 0 && asa.filter(as => as.free_invokes > 0).length > 0){
                // Add dialog here to pick aspect(s) being invoked.
                // Dialogue should display all situation aspects in current scene with number of free invokes;
                // We then need to harvest the number of invokes being used on each and set bonus accordingly.
@@ -1021,7 +1038,14 @@ class FateUtilities extends Application{
 
             let invokedAspect = undefined;
 
-            if (keyboard.isDown("Shift") && game.user.isGM && asa.filter(as => as.free_invokes > 0).length > 0){
+            let shift_down = false; 
+            if (isNewerVersion(game.version, "9.230")){
+                shift_down = game.system["fco-shifted"];    
+            } else {
+                shift_down = keyboard.isDown("Shift");
+            }
+
+            if (shift_down && game.user.isGM && Object.keys(asa).length >0 && asa.filter(as => as.free_invokes > 0).length > 0){
                 let options = ""
                 let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
@@ -1692,7 +1716,14 @@ class FateUtilities extends Application{
         let vis = countdown.visible;
         // Valid values are visible, hidden, show_boxes
 
-        if (keyboard.isDown("Shift")){
+        let shift_down = false; 
+        if (isNewerVersion(game.version, "9.230")){
+            shift_down = game.system["fco-shifted"];    
+        } else {
+            shift_down = keyboard.isDown("Shift");
+        }
+
+        if (shift_down){
             if (vis == "hidden") countdown.visible = "visible";
             if (vis == "show_boxes") countdown.visible = "hidden";
             if (vis == "visible") countdown.visible = "show_boxes";
@@ -1769,16 +1800,36 @@ class FateUtilities extends Application{
 
         if (type === "find"){
             let t_id = id;
-            let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
-            canvas.animatePan(token, 1);
-            if (token.isOwner) {
-                token.object.control({releaseOthers:true});
+            let combatant = game.combat.getCombatantByToken(t_id);
+            let token = combatant.token;
+            //let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
+            if (game.combat.data.scene){
+                canvas.animatePan(token, 1);
+                if (token.isOwner) {
+                    token.object.control({releaseOthers:true});
+                }
+            } else {
+                console.log(combatant)
+                if (combatant.data.sceneId){
+                    let scene = game.scenes.get(combatant.data.sceneId);
+                    if (scene.permission > 0){
+                        await game.scenes.get(combatant.data.sceneId).view();
+                        canvas.animatePan(token, 1);
+                        if (token.isOwner) {
+                            token.object.control({releaseOthers:true});
+                        }   
+                    } else {
+                        ui.notifications.info(game.i18n.localize("fate-core-official.nopermissionsforscene"));
+                    }
+                }
             }
+            
         }
 
         if (type === "sheet"){
             let t_id = id;
-            let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
+            let combatant = game.combat.getCombatantByToken(t_id);
+            let token = combatant.token;
             const sheet = token.actor.sheet;
             sheet.render(true, {token: token});
             sheet.maximize();
@@ -1841,7 +1892,7 @@ async getData(){
     }
     
     const data = {};
-    if (game.combat==null || tracker_disabled || game?.combat?.data?.scene == null){
+    if (game.combat==null || tracker_disabled || (game?.combat?.data?.scene == null && !isNewerVersion(game.version, "9.230"))){
         data.conflict = false;
     } else {
         data.conflict = true;
@@ -1905,6 +1956,7 @@ async getData(){
         notes = ""
     }
     data.notes = notes;
+    console.log(game.scenes.viewed.tokens.contents)
     game?.scenes?.viewed?.tokens?.contents?.forEach(token => {
 
         let ignore = false;
@@ -1967,6 +2019,13 @@ async getData(){
     data.rolls = rolls;
     data.user = game.user;
     let aspects = game.settings.get("fate-core-official","gameAspects");
+    if (game.combat?.data?.scene){
+        data.combatSceneName = game.scenes.get(game.combat.data.scene).name;
+        data.pinned = true;
+    } else {
+        data.combatSceneName = game.i18n.localize("fate-core-official.unpinned");
+        data.pinned = false;
+    }
 
     data.game_aspects = aspects;
     data.game_time = game.settings.get("fate-core-official","gameTime");
@@ -1977,9 +2036,9 @@ async getData(){
 
     if (data.combatants_only && data.conflict){
         let combatTokens = data.combat_tokens.concat(data.has_acted_tokens);
-        data.all_tokens = data.all_tokens.filter(t=>combatTokens.indexOf(t) != -1);
+        data.all_tokens = combatTokens;
     }
-    data.numConflicts = game.combats.contents.filter(c => c.data.scene == game.scenes.viewed.id).length;
+    data.numConflicts = (game.combats.contents.filter(c => c.data.scene == game.scenes.viewed.id).length)+(game.combats.contents.filter(c => c.data.scene == null).length);
     
     let countdowns = game.settings.get("fate-core-official", "countdowns")
     if (countdowns?.keys?.length < 1){

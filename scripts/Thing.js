@@ -578,14 +578,28 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
 
 Hooks.on ('dropCanvasData', async (canvas, data) => {
     if (game.user.isGM){
-        createThing (canvas.scene.data, data, game.user.id, keyboard.isDown("Shift"));
+
+        let shift_down = false; 
+        if (isNewerVersion(game.version, "9.230")){
+            shift_down = game.system["fco-shifted"];    
+        } else {
+            shift_down = keyboard.isDown("Shift");
+        }
+
+        createThing (canvas.scene.data, data, game.user.id, shift_down);
     } else {
         if (game.settings.get("fate-core-official","PlayerThings")){
             let GMs = game.users.contents.filter(user => user.active && user.isGM);
             if (GMs.length == 0) {
                 ui.notifications.error("A GM has to be logged in for you to create item tokens.")
             } else {
-                game.socket.emit("system.fate-core-official", {"action":"create_thing", "scene":canvas.scene, "data":data, "id":game.user.id, "shiftDown":keyboard.isDown("Shift")})
+                let shift_down = false; 
+                if (isNewerVersion(game.version, "9.230")){
+                    shift_down = game.system["fco-shifted"];    
+                } else {
+                    shift_down = keyboard.isDown("Shift");
+                }
+                game.socket.emit("system.fate-core-official", {"action":"create_thing", "scene":canvas.scene, "data":data, "id":game.user.id, "shiftDown":shift_down})
             }
         }
     }
@@ -627,12 +641,18 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
         //Need to check if the user has ownership of the target. If not, do nothing.
             if (target.isOwner){
                 //target.createEmbeddedDocuments("Item", [i.data]);
+                let shift_down = false; 
+                    if (isNewerVersion(game.version, "9.230")){
+                        shift_down = game.system["fco-shifted"];    
+                    } else {
+                        shift_down = keyboard.isDown("Shift");
+                    }
                 if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
-                    if (!keyboard.isDown("Shift")){
+                    if (!shift_down){
                         await actor.deleteEmbeddedDocuments("Item", [i.id]);
                     }
                 } else {
-                    if (keyboard.isDown("Shift")){
+                    if (shift_down){
                         await actor.deleteEmbeddedDocuments("Item", [i.id]);
                     }
                 }
@@ -654,12 +674,18 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
             }
             
             if (t.actor.isOwner && target.isOwner){
+                let shift_down = false; 
+                    if (isNewerVersion(game.version, "9.230")){
+                        shift_down = game.system["fco-shifted"];    
+                    } else {
+                        shift_down = keyboard.isDown("Shift");
+                    }
                 if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
-                    if (!keyboard.isDown("Shift")){
+                    if (!shift_down){
                         await t.actor.deleteEmbeddedDocuments("Item", [data.data._id]);
                     }
                 } else {
-                    if (keyboard.isDown("Shift")){
+                    if (shift_down){
                         await t.actor.deleteEmbeddedDocuments("Item", [data.data._id])
                     }
                 }

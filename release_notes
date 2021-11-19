@@ -1,3 +1,9 @@
+# Version 4.2.25
+  * Compatibility with 9.231 confirmed
+  * Shift clicking changed to use new keybinding API
+  * A couple of bugs killed relating to shift-click features.
+  * Added support for unpinned conflicts.
+
 # Version 4.2.24
   * Amended FateCharacterImporter.js to accommodate the altered structure of the current version of Fari's character files.
   * Minor bugfixes

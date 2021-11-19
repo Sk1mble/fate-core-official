@@ -393,6 +393,19 @@ Hooks.once('init', async function () {
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
 
+    if (isNewerVersion(game.version, "9.230")){
+        game.keybindings.register("fate-core-official", "fcoInteractionModifier", {
+            name: "Fate Core Official modifier key for dragging and clicking",
+            uneditable: [
+              {
+                key: "SHIFT"
+              }
+            ],
+            onDown: () => { game.system["fco-shifted"] = true; },
+            onUp: () => { game.system["fco-shifted"] = false; }
+          })
+    }
+    
     game.settings.register("fate-core-official","tracks",{
         name:"tracks",
         hint:game.i18n.localize("fate-core-official.TrackManagerHint"),
@@ -1072,7 +1085,8 @@ game.settings.register("fate-core-official","freeStunts", {
     Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
 
     // Register Item sheets
-    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'] });
+    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
+    Items.unregisterSheet('core', ItemSheet);
 
     game.settings.register("fate-core-official", "gameTime", {
         name: game.i18n.localize("fate-core-official.GameTime"),

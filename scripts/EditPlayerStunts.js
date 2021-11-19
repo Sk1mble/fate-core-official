@@ -325,7 +325,13 @@ class StuntDB extends Application {
                 let type = event.target.getAttribute("data-mfdtype");
                 let origin = event.target.getAttribute("data-mfactorid");
                 let dragged_name = event.target.getAttribute("data-mfname");
-                let shift_down = keyboard.isDown("Shift");
+                
+                let shift_down = false; 
+                if (isNewerVersion(game.version, "9.230")){
+                    shift_down = game.system["fco-shifted"];    
+                } else {
+                    shift_down = keyboard.isDown("Shift");
+                }
 
                 let dragged= this.stunts[dragged_name];
                 let user = game.user.id;

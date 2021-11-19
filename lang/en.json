@@ -1,4 +1,6 @@
 {
+   "fate-core-official.nopermissionsforscene":"That token is on a scene you don't have permission to view.",
+   "fate-core-official.unpinned":"Unpinned",
    "fate-core-official.fu-adhoc-roll-button":"Make an ad-hoc roll",
    "fate-core-official.fu-adhoc-roll":"Ad-Hoc Roll",
    "fate-core-official.fu-adhoc-roll-actor-name":"Actor Name:",
@@ -1347,7 +1349,7 @@
     "fate-core-official.OrderTracksTitle":"Default Track Order Setup for ",
     "fate-core-official.OrderTracks":"Set order for tracks on new sheets",
     "fate-core-official.aspectFromTrack":"This aspect is from a character's track and can't be edited here.",
-    "fate-core-official.NextConflict":"Cycle to next conflict in this scene.",
+    "fate-core-official.NextConflict":"Cycle to next available conflict (pinned to this scene or unpinned).",
     "fate-core-official.AddConflict":"Add a new conflict to this scene.",
     "fate-core-official.combatantsOnly":"Click to show information for all tokens in this scene.",
     "fate-core-official.notCombatantsOnly":"Click to show information only for combatants in the current conflict.",
