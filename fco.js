@@ -201,7 +201,7 @@ Hooks.once('ready', async function () {
                 const cont = html.find('button[id="fco_continue_button"]');
                 cont.on('click', async event => {
                     await game.settings.set("fate-core-official","run_once",true);
-                    await game.settings.set("fate-core-official","defaults",game.i18n.localize("fate-core-official.baseDefaults"))
+                    await game.settings.set("fate-core-official","defaults",game.i18n.translations["fate-core-official"]["baseDefaults"])
                     await ui.sidebar.render(false);
                     this.close();
                 })
@@ -510,7 +510,7 @@ Hooks.once('init', async function () {
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.FateCoreDefaultSkills"));
+                        game.settings.set("fate-core-official","skills",game.i18n.translations["fate-core-official"]["FateCoreDefaultSkills"]);
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
@@ -523,21 +523,21 @@ Hooks.once('init', async function () {
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
-                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.FateCondensedDefaultSkills"));
+                        game.settings.set("fate-core-official","skills",game.i18n.translations["fate-core-official"]["FateCondensedDefaultSkills"]);
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.FateAcceleratedDefaultSkills"));
+                        game.settings.set("fate-core-official","skills",game.i18n.translations["fate-core-official"]["FateAcceleratedDefaultSkills"]);
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","skills",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultSkills"));
+                        game.settings.set("fate-core-official","skills",game.i18n.translations["fate-core-official"]["DresdenFilesAcceleratedDefaultSkills"]);
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
@@ -565,13 +565,13 @@ Hooks.once('init', async function () {
             onChange: value => { // A callback function which triggers when the setting is changed
                     if (value == "fateCore"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.FateCoreDefaultAspects"));
+                            game.settings.set("fate-core-official","aspects",game.i18n.translations["fate-core-official"]["FateCoreDefaultAspects"]);
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value == "fateCondensed"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.FateCondensedDefaultAspects"));
+                            game.settings.set("fate-core-official","aspects",game.i18n.translations["fate-core-official"]["FateCondensedDefaultAspects"]);
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
@@ -583,13 +583,13 @@ Hooks.once('init', async function () {
                     }
                     if (value=="accelerated"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.FateAcceleratedDefaultAspects"));
+                            game.settings.set("fate-core-official","aspects",game.i18n.translations["fate-core-official"]["FateAcceleratedDefaultAspects"]);
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="dfa"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultAspects"));
+                            game.settings.set("fate-core-official","aspects",game.i18n.translations["fate-core-official"]["DresdenFilesAcceleratedDefaultAspects"]);
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
@@ -616,32 +616,36 @@ Hooks.once('init', async function () {
         onChange: value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.FateCoreDefaultTracks"));
+                        game.settings.set("fate-core-official","tracks",game.i18n.translations["fate-core-official"]["FateCoreDefaultTracks"]);
                         game.settings.set("fate-core-official","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
                         game.settings.set("fate-core-official","tracks",{});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.FateCondensedDefaultTracks"));
+                        game.settings.set("fate-core-official","tracks",game.i18n.translations["fate-core-official"]["FateCondensedDefaultTracks"]);
                         game.settings.set("fate-core-official","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.FateAcceleratedDefaultTracks"));
+                        game.settings.set("fate-core-official","tracks",game.i18n.translations["fate-core-official"]["FateAcceleratedDefaultTracks"]);
                         game.settings.set("fate-core-official","defaultTracks","nothing");
+                        game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultTracks"));
-                        game.settings.set("fate-core-official","track_categories",game.i18n.localize("fate-core-official.DresdenFilesAcceleratedDefaultTrackCategories"));
+                        game.settings.set("fate-core-official","tracks",game.i18n.translations["fate-core-official"]["DresdenFilesAcceleratedDefaultTracks"]);
+                        game.settings.set("fate-core-official","track_categories",game.i18n.translations["fate-core-official"]["DresdenFilesAcceleratedDefaultTrackCategories"]);
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
                 }
