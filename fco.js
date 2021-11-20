@@ -88,7 +88,7 @@ Hooks.once('ready', () => {
 
     // Set up a reference to the Fate Core Official translations file or fallback file.
     if (game.i18n?.translations["fate-core-official"]) {
-        game.system["lang"] = game.i8n.translations["fate-core-official"];
+        game.system["lang"] = game.i18n.translations["fate-core-official"];
     } else {
         game.system["lang"] = game.i18n._fallback["fate-core-official"];
     }
