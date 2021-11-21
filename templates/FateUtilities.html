@@ -573,9 +573,21 @@
        </div><!-- This div contains the main content pane-->
        {{#if conflict}}
        <div style="width:32em; display:flex; padding:2px; flex-direction:column"><!-- This div contains the combat tracker pane-->
-            <h2 style="padding-top:8px">{{localize 'fate-core-official.ActionTracker'}}
-                {{#if conflict}}{{#unless combatants_only}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.notCombatantsOnly'}}" class="fu_toggle_off fas fa-fist-raised"></i>{{else}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.combatantsOnly'}}" class="fu_toggle_on fas fa-fist-raised"></i>{{/unless}}
-                ({{localize 'fate-core-official.Exchange'}} {{exchange}})</h2>
+                <table style="border:none; padding:none; background-color:transparent">
+                    <tr>
+                        <td style="width:90%">
+                             <input style="background:transparent; cursor:text; padding:0; font-size:large; font-weight:bold; border:none;" id="conflict_name_input" type="text" {{#unless GM}}disabled="disabled"{{/unless}} value="{{conflictName}}"></input>       
+                        </td>
+                        <td style="width:10%">
+                            {{#if conflict}}{{#unless combatants_only}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.notCombatantsOnly'}}" class="fu_toggle_off fas fa-fist-raised"></i>{{else}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.combatantsOnly'}}" class="fu_toggle_on fas fa-fist-raised"></i>{{/unless}}
+                        </td>
+                    </tr>
+                    <tr style="padding:0; background:transparent">
+                        <td colspan="2">
+                            {{localize 'fate-core-official.Exchange'}} {{exchange}}
+                        </td>
+                    </tr>
+                </table>
                     <table style="border:none; background-color:transparent">
                     <tr>
                         <td width="25px"><i class="fas fa-thumbtack fco-pin-conflict {{#if GM}}mfate-panel__header-button{{/if}}" {{#if pinned}}style="color:black"{{else}}style="color:grey"{{/if}} ></i></td><td>{{combatSceneName}}</td>

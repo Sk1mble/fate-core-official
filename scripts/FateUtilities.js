@@ -54,6 +54,12 @@ class FateUtilities extends Application{
                 if (pinned) await game.combat.update({scene:null});
             })
 
+            const id_conflict = html.find('input[id="conflict_name_input"]');
+            id_conflict.on("change", async event => {
+                let new_name = event.currentTarget.value;
+                await game.combat.setFlag("fate-core-official","name",new_name);
+            })
+
             countdowns_rich.on('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
                 if (text != "discarded") {
@@ -1892,6 +1898,11 @@ async getData(){
     }
     
     const data = {};
+    data.conflictName = game.combat.getFlag("fate-core-official","name");
+    if (!data.conflictName) {
+        let conflictNum = game.combats.combats.indexOf(game.combat)+1;
+        data.conflictName = game.i18n.localize("fate-core-official.word_for_conflict") + " "+conflictNum;
+    }
     if (game.combat==null || tracker_disabled || (game?.combat?.data?.scene == null && !isNewerVersion(game.version, "9.230"))){
         data.conflict = false;
     } else {
