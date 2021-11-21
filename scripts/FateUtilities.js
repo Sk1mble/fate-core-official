@@ -1810,17 +1810,16 @@ class FateUtilities extends Application{
             let token = combatant.token;
             //let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
             if (game.combat.data.scene){
-                canvas.animatePan(token, 1);
+                canvas.animatePan(token.object, 5);
                 if (token.isOwner) {
                     token.object.control({releaseOthers:true});
                 }
             } else {
-                console.log(combatant)
                 if (combatant.data.sceneId){
                     let scene = game.scenes.get(combatant.data.sceneId);
                     if (scene.permission > 0){
                         await game.scenes.get(combatant.data.sceneId).view();
-                        canvas.animatePan(token, 1);
+                        canvas.animatePan(token.object, 5);
                         if (token.isOwner) {
                             token.object.control({releaseOthers:true});
                         }   
@@ -1967,9 +1966,7 @@ async getData(){
         notes = ""
     }
     data.notes = notes;
-    console.log(game.scenes.viewed.tokens.contents)
     game?.scenes?.viewed?.tokens?.contents?.forEach(token => {
-
         let ignore = false;
         if (token.actor == null) ignore = true;
         if (token.actor.data.type !== "fate-core-official") ignore = true;

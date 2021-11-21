@@ -1,3 +1,6 @@
+# Version 4.2.28
+  * Fixed a bug in the 'find token' combat tracker button. It wasn't panning to the token.
+
 # Version 4.2.27
   * Added the ability to name individual conflicts to assist in identifying which one you're looking at or for thematic reasons.
 
