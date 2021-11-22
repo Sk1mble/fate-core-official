@@ -1897,15 +1897,15 @@ async getData(){
     }
     
     const data = {};
-    data.conflictName = game.combat.getFlag("fate-core-official","name");
-    if (!data.conflictName) {
-        let conflictNum = game.combats.combats.indexOf(game.combat)+1;
-        data.conflictName = game.i18n.localize("fate-core-official.word_for_conflict") + " "+conflictNum;
-    }
     if (game.combat==null || tracker_disabled || (game?.combat?.data?.scene == null && !isNewerVersion(game.version, "9.230"))){
         data.conflict = false;
     } else {
         data.conflict = true;
+        data.conflictName = game.combat.getFlag("fate-core-official","name");
+        if (!data.conflictName) {
+            let conflictNum = game.combats.combats.indexOf(game.combat)+1;
+            data.conflictName = game.i18n.localize("fate-core-official.word_for_conflict") + " "+conflictNum;
+        }
 
         //Let's build a list of the tokens from game.scenes.viewed.tokens.contents and feed them to the presentation layer
         let c = game.combat.combatants;

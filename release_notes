@@ -1,3 +1,6 @@
+# Version 4.2.30
+  * Bugfix; Fate Utilities wouldn't work without there being an active combat (oops).
+
 # Version 4.2.29
   * Added a system option to disable enforcing the refresh total on PCs.
 
