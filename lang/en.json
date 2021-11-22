@@ -1,4 +1,6 @@
 {
+   "fate-core-official.enforceRefreshMenuName":"Enforce PC refresh total?",
+   "fate-core-official.enforceRefreshMenuHint":"If true, enforces that a PC's current refresh can't be more than the world refresh minus refresh spent.",
    "fate-core-official.word_for_conflict":"Conflict",
    "fate-core-official.nopermissionsforscene":"That token is on a scene you don't have permission to view.",
    "fate-core-official.unpinned":"Unpinned",

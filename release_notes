@@ -1,3 +1,6 @@
+# Version 4.2.29
+  * Added a system option to disable enforcing the refresh total on PCs.
+
 # Version 4.2.28
   * Fixed a bug in the 'find token' combat tracker button. It wasn't panning to the token.
 

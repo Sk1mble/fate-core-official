@@ -1284,7 +1284,7 @@ export class fcoCharacter extends ActorSheet {
 
         let isPlayer = this.object.hasPlayerOwner;
         let error = false;
-        if (isPlayer) {
+        if (isPlayer && game.settings.get("fate-core-official","enforceRefresh")) {
             // Refresh spent + refresh should = the game's refresh.
             let checkSpent = sheetData.data.details.fatePoints.refresh + sheetData.refreshSpent;
             let worldRefresh = game.settings.get("fate-core-official", "refreshTotal");

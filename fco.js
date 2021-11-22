@@ -716,6 +716,16 @@ game.settings.register("fate-core-official", "refreshTotal", {
     }
 });
 
+// Register a setting to determine whether the refresh total on PCs should be enforced
+game.settings.register("fate-core-official", "enforceRefresh", {
+    name: game.i18n.localize("fate-core-official.enforceRefreshMenuName"),
+    hint: game.i18n.localize("fate-core-official.enforceRefreshMenuHint"),
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default:true,
+});
+
 game.settings.register("fate-core-official","freeStunts", {
     name:game.i18n.localize("fate-core-official.FreeStunts"),
     hint:game.i18n.localize("fate-core-official.FreeStuntsHint"),
