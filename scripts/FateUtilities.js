@@ -2142,11 +2142,16 @@ async renderMe(...args){
         // Use jquery to find the relevant token and highlight it in all relevant things.
         //args[1] == token id
         //args[2] == control true/false 
+
         if (args[2] === true){
             $(`.${args[1]}_fu`).addClass("fu_controlled");
+            $(`.${args[1]}_fu_acted`).addClass("fu_controlled");
+            $(`.${args[1]}_fu_acted`).removeClass("fu_uncontrolled");
         }
         if (args[2] === false){
             $(`.${args[1]}_fu`).removeClass("fu_controlled");
+            $(`.${args[1]}_fu_acted`).removeClass("fu_controlled");
+            $(`.${args[1]}_fu_acted`).addClass("fu_uncontrolled");
         }
         return;
     }

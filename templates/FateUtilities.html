@@ -614,7 +614,7 @@
                     {{/if}}
                     <table style="border:none; background-color:white">
                     {{#each combat_tokens}}
-                    <tr class="{{#if (eq this._controlled true)}} fu_controlled {{/if}} {{this.id}}_fu">    
+                    <tr class="{{#if this._controlled}} fu_controlled {{/if}} {{this.id}}_fu" style="border-bottom:solid lightsteelblue 2px">    
                         <td style="width:60px">
                             <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_act1" title="{{localize 'fate-core-official.pocornAvatarHint'}}" style="border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" {{#if ../GM}}enabled="enabled"{{else}}disabled="disabled"{{/if}}/>     
                         </td>
@@ -631,7 +631,7 @@
                     
                     <table style="border:none; background-color:lightgray">
                     {{#each has_acted_tokens}}
-                    <tr class="{{#if (eq this._controlled true)}} fu_controlled {{else}} fu_uncontrolled {{/if}} {{this.id}}_fu">
+                    <tr class="{{#if this._controlled}} fu_controlled {{else}} fu_uncontrolled {{/if}}{{this.id}}_fu_acted">
                         <td style="width:60px">
                             <button type="button" style="filter:opacity(25%); border:none; height:60px; width:60px; background: url({{this.data.img}}) scroll no-repeat center center; background-size:50px 50px" disabled="disabled"/>     
                         </td>

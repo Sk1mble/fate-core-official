@@ -140,7 +140,7 @@ body, button, label, select, input, textarea {
 }
 
 .fu_uncontrolled {
-  background-color:var(--fco-foundry-interactable-color) !important;
+  background-color:lightgrey !important;
 }
 
 .fu_button:hover {
