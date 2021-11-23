@@ -1,3 +1,7 @@
+# Version 4.2.32
+  * Amended the Fate Utilities combat tracker; everything is nicely centered now
+  * Switched behaviour of some buttons in the combat tracker; removed the Open Sheet button and gave this function to the avatar button. This is more consistent with behaviour elsewhere, where clicking the avatar opens the character's sheet. The avatar still works for this function even though it's rendered partially transparent when the character has acted.
+
 # Version 4.2.31
   * Bugfix; the colouring of combatants that had acted in Fate Utilities' combat tracker was not working correctly.
 
