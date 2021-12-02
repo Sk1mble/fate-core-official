@@ -1,3 +1,7 @@
+# Version 4.2.33
+  * Checked for compatiblity with Foundry v9 testing build (9.232)
+  * Prevented a bug upon trying to open Fate Utilities when tokens without an actor in the actor database are present on the current scene.
+
 # Version 4.2.32
   * Amended the Fate Utilities combat tracker; everything is nicely centered now
   * Switched behaviour of some buttons in the combat tracker; removed the Open Sheet button and gave this function to the avatar button. This is more consistent with behaviour elsewhere, where clicking the avatar opens the character's sheet. The avatar still works for this function even though it's rendered partially transparent when the character has acted.

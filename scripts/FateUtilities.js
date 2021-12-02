@@ -1968,8 +1968,8 @@ async getData(){
     data.notes = notes;
     game?.scenes?.viewed?.tokens?.contents?.forEach(token => {
         let ignore = false;
-        if (token.actor == null) ignore = true;
-        if (token.actor.data.type !== "fate-core-official") ignore = true;
+        if (token?.actor == null) ignore = true;
+        if (token?.actor.data.type !== "fate-core-official") ignore = true;
         if (token.data.hidden == true && !game.user.isGM) ignore = true;
     
         // Check the FU ignore list
