@@ -1,3 +1,6 @@
+# Version 4.2.34
+
+  * Set an explicit width for the default framework manager, as under some circumstances this was not being assigned a width and it caused layout issues.
 # Version 4.2.33
   * Checked for compatiblity with Foundry v9 testing build (9.232)
   * Prevented a bug upon trying to open Fate Utilities when tokens without an actor in the actor database are present on the current scene.
