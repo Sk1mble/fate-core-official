@@ -47,7 +47,7 @@
     --fco-header-notch: polygon(0% 0px, 0px 0%, 100% 0%, 100% 0px, 100% 100%, 100% 100%, 0px 100%, 0 100%); /*Done*/
     --fco-border-radius:15px;    
     --fco-font-family:Montserrat;   
-    --fco-foundry-font-family:Signika, Arial, sans-serif;                                                                        /*Done*/
+    --fco-foundry-font-family:var(--font-primary);                                                                     /*Done*/
     --fco-foundry-interactable-color:lightsteelblue;
 }
 
