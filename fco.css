@@ -99,8 +99,16 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: inner-spin-button;
 }
 
-body, button, label, select, input, textarea {
+body, button, label, select, input {
   font-family:var(--fco-foundry-font-family);
+}
+
+textarea:not([name="command"]){
+  font-family:var(--fco-foundry-font-family);
+}
+
+textarea [name="command"] {
+  font-family: var(--font-mono);
 }
 
 #chat-log .message {
