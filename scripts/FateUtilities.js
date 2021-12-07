@@ -460,7 +460,7 @@ class FateUtilities extends Application{
         fu_adhoc_roll.on("click", event => this._fu_adhoc_roll(event, html));
 
         const fu_roll_button = html.find("button[name='fu_roll_button']");
-        fu_roll_button.on("click",event => this._fu_roll_button(event, html));
+        fu_roll_button.on("click",event => {this._fu_roll_button(event, html), event.target.blur()});
 
         const select = html.find("select[class='skill_select']");
 
@@ -956,6 +956,10 @@ class FateUtilities extends Application{
                     }
                     aspect.options = options;
                 }
+
+                if (isNewerVersion(game.version, "9.230")){
+                    game.system["fco-shifted"] = false;
+                }
                 
                 let content =`<br/><div>`
                 for (let aspect of sit_aspects){
@@ -975,57 +979,67 @@ class FateUtilities extends Application{
                                 }
                             }
                         },
-                        default:"ok"
+                        default:"ok",
+                        close: () => resolve()
                     }).render(true);
                 });
-                let updates = [];
-                for (let aspect of invokedAspects){                
-                    let name = aspect.value.split("_")[0];
-                    let num_invokes = aspect.value.split("_")[1];
-                    if (num_invokes > 0){
-                        bonus += parseInt(num_invokes, 10)*2;
-                        aspectsInvoked.push(`${name} x${num_invokes}`);
-                        let sit_aspect = all_sit_aspects.find(asp => asp.name == name);
-                        sit_aspect.free_invokes -= num_invokes;
-                        let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
-                        if (drawing != undefined){
-                            let text;
-                            if (sit_aspect.free_invokes == 1){
-                                text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
-                            } else {
-                                text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
+        
+                if (invokedAspects){
+                    let updates = [];
+                    for (let aspect of invokedAspects){                
+                        let name = aspect.value.split("_")[0];
+                        
+                        let num_invokes = aspect.value.split("_")[1];
+                        if (num_invokes > 0){
+                            invoked = true;
+                            bonus += parseInt(num_invokes, 10)*2;
+                            aspectsInvoked.push(`${name} x${num_invokes}`);
+                            let sit_aspect = all_sit_aspects.find(asp => asp.name == name);
+                            sit_aspect.free_invokes -= num_invokes;
+                            let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
+                            if (drawing != undefined){
+                                let text;
+                                if (sit_aspect.free_invokes == 1){
+                                    text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
+                                } else {
+                                    text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
+                                }
+                                let size = game.settings.get("fate-core-official","fuAspectLabelSize");
+                                let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+                                if (size === 0){
+                                    size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                                    if (size < 8) size = 8;
+                                    if (size > 256) size = 256;
+                                }
+                                let height = size * 2;
+                                let width = (text.length * size) / 1.5;
+                                updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
                             }
-                            let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-                            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
-                            if (size === 0){
-                                size = Math.floor(game.scenes.viewed.data.width*(1/100));
-                                if (size < 8) size = 8;
-                                if (size > 256) size = 256;
-                            }
-                            let height = size * 2;
-                            let width = (text.length * size) / 1.5;
-                            updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
                         }
                     }
+                    if (bonus > 0){
+                        await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
+                        flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokes")} +${bonus} (${aspectsInvoked.join(", ")})`
+                        await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
+                    }
                 }
-                await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
-                flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokes")} +${bonus} (${aspectsInvoked.join(", ")})`
-                await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
             }
-            roll.total+=bonus;
-            roll.flavor+=flavor;
-            if (game.user.isGM){
-                if (message) {
-                    let mroll = JSON.parse(message.data.roll);
-                    mroll.total = roll.total;
-                    roll.roll = mroll;
-                    await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
-                } 
-                await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
-            }
-            else {
-                //Create a socket call to update the scene's roll data
-                game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
+            if (bonus > 0){
+                roll.total+=bonus;
+                roll.flavor+=flavor;
+                if (game.user.isGM){
+                    if (message) {
+                        let mroll = JSON.parse(message.data.roll);
+                        mroll.total = roll.total;
+                        roll.roll = mroll;
+                        await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                    } 
+                    await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                }
+                else {
+                    //Create a socket call to update the scene's roll data
+                    game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
+                }
             }
         }
 
@@ -1051,14 +1065,20 @@ class FateUtilities extends Application{
                 shift_down = keyboard.isDown("Shift");
             }
 
+            let invokedAspects = false;
+
             if (shift_down && game.user.isGM && Object.keys(asa).length >0 && asa.filter(as => as.free_invokes > 0).length > 0){
                 let options = ""
+                if (isNewerVersion(game.version, "9.230")){
+                    game.system["fco-shifted"] = false;
+                }
                 let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
                     options +=`<option value="${aspect.name}">${aspect.name}</option>`
                 }                
                 let content =`<br/><div><select class="free_i_r_selector">${options}</select></div><br/>`
-               let invokedAspects = await new Promise(resolve => {
+
+               invokedAspects = await new Promise(resolve => {
                     new Dialog({
                         title: game.i18n.localize("fate-core-official.selectAspect"),
                         content: content,
@@ -1070,76 +1090,82 @@ class FateUtilities extends Application{
                                 }
                             }
                         },
-                        default:"ok"
+                        default:"ok",
+                        close: () => resolve("aborted")
                     }).render(true);
                 });
 
                 let updates = [];
-                for (let aspect of invokedAspects){
-                    let name = aspect.value;
-                    let sit_aspect = all_sit_aspects.find(asp => asp.name == name);
-                    sit_aspect.free_invokes -= 1;
-                    let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
-                    if (drawing != undefined){
-                        let text;
-                        if (sit_aspect.free_invokes == 1){
-                            text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
-                        } else {
-                            text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
+                if (invokedAspects && invokedAspects != "aborted"){
+                    for (let aspect of invokedAspects){
+                        let name = aspect.value;
+                        let sit_aspect = all_sit_aspects.find(asp => asp.name == name);
+                        sit_aspect.free_invokes -= 1;
+                        let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.data?.text?.startsWith(name));
+                        if (drawing != undefined){
+                            let text;
+                            if (sit_aspect.free_invokes == 1){
+                                text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
+                            } else {
+                                text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
+                            }
+                            let size = game.settings.get("fate-core-official","fuAspectLabelSize");
+                            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+                            if (size === 0){
+                                size = Math.floor(game.scenes.viewed.data.width*(1/100));
+                                if (size < 8) size = 8;
+                                if (size > 256) size = 256;
+                            }
+                            let height = size * 2;
+                            let width = (text.length * size) / 1.5;
+                            updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
                         }
-                        let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-                        let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
-                        if (size === 0){
-                            size = Math.floor(game.scenes.viewed.data.width*(1/100));
-                            if (size < 8) size = 8;
-                            if (size > 256) size = 256;
-                        }
-                        let height = size * 2;
-                        let width = (text.length * size) / 1.5;
-                        updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
+                        flavor += ` (${sit_aspect.name})`
+                        await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
+                        await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
+                        invokedAspect = sit_aspect.name;
                     }
-                    flavor += ` (${sit_aspect.name})`
-                    await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
-                    await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
-                    invokedAspect = sit_aspect.name;
                 }
             }
-            let r = new Roll ("4dF");
-            let r2 = await r.roll();
-            r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
 
-            let newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
-            if (invokedAspect) newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")} (${invokedAspect})</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
+            if (invokedAspects != "aborted"){
+                let r = new Roll ("4dF");
+                let r2 = await r.roll();
+                r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
 
-            r2.toMessage({
-                flavor: newFlavour
-            });
-            let oldDiceValue = 0;
-            for (let i = 0; i< 4; i++){
-                oldDiceValue += roll.dice[i]
-            }
-            roll.total -= oldDiceValue;
-            roll.dice = r2.dice[0].values;
-            if (roll.dice == undefined){
-                let d = r2.dice[0].rolls;
-                roll.dice = [];
-                for (let i=0; i< d.length; i++){
-                    roll.dice.push(d[i].roll)
+                let newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
+                if (invokedAspect) newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")} (${invokedAspect})</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
+
+                r2.toMessage({
+                    flavor: newFlavour
+                });
+                let oldDiceValue = 0;
+                for (let i = 0; i< 4; i++){
+                    oldDiceValue += roll.dice[i]
                 }
-            }
-            roll.total += r2.total;
-            roll.flavor+=flavor;
-            roll.roll = r2;
-            if (game.user.isGM){
-                if (message) {
-                    let mroll = duplicate(r2);
-                    mroll.total = roll.total;
-                    await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                roll.total -= oldDiceValue;
+                roll.dice = r2.dice[0].values;
+                if (roll.dice == undefined){
+                    let d = r2.dice[0].rolls;
+                    roll.dice = [];
+                    for (let i=0; i< d.length; i++){
+                        roll.dice.push(d[i].roll)
+                    }
                 }
-                game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
-            } else {
-                //Create a socket call to update the scene's roll data
-                game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
+                roll.total += r2.total;
+                roll.flavor+=flavor;
+                roll.roll = r2;
+                if (game.user.isGM){
+                    if (message) {
+                        let mroll = duplicate(r2);
+                        mroll.total = roll.total;
+                        await message.update({flavor:roll.flavor, content:roll.total, roll:JSON.stringify(mroll)})
+                    }
+                    game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                } else {
+                    //Create a socket call to update the scene's roll data
+                    game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
+                }
             }
         }
 
@@ -1327,7 +1353,7 @@ class FateUtilities extends Application{
                                 speaker: msg
                             });
                             }
-                            }
+                            },
                         }
                 },
                 {

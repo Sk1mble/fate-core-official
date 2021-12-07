@@ -1,3 +1,6 @@
+# Version 4.2.36
+  * Fixed a bug in the way the shift-click functions in the roll history tab for spending free invokes function.
+
 # Version 4.2.35
   * Tweaked the Fate Core Official CSS so it now won't override the monospace font used for macro editor text areas.
 
