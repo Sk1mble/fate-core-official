@@ -1,3 +1,6 @@
+# Version 4.2.37
+  * Changed behaviour of Entity Track Editor such that editing the name of a track will now delete the original and replace with the edited version rather than adding a new track to the character/extra.
+
 # Version 4.2.36
   * Fixed a bug in the way the shift-click functions in the roll history tab for spending free invokes function.
 

@@ -226,13 +226,6 @@ class EditEntityTrack extends FormApplication {
         if (!name) name = "Unnamed Track";
         track.name = name;
 
-        if (this.track.name != this.originalName) {
-            let num = 1;
-            for (let t in this.entity.data.data.tracks){
-                if (t.startsWith (name)) num ++
-            }
-            if (num > 1) this.track.name = this.track.name+" "+num;
-        }
         track.description = description;
         track.recovery_type = recovery_type;
         
@@ -272,7 +265,22 @@ class EditEntityTrack extends FormApplication {
         }
 
         let tracks = duplicate(this.entity.data.data.tracks);
+
+        if (this.track.name != this.originalName) {
+            delete tracks[this.originalName];
+            let num = 1;
+            for (let t in tracks){
+                if (t.startsWith (name)) num ++
+            }
+            if (num > 1) this.track.name = this.track.name+" "+num;
+
+            await this.entity.update({   
+                "data.tracks":[]
+            })    
+        }
+
         tracks [this.track.name] = this.track;
+
         let final_tracks = tracks;
         if (this.entity.type == "fate-core-official") {
             final_tracks = await this.entity.setupTracks(this.entity.data.data.skills, tracks);
