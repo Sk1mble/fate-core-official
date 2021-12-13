@@ -1960,7 +1960,7 @@ async getData(){
                 }
             }
 
-            if (comb.defeated || (comb.actor.data.type !== "fate-core-official" && comb.actor.data.type !== "Thing")){
+            if (comb.defeated || (comb?.actor?.data?.type !== "fate-core-official" && comb?.actor?.data?.type !== "Thing")){
                 hidden = true;
             }
 
@@ -1994,8 +1994,8 @@ async getData(){
     data.notes = notes;
     game?.scenes?.viewed?.tokens?.contents?.forEach(token => {
         let ignore = false;
-        if (token?.actor == null) ignore = true;
-        if (token?.actor.data.type !== "fate-core-official") ignore = true;
+        if (!token?.actor) ignore = true;
+        if (token?.actor?.data?.type !== "fate-core-official") ignore = true;
         if (token.data.hidden == true && !game.user.isGM) ignore = true;
     
         // Check the FU ignore list

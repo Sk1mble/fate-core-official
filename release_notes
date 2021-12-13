@@ -1,3 +1,8 @@
+# 4.2.38
+  * Fixed two bugs: 
+  * 1) Added a manual style for the fate core font on the presentation of stunts on the character sheet to prevent Ernie's Modern UI (or other visual override modules) from stopping the glyphs for Attack, Overcome, etc. displaying properly.
+  * 2) Finally got round to adding some additional optional chaining modifiers so that if an actor is deleted from the list of actors but still has a token on a scene, it doesn't prevent Fate Utilities from opening until the token is deleted.
+
 # Version 4.2.37
   * Changed behaviour of Entity Track Editor such that editing the name of a track will now delete the original and replace with the edited version rather than adding a new track to the character/extra.
 
