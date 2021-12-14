@@ -1711,7 +1711,8 @@ class FateUtilities extends Application{
         track.box_values[index] = checked;
         //console.log(token);
         await token.actor.update({
-            ["data.tracks"]: tracks
+            // By using this format, we can JUST update the box_values attribute.
+            ["data.tracks"]:{[name]:{["box_values"]:track.box_values}}
         })
     }
 

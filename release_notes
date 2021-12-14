@@ -1,3 +1,6 @@
+# 4.2.39
+  * Experimental bug fix; change box_values updates to only update box_values and not the whole set of Tracks to see if this resolves issue in Forge hosted account.
+
 # 4.2.38
   * Fixed two bugs: 
   * 1) Added a manual style for the fate core font on the presentation of stunts on the character sheet to prevent Ernie's Modern UI (or other visual override modules) from stopping the glyphs for Attack, Overcome, etc. displaying properly.

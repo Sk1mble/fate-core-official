@@ -1099,7 +1099,8 @@ export class fcoCharacter extends ActorSheet {
         let track = tracks[name]
         track.box_values[index] = checked;
         await this.object.update({
-            ["data.tracks"]: tracks
+            // By using this format for the update we can drill right down to the box_values array and avoid updating anything else.
+            ["data.tracks"]:{[name]:{["box_values"]:track.box_values}}
         })
     }
 
