@@ -1,3 +1,6 @@
+# 4.2.391
+ * Removed name field from some checkboxes to prevent two actor updates from being pushed simultaneously.
+
 # 4.2.39
   * Experimental bug fix; change box_values updates to only update box_values and not the whole set of Tracks to see if this resolves issue in Forge hosted account.
 

@@ -387,7 +387,7 @@ class FateUtilities extends Application{
                 this._render(false);
         })
         const track_name = html.find("div[name='track_name']");
-        const box = html.find("input[name='box']");
+        const box = html.find("input[class='fco-box']");
         const cd_box = html.find("input[name='cd_box']");
         cd_box.on('click', event => this._on_cd_box_click(event, html));
 

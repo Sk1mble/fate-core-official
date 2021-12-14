@@ -280,7 +280,7 @@ export class fcoCharacter extends ActorSheet {
             t_notes2.on("contextmenu", event => {this.updateNotesHTML(event, html)});
             a_notes2.on("contextmenu", event => {this.updateNotesHTML(event, html)});
 
-            const box = html.find("input[name='box']");
+            const box = html.find("input[class='fco-box']");
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
             const track_name = html.find("div[class='mfate-tracks__list']");
@@ -343,7 +343,7 @@ export class fcoCharacter extends ActorSheet {
                     fcoConstants.awaitOKDialog(track.name, content, 1000);
             })
 
-            const stunt_box = html.find("input[name='stunt_box']");
+            const stunt_box = html.find("input[class='stunt_box']");
             stunt_box.on("click", event => this._on_click_stunt_box(event, html));
 
             const delete_stunt = html.find("button[name='delete_stunt']");
