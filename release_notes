@@ -1,3 +1,6 @@
+# 4.3.0
+* Updated the Official Fate Core System documentation with various changes made since the documentation was last edited.
+
 # 4.2.391
  * Removed name field from some checkboxes to prevent two actor updates from being pushed simultaneously.
 
