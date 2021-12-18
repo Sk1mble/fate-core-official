@@ -1,3 +1,7 @@
+# 4.3.1
+ * Updated the keybinding code to be compatible with the breaking changes in 9.236.
+ * You can now set a keybinding for the modifier key in Fate Core Official to change it from LeftShift and RightShift.
+
 # 4.3.0
 * Updated the Official Fate Core System documentation with various changes made since the documentation was last edited.
 

@@ -1197,8 +1197,15 @@ export class fcoCharacter extends ActorSheet {
                     return;
                 } else {
                     let umr = false;
-                    if (event.shiftKey && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
-                    if (!event.shiftKey && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+
+                    if (isNewerVersion(game.version, "9.230")){
+                        if (game.system["fco-shifted"] && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;              
+                        if (!game.system["fco-shifted"] && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;              
+                    } else {
+                        if (event.shiftKey && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+                        if (!event.shiftKey && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+                    }
+                
                     if (umr){
                         await target.rollModifiedSkill(event.target.id);
                     }

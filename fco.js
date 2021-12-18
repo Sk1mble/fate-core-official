@@ -402,13 +402,26 @@ Hooks.once('init', async function () {
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
 
     if (isNewerVersion(game.version, "9.230")){
+        let bindings = [
+            {
+                key: "SHIFT"
+            }
+        ];
+
+        if (isNewerVersion(game.version, "9.235")){
+            bindings = [
+                {
+                  key: "ShiftLeft"
+                },
+                {
+                  key: "ShiftRight"
+                }
+            ];
+        }
+        
         game.keybindings.register("fate-core-official", "fcoInteractionModifier", {
             name: "Fate Core Official modifier key for dragging and clicking",
-            uneditable: [
-              {
-                key: "SHIFT"
-              }
-            ],
+            editable: bindings,
             onDown: () => { game.system["fco-shifted"] = true; },
             onUp: () => { game.system["fco-shifted"] = false; }
           })

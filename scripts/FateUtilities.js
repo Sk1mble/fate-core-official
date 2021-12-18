@@ -468,7 +468,13 @@ class FateUtilities extends Application{
             this.selectingSkill = true;
         });
 
-        select.on("click", event => {if (event.shiftKey) {this.shift = true}})
+        select.on("click", event => {
+            if (isNewerVersion(game.version, "9.230")){
+                this.shift = game.system["fco-shifted"]
+            } else {
+                if (event.shiftKey) {this.shift = true}
+            }
+        })
         select.on("change", event => this._selectRoll (event, html));
 
         select.on("blur", event => {
