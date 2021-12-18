@@ -1328,7 +1328,7 @@ Handlebars.registerHelper("str", function(value) {
 });
 
 Handlebars.registerHelper("concat", function(value1, value2){
-    return value1.concat(value2);
+    return value1?.concat(value2);
 });
 
 Handlebars.registerHelper("category", function(category1, category2) {
