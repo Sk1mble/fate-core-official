@@ -360,16 +360,19 @@ Hooks.on("renderSidebarTab", (app, html) => {
         </div>
     `);
 
-    html.on("click", 'input[id="MF_actor_to_create"]', () => {
+    html.on("click", 'input[id="MF_actor_to_create"]', (event) => {
+        event.stopPropagation();
         html.find('input[id="MF_actor_to_create"]')[0].select();
     })
 
-    html.on("click", 'button[id="manage_defaults"]', () => {
+    html.on("click", 'button[id="manage_defaults"]', (event) => {
         //Code to handle the defaults management (view list, delete)
+        event.stopPropagation()
         let md = new ManageDefaults().render(true);
     })
 
-    html.on("click", 'button[id="create_from_default"]', async () => {
+    html.on("click", 'button[id="create_from_default"]', async (event) => {
+        event.stopPropagation();
         let actor_name = html.find('input[id="MF_actor_to_create"]')[0].value;
         const default_name = html.find('select[id="MF_default_to_use"]')[0].value;
 
@@ -398,7 +401,6 @@ Hooks.on("renderSidebarTab", (app, html) => {
             await Actor.create({"name":actor_name, "type":"fate-core-official", permission: perm, "token.actorLink":true},{renderSheet:true});
             return;
         }
-
         await f.createCharacterFromDefault(default_name, actor_name, true);
     });
 });
