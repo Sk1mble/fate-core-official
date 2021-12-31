@@ -697,7 +697,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
 Hooks.once('ready', async function () {
     if (game.user.isGM){
         game.socket.on("system.fate-core-official", async (data) => {
-            let GMs = game.users.filter(user => user.isGM && user.active);
+            let GMs = game.users.filter(user => user.isGM && user.active).sort((a,b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
                 
             if (GMs[0].id != game.user.id){
                     return;
