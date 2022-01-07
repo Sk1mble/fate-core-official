@@ -939,7 +939,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:Number,
         default:40,
-        scope: "user",
+        scope:"user",
         range: {             // If range is specified, the resulting setting will be a range slider
             min: 10,
             max: 90,
@@ -956,7 +956,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:Number,
         default:55,
-        scope: "user",
+        scope:"user",
         range: {             // If range is specified, the resulting setting will be a range slider
             min: 10,
             max: 90,
@@ -1014,7 +1014,7 @@ game.settings.register("fate-core-official","freeStunts", {
         type: Boolean,
         default: false,
         config: false,
-        scope: "user",
+        scope:"user",
         onChange: () =>{
            setupSheet();
         }
