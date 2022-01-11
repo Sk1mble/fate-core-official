@@ -1,3 +1,6 @@
+# 4.3.3
+  * Minor bugfix: Putting "s or 's in skill names won't cause an error on saving modified skills.
+
 # 4.3.2
   * Minor bugfix; should prevent double character creation from the template buttons in the Actor menu if there is a popout copy of the menu also open.
 

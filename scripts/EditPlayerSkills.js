@@ -436,7 +436,13 @@ class EditGMSkills extends FormApplication{
         let actor=undefined;
         let updateObject = {};
         for (let s in this.player_skills){
-            let cbox = html.find(`input[id="${s}"]`)[0];
+            let cbox;
+            try{
+                cbox = html.find(`input[id='${s}']`)[0];
+                if (!cbox) cbox = html.find(`input[id="${s}"]`)[0];
+            } catch {
+                
+            }
             if (cbox != undefined && !cbox.checked){
                 updateObject[`data.skills.-=${s}`] = null;
             }
