@@ -425,7 +425,14 @@ class EditGMSkills extends FormApplication{
     
                 if (newSkill != undefined){
                     newSkill.name=newSkill.name.split(".").join("․");
-                    this.object.update({"data.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
+                    //patch for bug https://gitlab.com/foundrynet/foundryvtt/-/issues/6421
+                    let skills = duplicate(this.object.data.data.skills);
+                    delete(skills[oldSkill]);
+                    skills[newSkill.name] = newSkill;
+                    await this.object.update({"data.skills":null}, {render:false, noHook:true});
+                    await this.object.update({"data.skills":skills});
+                    // Restore below once patched
+                    //this.object.update({"data.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
                 }
             }
         })
@@ -434,33 +441,44 @@ class EditGMSkills extends FormApplication{
     async _confirm(event,html){
 
         let actor=undefined;
-        let updateObject = {};
+        let updateObject = duplicate(this.object.data.data.skills)
+        //let updateObject = {};
         for (let s in this.player_skills){
             let cbox;
             try{
                 cbox = html.find(`input[id='${s}']`)[0];
                 if (!cbox) cbox = html.find(`input[id="${s}"]`)[0];
             } catch {
-                
+
             }
             if (cbox != undefined && !cbox.checked){
-                updateObject[`data.skills.-=${s}`] = null;
+                delete updateObject[s]
+                //updateObject[`data.skills.-=${s}`] = null;
             }
         } 
         
         //Now we need to add skills that have checks and which aren't already checked.
         let world_skills=game.settings.get("fate-core-official","skills")
         for (let w in world_skills){
-            let cbox = html.find(`input[id="${w}"]`)[0];
-            if (cbox.checked){
+            let cbox;
+            try{
+                cbox = html.find(`input[id="${w}"]`)[0];
+                if (!cbox) cbox = html.find(`input[id='${w}']`)[0];
+            } catch {
+        
+            }  
+            if (cbox && cbox.checked){
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
                     skill.rank=0;
-                    updateObject[`data.skills.${w}`] = skill;
+                    updateObject[w] = skill;
+                    console.log(updateObject);
+                    //updateObject[`data.skills.${w}`] = skill;
                 }
             }
         }
-        await this.object.update(updateObject)    
+        await this.object.update({"data.skills":null}, {noHook:true, render:false})    
+        await this.object.update({"data.skills":updateObject})
         this.skillsWindow.render(false);
         this.close();
     }

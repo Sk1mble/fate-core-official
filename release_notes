@@ -1,3 +1,8 @@
+# 4.3.4
+  * Added patches to fix Foundry bug https://gitlab.com/foundrynet/foundryvtt/-/issues/6421
+  * This bug prevents the -= syntax from deleting a key from an item that's embedded in an unlinked actor.
+  * Will be reverted back to prevent a double database update on every deletion once this is patched in Foundry.
+
 # 4.3.3
   * Minor bugfix: Putting "s or 's in skill names won't cause an error on saving modified skills.
 

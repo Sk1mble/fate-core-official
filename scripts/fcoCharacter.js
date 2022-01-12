@@ -637,11 +637,11 @@ export class fcoCharacter extends ActorSheet {
                 let item_id = event.target.id.split("_")[0];
                 let item = this.document.items.get(item_id);
                 if (item.data.data.active){
-                    await item.update({"data.active":false},{render:false});
+                    await item.update({"data.active":false},{render:false, noHook:true});
                     await this.document.deactivateExtra(item, false);
                     this.render(false);
                 } else {
-                    await item.update({"data.active":true},{render:false});
+                    await item.update({"data.active":true},{render:false, noHook:true});
                     this.document.updateFromExtra(item);
                     this.render(false);
                 }
