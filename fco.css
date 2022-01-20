@@ -148,7 +148,7 @@ textarea [name="command"] {
 }
 
 .fu_uncontrolled {
-  background-color:lightgrey !important;
+  background-color:var(--fco-sheet-background-colour) !important;
 }
 
 .fu_button:hover {
@@ -178,8 +178,8 @@ textarea [name="command"] {
 
 .fu_toggle_off {
   font-size:x-large; 
-  color:grey;
-  background-color:lightgray;
+  color:var(--fco-foundry-interactable-color);
+  background-color:var(--fco-sheet-background-colour);
   float:right;
   padding-left:5px;
   padding-right:5px;
@@ -187,10 +187,9 @@ textarea [name="command"] {
 }
 
 .fu_toggle_on {
-  
   font-size:x-large; 
-  color:black;
-  background-color:lightgray;
+  color:var(--fco-foundry-interactable-color);
+  background-color:var(--fco-sheet-background-colour);
   float:right;
   padding-left:5px;
   padding-right:5px;
@@ -211,16 +210,19 @@ textarea [name="command"] {
   font-size:x-large; 
   padding: 15px; 
   float:left; 
-  color:grey;
-  background-color:lightgray;
+  color:var(--fco-sheet-text-colour);
+  border-bottom: 1px solid var(--fco-accent-colour);
+  background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
-  border-bottom: 1px solid black;
 }
 
 .fu_item_1.active {
-  color:black;
-  border: solid black; border-width: 1px 1px 0px 1px;
+  color:var(--fco-sheet-text-colour);
+  border: solid; 
+  border-width: 1px 1px 0px 1px;
+  border-color:var(--fco-accent-colour);
   box-shadow:none;
+  text-shadow: 0 0 8px var(--fco-accent-colour);
 }
 
 .fu_item_2 {
@@ -229,16 +231,19 @@ textarea [name="command"] {
   text-align:center;
   padding: 15px; 
   float:left; 
-  background-color:lightgray;
-  color:grey;
+  color:var(--fco-sheet-text-colour);
+  border-bottom: 1px solid var(--fco-accent-colour);
+  background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
-  border-bottom: 1px solid black
 }
 
 .fu_item_2.active {
-  color:black;
-  border: solid black; border-width: 1px 1px 0px 1px;
+  color:var(--fco-sheet-text-colour);
+  border: solid; 
+  border-width: 1px 1px 0px 1px;
+  border-color:var(--fco-accent-colour);
   box-shadow:none;
+  text-shadow: 0 0 8px var(--fco-accent-colour);
 }
 
 .fu_item_3 {
@@ -247,16 +252,19 @@ textarea [name="command"] {
   font-size:x-large; 
   padding: 15px; 
   float:left; 
-  background-color:lightgray;
-  color:grey;
+  color:var(--fco-sheet-text-colour);
+  border-bottom: 1px solid var(--fco-accent-colour);
+  background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
-  border-bottom: 1px solid black
 }
 
 .fu_item_3.active {
-  color:black;
-  border: solid black; border-width: 1px 1px 0px 1px;
+  color:var(--fco-sheet-text-colour);
+  border: solid; 
+  border-width: 1px 1px 0px 1px;
+  border-color:var(--fco-accent-colour);
   box-shadow:none;
+  text-shadow: 0 0 8px var(--fco-accent-colour);
 }
 
 .fu_item_4 {
@@ -265,16 +273,19 @@ textarea [name="command"] {
   font-size:x-large; 
   padding: 15px; 
   float:left; 
-  background-color:lightgray;
-  color:grey;
+  color:var(--fco-sheet-text-colour);
+  border-bottom: 1px solid var(--fco-accent-colour);
+  background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
-  border-bottom: 1px solid black
 }
 
 .fu_item_4.active {
-  color:black;
-  border: solid black; border-width: 1px 1px 0px 1px;
+  color:var(--fco-sheet-text-colour);
+  border: solid; 
+  border-width: 1px 1px 0px 1px;
+  border-color:var(--fco-accent-colour);
   box-shadow:none;
+  text-shadow: 0 0 8px var(--fco-accent-colour);
 }
 
 .fu_item_5 {
@@ -283,16 +294,19 @@ textarea [name="command"] {
   font-size:x-large; 
   padding: 15px; 
   float:left; 
-  background-color:lightgray;
-  color:grey;
+  color:var(--fco-sheet-text-colour);
+  border-bottom: 1px solid var(--fco-accent-colour);
+  background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
-  border-bottom: 1px solid black
 }
 
 .fu_item_5.active {
-  color:black;
-  border: solid black; border-width: 1px 1px 0px 1px; 
+  color:var(--fco-sheet-text-colour);
+  border: solid; 
+  border-width: 1px 1px 0px 1px;
+  border-color:var(--fco-accent-colour);
   box-shadow:none;
+  text-shadow: 0 0 8px var(--fco-accent-colour);
 }
 
 /* The container */
@@ -321,9 +335,10 @@ textarea [name="command"] {
   height: 25px;
   width: 25px;
   border: solid;
-  border-color:#2f3542;
+  border-color:var(--fco-foundry-interactable-color);
   border-width:3px;
-  background-color:white;
+  background-color:var(--fco-sheet-input-colour);
+  color:var(--fco-sheet-text-colour);
 }
 
 /* On mouse-over, add a grey background color */
@@ -376,9 +391,10 @@ textarea [name="command"] {
   height: 25px;
   width: 25px;
   border: solid;
-  border-color:#2f3542;
+  border-color:var(--fco-foundry-interactable-color);
   border-width:3px;
-  background-color:white;
+  background-color:var(--fco-sheet-input-colour);
+  color:var(--fco-sheet-text-colour);
 }
 
 /* On mouse-over, add a grey background color */
@@ -409,7 +425,8 @@ textarea [name="command"] {
 }
 
 .cs_box {
-  background-color:white !important;
+  background-color:var(--fco-sheet-input-colour) !important;
+  color:var(--fco-sheet-text-colour) !important;
   font-family:var(--fco-font-family) !important;
   border-top:none !important;
   border-radius:0 !important;
@@ -431,8 +448,8 @@ textarea [name="command"] {
   height:25px !important; 
   float:left !important; 
   padding:5px !important; 
-  color:black !important; 
-  background-color :white !important; 
+  color:var(--fco-sheet-text-colour) !important; 
+  background-color :var(--fco-sheet-input-colour) !important; 
   font-family:var(--fco-font-family) !important; 
   border:none !important; 
   border-bottom: 1px solid var(--fco-foundry-interactable-color) !important
@@ -448,8 +465,8 @@ textarea [name="command"] {
   height:25px !important; 
   float:left !important; 
   padding:5px !important; 
-  color:black !important; 
-  background-color :white !important; 
+  color:var(--fco-sheet-text-colour) !important; 
+  background-color:var(--fco-sheet-input-colour) !important; 
   font-family:var(--fco-font-family) !important; 
   border:none !important; 
   border-bottom: 1px solid var(--fco-foundry-interactable-color) !important
@@ -465,18 +482,22 @@ textarea [name="command"] {
 
 .long_text {
   min-height:50px !important; 
-  background-color:white !important;
+  background-color:var(--fco-sheet-input-colour) !important;
+  color:var(--fco-sheet-text-colour) !important;
   font-family:var(--fco-font-family) !important;
   font-size:10pt;
   overflow-y:auto;
+  padding-left:5px;
 }
 
 .long_text_rich {
   min-height:50px !important; 
-  background-color:white !important;
+  background-color:var(--fco-sheet-input-colour) !important;
+  color:var(--fco-sheet-text-colour) !important;
   font-family:var(--fco-font-family) !important;
   font-size:10pt;
   overflow-y:auto;
+  padding-left:5px;
 }
 
 .long_text_rich:hover {

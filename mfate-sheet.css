@@ -44,6 +44,9 @@
     --fco-header-colour:#185CAB;
     --fco-accent-colour:#6793c5;
     --fco-label-colour:#FFFFFF;
+    --fco-sheet-text-colour:#000000;
+    --fco-sheet-background-colour:#FFFFFF;
+    --fco-sheet-input-colour:#FFFFFF;
     --fco-header-notch: polygon(0% 0px, 0px 0%, 100% 0%, 100% 0px, 100% 100%, 100% 100%, 0px 100%, 0 100%); /*Done*/
     --fco-border-radius:15px;    
     --fco-font-family:Montserrat;   
@@ -125,7 +128,7 @@
     display: flex;
     padding: 7px 7px 0;
     /* background: var(--fco-foundry-interactable-color); */
-    box-shadow: inset 0px -1px 0 0 #ccc;
+    box-shadow: inset 0px -1px 0 0 var(--fco-foundry-interactable-color);
 }
 
 .mfate-sheet__identity-panel {
@@ -187,6 +190,7 @@
 .mfate-sheet__meta-value {
     display: table-cell;
     padding: 4px 6px;
+    color:var(--fco-sheet-text-colour) !important;
 }
 
 .mfate-sheet__meta-label {
@@ -202,7 +206,7 @@
 
 .mfate-sheet__meta-value {
     width: 75px;
-    border: 1px solid gray;
+    background:transparent;
 }
 
 .mfate-sheet__meta-value:hover {
@@ -235,14 +239,14 @@
 /*.mfate-sheet__tabs-nav-item {}*/
 
 .mfate-sheet__tabs-nav-link {
-    border: 1px solid #ccc;
+    border: 1px solid var(--fco-foundry-interactable-color);
     border-radius: 3px 3px 0 0;
     margin-left: 3px;
-    background: white;
+    background: var(--fco-sheet-background-colour)
 }
 
 .mfate-sheet__tabs-nav-link:not(.active) {
-    box-shadow: inset 0px -6px 9px -6px #ccc;
+    box-shadow: inset 0px -6px 9px -6px var(--fco-foundry-interactable-color);
 }
 
 .mfate-sheet__tabs-nav-link.active {
@@ -316,11 +320,14 @@
     margin-top: 10px;
 }
 
+.mfate-sheet-notes,
 .mfate-sheet-notes {
     min-height: 95%;
     max-height: 95%;
     overflow-y: auto;
-    /*background-color:white !important;*/
+    padding:5px !important;
+    color:var(--fco-sheet-text-colour) !important;
+    background-color:var(--fco-sheet-input-colour) !important;
     font-family: var(--fco-font-family) !important;
     font-size:10pt;
 }
@@ -328,7 +335,8 @@
 .mfate-panel__header-select {
     font-family: var(--fco-font-family);
     margin-right: 8px;
-    background: rgba(255, 255, 255, 0.5);
+    color:var(--fco-sheet-text-colour);
+    background: var(--fco-sheet-input-colour)
 }
 
 
@@ -409,6 +417,7 @@
     border-bottom: 1px solid var(--fco-foundry-interactable-color);
     padding: .3em .5em;
     font-family: var(--fco-font-family);
+    color:var(--fco-sheet-text-colour);
 }
 
 .mfate-skills-list__number {
@@ -457,7 +466,7 @@
 .mfate-aspects-notes__input {
     margin-left:25px;
     font-size: 11px;
-    min-height:75px;
+    min-height:3em;
     max-height:500px;
 }
 
@@ -490,7 +499,7 @@
 .mfate-tracks-notes__input {
     margin-left:25px;
     font-size: 11px;
-    min-height:75px;
+    min-height:3em;
     max-height:500px;
     width: 90%;
 }
@@ -502,6 +511,7 @@
     padding-right:10px;
     padding-top:5px;
     width:15em;
+    color:var(--fco-sheet-text-colour);
 }
 
 .mfate-tracks__boxes {
@@ -573,10 +583,12 @@
 .mfate-stunts__row-header-cell {
     font-weight: bold;
     font-family: var(--fco-font-family);
+    color:var(--fco-sheet-text-colour);
 }
 
 .mfate-stunts__row-header-icon {
     border: none;
+    color:var(--fco-sheet-text-colour);
     background: transparent;
     float: right;
     width: 22px;
@@ -593,6 +605,7 @@
 .mfate-stunts__row-body {
     font-family: var(--fco-font-family);
     font-size: 11px;
+    color:var(--fco-sheet-text-colour);
     padding: 5px;
     margin-left:20px;
     margin-right:0;
@@ -607,6 +620,7 @@
     font-size: large;
     margin-left:20px;
     margin-right:0;
+    color:var(--fco-sheet-text-colour)
     /* padding-bottom: 20px; */
 }
 
@@ -718,7 +732,7 @@
 
 .fate-extras__row {
     /*background: white;*/
-    color: black;
+    color:var(--fco-sheet-text-colour);
     border: none;
 }
 
@@ -734,6 +748,7 @@
 
 .fate-extras__row-header-button {
     border: none;
+    color:var(--fco-sheet-text-colour);
     background-color: transparent;
     float: right;
     width: 22px;

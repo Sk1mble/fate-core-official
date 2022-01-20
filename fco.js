@@ -69,6 +69,18 @@ function setupSheet(){
 
     val = game.settings.get("fate-core-official","sheetLabelColour");
     document.documentElement.style.setProperty('--fco-label-colour', `${val}`);
+
+    val = game.settings.get("fate-core-official","sheetBackgroundColour");
+    document.documentElement.style.setProperty('--fco-sheet-background-colour', `${val}`);
+
+    val = game.settings.get("fate-core-official","sheetInputColour");
+    document.documentElement.style.setProperty('--fco-sheet-input-colour', `${val}`);
+
+    val = game.settings.get("fate-core-official","sheetTextColour");
+    document.documentElement.style.setProperty('--fco-sheet-text-colour', `${val}`);
+
+    val = game.settings.get("fate-core-official","sheetInteractableColour");
+    document.documentElement.style.setProperty('--fco-foundry-interactable-color', `${val}`);
 }
 
 function setupFont(){
@@ -1062,6 +1074,62 @@ game.settings.register("fate-core-official","freeStunts", {
         }
     })     
 
+    //Sheet input field colour
+    game.settings.register("fate-core-official","sheetInputColour", {
+        name: game.i18n.localize("fate-core-official.sheetInputColour"),
+        hint:game.i18n.localize("fate-core-official.sheetInputColourHint"),
+        scope:"user",
+        config:false,
+        restricted:false,
+        type:String,
+        default:"#FFFFFF",
+        onChange: () => {
+            setupSheet();
+        }
+    })  
+    
+        //Sheet background colour
+        game.settings.register("fate-core-official","sheetBackgroundColour", {
+            name: game.i18n.localize("fate-core-official.sheetBackgroundColour"),
+            hint:game.i18n.localize("fate-core-official.sheetBackgroundColourHint"),
+            scope:"user",
+            config:false,
+            restricted:false,
+            type:String,
+            default:"#FFFFFF",
+            onChange: () => {
+                setupSheet();
+            }
+        })  
+
+        //Sheet text colour
+        game.settings.register("fate-core-official","sheetTextColour", {
+            name: game.i18n.localize("fate-core-official.sheetTextColour"),
+            hint:game.i18n.localize("fate-core-official.sheetTextColourHint"),
+            scope:"user",
+            config:false,
+            restricted:false,
+            type:String,
+            default:"#000000",
+            onChange: () => {
+                setupSheet();
+            }
+        })  
+        
+        //Sheet interactable colour
+        game.settings.register("fate-core-official","sheetInteractableColour", {
+            name: game.i18n.localize("fate-core-official.sheetInteractableColour"),
+            hint:game.i18n.localize("fate-core-official.sheetInteractableColourHint"),
+            scope:"user",
+            config:false,
+            restricted:false,
+            type:String,
+            default:"#b0c4de",
+            onChange: () => {
+                setupSheet();
+            }
+        })  
+
     game.settings.register("fate-core-official","fu_actor_avatars", {
         name:"Use actor avatars instead of token avatars in Fate Utilities?",
         hint:"Whether to use actor avatars instead of token avatars in Fate Utilities' aspect viewer",
@@ -1386,7 +1454,11 @@ class CustomiseSheet extends FormApplication {
         await game.settings.set("fate-core-official", "sheetLabelColour", formData.sheet_label_colour);
         await game.settings.set("fate-core-official", "sheetAccentColour", formData.sheet_accent_colour);
         await game.settings.set("fate-core-official", "sheetHeaderColour", formData.sheet_header_colour);
+        await game.settings.set("fate-core-official", "sheetInputColour", formData.inputColour);
+        await game.settings.set("fate-core-official", "sheetBackgroundColour", formData.backgroundColour);
         await game.settings.set("fate-core-official", "fco-notched-headers", formData.use_notched);
+        await game.settings.set("fate-core-official", "sheetTextColour",formData.textColour)
+        await game.settings.set("fate-core-official", "sheetInteractableColour",formData.interactableColour)
         this.close();
     }
 
@@ -1398,6 +1470,10 @@ class CustomiseSheet extends FormApplication {
             notch:game.settings.get("fate-core-official","fco-notched-headers"),
             aspectsHeight:game.settings.get("fate-core-official","fco-aspects-pane-mheight"),
             skillsHeight:game.settings.get("fate-core-official","fco-skills-pane-mheight"),
+            inputColour:game.settings.get("fate-core-official","sheetInputColour"),
+            backgroundColour:game.settings.get("fate-core-official","sheetBackgroundColour"),
+            textColour:game.settings.get("fate-core-official","sheetTextColour"),
+            interactableColour:game.settings.get("fate-core-official","sheetInteractableColour"),
         }
     }
 

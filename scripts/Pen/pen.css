@@ -1,7 +1,6 @@
 /*! Licensed under MIT, https://github.com/sofish/pen */
 
 /* basic reset */
-.pen, .pen-menu, .pen-input, .pen textarea{font:400 1em/1.45 Montserrat;color:#331; padding-left:2px; padding-right:2px;}
 .pen:focus{outline:none;}
 .pen fieldset, img {border: 0;}
 .pen blockquote{padding-left:10px;margin-left:-14px;border-left:4px solid #1abf89;}

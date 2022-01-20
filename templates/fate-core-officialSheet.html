@@ -1,4 +1,4 @@
-<form class="mfate-sheet contenteditable" style="background:white; width:100%; height: 100%; border:none !important">
+<form class="mfate-sheet contenteditable" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-background-colour); width:100%; height: 100%; border:none !important">
     <div class="mfate-sheet__header">
         <div style="display:block; width:50%">
             <div style="display:flex; flex-direction:row; width:100%"><img class="mfate-sheet__identity-avatar profile-img" width="150" height="auto" style="border:0; cursor: pointer; padding-right:5px" id="avatar" data-edit="img" src="{{document.img}}"></img>
@@ -12,8 +12,7 @@
             <div class="mfate-sheet__meta">
                 {{#if (eq this.sheetMode 'full')}}
                         <div style="display:block;">
-                            <input class="circle-input
-                            class="mfate-sheet__meta-value" style="text-align:center;" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
+                            <input class="circle-input mfate-sheet__meta-value" style="text-align:center;" type="number" name="data.details.fatePoints.current" value="{{data.details.fatePoints.current}}"></input>
                             <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; padding-top:5px; font-size: 8pt; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Current'}} </div>
                         </div>
                         {{/if}}
@@ -25,9 +24,9 @@
                 <img src = "/systems/fate-core-official/assets/pbf.svg" style = "pointer-events:none; width:160px; height:auto; margin-bottom:15px; margin-right:1px"></img>
             </div>            
             <nav class="mfate-sheet__tabs-nav foo" style="margin-top:8px; margin-right:0px; margin-left:auto">
-                {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
-                <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.applyDefault'}}"><i class="fas fa-user-edit"></i></button>
-                <button type="button" name="changeSheetMode" style="width:35px; height:35px; float:left; border:none; background-color:transparent" title="{{localize 'fate-core-official.changeSheetMode'}}"><i class="fas fa-eye"></i></button>{{/if}}
+                {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; color:var(--fco-sheet-text-color); background-color:transparent" title="{{localize 'fate-core-official.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
+                <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; color:var(--fco-sheet-text-color); background-color:transparent" title="{{localize 'fate-core-official.applyDefault'}}"><i class="fas fa-user-edit"></i></button>
+                <button type="button" name="changeSheetMode" style="width:35px; height:35px; float:left; border:none; color:var(--fco-sheet-text-color); background-color:transparent" title="{{localize 'fate-core-official.changeSheetMode'}}"><i class="fas fa-eye"></i></button>{{/if}}
                 {{#if (eq this.sheetMode 'full')}}
                 <a class="mfate-sheet__tabs-nav-link item active" data-tab="sheet">
                     <span class="sr-only">{{localize 'fate-core-official.CharacterSheet'}}</span>
@@ -79,13 +78,13 @@
                 </div>
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
                     {{#if data.details.notes.GM}}
-                        {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="display:none; max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
-                                  <div class="mfate-sheet-notes_long" id="{{this.document.id}}_notes_rich" tabindex = "0"style="max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{enr  data.details.notes.value this.document}}}</div>
+                        {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="display:none; max-width:100%;" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                                  <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="max-width:100%;" data-edit="data.details.notes.value">{{{enr  data.details.notes.value this.document}}}</div>
                             {{else}}<div>These notes are for the GM's eyes only...</div>
                         {{/if}}
                     {{else}}
-                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="min-height:100%; display:none; max-width:100%; background-color:transparent !important" data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
-                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="min-height:100%; max-width:100%; background-color:transparent !important">{{{enr  data.details.notes.value this.document}}}</div>
+                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="data.details.notes.value" style="min-height:100%; display:none; max-width:100%; data-edit="data.details.notes.value">{{{data.details.notes.value}}}</div>
+                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="min-height:100%; max-width:100%;">{{{enr  data.details.notes.value this.document}}}</div>
                     {{/if}}
                 </div>
             </div>
@@ -169,7 +168,7 @@
                                             <label class="box">
                                                 <input type="checkbox" class="fco-box" id="{{../name}}_{{@index}}_false" style="opacity:0;width:25px; height:25px; float:left;" checked="checked">
                                                     <span class="checkmark"></span>
-                                                    <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px white;">
+                                                    <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: var(--fco-sheet-text-color);">
                                                         {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'fate-core-official.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
                                                     </i>
                                                 </input>
@@ -177,7 +176,7 @@
                                             <label class="box">
                                                 <input type="checkbox" class="fco-box" id="{{../name}}_{{@index}}_true" style="opacity:0; width:25px; height:25px; float:left;">
                                                     <span class="checkmark"></span>
-                                                    <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">
+                                                    <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: var(--fco-sheet-text-color)">
                                                         {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'fate-core-official.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
                                                     </i>
                                                 </input>
@@ -190,7 +189,7 @@
                                                 {{this.harm_can_absorb}}
                                                 </label> {{/if}}
                                             <input type="text" class="aspect_box" name="data.tracks.{{this.name}}.aspect.name" value="{{this.aspect.name}}">
-                                            <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i>
+                                            <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: var(--fco-sheet-text-color)"></i>
                                             </input>
                                             {{/if}}
                                             {{#if this.extra_tag.extra_name}}<i class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{this.extra_tag.extra_name}}"></i>{{/if}}
@@ -198,8 +197,8 @@
                                     </div>
                                 </div>
                                 {{#if (expanded ../this.document (concat this.name '_track'))}}<div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                    <div class="cs_box mfate-tracks-notes__input" style="min-height:1.5em" data-edit= "data.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
-                                    <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none; min-height:1.5em;" data-edit= "data.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes" name="data.tracks.{{this.name}}.notes">{{{this.notes}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "data.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none;" data-edit= "data.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes" name="data.tracks.{{this.name}}.notes">{{{this.notes}}}</div>
                                 {{/if}}
                                 {{/if}}{{/if}}                                
                                 {{/each}}
@@ -229,8 +228,8 @@
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_tag undefined)}}{{else}}disabled="disabled"{{/if}} name="data.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (concat this.name '_aspect'))}}
                                 <div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                <div class="cs_box mfate-aspects-notes__input" style="min-height:1.5em;" data-edit="data.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
-                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="min-height:1.5em; display:none;" data-edit="data.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="data.aspects.{{this.name}}.notes" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
+                                <div class="cs_box mfate-aspects-notes__input" data-edit="data.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
+                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="display:none;" data-edit="data.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="data.aspects.{{this.name}}.notes" {{#if this.extra_tag.extra_name}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
                                 {{/if}}
                         </li>
                         {{/each}}
