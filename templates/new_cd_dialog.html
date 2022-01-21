@@ -1,10 +1,10 @@
-<form style="font-family:var(--fco-font-family); padding:10px; text-align:left; width:70em; min-height:18em">
+<form style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-background-colour); font-family:var(--fco-font-family); padding:10px; text-align:left; width:70em; min-height:18em">
     <div style="display:flex; flex-direction:row; margin-top:10px">
         <div style="width:15em;">
             Countdown Name:
         </div>
         <div style="width:50em; height:3em">
-            <div style="background-color:white; width:100%; min-height:2em; max-height:2em; overflow-Y:auto;" data-edit="name" id="cd_name"></div>
+            <div style="background-color:var(--fco-sheet-input-colour); width:100%; min-height:2em; max-height:2em; overflow-Y:auto; padding-left:2px;" data-edit="name" id="cd_name"></div>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">
@@ -12,7 +12,7 @@
             Number of Boxes (1-20):
         </div>
         <div>
-            <input type="number" name="boxes" value="3" style="background-color:white; width:15em"></input>
+            <input type="number" name="boxes" value="3" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); padding-left:2px; width:15em"></input>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">
@@ -20,7 +20,7 @@
             Triggers and Outcome:
         </div>
         <div style="width:50em; height:6em">
-            <div style="background-color:white; width:100%; min-height:5em; max-height:5em; overflow-Y:auto;" data-edit="description" id="cd_description"></div>
+            <div style="background-color:var(--fco-sheet-input-colour); padding-left:2px; width:100%; min-height:5em; max-height:5em; overflow-Y:auto;" data-edit="description" id="cd_description"></div>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">
@@ -28,12 +28,12 @@
             Visibility:
         </div>
         <div>
-            <select name="visible" style="background-color:white; width:15em">
+            <select name="visible" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); width:15em">
                 <option value="visible">Visible</option>
                 <option value="hidden">Hidden</option>
                 <option value="show_boxes">Hidden Except Boxes</option>
             </select>
-            <button type="button" id="cd_dialog_save" style="width:6em; height:25px; line-height:10px">{{localize 'fate-core-official.Save'}}</button>
+            <button type="button" id="cd_dialog_save" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:6em; height:25px; line-height:10px">{{localize 'fate-core-official.Save'}}</button>
         </div>
     </div>
 </form>

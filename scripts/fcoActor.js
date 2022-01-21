@@ -203,21 +203,22 @@ export class fcoActor extends Actor {
         // Get the highest number on any item relating to this one.
         // data = aspects, stunts etc. test = aspect, stunt etc. name including integer if already applied
         for (let item in data){
-            if (item.startsWith(test)){
+            if (item == test){
+                // If item = New Stunt, then New Stunt 2, New Stunt 3, etc. will all begin with this.
+                // We need to find the highest number on other items that start with this name, and go one higher.
+                // We should not add a number to ourselves if we're the only one that matches us.
                 if (data[item].extra_tag?.extra_id == extra_id){
-                    // The item on the character sheet is from the extra being investigated.
-                    let num = parseInt(item.split(" ")[item.split(" ").length-1],10);
-                    if (num){
-                        return num;
-                    } else {
-                        return 0;
-                    }
-                }
-                let num = parseInt(item.split(" ")[item.split(" ").length-1],10);
-                if (num) {
-                    count = num + 1;
+                    // The item on the character sheet is from the extra being investigated; do nothing.
                 } else {
-                    count ++;
+                    // NOW we need to know how many other things there are that start with my name
+                    for (let item2 in data){
+                        if (item2.startsWith(test)){
+                            // Increment the count, because this is something other than me that starts with the same name.
+                            if (data[item2].extra_tag?.extra_id !== extra_id){
+                                count ++;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -257,7 +258,18 @@ export class fcoActor extends Actor {
                 if (!Array.isArray(stunts)){
                     for (let stunt in stunts){
                         let count = this.getHighest(actor.data.data.stunts, stunt, extra_id);
-                        stunts[stunt].extra_tag = extra_tag;
+                        if (count > 1) {
+                            let count2 = this.getHighest(stunts, stunt, extra_id);
+                            // Count is the number of things starting with this on the actor
+                            // Count2 is the number of things starting with this on the extra
+                            // Do I just use the higher value? I think that will work
+                            if (count2 > count) count = count2
+                        }
+
+                        let modified_tag = duplicate(extra_tag);
+                        modified_tag.original_name = stunt;
+                        stunts[stunt].extra_tag = modified_tag;
+                        
                         if (count > 1){    
                             stunts[stunt].name = stunts[stunt].name + ` ${count}`;
                         }
@@ -272,8 +284,22 @@ export class fcoActor extends Actor {
                         // If this and its constituent skills are NOT set to combine skills, we need to create an entry for this skill.
                         if (!extra.data.combineSkills && !skills[skill].combineMe){
                             let count = this.getHighest(askills, skill, extra_id);
-                            skills[skill].extra_tag = extra_tag;
+                            
+                            let modified_tag = duplicate(extra_tag);
+                            modified_tag.original_name = skill;
+                            skills[skill].extra_tag = modified_tag;
+
+                            if (count > 1) {
+                                let count2 = this.getHighest(stunts, stunt, extra_id);
+                                // Count is the number of things starting with this on the actor
+                                // Count2 is the number of things starting with this on the extra
+                                // Do I just use the higher value? I think that will work
+                                if (count2 > count) count = count2
+                            }
+                            
                             if (count > 1){    
+                                let count2 = this.getHighest(skills, skill, extra_id);
+                                if (count2 > count) count = count2;
                                 skills[skill].name = skills[skill].name + ` ${count}`;
                             }
                             skills_output[skills[skill].name]=skills[skill];
@@ -321,8 +347,14 @@ export class fcoActor extends Actor {
                 if (!Array.isArray(aspects)){
                     for (let aspect in aspects){
                         let count = this.getHighest(actor.data.data.aspects, aspect, extra_id);
-                        aspects[aspect].extra_tag = extra_tag;
+                        
+                        let modified_tag = duplicate(extra_tag);
+                        modified_tag.original_name = aspect;
+                        aspects[aspect].extra_tag = modified_tag;
+                        
                         if (count > 1){
+                            let count2 = this.getHighest(aspects, aspect, extra_id);
+                            if (count2 > count) count = count2;
                             aspects[aspect].name = aspects[aspect].name + ` ${count}`;
                         }
                         aspects_output[aspects[aspect].name]=aspects[aspect];
@@ -333,8 +365,14 @@ export class fcoActor extends Actor {
                 if (!Array.isArray(tracks)){
                     for (let track in tracks){
                         let count = this.getHighest(actor.data.data.tracks, track, extra_id);
-                        tracks[track].extra_tag = extra_tag;
+                        
+                        let modified_tag = duplicate(extra_tag);
+                        modified_tag.original_name = track;
+                        tracks[track].extra_tag = modified_tag;
+                        
                         if (count >1 ){
+                            let count2 = this.getHighest(tracks, track, extra_id);
+                            if (count2 > count) count = count2;
                             tracks[track].name = tracks[track].name +` ${count}`;
                         }
                         tracks_output[tracks[track].name]=tracks[track];
@@ -433,21 +471,32 @@ export class fcoActor extends Actor {
         //and then removing extra_tag from each track and writing it back to the item in an update call.
         if (!deleting){
             let trackUpdates = duplicate(item.data.data.tracks);
+            let tracks = actor?.data?.data?.tracks;
+
             for (let t in trackUpdates){
-                let track = actor?.data?.data?.tracks[t];
-                if (track){
-                    track = duplicate(track);
-                    delete track.extra_tag;
-                    trackUpdates[t] = track;
+                // Need to grab the original name from the ACTOR, not from the extra. So we need to reverse the order of operations here
+                // to search through the actor's tracks to find one with an original name that matches this track.
+                for (let at in tracks){
+                    let name = tracks[at]?.extra_tag?.original_name;
+                    if (name == t){
+                        let track = duplicate(tracks[at]);
+                        track.name = name;
+                        delete track.extra_tag;
+                        trackUpdates[name] = track;
+                    }
                 }
             }
             let stuntUpdates = duplicate(item.data.data.stunts);
+            let stunts = actor?.data?.data?.stunts;
             for (let s in stuntUpdates){
-                let stunt = actor?.data?.data?.stunts[s];
-                if (stunt){
-                    stunt = duplicate(stunt);
-                    delete stunt.extra_tag;
-                    stuntUpdates[s] = stunt;
+                for (let as in stunts){
+                    let name = stunts[as]?.extra_tag?.original_name;
+                    if (name == s){
+                        let stunt = duplicate(stunts[as]);
+                        stunt.name = name;
+                        delete stunt.extra_tag;
+                        stuntUpdates[name] = stunt;
+                    }
                 }
             }
             await item.update({"data.tracks":trackUpdates, "data.stunts":stuntUpdates},{renderSheet:false});

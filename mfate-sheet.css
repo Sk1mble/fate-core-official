@@ -191,6 +191,7 @@
     display: table-cell;
     padding: 4px 6px;
     color:var(--fco-sheet-text-colour) !important;
+    background-color:transparent !important;
 }
 
 .mfate-sheet__meta-label {
@@ -336,7 +337,8 @@
     font-family: var(--fco-font-family);
     margin-right: 8px;
     color:var(--fco-sheet-text-colour);
-    background: var(--fco-sheet-input-colour)
+    background: var(--fco-sheet-input-colour);
+    opacity:0.5;
 }
 
 
@@ -468,6 +470,9 @@
     font-size: 11px;
     min-height:3em;
     max-height:500px;
+    padding-left:2px;
+    padding-top:2px;
+    padding-right:2px;
 }
 
 /* Tracks list */
@@ -502,6 +507,9 @@
     min-height:3em;
     max-height:500px;
     width: 90%;
+    padding-left:2px;
+    padding-top:2px;
+    padding-right:2px;
 }
 
 .mfate-tracks__item-label {

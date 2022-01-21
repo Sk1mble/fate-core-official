@@ -2245,6 +2245,7 @@ class acd extends FormApplication {
         options.closeOnSubmit = true;
         options.submitOnClose = false;
         options.title = game.i18n.localize("fate-core-official.addCountdown");
+        options.classes=options.classes.concat("fate");
         return options;
     }
 
