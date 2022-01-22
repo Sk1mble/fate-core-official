@@ -1,6 +1,6 @@
-<form style="background: white; width:100%; height: 100%; border:none !important; padding:10px">
+<form style="background: var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); width:100%; height: 100%; border:none !important; padding:10px">
     <div style="display:flex; flex-direction:row">
-        <table style="background-color:white; border:none; width:100px"><tr><td><img class="mfate-sheet_extra-avatar" width="100" height="auto" style="padding:0px; border:0;" id="avatar" src="{{document.img}}"></img></td></tr></table>
+        <table style="background-color:transparent; border:none; width:100px"><tr><td><img class="mfate-sheet_extra-avatar" width="100" height="auto" style="padding:0px; border:0;" id="avatar" src="{{document.img}}"></img></td></tr></table>
         <textarea class="mfate-sheet__identity-name" rows="2" disabled="disabled" style="width:70%">{{document.name}}</textarea>
         <span style="vertical-align:middle; width:30%">
             <div {{#unless this.GM}} style="opacity:0.6" {{/unless}}>{{localize 'fate-core-official.container'}}</div>
@@ -11,7 +11,7 @@
             <div>Movable?</div>
             <div><input type="checkbox" name="data.container.movable" {{#if data.container.movable}}checked="checked"{{/if}}{{#unless this.GM}}disabled="disabled"{{/unless}}></input></div>{{/if}}
             {{#if data.container.isContainer}}<div>Locked?</div><div><input type="checkbox" name="data.container.locked" {{#if data.container.locked}}checked="checked"{{/if}} {{#unless this.GM}}disabled="disabled"{{/unless}}></input>
-            <label style="padding-left:25px; vertical-align:top">Security: </label><input class="mfate-sheet__meta-value" style="width:3rem; vertical-align:top" type="number" name="data.container.security" value="{{data.container.security}}" {{#unless this.GM}}disabled="disabled"{{/unless}}></input></div>{{/if}}        
+            <label style="padding-left:25px; vertical-align:top; color:var(--fco-sheet-text-colour);">Security: </label><input class="mfate-sheet__meta-value" style="width:3rem; vertical-align:top; background-color:var(--fco-sheet-input-colour) !important; color:var(--fco-sheet-text-colour);" type="number" name="data.container.security" value="{{data.container.security}}" {{#unless this.GM}}disabled="disabled"{{/unless}}></input></div>{{/if}}        
             {{#if data.container.isContainer}}</span>{{/if}}
     </div>
 
@@ -41,7 +41,7 @@
                 {{#each items}}
                 <div name="item_header" class="mf_draggable" draggable="true" id="{{../this.document.id}}_{{this.id}}" data-item="{{this.uuid}}">
                 <div class = "fate-extras__row-header">
-                    <button type="button" name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></button>&nbsp&nbsp{{{enr this.name}}}
+                    <button type="button" name="expandExtra" style="color:var(--fco-sheet-text-colour); width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></button>&nbsp&nbsp{{{enr this.name}}}
                     {{#if ../this.GM}}<button i icon class="fas fa-trash fate-extras__row-header-button fu_button" type="button" name="delete_extra" id="{{this.id}}_delete"></button>{{/if}}
                     {{#if ../this.GM}}<button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button fu_button" id="{{this.id}}_edit"></button>{{/if}}
                     <button name="grab_extra" type="button" i icon class="fas fa-hand-paper  fate-extras__row-header-button fu_button" id="{{this.id}}_{{../this.document.id}}_grab" enabled="enabled"></button>
@@ -56,5 +56,5 @@
     </div>
     {{/if}}
     {{/unless}}
-    {{#if data.container.isContainer}}{{#unless data.container.locked}}{{#if (gt numExtras 0)}}<button type="button" style="width:150px" name="container_take_all">Take All</button>{{/if}}{{/unless}}{{#if data.container.movable}}<button type="button" style="width:150px" name="container_take">Take Container</button>{{/if}}{{/if}}
+    {{#if data.container.isContainer}}{{#unless data.container.locked}}{{#if (gt numExtras 0)}}<button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:150px" name="container_take_all">Take All</button>{{/if}}{{/unless}}{{#if data.container.movable}}<button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:150px" name="container_take">Take Container</button>{{/if}}{{/if}}
 </form>

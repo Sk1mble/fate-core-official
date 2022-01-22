@@ -21,7 +21,7 @@ class EditEntityTrack extends FormApplication {
         options.template = "systems/fate-core-official/templates/EditEntityTrack.html"; 
     
         //Define the FormApplication's options
-        options.width = "1000";
+        options.width = "1024";
         options.height = "auto";
         options.title = game.i18n.localize("fate-core-official.EntityTrackEditor");
         options.closeOnSubmit = true;

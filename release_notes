@@ -1,3 +1,9 @@
+# 4.3.5
+  * Added additional sheet options for theming the character sheet, including the background
+  * Applied theming options to Fate Utilities and most other player-facing interfaces in the game.
+  * Fixed edge case bugs around the renaming of features from extras when applying them to characters.
+  * Added simple ability to modify sheet appearance by editing a text box/copying/pasting - may eventually implement the ability to save sheet appearances to a user or world setting.
+
 # 4.3.4
   * Added patches to fix Foundry bug https://gitlab.com/foundrynet/foundryvtt/-/issues/6421
   * This bug prevents the -= syntax from deleting a key from an item that's embedded in an unlinked actor.

@@ -1,27 +1,27 @@
-<form style="background-color:white">
-    <table style="border:none; font-family:var(--fco-font-family); background-color:white;" padding="10px" spacing="10px" margin="10px">
-        <tr style="height:40px">
+<form style="background-color:var(--fco-sheet-background-colour); padding:10px; color:var(--fco-sheet-text-colour)">
+    <table style="border:none; font-family:var(--fco-font-family); background-color:transparent;" padding="10px" spacing="10px" margin="10px">
+        <tr style="height:40px; background-color:transparent">
             <td style="font-weight:bold; padding-left:5px; width:200px">
                 {{localize 'fate-core-official.Modifier'}}:
             </td>
             <td>
-                <input type="number" id="modifier" style="background-color:white; border:1px solid var(--fco-foundry-interactable-color)" value="0"></input>
+                <input type="number" id="modifier" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border:1px solid var(--fco-foundry-interactable-color)" value="0"></input>
             </td>
         </tr>
-        <tr style="height:40px">
+        <tr style="height:40px; background-color:transparent">
             <td style="font-weight:bold; padding-left:5px">
                 {{localize 'fate-core-official.Description'}}:
             </td>
             <td>
-                <input type="text" id = "description" style="background-color:white; border-bottom:1px solid var(--fco-foundry-interactable-color); border-top:none; border-left:none; border-right:none; width:500px"></input>
+                <input type="text" id = "description" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border-bottom:1px solid var(--fco-foundry-interactable-color); border-top:none; border-left:none; border-right:none; width:500px"></input>
             </td>
         </tr>
-        <tr style="height:40px">
+        <tr style="height:40px; background-color:transparent">
             <td style="font-weight:bold; padding-left:5px">
                 {{localize 'fate-core-official.AddSecondSkill'}}
             </td>
             <td>
-                <select id="second_skill">
+                <select id="second_skill" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour);">
                     <option selected="selected">{{localize 'fate-core-official.None'}}</option>
                     {{#each this.data.data.skills}}
                     <option>{{this.name}}</option>
@@ -29,7 +29,7 @@
                 </select>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td style="font-weight:bold; padding-left:5px; vertical-align: top;">
                 {{localize 'fate-core-official.Stunt_s'}}:
             </td>
@@ -46,7 +46,7 @@
         </tr>
         <tr>
             <td colspan="2" style="padding-top:10px">
-                <button type="button" class="modifiedRoll">{{localize 'fate-core-official.Roll'}}</button>
+                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" class="modifiedRoll">{{localize 'fate-core-official.Roll'}}</button>
             </td>
         </tr>
     </table>

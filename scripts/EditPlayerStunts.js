@@ -289,6 +289,7 @@ class StuntDB extends Application {
         options.height = "auto";
         options.title = game.i18n.localize("fate-core-official.StuntDatabase");
         options.id = "StuntDB";
+        options.classes = options.classes.concat(['fate']);
         options.resizable = false;
         options.scrollY = ["#stunts_db"]
         return options; 

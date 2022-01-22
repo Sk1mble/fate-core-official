@@ -1463,17 +1463,36 @@ class CustomiseSheet extends FormApplication {
     }
 
     async getData(){
-        return {
-            sheetHeaderColour:game.settings.get("fate-core-official","sheetHeaderColour"),
-            sheetAccentColour:game.settings.get("fate-core-official","sheetAccentColour"),
-            sheetLabelColour:game.settings.get("fate-core-official","sheetLabelColour"),
-            notch:game.settings.get("fate-core-official","fco-notched-headers"),
-            aspectsHeight:game.settings.get("fate-core-official","fco-aspects-pane-mheight"),
-            skillsHeight:game.settings.get("fate-core-official","fco-skills-pane-mheight"),
-            inputColour:game.settings.get("fate-core-official","sheetInputColour"),
-            backgroundColour:game.settings.get("fate-core-official","sheetBackgroundColour"),
-            textColour:game.settings.get("fate-core-official","sheetTextColour"),
-            interactableColour:game.settings.get("fate-core-official","sheetInteractableColour"),
+        if (this.custom){
+            return this.custom;
+        }
+
+        if (this.reset){
+            return {
+                sheetHeaderColour:'#185cab',
+                sheetAccentColour:'#6793c5',
+                sheetLabelColour:'#ffffff',
+                notch:false,
+                aspectsHeight:40,
+                skillsHeight:55,
+                inputColour:'#ffffff',
+                backgroundColour:'#ffffff',
+                textColour:'#000000',
+                interactableColour:'#b0c4de'
+            }
+        } else {
+            return {
+                sheetHeaderColour:game.settings.get("fate-core-official","sheetHeaderColour"),
+                sheetAccentColour:game.settings.get("fate-core-official","sheetAccentColour"),
+                sheetLabelColour:game.settings.get("fate-core-official","sheetLabelColour"),
+                notch:game.settings.get("fate-core-official","fco-notched-headers"),
+                aspectsHeight:game.settings.get("fate-core-official","fco-aspects-pane-mheight"),
+                skillsHeight:game.settings.get("fate-core-official","fco-skills-pane-mheight"),
+                inputColour:game.settings.get("fate-core-official","sheetInputColour"),
+                backgroundColour:game.settings.get("fate-core-official","sheetBackgroundColour"),
+                textColour:game.settings.get("fate-core-official","sheetTextColour"),
+                interactableColour:game.settings.get("fate-core-official","sheetInteractableColour"),
+            }
         }
     }
 
@@ -1481,6 +1500,34 @@ class CustomiseSheet extends FormApplication {
         super.activateListeners(html);
         $('#save_sheet_settings').on('click', async event => {
             this.submit();
+        })
+
+        $('#load_defaults').on('click', async event => {
+            this.reset = true;
+            this.custom = undefined;
+            this.render(false);
+        })
+
+        $('#load_custom').on('click', async event => {
+            let text = JSON.stringify(await this.getData(),null,5);
+            let value =  await new Promise(resolve => {
+                new Dialog({
+                    title: game.i18n.localize("fate-core-official.LoadCustomSheet"),
+                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="custom_sheet_value">${text}</textarea></div>`,
+                    buttons: {
+                        ok: {
+                            label: game.i18n.localize("fate-core-official.PopulateFromPasted"),
+                            callback: () => {
+                                resolve (document.getElementById("custom_sheet_value").value);
+                            }
+                        }
+                    },
+                }).render(true)
+            });
+            let data = JSON.parse(value);
+            this.custom = data;
+            this.reset = false;
+            this.render(false);
         })
     }
 }

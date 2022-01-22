@@ -22,7 +22,7 @@
                         <div id="aspects" name = "aspects" style="background-color:var(fco-sheet-background-colour); max-height:calc({{height}}px - 175px); overflow-y:auto">                
                             <table style="color:var(--fco-sheet-text-colour); font-size:{{fontSize}}pt; border:none;">
                                 {{#each GMUsers}}
-                                <tr style="border-top:2px solid var(--fco-accent-colour)">
+                                <tr style="border-top:4px solid var(--fco-accent-colour); background-color:transparent">
                                     <td style="width:20px"></td>
                                     <td style="padding:5px; text-align:left; width:60px">
                                         <img src="{{this.data.avatar}}" style="width:50px; height:auto; border:none;"/>
@@ -36,7 +36,7 @@
                                 </tr>
                                 {{/each}}
                                 {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
-                                <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="{{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{/if}}>
+                                <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="{{this.id}}_fu" style="background-color:transparent; border-top:var(--fco-accent-colour) 4px solid"{{/if}}>
                                     <td style="width:20px; vertical-align:top">
                                         <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     </td>
@@ -95,7 +95,7 @@
                                 {{/if}}
                                 {{/each}}
                                 {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                                <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="{{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{/if}}>
+                                <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="{{this.id}}_fu" style="background-color:transparent; border-top:var(--fco-accent-colour) 4px solid"{{/if}}>
                                     <td style="vertical-align:top; width:20px">
                                         <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}}></button>
                                     </td>
@@ -178,7 +178,7 @@
                         {{#each all_tokens}}
                         {{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
                         <table style="border-bottom:none; margin:0" class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
-                            <tr style="border-top:2px var(--fco-accent-colour) solid;">
+                            <tr style="border-top:4px var(--fco-accent-colour) solid; background-color:transparent;">
                                 <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                     <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     {{this.name}}
@@ -189,7 +189,7 @@
                         {{#if (eq this.tracksMaximised false)}}{{else}}
                         {{#each this.actor.data.data.tracks}}
                         {{#if (category ../../category this.category)}}{{#if this.enabled}}
-                        <tr>
+                        <tr style="background-color:transparent;">
                             <td style="vertical-align:top; width:18em; padding-left:15px">
                                 <div name="FUexpandTrack" data-name="{{this.name}}" style="width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; cursor:pointer; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress fu_button fuExpandAspect" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button fuExpandAspect fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></div><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal; font-size:{{../../fontSize}}pt">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br> <span style="padding-left:27px; font-size:{{../../fontSize}}pt">{{localize 'fate-core-official.Notes'}}:</span>{{/if}}</div>
                             </td>
@@ -217,7 +217,7 @@
                         {{#each all_tokens}}
                         {{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                         <table style="border-bottom:none; margin:0"  class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
-                            <tr style="border-top:2px var(--fco-accent-colour) solid;">
+                            <tr style="border-top:4px var(--fco-accent-colour) solid; background-color:transparent;">
                                 <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                     <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     {{this.name}}
@@ -228,7 +228,7 @@
                         {{#if (eq this.tracksMaximised false)}}{{else}}
                         {{#each this.actor.data.data.tracks}}
                         {{#if (category ../../category this.category)}}{{#if this.enabled}}
-                        <tr>
+                        <tr style="background-color:transparent;">
                             <td style="vertical-align:top; width:18em; padding-left:15px">
                                 <div name="FUexpandTrack" data-name="{{this.name}}" style="width:{{../../fontSize}}pt; height:{{../../fontSize}}pt; float:left; cursor:pointer; background-color:transparent; border:none" {{#if (expanded ../this.actor (concat this.name '_track'))}}icon class="fas fa-compress fu_button fuExpandAspect" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button fuExpandAspect fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{../this.id}}_{{this.name}}_FUexpandTrackNotes"></div><div name="track_name" id="{{../this.id}}"><i style="padding-left:5px; font-style:normal; font-size:{{../../fontSize}}pt">{{this.name}}</i>{{#if (expanded ../this.actor (concat this.name '_track'))}}<br><br> <span style="padding-left:27px; font-size:{{../../fontSize}}pt">{{localize 'fate-core-official.Notes'}}:</span>{{/if}}</div>
                             </td>
@@ -293,12 +293,12 @@
                             {{#if (eq this.visible 'visible')}}
                             <tr>
                                 <td style="width:25%; padding-right:10px; vertical-align:top;">
-                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{enr this.name}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{enr this.name}}}</div>
+                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
                                 </td>
                                 <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{enr this.description}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{enr this.description}}}</div>
+                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
                                 </td>
                                 <td style="width:25%">
                                     {{#each this.boxes}}
@@ -340,12 +340,12 @@
                             {{#if ../GM}}
                             <tr>
                                  <td style="width:25%; padding-right:10px; vertical-align:top;">
-                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{enr  this.name}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{enr  this.name}}}</div>
+                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
                                 </td>
                                 <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{enr this.description}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{enr this.description}}}</div>
+                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
                                 </td>
                                 <td style="width:25%;">
                                     {{#each this.boxes}}
@@ -392,12 +392,12 @@
                             {{#if ../GM}}
                             <tr>
                                  <td style="width:25%; padding-right:10px; vertical-align:top;">
-                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{enr  this.name}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:edit; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{enr  this.name}}}</div>
+                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
                                 </td>
                                 <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{enr this.description}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:edit; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                                    <div class="cd_datum_rich" style="min-height:1.5em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{enr this.description}}}</div>
+                                    <div class="cd_datum" style="display:none; min-height:1.5em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
                                 </td>
                                 <td style="width:25%">
                                     {{#each this.boxes}}
@@ -439,7 +439,7 @@
                         <button type="button" title="{{localize 'fate-core-official.fu-adhoc-roll-button'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; height:50px; border:2px; border-style:outset;" id="fu_ad_hoc_roll" class="fas fa-dice"></button>{{/if}}
                         <div id="fu_rolls_tab" style="overflow-y:auto; max-height:calc({{height}}px - 160px);">
                         <table style="background:none; color:var(--fco-sheet-text-colour); border:2px solid var(--fco-accent-colour);">
-                        <tr>
+                        <tr style="background-color:transparent">
                             <th style="border:2px solid var(--fco-accent-colour); font-weight:bold; text-align:center; font-size:{{fontSize}}pt">
                                 {{localize 'fate-core-official.Character'}}
                             </th>
@@ -457,7 +457,7 @@
                             </th>
                         </tr>
                         {{#each rolls}}
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td style="border:2px solid var(--fco-accent-colour); width:20%; font-size:{{../fontSize}}pt">
                                 <div name="fu_roll">{{this.speaker}}</div>
                             </td>

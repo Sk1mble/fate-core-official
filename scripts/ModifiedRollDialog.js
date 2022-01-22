@@ -6,6 +6,7 @@ class ModifiedRollDialog extends Application {
         options.height = "auto";
         options.title = game.i18n.localize("fate-core-official.ModifiedRoll");
         options.resizable = false;
+        options.classes = options.classes.concat(['fate']);
         return options 
     } // End getDefaultOptions
 

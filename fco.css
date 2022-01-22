@@ -223,6 +223,7 @@ textarea [name="command"] {
   border-bottom: 1px solid var(--fco-accent-colour);
   background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
+  opacity:0.25;
 }
 
 .fu_item_1.active {
@@ -232,6 +233,7 @@ textarea [name="command"] {
   border-color:var(--fco-accent-colour);
   box-shadow:none;
   text-shadow: 0 0 8px var(--fco-accent-colour);
+  opacity:1;
 }
 
 .fu_item_2 {
@@ -244,6 +246,7 @@ textarea [name="command"] {
   border-bottom: 1px solid var(--fco-accent-colour);
   background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
+  opacity:0.25;
 }
 
 .fu_item_2.active {
@@ -253,6 +256,7 @@ textarea [name="command"] {
   border-color:var(--fco-accent-colour);
   box-shadow:none;
   text-shadow: 0 0 8px var(--fco-accent-colour);
+  opacity:1;
 }
 
 .fu_item_3 {
@@ -265,6 +269,7 @@ textarea [name="command"] {
   border-bottom: 1px solid var(--fco-accent-colour);
   background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
+  opacity:0.25;
 }
 
 .fu_item_3.active {
@@ -274,6 +279,7 @@ textarea [name="command"] {
   border-color:var(--fco-accent-colour);
   box-shadow:none;
   text-shadow: 0 0 8px var(--fco-accent-colour);
+  opacity:1;
 }
 
 .fu_item_4 {
@@ -286,6 +292,7 @@ textarea [name="command"] {
   border-bottom: 1px solid var(--fco-accent-colour);
   background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
+  opacity:0.25;
 }
 
 .fu_item_4.active {
@@ -295,6 +302,7 @@ textarea [name="command"] {
   border-color:var(--fco-accent-colour);
   box-shadow:none;
   text-shadow: 0 0 8px var(--fco-accent-colour);
+  opacity:1;
 }
 
 .fu_item_5 {
@@ -307,6 +315,7 @@ textarea [name="command"] {
   border-bottom: 1px solid var(--fco-accent-colour);
   background-color:var(--fco-sheet-background-colour);
   box-shadow: inset 0px -6px 15px -6px black;
+  opacity:0.25;
 }
 
 .fu_item_5.active {
@@ -316,6 +325,7 @@ textarea [name="command"] {
   border-color:var(--fco-accent-colour);
   box-shadow:none;
   text-shadow: 0 0 8px var(--fco-accent-colour);
+  opacity:1;
 }
 
 /* The container */
@@ -497,6 +507,7 @@ textarea [name="command"] {
   font-size:10pt;
   overflow-y:auto;
   padding-left:5px;
+  cursor:text;
 }
 
 .long_text_rich {
@@ -507,6 +518,7 @@ textarea [name="command"] {
   font-size:10pt;
   overflow-y:auto;
   padding-left:5px;
+  cursor:text;
 }
 
 .long_text_rich:hover {

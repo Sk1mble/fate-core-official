@@ -18,6 +18,28 @@
     border: 1px solid var(--fco-accent-colour);
 }
 
+.fate *::-webkit-scrollbar-thumb {
+    background:var(--fco-accent-colour);
+    border: 1px solid var(--fco-accent-colour);
+}
+
+#FateUtilities *::-webkit-scrollbar-thumb {
+    background:var(--fco-accent-colour);
+    border: 1px solid var(--fco-accent-colour);
+}
+
+.fate table {
+    background:none;
+}
+
+#FateUtilities table {
+    background:none;
+}
+
+#EditEntityTrack table {
+    background:none;
+}
+
 .mfate-sheet__header {
     grid-area: header;
 }
@@ -331,6 +353,7 @@
     background-color:var(--fco-sheet-input-colour) !important;
     font-family: var(--fco-font-family) !important;
     font-size:10pt;
+    cursor:text;
 }
 
 .mfate-panel__header-select {
