@@ -1,7 +1,12 @@
+# 4.3.7
+  * Added ability for GMs to delete public schemes from other users
+  * Added ability for GMs to hover over the name of a scheme to see who the author is
+  * Fixed a bug that was causing the shift-click free invoke function to fail before being able to assign invokes.
+
 # 4.3.6
   * Completed the addition of a storage mechanism for character sheet colour profiles, allowing rapid transition between stored settings.
   * Colour settings made public by a user are shared freely with other users.
-  
+
 # 4.3.5
   * Added additional sheet options for theming the character sheet, including the background
   * Applied theming options to Fate Utilities and most other player-facing interfaces in the game.

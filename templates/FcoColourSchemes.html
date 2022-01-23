@@ -51,7 +51,7 @@
     <div style="display:table; border-spacing:5px; width:100%">  
         {{#each otherSchemes}}
             <div style="display:table-row;">
-                <div style="display:table-cell; width:15em">
+                <div style="display:table-cell; width:15em" title="by {{author.name}}">
                     <strong>{{name}}</strong>
                 </div>
                 <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_header_colour}};">
@@ -85,7 +85,13 @@
                     Skills Panel height: {{scheme.fco_skills_panel_height}}
                 </div>
                 <div style="display:table-cell;">
-                    <button type="button" class="publicColourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px; margin-right:35px" icon></button>
+                    
+                    {{#if ../isGM}}
+                        <button type="button" class="publicColourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px; margin-right:5px" icon></button>
+                        <button type="button" class="publicColourSchemeDelete fas fa-trash" style="width:30px; height:30px;" data-index="{{@key}}" icon></button>
+                    {{else}}
+                        <button type="button" class="publicColourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px; margin-right:35px" icon></button>
+                    {{/if}}
                 </div>
             </div>
         {{/each}}

@@ -438,7 +438,7 @@
                         {{#if GM}}<button type="button" class="fas fa-trash" id="fu_clear_rolls" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:{{fontSize}}pt; border:2px; border-style:outset; width:50px; height:50px;" title="{{localize 'fate-core-official.ClearAllRolls'}}"></button>
                         <button type="button" title="{{localize 'fate-core-official.fu-adhoc-roll-button'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; height:50px; border:2px; border-style:outset;" id="fu_ad_hoc_roll" class="fas fa-dice"></button>{{/if}}
                         <div id="fu_rolls_tab" style="overflow-y:auto; max-height:calc({{height}}px - 160px);">
-                        <table style="background:none; color:var(--fco-sheet-text-colour); border:2px solid var(--fco-accent-colour);">
+                        <table style="background:none; color:var(--fco-sheet-text-colour); border:2px solid var(--fco-accent-colour); max-width:calc(100% - 5px)">
                         <tr style="background-color:transparent">
                             <th style="border:2px solid var(--fco-accent-colour); font-weight:bold; text-align:center; font-size:{{fontSize}}pt">
                                 {{localize 'fate-core-official.Character'}}

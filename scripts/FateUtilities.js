@@ -997,7 +997,6 @@ class FateUtilities extends Application{
                         
                         let num_invokes = aspect.value.split("_")[1];
                         if (num_invokes > 0){
-                            invoked = true;
                             bonus += parseInt(num_invokes, 10)*2;
                             aspectsInvoked.push(`${name} x${num_invokes}`);
                             let sit_aspect = all_sit_aspects.find(asp => asp.name == name);

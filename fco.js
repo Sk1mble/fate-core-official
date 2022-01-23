@@ -1597,6 +1597,9 @@ class FcoColourSchemes extends FormApplication {
             if (user.id != game.user.id){
                 let schemes = user.getFlag("fate-core-official", "colourSchemes");
                 if (schemes){
+                    schemes.forEach(sc => {
+                        sc.author = user;
+                    })
                     otherSchemes = otherSchemes.concat(schemes.filter(sc => sc.public));
                 }
             }
@@ -1607,7 +1610,8 @@ class FcoColourSchemes extends FormApplication {
 
         return {
             mySchemes:mySchemes,
-            otherSchemes:otherSchemes
+            otherSchemes:otherSchemes,
+            isGM:game.user.isGM
         } 
     }
 
@@ -1646,6 +1650,28 @@ class FcoColourSchemes extends FormApplication {
                 this.mySchemes.splice(index, 1);
                 await game.user.unsetFlag("fate-core-official","colourSchemes");
                 await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
+                this.render(false);
+            }
+        })
+
+        $('.publicColourSchemeDelete').on('click', async event => {
+            let del = await fcoConstants.confirmDeletion();
+            if (del){
+                let index = event.currentTarget.getAttribute("data-index");
+                let user = this.otherSchemes[index].author;
+                let scheme = this.otherSchemes[index];
+                let userSchemes = user.getFlag("fate-core-official","colourSchemes");
+                for (let i = 0; i < userSchemes.length; i++){
+                    let toDelete = JSON.stringify(scheme);
+                    let toTest = JSON.stringify(userSchemes[i]);
+                    if (toDelete == toTest){
+                        userSchemes.splice(i, 1);
+                        await user.unsetFlag("fate-core-official","colourSchemes");
+                        await user.setFlag("fate-core-official","colourSchemes", userSchemes);
+                        this.render(false);
+                        return;
+                    }
+                }
                 this.render(false);
             }
         })
