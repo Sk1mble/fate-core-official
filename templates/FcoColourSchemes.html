@@ -1,0 +1,93 @@
+<form>
+    <h1>Your Colour Schemes</h1>
+    <div style="display:table; border-spacing:5px; width:100%">
+        {{#each mySchemes}}
+            <div style="display:table-row;">
+                <div style="display:table-cell; width:15em">
+                    <input type="text" class="scheme_name" data-index="{{@key}}" style="font-weight:bold" value="{{name}}"></input>
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_header_colour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_accent_colour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.inputColour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.interactableColour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_label_colour}};">
+                    &nbsp;
+                </div>                
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_background_colour}};">
+                    &nbsp;
+                </div>                
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_text_colour}};">
+                    &nbsp;
+                </div>                
+                <div style="display:table-cell;">
+                    Notches: {{scheme.use_notched}}
+                </div>
+                <div style="display:table-cell;">
+                    Aspect Panel: {{scheme.fco_aspects_panel_height}}
+                </div>
+                <div style="display:table-cell;">
+                    Skills Panel: {{scheme.fco_skills_panel_height}}
+                </div>
+                <div style="display:table-cell;">
+                    Public: <input type="checkbox" class="colourSchemePublicCheck" data-index="{{@key}}" {{#if public}}checked = "checked"{{/if}}></input>
+                </div>
+                <div style="display:table-cell;">
+                    <button type="button" class="colourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px;" icon></button>
+                    <button type="button" class="colourSchemeDelete fas fa-trash" style="width:30px; height:30px;" data-index="{{@key}}" icon></button>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+    
+    <h1>Public Colour Schemes</h1>   
+    <div style="display:table; border-spacing:5px; width:100%">  
+        {{#each otherSchemes}}
+            <div style="display:table-row;">
+                <div style="display:table-cell; width:15em">
+                    <strong>{{name}}</strong>
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_header_colour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_accent_colour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.inputColour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.interactableColour}};">
+                    &nbsp;
+                </div>
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_label_colour}};">
+                    &nbsp;
+                </div>                
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_background_colour}};">
+                    &nbsp;
+                </div>                
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_text_colour}};">
+                    &nbsp;
+                </div>                
+                <div style="display:table-cell;">
+                    Notches: {{scheme.use_notched}}
+                </div>
+                <div style="display:table-cell;">
+                    Aspect Panel height: {{scheme.fco_aspects_panel_height}}
+                </div>
+                <div style="display:table-cell;">
+                    Skills Panel height: {{scheme.fco_skills_panel_height}}
+                </div>
+                <div style="display:table-cell;">
+                    <button type="button" class="publicColourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px; margin-right:35px" icon></button>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</form>

@@ -1508,6 +1508,50 @@ class CustomiseSheet extends FormApplication {
             this.render(false);
         })
 
+        $('#fco_view_colourSchemes').on('click', async event => {
+            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
+            if (cs){
+                cs.render(true);
+                try {
+                    cs.bringToTop();
+                } catch {
+
+                }
+            } else {
+                cs = new FcoColourSchemes();
+                cs.customiseSheet = this;
+                cs.render(true);
+            }
+        })
+
+        $('#fco_store_colourScheme').on('click', async event => {
+            let schemes = game.user.getFlag("fate-core-official", "colourSchemes");
+            if (!schemes) schemes = [];
+            let scheme = this._getSubmitData();
+            let name = await fcoConstants.getInput(game.i18n.localize("fate-core-official.nameToUse"));
+            if (!name) name = "Unnamed Colour Scheme";
+            let p = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.makePublic"), game.i18n.localize("fate-core-official.saveAsPublic"));
+            let publicB = false;
+            if (p == "yes") publicB = true;
+            let schemeData = {name:name, scheme:scheme, public:publicB};
+            schemes.push(schemeData);
+            await game.user.unsetFlag("fate-core-official", "colourSchemes");
+            await game.user.setFlag("fate-core-official", "colourSchemes", schemes);
+            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
+            if (cs){
+                cs.render(true);
+                try {
+                    cs.bringToTop();
+                } catch {
+
+                }
+            } else {
+                cs = new FcoColourSchemes();
+                cs.customiseSheet = this;
+                cs.render(true);
+            }
+        })
+
         $('#load_custom').on('click', async event => {
             let text = JSON.stringify(await this.getData(),null,5);
             let value =  await new Promise(resolve => {
@@ -1528,6 +1572,122 @@ class CustomiseSheet extends FormApplication {
             this.custom = data;
             this.reset = false;
             this.render(false);
+        })
+    }
+}
+
+class FcoColourSchemes extends FormApplication {
+    static get defaultOptions (){
+        const options = super.defaultOptions;
+        options.template = "systems/fate-core-official/templates/FcoColourSchemes.html";
+        options.closeOnSubmit = true;
+        options.submitOnClose = false;
+        options.width = 1024;
+        options.height = "auto";
+        options.title = game.i18n.localize("fate-core-official.viewStoredColourSchemes");
+        options.id = "FcoColourSchemes";
+        return options;
+    }
+
+    async getData(){
+        let mySchemes = game.user.getFlag("fate-core-official", "colourSchemes");
+        let otherSchemes = [];
+        
+        game.users.forEach (user =>{
+            if (user.id != game.user.id){
+                let schemes = user.getFlag("fate-core-official", "colourSchemes");
+                if (schemes){
+                    otherSchemes = otherSchemes.concat(schemes.filter(sc => sc.public));
+                }
+            }
+        })
+
+        this.mySchemes = mySchemes;
+        this.otherSchemes = otherSchemes;
+
+        return {
+            mySchemes:mySchemes,
+            otherSchemes:otherSchemes
+        } 
+    }
+
+    async activateListeners(html){
+        super.activateListeners(html);
+
+        $('.colourSchemeUpload').on('click', async event => {
+            let index = event.currentTarget.getAttribute("data-index");
+            let scheme = this.mySchemes[index].scheme;
+            console.log(scheme);
+            this.customiseSheet.custom = {
+                sheetHeaderColour:scheme.sheet_header_colour,
+                sheetAccentColour:scheme.sheet_accent_colour,
+                sheetLabelColour:scheme.sheet_label_colour,
+                aspectsHeight:scheme.fco_aspects_panel_height,
+                skillsHeight:scheme.fco_skills_panel_height,
+                inputColour:scheme.inputColour,
+                backgroundColour:scheme.backgroundColour,
+                textColour:scheme.textColour,
+                interactableColour:scheme.interactableColour,
+                notch:scheme.use_notched,
+            }
+            this.customiseSheet.reset = false;
+            this.customiseSheet.render(true);
+            try {
+                this.customiseSheet.bringToTop();
+            } catch {
+                
+            }
+        })
+
+        $('.colourSchemeDelete').on('click', async event => {
+            let del = await fcoConstants.confirmDeletion();
+            if (del){
+                let index = event.currentTarget.getAttribute("data-index");
+                this.mySchemes.splice(index, 1);
+                await game.user.unsetFlag("fate-core-official","colourSchemes");
+                await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
+                this.render(false);
+            }
+        })
+
+        $('.scheme_name').on('change', async event => {
+            let index = event.currentTarget.getAttribute("data-index");
+            this.mySchemes[index].name = event.currentTarget.value;
+            await game.user.unsetFlag("fate-core-official","colourSchemes");
+            await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
+            this.render(false);
+        })
+
+        $('.colourSchemePublicCheck').on('change', async event => {
+            let index = event.currentTarget.getAttribute("data-index");
+            this.mySchemes[index].public = event.currentTarget.checked;
+            await game.user.unsetFlag("fate-core-official","colourSchemes");
+            await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
+            this.render(false);
+        })
+
+        $('.publicColourSchemeUpload').on('click', async event => {
+            let index = event.currentTarget.getAttribute("data-index");
+            let scheme = this.otherSchemes[index].scheme;
+            this.customiseSheet.custom = {
+                sheetHeaderColour:scheme.sheet_header_colour,
+                sheetAccentColour:scheme.sheet_accent_colour,
+                sheetLabelColour:scheme.sheet_label_colour,
+                aspectsHeight:scheme.fco_aspects_panel_height,
+                skillsHeight:scheme.fco_skills_panel_height,
+                inputColour:scheme.inputColour,
+                backgroundColour:scheme.backgroundColour,
+                textColour:scheme.textColour,
+                interactableColour:scheme.interactableColour,
+                notch:scheme.use_notched
+            }
+            this.customiseSheet.reset = false;
+            this.customiseSheet.render(true);
+            try {
+                this.customiseSheet.bringToTop();
+            } catch {
+
+            }
         })
     }
 }

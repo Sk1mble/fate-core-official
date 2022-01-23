@@ -1,3 +1,7 @@
+# 4.3.6
+  * Completed the addition of a storage mechanism for character sheet colour profiles, allowing rapid transition between stored settings.
+  * Colour settings made public by a user are shared freely with other users.
+  
 # 4.3.5
   * Added additional sheet options for theming the character sheet, including the background
   * Applied theming options to Fate Utilities and most other player-facing interfaces in the game.

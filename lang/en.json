@@ -1,4 +1,9 @@
 {
+   "fate-core-official.storeColourScheme":"Store This Colour Scheme",
+   "fate-core-official.nameToUse":"Name to use?",
+   "fate-core-official.makePublic":"Make Public?",
+   "fate-core-official.saveAsPublic":"Do you want make this colour scheme public?",
+   "fate-core-official.viewStoredColourSchemes":"Manage Stored Colour Schemes",
    "fate-core-official.enforceRefreshMenuName":"Enforce PC refresh total?",
    "fate-core-official.enforceRefreshMenuHint":"If true, enforces that a PC's current refresh can't be more than the world refresh minus refresh spent.",
    "fate-core-official.word_for_conflict":"Conflict",
