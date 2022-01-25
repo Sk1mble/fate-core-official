@@ -1,3 +1,6 @@
+# 4.3.8
+  * Added an 'apply' button to the sheet customisation tool, allowing the current settings to be saved and applied without closing the customisation dialog.
+
 # 4.3.7
   * Added ability for GMs to delete public schemes from other users
   * Added ability for GMs to hover over the name of a scheme to see who the author is

@@ -521,7 +521,7 @@ Hooks.once('init', async function () {
         label: game.i18n.localize("fate-core-official.Setup"),      // The text label used in the button
         hint: game.i18n.localize("fate-core-official.SetupSkillsHint"),
         type: SkillSetup,   // A FormApplication subclass which should be created
-        restricted: true                   // Restrict this submenu to gamemaster only?
+        restricted: true    // Restrict this submenu to gamemaster only?
       });
 
     game.settings.register("fate-core-official", "defaultSkills", {
@@ -1442,9 +1442,10 @@ class CustomiseSheet extends FormApplication {
     static get defaultOptions (){
         const options = super.defaultOptions;
         options.template = "systems/fate-core-official/templates/CustomiseSheet.html";
-        options.closeOnSubmit = true;
+        options.closeOnSubmit = false;
         options.submitOnClose = false;
         options.title = game.i18n.localize("fate-core-official.customiseSheet");
+        options.id = "CustomiseSheet";
         return options;
     }
 
@@ -1459,7 +1460,6 @@ class CustomiseSheet extends FormApplication {
         await game.settings.set("fate-core-official", "fco-notched-headers", formData.use_notched);
         await game.settings.set("fate-core-official", "sheetTextColour",formData.textColour)
         await game.settings.set("fate-core-official", "sheetInteractableColour",formData.interactableColour)
-        this.close();
     }
 
     async getData(){
@@ -1496,10 +1496,24 @@ class CustomiseSheet extends FormApplication {
         }
     }
 
+    close(){
+        let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
+        if (cs){
+            cs.close();
+        }
+        super.close();
+    }
+
     async activateListeners(html){
         super.activateListeners(html);
+        $('#apply_sheet_settings').on('click', async event => {
+            await this.submit();
+            ui.notifications.info(game.i18n.localize("fate-core-official.colourSettingsApplied"));
+        })
+
         $('#save_sheet_settings').on('click', async event => {
-            this.submit();
+            await this.submit();
+            this.close();
         })
 
         $('#load_defaults').on('click', async event => {
@@ -1580,8 +1594,6 @@ class FcoColourSchemes extends FormApplication {
     static get defaultOptions (){
         const options = super.defaultOptions;
         options.template = "systems/fate-core-official/templates/FcoColourSchemes.html";
-        options.closeOnSubmit = true;
-        options.submitOnClose = false;
         options.width = 1024;
         options.height = "auto";
         options.title = game.i18n.localize("fate-core-official.viewStoredColourSchemes");

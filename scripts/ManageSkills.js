@@ -432,7 +432,6 @@ class EditSkill extends FormApplication{
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.template = "systems/fate-core-official/templates/EditSkill.html"; 
-    
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";
