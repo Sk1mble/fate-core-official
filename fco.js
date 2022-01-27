@@ -43,6 +43,22 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
+Hooks.on("renderSettingsConfig", (app, html) => {
+    const input = html[0].querySelector("[name='fate-core-official.fco-font-family']");
+    input.remove(0);
+
+    CONFIG.fontFamilies.forEach(font => {
+        const option = document.createElement("option");
+        option.value = font;
+        option.text = font;
+        input.add(option);
+    });
+    
+    let options = input.getElementsByTagName('option');
+    let current = game.settings.get("fate-core-official","fco-font-family");
+    for (let option of options) if (option.value == current) option.selected = 'selected'
+});
+
 function setupSheet(){
     // Setup the character sheet according to the user's settings
     let val = game.settings.get("fate-core-official","fco-aspects-pane-mheight");
@@ -1003,7 +1019,7 @@ game.settings.register("fate-core-official","freeStunts", {
        restricted:false,
        scope:"user",
        config:true,
-       choices:CONFIG.fontFamilies.reduce((a, v) => ({ ...a, [v]: v}), {}),
+       choices:"delete",
        onChange:() => {
            setupFont();
        }
@@ -1315,7 +1331,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:String,
         restricted:true,
-        choices:CONFIG.fontFamilies.reduce((a, v) => ({ ...a, [v]: v}), {}),
+        choices:"delete",
         default:"Montserrat",
     })
 
