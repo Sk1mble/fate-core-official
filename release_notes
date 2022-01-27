@@ -1,6 +1,9 @@
+# 4.3.10
+Added extra code to support additional fonts added outside the system and after init, for example with the Custom Fonts module.
+
 # 4.3.9
   * The font options now store a text value for the font name rather than the index of the font in CONFIG.fontFamilies. This prevents issues if a font is added or deleted, changing the order of fonts.
-  
+
 # 4.3.8
   * Added an 'apply' button to the sheet customisation tool, allowing the current settings to be saved and applied without closing the customisation dialog.
 
