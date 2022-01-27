@@ -85,7 +85,11 @@ function setupSheet(){
 
 function setupFont(){
     // Setup the system font according to the user's settings
-    let val = CONFIG.fontFamilies[game.settings.get("fate-core-official","fco-font-family")];
+    let val = game.settings.get("fate-core-official","fco-font-family");
+    if (CONFIG.fontFamilies.indexOf(val) == -1){
+        // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+        val = CONFIG.fontFamilies[game.settings.get("fate-core-official","fco-font-family")]
+    }
     let override = game.settings.get("fate-core-official", "override-foundry-font");
     if (override) {
         document.documentElement.style.setProperty('--fco-foundry-font-family', "")
@@ -995,11 +999,11 @@ game.settings.register("fate-core-official","freeStunts", {
        label:game.i18n.localize("fate-core-official.fontFamilyLabel"),
        hint:game.i18n.localize("fate-core-official.fontFamilyHint"),
        type:String,
-       default:CONFIG.fontFamilies.indexOf("Montserrat"),
+       default:"Montserrat",
        restricted:false,
        scope:"user",
        config:true,
-       choices:CONFIG.fontFamilies,
+       choices:CONFIG.fontFamilies.reduce((a, v) => ({ ...a, [v]: v}), {}),
        onChange:() => {
            setupFont();
        }
@@ -1311,7 +1315,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:String,
         restricted:true,
-        choices:CONFIG.fontFamilies,
+        choices:CONFIG.fontFamilies.reduce((a, v) => ({ ...a, [v]: v}), {}),
         default:"Montserrat",
     })
 

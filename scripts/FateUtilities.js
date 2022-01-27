@@ -610,7 +610,14 @@ class FateUtilities extends Application{
                 text = aspect.name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
             }
             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+
+            // Setup the aspect label font according to the user's settings
+            let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+            if (CONFIG.fontFamilies.indexOf(font) == -1){
+                 // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+            }
+
             if (size === 0){
                 size = Math.floor(game.scenes.viewed.data.width*(1/100));
                 if (size < 8) size = 8;
@@ -1010,7 +1017,14 @@ class FateUtilities extends Application{
                                     text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
                                 }
                                 let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-                                let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+                                
+                                // Setup the aspect label font according to the user's settings
+                                let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+                                if (CONFIG.fontFamilies.indexOf(font) == -1){
+                                    // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+                                    font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                                }
+                                
                                 if (size === 0){
                                     size = Math.floor(game.scenes.viewed.data.width*(1/100));
                                     if (size < 8) size = 8;
@@ -1115,7 +1129,14 @@ class FateUtilities extends Application{
                                 text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
                             }
                             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-                            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+                            
+                            // Setup the aspect label font according to the user's settings
+                            let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+                            if (CONFIG.fontFamilies.indexOf(font) == -1){
+                                // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+                                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                            }
+
                             if (size === 0){
                                 size = Math.floor(game.scenes.viewed.data.width*(1/100));
                                 if (size < 8) size = 8;
@@ -1446,7 +1467,14 @@ class FateUtilities extends Application{
                 text = name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
             }
             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+            
+            // Setup the aspect label font according to the user's settings
+            let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+            if (CONFIG.fontFamilies.indexOf(font) == -1){
+                // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+            }
+
             if (size === 0){
                 size = Math.floor(game.scenes.viewed.data.width*(1/100));
                 if (size < 8) size = 8;
@@ -1485,7 +1513,14 @@ class FateUtilities extends Application{
                 text = name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
             }
                 let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-                let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+            
+                // Setup the aspect label font according to the user's settings
+                let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+                if (CONFIG.fontFamilies.indexOf(font) == -1){
+                    // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+                    font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                }
+
                 if (size === 0){
                     size = Math.floor(game.scenes.viewed.data.width*(1/100));
                     if (size < 8) size = 8;
@@ -1679,7 +1714,14 @@ class FateUtilities extends Application{
                 text = aspect.name+` (${value} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
             }
             let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-            let font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")];
+            
+            // Setup the aspect label font according to the user's settings
+            let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+            if (CONFIG.fontFamilies.indexOf(font) == -1){
+                 // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+            }
+
             if (size === 0){
                 size = Math.floor(game.scenes.viewed.data.width*(1/100));
                 if (size < 8) size = 8;
@@ -2411,7 +2453,7 @@ class FUAspectLabelClass extends FormApplication {
         let border_alpha = formData.fu_border_alpha;
         let fill_alpha = formData.fu_fill_alpha;
 
-        await game.settings.set("fate-core-official","fuAspectLabelFont", CONFIG.fontFamilies.indexOf(font));
+        await game.settings.set("fate-core-official","fuAspectLabelFont", font);
         await game.settings.set("fate-core-official","fuAspectLabelSize", size);
         await game.settings.set("fate-core-official", "fuAspectLabelTextColour", text);
         await game.settings.set("fate-core-official", "fuAspectLabelFillColour", fill);
@@ -2423,9 +2465,12 @@ class FUAspectLabelClass extends FormApplication {
     }
 
     async getData(){
+        let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+        if (CONFIG.fontFamilies.indexOf(font) == -1) font = CONFIG.fontFamilies[font];
+        
         return {
                     fonts:CONFIG.fontFamilies, 
-                    currentFont:CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")],
+                    currentFont:font,
                     fontSize:game.settings.get("fate-core-official", "fuAspectLabelSize"),
                     textColour:game.settings.get("fate-core-official","fuAspectLabelTextColour"),
                     fillColour:game.settings.get("fate-core-official","fuAspectLabelFillColour"),
