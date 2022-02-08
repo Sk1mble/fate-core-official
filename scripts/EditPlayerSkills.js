@@ -472,7 +472,6 @@ class EditGMSkills extends FormApplication{
                     let skill = world_skills[w];
                     skill.rank=0;
                     updateObject[w] = skill;
-                    console.log(updateObject);
                     //updateObject[`data.skills.${w}`] = skill;
                 }
             }

@@ -196,14 +196,13 @@ class EditEntityTrack extends FormApplication {
     }
 
     async _edit_entity_linked_skillsButtonClick(event, html){    
-        console.log("click")
-            let linked_skill_editor = new EditEntityLinkedSkills(this.track, this.entity);
-            linked_skill_editor.render(true);
-            try {
-                linked_skill_editor.bringToTop();
-            } catch  {
-                // Do nothing.
-            }
+        let linked_skill_editor = new EditEntityLinkedSkills(this.track, this.entity);
+        linked_skill_editor.render(true);
+        try {
+            linked_skill_editor.bringToTop();
+        } catch  {
+            // Do nothing.
+        }
     }
 
     async _onSaveTrackButton(event,html){

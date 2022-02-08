@@ -501,7 +501,7 @@
                                             </tr>
                                     </table>
                                 {{/if}}
-                                {{#if (eq this.user._id ../user.id)}}{{#if ../GM}}{{else}}
+                                {{#if (eq this.fullSpeaker.actor ../user.character.id)}}{{#if ../GM}}{{else}}
                                 <table style="background:transparent; border:none">
                                     <tr><th>{{localize 'fate-core-official.FreeActions'}}</th>
                                         <th>{{localize 'fate-core-official.FatePointActions'}}</th>

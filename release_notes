@@ -1,3 +1,7 @@
+# 4.3.12
+ * When the GM rolls for a user, the user can now modify the resulting roll as long as the character is assigned to them as their character.
+ * Fixed a bug in the logic that stored the user in the speaker on rolls where a stunt was used, ensuring that it now subtracts from the correct fate point pool.
+
 # 4.3.11
   * When the GM clicks to modify a roll with a fate point (+2, reroll, manual modifier) the system will now only deduct from the GM's fate points if the character has no player owner.
   * You can invert this behaviour as the GM to deduct from your points for the scene when you invoke by holding shift (or whatever you have set the modifier key to) when you click on the modifier button.

@@ -569,7 +569,6 @@ export class fcoActor extends Actor {
 
             let msg = ChatMessage.getSpeaker({actor:actor})
             msg.alias = actor.name;
-            console.log(msg);
 
             roll.toMessage({
                 flavor: `<h1>${skill.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
@@ -607,7 +606,7 @@ export class fcoActor extends Actor {
             let roll = await r.roll();
             roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
     
-            let msg = ChatMessage.getSpeaker({actor:this.actor})
+            let msg = ChatMessage.getSpeaker({actor:this})
             msg.alias = this.name;
     
             roll.toMessage({

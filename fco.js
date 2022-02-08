@@ -1653,7 +1653,6 @@ class FcoColourSchemes extends FormApplication {
         $('.colourSchemeUpload').on('click', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             let scheme = this.mySchemes[index].scheme;
-            console.log(scheme);
             this.customiseSheet.custom = {
                 sheetHeaderColour:scheme.sheet_header_colour,
                 sheetAccentColour:scheme.sheet_accent_colour,
