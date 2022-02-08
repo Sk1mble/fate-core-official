@@ -8,8 +8,30 @@
                 <input type="number" id="modifier" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border:1px solid var(--fco-foundry-interactable-color)" value="0"></input>
             </td>
         </tr>
+
+        {{#if allowManual}}
         <tr style="height:40px; background-color:transparent">
-            <td style="font-weight:bold; padding-left:5px">
+            <td style="font-weight:bold; padding-left:5px; width:200px">
+                {{localize 'fate-core-official.manualRoll'}}:
+            </td>
+            <td>
+                <select id="manualRoll" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border:1px solid var(--fco-foundry-interactable-color)" value="">
+                    <option value = "" selected = "selected">N/A</option>
+                    <option value = "-4">-4</option>
+                    <option value = "-3">-3</option>
+                    <option value = "-2">-2</option>
+                    <option value = "-1">-1</option>
+                    <option value = "0">0</option>
+                    <option value = "1">+1</option>
+                    <option value = "2">+2</option>
+                    <option value = "3">+3</option>
+                    <option value = "4">+4</option>
+                </select>
+            </td>
+        </tr>
+        {{/if}}
+        <tr style="height:40px; background-color:transparent">
+            <td style="font-weight:bold; padding-left:5px"> 
                 {{localize 'fate-core-official.Description'}}:
             </td>
             <td>
@@ -23,7 +45,7 @@
             <td>
                 <select id="second_skill" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour);">
                     <option selected="selected">{{localize 'fate-core-official.None'}}</option>
-                    {{#each this.data.data.skills}}
+                    {{#each this.actor.data.data.skills}}
                     <option>{{this.name}}</option>
                     {{/each}}
                 </select>
@@ -34,7 +56,7 @@
                 {{localize 'fate-core-official.Stunt_s'}}:
             </td>
             <td width="300px">
-                {{#each this.data.data.stunts}}
+                {{#each this.actor.data.data.stunts}}
                 {{#if (eq this.linked_skill ../activeSkill)}}
                     <i style="font-style:normal;" title="{{this.description}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
                 {{/if}}

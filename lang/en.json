@@ -1,4 +1,7 @@
 {
+   "fate-core-official.manualRoll":"Manual Roll",
+   "fate-core-official.allowManualOfflineRolls":"Allow manual offline rolls?",
+   "fate-core-official.allowManualOfflineRollsHint":"Allow manual offline rolls from the Modified Roll Dialogue?",
    "fate-core-official.colourSettingsApplied":"Colour settings saved and applied.",
    "fate-core-official.storeColourScheme":"Store This Colour Scheme",
    "fate-core-official.nameToUse":"Name to use?",

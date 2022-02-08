@@ -877,6 +877,15 @@ game.settings.register("fate-core-official","freeStunts", {
         default:false
     })
 
+    game.settings.register("fate-core-official","allowManualRolls", {
+        name:game.i18n.localize("fate-core-official.allowManualOfflineRolls"),
+        hint:game.i18n.localize("fate-core-official.allowManualOfflineRollsHint"),
+        scope:"world",
+        config:"true",
+        type:Boolean,
+        default:false
+    })
+
     game.settings.register("fate-core-official", "default_actor_permission", {
         name: game.i18n.localize("fate-core-official.default_actor_permission"),
         hint: game.i18n.localize("fate-core-official.default_actor_permission_hint"),

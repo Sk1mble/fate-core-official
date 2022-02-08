@@ -34,6 +34,7 @@ class ModifiedRollDialog extends Application {
         let second_skill_rank = 0;
         let second_skill_text = ""
         let skill_rank = this.actor.data.data.skills[this.skill_name].rank;
+        let manual_roll = html.find("select[id='manualRoll']")[0].value;
 
         total_modifier += parseInt(skill_rank);
         let modifier_text = "";
@@ -63,10 +64,48 @@ class ModifiedRollDialog extends Application {
             }
         }
 
-        let r = new Roll(`4dF + ${total_modifier}`);
-        let roll = await r.roll();
-        roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
+        let r;
+        let roll; 
+        let manualFlavour = "";
 
+        if (game.settings.get("fate-core-official","allowManualRolls") && manual_roll.length != 0){
+            let results = '';
+            let num = parseInt(manual_roll)
+            manualFlavour = `<br/>${game.i18n.localize("fate-core-official.manualRoll")}: ${num}`;
+            if (num == 0){
+                results = '{"result":-0,"active":true},{"result":-0,"active":true},{"result":-0,"active":true},{"result":-0,"active":true}'
+            }
+            if (num == -1){
+                results = '{"result":-1,"active":true,"failure":true},{"result":-0,"active":true},{"result":-0,"active":true},{"result":-0,"active":true}'
+            }
+            if (num == -2){
+                results = '{"result":-1,"active":true,"failure":true},{"result":-1,"active":true,"failure":true},{"result":-0,"active":true},{"result":-0,"active":true}'
+            }
+            if (num == -3){
+                results = '{"result":-1,"active":true,"failure":true},{"result":-1,"active":true,"failure":true},{"result":-1,"active":true,"failure":true},{"result":-0,"active":true}'
+            }
+            if (num == -4){
+                results = '{"result":-1,"active":true,"failure":true},{"result":-1,"active":true,"failure":true},{"result":-1,"active":true,"failure":true},{"result":-1,"active":true,"failure":true}'
+            }
+            if (num == 1){
+                results = '{"result":1,"active":true, "success":true},{"result":-0,"active":true},{"result":-0,"active":true},{"result":-0,"active":true}'
+            }
+            if (num == 2){
+                results = '{"result":1,"active":true, "success":true},{"result":1,"active":true, "success":true},{"result":-0,"active":true},{"result":-0,"active":true}'
+            }
+            if (num == 3){
+                results = '{"result":1,"active":true, "success":true},{"result":1,"active":true, "success":true},{"result":1,"active":true, "success":true},{"result":-0,"active":true}'
+            }
+            if (num == 4){
+                results = '{"result":1,"active":true, "success":true},{"result":1,"active":true, "success":true},{"result":1,"active":true, "success":true},{"result":1,"active":true, "success":true}'
+            }
+            roll = Roll.fromJSON(`{"class":"Roll","options":{},"dice":[],"formula":"4df + ${total_modifier}","terms":[{"class":"FateDie","options":{},"evaluated":true,"number":4,"faces":3,"modifiers":[],"results":[${results}]},{"class":"OperatorTerm","options":{},"evaluated":true,"operator":"+"},{"class":"NumericTerm","options":{},"evaluated":true,"number":${total_modifier}}],"total":${num+total_modifier},"evaluated":true}`)
+        } else {
+            r = new Roll(`4dF + ${total_modifier}`);
+            roll = await r.roll();
+            roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
+        }
+    
         let msg = ChatMessage.getSpeaker({actor:this.actor})
         msg.alias = this.actor.name;
 
@@ -77,7 +116,8 @@ class ModifiedRollDialog extends Application {
             ${game.i18n.localize("fate-core-official.Skill_Rank")}: ${skill_rank} (${rs})<br>
             ${modifier_text}
             ${stunt_text}
-            ${second_skill_text}`,
+            ${second_skill_text}
+            ${manualFlavour}`,
             speaker: msg
         });
 
@@ -86,7 +126,10 @@ class ModifiedRollDialog extends Application {
 
     getData (){
         this.options.title = game.i18n.format("fate-core-official.modifiedRollFor", {skill:this.skill_name, name:this.actor.name})
-        this.actor.activeSkill=this.skill_name;
-        return this.actor;
+        let data = {};
+        data.actor = this.actor;
+        data.activeSkill=this.skill_name;
+        data.allowManual = game.settings.get("fate-core-official","allowManualRolls");
+        return data;
     }
 }

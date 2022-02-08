@@ -1,3 +1,9 @@
+# 4.3.13
+ * Added a system option (world setting) to 'allow manual offline rolls'.
+ * When activated an additional option is added to the Modified Roll Dialog which allows the the user to provide a manual roll result (i.e. because they rolled dice offline or elsewhere)
+ * If this option is used, this manual result will be used to derive the roll rather than an actual roll.
+ * At this time, rerolls from fate points or free invokes cannot also be made manual, suggest you use the manual roll modification option in this circumstance.
+
 # 4.3.12
  * When the GM rolls for a user, the user can now modify the resulting roll as long as the character is assigned to them as their character.
  * Fixed a bug in the logic that stored the user in the speaker on rolls where a stunt was used, ensuring that it now subtracts from the correct fate point pool.
