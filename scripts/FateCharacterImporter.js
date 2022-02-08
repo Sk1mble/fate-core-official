@@ -265,19 +265,20 @@ class FateCharacterImporter {
 
         // Import from Fari (only supports the newest version)
         //console.log(data);
-        let allSections;
-        let interimSections;
+        let allSections=[];
+        let rows;
 
         if (data?.fariType?.toLowerCase() === "character") {
-            interimSections = data.pages.flatMap((page) => {
-                return page.sections;
+            rows = data.pages.flatMap((page) => {
+                return page.rows;
             });
 
-            if (interimSections[0].left || interimSections [0].right){
-                allSections = interimSections[0].left.concat(interimSections[0].right)
-            } else {
-                allSections = interimSections;
-            }
+            rows.forEach(row => {
+                let columns = row.columns;
+                columns.forEach(column => {
+                    allSections = allSections.concat(column.sections);
+                });
+            })
             
             //Assign aspects
             const aspectSection = allSections.find(
@@ -299,11 +300,15 @@ class FateCharacterImporter {
             })
             actorData.data.aspects = aspects;
 
-            //Assign skills - Will only work if there is a section with a single skills block (no matter what they are called).
-            const skillSection = allSections.find (
-                (section) => section.blocks[0].type.toLowerCase() === "skill"
-            );
-            const rawSkills = skillSection?.blocks.map((block) => {
+            //Assign skills - Will add all sections that contain skill blocks.
+            let skillSection = [];
+            allSections.forEach (section => {
+                if (section.blocks[0].type.toLowerCase() === "skill"){
+                    skillSection = skillSection.concat(section.blocks);
+                }
+            })
+            
+            const rawSkills = skillSection?.map((block) => {
                 let rank = parseInt(block.value);
                 if (!rank) rank = 0;
                 return {
@@ -322,11 +327,15 @@ class FateCharacterImporter {
             actorData.data.skills = skills;
 
             //Assign Stunts
-            const stuntSection = allSections.find (
-                (section) => section.label.toLowerCase().includes("stunts")
-            );
 
-            const rawStunts = stuntSection?.blocks.map((block) => {
+            let stuntSection = [];
+            allSections.forEach (section => {
+                if (section.blocks[0].label.toLowerCase().includes("stunt")){
+                    stuntSection = stuntSection.concat(section.blocks);
+                }
+            })
+
+            const rawStunts = stuntSection?.map((block) => {
                 return {
                     name: block.label,
                     value: block.value,

@@ -67,7 +67,7 @@ class ModifiedRollDialog extends Application {
         let roll = await r.roll();
         roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
 
-        let msg = ChatMessage.getSpeaker(this.actor)
+        let msg = ChatMessage.getSpeaker({actor:this.actor})
         msg.alias = this.actor.name;
 
         let ladder = fcoConstants.getFateLadder();

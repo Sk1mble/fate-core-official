@@ -1,5 +1,10 @@
+# 4.3.11
+  * When the GM clicks to modify a roll with a fate point (+2, reroll, manual modifier) the system will now only deduct from the GM's fate points if the character has no player owner.
+  * You can invert this behaviour as the GM to deduct from your points for the scene when you invoke by holding shift (or whatever you have set the modifier key to) when you click on the modifier button.
+  * Updated the Fari importer to cope with the structural changes introduced in v6 of Fari in February 2022. Will now accommodate multiple Skills blocks (though they'll get collapsed into one skill list on import)
+
 # 4.3.10
-Added extra code to support additional fonts added outside the system and after init, for example with the Custom Fonts module.
+  * Added extra code to support additional fonts added outside the system and after init, for example with the Custom Fonts module.
 
 # 4.3.9
   * The font options now store a text value for the font name rather than the index of the font in CONFIG.fontFamilies. This prevents issues if a font is added or deleted, changing the order of fonts.
