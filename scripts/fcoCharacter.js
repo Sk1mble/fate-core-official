@@ -1359,11 +1359,10 @@ export class fcoCharacter extends ActorSheet {
         sheetData.track_categories=Array.from(cats);
         sheetData.category = this.track_category;
 
-        let logo = game.settings.get("fate-core-official", "fco-sheet-logo");
-        let user_logo = game.settings.get("fate-core-official","fco-user-sheet-logo");
-
-        if (user_logo != "world") logo = user_logo;
-
+        let scheme = await game.user.getFlag ("fate-core-official","current-sheet-scheme");
+        if (!scheme) scheme = game.settings.get("fate-core-official","fco-world-sheet-scheme");  
+        
+        let logo = scheme.fco_user_sheet_logo;
         sheetData.logo = logo;
     
         return sheetData;

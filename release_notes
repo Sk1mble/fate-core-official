@@ -1,3 +1,11 @@
+# 4.3.16
+ * Reworked the settings engine for sheet customisations yet again, giving GMs the ability to override the core system sheet colours & other settings to make the default appearance look how they want.
+ * Users can still override this freely to make the sheet look however they want.
+ * The user's choice of sheet design is now stored in a flag on their user rather than in system settings, meaning that it will persist across sessions on different web browsers.
+ * GMs can also revert back to system default settings from the sheet customisation options dialog.
+ * Users can abandon their customisations to use the world's settings by default.
+ * Added code to the utilities for EH module migration allowing the sheet settings to be migrated with the world.
+
 # 4.3.15
  * Added an extra option to allow users to override the world's sheet logo for their own purposes in the character sheet customisation menu.
 

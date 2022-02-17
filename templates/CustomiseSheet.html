@@ -6,7 +6,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetHeaderColourHint'}}</div>
             </td>
             <td>
-                {{colorPicker name="sheet_header_colour" value = this.sheetHeaderColour}}
+                {{colorPicker name="sheet_header_colour" value = this.sheet_header_colour}}
             </td>
         </tr>
         <tr>
@@ -15,7 +15,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetAccentColourHint'}}</div>
             </td>
             <td>
-                {{colorPicker name="sheet_accent_colour" value = this.sheetAccentColour}}
+                {{colorPicker name="sheet_accent_colour" value = this.sheet_accent_colour}}
             </td>
         </tr>
         <tr>
@@ -60,7 +60,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetLabelColourHint'}}</div>
             </td>
             <td>
-                {{colorPicker name="sheet_label_colour" value = this.sheetLabelColour}}
+                {{colorPicker name="sheet_label_colour" value = this.sheet_label_colour}}
             </td>
         </tr>
         <tr>
@@ -69,7 +69,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.notched-headers-hint'}}</div>
             </td>
             <td>
-                <input name="use_notched" type="checkbox" {{#if this.notch}}checked = "checked"{{/if}}></input>
+                <input name="use_notched" type="checkbox" {{#if this.use_notched}}checked = "checked"{{/if}}></input>
             </td>
         </tr>
         <tr>
@@ -78,7 +78,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fcoAspectPaneHeightHint'}}</div>
             </td>
             <td>
-                {{rangePicker name="fco_aspects_panel_height" value = this.aspectsHeight max = "90" min = "10" step = "5"}}
+                {{rangePicker name="fco_aspects_panel_height" value = this.fco_aspects_panel_height max = "90" min = "10" step = "5"}}
             </td>
         </tr>
         <tr>
@@ -87,7 +87,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fcoSkillsPaneHeightHint'}}</div>
             </td>
             <td>
-                {{rangePicker name="fco_skills_panel_height" value = this.skillsHeight max = "90" min = "10" step = "5"}}
+                {{rangePicker name="fco_skills_panel_height" value = this.fco_skills_panel_height max = "90" min = "10" step = "5"}}
             </td>
         </tr>
         <tr>
@@ -96,24 +96,24 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.user-sheet-logo-hint'}}</div>
             </td>
             <td>
-                {{filePicker target = "fco_user_sheet_logo"}}<input type="text" id="fco_user_sheet_logo" name="fco_user_sheet_logo" value='{{logo}}'></input>
+                {{filePicker target = "fco_user_sheet_logo"}}<input type="text" id="fco_user_sheet_logo" name="fco_user_sheet_logo" value='{{fco_user_sheet_logo}}'></input>
             </td>
             <td style="text-align:center">
-                {{#if (eq logo "world")}}
-                    <img src = "{{world_logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto"></img>
-                {{else}}
-                    <img src = "{{logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto"></img>
-                {{/if}}
+                <img src = "{{fco_user_sheet_logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto"></img>
             </td>
         </tr>
         <tr>
             <td colspan="3" style="text-align:center">
                 <button type="button" id="save_sheet_settings" style="width:5em">{{localize 'fate-core-official.Save'}}</button>
                 <button type="button" id="apply_sheet_settings" style="width:5em">{{localize 'fate-core-official.Apply'}}</button>
-                <button type="button" id="load_defaults" style="width:5em" title="{{localize 'fate-core-official.RestoreSheet'}}"><i icon class="fas fa-undo"></i></button>
+                <button type="button" id="undo" style="width:5em" title="{{localize 'fate-core-official.RestoreSheet'}}"><i icon class="fas fa-undo"></i></button>
                 <button type="button" id="fco_view_colourSchemes" style="width:5em" title="{{localize 'fate-core-official.viewStoredColourSchemes'}}"><i icon class="fas fa-palette"></i></button>
                 <button type="button" id="fco_store_colourScheme" style="width:5em" title="{{localize 'fate-core-official.storeColourScheme'}}"><i icon class="fas fa-download"></i></button>
                 <button type="button" id="load_custom" style="width:5em" title="{{localize 'fate-core-official.LoadCustomSheet'}}"><i icon class="fas fa-upload"></i></button>
+                <button type="button" id="del_fco_custom" style="width:5em" title="{{localize 'fate-core-official.deleteSheetCustomisations'}}"><i icon class="fas fa-trash"></i></button>
+                {{#if (fco_isGM)}}
+                    <button type="button" id="fco_make_default" style="width:5em" title="{{localize 'fate-core-official.makeDefault'}}"><i icon class="fas fa-hammer"></i></button>
+                {{/if}}
             </td>
         </tr>
     </table>

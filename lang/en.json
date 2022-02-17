@@ -1,4 +1,6 @@
 {
+   "fate-core-official.makeDefault":"Apply the currently shown settings as the world's default sheet appearance",
+   "fate-core-official.deleteSheetCustomisations":"Delete sheet customisations and revert to using the world's settings.",
    "fate-core-official.sheet-logo":"Character Sheet Logo",
    "fate-core-official.sheet-logo-hint":"Select an image file to use as the default Character Sheet Logo for this world",
    "fate-core-official.user-sheet-logo-hint":"Select an image file to use as the Character Sheet Logo for you as a user. This will overrides the world's setting. When set to 'world', the world's setting will always be used.",
@@ -41,7 +43,7 @@
    "fate-core-official.fontFamilyHint":"Choose a font with which to override the system font for all windows (Defaults to Montserrat; use Signika for the 'stock' Foundry experience)",
    "fate-core-official.abandonChangesQ":"Abandon changes?",
    "fate-core-official.abandonChanges":"Close without saving the changes you've made to this character's skills?",
-   "fate-core-official.RestoreSheet":"Populate with default sheet settings",
+   "fate-core-official.RestoreSheet":"Revert to most recently saved/applied settings.",
    "fate-core-official.PopulateFromPasted":"Populate",
    "fate-core-official.LoadCustomSheet":"Copy/Paste stored sheet colour etc. settings",
    "fate-core-official.sheetHeaderColour":"Header Colour",

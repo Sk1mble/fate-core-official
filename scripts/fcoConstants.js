@@ -300,6 +300,8 @@ class fcoConstants {
         output.fuAspectLabelFillColour = game.settings.get("fate-core-official", "fuAspectLabelFillColour")
         output.fuAspectLabelBorderColour = game.settings.get("fate-core-official", "fuAspectLabelBorderColour")
         output.skillsLabel = game.settings.get("fate-core-official", "skillsLabel")
+        let scheme = game.settings.get("fate-core-official", "fco-world-sheet-scheme");
+        if (scheme) output.fco_world_sheet_scheme = scheme;
         return JSON.stringify(output, null, 5);
     }
 
@@ -360,6 +362,7 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "fuAspectLabelFillColour", input.fuAspectLabelFillColour)
         await game.settings.set("fate-core-official", "fuAspectLabelBorderColour", input.fuAspectLabelBorderColour)
         await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel)
+        if (input?.fco_world_sheet_scheme) await game.settings.set("fate-core-official", "fco-world-sheet-scheme", input.fco_world_sheet_scheme);
         await ui.sidebar.render(false);
     }
 
