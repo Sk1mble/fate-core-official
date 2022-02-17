@@ -1,4 +1,6 @@
 {
+   "fate-core-official.sheet-logo":"Character Sheet Logo",
+   "fate-core-official.sheet-logo-hint":"Select an image file to use as the Character Sheet Logo for this world",
    "fate-core-official.manualRoll":"Manual Roll",
    "fate-core-official.allowManualOfflineRolls":"Allow manual offline rolls?",
    "fate-core-official.allowManualOfflineRollsHint":"Allow manual offline rolls from the Modified Roll Dialogue?",
@@ -51,7 +53,7 @@
    "fate-core-official.sheetLabelColourHint":"The colour used for the text in headers like Skills, Stunts, etc. Default is #FFFFFF",
    "fate-core-official.sheetAccentColour":"Accent Colour",
    "fate-core-official.sheetAccentColourHint":"The colour used for accents like scrollbars, the circles around Fate Points etc. Default is #6793c5",
-   "fate-core-official.customiseSheet":"Customise Sheets",
+   "fate-core-official.customiseSheet":"Customise User Sheets",
    "fate-core-official.sheetInputColour":"Sheet Input Field Colour",
    "fate-core-official.sheetInputColourHint":"The colour used for input fields on Fate Utilities and character and extra sheets, default is #FFFFFF",
    "fate-core-official.sheetBackgroundColour":"Background Colour",

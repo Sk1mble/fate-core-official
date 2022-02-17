@@ -922,6 +922,24 @@ game.settings.register("fate-core-official","freeStunts", {
         filePicker:true
     })
 
+    game.settings.register("fate-core-official", "fco-sheet-logo", {
+        name: game.i18n.localize("fate-core-official.sheet-logo"),
+        label: game.i18n.localize("fate-core-official.sheet-logo"),
+        hint: game.i18n.localize("fate-core-official.sheet-logo-hint"),
+        type: String,
+        default: "/systems/fate-core-official/assets/pbf.svg",
+        config: true,
+        filePicker:true,
+        scope:"world",
+        onChange: () =>{
+            for (let window in ui.windows){
+              if (ui.windows[window].constructor.name == "fcoCharacter"){
+                ui.windows[window].render(false);
+              }  
+            } 
+        }
+    })
+
     game.settings.register ("fate-core-official","PlayerThings", {
         name:game.i18n.localize("fate-core-official.AllowPlayerThingCreation"),
         label:game.i18n.localize("fate-core-official.ThingCreationLabel"),
@@ -1520,7 +1538,7 @@ class CustomiseSheet extends FormApplication {
                 inputColour:game.settings.get("fate-core-official","sheetInputColour"),
                 backgroundColour:game.settings.get("fate-core-official","sheetBackgroundColour"),
                 textColour:game.settings.get("fate-core-official","sheetTextColour"),
-                interactableColour:game.settings.get("fate-core-official","sheetInteractableColour"),
+                interactableColour:game.settings.get("fate-core-official","sheetInteractableColour")
             }
         }
     }

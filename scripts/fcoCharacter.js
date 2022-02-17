@@ -1358,6 +1358,8 @@ export class fcoCharacter extends ActorSheet {
         }
         sheetData.track_categories=Array.from(cats);
         sheetData.category = this.track_category;
+
+        sheetData.logo = game.settings.get("fate-core-official", "fco-sheet-logo");
     
         return sheetData;
     }
