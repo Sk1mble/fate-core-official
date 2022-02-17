@@ -21,10 +21,10 @@
                 <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_label_colour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_background_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.backgroundColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_text_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.textColour}};">
                     &nbsp;
                 </div>                
                 <div style="display:table-cell;">
@@ -38,6 +38,13 @@
                 </div>
                 <div style="display:table-cell;">
                     Public: <input type="checkbox" class="colourSchemePublicCheck" data-index="{{@key}}" {{#if public}}checked = "checked"{{/if}}></input>
+                </div>
+                <div style="display:table-cell;">
+                    {{#if (eq scheme.fco_user_sheet_logo "world")}}
+                        <img src = "{{../world_logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto" title = "World Logo"></img>
+                    {{else}}
+                        <img src = "{{scheme.fco_user_sheet_logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto" title = "Sheet Logo"></img>
+                    {{/if}}
                 </div>
                 <div style="display:table-cell;">
                     <button type="button" class="colourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px;" icon></button>
@@ -69,23 +76,29 @@
                 <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_label_colour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_background_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.backgroundColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_text_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.textColour}};">
                     &nbsp;
                 </div>                
                 <div style="display:table-cell;">
                     Notches: {{scheme.use_notched}}
                 </div>
                 <div style="display:table-cell;">
-                    Aspect Panel height: {{scheme.fco_aspects_panel_height}}
+                    Aspect Panel: {{scheme.fco_aspects_panel_height}}
                 </div>
                 <div style="display:table-cell;">
-                    Skills Panel height: {{scheme.fco_skills_panel_height}}
+                    Skills Panel: {{scheme.fco_skills_panel_height}}
                 </div>
                 <div style="display:table-cell;">
-                    
+                    {{#if (eq scheme.fco_user_sheet_logo "world")}}
+                        <img src = "{{../world_logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto" title = "World Logo"></img>
+                    {{else}}
+                        <img src = "{{scheme.fco_user_sheet_logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto" title = "Sheet Logo"></img>
+                    {{/if}}
+                </div>
+                <div style="display:table-cell;">
                     {{#if ../isGM}}
                         <button type="button" class="publicColourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px; margin-right:5px" icon></button>
                         <button type="button" class="publicColourSchemeDelete fas fa-trash" style="width:30px; height:30px;" data-index="{{@key}}" icon></button>

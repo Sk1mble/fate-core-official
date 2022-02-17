@@ -1,7 +1,7 @@
 <form>
     <table style="background-color:none; border:none; margin-left:10px; margin-right:10px; max-width:98%">
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.sheetHeaderColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetHeaderColourHint'}}</div>
             </td>
@@ -10,7 +10,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.sheetAccentColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetAccentColourHint'}}</div>
             </td>
@@ -19,7 +19,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.sheetBackgroundColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetBackgroundColourHint'}}</div>
             </td>
@@ -28,7 +28,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.sheetInputColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetInputColourHint'}}</div>
             </td>
@@ -37,7 +37,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.sheetTextColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetTextColourHint'}}</div>
             </td>
@@ -46,7 +46,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.sheetInteractableColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetInteractableColourHint'}}</div>
             </td>
@@ -55,7 +55,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.sheetLabelColour'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.sheetLabelColourHint'}}</div>
             </td>
@@ -64,7 +64,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.notched-headers'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.notched-headers-hint'}}</div>
             </td>
@@ -73,7 +73,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.fcoAspectPaneHeight'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fcoAspectPaneHeightHint'}}</div>
             </td>
@@ -82,7 +82,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 {{localize 'fate-core-official.fcoSkillsPaneHeight'}}<br/>
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fcoSkillsPaneHeightHint'}}</div>
             </td>
@@ -91,7 +91,23 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="text-align:center">
+            <td>
+                {{localize 'fate-core-official.sheet-logo'}}<br/>
+                <div style="font-size:0.8em">{{localize 'fate-core-official.user-sheet-logo-hint'}}</div>
+            </td>
+            <td>
+                {{filePicker target = "fco_user_sheet_logo"}}<input type="text" id="fco_user_sheet_logo" name="fco_user_sheet_logo" value='{{logo}}'></input>
+            </td>
+            <td style="text-align:center">
+                {{#if (eq logo "world")}}
+                    <img src = "{{world_logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto"></img>
+                {{else}}
+                    <img src = "{{logo}}" id = "fco_user_sheet_logo_img" style="width:50px; height:auto"></img>
+                {{/if}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:center">
                 <button type="button" id="save_sheet_settings" style="width:5em">{{localize 'fate-core-official.Save'}}</button>
                 <button type="button" id="apply_sheet_settings" style="width:5em">{{localize 'fate-core-official.Apply'}}</button>
                 <button type="button" id="load_defaults" style="width:5em" title="{{localize 'fate-core-official.RestoreSheet'}}"><i icon class="fas fa-undo"></i></button>

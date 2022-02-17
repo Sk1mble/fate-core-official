@@ -940,6 +940,23 @@ game.settings.register("fate-core-official","freeStunts", {
         }
     })
 
+    game.settings.register("fate-core-official", "fco-user-sheet-logo", {
+        name: game.i18n.localize("fate-core-official.sheet-logo"),
+        label: game.i18n.localize("fate-core-official.sheet-logo"),
+        hint: game.i18n.localize("fate-core-official.user-sheet-logo-hint"),
+        type: String,
+        default:"world",
+        config: false,
+        scope:"user",
+        onChange: () =>{
+            for (let window in ui.windows){
+              if (ui.windows[window].constructor.name == "fcoCharacter"){
+                ui.windows[window].render(false);
+              }  
+            } 
+        }
+    })
+
     game.settings.register ("fate-core-official","PlayerThings", {
         name:game.i18n.localize("fate-core-official.AllowPlayerThingCreation"),
         label:game.i18n.localize("fate-core-official.ThingCreationLabel"),
@@ -1505,8 +1522,9 @@ class CustomiseSheet extends FormApplication {
         await game.settings.set("fate-core-official", "sheetInputColour", formData.inputColour);
         await game.settings.set("fate-core-official", "sheetBackgroundColour", formData.backgroundColour);
         await game.settings.set("fate-core-official", "fco-notched-headers", formData.use_notched);
-        await game.settings.set("fate-core-official", "sheetTextColour",formData.textColour)
-        await game.settings.set("fate-core-official", "sheetInteractableColour",formData.interactableColour)
+        await game.settings.set("fate-core-official", "sheetTextColour",formData.textColour);
+        await game.settings.set("fate-core-official", "sheetInteractableColour",formData.interactableColour);
+        await game.settings.set("fate-core-official","fco-user-sheet-logo", formData.fco_user_sheet_logo);
     }
 
     async getData(){
@@ -1525,7 +1543,9 @@ class CustomiseSheet extends FormApplication {
                 inputColour:'#ffffff',
                 backgroundColour:'#ffffff',
                 textColour:'#000000',
-                interactableColour:'#b0c4de'
+                interactableColour:'#b0c4de',
+                logo:"world",
+                world_logo:game.settings.get("fate-core-official","fco-sheet-logo")
             }
         } else {
             return {
@@ -1538,7 +1558,9 @@ class CustomiseSheet extends FormApplication {
                 inputColour:game.settings.get("fate-core-official","sheetInputColour"),
                 backgroundColour:game.settings.get("fate-core-official","sheetBackgroundColour"),
                 textColour:game.settings.get("fate-core-official","sheetTextColour"),
-                interactableColour:game.settings.get("fate-core-official","sheetInteractableColour")
+                interactableColour:game.settings.get("fate-core-official","sheetInteractableColour"),
+                logo:game.settings.get("fate-core-official","fco-user-sheet-logo"),
+                world_logo:game.settings.get("fate-core-official","fco-sheet-logo")
             }
         }
     }
@@ -1582,6 +1604,15 @@ class CustomiseSheet extends FormApplication {
                 cs = new FcoColourSchemes();
                 cs.customiseSheet = this;
                 cs.render(true);
+            }
+        })
+
+        $('#fco_user_sheet_logo').on('change', () => {
+            if ($('#fco_user_sheet_logo')[0].value == "world"){
+                $('#fco_user_sheet_logo_img').attr("src", game.settings.get("fate-core-official","fco-sheet-logo"));
+            }
+            else {
+                $('#fco_user_sheet_logo_img').attr("src", $('#fco_user_sheet_logo')[0].value);
             }
         })
 
@@ -1667,10 +1698,23 @@ class FcoColourSchemes extends FormApplication {
         this.mySchemes = mySchemes;
         this.otherSchemes = otherSchemes;
 
+        mySchemes.forEach(scheme => {
+            if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo")){
+                scheme.scheme.fco_user_sheet_logo = "world"
+            }
+        })
+
+        otherSchemes.forEach(scheme => {
+            if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo")){
+                scheme.scheme.fco_user_sheet_logo = "world"
+            }
+        })
+
         return {
             mySchemes:mySchemes,
             otherSchemes:otherSchemes,
-            isGM:game.user.isGM
+            isGM:game.user.isGM,
+            world_logo:game.settings.get("fate-core-official","fco-sheet-logo")
         } 
     }
 
@@ -1691,6 +1735,7 @@ class FcoColourSchemes extends FormApplication {
                 textColour:scheme.textColour,
                 interactableColour:scheme.interactableColour,
                 notch:scheme.use_notched,
+                logo:scheme.fco_user_sheet_logo
             }
             this.customiseSheet.reset = false;
             this.customiseSheet.render(true);
@@ -1763,7 +1808,8 @@ class FcoColourSchemes extends FormApplication {
                 backgroundColour:scheme.backgroundColour,
                 textColour:scheme.textColour,
                 interactableColour:scheme.interactableColour,
-                notch:scheme.use_notched
+                notch:scheme.use_notched,
+                logo:scheme.fco_user_sheet_logo
             }
             this.customiseSheet.reset = false;
             this.customiseSheet.render(true);
