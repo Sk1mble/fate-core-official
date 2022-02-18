@@ -1,3 +1,6 @@
+# 4.3.17
+  * Bug fix; modified rolls were not working when manual roll values were disabled because of a missing ? in the call to the value of the manual roll field.
+
 # 4.3.16
  * Reworked the settings engine for sheet customisations yet again, giving GMs the ability to override the core system sheet colours & other settings to make the default appearance look how they want.
  * Users can still override this freely to make the sheet look however they want.

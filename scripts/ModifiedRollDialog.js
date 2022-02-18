@@ -34,7 +34,7 @@ class ModifiedRollDialog extends Application {
         let second_skill_rank = 0;
         let second_skill_text = ""
         let skill_rank = this.actor.data.data.skills[this.skill_name].rank;
-        let manual_roll = html.find("select[id='manualRoll']")[0].value;
+        let manual_roll = html.find("select[id='manualRoll']")[0]?.value;
 
         total_modifier += parseInt(skill_rank);
         let modifier_text = "";
