@@ -34,7 +34,8 @@ class fcoConstants {
                 textarea: '<textarea name="content"></textarea>', // fallback for old browsers
                 linksInNewWindow: false // open hyperlinks in a new windows/tab
             }
-            return new Pen(options);
+            let p = new Pen (options);
+            return p;
         }
     }
 
@@ -49,7 +50,7 @@ class fcoConstants {
         return new Promise(resolve => {
             new Dialog({
                 title: prompt,
-                content: content,
+                content: `<p>${content}<br/>`,
                 buttons: {
                     ok: {
                         label: game.i18n.localize("fate-core-official.OK"),
@@ -72,7 +73,7 @@ class fcoConstants {
         return new Promise(resolve => {
             new Dialog({
                 title: prompt,
-                content: content,
+                content: `<p>${content}<br/>`,
                 buttons: {
                     yes: {
                         label: game.i18n.localize("fate-core-official.Yes"),
