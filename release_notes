@@ -1,3 +1,8 @@
+# 4.3.18
+  * Edited the Pen.css file to improve consistency between Pen editors and the main standard look of things.
+  * Added <p> tags to the dialog functions in fcoConstants so that the dialogs generated with them are prettier.
+  * In the colour schemes manager, changed background-color to background for the header colour variable so that, if user has set a gradient etc. it will show it properly.
+
 # 4.3.17
   * Bug fix; modified rolls were not working when manual roll values were disabled because of a missing ? in the call to the value of the manual roll field.
 
