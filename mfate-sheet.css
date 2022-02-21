@@ -163,7 +163,7 @@
     font-family: Jost;
     font-weight: bold;
     /* color: black; */
-    color: var(--fco-header-colour);;
+    color: var(--fco-text-colour);;
     /* text-shadow: 2px 2px 5px darkslategrey; */
     height: auto;
     max-height: 3.5em;

@@ -1,5 +1,7 @@
-# Unreleased 4.3.19
+# 4.3.19
   * The background colour attribute is now also a background rather than a background-color, allowing the use of css tools like gradients, url() etc.
+  * The name on a character sheet now uses the text colour rather than the header colour.
+  * The stunt database window now uses the background property for the header colour for parity with the character sheet headers etc.
 
 # 4.3.18
   * Edited the Pen.css file to improve consistency between Pen editors and the main standard look of things.
