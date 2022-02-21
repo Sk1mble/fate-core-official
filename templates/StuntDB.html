@@ -1,5 +1,5 @@
 <body>
-    <div style="width:1200px; max-height:40px; background-color:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-size:10pt; padding:0px; display:block;">
+    <div style="width:1200px; max-height:40px; background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-size:10pt; padding:0px; display:block;">
         <div style="display:table-row;background-color:var(--fco-header-colour); color:var(--fco-label-colour);">
             <div name="sb_name" title="Sort by name" style="width:200px; border-right:1px solid var(--fco-foundry-interactable-color); font-weight:bold; float:left; padding:5px">
                 {{localize 'fate-core-official.StuntName'}}
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-<div style="width:1200px; min-height:150px; max-height:850px; color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-background-colour); overflow-y:auto; font-family:var(--fco-font-family); font-size:10pt; padding:0px;">
+<div style="width:1200px; min-height:150px; max-height:850px; color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); overflow-y:auto; font-family:var(--fco-font-family); font-size:10pt; padding:0px;">
     <div style="background:var(--fco-sheet-background-colour); display:table">
         {{#each stunts}}
         <div style="display:table-row">
@@ -48,7 +48,7 @@
         {{/each}}
     </div>    
 </div>
-<div style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-background-colour); max-height:50px; padding:10px"><button type="button" id="export_stunts" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.ExportStunts'}}</button>
+<div style="color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); max-height:50px; padding:10px"><button type="button" id="export_stunts" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.ExportStunts'}}</button>
     {{#if this.gm}}<button type="button" id="import_stunts" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.ImportStunts'}}</button>
     <button type="button" id="add_db_stunt" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.addStunt'}}</button>{{/if}}
 </div>

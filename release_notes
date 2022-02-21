@@ -1,3 +1,6 @@
+# Unreleased 4.3.19
+  * The background colour attribute is now also a background rather than a background-color, allowing the use of css tools like gradients, url() etc.
+
 # 4.3.18
   * Edited the Pen.css file to improve consistency between Pen editors and the main standard look of things.
   * Added <p> tags to the dialog functions in fcoConstants so that the dialogs generated with them are prettier.

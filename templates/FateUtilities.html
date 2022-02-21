@@ -1,4 +1,4 @@
-<form id="FateUtilities" style="background-color:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour) height:100%; padding-left:5px; padding-right:10p    x" onsubmit="event.preventDefault();">
+<form id="FateUtilities" style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour) height:100%; padding-left:5px; padding-right:10p    x" onsubmit="event.preventDefault();">
 <div style="height:100%; display:flex; flex-direction:column"> <!--Container div for absolutely everything-->
     <div> <!-- Container div for the Nav bar-->
         <nav class="navigation foo">
@@ -158,7 +158,7 @@
                         </div>
                     </div><!--End Aspects tab--------------------------------------->
                     <!--------BEGIN Tracks tab-->
-                    <div name="tracks" class="tab tracks" data-tab="tracks" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-background-colour); font-family:var(--fco-font-family); padding-top:10px; font-size:{{fontSize}}pt">
+                    <div name="tracks" class="tab tracks" data-tab="tracks" style="color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); font-family:var(--fco-font-family); padding-top:10px; font-size:{{fontSize}}pt">
                         {{localize 'fate-core-official.Category'}}: 
                         <select style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); padding-right:100px" id = "category_select">
                             <option value="{{localize 'fate-core-official.All'}}" {{#if (eq category "{{localize 'fate-core-official.All'}}")}}selected{{/if}}>{{localize 'fate-core-official.All'}}</option>
