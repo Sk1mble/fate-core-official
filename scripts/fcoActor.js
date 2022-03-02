@@ -290,7 +290,7 @@ export class fcoActor extends Actor {
                             skills[skill].extra_tag = modified_tag;
 
                             if (count > 1) {
-                                let count2 = this.getHighest(stunts, stunt, extra_id);
+                                let count2 = this.getHighest(skills, skill, extra_id);
                                 // Count is the number of things starting with this on the actor
                                 // Count2 is the number of things starting with this on the extra
                                 // Do I just use the higher value? I think that will work

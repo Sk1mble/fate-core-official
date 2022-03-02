@@ -533,13 +533,7 @@ export class ExtraSheet extends ItemSheet {
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let name = event.target.id.split("_")[0];
-            //patch for bug https://gitlab.com/foundrynet/foundryvtt/-/issues/6421
-            let stunts = duplicate(this.object.data.data.stunts);
-            delete(stunts[name]);
-            await this.object.update({"data.stunts":null}, {noHook:true, render:false});
-            await this.object.update({"data.stunts":stunts});
-            //Once officially patched, uncomment line below
-            //await this.object.update({"data.stunts":{[`-=${name}`]:null}});
+            await this.object.update({"data.stunts":{[`-=${name}`]:null}});
         }
     }
 

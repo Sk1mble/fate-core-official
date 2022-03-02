@@ -68,13 +68,7 @@ class EditPlayerStunts extends FormApplication {
             }
 
             if (formData["name"]!=this.stunt.name && !this.new) {
-                //patch for bug https://gitlab.com/foundrynet/foundryvtt/-/issues/6421
-                let stunts = duplicate(this.object.data.data.stunts);
-                delete(stunts[this.stunt.name]);
-                await this.object.update({"data.stunts":null}, {render:false, noHook:true});
-                await this.object.update({"data.stunts":stunts});
-                // Restore below once patched
-                // await this.object.update({"data.stunts":{[`-=${this.stunt.name}`]:null}});
+                await this.object.update({"data.stunts":{[`-=${this.stunt.name}`]:null}});
             }
             
             for (let t in formData){

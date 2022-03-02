@@ -1,3 +1,6 @@
+# 4.3.20 
+  * Undid the patch from 4.3.4 as the bug is fixed in the latest version of Foundry. If you're suddenly having trouble deleting skills, tracks, or stunts from items on token actors, update Foundry.
+
 # 4.3.19
   * The background colour attribute is now also a background rather than a background-color, allowing the use of css tools like gradients, url() etc.
   * The name on a character sheet now uses the text colour rather than the header colour.

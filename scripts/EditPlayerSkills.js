@@ -425,14 +425,7 @@ class EditGMSkills extends FormApplication{
     
                 if (newSkill != undefined){
                     newSkill.name=newSkill.name.split(".").join("․");
-                    //patch for bug https://gitlab.com/foundrynet/foundryvtt/-/issues/6421
-                    let skills = duplicate(this.object.data.data.skills);
-                    delete(skills[oldSkill]);
-                    skills[newSkill.name] = newSkill;
-                    await this.object.update({"data.skills":null}, {render:false, noHook:true});
-                    await this.object.update({"data.skills":skills});
-                    // Restore below once patched
-                    //this.object.update({"data.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
+                    this.object.update({"data.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
                 }
             }
         })
@@ -441,8 +434,7 @@ class EditGMSkills extends FormApplication{
     async _confirm(event,html){
 
         let actor=undefined;
-        let updateObject = duplicate(this.object.data.data.skills)
-        //let updateObject = {};
+        let updateObject = {};
         for (let s in this.player_skills){
             let cbox;
             try{
@@ -452,8 +444,7 @@ class EditGMSkills extends FormApplication{
 
             }
             if (cbox != undefined && !cbox.checked){
-                delete updateObject[s]
-                //updateObject[`data.skills.-=${s}`] = null;
+                updateObject[`data.skills.-=${s}`] = null;
             }
         } 
         
@@ -471,13 +462,11 @@ class EditGMSkills extends FormApplication{
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
                     skill.rank=0;
-                    updateObject[w] = skill;
-                    //updateObject[`data.skills.${w}`] = skill;
+                    updateObject[`data.skills.${w}`] = skill;
                 }
             }
         }
-        await this.object.update({"data.skills":null}, {noHook:true, render:false})    
-        await this.object.update({"data.skills":updateObject})
+        await this.object.update(updateObject);
         this.skillsWindow.render(false);
         this.close();
     }

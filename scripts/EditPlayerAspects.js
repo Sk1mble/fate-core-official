@@ -211,7 +211,7 @@ class EditPlayerAspects extends FormApplication{
 
     async _updateObject(event, formData){
         await this.object.update({"data.aspects":null}, {noHook:true, render:false})
-        this.object.update({"data.aspects":this.aspects})
+        await this.object.update({"data.aspects":this.aspects})
     }
 
     //This function is called when an actor or item update is called.
