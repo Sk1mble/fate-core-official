@@ -462,18 +462,22 @@
                                 <div name="fu_roll">{{this.speaker}}</div>
                             </td>
                             <td style="border:2px solid var(--fco-accent-colour); font-size:{{../fontSize}}pt">
-                                {{{enr  this.flavor}}}
+                                {{{enr this.flavor}}}
                             </td>
                             <td style="font-size:{{add5 ../fontSize}}pt; color:var(--fco-sheet-text-colour); text-align:center; border:2px solid var(--fco-accent-colour);">
                                 {{#each this.dice}}
-                                    {{#if (eq this 1)}}
-                                        <i icon class="fas fa-plus-square"/>
-                                    {{/if}}
-                                    {{#if (eq this -1)}}
-                                        <i icon class="fas fa-minus-square"/>
-                                    {{/if}}
-                                    {{#if (eq this 0)}}
-                                        <i icon class="fas fa-square"/>
+                                    {{#if (lt this 2)}}
+                                        {{#if (eq this 1)}}
+                                            <i icon class="fas fa-plus-square"></i>
+                                        {{/if}}
+                                        {{#if (eq this -1)}}
+                                            <i icon class="fas fa-minus-square"></i>
+                                        {{/if}}
+                                        {{#if (eq this 0)}}
+                                            <i icon class="fas fa-square"></i>
+                                        {{/if}}
+                                    {{else}}
+                                        <i style="font-style:normal; font-size:{{../../fontSize}}pt; margin:2px">{{this}}</i>
                                     {{/if}}
                                 {{/each}}
                             </td>

@@ -1064,9 +1064,13 @@ class FateUtilities extends Application{
         if (action == "reroll"){
             let oldRoll= "";
             for (let r of roll.dice){
-                if (r == -1) oldRoll += `<em style="font-family:fate; font-style:normal">-</em>`
-                if (r == -0) oldRoll += `<em style="font-family:fate; font-style:normal">0</em>`
-                if (r == 1) oldRoll += `<em style="font-family:fate; font-style:normal">+</em>`
+                if (r < 2){
+                    if (r == -1) oldRoll += `<em style="font-family:fate; font-style:normal">-</em>`
+                    if (r == -0) oldRoll += `<em style="font-family:fate; font-style:normal">0</em>`
+                    if (r == 1) oldRoll += `<em style="font-family:fate; font-style:normal">+</em>`
+                } else {
+                    oldRoll += `<em style="font-style:normal">${r} </em>`
+                } 
             }            
             let flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokeReroll")} ${oldRoll}`
 
@@ -1154,7 +1158,8 @@ class FateUtilities extends Application{
             }
 
             if (invokedAspects != "aborted"){
-                let r = new Roll ("4dF");
+                let dicepart = roll.formula.split("-")[0].split("+")[0];
+                let r = new Roll (dicepart);
                 let r2 = await r.roll();
                 r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
 
@@ -1165,7 +1170,7 @@ class FateUtilities extends Application{
                     flavor: newFlavour
                 });
                 let oldDiceValue = 0;
-                for (let i = 0; i< 4; i++){
+                for (let i = 0; i< roll.dice.length; i++){
                     oldDiceValue += roll.dice[i]
                 }
                 roll.total -= oldDiceValue;
@@ -1204,8 +1209,6 @@ class FateUtilities extends Application{
             // speaker.scene is null if there is no active scene (so this can't be a token actor, by definition)
             let speaker = roll.fullSpeaker;
             if (!speaker) speaker = game.messages.get(roll.message_id).data.speaker;
-
-            console.log(speaker.actor === null)
 
             if (!speaker.actor || speaker.actor === null){
                 return {gmp:true, actor:undefined};
@@ -1293,9 +1296,13 @@ class FateUtilities extends Application{
             let gp = await (gmfp(roll));
             let oldRoll= "";
             for (let r of roll.dice){
-                if (r == -1) oldRoll += `<em style="font-family:fate; font-style:normal">-</em>`
-                if (r == -0) oldRoll += `<em style="font-family:fate; font-style:normal">0</em>`
-                if (r == 1) oldRoll += `<em style="font-family:fate; font-style:normal">+</em>`
+                if (r < 2){
+                    if (r == -1) oldRoll += `<em style="font-family:fate; font-style:normal">-</em>`
+                    if (r == -0) oldRoll += `<em style="font-family:fate; font-style:normal">0</em>`
+                    if (r == 1) oldRoll += `<em style="font-family:fate; font-style:normal">+</em>`
+                } else {
+                    oldRoll += `<em style="font-style:normal">${r} </em>`
+                } 
             }            
 
             if (gp.gmp){
@@ -1304,14 +1311,15 @@ class FateUtilities extends Application{
                     ui.notifications.error(game.i18n.localize("fate-core-official.NoGMFatePoints"))
                 } else {
                     user.setFlag("fate-core-official","gmfatepoints",fps-1);
-                    let r = new Roll ("4dF");
+                    let dicepart = roll.formula.split("-")[0].split("+")[0];
+                    let r = new Roll (dicepart);
                     let r2 = await r.roll();
                     r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
                     r2.toMessage({
                         flavor: `<h1>${game.i18n.localize("fate-core-official.PaidRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
                     });
                     let oldDiceValue = 0;
-                    for (let i = 0; i< 4; i++){
+                    for (let i = 0; i< roll.dice.length; i++){
                         oldDiceValue += roll.dice[i]
                     }
                     roll.total -= oldDiceValue;
@@ -1341,14 +1349,15 @@ class FateUtilities extends Application{
                 } else {
                     char.update({"data.details.fatePoints.current":fps-1})
                     roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvokeReroll")} ${oldRoll}`
-                    let r = new Roll ("4dF");
+                    let dicepart = roll.formula.split("-")[0].split("+")[0];
+                    let r = new Roll (dicepart);
                     let r2 = await r.roll();
                     r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
                     r2.toMessage({
                         flavor: `<h1>${game.i18n.localize("fate-core-official.PaidRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
                     });
                     let oldDiceValue = 0;
-                    for (let i = 0; i< 4; i++){
+                    for (let i = 0; i< roll.dice.length; i++){
                         oldDiceValue += roll.dice[i]
                     }
                     roll.total -= oldDiceValue;
@@ -1380,7 +1389,24 @@ class FateUtilities extends Application{
         let modifier = 0;
         let flavour = "";
 
+        let fs = game.settings.get("fate-core-official","fu-roll-formulae");
+        let showFormulae = false;
+        let formulae = [];
+        if (fs){
+            formulae = fs.split(",").map(item => item.trim());
+            if (formulae.length > 1) showFormulae = true;
+            if (formulae.length == 1 && formulae[0].toLowerCase() != '4df') showFormulae = true;
+            if (formulae.indexOf('4dF') == -1 && formulae.indexOf('4df') == -1) formulae.push('4df');
+        }
+        let formulaeContent = "";
+        if (showFormulae){
+            formulaeContent = `<tr><td>${game.i18n.localize("fate-core-official.diceFormula")}:</td><td><select style="background-color:white" type="text" id="fco-gmadhr-formula">`;
+            for (let formula of formulae) formulaeContent += `<option value="${formula}">${formula}</option>`;
+            formulaeContent += `</select></td></tr>`;
+        }
+        
         let content = `<table style="border:none;">
+        ${formulaeContent}
         <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-actor-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-name"></input></td></tr>
         <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-skill-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-skill"></input></td></tr>
         <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-modifier")}</td><td><input style="background-color:white" type="number" id="fco-gmadhr-modifier"></input></td></tr>
@@ -1388,6 +1414,7 @@ class FateUtilities extends Application{
         </tr></table>`;
         let width = 400;
         let height = 230;
+        if (showFormulae) height = 270;
 
         new Dialog({
                     title: game.i18n.localize("fate-core-official.fu-adhoc-roll"),
@@ -1397,6 +1424,8 @@ class FateUtilities extends Application{
                             label: game.i18n.localize("fate-core-official.OK"),
                             callback: async ()=> {
                                 // Do the stuff here
+                                let formula = $('#fco-gmadhr-formula')[0]?.value;
+                                if (!formula) formula = '4df';
                                 name = $('#fco-gmadhr-name')[0].value;
                                 if (!name) name = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousEntity");
                                 skill = $('#fco-gmadhr-skill')[0].value;
@@ -1406,9 +1435,10 @@ class FateUtilities extends Application{
                                 flavour = $('#fco-gmadhr-flavour')[0].value;
                                 if (!flavour) flavour = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousReason");
 
-                                let r = new Roll(`4dF + ${modifier}`);
+                                let r = new Roll(`${formula} + ${modifier}`);
                                 let roll = await r.roll();
                                 roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
+                                roll.options.fco_formula = formula;
                                 let msg = ChatMessage.getSpeaker(game.user)
                                 msg.scene = null;
                                 msg.token = null;
@@ -1416,7 +1446,7 @@ class FateUtilities extends Application{
                                 msg.alias = name;
                 
                                 roll.toMessage({
-                                    flavor: `<h1>${skill}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+                                    flavor: `<h1>${skill}</h1>${formula} ${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
                                     Skill Rank & Modifiers: ${modifier} <br>Description: ${flavour}`,
                                     speaker: msg
                                 });
@@ -2558,6 +2588,17 @@ Hooks.on('renderCombatTracker', () => {
     }
 })
 
+function checkFormula(formula){
+    let formulae = game.settings.get("fate-core-official","fu-roll-formulae").split(",");
+    let validFormula = false;
+    formula = formula.trim().toLowerCase();
+    for (let i = 0; i < formulae.length; i++){
+        let testFormula = formulae[i].trim().toLowerCase();
+        if (formula == testFormula) validFormula = true;
+    }
+    return validFormula;
+}
+
 Hooks.on('createChatMessage', (message) => {
     // We're only interested if this is a chat message with a roll in it
     if (message.data.roll == undefined || message?.data?.flavor?.startsWith("<h1>Reroll")){
@@ -2567,7 +2608,14 @@ Hooks.on('createChatMessage', (message) => {
     // We only need to take action on this if we're the first logged-in GM.
     if (game.users.contents.find(user => user.active && user.isGM) == game.user){
         let roll = JSON.parse(message.data.roll)
-        if (roll.formula.startsWith("4df") || roll.formula.startsWith("4dF")){
+
+        // Get the core dice formula specified for this roll.
+        let dice_formula = roll?.options?.fco_formula;
+
+        // If there's no dice formula stored, make a best effort guess at working it out from the formula.
+        if (!dice_formula) dice_formula = roll.formula.split("+")[0].split("-")[0].trim();
+
+        if (roll.formula.startsWith("4df") || roll.formula.startsWith("4dF") || checkFormula (dice_formula?.toLowerCase())){
             //We're not interested in it unless it's a Fate roll.
             //If it is, we want to add this to the array of rolls in the scene's flags.
             let speaker = message.data.speaker.alias;
@@ -2576,6 +2624,7 @@ Hooks.on('createChatMessage', (message) => {
             let formula = roll.formula;
             let total = roll.total;
             let message_id = message.id;
+
             if (!flavor) {
                 flavor = formula.replace(/ *\[[^\]]*]/g, '')+"<br/>";
                 roll.terms.forEach(term => {
@@ -2605,6 +2654,7 @@ Hooks.on('createChatMessage', (message) => {
                 "speaker":speaker,
                 "fullSpeaker":fullSpeaker,
                 "formula":formula,
+                "dice_formula":dice_formula,
                 "flavor":flavor,
                 "total":total,
                 "dice":diceResult,

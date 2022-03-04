@@ -1,3 +1,7 @@
+# 4.3.21 
+  * Support added for different dice formulae that will still show in Fate Utilities. Set valid formulae as a comma separated list. 4df is always available, but the modified roll dialog and GM ad-hoc roll dialogs will default to the first item in this list.
+  * Other fate formulae are supported (e.g. 5dfkh4 from Straw Boss) but you can also use non-Fate Dice, though this is experimental.
+
 # 4.3.20 
   * Undid the patch from 4.3.4 as the bug is fixed in the latest version of Foundry. If you're suddenly having trouble deleting skills, tracks, or stunts from items on token actors, update Foundry.
 

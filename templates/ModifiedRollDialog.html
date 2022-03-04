@@ -30,6 +30,20 @@
             </td>
         </tr>
         {{/if}}
+        {{#if showFormulae}}
+            <tr style="height:40px; background-color:transparent">
+                <td style="font-weight:bold; padding-left:5px"> 
+                    Custom Dice Formula:
+                </td>
+                <td>
+                    <select id="customFormula" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border:1px solid var(--fco-foundry-interactable-color)" value="">             
+                        {{#each formulae}}
+                            <option value = "{{this}}">{{this}}</option>
+                        {{/each}}
+                    </select>           
+                </td>
+            </tr>
+        {{/if}}
         <tr style="height:40px; background-color:transparent">
             <td style="font-weight:bold; padding-left:5px"> 
                 {{localize 'fate-core-official.Description'}}:

@@ -1225,6 +1225,15 @@ game.settings.register("fate-core-official","freeStunts", {
         }
     });
 
+    game.settings.register("fate-core-official", "fu-roll-formulae", {
+        name: game.i18n.localize("fate-core-official.fu_roll_formulae_name"),
+        hint: game.i18n.localize("fate-core-official.fu_roll_formulae_hint"),
+        scope: "world",
+        config: true,
+        type: String,
+        default:"4dF"
+    });
+
     game.settings.register("fate-core-official", "fuAspectLabelBorderAlpha", {
         name: game.i18n.localize("fate-core-official.aspectBorderAlpha"),
         hint: game.i18n.localize("fate-core-official.AspectBorderAlphaLabel"),

@@ -67,6 +67,7 @@ class ModifiedRollDialog extends Application {
         let r;
         let roll; 
         let manualFlavour = "";
+        let formula = "";
 
         if (game.settings.get("fate-core-official","allowManualRolls") && manual_roll.length != 0){
             let results = '';
@@ -101,9 +102,24 @@ class ModifiedRollDialog extends Application {
             }
             roll = Roll.fromJSON(`{"class":"Roll","options":{},"dice":[],"formula":"4df + ${total_modifier}","terms":[{"class":"FateDie","options":{},"evaluated":true,"number":4,"faces":3,"modifiers":[],"results":[${results}]},{"class":"OperatorTerm","options":{},"evaluated":true,"operator":"+"},{"class":"NumericTerm","options":{},"evaluated":true,"number":${total_modifier}}],"total":${num+total_modifier},"evaluated":true}`)
         } else {
-            r = new Roll(`4dF + ${total_modifier}`);
+            // Get the custom roll from the <select> box for that purpose and enter it here. If there's no custom roll set, fall back to 4dF.
+            // First, set to 4dF
+            formula = '4dF'
+            // Then get the value from the dialog, doing nothing if it's blank or not displayed
+            // ToDo: Set up the custom formula field in the HTML with id 'customFormula'
+            // ToDo: Add custom formulae from setting to the custom formula field
+            // ToDo: Ensure custom formula field is shown if there's more than 4dF in the custom formula setting.
+            let customFormula = html.find("select[id='customFormula']")[0]?.value;
+            if (customFormula) formula = customFormula;
+
+            r = new Roll(`${formula} + ${total_modifier}`);
             roll = await r.roll();
+            
+            // Here we go, we can add the custom dice 
             roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
+
+            // Add the formula to the roll so we can extract it in FateUtilities to do re-rolls without having to parse the roll ourselves
+            roll.options.fco_formula = formula;
         }
     
         let msg = ChatMessage.getSpeaker({actor:this.actor})
@@ -112,7 +128,7 @@ class ModifiedRollDialog extends Application {
         let ladder = fcoConstants.getFateLadder();
         let rs = ladder[`${skill_rank.toString()}`];
         roll.toMessage({
-            flavor: `<h1>${this.skill_name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+            flavor: `<h1>${this.skill_name}</h1>${formula} ${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
             ${game.i18n.localize("fate-core-official.Skill_Rank")}: ${skill_rank} (${rs})<br>
             ${modifier_text}
             ${stunt_text}
@@ -130,6 +146,15 @@ class ModifiedRollDialog extends Application {
         data.actor = this.actor;
         data.activeSkill=this.skill_name;
         data.allowManual = game.settings.get("fate-core-official","allowManualRolls");
+        let formulae = game.settings.get("fate-core-official","fu-roll-formulae");
+        data.showFormulae = false;
+        data.formulae = [];
+        if (formulae){
+            data.formulae = formulae.split(",").map(item => item.trim());
+            if (data.formulae.length > 1) data.showFormulae = true;
+            if (data.formulae.length == 1 && data.formulae[0].toLowerCase() != '4df') data.showFormulae = true;
+            if (data.formulae.indexOf('4dF') == -1 && data.formulae.indexOf('4df') == -1) data.formulae.push('4df');
+        }
         return data;
     }
 }
