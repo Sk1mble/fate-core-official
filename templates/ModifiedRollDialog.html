@@ -8,7 +8,14 @@
                 <input type="number" id="modifier" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border:1px solid var(--fco-foundry-interactable-color)" value="0"></input>
             </td>
         </tr>
-
+        <tr style="height:40px; background-color:transparent">
+            <td style="font-weight:bold; padding-left:5px"> 
+                {{localize 'fate-core-official.ModifierDescription'}}:
+            </td>
+            <td>
+                <input type="text" id = "description" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border-bottom:1px solid var(--fco-foundry-interactable-color); border-top:none; border-left:none; border-right:none; width:500px"></input>
+            </td>
+        </tr>
         {{#if allowManual}}
         <tr style="height:40px; background-color:transparent">
             <td style="font-weight:bold; padding-left:5px; width:200px">
@@ -44,14 +51,6 @@
                 </td>
             </tr>
         {{/if}}
-        <tr style="height:40px; background-color:transparent">
-            <td style="font-weight:bold; padding-left:5px"> 
-                {{localize 'fate-core-official.Description'}}:
-            </td>
-            <td>
-                <input type="text" id = "description" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour); border-bottom:1px solid var(--fco-foundry-interactable-color); border-top:none; border-left:none; border-right:none; width:500px"></input>
-            </td>
-        </tr>
         <tr style="height:40px; background-color:transparent">
             <td style="font-weight:bold; padding-left:5px">
                 {{localize 'fate-core-official.AddSecondSkill'}}

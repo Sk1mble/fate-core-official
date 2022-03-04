@@ -148,6 +148,7 @@
     "fate-core-official.item":"Item",
     "fate-core-official.applyFromDefault":"Apply from default?",
     "fate-core-official.description":"Description:",
+    "fate-core-official.ModifierDescription":"Modifier Description",
     "fate-core-official.baseDefaults":{
         "fate-core":{
            "actorLink":true,
