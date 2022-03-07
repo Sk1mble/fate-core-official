@@ -1,3 +1,6 @@
+# 4.3.22
+  * Minor tweak to the html of the Extra Sheet so that it doesn't band if you have a gradient or image set as the background colour.
+
 # 4.3.21 
   * Support added for different dice formulae that will still show in Fate Utilities. Set valid formulae as a comma separated list. 4df is always available, but the modified roll dialog and GM ad-hoc roll dialogs will default to the first item in this list.
   * Other fate formulae are supported (e.g. 5dfkh4 from Straw Boss) but you can also use non-Fate Dice, though this is experimental.
