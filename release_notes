@@ -1,5 +1,6 @@
-# 4.3.22
+# 4.3.22 (unreleased)
   * Minor tweak to the html of the Extra Sheet so that it doesn't band if you have a gradient or image set as the background colour.
+  * Minor tweak to Modified Roll Dialog so it doesn't add a <br> after stunts unless required
 
 # 4.3.21 
   * Support added for different dice formulae that will still show in Fate Utilities. Set valid formulae as a comma separated list. 4df is always available, but the modified roll dialog and GM ad-hoc roll dialogs will default to the first item in this list.

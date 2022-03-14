@@ -55,11 +55,12 @@ class ModifiedRollDialog extends Application {
 
         let stunt_text = ""
 
-        for (let i = 0; i< stunts.length; i++){
+        for (let i = 0; i < stunts.length; i++){
             if (stunts[i].checked){
                 let s_name = stunts[i].id.split("_")[1]
                 let s_modifier = this.actor.data.data.stunts[s_name].bonus;
-                stunt_text += game.i18n.localize("fate-core-official.Stunt")+": "+ s_name + " (+" + s_modifier + ")<br>"
+                if (i > 0 ) stunt_text+="<br/>"
+                stunt_text += game.i18n.localize("fate-core-official.Stunt")+": "+ s_name + " (+" + s_modifier + ")"
                 total_modifier += parseInt(s_modifier);
             }
         }
