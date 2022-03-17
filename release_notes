@@ -1,4 +1,4 @@
-# 4.3.22 (unreleased)
+# 4.3.22
   * Minor tweak to the html of the Extra Sheet so that it doesn't band if you have a gradient or image set as the background colour.
   * Minor tweak to Modified Roll Dialog so it doesn't add a <br> after stunts unless required
 
