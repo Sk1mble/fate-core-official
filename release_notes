@@ -1,3 +1,9 @@
+# 4.3.24
+  * Fixed a critical bug in the import module code used to set up Fate Core modules provided by Evil Hat.
+
+# 4.3.23 
+  * Fixed an edge case where Fate Utilities wouldn't refresh correctly upon changing the fate points of an actor that has two linked tokens on the same scene.
+
 # 4.3.22
   * Minor tweak to the html of the Extra Sheet so that it doesn't band if you have a gradient or image set as the background colour.
   * Minor tweak to Modified Roll Dialog so it doesn't add a <br> after stunts unless required

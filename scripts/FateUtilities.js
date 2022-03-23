@@ -1506,9 +1506,11 @@ class FateUtilities extends Application{
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
         let fps = parseInt(event.target.value);
 
-        token.actor.update({
+        await token.actor.update({
             ["data.details.fatePoints.current"]: fps
         })
+        this.editing = false;
+        await this._render(false);
     }
 
     async _edit_gm_points(event, html){
