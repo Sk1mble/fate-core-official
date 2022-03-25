@@ -71,7 +71,7 @@
   "dependencies": [],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/master/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.3.22.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.3.24.zip",
   "protected": false,
   "gridDistance": 1
 }
