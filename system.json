@@ -1,7 +1,7 @@
 {
   "name": "fate-core-official",
   "title": "Fate Core Official",
-  "description": "Grab your plasma rifles, spell components, and jetpacks! Name your game; Fate Core is the foundation that can make it happen. Fate Core is a flexible system that can support whatever worlds you dream up. Have you always wanted to play a post-apocalyptic spaghetti western with tentacle monsters? Swords and sorcery in space? Wish there was a game based on your favorite series of books, film, or television, but it never happened? Fate Core is your answer. <p/>Fate Core is a tabletop roleplaying game about proactive, capable people who lead dramatic lives. The type of drama they experience is up to you. But wherever they go, you can expect a fun storytelling experience full of twists…of fate.<p/>This Foundry system is supported by Evil Hat Productions and will allow you to build almost any character from a system that's Powered by Fate.",
+  "description": "Grab your plasma rifles, spell components, and jetpacks! Name your game; Fate Core is the foundation that can make it happen. Fate Core is a flexible system that can support whatever worlds you dream up. Have you always wanted to play a post-apocalyptic spaghetti western with tentacle monsters? Swords and sorcery in space? Wish there was a game based on your favorite series of books, film, or television, but it never happened? Fate Core is your answer. <p>Fate Core is a tabletop roleplaying game about proactive, capable people who lead dramatic lives. The type of drama they experience is up to you. But wherever they go, you can expect a fun storytelling experience full of twists…of fate.</p><p>This Foundry system is supported by Evil Hat Productions and will allow you to build almost any character from a system that's Powered by Fate.</p>",
   "author": "Richard Bellingham",
   "authors": [],
   "url": "https://github.com/Sk1mble/fate-core-official",
@@ -39,12 +39,16 @@
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "systems/fate-core-official/lang/en.json",
+      "system": "",
+      "module": ""
     },
     {
       "lang": "de",
       "name": "Deutsch",
-      "path": "lang/de.json"
+      "path": "systems/fate-core-official/lang/de.json",
+      "system": "",
+      "module": ""
     }
   ],
   "packs": [
@@ -52,8 +56,7 @@
       "name": "macros",
       "label": "Fate Core Official Macros",
       "path": "/packs/macros.db",
-      "entity": "Macro",
-      "type":"Macro",
+      "type": "Macro",
       "system": "fate-core-official",
       "private": false
     },
@@ -61,8 +64,7 @@
       "name": "documentation",
       "label": "Fate Core Official Documentation",
       "path": "/packs/documentation.db",
-      "entity": "JournalEntry",
-      "type":"JournalEntry",
+      "type": "JournalEntry",
       "system": "fate-core-official",
       "private": false
     }
@@ -73,5 +75,14 @@
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/master/system.json",
   "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.4.00.zip",
   "protected": false,
-  "gridDistance": 1
+  "gridDistance": 1,
+  "license": "",
+  "readme": "",
+  "bugs": "",
+  "changelog": "",
+  "background": "",
+  "initiative": "",
+  "gridUnits": "",
+  "primaryTokenAttribute": "",
+  "secondaryTokenAttribute": ""
 }
