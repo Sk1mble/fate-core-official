@@ -47,12 +47,12 @@ class ShowCharacter extends Application {
         actorInfo = actorInfo.split("_");
         if (actorInfo[0]=="token"){
             let token = game.scenes.viewed.getEmbeddedDocument("Token", actorInfo[1]);
-            actor_data = token.actor.data;
+            actor_data = token.actor;
             elements.name=token.name;
         }
         if (actorInfo[0]=="actor"){
             let actor = game.actors.contents.find(actor => actor.id == actorInfo[1])
-            actor_data = actor.data;
+            actor_data = actor;
             elements.name=actor.data.name;
         }
         // Get values to be shown to the user
@@ -64,22 +64,22 @@ class ShowCharacter extends Application {
                     elements.avatar=actor_data.img;
                 }
                 if (element.id == "biography"){
-                    elements.biography = actor_data.data.details.biography;
+                    elements.biography = actor_data.system.details.biography;
                 }
                 if (element.id == "description"){
-                    elements.description = actor_data.data.details.description;
+                    elements.description = actor_data.system.details.description;
                 }
                 if (element.id == "aspects"){
-                    elements.aspects = actor_data.data.aspects;
+                    elements.aspects = actor_data.system.aspects;
                 }
                 if (element.id == "skills"){
-                    elements.skills = actor_data.data.skills;
+                    elements.skills = actor_data.system.skills;
                 }
                 if (element.id == "tracks"){
-                    elements.tracks = actor_data.data.tracks;
+                    elements.tracks = actor_data.system.tracks;
                 }
                 if (element.id == "stunts"){
-                    elements.stunts = actor_data.data.stunts;
+                    elements.stunts = actor_data.system.stunts;
                 }
                 if (element.id == "extras"){
                     elements.extras = actor_data.items;

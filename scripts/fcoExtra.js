@@ -21,40 +21,40 @@ export class fcoExtra extends Item {
     }
 
     get active (){
-        return this.data.data.active;
+        return this.system.active;
     }
 
     get skills (){
-        return this.data.data.skills;
+        return this.system.skills;
     }
 
     get stunts (){
-        return this.data.data.stunts;
+        return this.system.stunts;
     }
 
     get tracks (){
-        return this.data.data.tracks;
+        return this.system.tracks;
     }
 
     get aspects (){
-        return this.data.data.aspects;
+        return this.system.aspects;
     }
 
     get extraCost (){
         let toReturn = {}
         let paidTracks = 0;
         let paidStunts = 0;
-        let refreshCost = this.data.data.refresh;
+        let refreshCost = this.system.refresh;
         let skillCost = 0;
 
-        let tracks = this.data.data.tracks;
+        let tracks = this.system.tracks;
         for (let track in tracks){
             if (tracks[track].paid){
                 paidTracks ++;
             }
         }
 
-        let stunts = this.data.data.stunts;
+        let stunts = this.system.stunts;
         for (let stunt in stunts){
             paidStunts += stunts[stunt].refresh_cost;
         }
@@ -63,8 +63,8 @@ export class fcoExtra extends Item {
         toReturn.paidStunts = paidStunts;
         toReturn.refreshCost = refreshCost;
 
-        let skills = this.data.data.skills;
-        if (this.data.data.countSkills){
+        let skills = this.system.skills;
+        if (this.system.countSkills){
             for (let skill in skills){
                 skillCost += skills[skill].rank;
             }

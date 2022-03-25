@@ -46,7 +46,7 @@
                     <label class="box"><input type="checkbox" class="fco-box" disabled="disabled" style="opacity:0;width:25px; height:25px; float:left;" checked="checked"><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
                     <label class="box"><input type="checkbox" class="fco-box" disabled="disabled" style="opacity:0; width:25px; height:25px; float:left;"><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
                     {{/each}}
-                    {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input type="text" class="aspect_box" disabled="disabled" name = "data.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{/if}}
+                    {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input type="text" class="aspect_box" disabled="disabled" name = "system.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{/if}}
                 </td>
             </tr>
             {{/if}}{{/each}}
@@ -69,7 +69,7 @@
     {{#each extras}}
         <tr>
             <td>{{this.name}}</td>
-            <td>{{{enr this.data.description.value}}}</td>
+            <td>{{{enr this.system.description.value}}}</td>
         </tr>
     {{/each}}
     </table>

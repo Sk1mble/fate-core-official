@@ -1,3 +1,19 @@
+# 4.4.00
+  * Refactored to eliminate deprecation warnings and ensure working normally in v10 prototype 1.
+    * The importModule code now uses the compendiums grabbed from game.packs.get() rather than building a compendiumcollection in memory, because that stopped working
+    * Calls to JSON.parse dice rolls are no longer necessary as rolls contain the parsed rolls in the first place now.
+    * All calls to message.roll translated to message.rolls as the chatmessage now holds an array of rolls. We only ever work with the first roll.
+    * CONST.DOCUMENT_PERMISSION_LEVELS changed to CONST.DOCUMENT_OWNERSHIP_LEVELS
+    * Amended _precreate method to use updateSource rather than data.update.
+    * All relevant calls to data.data changed to .system and all relevant updates for data changed to system (There were a lot).
+    * Overhauled the method used to import all compendium packs for an EH module to be more reliable, using built-in Foundry methods rather than my own.
+    * Fixed the sorting of extras on actors and Things
+  * Ensured fco_shifted initialised to false on start-up to ensure that the value is not just undefined.
+  
+  * Known bugs:
+    * There appear to be some issues with the functionality of updating embedded items on token actors. It often doesn't show the update until after you refresh the game.
+    * Due to the above, for this phase of the prototype, don't use extras on token actors that you want to turn on and off to change their traits etc.
+
 # 4.3.24
   * Fixed a critical bug in the import module code used to set up Fate Core modules provided by Evil Hat.
 

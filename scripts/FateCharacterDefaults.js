@@ -169,10 +169,10 @@ class FateCharacterDefaults {
         let character_default = {};
         
         // Return stunts as they are; nothing further to do with these.
-        let stunts = data.data.stunts;
+        let stunts = data.system.stunts;
 
         // For tracks we need to reset any stress boxes and aspects that are defined.
-        let tracks = data.data.tracks;
+        let tracks = data.system.tracks;
         for (let t in tracks){
             let track = tracks[t];
             if (track?.aspect && track?.aspect !== "No"){
@@ -191,7 +191,7 @@ class FateCharacterDefaults {
         }
 
         // For aspects we need to reset any aspect values to blank
-        let aspects = data.data.aspects;
+        let aspects = data.system.aspects;
         for (let a in aspects){
             let aspect = aspects[a];
             if (aspect?.value){
@@ -203,7 +203,7 @@ class FateCharacterDefaults {
         }
 
         // For skills, we need to reset all ranks to 0.
-        let skills = data.data.skills;
+        let skills = data.system.skills;
         for (let s in skills){
             let skill = skills[s];
             if (skill?.rank){
@@ -222,14 +222,14 @@ class FateCharacterDefaults {
         
         //Let's apply the actor's avatar to the default, too.
         character_default.img = data.img;
-        character_default.token_img = data.token.img;
+        character_default.token_img = data.prototypeToken.img; 
         
-        character_default.actorLink = data.token.actorLink;
+        character_default.actorLink = data.prototypeToken.actorLink;
 
         //This is important; it's the value which is used to grab the default out of the settings.
         character_default.default_name = default_name;
         character_default.default_description = default_description;
-
+        console.log(character_default);
         return character_default;
     }
 
@@ -250,21 +250,16 @@ class FateCharacterDefaults {
         let a_link = false;
         if (character_default.actorLink) a_link = character_default.actorLink;
 
-        let perm;
-        if (isNewerVersion(game.version, '9.224')){
-            perm = {"default":CONST.DOCUMENT_PERMISSION_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
-        } else {
-            perm = {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]};
-        }
-
+        let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
+            
         const actor_data = {
             name:name,
             type:"fate-core-official",
             items:character_default.extras,
             img:character_default.img,
-            token:{img:character_default.token_img, actorLink:a_link},
+            prototypeToken:{img:character_default.token_img, actorLink:a_link},
             permission: perm,
-            data:{
+            system:{
                 details:{fatePoints:{refresh:refresh, current:refresh}},
                 skills:character_default.skills,
                 stunts:character_default.stunts,
@@ -302,7 +297,7 @@ class FateCharacterDefaults {
             //Replace the avatar and token images also
             if (options.avatar) {
                 updates["img"] = character_default["img"];
-                updates["token.img"] = character_default["token_img"];
+                updates["prototypeToken.img"] = character_default["token_img"];
             }
         
             //Now commit the updates.
@@ -318,11 +313,11 @@ class FateCharacterDefaults {
             let updates = {};
             let sections = options.sections;
             for (let section of sections){
-                updates[`data.${section}`] = mergeObject (character_default[section], actor.data.data[`${section}`], {inplace:false});
+                updates[`data.${section}`] = mergeObject (character_default[section], actor.system[`${section}`], {inplace:false});
             }
             if (options.avatar){
                 updates["img"] = character_default["img"];
-                updates["token.img"] = character_default["token_img"];
+                updates["prototypeToken.img"] = character_default["token_img"];
             }
             await actor.update(updates);
 
@@ -378,27 +373,22 @@ Hooks.on("renderSidebarTab", (app, html) => {
 
         if (! actor_name) actor_name = "New Character";
 
-        let perm;
-        if (isNewerVersion(game.version, '9.224')){
-            perm = {"default":CONST.DOCUMENT_PERMISSION_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
-        } else {
-            perm = {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]};
-        }
+        let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
 
         if (default_name === "Blank"){
             let actorData = {
                 "name":actor_name,
                 "type":"fate-core-official",
                 "permission": perm,
-                "data.details.fatePoints.refresh":"0",
-                "token.actorLink":true
+                "system.details.fatePoints.refresh":"0",
+                "prototypeToken.actorLink":true
              }
              await Actor.create(actorData, {"renderSheet":true});
              return;
         }
 
         if (default_name === "fate-core-official"){
-            await Actor.create({"name":actor_name, "type":"fate-core-official", permission: perm, "token.actorLink":true},{renderSheet:true});
+            await Actor.create({"name":actor_name, "type":"fate-core-official", permission: perm, "prototypeToken.actorLink":true},{renderSheet:true});
             return;
         }
         await f.createCharacterFromDefault(default_name, actor_name, true);

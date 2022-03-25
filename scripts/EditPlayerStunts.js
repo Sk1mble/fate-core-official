@@ -61,14 +61,14 @@ class EditPlayerStunts extends FormApplication {
         } else {
             if (this.new){
                 let count = 1;
-                for (let stunt in this.actor.data.data.stunts){
+                for (let stunt in this.actor.system.stunts){
                     if (stunt.startsWith(formData["name"])) count++;
                 }
                 if (count > 1) formData["name"] = this.stunt.name + " " + count;
             }
 
             if (formData["name"]!=this.stunt.name && !this.new) {
-                await this.object.update({"data.stunts":{[`-=${this.stunt.name}`]:null}});
+                await this.object.update({"system.stunts":{[`-=${this.stunt.name}`]:null}});
             }
             
             for (let t in formData){
@@ -91,7 +91,7 @@ class EditPlayerStunts extends FormApplication {
             }
             
             this.stunt.box_values = new_box_values;
-            await this.actor.update({"data.stunts":{[this.stunt.name]:this.stunt}})
+            await this.actor.update({"system.stunts":{[this.stunt.name]:this.stunt}})
             if (this.object.type == "Extra"){
                 //code to render editplayerstunts.
                 Hooks.call("updateItem", {"id":this.object.id})
@@ -161,14 +161,14 @@ class EditPlayerStunts extends FormApplication {
 
     renderMe(id,data){
         if (this.object.isToken){
-            if (this.actor.token.data.id == id){
+            if (this.actor.token.id == id){
                let name = this.stunt.name;
                 try {
-                    if (data.actorData.data.stunts[name]!=undefined){
+                    if (data.actorData.system.stunts[name]!=undefined){
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
-                                this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
+                                this.stunt = mergeObject(this.stunt, data.actorData.system.stunts[name]);
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
@@ -185,12 +185,11 @@ class EditPlayerStunts extends FormApplication {
             if (this.actor.id == id){
                 let name = this.stunt.name;
                 try {
-                    if (data.data.stunts[name]!=undefined){
-                        
+                    if (data.system.stunts[name]!=undefined){
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
-                                this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
+                                this.stunt = mergeObject(this.stunt, data.system.stunts[name]);
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
@@ -221,9 +220,9 @@ class EditPlayerStunts extends FormApplication {
             data.skills=game.settings.get("fate-core-official","skills");
         } else {
             if (this.actor.type=="Extra"){
-                data.skills=mergeObject(this.actor.data.data.skills, game.settings.get("fate-core-official","skills"), {inplace:false});
+                data.skills=mergeObject(this.actor.system.skills, game.settings.get("fate-core-official","skills"), {inplace:false});
             } else {
-                data.skills=this.actor.data.data.skills;
+                data.skills=this.actor.system.skills;
             }
         }
         data.gm = game.user.isGM;
@@ -474,7 +473,7 @@ class StuntDB extends Application {
 
     async _onAddButton(event, html){
         let stunt = game.settings.get("fate-core-official","stunts")[event.target.id.split("_")[0]];
-        this.actor.update({"data.stunts":{[`${stunt.name}`]:stunt}});
+        this.actor.update({"system.stunts":{[`${stunt.name}`]:stunt}});
     }
 
     async _onDeleteButton(event, html){

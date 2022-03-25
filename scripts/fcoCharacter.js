@@ -32,7 +32,7 @@ export class fcoCharacter extends ActorSheet {
     }
 
     get actorType() {
-        return this.actor.data.type;
+        return this.actor.type;
     }
 
     get template() {
@@ -72,7 +72,7 @@ export class fcoCharacter extends ActorSheet {
 
         expandAspect.on("click", event => {
             let a = event.target.id.split("_")[0];
-            let aspect = this.actor.data.data.aspects[a];
+            let aspect = this.actor.system.aspects[a];
             let key = this.actor.id+aspect.name+"_aspect";
     
             if (game.user.expanded == undefined){
@@ -91,7 +91,7 @@ export class fcoCharacter extends ActorSheet {
 
         expandTrack.on("click", event => {
             let t = event.target.id.split("_")[0];
-            let track = this.object.data.data.tracks[t];
+            let track = this.object.system.tracks[t];
             let key = this.actor.id+track.name+"_track";
         
             if (game.user.expanded == undefined){
@@ -110,7 +110,7 @@ export class fcoCharacter extends ActorSheet {
 
         expandStunt.on("click", event => {
             let s = event.target.id.split("_")[0];
-            let stunt = this.object.data.data.stunts[s];
+            let stunt = this.object.system.stunts[s];
             let key = this.actor.id+stunt.name+"_stunt";
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
@@ -157,7 +157,7 @@ export class fcoCharacter extends ActorSheet {
         })
 
         const ul_all_stunts = html.find('div[name="ul_all_stunts"]');
-        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.data.data.stunts));
+        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.system.stunts));
 
         const expandBiography = html.find("div[name='expandBiography']");
         expandBiography.on("click", event => {
@@ -194,7 +194,7 @@ export class fcoCharacter extends ActorSheet {
         const compressAllStunts = html.find("div[name='compressAllStunts']")
 
         expandAllStunts.on("click", event => {
-            let stunts = this.object.data.data.stunts;
+            let stunts = this.object.system.stunts;
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
             }
@@ -207,7 +207,7 @@ export class fcoCharacter extends ActorSheet {
         })
 
         compressAllStunts.on("click", event => {
-            let stunts = this.object.data.data.stunts;
+            let stunts = this.object.system.stunts;
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
             }
@@ -286,7 +286,7 @@ export class fcoCharacter extends ActorSheet {
             const track_name = html.find("div[class='mfate-tracks__list']");
             track_name.on("contextmenu", event => {
                     let name = event.currentTarget.id.split("_")[1]
-                    let track = this.object.data.data.tracks[name];
+                    let track = this.object.system.tracks[name];
             
                     let linked_skills_text =""
                     if (track.linked_skills != undefined && track.linked_skills.length >0){
@@ -360,14 +360,14 @@ export class fcoCharacter extends ActorSheet {
 
             const gm_notes = html.find(`i[id="${this.document.id}_toggle_gm_notes"]`);
             gm_notes.on("click", async event => {
-                if (this.document.data.data.details.notes.GM){
-                    await this.document.update({"data.details.notes.GM":false});
+                if (this.document.system.details.notes.GM){
+                    await this.document.update({"system.details.notes.GM":false});
                 } else {
-                    await this.document.update({"data.details.notes.GM":true});
+                    await this.document.update({"system.details.notes.GM":true});
                 }
             })
 
-            let tracks = this.object.data.data.tracks;
+            let tracks = this.object.system.tracks;
             for (let track in tracks){
                 let id = fcoConstants.getKey(tracks[track].name)+"_track_notes";
                 fcoConstants.getPen(id);
@@ -393,7 +393,7 @@ export class fcoCharacter extends ActorSheet {
                 })
             }
 
-            let aspects = this.object.data.data.aspects;
+            let aspects = this.object.system.aspects;
             for (let aspect in aspects){
                 if (aspects[aspect].notes == undefined){
                     aspects[aspect].notes = "";
@@ -449,7 +449,7 @@ export class fcoCharacter extends ActorSheet {
                 let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
                 if (text != "discarded") {
                     this.editing = false;
-                    await this.object.update({"data.details.biography.value":text});
+                    await this.object.update({"system.details.biography.value":text});
                 }
             })
 
@@ -466,7 +466,7 @@ export class fcoCharacter extends ActorSheet {
                 let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
                 if (text != "discarded") {
                     this.editing = false;
-                    await this.object.update({"data.details.description.value":text});
+                    await this.object.update({"system.details.description.value":text});
                 }
             })
 
@@ -483,7 +483,7 @@ export class fcoCharacter extends ActorSheet {
                 let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
                 if (text != "discarded") {
                     this.editing = false;
-                    await this.object.update({"data.details.notes.value":text});
+                    await this.object.update({"system.details.notes.value":text});
                 }
             })
 
@@ -515,36 +515,36 @@ export class fcoCharacter extends ActorSheet {
                 let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
                 let user = game.user;
                 let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
-                item = duplicate(item.data);
+                item = duplicate(item);
                 
                 content += `<strong>${item.name}</strong><br/>
                             <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
-                            <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${item.data.description.value}<br/>
-                            <strong>${game.i18n.localize("fate-core-official.Permissions")}:</strong> ${item.data.permissions}<br/>
-                            <strong>${game.i18n.localize("fate-core-official.Costs")}:</strong> ${item.data.costs}<br/>
-                            <strong>${game.i18n.localize("fate-core-official.Refresh")}:</strong> ${item.data.refresh}<br/>`
+                            <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${item.system.description.value}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Permissions")}:</strong> ${item.system.permissions}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Costs")}:</strong> ${item.system.costs}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Refresh")}:</strong> ${item.system.refresh}<br/>`
 
                 let items = [];
-                for (let aspect in item.data.aspects){
-                    items.push(`${item.data.aspects[aspect].value}`)
+                for (let aspect in item.system.aspects){
+                    items.push(`${item.system.aspects[aspect].value}`)
                 }
                 content += `<strong>${game.i18n.localize("fate-core-official.Aspects")}: </strong>${items.join(", ")}<br/>`;
                 
                 items = [];                            
-                for (let skill in item.data.skills){
-                    items.push (`${item.data.skills[skill].name} (${item.data.skills[skill].rank})`);
+                for (let skill in item.system.skills){
+                    items.push (`${item.system.skills[skill].name} (${item.system.skills[skill].rank})`);
                 }
                 content += `<strong>${game.i18n.localize("fate-core-official.Skills")}: </strong>${items.join(", ")}<br/>`;
 
                 items = [];                            
-                for (let stunt in item.data.stunts){
-                    items.push (item.data.stunts[stunt].name);
+                for (let stunt in item.system.stunts){
+                    items.push (item.system.stunts[stunt].name);
                 }
                 content += `<strong>${game.i18n.localize("fate-core-official.Stunts")}: </strong>${items.join(", ")}<br/>`;
 
                 items = [];                            
-                for (let track in item.data.tracks){
-                    items.push (item.data.tracks[track].name);
+                for (let track in item.system.tracks){
+                    items.push (item.system.tracks[track].name);
                 }
                 content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
 
@@ -567,10 +567,10 @@ export class fcoCharacter extends ActorSheet {
                     }
 
                     let dragged;
-                    if (type == "skill") dragged = this.actor.data.data.skills[dragged_name];
-                    if (type == "stunt") dragged = this.actor.data.data.stunts[dragged_name];
-                    if (type == "aspect") dragged = this.actor.data.data.aspects[dragged_name];
-                    if (type == "track") dragged = this.actor.data.data.tracks[dragged_name]
+                    if (type == "skill") dragged = this.actor.system.skills[dragged_name];
+                    if (type == "stunt") dragged = this.actor.system.stunts[dragged_name];
+                    if (type == "aspect") dragged = this.actor.system.aspects[dragged_name];
+                    if (type == "track") dragged = this.actor.system.tracks[dragged_name]
                     let user = game.user.id;
                     let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
                     event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
@@ -586,13 +586,13 @@ export class fcoCharacter extends ActorSheet {
                 let name = event.target.getAttribute("data-mfname");
                 let entity;
                 if (type == "skill") {
-                    entity = this.actor.data.data.skills[name];
+                    entity = this.actor.system.skills[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Rank")}: </strong> ${entity.rank}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>`
                 }
                 if (type == "stunt") {
-                    entity = this.actor.data.data.stunts[name];
+                    entity = this.actor.system.stunts[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name} (${game.i18n.localize("fate-core-official.Refresh")} ${entity.refresh_cost})<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${entity.description}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Skill")}:</strong> ${entity.linked_skill}<br/>
@@ -605,14 +605,14 @@ export class fcoCharacter extends ActorSheet {
                     content += actions;
                 }
                 if (type == "aspect"){
-                    entity = this.actor.data.data.aspects[name];
+                    entity = this.actor.system.aspects[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Value")}: </strong> ${entity.value}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
                 } 
                 if (type == "track") {
-                    entity = this.actor.data.data.tracks[name];
+                    entity = this.actor.system.tracks[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
@@ -636,12 +636,12 @@ export class fcoCharacter extends ActorSheet {
             extra_active.on("click", async event => {
                 let item_id = event.target.id.split("_")[0];
                 let item = this.document.items.get(item_id);
-                if (item.data.data.active){
-                    await item.update({"data.active":false},{render:false, noHook:true});
+                if (item.system.active){
+                    await item.update({"system.active":false},{render:false, noHook:true});
                     await this.document.deactivateExtra(item, false);
                     this.render(false);
                 } else {
-                    await item.update({"data.active":true},{render:false, noHook:true});
+                    await item.update({"system.active":true},{render:false, noHook:true});
                     this.document.updateFromExtra(item);
                     this.render(false);
                 }
@@ -680,7 +680,7 @@ export class fcoCharacter extends ActorSheet {
                                 let desc = $(`#${this.document.id}_choose_default_description`)[0].value;
                                 if (!name) name = this.document.name;
                                 let f = new FateCharacterDefaults();
-                                let def = await f.extractDefault(this.document.data, name, desc);
+                                let def = await f.extractDefault(this.document, name, desc);
                                 await f.storeDefault(def);
                                 ui.sidebar.render(false);
                             }
@@ -693,21 +693,21 @@ export class fcoCharacter extends ActorSheet {
             const changeSheetMode = html.find("button[name='changeSheetMode']");
             changeSheetMode.on('click', async event => {
                 // Cycle between the display options and tell the user what the new option is.
-                let current_mode = this.actor.data.data.details.sheet_mode;
+                let current_mode = this.actor.system.details.sheet_mode;
                 if (current_mode == "minimal_at_refresh_0") {
                     // Switch to full
-                    await this.actor.update({"data.details.sheet_mode":"full"})
+                    await this.actor.update({"system.details.sheet_mode":"full"})
                     ui.notifications.info(game.i18n.localize("fate-core-official.modeToFull"))
                 }
                 if (current_mode == "minimal"){
                     //Switch to minimal_at_refresh_0
-                    await this.actor.update({"data.details.sheet_mode":"minimal_at_refresh_0"})
+                    await this.actor.update({"system.details.sheet_mode":"minimal_at_refresh_0"})
                     ui.notifications.info(game.i18n.localize("fate-core-official.modeToMinimal0"))
 
                 }
                 if (current_mode == "full"){
                     // Switch to minimal
-                    await this.actor.update({"data.details.sheet_mode":"minimal"})
+                    await this.actor.update({"system.details.sheet_mode":"minimal"})
                     ui.notifications.info(game.i18n.localize("fate-core-official.modeToMinimal"))
                 }
             })
@@ -844,7 +844,6 @@ export class fcoCharacter extends ActorSheet {
             })
 
             input.on("focus", event => {
-                
                 if (this.editing == false) {
                     this.editing = true;
                 }
@@ -869,7 +868,7 @@ export class fcoCharacter extends ActorSheet {
 
     async _onSkillR(event,html){
         let name = event.target.id;
-        let skill = this.actor.data.data.skills[name];
+        let skill = this.actor.system.skills[name];
         fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
                                             <div style="background-color:white">
                                             <table cellspacing ="4" cellpadding="4" border="1" style="background-color:white">
@@ -923,7 +922,7 @@ export class fcoCharacter extends ActorSheet {
         let item_id = info[1];
         let actor_id = info[0];
         let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
-        item = duplicate(item.data);
+        item = duplicate(item);
         
         let tokenId = undefined;
 
@@ -953,7 +952,7 @@ export class fcoCharacter extends ActorSheet {
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
         let db = duplicate(game.settings.get("fate-core-official","stunts"));
-        db[name]=this.object.data.data.stunts[name];
+        db[name]=this.object.system.stunts[name];
         await game.settings.set("fate-core-official","stunts",db);
         ui.notifications.info(game.i18n.localize("fate-core-official.Added")+" "+name+" "+game.i18n.localize("fate-core-official.ToTheStuntDatabase"));
     }
@@ -977,7 +976,7 @@ export class fcoCharacter extends ActorSheet {
     async _onBioFocusOut (event, html){
         if (!window.getSelection().toString()){
             let bio = DOMPurify.sanitize(event.target.innerHTML);
-            await this.object.update({"data.details.biography.value":bio})
+            await this.object.update({"system.details.biography.value":bio})
             $(`#${this.object.id}_biography`).css('display', 'none');
             $(`#${this.object.id}_biography_rich`).css('display', 'block');
             this.editing = false;
@@ -988,7 +987,7 @@ export class fcoCharacter extends ActorSheet {
     async _onNotesFocusOut (event, html){
         if (!window.getSelection().toString()){
             let notes = DOMPurify.sanitize(event.target.innerHTML);
-            await this.object.update({"data.details.notes.value":notes})
+            await this.object.update({"system.details.notes.value":notes})
             $(`#${this.object.id}_notes`).css('display', 'none');
             $(`#${this.object.id}_notes_rich`).css('display', 'block');
             this.editing = false;
@@ -1021,7 +1020,7 @@ export class fcoCharacter extends ActorSheet {
     async _onDescFocusOut (event, html){
         if (!window.getSelection().toString()){
             let desc = DOMPurify.sanitize(event.target.innerHTML);
-            await this.object.update({"data.details.description.value":desc});
+            await this.object.update({"system.details.description.value":desc});
             $(`#${this.object.id}_description`).css('display', 'none');
             $(`#${this.object.id}_description_rich`).css('display', 'block');
             this.editing = false;
@@ -1065,14 +1064,14 @@ export class fcoCharacter extends ActorSheet {
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let name = event.target.id.split("_")[0];
-            await this.object.update({"data.stunts":{[`-=${name}`]:null}});
+            await this.object.update({"system.stunts":{[`-=${name}`]:null}});
         }
     }
 
     async _onEdit (event, html){
         let name=event.target.id.split("_")[0];
 
-        let editor = new EditPlayerStunts(this.actor, this.object.data.data.stunts[name], {new:false});
+        let editor = new EditPlayerStunts(this.actor, this.object.system.stunts[name], {new:false});
         editor.render(true);
         editor.setSheet(this);
         try {
@@ -1095,12 +1094,12 @@ export class fcoCharacter extends ActorSheet {
         if (checked == "false") {
             checked = false
         }
-        let tracks = duplicate(this.object.data.data.tracks);
+        let tracks = duplicate(this.object.system.tracks);
         let track = tracks[name]
         track.box_values[index] = checked;
         await this.object.update({
             // By using this format for the update we can drill right down to the box_values array and avoid updating anything else.
-            ["data.tracks"]:{[name]:{["box_values"]:track.box_values}}
+            ["system.tracks"]:{[name]:{["box_values"]:track.box_values}}
         })
     }
 
@@ -1109,10 +1108,10 @@ export class fcoCharacter extends ActorSheet {
         let index = event.target.getAttribute("data-index");
         let checked = event.target.checked;
 
-        let stunts = duplicate(this.object.data.data.stunts);
+        let stunts = duplicate(this.object.system.stunts);
         let stunt = stunts[name];
         stunt.box_values[index] = checked;
-        await this.object.update({["data.stunts"]:stunts});
+        await this.object.update({["system.stunts"]:stunts});
     }
 
     async _onStunts_click(event, html) {
@@ -1252,12 +1251,12 @@ export class fcoCharacter extends ActorSheet {
         // Otherwise, return full.
 
         sheetData.sheetMode = "full";
-        if (sheetData.data.details.sheet_mode == "minimal") sheetData.sheetMode = "minimal";
-        if (sheetData.data.details.sheet_mode == "minimal_at_refresh_0" && sheetData.data.details.fatePoints.refresh == 0) sheetData.sheetMode = "minimal";
+        if (sheetData.system.details.sheet_mode == "minimal") sheetData.sheetMode = "minimal";
+        if (sheetData.system.details.sheet_mode == "minimal_at_refresh_0" && sheetData.system.details.fatePoints.refresh == 0) sheetData.sheetMode = "minimal";
 
         sheetData.showPronouns = game.settings.get("fate-core-official", "showPronouns");
         let items = this.object.items.contents;
-        items.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)); // Sort according to each item's sort parameter.
+        items.sort((a, b) => (a.sort || 0) - (b.sort || 0)); // Sort according to each item's sort parameter.
         sheetData.items = items;
 
         sheetData.paidTracks = 0;
@@ -1268,7 +1267,7 @@ export class fcoCharacter extends ActorSheet {
         sheetData.freeStunts = game.settings.get("fate-core-official", "freeStunts");
 
         //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value        
-        let tracks = sheetData.data.tracks; // Removed duplicate() here as we don't write to the tracks data, just read from it.
+        let tracks = sheetData.system.tracks; // Removed duplicate() here as we don't write to the tracks data, just read from it.
         for (let track in tracks) {
             if (tracks[track].paid) {
                 sheetData.paidTracks++;
@@ -1276,13 +1275,13 @@ export class fcoCharacter extends ActorSheet {
         }
 
         sheetData.items.forEach(item => {
-            let cost = parseInt(item.data.data.refresh);
-            if (!isNaN(cost) && cost != undefined & item.data.data.active){
+            let cost = parseInt(item.system.refresh);
+            if (!isNaN(cost) && cost != undefined & item.system.active){
                 sheetData.paidExtras += cost;
             }
         })
 
-        let stunts = sheetData.data.stunts;
+        let stunts = sheetData.system.stunts;
         for (let s in stunts){
             sheetData.paidStunts += parseInt(stunts[s].refresh_cost);
         }
@@ -1294,9 +1293,9 @@ export class fcoCharacter extends ActorSheet {
         let error = false;
         if (isPlayer && game.settings.get("fate-core-official","enforceRefresh")) {
             // Refresh spent + refresh should = the game's refresh.
-            let checkSpent = sheetData.data.details.fatePoints.refresh + sheetData.refreshSpent;
+            let checkSpent = sheetData.system.details.fatePoints.refresh + sheetData.refreshSpent;
             let worldRefresh = game.settings.get("fate-core-official", "refreshTotal");
-            let checkWorld = worldRefresh - sheetData.data.details.fatePoints.refresh;
+            let checkWorld = worldRefresh - sheetData.system.details.fatePoints.refresh;
 
             let message = game.i18n.localize("fate-core-official.SheetDoesNotAddUp")
             if (checkWorld < 0) {
@@ -1316,7 +1315,7 @@ export class fcoCharacter extends ActorSheet {
                 ui.notifications.error(message);
             }
         }
-        const unordered_skills = sheetData.data.skills;
+        const unordered_skills = sheetData.system.skills;
         const ordered_skills = {};
         let sorted_by_rank = fcoConstants.sortByRank(unordered_skills);
 
@@ -1335,9 +1334,9 @@ export class fcoCharacter extends ActorSheet {
         }
 
         for (let extra of sheetData.items){
-            for (let sk in extra.data.data.skills){
-                if (extra.data.data.active && (!extra.data.data.countSkills && !extra.data.data.skills[sk].countMe)){
-                    skillTotal -= extra.data.data.skills[sk].rank;
+            for (let sk in extra.system.skills){
+                if (extra.system.active && (!extra.system.countSkills && !extra.system.skills[sk].countMe)){
+                    skillTotal -= extra.system.skills[sk].rank;
                 }
             }
         }
@@ -1350,7 +1349,7 @@ export class fcoCharacter extends ActorSheet {
         sheetData.gameSkillPoints = game.settings.get("fate-core-official", "skillTotal")
         sheetData.GM = game.user.isGM;
 
-        let track_categories = sheetData.data.tracks;
+        let track_categories = sheetData.system.tracks;
         let cats = new Set();
         for (let c in track_categories){
             let cat = track_categories[c].category;
@@ -1375,15 +1374,15 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         if (data.ident !== "mf_draggable") return;
         if (actor.id == data.origin) return;
         if (data.type == "stunt"){
-            let old = actor.data.data.stunts[data.dragged.name];
+            let old = actor.system.stunts[data.dragged.name];
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
-            await actor.update({"data.stunts":{[data.dragged.name]:data.dragged}});
+            await actor.update({"system.stunts":{[data.dragged.name]:data.dragged}});
         }
         if (data.type == "aspect"){
-            let old = actor.data.data.aspects[data.dragged.name];
+            let old = actor.system.aspects[data.dragged.name];
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
@@ -1392,10 +1391,10 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
                 data.dragged.value = "";
                 data.dragged.notes = "";
             }
-            await actor.update({"data.aspects":{[data.dragged.name]:data.dragged}});
+            await actor.update({"system.aspects":{[data.dragged.name]:data.dragged}});
         }
         if (data.type == "skill"){
-            let old = actor.data.data.skills[data.dragged.name];
+            let old = actor.system.skills[data.dragged.name];
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
@@ -1403,7 +1402,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
             if (!data.shift_down){
                 data.dragged.rank = 0;
             }
-            await actor.update({"data.skills":{[data.dragged.name]:data.dragged}});
+            await actor.update({"system.skills":{[data.dragged.name]:data.dragged}});
         }
         if (data.type == "track"){
             let track = data.dragged;
@@ -1422,12 +1421,12 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
                     track.notes = "";
                 }
             }
-            let old = actor.data.data.tracks[track.name];
+            let old = actor.system.tracks[track.name];
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
-            await actor.update({"data.tracks":{[track.name]:track}});
+            await actor.update({"system.tracks":{[track.name]:track}});
         }
     }
 })

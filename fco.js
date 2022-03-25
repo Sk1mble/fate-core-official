@@ -35,7 +35,7 @@ import { fcoActor } from "./scripts/fcoActor.js"
 import { fcoExtra } from "./scripts/fcoExtra.js"
 
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
-    if (data.type == "Thing"){
+    if (actor.type == "Thing"){
         if (!options.thing){
             ui.notifications.error(game.i18n.localize("fate-core-official.CantCreateThing"));
             return false
@@ -128,7 +128,7 @@ function setupFont(){
 }
     
 Hooks.once('ready', () => {
-
+    game.system["fco-shifted"]=false;
     // Set up a reference to the Fate Core Official translations file or fallback file.
     if (game.i18n?.translations["fate-core-official"]) {
         game.system["lang"] = game.i18n.translations["fate-core-official"];
@@ -181,8 +181,8 @@ Hooks.once('ready', async function () {
     // Now flags, let us write a convenience function
 
     async function changeFlags(doc){
-        let flags1 = doc.data.flags["ModularFate"];
-        let flags2 = doc.data.flags["FateCoreOfficial"];
+        let flags1 = doc.flags["ModularFate"];
+        let flags2 = doc.flags["FateCoreOfficial"];
         if ( flags1 ) {
             await doc.update({"flags.fate-core-official": flags1}, {recursive: false});
             await doc.update({"flags.-=ModularFate": null});
@@ -292,7 +292,9 @@ Hooks.once('ready', async function () {
     
                 // Grab all of the compendium pack data for the module
                 let module = await game.modules.get(module_name);
-                let packs = Array.from(module.packs);
+                
+                let packs = Array.from(module?.data?.packs);
+
                 //First we sort by entity - this is primarily because I want JournalEntries to be
                 //loaded before Scenes so that on first load the map pins aren't 'unknown'.
 
@@ -304,8 +306,7 @@ Hooks.once('ready', async function () {
 
                 for (let pack of packs){
                     if (!pack.name.includes("fatex")){
-                        let cc = new CompendiumCollection (pack);
-                        await fcoConstants.importAllFromPack(cc)
+                        await fcoConstants.importAllFromPack(await game.packs.get(`${module_name}.${pack.name}`))
                     }
                 }
 
@@ -1325,7 +1326,7 @@ Combatant.prototype._getInitiativeFormula = function () {
     if (init_skill === "None" || init_skill === "Disable") {
         return "1d0";
     }else {
-        return `1d0+${this.actor.data.data.skills[init_skill].rank}`;
+        return `1d0+${this.actor.system.skills[init_skill].rank}`;
     }
 }
 

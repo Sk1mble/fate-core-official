@@ -416,25 +416,25 @@ class fcoConstants {
         // This requires the prototype module to be installed on the system so its compendiums are available.
         let packStructure = {};
         game.packs.forEach(pack => {
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Actor"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Actor"){
                 packStructure.actor = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "JournalEntry"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "JournalEntry"){
                 packStructure.journal = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "RollTable"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "RollTable"){
                 packStructure.table = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Macro"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Macro"){
                 packStructure.macro = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Playlist"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Playlist"){
                 packStructure.playlist = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Item"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Item"){
                 packStructure.item = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Scene"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Scene"){
                 packStructure.scene = pack.collection;
             }
         })
@@ -519,33 +519,12 @@ class fcoConstants {
     }
 
     static async importAllFromPack(pack) {
-        // Load all content
-        const documents = await pack.getDocuments();
-    
-        // Prepare import data
+        let documents = await pack.getDocuments();
         const collection = game.collections.get(pack.documentName);
-        const createData = documents.map(doc => {
-          const data = doc.toObject();
-          return data;
-        })
-    
-        // Create World Documents in batches
-        const chunkSize = 100;
-        const nBatches = Math.ceil(createData.length / chunkSize);
-        let created = [];
-        for ( let n=0; n<nBatches; n++ ) {
-          const chunk = createData.slice(n*chunkSize, (n+1)*chunkSize);
-          const docs = await pack.documentClass.createDocuments(chunk, {keepId:true}); // Keep the ID - this is important.
-          created = created.concat(docs);
+        for (let doc of documents){
+            await collection.importFromCompendium(pack, doc.id, {folder:doc.folder}, {keepId:true}); 
         }
-    
-        // Notify of success
-        ui.notifications.info(game.i18n.format("COMPENDIUM.ImportAllFinish", {
-          number: created.length,
-          folder: "correct",
-          type: pack.documentName,
-        }));
-        return created;
+        ui.notifications.info(`Imported ${documents.length} documents of type ${pack.documentName}`);
     }
 } 
 

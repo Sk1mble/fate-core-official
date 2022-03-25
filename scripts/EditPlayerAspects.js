@@ -7,11 +7,11 @@ class EditPlayerAspects extends FormApplication{
                 } else {
                     this.options.title=`${game.i18n.localize("fate-core-official.EditAspectsTitle")} ${this.object.name}`
                 }
-                this.player_aspects=duplicate(this.object.data.data.aspects);
+                this.player_aspects=duplicate(this.object.system.aspects);
                 
                 game.system.apps["actor"].push(this);
                 game.system.apps["item"].push(this);
-                this.aspects=duplicate(this.object.data.data.aspects)
+                this.aspects=duplicate(this.object.system.aspects);
     }
 
     activateListeners(html){
@@ -194,7 +194,7 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async getData(){
-        let current = duplicate(this.object.data.data.aspects);
+        let current = duplicate(this.object.system.aspects);
         let updated = this.aspects;
         for (let aspect in current){
             if (current[aspect].notes == undefined){
@@ -210,8 +210,8 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _updateObject(event, formData){
-        await this.object.update({"data.aspects":null}, {noHook:true, render:false})
-        await this.object.update({"data.aspects":this.aspects})
+        await this.object.update({"system.aspects":null}, {noHook:true, render:false})
+        await this.object.update({"system.aspects":this.aspects})
     }
 
     //This function is called when an actor or item update is called.

@@ -11,7 +11,7 @@ class EditEntityTrack extends FormApplication {
     getData(){
         const templateData = {
             track:this.track,
-            skills:duplicate(this.entity.data.data.skills),
+            skills:duplicate(this.entity.system.skills),
             entity:this.entity
         }
         return templateData;
@@ -181,13 +181,13 @@ class EditEntityTrack extends FormApplication {
         // Copy this track to the existing actor with the name provided. If it already exists, create with 'copy' appended.
         let name = this.track.name;
         let num = 1;
-        for (let t in this.entity.data.data.tracks){
+        for (let t in this.entity.system.tracks){
             if (t.startsWith (name)) num ++
         }
         this.track.name = this.track.name+" "+num;
         await this.entity.update(
             {
-                "data.tracks":{
+                "system.tracks":{
                     [this.track.name]:this.track
                 }
             }
@@ -263,7 +263,7 @@ class EditEntityTrack extends FormApplication {
             }
         }
 
-        let tracks = duplicate(this.entity.data.data.tracks);
+        let tracks = duplicate(this.entity.system.tracks);
 
         if (this.track.name != this.originalName) {
             delete tracks[this.originalName];
@@ -274,7 +274,7 @@ class EditEntityTrack extends FormApplication {
             if (num > 1) this.track.name = this.track.name+" "+num;
 
             await this.entity.update({   
-                "data.tracks":[]
+                "system.tracks":[]
             })    
         }
 
@@ -282,10 +282,10 @@ class EditEntityTrack extends FormApplication {
 
         let final_tracks = tracks;
         if (this.entity.type == "fate-core-official") {
-            final_tracks = await this.entity.setupTracks(this.entity.data.data.skills, tracks);
+            final_tracks = await this.entity.setupTracks(this.entity.system.skills, tracks);
         }
         await this.entity.update({   
-                "data.tracks":final_tracks
+                "system.tracks":final_tracks
         })
         this.origin.render(false);
         this.close();
@@ -300,7 +300,7 @@ class EditEntityLinkedSkills extends FormApplication {
     getData(){
         const templateData = {
             track:this.track,
-            skills:duplicate (this.entity.data.data.skills),
+            skills:duplicate (this.entity.system.skills),
             entity:this.entity
         }
         return templateData;
