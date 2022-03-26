@@ -39,14 +39,14 @@
     {
       "lang": "en",
       "name": "English",
-      "path": "systems/fate-core-official/lang/en.json",
+      "path": "lang/en.json",
       "system": "",
       "module": ""
     },
     {
       "lang": "de",
       "name": "Deutsch",
-      "path": "systems/fate-core-official/lang/de.json",
+      "path": "lang/de.json",
       "system": "",
       "module": ""
     }
