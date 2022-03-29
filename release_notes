@@ -1,3 +1,6 @@
+# 4.3.25
+  * Renamed the Fate Core Official concat handlebars helper to fco_concat as the original helper was causing a conflict with the built in Foundry helper. The result of this was to prevent the file picker for card faces from correctly allocating the chosen file to the relevant data field.
+
 # 4.3.24
   * Fixed a critical bug in the import module code used to set up Fate Core modules provided by Evil Hat.
 
