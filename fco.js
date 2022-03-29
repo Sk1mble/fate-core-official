@@ -1367,7 +1367,7 @@ Handlebars.registerHelper("str", function(value) {
     return JSON.stringify(value);
 });
 
-Handlebars.registerHelper("concat", function(value1, value2){
+Handlebars.registerHelper("fco_concat", function(value1, value2){
     return value1?.concat(value2);
 });
 
