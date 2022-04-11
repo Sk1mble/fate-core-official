@@ -1,4 +1,7 @@
-# 4.4.01 (Unreleased)
+# 4.4.02
+  * Fixed a bug where attempting to change the name of an aspect with a drawing on the board caused an error and failure to change the name.
+
+# 4.4.01
   * Reduced bottom padding on mfate-tracks__list element to make the gap between rows slightly less large. Was set to 1em, now set to 5px.
   * Merged commit from 4.3.25 - Renamed the Fate Core Official concat handlebars helper to fco_concat as the original helper was causing a conflict with the built in Foundry helper. The result of this was to prevent the file picker for card faces from correctly allocating the chosen file to the relevant data field.
 

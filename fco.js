@@ -854,7 +854,7 @@ game.settings.register("fate-core-official","freeStunts", {
     game.settings.register("fate-core-official","showPronouns", {
         name: game.i18n.localize("fate-core-official.showPronouns"),
         hint: game.i18n.localize("fate-core-official.showPronounsHint"),
-        scope:"user",
+        scope:"client",
         config:true,
         type: Boolean,
         restricted:false,
@@ -989,7 +989,7 @@ game.settings.register("fate-core-official","freeStunts", {
     game.settings.register("fate-core-official","confirmDeletion", {
         name: game.i18n.localize("fate-core-official.ConfirmDeletionName"),
         hint:game.i18n.localize("fate-core-official.ConfirmDeletionHint"),
-        scope:"user",
+        scope:"client",
         config:true,
         type:Boolean,
         restricted:false,
@@ -1022,7 +1022,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:Number,
         default:40,
-        scope:"user",
+        scope:"client",
         range: {             // If range is specified, the resulting setting will be a range slider
             min: 10,
             max: 90,
@@ -1039,7 +1039,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:Number,
         default:55,
-        scope:"user",
+        scope:"client",
         range: {             // If range is specified, the resulting setting will be a range slider
             min: 10,
             max: 90,
@@ -1068,7 +1068,7 @@ game.settings.register("fate-core-official","freeStunts", {
        type:String,
        default:"Montserrat",
        restricted:false,
-       scope:"user",
+       scope:"client",
        config:true,
        choices:"delete",
        onChange:() => {
@@ -1083,7 +1083,7 @@ game.settings.register("fate-core-official","freeStunts", {
         type:Boolean,
         default:false,
         restricted:false,
-        scope:"user",
+        scope:"client",
         config:true,
         onChange:() => {
             setupFont();
@@ -1102,7 +1102,7 @@ game.settings.register("fate-core-official","freeStunts", {
     game.settings.register("fate-core-official","fu_combatants_only", {
         name:"Display information only for combatants in the current 'encounter' rather than all tokens?",
         hint:"Toggle between display of all tokens or just active combatants in Fate Utilities",
-        scope:"user",
+        scope:"client",
         config:false,
         default:false,
         type:Boolean
@@ -1189,7 +1189,7 @@ game.settings.register("fate-core-official","freeStunts", {
 
     game.settings.register("fate-core-official", "fuFontSize", {
         name: "Fate Utilities Font Size",
-        scope:"user",
+        scope:"client",
         config:false,
         type:Number,
         restricted:false,

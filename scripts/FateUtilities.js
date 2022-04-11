@@ -579,7 +579,7 @@ class FateUtilities extends Application{
 
         let drawing = undefined;
         if (aspect.name != "") {
-            drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.text?.startsWith(aspect.name));
+            drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing.document?.text?.startsWith(aspect.name));
         }
         
         aspect.name = event.target.value;
