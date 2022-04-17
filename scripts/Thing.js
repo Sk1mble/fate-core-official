@@ -556,7 +556,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
         actorData: {}
       }
 
-    let scene = canvas_scene;
+    let scene = game.scenes.get(canvas_scene._id);
     await scene.createEmbeddedDocuments("Token", [token]); //createEmbeddedDocuments takes an array of creation data.
     //Now we need to create the contents and set the container parameters.
     if (contents?.extras != undefined){

@@ -1,3 +1,6 @@
+# 4.4.03 
+ * Fixed a bug in Thing creation for players - parameter passed to createThing was the scene data not the scene itself meaning that getting the token failed.
+
 # 4.4.02
   * Fixed a bug where attempting to change the name of an aspect with a drawing on the board caused an error and failure to change the name.
 
