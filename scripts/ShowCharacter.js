@@ -104,7 +104,6 @@ class ShowCharacter extends Application {
 
     async getData(){
         const data = await super.getData();
-        ////console.log(data);
         data.users = game.users.players;
         data.tokens = game.scenes.viewed.tokens.contents;
         data.actors = game.actors.contents;

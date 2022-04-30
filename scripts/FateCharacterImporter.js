@@ -264,7 +264,6 @@ class FateCharacterImporter {
         }
 
         // Import from Fari (only supports the newest version)
-        //console.log(data);
         let allSections=[];
         let rows;
 

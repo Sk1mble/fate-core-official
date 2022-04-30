@@ -579,7 +579,6 @@ class EditPlayerTracks extends FormApplication {
                         }
                     }
                 } catch(error){
-                    ////console.log(error)
                 }
         }
             

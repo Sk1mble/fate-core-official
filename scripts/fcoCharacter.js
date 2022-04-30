@@ -918,29 +918,11 @@ export class fcoCharacter extends ActorSheet {
     }
 
     async _on_item_drag (event, html){
-        let info = event.target.id.split("_");
-        let item_id = info[1];
-        let actor_id = info[0];
         let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
-        item = duplicate(item);
-        
-        let tokenId = undefined;
-
-        if (this.actor.isToken === true){
-            tokenId = this.actor.token.id;
-        }
-
-        let i = new Item(item);
-
         let data = {
-                    "type":"Item",
-                    "actor":this.actor,
-                    "id":item_id,
-                    "actorId":actor_id,
-                    "data":i,
-                    "tokenId":tokenId,
-                    "scene":game.scenes.viewed
-                }
+            "type":"Item", 
+            "uuid":item.uuid
+        }
         await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
     }
 

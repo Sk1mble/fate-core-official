@@ -229,7 +229,6 @@ class FateCharacterDefaults {
         //This is important; it's the value which is used to grab the default out of the settings.
         character_default.default_name = default_name;
         character_default.default_description = default_description;
-        console.log(character_default);
         return character_default;
     }
 

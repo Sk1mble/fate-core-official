@@ -537,9 +537,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async _on_boxes_change(html, event){
-        ////console.log(event.target.value)
         let num = parseInt(DOMPurify.sanitize(event.target.innerHTML));
-        ////console.log(num);
     }
     static get defaultOptions() {
         const options = super.defaultOptions;

@@ -11,13 +11,12 @@ export class fcoActor extends Actor {
 
     // Override the standard createDialog to just spawn a character called 'New Actor'.
     static async createDialog (...args){
-
         let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
 
         if (args[0].folder) {
-            Actor.create({"name":"New Character", "folder":args[0].folder, "type":"fate-core-official", permission: perm});
+            Actor.create({"name":"New Character", "folder":args[0].folder, "type":"fate-core-official", ownership: perm});
         } else {
-            Actor.create({"name":"New Character", "type":"fate-core-official", permission: perm});
+            Actor.create({"name":"New Character", "type":"fate-core-official", ownership: perm});
         }
     }
 

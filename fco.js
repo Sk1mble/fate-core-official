@@ -225,7 +225,7 @@ Hooks.once('ready', async function () {
     if (game.settings.get("fate-core-official","run_once") == false && game.user.isGM){
         const ehmodules = [];
         game.modules.forEach(m => {
-            if (m.data?.flags?.ehproduct == "Fate Core"){
+            if (m?.flags?.ehproduct == "Fate Core"){
                 ehmodules.push(m);
             }
         })
@@ -293,7 +293,7 @@ Hooks.once('ready', async function () {
                 // Grab all of the compendium pack data for the module
                 let module = await game.modules.get(module_name);
                 
-                let packs = Array.from(module?.data?.packs);
+                let packs = Array.from(module?.packs);
 
                 //First we sort by entity - this is primarily because I want JournalEntries to be
                 //loaded before Scenes so that on first load the map pins aren't 'unknown'.
@@ -324,7 +324,7 @@ Hooks.once('ready', async function () {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                       action: "editWorld",
-                      background: `modules/${module_name}/art/world.webp`, title:game.world.data.title, name:game.world.data.name, nextSession:null
+                      background: `modules/${module_name}/art/world.webp`, title:game.world.title, id:game.world.id, nextSession:null
                     })
                 });
 
@@ -440,6 +440,9 @@ Hooks.once('init', async function () {
     CONFIG.fontFamilies.push("Montserrat");
     CONFIG.fontFamilies.push("Jost");
     CONFIG.fontFamilies.push("Fate");
+
+    const includeRgx = new RegExp("/systems/fate-core-official/");
+    CONFIG.compatibility.includePatterns.push(includeRgx);
 
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
@@ -909,7 +912,7 @@ game.settings.register("fate-core-official","freeStunts", {
           OBSERVER:"Observer",
           OWNER:"Owner"
         },
-        default: "none"
+        default: "NONE"
       });
 
     game.settings.register("fate-core-official","sheet_template", {

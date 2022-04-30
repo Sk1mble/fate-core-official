@@ -68,7 +68,6 @@ export class Thing extends ActorSheet {
           
             // Create the container item if it does not already exist
             let container = new Item({name: this.actor.name, "description": this.actor.description, "type": "Extra"});
-            console.log(this.actor.system.container.extra);
 
             if ( foundry.utils.isObjectEmpty(this.actor.system.container.extra) ) {
                 await this.actor.update({"system.container.extra": container.toObject()});
@@ -86,7 +85,6 @@ export class Thing extends ActorSheet {
           
             // Delete tokens
             const tokens = this.actor.getActiveTokens();
-            console.log(tokens);
             const tokenIds = tokens.map(t => t.id);
             if ( game.user.isGM ) {
               await canvas.scene.deleteEmbeddedDocuments("Token", tokenIds);
@@ -243,25 +241,11 @@ export class Thing extends ActorSheet {
     // Handler for dragging extras from a ThingSheet (not to be confused with the main character sheet drag handler).
     // We should standardsise this given that all extras are the same!
     async _on_item_drag (event, html){
-        let info = event.target.id.split("_");
-        let item_id = info[1];
-        let actor_id = info[0];
         let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
-        let tokenId = undefined;
-
-        if (this.actor?.protoTypetoken?.actorLink === false){
-            tokenId = this.actor.token.id;
-        }
-
         let data = {
-                    "type":"Item",
-                    "actor":this.actor,
-                    "id":item_id,
-                    "actorId":actor_id,
-                    "data":item,
-                    "tokenId":tokenId,
-                    "scene":game.scenes.viewed
-                }
+            "type":"Item",
+            "uuid":item.uuid
+        }
         await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
     }
 
@@ -408,144 +392,67 @@ async function checkContainer (actor){
     }
 }
 
-async function createThing (canvas_scene, data, user_id, shiftDown){    
+async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord){    
     if (data.type != "Item" && data.type != "Extra"){
         return;
     }
 
     let itemActor = undefined;
     let contents = undefined;
-    let newItem;
+    let newItem;    
 
-    if (data.data != undefined){ // This means it came from a token
-        newItem = new Item(data.data);
+    newItem = new Item(data);
         
-        //Let's get the contents, if there are any, so we can do some stuff with them later.
-        if (newItem?.system?.contents){
-            contents = duplicate(newItem.system.contents);
-            delete newItem.system.contents;
-        }
+    //Let's get the contents, if there are any, so we can do some stuff with them later.
+    if (newItem?.system?.contents){
+        contents = duplicate(newItem.system.contents);
+        delete newItem.system.contents;
+    }
 
-        let folder = game.folders.find (f => f.name.startsWith("fate-core-official Things"));
-                if (folder != undefined){
-                    folder.delete();
-                }
+    let folder = game.folders.find (f => f.name.startsWith("fate-core-official Things"));
+            if (folder != undefined){
+                folder.delete();
+            }
 
-                let isContainer = contents.extras != undefined;
-                
-                let toCreate = {
-                    name: newItem.name,
-                    type: "Thing",
-                    system:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
-                    img:newItem.img,
-                    sort: 12000,
-                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                }
-                if (!isContainer) toCreate.items = [newItem.toJSON()]
+            let isContainer = contents.extras != undefined;
+            
+            let toCreate = {
+                name: newItem.name,
+                type: "Thing",
+                system:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
+                img:newItem.img,
+                sort: 12000,
+                permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
+            }
+            if (!isContainer) toCreate.items = [newItem.toJSON()];
 
-                itemActor = await Actor.create(toCreate
-                ,{"temporary":false,"renderSheet":false,"thing":true});   
+            itemActor = await Actor.create(toCreate
+            ,{"temporary":false,"renderSheet":false,"thing":true});   
 
-                if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
-                    let actor = new Actor (data.actor);
-                    if (data.tokenId === undefined){
-                        let actor=game.actors.get(data.actorId);
-                    
-                        if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
-                            if (shiftDown === false){
-                                await actor.deleteEmbeddedDocuments("Item", [data.id]); 
+            if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
+                if (actord) {
+                    let actor = fromUuidSync(actord);
+                    if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
+                        if (shiftDown === false){
+                            if (actor.constructor.name == "TokenDocument"){
+                                actor = actor.actor;
                             }
-                        } else {
-                            if (shiftDown === true){
-                                await actor.deleteEmbeddedDocuments("Item", [data.id]); 
-                            }
+                            let item = actor.items.get(data._id)
+                            await item.delete();
                         }
-                        
-                    } else { // This is a token actor. Respond accordingly.
-                        let scene = canvas.scene;
-                        let token = scene.tokens.find(t=>t.id == data.tokenId);
-                        
-                        if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
-                            if (shiftDown === false){
-                                await token.actor.deleteEmbeddedDocuments("Item", [data.id]); 
-                            }
-                        } else {
-                            if (shiftDown === true){
-                                await token.actor.deleteEmbeddedDocuments("Item", [data.id]); 
-                            }
+                    } else {
+                        if (shiftDown === true){
+                            let item = actor.items.get(data._id)
+                            await item.delete();
                         }
                     }
                 }
-    } else {
-        if (data.pack != undefined){ // This means it came from a compendium
-            const pack = game.packs.get(data.pack);
-            let i = await duplicate(await pack.getDocument(data.id));
-            let permission = i.permission;
-            newItem = new Item (i); 
-
-        //Let's get the contents, if there are any, so we can do some stuff with them later.
-        if (newItem?.system?.contents){
-            contents = duplicate(newItem.system.contents);
-            delete newItem.system.contents;
-        }
-
-        let folder = game.folders.find (f => f.name.startsWith("fate-core-official Things"));
-        if (folder != undefined){
-            folder.delete();
-        }
-
-                let isContainer = contents.extras != undefined;
-                
-                let toCreate = {
-                    name: newItem.name,
-                    type: "Thing",
-                    system:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
-                    img:newItem.img,
-                    sort: 12000,
-                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                }
-                if (!isContainer) toCreate.items = [newItem.toJSON()]
-
-                itemActor = await Actor.create(toCreate
-                ,{"temporary":false,"renderSheet":false,"thing":true});      
-        } else {
-            if (data.type == "Item"){ // This means it was dropped straight from the items list.
-                
-                let i = duplicate(game.items.contents.find(it => it.id == data.id));
-                newItem = new Item (i);
-                let permission = newItem.permission;
-
-        //Let's get the contents, if there are any, so we can do some stuff with them later.
-        if (newItem?.system?.contents){
-            contents = duplicate(newItem.system.contents);
-            delete newItem.system.contents;
-        }
-
-        let folder = game.folders.find (f => f.name.startsWith("fate-core-official Things"));
-        if (folder != undefined){
-            folder.delete();
-        }
-                let isContainer = contents.extras != undefined;
-                
-                let toCreate = {
-                    name: newItem.name,
-                    type: "Thing",
-                    system:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
-                    img:newItem.img,
-                    sort: 12000,
-                    permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
-                }
-                if (!isContainer) toCreate.items = [newItem.toJSON()]
-
-                itemActor = await Actor.create(toCreate
-                ,{"temporary":false,"renderSheet":false,"thing":true});      
             }
-        }
-    }
+
     let token = {
         name: itemActor.name,
-        x: data.x,
-        y: data.y,
+        x:x,
+        y:y,
         img: itemActor.img,
         width: 1,
         height: 1,
@@ -571,43 +478,60 @@ async function createThing (canvas_scene, data, user_id, shiftDown){
 }
 
 Hooks.on ('dropCanvasData', async (canvas, data) => {
-    if (game.user.isGM){
-
-        let shift_down = false; 
-        if (isNewerVersion(game.version, "9.230")){
-            shift_down = game.system["fco-shifted"];    
-        } else {
-            shift_down = keyboard.isDown("Shift");
+    if (data.type == "Item"){
+        let item = fromUuidSync(data.uuid);
+        if (item.pack){
+            const pack = game.packs.get(item.pack);
+            item = await pack.getDocument(item._id);
         }
-        createThing (canvas.scene, data, game.user.id, shift_down);
-    } else {
-        if (game.settings.get("fate-core-official","PlayerThings")){
-            let GMs = game.users.contents.filter(user => user.active && user.isGM);
-            if (GMs.length == 0) {
-                ui.notifications.error("A GM has to be logged in for you to create item tokens.")
+
+        let itemd = item.toJSON();
+        let actor = item?.actor?.uuid;
+
+        if (game.user.isGM){
+            let shift_down = false; 
+            if (isNewerVersion(game.version, "9.230")){
+                shift_down = game.system["fco-shifted"];    
             } else {
-                let shift_down = false; 
-                if (isNewerVersion(game.version, "9.230")){
-                    shift_down = game.system["fco-shifted"];    
+                shift_down = keyboard.isDown("Shift");
+            }
+            createThing (canvas.scene, itemd, game.user.id, shift_down, data.x, data.y, actor);
+        } else {
+            if (game.settings.get("fate-core-official","PlayerThings")){
+                let GMs = game.users.contents.filter(user => user.active && user.isGM);
+                if (GMs.length == 0) {
+                    ui.notifications.error("A GM has to be logged in for you to create item tokens.")
                 } else {
-                    shift_down = keyboard.isDown("Shift");
+                    let shift_down = false; 
+                    if (isNewerVersion(game.version, "9.230")){
+                        shift_down = game.system["fco-shifted"];    
+                    } else {
+                        shift_down = keyboard.isDown("Shift");
+                    }
+                    game.socket.emit("system.fate-core-official", {"action":"create_thing", "scene":canvas.scene, "data":itemd, "id":game.user.id, "shiftDown":shift_down, "x":data.x, "y":data.y, "actor":actor})
                 }
-                game.socket.emit("system.fate-core-official", {"action":"create_thing", "scene":canvas.scene, "data":data, "id":game.user.id, "shiftDown":shift_down})
             }
         }
     }
 })
 
 Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
-    if (target.system?.container?.isContainer == false && target.items?.length == 1){
+
+    if (data?.ident == "mf_draggable"){
         return;
     }
 
-    if (data.pack != undefined){
+    let i = fromUuidSync(data.uuid);
+
+    if (target.system?.container?.isContainer == false){
         return;
     }
 
-    if (data.data == undefined){
+    if (data.uuid.startsWith("Compendium")){
+        return;
+    }
+
+    if (data.uuid.startsWith("Item")){
         return;
     }
 
@@ -615,73 +539,32 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
         return;
     }
 
-    let i = new Item(data.data);
-
-    if (target.id === data.actorId){
-        if (data.tokenId === undefined){ // This is being dragged on the same linked actor, do nothing.
+    if (target.id === i?.parent?.id){
+        if (!data.uuid.startsWith("Scene")){ // This is being dragged on the same linked actor, do nothing.
             return;
         } else {
             // This is a token actor, so it could be being dragged from one instance of the token to another. 
             // We need to check if the token IDs are the same rather than the actor IDs.
-            if (target.token.id === data.tokenId){ // Being dragged within token sheet.
+            if (target.token.id === i?.parent?.token?.id){ // Being dragged within token sheet.
                 return;
             }
         }
     }
 
-    if (data.tokenId === undefined){ //This is from a real actor
-        let actor = game.actors.get(data.actorId);
-        //Need to check if the user has ownership of the target. If not, do nothing.
-            if (target.isOwner){
-                //target.createEmbeddedDocuments("Item", [i.data]);
-                let shift_down = false; 
-                    if (isNewerVersion(game.version, "9.230")){
-                        shift_down = game.system["fco-shifted"];    
-                    } else {
-                        shift_down = keyboard.isDown("Shift");
-                    }
-                if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
-                    if (!shift_down){
-                        await actor.deleteEmbeddedDocuments("Item", [i.id]);
-                    }
-                } else {
-                    if (shift_down){
-                        await actor.deleteEmbeddedDocuments("Item", [i.id]);
-                    }
-                }
-            }
-    } else { // This is from a token actor. Respond accordingly.
-        let scene = data.scene;
-        let token = scene.tokens.find(t1 => t1.id === data.tokenId);
-        let destination = scene.tokens.find(t2=> t2.id == target?.token?.id)
-    
-        if (token !== undefined){
-            let t = token;
-            let dt = destination;
-            
-            if (t.actor.id == dt?.actor?.id){
-                // Create a copy of the item on the destination, as it appears Foundry doesn't by default.
-                await dt.actor.createEmbeddedDocuments("Item", [data.data]);
+    if (target.isOwner){
+        let shift_down = false; 
+            if (isNewerVersion(game.version, "9.230")){
+                shift_down = game.system["fco-shifted"];    
             } else {
-                // Do nothing, as the default Foundry behaviour has got this covered.
+                shift_down = keyboard.isDown("Shift");
             }
-            
-            if (t.actor.isOwner && target.isOwner){
-                let shift_down = false; 
-                    if (isNewerVersion(game.version, "9.230")){
-                        shift_down = game.system["fco-shifted"];    
-                    } else {
-                        shift_down = keyboard.isDown("Shift");
-                    }
-                if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
-                    if (!shift_down){
-                        await t.actor.deleteEmbeddedDocuments("Item", [data.data._id]);
-                    }
-                } else {
-                    if (shift_down){
-                        await t.actor.deleteEmbeddedDocuments("Item", [data.data._id])
-                    }
-                }
+        if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
+            if (!shift_down){
+                await i.delete();
+            }
+        } else {
+            if (shift_down){
+                await i.delete();
             }
         }
     }
@@ -696,7 +579,7 @@ Hooks.once('ready', async function () {
                     return;
             }
             if (data.action == "create_thing"){
-                    await createThing (data.scene, data.data, data.id, data.shiftDown);                
+                    await createThing (data.scene, data.data, data.id, data.shiftDown, data.x, data.y, data.actor);                
             }  
             if (data.action == "delete_token"){
                 let scene = game.scenes.get(data.scene._id);

@@ -1773,7 +1773,6 @@ class FateUtilities extends Application{
             try {
                 game.scenes.viewed.deleteEmbeddedDocuments("Drawing", [d.id])
             } catch (err) {
-                //console.log(err);
             }
             return;
         }
@@ -1837,7 +1836,6 @@ class FateUtilities extends Application{
         let tracks = duplicate(token.actor.system.tracks);
         let track = tracks[name]
         track.box_values[index] = checked;
-        //console.log(token);
         await token.actor.update({
             // By using this format, we can JUST update the box_values attribute.
             ["system.tracks"]:{[name]:{["box_values"]:track.box_values}}
