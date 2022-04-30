@@ -89,7 +89,7 @@ export class Thing extends ActorSheet {
             if ( game.user.isGM ) {
               await canvas.scene.deleteEmbeddedDocuments("Token", tokenIds);
             } else {
-              game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "tokens":tokenIds});
+              game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "token":tokenIds});
             }
             // Close the actor sheet
             this.actor.sheet.close({force: true});
@@ -354,7 +354,7 @@ Hooks.on('deleteItem', async (item) => {
                 game.scenes.viewed.deleteEmbeddedDocuments("Token", [t.id])
             } else {
                 let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id); //game.scenes.viewed.tokens.contents is the no-canvas safe alternative to game.scenes.viewed.tokens.contents.
-                game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "token":t.id});
+                game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "token":[t.id]});
             }
         }
     }
@@ -583,7 +583,8 @@ Hooks.once('ready', async function () {
             }  
             if (data.action == "delete_token"){
                 let scene = game.scenes.get(data.scene._id);
-                await scene.deleteEmbeddedDocuments("Token", [data.token]);
+                console.log(data.token);
+                await scene.deleteEmbeddedDocuments("Token", data.token);
             }
         })
     }

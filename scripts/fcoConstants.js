@@ -117,7 +117,7 @@ class fcoConstants {
         if (!confirm){
             return true;
         } else {
-            let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.ConfirmDeletion"));
+            let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.Delete"),game.i18n.localize("fate-core-official.ConfirmDeletion"));
             if (del=="yes"){
                 return true;
             } else {
