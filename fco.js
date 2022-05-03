@@ -1596,17 +1596,21 @@ class FcoColourSchemes extends FormApplication {
             }
         })
 
-        mySchemes.forEach(scheme => {
-            if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
-                scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
-            }
-        })
+        if (mySchemes) {
+                mySchemes.forEach(scheme => {
+                if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
+                    scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
+                }
+            })
+        }
 
-        otherSchemes.forEach(scheme => {
-            if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
-                scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
-            }
-        })
+        if (otherSchemes){
+                otherSchemes.forEach(scheme => {
+                if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
+                    scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
+                }
+            })
+        }
 
         this.mySchemes = mySchemes;
         this.otherSchemes = otherSchemes;
