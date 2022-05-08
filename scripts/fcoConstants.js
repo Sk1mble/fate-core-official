@@ -303,8 +303,8 @@ class fcoConstants {
         output.skillsLabel = game.settings.get("fate-core-official", "skillsLabel")
         let scheme = game.settings.get("fate-core-official", "fco-world-sheet-scheme");
         if (scheme) output.fco_world_sheet_scheme = scheme;
-        let formulae = game.settings.get("fate-core-official","fu_roll-formulae");
-        if (formulae) output["fu_roll-formulae"] = formulae;
+        let formulae = game.settings.get("fate-core-official","fu-roll-formulae");
+        if (formulae) output["fu-roll-formulae"] = formulae;
         return JSON.stringify(output, null, 5);
     }
 
