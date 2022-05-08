@@ -1,3 +1,6 @@
+# 4.3.26
+  * Minor bug fix; exporting of settings was broken due to fco_roll-formulae being used rather than fco-roll-formulae in the output tool.
+  
 # 4.3.25
   * Renamed the Fate Core Official concat handlebars helper to fco_concat as the original helper was causing a conflict with the built in Foundry helper. The result of this was to prevent the file picker for card faces from correctly allocating the chosen file to the relevant data field.
 
