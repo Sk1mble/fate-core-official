@@ -1,3 +1,6 @@
+# 4.4.05
+  * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
+
 # 4.4.04
   * Edited some drag and drop functions to make them work with Foundry 10.262 following changes to the drag and drop workflow.
   * Tided up the code surrounding creating Things by dropping items to canvas to follow the new workflow as well.
