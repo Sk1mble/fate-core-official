@@ -22,6 +22,7 @@
     "./scripts/ShowCharacter.js",
     "./scripts/FateCharacterImporter.js",
     "./scripts/FateCharacterDefaults.js",
+    "./scripts/FateCoreOfficialModels.js",
     "./scripts/Pen/pen.js",
     "./scripts/Pen/markdown.js",
     "./scripts/purify.min.js"
