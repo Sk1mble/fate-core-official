@@ -123,14 +123,23 @@ class SkillSetup extends FormApplication{
                 skills = {};
             }
 
-            // TODO: Add code here to validate the imported skills to make sure they all match the schema.
-
-            for (let skill in imported_skills){
-                let sk = new fcoSkill(imported_skills[skill]).toJSON();
+            if (!imported_skills.hasOwnProperty("name")){
+                // This is a skills object
+                // Validate the imported data to make sure they all match the schema.
+                for (let skill in imported_skills){
+                    let sk = new fcoSkill(imported_skills[skill]).toJSON();
+                    if (sk){
+                        skills[skill] = sk;  
+                    }
+                }
+            } else {
+                // This is a single skill
+                let sk = new fcoSkill(imported_skills).toJSON();
                 if (sk){
-                    skills[skill] = sk;  
+                    skills[sk.name] = sk;
                 }
             }
+           
             await game.settings.set("fate-core-official","skills", skills);
             this.render(false);
         } catch (e) {

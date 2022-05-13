@@ -126,15 +126,23 @@ class EditPlayerAspects extends FormApplication{
     async _on_name_change(event, html){
         let name = event.target.name.split("_")[1];
         let newName = event.target.value;
-        let newAspect = {};
-        newName = newName.split(".").join("․").trim();
-        newAspect.name = newName;
-    
-        newAspect.description = this.aspects[name].description;
-        newAspect.value = this.aspects[name].value;
-        delete this.aspects[name]
-        this.aspects[newName]=newAspect;
-        this.render(false);
+        if (!newName) {
+            ui.notifications.error(game.i18n.localize("fate-core-official.YouCannotHaveAnAspectWithABlankName"));
+            event.target.value = name;
+            return;
+        }
+        
+        let newAspect = new fcoAspect({
+            name:newName.split(".").join("․").trim(),
+            description:this.aspects[name].description,
+            value:this.aspects[name].value
+        }).toJSON();
+        
+        if (newAspect){
+            delete this.aspects[name]
+            this.aspects[newName]=newAspect;
+            this.render(false);
+        }
     }
 
     async _on_value_change(event, html){
@@ -173,9 +181,10 @@ class EditPlayerAspects extends FormApplication{
         }
         let name = game.i18n.localize("fate-core-official.New_Aspect") + " "+ count;
         let newAspect = new fcoAspect({"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}).toJSON();
-       
-        this.aspects[newAspect.name] = newAspect;
-        this.render(false);
+        if (newAspect){
+            this.aspects[newAspect.name] = newAspect;
+            this.render(false);
+        }
     }
 
     //Set up the default options for instances of this class

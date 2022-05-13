@@ -461,8 +461,22 @@ class StuntDB extends Application {
             if (stuntDB == undefined){
                 stuntDB = {};
             }
-            for (let stunt in imported_stunts){
-                stuntDB[stunt]=imported_stunts[stunt];
+
+            if (!imported_stunts.hasOwnProperty("name")){
+                //THis is a stunts object
+                // Validate the imported data to make sure they all match the schema
+                for (let stunt in imported_stunts){
+                    let st = new fcoStunt(imported_stunts[stunt]).toJSON();
+                    if (st){
+                        stuntDB[stunt] = st;  
+                    }
+                }
+            } else {
+                // This is a single stunt.
+                let st = new fcoStunt(imported_stunts).toJSON();
+                if (st){
+                    stuntDB[st.name] = st;
+                }
             }
             await game.settings.set("fate-core-official","stunts", stuntDB);
             this.render(false);

@@ -92,6 +92,8 @@ class trackAspectField extends foundry.data.fields.ObjectField {
                     valid = false;
                 } 
                 return valid;
+            } else {
+                return false;
             }
         }
     }
@@ -165,12 +167,12 @@ class fcoStunt extends foundry.abstract.DataModel {
             "attack":new foundry.data.fields.BooleanField({ required: true, initial:false }),
             "defend":new foundry.data.fields.BooleanField({ required: true, initial:false }),
             "bonus":new foundry.data.fields.NumberField({ required: true, initial:0 }),
-            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0 })
+            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0 }),
+            "box_values":new foundry.data.fields.ArrayField(new foundry.data.fields.BooleanField()),
         }
     }
 }
 
-// Other models we might want to add:
-// Colour schemes
-// Countdowns
-// Fate Utilities aspects
+// Consider adding a model for character sheet colour schemes.
+// Consider using models on importing from Fari/FateX to standardize data (FateCharacterImporter)
+// Consider using models for character default frameworks to ensure consistency in using, exporting & importing them.

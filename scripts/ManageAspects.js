@@ -109,13 +109,29 @@ class AspectSetup extends FormApplication{
         let text = await this.getAspects();
         try {
             let imported_aspects = JSON.parse(text);
+
             let aspects = duplicate(game.settings.get("fate-core-official","aspects"));
             if (aspects == undefined){
                 aspects = {};
             }
-            for (let aspect in imported_aspects){
-                aspects[aspect]=imported_aspects[aspect];
+
+            if (!imported_aspects.hasOwnProperty("name")){
+                // This is an aspects object
+                // Validate the imported data to make sure they all match the schema
+                for (let aspect in imported_aspects){
+                    let as = new fcoAspect(imported_aspects[aspect]).toJSON();
+                    if (as){
+                        aspects[aspect]=as;
+                    }
+                }
+            } else {
+                // This is a single aspect
+                let as = new fcoAspect(imported_aspects).toJSON();
+                if (as){
+                    skills[as.name] = as;
+                }
             }
+            
             await game.settings.set("fate-core-official","aspects", aspects);
             this.render(false);
         } catch (e) {

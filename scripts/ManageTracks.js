@@ -800,7 +800,7 @@ class EditTracks extends FormApplication {
                     }
                     delete this.tracks[this.track.name]
                 }
-                let newTrack = {
+                let newTrack = new fcoTrack({
                     "name":name,
                     "category":this.category,
                     "description":description,
@@ -815,7 +815,7 @@ class EditTracks extends FormApplication {
                     "paid":paid,
                     "linked_skills":linked_skills,
                     "label":label
-                }
+                }).toJSON();
                 this.tracks[name]=newTrack;
             }
             await game.settings.set("fate-core-official","tracks",this.tracks);
@@ -920,11 +920,25 @@ class TrackSetup extends FormApplication{
             if (tracks == undefined){
                 tracks = {};
             }
-            for (let track in imported_tracks){
-                tracks[track]=imported_tracks[track];
-                let cat = imported_tracks[track].category;
-                track_categories[cat]=cat;
+
+            if (!imported_tracks.hasOwnProperty("name")){
+                // This is a tracks object.
+                for (let track in imported_tracks){
+                    let tr = new fcoTrack(imported_tracks[track]).toJSON();
+                    if (tr){
+                        tracks[track]=tr;
+                    }
+                    let cat = imported_tracks[track].category;
+                    track_categories[cat]=cat;
+                }
+            } else {
+                // This is a track object
+                let tr = new fcoTrack(imported_tracks).toJSON();
+                    if (tr){
+                        tracks[tr.name]=tr;
+                    }
             }
+
             await game.settings.set("fate-core-official","tracks", tracks);
             await game.settings.set("fate-core-official", "track_categories", track_categories);
             this.render(false);
