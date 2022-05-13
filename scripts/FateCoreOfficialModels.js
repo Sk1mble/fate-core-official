@@ -73,7 +73,7 @@ class fcoAspect extends foundry.abstract.DataModel {
 }
 
 class trackAspectField extends foundry.data.fields.ObjectField {
-    _validateSpecial(data){
+    _validateType(data){
         if (data == "No" ){
             return true;
         } else {
@@ -97,7 +97,17 @@ class trackAspectField extends foundry.data.fields.ObjectField {
     }
     
     _cast(data){
+        // This is required to prevent a validation error as the default _cast function casts the data to an object.
         return data;
+    }
+}
+
+class trackLabelField extends foundry.data.fields.StringField {
+    _validateType(string){
+        let validate = true;
+        if (string.constructor.name != "String") validate = false;
+        if (string !== "escalating" && string !== "none" && string.length > 1) validate = false;
+        return validate;
     }
 }
 
@@ -110,7 +120,6 @@ class fcoTrack extends foundry.abstract.DataModel {
 			"enables": new foundry.data.fields.BooleanField({ required: true, initial:false })
         }));
 
-        let label = new foundry.data.fields.StringField({nullable: false, required: true, initial:"escalating"});
         let recovery_type = new foundry.data.fields.StringField({nullable: false, required: true, initial:"Fleeting"});
         recovery_type.choices = ["Fleeting","Sticky","Lasting"];
 
@@ -129,7 +138,7 @@ class fcoTrack extends foundry.abstract.DataModel {
             "universal":new foundry.data.fields.BooleanField({ required: true, initial:true }),
             "unique":new foundry.data.fields.BooleanField({ required: true, initial:true }),
             "enabled":new foundry.data.fields.BooleanField({ required: true, initial:true }),
-            "label":label,
+            "label":new trackLabelField({nullable: false, required: true, initial:"escalating"}),
             "recovery_type":recovery_type,
             "when_marked":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "recovery_conditions":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
@@ -160,3 +169,8 @@ class fcoStunt extends foundry.abstract.DataModel {
         }
     }
 }
+
+// Other models we might want to add:
+// Colour schemes
+// Countdowns
+// Fate Utilities aspects
