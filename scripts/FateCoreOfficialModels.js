@@ -175,4 +175,4 @@ class fcoStunt extends foundry.abstract.DataModel {
 
 // Consider adding a model for character sheet colour schemes.
 // Consider using models on importing from Fari/FateX to standardize data (FateCharacterImporter)
-// Consider using models for character default frameworks to ensure consistency in using, exporting & importing them.
+// Consider using models for character default frameworks to ensure consistency in using, exporting & importing them. (FateCharacterDefaults)
