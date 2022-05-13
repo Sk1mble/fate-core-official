@@ -385,7 +385,7 @@ class StuntDB extends Application {
         })
 
         add_stunt.on("click", event => {
-            let stunt = {
+            let stunt = new fcoStunt({
                 "name":game.i18n.localize("fate-core-official.NewStunt"),
                 "linked_skill":"None",
                 "description":"",
@@ -395,7 +395,7 @@ class StuntDB extends Application {
                 "attack":false,
                 "defend":false,
                 "bonus":0
-            }
+            }).toJSON();
             let editor = new EditPlayerStunts(null, stunt, {new:true});
             editor.originator = this;
             editor.render(true);

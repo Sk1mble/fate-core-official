@@ -192,11 +192,7 @@ class EditAspect extends FormApplication{
             super(aspect);
             this.aspect=aspect;
             if (this.aspect==undefined){
-                this.aspect={
-                    "name":"",
-                    "description":"",
-                    "notes":""
-                }
+                this.aspect = new fcoAspect().toJSON();
             }
         }
 
@@ -205,7 +201,7 @@ class EditAspect extends FormApplication{
             let description = f.description;
             var existing = false;
             let aspects=game.settings.get("fate-core-official","aspects");
-            let newAspect = {"name":name, "description":description, "notes":""};
+            let newAspect = new fcoAspect ({"name":name, "description":description, "notes":""}).toJSON();
 
             //First check if we already have an aspect by that name, or the aspect is blank; if so, throw an error.
             if (name == undefined || name ==""){

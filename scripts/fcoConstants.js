@@ -379,7 +379,8 @@ class fcoConstants {
 
         // First check for duplicates and permission to overwrite
         for (let st in stunts){
-            delete stunts[st].extra_tag;
+            delete stunts[st].extra_id;
+            delete stunts[st].original_name;
             
             if (db[st]){
                 let overwrite = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"),`${game.i18n.localize("fate-core-official.stunt")} "${db[st].name}": `+game.i18n.localize("fate-core-official.exists"));

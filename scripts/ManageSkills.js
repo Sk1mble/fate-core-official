@@ -122,8 +122,14 @@ class SkillSetup extends FormApplication{
             if (skills == undefined){
                 skills = {};
             }
+
+            // TODO: Add code here to validate the imported skills to make sure they all match the schema.
+
             for (let skill in imported_skills){
-                skills[skill]=imported_skills[skill];
+                let sk = new fcoSkill(imported_skills[skill]).toJSON();
+                if (sk){
+                    skills[skill] = sk;  
+                }
             }
             await game.settings.set("fate-core-official","skills", skills);
             this.render(false);
@@ -213,22 +219,14 @@ class EditSkill extends FormApplication{
             super(skill);
             this.skill=skill;
             if (this.skill==undefined){
-                this.skill={
-                    "name":"",
-                    "description":"",
-                    "overcome":"",
-                    "caa":"",
-                    "attack":"",
-                    "defend":"",
-                    "pc":"true"
-                }
+                this.skill= new fcoSkill().toObject();
             }
         }
 
         async _updateObject(event, f) {
             let skills=game.settings.get("fate-core-official","skills");
             let name = f.name.split(".").join("․").trim();
-            let newSkill = {"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
+            let newSkill = new fcoSkill({"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc}).toJSON();
             var existing = false;
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
             if (name == undefined || name ==""){

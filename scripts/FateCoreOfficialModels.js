@@ -39,12 +39,8 @@
 * {string} label A localizable label displayed on forms which render this field.
 * {string} hint Localizable help text displayed on forms which render this field.
 * {string} validationError A custom validation error string. When displayed will be prepended with the document name, field name, and candidate value.
-
+* To create a field with a random ID in it: new foundry.data.fields.StringField({initial: () => foundry.utils.randomID()})
 */
-
-// We aren't quite ready to use this yet, as it seems impossible at the minute to define a SchemaField that defaults to undefined or null, so I'm going to have issues with the code
-// surrounding extra_tags unless I change ALL references checking to see if extra_tag is undefined to check for if (*.extra_tag?.id) - this will only do something if the extra_tag has a truthy id.
-// Ideally I would rather have the extra_tag field default to null or undefined.
 
 class fcoSkill extends foundry.abstract.DataModel {
     static defineSchema(){
@@ -57,11 +53,9 @@ class fcoSkill extends foundry.abstract.DataModel {
             "defend":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "pc": new foundry.data.fields.BooleanField({ nullable: false, required: true, initial:true}),
             "rank": new foundry.data.fields.NumberField({ required: true, initial:0 }),
-            "extra_tag": new foundry.data.fields.SchemaField({
-                    "extra_name":new foundry.data.fields.StringField({ nullable: true, required: true, initial:null}), 
-                    "extra_id":new foundry.data.fields.StringField({ nullable: true, required: true, initial:null})
-                }, 
-                {required:false, initial:undefined, nullable:true})
+            "extra_id": new foundry.data.fields.StringField({ required: false, initial: undefined }),
+            "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
+            "adhoc": new foundry.data.fields.BooleanField({ required: false, initial:false }),
         }
     }
 }
@@ -72,14 +66,97 @@ class fcoAspect extends foundry.abstract.DataModel {
             "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "description":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "notes":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "extra_id": new foundry.data.fields.StringField({ required: false, initial:undefined }),
+            "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined })
         }
     }
 }
 
-class fcoTrack extends foundry.abstract.DataModel {
+class trackAspectField extends foundry.data.fields.ObjectField {
+    _validateSpecial(data){
+        if (data == "No" ){
+            return true;
+        } else {
+            if (Object.prototype.toString.call(data) === '[object Object]'){
+                let valid = true;
+                if (!data?.as_name && !data?.when_marked){
+                    valid = false;
+                    this.validationError = game.i18n.localize("fate-core-official.trackAspectFieldValidation1");
+                } 
+                if (data?.as_name && data?.when_marked){
+                    this.validationError = game.i18n.localize("fate-core-official.trackAspectFieldValidation1")
+                    valid = false;
+                } 
+                if (Object.keys(data).indexOf("name") == -1){
+                    this.validationError = game.i18n.localize("fate-core-official.trackAspectFieldValidation2");
+                    valid = false;
+                } 
+                return valid;
+            }
+        }
+    }
+    
+    _cast(data){
+        return data;
+    }
+}
 
+class fcoTrack extends foundry.abstract.DataModel {
+    static defineSchema(){
+        let linked_skills = new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField({
+            "linked_skill":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+			"rank": new foundry.data.fields.NumberField({ required: true, initial:0 }),
+			"boxes": new foundry.data.fields.NumberField({ required: true, initial:0 }),
+			"enables": new foundry.data.fields.BooleanField({ required: true, initial:false })
+        }));
+
+        let label = new foundry.data.fields.StringField({nullable: false, required: true, initial:"escalating"});
+        let recovery_type = new foundry.data.fields.StringField({nullable: false, required: true, initial:"Fleeting"});
+        recovery_type.choices = ["Fleeting","Sticky","Lasting"];
+
+        let category = new foundry.data.fields.StringField({ nullable: false, required: true, initial:"Combat"});
+        category.choices = Object.keys(game.settings.get("fate-core-official","track_categories"));
+
+        return {
+            "category":category,
+            "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "description":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "notes":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "extra_id": new foundry.data.fields.StringField({ required: false, initial:undefined }),
+            "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
+            "linked_skills":linked_skills,
+            "paid":new foundry.data.fields.BooleanField({ required: true, initial:false }),
+            "universal":new foundry.data.fields.BooleanField({ required: true, initial:true }),
+            "unique":new foundry.data.fields.BooleanField({ required: true, initial:true }),
+            "enabled":new foundry.data.fields.BooleanField({ required: true, initial:true }),
+            "label":label,
+            "recovery_type":recovery_type,
+            "when_marked":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "recovery_conditions":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "harm_can_absorb": new foundry.data.fields.NumberField({ required: true, initial:0 }),
+            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0 }),
+            "box_values":new foundry.data.fields.ArrayField(new foundry.data.fields.BooleanField()),
+            "aspect":new trackAspectField({required: true, initial:"No"})
+        }
+    }
 }
 
 class fcoStunt extends foundry.abstract.DataModel {
-
+    static defineSchema(){
+        return {
+            "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "description":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "notes":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "extra_id": new foundry.data.fields.StringField({ required: false, initial:undefined }),
+            "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
+            "linked_skill": new foundry.data.fields.StringField({ required: true, initial:"None" }),
+            "refresh_cost":new foundry.data.fields.NumberField({ required: true, initial:1 }),
+            "overcome":new foundry.data.fields.BooleanField({ required: true, initial:false }),
+            "caa":new foundry.data.fields.BooleanField({ required: true, initial:false }),
+            "attack":new foundry.data.fields.BooleanField({ required: true, initial:false }),
+            "defend":new foundry.data.fields.BooleanField({ required: true, initial:false }),
+            "bonus":new foundry.data.fields.NumberField({ required: true, initial:0 }),
+            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0 })
+        }
+    }
 }

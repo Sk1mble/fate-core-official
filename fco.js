@@ -1413,6 +1413,12 @@ Handlebars.registerHelper("hasBoxes", function(track) {
     }
 });
 
+Handlebars.registerHelper("fco_item_name_from_id", function (actor, id){
+    console.log(actor);
+    let item = actor.items.get(id);
+    return item.name;
+})
+
 class CustomiseSheet extends FormApplication {
     static get defaultOptions (){
         const options = super.defaultOptions;

@@ -2,7 +2,7 @@
 <div style="width:20vw; height:75vh; max-height:75vh" id="skills_editor">
     <div style = "max-height:70vh; overflow-y:auto">
     {{#each character_skills}}
-    {{#if (eq this.extra_tag undefined)}}
+    {{#if (eq this.extra_id undefined)}}
     <div class="row">
         <div class="column" style="float:left; width:20%; margin:auto; padding:3px;">
             <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; height:35px; text-align:left"></input>

@@ -1,3 +1,8 @@
+# 4.4.06 (Unreleased)
+  * Refactored extra_tag to extra_id, adding another key for original_name as well where necessary. This is designed to allow us to get data models working properly for stunts, skills, tracks, and aspects.
+  * Refactored ManageSkills to use the fcoSkill model for creating and editing skills, ensuring data consistency.
+  * Refactored skill editors on character sheet to use the fcoSkill model for creating or editing ad-hoc skills.
+
 # 4.4.05
   * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
 

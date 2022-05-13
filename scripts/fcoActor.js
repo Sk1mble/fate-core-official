@@ -32,6 +32,23 @@ export class fcoActor extends Actor {
         }
     }
 
+    static migrateData (data){
+        // Convert all extra_tags to being extra_id.
+        if (data.system){
+            let toProcess = ["skills","stunts","aspects","tracks"];
+            for (let item of toProcess){
+                for (let sub_item in data.system[item]){
+                    if (data.system[item][sub_item]?.extra_tag?.extra_id){
+                        let id = data.system[item][sub_item]?.extra_tag?.extra_id;
+                        delete data.system[item][sub_item].extra_tag;
+                        data.system[item][sub_item].extra_id = id;
+                    }
+                }
+            }
+        }
+        return super.migrateData(data);
+    }
+
     async _preUpdate(data, options, user){
         await super._preUpdate(data, options, user);
         if (data.type == "ModularFate" || data.type == "FateCoreOfficial"){
@@ -199,14 +216,14 @@ export class fcoActor extends Actor {
                 // If item = New Stunt, then New Stunt 2, New Stunt 3, etc. will all begin with this.
                 // We need to find the highest number on other items that start with this name, and go one higher.
                 // We should not add a number to ourselves if we're the only one that matches us.
-                if (data[item].extra_tag?.extra_id == extra_id){
+                if (data[item]?.extra_id == extra_id){
                     // The item on the character sheet is from the extra being investigated; do nothing.
                 } else {
                     // NOW we need to know how many other things there are that start with my name
                     for (let item2 in data){
                         if (item2.startsWith(test)){
                             // Increment the count, because this is something other than me that starts with the same name.
-                            if (data[item2].extra_tag?.extra_id !== extra_id){
+                            if (data[item2]?.extra_id !== extra_id){
                                 count ++;
                             }
                         }
@@ -234,7 +251,7 @@ export class fcoActor extends Actor {
             //Done: Edit editplayerskills to be blind to any object with the extra data type defined
             //Done: Edit editplayeraspects to be blind to any object with the extra data type defined
             //Check to see if the thing is already on the character sheet. If it is, update with the version from the item (should take care of diffing for me and only do a database update if changed)
-            //Done: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_tag != undefined)
+            //Done: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_id != undefined)
             
             let stunts_output = {};
             let skills_output = {};
@@ -243,7 +260,6 @@ export class fcoActor extends Actor {
     
                 let extra_name = extra.name;
                 let extra_id = extra._id;
-                let extra_tag = {"extra_name":extra_name, "extra_id":extra_id};
     
                 let stunts = duplicate(extra.system.stunts);
         
@@ -258,9 +274,8 @@ export class fcoActor extends Actor {
                             if (count2 > count) count = count2
                         }
 
-                        let modified_tag = duplicate(extra_tag);
-                        modified_tag.original_name = stunt;
-                        stunts[stunt].extra_tag = modified_tag;
+                        stunts[stunt].extra_id = extra_id;
+                        stunts[stunt].original_name = stunt;
                         
                         if (count > 1){    
                             stunts[stunt].name = stunts[stunt].name + ` ${count}`;
@@ -276,10 +291,9 @@ export class fcoActor extends Actor {
                         // If this and its constituent skills are NOT set to combine skills, we need to create an entry for this skill.
                         if (!extra.system.combineSkills && !skills[skill].combineMe){
                             let count = this.getHighest(askills, skill, extra_id);
-                            
-                            let modified_tag = duplicate(extra_tag);
-                            modified_tag.original_name = skill;
-                            skills[skill].extra_tag = modified_tag;
+                        
+                            skills[skill].original_name = skill;
+                            skills[skill].extra_id = extra_id;
 
                             if (count > 1) {
                                 let count2 = this.getHighest(skills, skill, extra_id);
@@ -308,20 +322,20 @@ export class fcoActor extends Actor {
                                 if (combined_skill) combined_skill = duplicate(combined_skill);                                    
                             }
                         }
-                        if (combined_skill && !combined_skill.extra_tag){
+                        if (combined_skill && !combined_skill.extra_id){
                             // The skill is a real one from the character and we cannot combine with it.
                         } else {
                             // If it is null, it needs to be created. That can only happen if this extra is newly creating a merged skill.
                             if (!combined_skill){
                                 combined_skill = duplicate(skills[skill]);
-                                combined_skill.extra_tag = extra_tag;
+                                combined_skill.extra_id = extra_id;
                             }
                             // Now we know for a fact that the base combined_skill is there and we have a reference to it, we can set its ranks.
                             if (combined_skill){
                                 combined_skill.rank = 0;
                                 for (let extra of this.items){
                                     if (extra.system.active){
-                                        if (extra.system.combineSkills || extra.system.skills[skill]?.combineMe || combined_skill.extra_tag.extra_id == extra.id){
+                                        if (extra.system.combineSkills || extra.system.skills[skill]?.combineMe || combined_skill.extra_id == extra.id){
                                             let esk = extra.system.skills[skill];
                                             if (esk){
                                                 combined_skill.rank += esk.rank;
@@ -340,9 +354,8 @@ export class fcoActor extends Actor {
                     for (let aspect in aspects){
                         let count = this.getHighest(actor.system.aspects, aspect, extra_id);
                         
-                        let modified_tag = duplicate(extra_tag);
-                        modified_tag.original_name = aspect;
-                        aspects[aspect].extra_tag = modified_tag;
+                        aspects[aspect].original_name = aspect;
+                        aspects[aspect].extra_id = extra_id;
                         
                         if (count > 1){
                             let count2 = this.getHighest(aspects, aspect, extra_id);
@@ -358,9 +371,8 @@ export class fcoActor extends Actor {
                     for (let track in tracks){
                         let count = this.getHighest(actor.system.tracks, track, extra_id);
                         
-                        let modified_tag = duplicate(extra_tag);
-                        modified_tag.original_name = track;
-                        tracks[track].extra_tag = modified_tag;
+                        tracks[track].original_name = track;
+                        tracks[track].extra_id = extra_id;
                         
                         if (count >1 ){
                             let count2 = this.getHighest(tracks, track, extra_id);
@@ -376,7 +388,7 @@ export class fcoActor extends Actor {
             let actor_tracks = duplicate(actor.system.tracks);
     
             //Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character
-            //Find all tracks on this actor that have the item's ID in their extra_tag attribute
+            //Find all tracks on this actor that have the item's ID in their extra_id attribute
             //Check to see that those tracks are also on the item's list of tracks
             //If they aren't, delete them from the character.
     
@@ -384,7 +396,7 @@ export class fcoActor extends Actor {
     
             for (let t in actor_tracks){
                 let track = actor_tracks[t];
-                if (track.extra_tag != undefined && track.extra_tag.extra_id == extra_id){
+                if (track.extra_id != undefined && track.extra_id == extra_id){
                     if (tracks_output[t] == undefined){
                         update_object[`system.tracks.-=${t}`] = null;
                     }
@@ -406,7 +418,7 @@ export class fcoActor extends Actor {
             //Ditto for orphaned aspects
             for (let a in actor_aspects){
                 let aspect = actor_aspects[a];
-                if (aspect != undefined && aspect.extra_tag != undefined && aspect.extra_tag.extra_id == extra_id){
+                if (aspect != undefined && aspect.extra_id != undefined && aspect.extra_id == extra_id){
                     if (aspects_output[a] == undefined){
                         update_object[`system.aspects.-=${a}`] = null;
                     }
@@ -418,7 +430,7 @@ export class fcoActor extends Actor {
             //Ditto for orphaned skills
             for (let s in actor_skills){
                 let skill = actor_skills[s];
-                if (skill != undefined && skill.extra_tag != undefined && skill.extra_tag.extra_id == extra_id){
+                if (skill != undefined && skill.extra_id != undefined && skill.extra_id == extra_id){
                     if (skills_output[s] == undefined){
                         update_object[`system.skills.-=${s}`] = null;
                     }
@@ -428,7 +440,7 @@ export class fcoActor extends Actor {
             //Ditto for orphaned stunts
             for (let s in actor_stunts){
                 let stunt = actor_stunts[s];
-                if (stunt != undefined && stunt.extra_tag != undefined && stunt.extra_tag.extra_id == extra_id){
+                if (stunt != undefined && stunt.extra_id != undefined && stunt.extra_id == extra_id){
                     if (stunts_output[s] == undefined){
                         update_object[`system.stunts.-=${s}`] = null;;
                     }
@@ -460,7 +472,7 @@ export class fcoActor extends Actor {
         //Add a parameter - 'deleting' - if false, push the existing track on the actor back to the extra
         //before removing it - if the extra is toggled on and off, any tracks on the character that are partially
         //filled in should remain that way. This should be as simple as adding a parameter to calls to this method
-        //and then removing extra_tag from each track and writing it back to the item in an update call.
+        //and then removing extra_id from each track and writing it back to the item in an update call.
         if (!deleting){
             let trackUpdates = duplicate(item.system.tracks);
             let tracks = actor?.system?.tracks;
@@ -469,11 +481,12 @@ export class fcoActor extends Actor {
                 // Need to grab the original name from the ACTOR, not from the extra. So we need to reverse the order of operations here
                 // to search through the actor's tracks to find one with an original name that matches this track.
                 for (let at in tracks){
-                    let name = tracks[at]?.extra_tag?.original_name;
-                    if (name == t){
+                    let name = tracks[at]?.original_name;
+                    if (name == t && tracks[at]?.extra_id == item.id){
                         let track = duplicate(tracks[at]);
                         track.name = name;
-                        delete track.extra_tag;
+                        delete track.extra_id;
+                        delete track.original_name;
                         trackUpdates[name] = track;
                     }
                 }
@@ -482,11 +495,12 @@ export class fcoActor extends Actor {
             let stunts = actor?.system?.stunts;
             for (let s in stuntUpdates){
                 for (let as in stunts){
-                    let name = stunts[as]?.extra_tag?.original_name;
-                    if (name == s){
+                    let name = stunts[as]?.original_name;
+                    if (name == s && stunts[as]?.extra_id == item.id){
                         let stunt = duplicate(stunts[as]);
                         stunt.name = name;
-                        delete stunt.extra_tag;
+                        delete stunt.extra_id;
+                        delete stunt.original_name;
                         stuntUpdates[name] = stunt;
                     }
                 }
@@ -501,8 +515,7 @@ export class fcoActor extends Actor {
     
         for(let aspect in actor_aspects)
         {
-            let et = actor_aspects[aspect].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
+            if ( actor_aspects[aspect]?.extra_id == itemData._id){
                 updateObject[`system.aspects.-=${aspect}`] = null;
             }
         }
@@ -510,8 +523,7 @@ export class fcoActor extends Actor {
         let actor_stunts = duplicate(actor.system.stunts)
     
         for (let stunt in actor_stunts){
-            let et = actor_stunts[stunt].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
+            if (actor_stunts[stunt]?.extra_id == itemData._id){
                 updateObject[`system.stunts.-=${stunt}`] = null;
             }
         }
@@ -519,8 +531,7 @@ export class fcoActor extends Actor {
         let actor_tracks = duplicate(actor.system.tracks)
     
         for (let track in actor_tracks){
-            let et = actor_tracks[track].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
+            if (actor_tracks[track]?.extra_id == itemData._id){
                 updateObject[`system.tracks.-=${track}`] = null;
             }
         }
@@ -528,8 +539,7 @@ export class fcoActor extends Actor {
         let actor_skills = duplicate(actor.system.skills)
     
         for (let skill in actor_skills){
-            let et = actor_skills[skill].extra_tag;
-            if (et!= undefined && et.extra_id == itemData._id){
+            if (actor_skills[skill]?.extra_id == itemData._id){
                 updateObject[`system.skills.-=${skill}`] = null;
             }
         }      

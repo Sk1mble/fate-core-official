@@ -10,7 +10,7 @@
         <table style="background-color:transparent; border:none">
         {{#each tracks_by_category}}
             {{#each this}}
-            {{#if (eq this.extra_tag undefined)}}
+            {{#if (eq this.extra_id undefined)}}
             <tr style="background-color:transparent;">
                 {{#if (eq ../../cat @../key)}}
                 <td title ="{{this.description}}">

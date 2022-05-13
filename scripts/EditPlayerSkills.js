@@ -123,8 +123,8 @@ class EditPlayerSkills extends FormApplication{
                 let ranks = [0,0,0,0,0,0,0,0,0,0,0];
                 //Ignore skills from extras if the countSkills setting is false.
                 for (let sk in p_skills){
-                    if (p_skills[sk].extra_tag != undefined){
-                        let extra_id = p_skills[sk].extra_tag.extra_id;
+                    if (p_skills[sk].extra_id != undefined){
+                        let extra_id = p_skills[sk].extra_id;
                         let extra = this.object.items.find(item=>item.id == extra_id);
                 
                         if (extra != undefined && extra.system.countSkills){
@@ -170,8 +170,8 @@ class EditPlayerSkills extends FormApplication{
                 let player_total = 0;
             
                 for (let sk in p_skills){
-                    if (p_skills[sk].extra_tag != undefined){
-                        let extra_id = p_skills[sk].extra_tag.extra_id;
+                    if (p_skills[sk].extra_id != undefined){
+                        let extra_id = p_skills[sk].extra_id;
                         let extra = this.object.items.find(item=>item.id == extra_id);
                 
                         if (extra != undefined && extra.system.countSkills){
@@ -212,7 +212,7 @@ class EditPlayerSkills extends FormApplication{
             this.temp_presentation_skills=[];
         } else {
             for (let x in this.player_skills){
-                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank,"extra_tag":this.player_skills[x].extra_tag});
+                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank,"extra_id":this.player_skills[x].extra_id});
             }
         }
         
@@ -410,7 +410,7 @@ class EditGMSkills extends FormApplication{
             let newSkill = event.target.value.split(".").join("․");
             if (oldSkill != newSkill){
                 let rank = this.object.system.skills[oldSkill].rank;
-                newSkill= {
+                newSkill= new fcoSkill({
                     "name":newSkill,
                     "description":game.i18n.localize("fate-core-official.AdHocSkill"),
                     "pc":false,
@@ -420,7 +420,7 @@ class EditGMSkills extends FormApplication{
                     "defend":"",
                     "rank":rank,
                     "adhoc":true
-                }
+                }).toJSON();
     
                 if (newSkill != undefined){
                     newSkill.name=newSkill.name.split(".").join("․");
@@ -474,7 +474,7 @@ class EditGMSkills extends FormApplication{
         let name = html.find("input[id='ad_hoc_input']")[0].value
         var newSkill=undefined;
         if (name!= undefined && name !=""){
-            newSkill= {
+            newSkill= new fcoSkill({
                 "name":name,
                 "description":game.i18n.localize("fate-core-official.AdHocSkill"),
                 "pc":false,
@@ -484,7 +484,7 @@ class EditGMSkills extends FormApplication{
                 "defend":"",
                 "rank":0,
                 "adhoc":true
-            }
+            }).toJSON();
         }
         if (newSkill != undefined){
             newSkill.name=newSkill.name.split(".").join("․");
@@ -507,11 +507,11 @@ class EditGMSkills extends FormApplication{
 
         for (let w in world_skills){
             let s = this.player_skills[w];
-            if (s == undefined || s?.extra_tag?.extra_name){
-                if (!world_skills[w].pc && !s?.extra_tag.extra_name){ 
+            if (s == undefined || s?.extra_id){
+                if (!world_skills[w].pc && !s?.extra_id){ 
                     non_pc_world_skills.push(world_skills[w])
                 } else {
-                    if (!s?.extra_tag?.extra_name)
+                    if (!s?.extra_id)
                     absent.push(world_skills[w])
                 }
             } else {

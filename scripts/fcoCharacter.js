@@ -399,7 +399,7 @@ export class fcoCharacter extends ActorSheet {
                     aspects[aspect].notes = "";
                 }
                 let id = fcoConstants.getKey(aspects[aspect].name)+"_aspect_notes";
-                if (!aspects[aspect].extra_tag) fcoConstants.getPen(id);
+                if (!aspects[aspect].extra_id) fcoConstants.getPen(id);
 
                 $(`#${id}_rich`).on("click", event => {
                     if (event.target.outerHTML.startsWith("<a data")) return;
@@ -1098,7 +1098,7 @@ export class fcoCharacter extends ActorSheet {
 
     async _onStunts_click(event, html) {
         //Launch the EditPlayerStunts FormApplication.
-        let stunt = {
+        let stunt = new fcoStunt({
             "name":game.i18n.localize("fate-core-official.NewStunt"),
             "linked_skill":"None",
             "description":"",
@@ -1107,8 +1107,8 @@ export class fcoCharacter extends ActorSheet {
             "caa":false,
             "attack":false,
             "defend":false,
-            "bonus":0
-        }
+            "bonus":0,
+        }).toJSON();
         let editor = new EditPlayerStunts(this.actor, stunt, {new:true});
         editor.render(true);
         editor.setSheet(this);

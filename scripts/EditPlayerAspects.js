@@ -172,7 +172,7 @@ class EditPlayerAspects extends FormApplication{
             }
         }
         let name = game.i18n.localize("fate-core-official.New_Aspect") + " "+ count;
-        let newAspect = {"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}
+        let newAspect = new fcoAspect({"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}).toJSON();
        
         this.aspects[newAspect.name] = newAspect;
         this.render(false);
