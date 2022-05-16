@@ -222,7 +222,7 @@ class FateCharacterDefaults {
         
         //Let's apply the actor's avatar to the default, too.
         character_default.img = data.img;
-        character_default.token_img = data.prototypeToken.img; 
+        character_default.token_img = data.prototypeToken.texture.src; 
         
         character_default.actorLink = data.prototypeToken.actorLink;
 
@@ -256,7 +256,7 @@ class FateCharacterDefaults {
             type:"fate-core-official",
             items:character_default.extras,
             img:character_default.img,
-            prototypeToken:{img:character_default.token_img, actorLink:a_link},
+            prototypeToken:{texture:{src:character_default.token_img}, actorLink:a_link},
             permission: perm,
             system:{
                 details:{fatePoints:{refresh:refresh, current:refresh}},
@@ -267,6 +267,7 @@ class FateCharacterDefaults {
 
             }
         }
+        console.log(actor_data)
         return await Actor.create(actor_data, {renderSheet:render});
     }
 
@@ -296,7 +297,7 @@ class FateCharacterDefaults {
             //Replace the avatar and token images also
             if (options.avatar) {
                 updates["img"] = character_default["img"];
-                updates["prototypeToken.img"] = character_default["token_img"];
+                updates["prototypeToken.texture.src"] = character_default["token_img"];
             }
         
             //Now commit the updates.
@@ -316,7 +317,7 @@ class FateCharacterDefaults {
             }
             if (options.avatar){
                 updates["img"] = character_default["img"];
-                updates["prototypeToken.img"] = character_default["token_img"];
+                updates["prototypeToken.texture.src"] = character_default["token_img"];
             }
             await actor.update(updates);
 

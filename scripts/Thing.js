@@ -453,7 +453,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord
         name: itemActor.name,
         x:x,
         y:y,
-        img: itemActor.img,
+        texture:{src:itemActor.img},
         width: 1,
         height: 1,
         vision: false,

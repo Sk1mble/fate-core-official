@@ -42,7 +42,7 @@
                                     </td>
                                     <td style="width:60px; padding:5px; text-align:left; vertical-align:top">
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.img}}" id="{{this.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none;"/>{{else}}
+                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.texture.src}}" id="{{this.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none;"/>{{else}}
                                         <img name="avatar" src="{{this.actor.img}}" id="{{this.id}}_avatar" style="width:50px; cursor: pointer; height:auto; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
@@ -101,7 +101,7 @@
                                     </td>
                                     <td style="width:60px; padding:5px; text-align:left; vertical-align:top">
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
-                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.img}}" id="{{this.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none"/>{{else}}
+                                        {{#if ../tokenAvatar}}<img name="avatar" src="{{this.texture.src}}" id="{{this.id}}_avatar" style="width:50px; height:auto; cursor: pointer; border:none"/>{{else}}
                                         <img name="avatar" src="{{this.actor.img}}" id="{{this.id}}_avatar" style="width:50px; cursor: pointer; height:auto; cursor: pointer; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
@@ -620,7 +620,7 @@
                     {{#each combat_tokens}}
                     <tr class="{{#if this._controlled}} fu_controlled {{/if}} {{this.id}}_fu" style="border-bottom:none; background-color:transparent">    
                         <td style="width:60px">
-                            <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_sheet" title="{{localize 'fate-core-official.pocornSheetHint'}}" style="border:none; height:60px; width:60px; background: url({{this.img}}) scroll no-repeat center center; background-size:50px 50px"/>     
+                            <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_sheet" title="{{localize 'fate-core-official.pocornSheetHint'}}" style="border:none; height:60px; width:60px; background: url({{this.texture.src}}) scroll no-repeat center center; background-size:50px 50px"/>     
                         </td>
                         <td>
                             <table style="border:none; background-color:transparent; color:var(--fco-sheet-text-colour);"
@@ -643,7 +643,7 @@
                     {{#each has_acted_tokens}}
                     <tr class="{{#if this._controlled}} fu_controlled {{else}} fu_uncontrolled {{/if}}{{this.id}}_fu_acted">
                         <td style="width:60px">
-                             <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_sheet" title="{{localize 'fate-core-official.pocornSheetHint'}}" style="border:none; height:60px; width:60px; background: url({{this.img}}) scroll no-repeat center center; opacity:0.5; background-size:50px 50px;"/>
+                             <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_sheet" title="{{localize 'fate-core-official.pocornSheetHint'}}" style="border:none; height:60px; width:60px; background: url({{this.texture.src}}) scroll no-repeat center center; opacity:0.5; background-size:50px 50px;"/>
                         </td>
                         <td>
                             <table style="border:none; background-color:transparent;">
