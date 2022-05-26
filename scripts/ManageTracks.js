@@ -8,11 +8,18 @@ class EditEntityTrack extends FormApplication {
         this.originalName = track.name;
     }
 
-    getData(){
+    async getData(){
+
+        let rich = {};
+        for (let part in this.track){
+            if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.track[part]);
+        }
+
         const templateData = {
             track:this.track,
             skills:duplicate(this.entity.system.skills),
-            entity:this.entity
+            entity:this.entity,
+            rich:rich
         }
         return templateData;
     }
@@ -528,12 +535,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_when_recovers').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
-                }
+                let desc= await fcoConstants.fcoEnrich(event.target.innerHTML);
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $('#edit_track_when_recovers').css('display', 'none');
                 $('#edit_track_when_recovers_rich')[0].innerHTML = desc;    
@@ -562,12 +564,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_when_marked').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:game.user.isGM, documents:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:game.user.isGM, entities:true}));
-                }
+                let desc = await fcoConstants.fcoEnrich(event.target.innerHTML);
                 $('#edit_track_when_marked').css('display', 'none');
                 $('#edit_track_when_marked_rich')[0].innerHTML = desc;    
                 $('#edit_track_when_marked_rich').css('display', 'block');
@@ -594,7 +591,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_description').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(event.target.innerHTML);
+                let desc = await fcoConstants.fcoEnrich(event.target.innerHTML);
                 $('#edit_track_description').css('display', 'none');
                 $('#edit_track_description_rich')[0].innerHTML = desc;    
                 $('#edit_track_description_rich').css('display', 'block');
@@ -714,15 +711,15 @@ class EditTracks extends FormApplication {
             this.track=track;
             document.getElementById("edit_track_name").value=track.name;
             document.getElementById("edit_track_description").innerHTML=DOMPurify.sanitize(track.description);
-            document.getElementById("edit_track_description_rich").innerHTML=DOMPurify.sanitize(track.description);
+            document.getElementById("edit_track_description_rich").innerHTML= await fcoConstants.fcoEnrich(track.description);
             document.getElementById("edit_track_universal").checked=track.universal;
             document.getElementById("edit_track_unique").checked=track.unique;
             document.getElementById("edit_track_recovery_type").value=track.recovery_type;
             document.getElementById("edit_track_aspect").value=track.aspect;
             document.getElementById("edit_track_when_marked").innerHTML=DOMPurify.sanitize(track.when_marked);
-            document.getElementById("edit_track_when_marked_rich").innerHTML=DOMPurify.sanitize(track.when_marked);
+            document.getElementById("edit_track_when_marked_rich").innerHTML= await fcoConstants.fcoEnrich(track.when_marked);
             document.getElementById("edit_track_when_recovers").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
-            document.getElementById("edit_track_when_recovers_rich").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
+            document.getElementById("edit_track_when_recovers_rich").innerHTML= await fcoConstants.fcoEnrich(track.recovery_conditions);
             document.getElementById("edit_track_boxes").value=track.boxes;
             document.getElementById("edit_track_harm").value=track.harm_can_absorb;
             document.getElementById("edit_linked_skills").disabled=false;

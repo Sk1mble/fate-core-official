@@ -1350,11 +1350,6 @@ Handlebars.registerHelper("enr", function(value, object) {
 })
 
 /*
-    EditTrack
-    description
-    when_marked
-    when_recovers
-
     EditEntityTrack
     this.track.description
     this.track.when_marked
