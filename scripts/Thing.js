@@ -279,10 +279,14 @@ export class Thing extends ActorSheet {
         if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
 
         const superData = super.getData();
-        const sheetData = superData.data;
+        const sheetData = duplicate(superData.data);
         sheetData.document = superData.actor;
         let items = this.object.items.contents;
         items.sort((a, b) => (a.sort || 0) - (b.sort || 0)); // Sort according to each item's sort parameter.
+        for (let item of items){
+            item.richName = await fcoConstants.fcoEnrich(item.name);
+            item.richDesc = await fcoConstants.fcoEnrich(item.system.description.value);
+        }
         sheetData.items = items;
 
         sheetData.numExtras = sheetData.items.length;

@@ -35,7 +35,7 @@
                 {{this.refresh_cost}}
             </div>
             <div style="border-right:1px solid var(--fco-foundry-interactable-color); border-bottom:1px solid var(--fco-foundry-interactable-color); width:700px; display:table-cell; padding:5px">
-                {{{enr this.description}}}
+                {{{this.richDesc}}}
             </div>
             <div style="border-bottom:1px solid var(--fco-foundry-interactable-color); width:120px; display:table-cell; padding:5px">
                 {{#if ../actor.isOwner}}<button type="button" name="add_stunt" style="color:var(--fco-sheet-text-colour); border:none; float:left; width:25px; height:25px; background-color:transparent" title="{{localize 'fate-core-official.AddStuntToActor'}} {{../actor.name}}" i icon class = "fas fa-download fu_button" id="{{this.name}}_addStunt"></button>{{/if}}
