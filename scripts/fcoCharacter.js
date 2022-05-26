@@ -1357,6 +1357,7 @@ export class fcoCharacter extends ActorSheet {
         let ass = sheetData.system.aspects;
         for (let as in ass){
             ass[as].richNotes = await fcoConstants.fcoEnrich(ass[as].notes);
+            ass[as].richDesc = await fcoConstants.fcoEnrich(ass[as].description)
         }
         let sts = sheetData.system.stunts;
         for (let st in sts){

@@ -1340,16 +1340,6 @@ Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, name, e
     return enriched_tokens[token_id][type][name].richNotes;
 })
 
-/*
-    thingsheet
-    ---------- 
-    extra name
-    each extra this.system.system.description.value
-
-    await fcoConstants.fcoEnrich(data, object);
-*/
-
-
 Handlebars.registerHelper("fco_strip", function (value) {
     return value.replace(/(<([^>]+)>)/gi, "")
 })
