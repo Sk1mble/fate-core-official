@@ -275,7 +275,10 @@ Hooks.once('ready', async function () {
 
            async getData(){
                 let data = super.getData();
-                data.ehmodules = ehmodules;
+                data.ehmodules = duplicate(ehmodules);
+                for (let ehm of data.ehmodules){
+                    ehm.richDesc = await fcoConstants.fcoEnrich(ehm.description);
+                }
                 data.num_modules = ehmodules.length;
                 data.h = window.innerHeight /2;
                 data.w = window.innerWidth /2;
@@ -1347,8 +1350,10 @@ Handlebars.registerHelper("enr", function(value, object) {
 })
 
 /*
-    EditAspect
-    aspect.description
+    EditTrack
+    description
+    when_marked
+    when_recovers
 
     EditEntityTrack
     this.track.description
@@ -1361,14 +1366,6 @@ Handlebars.registerHelper("enr", function(value, object) {
 
     EditPlayerStunts
     stunt.description
-
-
-    EditSkill
-    skill.description
-    skill.overcome
-    skill.caa
-    skill.attack
-    skill.defend
 
     ExtraSheet
     this.document.system.permissions
@@ -1389,9 +1386,6 @@ Handlebars.registerHelper("enr", function(value, object) {
     system.details.biography.value
     each extra this.system.description.value, this.name
 
-    FateSplash 
-    each module this.description
-
     Fate Utilities
     Aspect notes
     track notes
@@ -1406,8 +1400,6 @@ Handlebars.registerHelper("enr", function(value, object) {
     this.description
     thingsheet extra name
     each extra this.system.system.description.value
-
-    Calls to enrichHTML from event handlers should be able to be made async without issue.
 
     await fcoConstants.fcoEnrich(data, object);
 */

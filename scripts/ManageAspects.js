@@ -307,9 +307,10 @@ class EditAspect extends FormApplication{
         options.resizable = true;
         return options;
     }
-    getData(){
+    async getData(){
         const templateData = {
-           aspect:this.aspect
+           aspect:this.aspect,
+           richDesc:await fcoConstants.fcoEnrich(this.aspect.description)
         }
         return templateData;
         }
