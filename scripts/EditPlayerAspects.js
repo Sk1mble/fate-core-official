@@ -81,9 +81,9 @@ class EditPlayerAspects extends FormApplication{
                 if (!window.getSelection().toString()){
                     let desc; 
                     if (isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true}));
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                     } else {
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true}));
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}));
                     }
 
                     $(`#${id}`).css('display', 'none');
@@ -108,9 +108,9 @@ class EditPlayerAspects extends FormApplication{
                 if (!window.getSelection().toString()){
                     let desc;
                     if (isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))
                     } else {
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))
                     }
                     
                     $(`#${id2}`).css('display', 'none');
@@ -215,7 +215,12 @@ class EditPlayerAspects extends FormApplication{
                 delete current[aspect];
             }
         }
-        return mergeObject(this.aspects, current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        let data = mergeObject (duplicate(this.aspects), current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        for (let as in data){
+            data[as].richDesc = await fcoConstants.fcoEnrich(data[as].description, this.object)
+            data[as].richNotes = await fcoConstants.fcoEnrich(data[as].notes, this.object)
+        }
+        return data;
     }
 
     async _updateObject(event, formData){

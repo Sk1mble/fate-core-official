@@ -83,9 +83,9 @@ class EditEntityTrack extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $('#edit_entity_track_when_recovers').css('display', 'none');
@@ -117,9 +117,9 @@ class EditEntityTrack extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 $('#edit_entity_track_when_marked').css('display', 'none');
                 $('#edit_entity_track_when_marked_rich')[0].innerHTML = desc;    
@@ -149,9 +149,9 @@ class EditEntityTrack extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 $('#edit_entity_track_description').css('display', 'none');
                 $('#edit_entity_track_description_rich')[0].innerHTML = desc;    

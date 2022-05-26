@@ -22,7 +22,7 @@ class fcoConstants {
         let secrets = false;
         if (object) secrets = object.isOwner;
         if (game.user.isGM) secrets = true;
-        return DOMPurify.sanitize(await TextEditor.enrichHTML(value, {secrets:secrets, documents:true}));
+        return DOMPurify.sanitize(await TextEditor.enrichHTML(value, {secrets:secrets, documents:true, async:true}));
     }
 
     static getAdjective(r){

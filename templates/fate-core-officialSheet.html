@@ -79,12 +79,12 @@
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
                     {{#if system.details.notes.GM}}
                         {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="system.details.notes.value" style="display:none; max-width:100%;" data-edit="system.details.notes.value">{{{system.details.notes.value}}}</div>
-                                  <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="max-width:100%;" data-edit="system.details.notes.value">{{{enr  system.details.notes.value this.document}}}</div>
+                                  <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="max-width:100%;" data-edit="system.details.notes.value">{{{system.details.notes.rich}}}</div>
                             {{else}}<div>These notes are for the GM's eyes only...</div>
                         {{/if}}
                     {{else}}
                         <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="system.details.notes.value" style="min-height:100%; display:none; max-width:100%; data-edit="system.details.notes.value">{{{system.details.notes.value}}}</div>
-                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="min-height:100%; max-width:100%;">{{{enr  system.details.notes.value this.document}}}</div>
+                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes_rich" tabindex = "0"style="min-height:100%; max-width:100%;">{{{system.details.notes.rich}}}</div>
                     {{/if}}
                 </div>
             </div>
@@ -196,7 +196,7 @@
                                     </div>
                                 </div>
                                 {{#if (expanded ../this.document (fco_concat this.name '_track'))}}<div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "system.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "system.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
                                     <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none;" data-edit= "system.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes" name="system.tracks.{{this.name}}.notes">{{{this.notes}}}</div>
                                 {{/if}}
                                 {{/if}}{{/if}}                                
@@ -227,7 +227,7 @@
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_id undefined)}}{{else}}disabled="disabled"{{/if}} name="system.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (fco_concat this.name '_aspect'))}}
                                 <div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                <div class="cs_box mfate-aspects-notes__input" data-edit="system.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{enr this.notes ../this.document}}}</div>
+                                <div class="cs_box mfate-aspects-notes__input" data-edit="system.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
                                 <div class="cs_box mfate-aspects-notes__input contenteditable" style="display:none;" data-edit="system.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="system.aspects.{{this.name}}.notes" {{#if this.extra_id}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
                                 {{/if}}
                         </li>
@@ -283,7 +283,7 @@
                                                 {{/if}}
                                             {{/each}}
                                         </div>
-                                        <div>{{{enr  this.description ../this.document}}}</div>
+                                        <div>{{{this.richDesc}}}</div>
                                     </div>
                                     <div class="mfate-stunts__row-footer">
                                         <div class="mfate-stunts__row-footer-cell">
@@ -316,7 +316,7 @@
                 </div>
                 {{#if (expanded this.document '_description')}}
                 <div class="mfate-description__content long_text" style="display:none" id="{{this.document.id}}_description" name="system.details.description.value" data-edit="system.details.description.value">{{{system.details.description.value}}}</div>
-                <div class="mfate-description__content long_text_rich" style="min-height:1.5em;" id="{{this.document.id}}_description_rich" tabindex = "0">{{{enr  system.details.description.value this.document}}}</div>
+                <div class="mfate-description__content long_text_rich" style="min-height:1.5em;" id="{{this.document.id}}_description_rich" tabindex = "0">{{{system.details.description.rich}}}</div>
                 {{/if}}
             </div>
             <div {{#if (expanded this.document '_biography')}}class="mfate-biography"{{else}}class="mfate-biography-collapsed"{{/if}}>
@@ -325,7 +325,7 @@
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Biography'}}</div>
                 </div>
                 {{#if (expanded this.document '_biography')}}
-                <div class="mfate-biography__content long_text_rich" style="min-height:1.5em;" id="{{this.document.id}}_biography_rich" tabindex = "0">{{{enr system.details.biography.value this.document}}}</div>
+                <div class="mfate-biography__content long_text_rich" style="min-height:1.5em;" id="{{this.document.id}}_biography_rich" tabindex = "0">{{{system.details.biography.rich}}}</div>
                 <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="system.details.biography.value" name="system.details.biography.value">{{{system.details.biography.value}}}</div>{{/if}}
             </div>
             {{#if (expanded this.document '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}
@@ -345,13 +345,13 @@
                             <div class="item_header" name="item_header" draggable="true" id="{{../this.document.id}}_{{this.id}}" data-item="{{this.uuid}}" data-item-id="{{this.id}}">
                             <div class = "fate-extras__row-header" margin-left:5px; margin-right:5px">
                                 <i name="expandExtra" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.id '_extra'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.id}}_expandExtra"></i>
-                                &nbsp{{{enr  this.name ../this.document}}}
+                                &nbsp{{{this.richName}}}
                                 <button i icon class="fas fa-trash fate-extras__row-header-button fu_button" type="button" name="delete_extra" id="{{this.id}}_delete"></button>
                                 <button name="edit_extra" type="button" i icon class="fas fa-edit  fate-extras__row-header-button fu_button" id="{{this.id}}_edit"></button>
                                 <button title="{{localize 'fate-core-official.active'}}" name="extra_active" type="button" {{#if this.system.active}}i icon class="fas fa-toggle-on  fate-extras__row-header-button fu_button"{{else}}i icon class="fas fa-toggle-off  fate-extras__row-header-button fu_button"{{/if}} id="{{this.id}}_active"></button>
                             </div>
                             <div class="fate-extras__row-body">
-                                        <div class="fate-extras__row-body-content style="margin-left:5px; margin-right:5px"">{{#unless (expanded ../this.document (fco_concat this.id '_extra'))}}{{else}}{{{enr this.system.description.value ../this.document}}}{{/unless}}</div>
+                                        <div class="fate-extras__row-body-content style="margin-left:5px; margin-right:5px"">{{#unless (expanded ../this.document (fco_concat this.id '_extra'))}}{{else}}{{{this.richDesc}}}{{/unless}}</div>
                             </div>
                         </div>
                             {{/each}}

@@ -291,10 +291,10 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                     $('#edit_skill_description_rich')[0].innerHTML = desc;     
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 
                 $('#edit_skill_description').css('display', 'none');
@@ -323,7 +323,7 @@ class EditSkill extends FormApplication{
         
         $('#edit_skill_overcome').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 $('#edit_skill_overcome').css('display', 'none');
                 $('#edit_skill_overcome_rich')[0].innerHTML = desc;    
                 $('#edit_skill_overcome_rich').css('display', 'block');
@@ -353,9 +353,9 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));   
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
                 }
                 $('#edit_skill_caa').css('display', 'none');
                 $('#edit_skill_caa_rich')[0].innerHTML = desc;    
@@ -386,9 +386,9 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));   
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
                 }
                 $('#edit_skill_attack').css('display', 'none');
                 $('#edit_skill_attack_rich')[0].innerHTML = desc;    
@@ -419,9 +419,9 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));   
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
                 }
                 $('#edit_skill_defend').css('display', 'none');
                 $('#edit_skill_defend_rich')[0].innerHTML = desc;    

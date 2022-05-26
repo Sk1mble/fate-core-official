@@ -141,9 +141,9 @@ class EditPlayerStunts extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 
                 $('#edit_stunt_desc').css('display', 'none');
@@ -215,7 +215,8 @@ class EditPlayerStunts extends FormApplication {
 
     async getData(){
         let data={}
-        data.stunt=this.stunt;
+        data.stunt=duplicate(this.stunt);
+        data.stunt.richDesc = await fcoConstants.fcoEnrich(data.stunt.description, this.actor)
         if (this.actor == null){
             data.skills=game.settings.get("fate-core-official","skills");
         } else {
@@ -247,6 +248,9 @@ class StuntDB extends Application {
         }
         let data = {};
         let stunts = duplicate(game.settings.get("fate-core-official","stunts"));
+        for (let stunt in stunts){
+            stunts[stunt].richDesc = await fcoConstants.fcoEnrich(stunts[stunt].description);
+        }
         this.stunts = stunts;
         let stuntsA = [];
     

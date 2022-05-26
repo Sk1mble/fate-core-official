@@ -321,7 +321,7 @@ class FateUtilities extends Application{
         trackNotesRich.on('contextmenu', async event => {
             let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
             if (text != "discarded") {
-                let id = event.currentTarget.id.split("_rich").join("");
+                let id = event.cusrrentTarget.id.split("_rich").join("");
                 $(`#${id}`)[0].innerHTML = text;
                 event.currentTarget.innerHTML = text;
                 $(`#${id}`).trigger('blur');
@@ -2115,10 +2115,12 @@ async getData(){
     }
     let all_tokens = [];
     let notes = game?.scenes?.viewed?.getFlag("fate-core-official","sceneNotes");
+    let richNotes = await fcoConstants.fcoEnrich(game?.scenes?.viewed?.getFlag("fate-core-official","sceneNotes"));
     if (notes == undefined){
         notes = ""
     }
     data.notes = notes;
+    data.richNotes = richNotes;
     game?.scenes?.viewed?.tokens?.contents?.forEach(token => {
         let ignore = false;
         if (!token?.actor) ignore = true;
@@ -2151,6 +2153,21 @@ async getData(){
     data.situation_aspects = situation_aspects;
     fcoConstants.sort_key(all_tokens, "name");
     data.all_tokens = all_tokens;
+
+    let enriched_tokens = {};
+    for (let tk of all_tokens){
+        let ass = duplicate (tk.actor.system.aspects);
+        let trks = duplicate (tk.actor.system.tracks);
+        for (let as in ass){
+            ass[as].richNotes = await fcoConstants.fcoEnrich(ass[as].notes);
+        }
+        for (let tk in trks) {
+            trks[tk].richNotes = await fcoConstants.fcoEnrich(trks[tk].notes);
+        }
+        enriched_tokens[tk.id]={aspects:ass, tracks:trks};
+    }
+    data.enriched_tokens = enriched_tokens;
+    console.log(enriched_tokens);
     data.GM=game.user.isGM;
     
     let GMUsers={};
@@ -2177,7 +2194,12 @@ async getData(){
     if (rolls == undefined){
         rolls = [];
     }
-    data.rolls = rolls;
+    data.rolls = duplicate(rolls);
+    
+    for (let roll of data.rolls){
+        roll.richFlavor = await fcoConstants.fcoEnrich(roll.flavor);
+    }
+
     data.user = game.user;
     let aspects = game.settings.get("fate-core-official","gameAspects");
     if (game.combat?.scene){
@@ -2190,7 +2212,9 @@ async getData(){
 
     data.game_aspects = aspects;
     data.game_time = game.settings.get("fate-core-official","gameTime");
+    data.rich_game_time = await fcoConstants.fcoEnrich (game.settings.get("fate-core-official","gameTime"));
     data.game_notes = game.settings.get("fate-core-official","gameNotes");
+    data.rich_game_notes = await fcoConstants.fcoEnrich (game.settings.get("fate-core-official","gameNotes"))
     data.fontSize = game.settings.get("fate-core-official","fuFontSize");
     data.height = this.position.height;
     data.combatants_only = game.settings.get("fate-core-official","fu_combatants_only");
@@ -2201,13 +2225,15 @@ async getData(){
     }
     data.numConflicts = (game.combats.contents.filter(c => c.scene?.id == game?.scenes?.viewed?.id).length)+(game.combats.contents.filter(c => c.scene == null).length);
     
-    let countdowns = game.settings.get("fate-core-official", "countdowns")
+    let countdowns = duplicate(game.settings.get("fate-core-official", "countdowns"));
     if (countdowns?.keys?.length < 1){
         data.countdowns = "none";
     }
     else {
         let cd_a = [];
         for (let cd in countdowns){
+            countdowns[cd].richName = await await fcoConstants.fcoEnrich(countdowns[cd].name);
+            countdowns[cd].richDesc = await await fcoConstants.fcoEnrich(countdowns[cd].description);
             cd_a.push(countdowns[cd]);
         }
         fcoConstants.sort_name(cd_a);

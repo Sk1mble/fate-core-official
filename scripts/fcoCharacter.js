@@ -382,9 +382,9 @@ export class fcoCharacter extends ActorSheet {
                     if (!window.getSelection().toString()){
                         let desc;
                         if (isNewerVersion(game.version, '9.224')){
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))                            
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            
                         } else {
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))    
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))    
                         }
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
@@ -412,9 +412,9 @@ export class fcoCharacter extends ActorSheet {
                     if (!window.getSelection().toString()){
                         let desc;
                         if (isNewerVersion(game.version, '9.224')){
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))
                         } else {
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))
                         }
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
@@ -1222,7 +1222,7 @@ export class fcoCharacter extends ActorSheet {
                 };
         */
         const superData = super.getData();
-        const sheetData = superData.data;
+        const sheetData = duplicate(superData.data);
         sheetData.document = superData.actor;
         sheetData.owner = superData.owner;
 
@@ -1346,6 +1346,27 @@ export class fcoCharacter extends ActorSheet {
         let logo = scheme.fco_user_sheet_logo;
         sheetData.logo = logo;
     
+        // Enrich things that need to be enriched
+        sheetData.system.details.notes.rich = await fcoConstants.fcoEnrich(sheetData.system.details.notes.value, this.actor);
+        sheetData.system.details.biography.rich = await fcoConstants.fcoEnrich(sheetData.system.details.biography.value, this.actor);
+        sheetData.system.details.description.rich = await fcoConstants.fcoEnrich(sheetData.system.details.description.value, this.actor);
+        let trs = sheetData.system.tracks;
+        for (let tr in trs){
+            trs[tr].richNotes = await fcoConstants.fcoEnrich(trs[tr].notes);
+        }
+        let ass = sheetData.system.aspects;
+        for (let as in ass){
+            ass[as].richNotes = await fcoConstants.fcoEnrich(ass[as].notes);
+        }
+        let sts = sheetData.system.stunts;
+        for (let st in sts){
+            sts[st].richDesc = await fcoConstants.fcoEnrich(sts[st].description);
+        }
+        let exs = duplicate(this.actor.items.contents);
+        for (let ex of items){
+            ex.richName = await fcoConstants.fcoEnrich(ex.name);
+            ex.richDesc = await fcoConstants.fcoEnrich(ex.system.description.value);
+        }
         return sheetData;
     }
 }

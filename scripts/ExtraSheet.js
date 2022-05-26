@@ -73,6 +73,19 @@ export class ExtraSheet extends ItemSheet {
         else {
             data.contents = false;
         }
+
+        data.rich = {};
+        data.rich.description = await fcoConstants.fcoEnrich (data.document.system.description.value, this.object);
+        data.rich.costs = await fcoConstants.fcoEnrich (data.document.system.costs, this.object);
+        data.rich.permissions = await fcoConstants.fcoEnrich (data.document.system.permissions, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.overcome, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.create, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.attack, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.defend, this.object);
+        data.rich.stunts = duplicate(data.document.system.stunts);
+        for (let st in data.rich.stunts){
+            data.rich.stunts[st].richDesc = await fcoConstants.fcoEnrich (data.rich.stunts[st].description, this.object);
+        }
         return data;
     }
 

@@ -1336,64 +1336,14 @@ Combatant.prototype._getInitiativeFormula = function () {
     }
 }
 
-// Return enriched text WITH secret blocks if the user is GM and otherwise WITHOUT
-Handlebars.registerHelper("enr", function(value, object) {
-    let secrets = false;
-    if (object) secrets = object.isOwner;
-    if (game.user.isGM) secrets = true;
-    //enrichHTML(content, secrets, entities, links, rolls, rollData) → {string}
-    if (isNewerVersion(game.version, '9.224')){
-        return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:secrets, documents:true}));
-    } else {
-        return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:secrets, entities:true}));
-    }
+Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, name, enriched_tokens) {
+    return enriched_tokens[token_id][type][name].richNotes;
 })
 
 /*
-    EditEntityTrack
-    this.track.description
-    this.track.when_marked
-    this.track.recovery_condition
-
-    EditPlayerAspects
-    this.description
-    this.notes
-
-    EditPlayerStunts
-    stunt.description
-
-    ExtraSheet
-    this.document.system.permissions
-    this.document.system.costs
-    this.document.system.description.value
-    this.document.system.actions.overcome
-    this.document.system.actions.create
-    this.document.system.actions.attack
-    this.document.system.actions.defend
-    each stunt this.description
-
-    FCOActorSheet
-    system.details.notes.value
-    each track this.notes
-    Each aspect this.notes
-    each stunt this.description
-    system.details.description.value
-    system.details.biography.value
-    each extra this.system.description.value, this.name
-
-    Fate Utilities
-    Aspect notes
-    track notes
-    countdown names
-    countdown descriptions
-    Scene notes
-    Roll flavour
-    game_time
-    game_notes
-
-    StuntDB
-    this.description
-    thingsheet extra name
+    thingsheet
+    ---------- 
+    extra name
     each extra this.system.system.description.value
 
     await fcoConstants.fcoEnrich(data, object);
