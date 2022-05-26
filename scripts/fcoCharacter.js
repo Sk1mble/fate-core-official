@@ -382,9 +382,9 @@ export class fcoCharacter extends ActorSheet {
                     if (!window.getSelection().toString()){
                         let desc;
                         if (isNewerVersion(game.version, '9.224')){
-                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))                            
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))                            
                         } else {
-                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))    
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))    
                         }
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
@@ -412,9 +412,9 @@ export class fcoCharacter extends ActorSheet {
                     if (!window.getSelection().toString()){
                         let desc;
                         if (isNewerVersion(game.version, '9.224')){
-                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
                         } else {
-                            desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
                         }
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    

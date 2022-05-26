@@ -3,6 +3,7 @@
   * Refactored ManageSkills to use the fcoSkill model for creating and editing skills, ensuring data consistency.
   * Refactored skill editors on character sheet to use the fcoSkill model for creating or editing ad-hoc skills.
   * Repaired some mentions of token.image by switching to prototypetoken.src.img
+  * Fixed a bug that caused an actor to be deleted if dragged on to a character sheet.
 
 # 4.4.05
   * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.

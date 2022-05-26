@@ -5,9 +5,11 @@
   "authors": [{"name":"Richard Bellingham"}],
   "url": "https://github.com/Sk1mble/fate-core-official",
   "flags": {},
+  "compatibility": {
+    "minimum":"10.262",
+    "verified":"10.263"
+  },
   "version": "4.4.06",
-  "minimumCoreVersion": "10.262",
-  "compatibleCoreVersion": "10.263",
   "scripts": [
     "./scripts/fcoConstants.js",
     "./scripts/ManageSkills.js",

@@ -141,9 +141,9 @@ class EditPlayerStunts extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
                 }
                 
                 $('#edit_stunt_desc').css('display', 'none');

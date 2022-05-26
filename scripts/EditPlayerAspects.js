@@ -77,13 +77,13 @@ class EditPlayerAspects extends FormApplication{
                 })
             }
     
-            $(`#${id}`).on('blur', event => {
+            $(`#${id}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc; 
                     if (isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true}));
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true}));
                     } else {
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true}));
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true}));
                     }
 
                     $(`#${id}`).css('display', 'none');
@@ -104,13 +104,13 @@ class EditPlayerAspects extends FormApplication{
                 $(`#${id2}`).focus();
             })
     
-            $(`#${id2}`).on('blur', event => {
+            $(`#${id2}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc;
                     if (isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
                     } else {
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
                     }
                     
                     $(`#${id2}`).css('display', 'none');

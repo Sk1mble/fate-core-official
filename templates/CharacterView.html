@@ -1,8 +1,8 @@
 <form id="CharacterView" style="font-family:var(--fco-font-family)">
     <h1>{{name}}</h1>
     {{#if (eq avatar undefined)}}{{else}}<img style="width:200px; height:auto" src = "{{avatar}}"/><p/>{{/if}}
-    {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'fate-core-official.Biography'}}</h2>{{{enr  biography.value}}}</div><p/>{{/if}}
-    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'fate-core-official.Description'}}</h2>{{{enr  description.value}}}</div><p/>{{/if}}
+    {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'fate-core-official.Biography'}}</h2>{{{biography}}}</div><p/>{{/if}}
+    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'fate-core-official.Description'}}</h2>{{{description}}}</div><p/>{{/if}}
     {{#if (eq aspects undefined)}}{{else}}<h2>{{localize 'fate-core-official.Aspects'}}</h2>
     <table style="border:none; background:none">
     {{#each aspects}}
@@ -58,7 +58,7 @@
     {{#each stunts}}
         <tr>
             <td width = 25%>{{this.name}}</td>
-            <td>{{{enr this.description}}}</td>
+            <td>{{{this.richDesc}}}</td>
         </tr>
     {{/each}}
     </table>
@@ -68,8 +68,8 @@
     <table style="border:none; background:none; padding:10px">
     {{#each extras}}
         <tr>
-            <td>{{this.name}}</td>
-            <td>{{{enr this.system.description.value}}}</td>
+            <td width = "25%">{{this.name}}</td>
+            <td>{{{this.richDesc}}}</td>
         </tr>
     {{/each}}
     </table>

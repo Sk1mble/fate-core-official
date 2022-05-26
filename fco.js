@@ -1346,6 +1346,73 @@ Handlebars.registerHelper("enr", function(value, object) {
     }
 })
 
+/*
+    EditAspect
+    aspect.description
+
+    EditEntityTrack
+    this.track.description
+    this.track.when_marked
+    this.track.recovery_condition
+
+    EditPlayerAspects
+    this.description
+    this.notes
+
+    EditPlayerStunts
+    stunt.description
+
+
+    EditSkill
+    skill.description
+    skill.overcome
+    skill.caa
+    skill.attack
+    skill.defend
+
+    ExtraSheet
+    this.document.system.permissions
+    this.document.system.costs
+    this.document.system.description.value
+    this.document.system.actions.overcome
+    this.document.system.actions.create
+    this.document.system.actions.attack
+    this.document.system.actions.defend
+    each stunt this.description
+
+    FCOActorSheet
+    system.details.notes.value
+    each track this.notes
+    Each aspect this.notes
+    each stunt this.description
+    system.details.description.value
+    system.details.biography.value
+    each extra this.system.description.value, this.name
+
+    FateSplash 
+    each module this.description
+
+    Fate Utilities
+    Aspect notes
+    track notes
+    countdown names
+    countdown descriptions
+    Scene notes
+    Roll flavour
+    game_time
+    game_notes
+
+    StuntDB
+    this.description
+    thingsheet extra name
+    each extra this.system.system.description.value
+
+    Calls to enrichHTML from event handlers should be able to be made async without issue.
+
+    await fcoConstants.fcoEnrich(data, object);
+*/
+
+
 Handlebars.registerHelper("fco_strip", function (value) {
     return value.replace(/(<([^>]+)>)/gi, "")
 })
@@ -1414,7 +1481,6 @@ Handlebars.registerHelper("hasBoxes", function(track) {
 });
 
 Handlebars.registerHelper("fco_item_name_from_id", function (actor, id){
-    console.log(actor);
     let item = actor.items.get(id);
     return item.name;
 })
@@ -1738,4 +1804,5 @@ class FcoColourSchemes extends FormApplication {
         })
     }
 }
+
 

@@ -18,6 +18,13 @@ class fcoConstants {
                 }
     }
 
+    static async fcoEnrich (value, object){
+        let secrets = false;
+        if (object) secrets = object.isOwner;
+        if (game.user.isGM) secrets = true;
+        return DOMPurify.sanitize(await TextEditor.enrichHTML(value, {secrets:secrets, documents:true}));
+    }
+
     static getAdjective(r){
         const ladder = this.getFateLadder()
         return (ladder[r])

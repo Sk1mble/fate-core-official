@@ -64,10 +64,10 @@ class ShowCharacter extends Application {
                     elements.avatar=actor_data.img;
                 }
                 if (element.id == "biography"){
-                    elements.biography = actor_data.system.details.biography;
+                    elements.biography = await fcoConstants.fcoEnrich(actor_data.system.details.biography.value, actor_data);
                 }
                 if (element.id == "description"){
-                    elements.description = actor_data.system.details.description;
+                    elements.description = await fcoConstants.fcoEnrich(actor_data.system.details.description.value, actor_data);
                 }
                 if (element.id == "aspects"){
                     elements.aspects = actor_data.system.aspects;
@@ -79,10 +79,18 @@ class ShowCharacter extends Application {
                     elements.tracks = actor_data.system.tracks;
                 }
                 if (element.id == "stunts"){
-                    elements.stunts = actor_data.system.stunts;
+                    let stunts = duplicate (actor_data.system.stunts);
+                    for (let stunt in stunts){
+                        stunts[stunt].richDesc = await fcoConstants.fcoEnrich (stunts[stunt].description, actor_data);
+                    }
+                    elements.stunts = stunts;
                 }
                 if (element.id == "extras"){
-                    elements.extras = actor_data.items;
+                    let extras = duplicate (actor_data.items);
+                    for (let extra of extras){
+                        extra.richDesc = await fcoConstants.fcoEnrich (extra.system.description.value, actor_data);
+                    }
+                    elements.extras = extras;
                 }
             }
         }

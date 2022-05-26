@@ -523,6 +523,10 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
 
     let i = fromUuidSync(data.uuid);
 
+    if (i.type != "Extra"){
+        return;
+    }
+
     if (target.system?.container?.isContainer == false){
         return;
     }
