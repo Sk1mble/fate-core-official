@@ -138,7 +138,8 @@ Hooks.once('ready', () => {
 
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         try {
-            game.canvas.drawings.setParent(game.canvas.interface);
+            // This method doesn't work in v10
+            //game.canvas.drawings.setParent(game.canvas.interface);
         } catch {
             // This just means that the layers aren't instantiated yet.
         }
@@ -146,6 +147,34 @@ Hooks.once('ready', () => {
     setupSheet();
     setupFont();
 });
+
+Hooks.on('canvasReady' , (canvas) => {
+    if (game.settings.get("fate-core-official","drawingsOnTop")){
+        canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
+        canvas.drawings.foreground.sortableChildren = true;
+        for (let drawing of canvas.drawings.objects.children){
+            canvas.drawings.foreground.addChild(drawing.shape);
+            //drawing.shape.zIndex = drawing.document.z;
+        }
+    }
+})
+
+Hooks.on('createDrawing', (drawing) => {
+    if (game.settings.get("fate-core-official","drawingsOnTop")){
+        canvas.drawings.foreground.addChild(drawing.object.shape);
+        drawing.shape.zIndex = drawing.z;
+    }
+})
+
+Hooks.on('deleteDrawing', (drawing, render, id) => {
+    if (game.settings.get("fate-core-official","drawingsOnTop")){
+        for (let d of canvas.drawings.foreground.children){
+            if (d.object._destroyed){
+                canvas.drawings.foreground.removeChild(d);
+            }
+        }
+    }
+})
 
 Hooks.on('diceSoNiceReady', function() {
     game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);
@@ -1012,12 +1041,18 @@ game.settings.register("fate-core-official","freeStunts", {
         onChange: () => {
             let val = game.settings.get("fate-core-official","drawingsOnTop");
             if (val) {
-                game.canvas.drawings.setParent(game.canvas.interface);
-                game.socket.emit("system.fate-core-official",{"drawingsOnTop":true})
+                canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
+                canvas.drawings.foreground.sortableChildren = true;
+                for (let drawing of canvas.drawings.objects.children){
+                    canvas.drawings.foreground.addChild(drawing.shape);
+                    //drawing.shape.zIndex = drawing.document.z;
+                }
             }
             else {
-                game.canvas.drawings.setParent(game.canvas.primary);
-                game.socket.emit("system.fate-core-official",{"drawingsOnTop":false})
+                for (let drawing of canvas.drawings.objects.children){
+                    canvas.primary.addChild(drawing.shape);
+                    //drawing.shape.zIndex = drawing.document.z;
+                }
             }
         }
     })
@@ -1213,7 +1248,14 @@ game.settings.register("fate-core-official","freeStunts", {
             max: 50,
             step: 1,
         },
-        default:12
+        default:12,
+        onChange:() => {
+            for (let app in ui.windows){
+                if (ui.windows[app]?.options?.id == "FateUtilities"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
     });
 
     game.settings.register("fate-core-official", "fu-ignore-list", {

@@ -2726,10 +2726,18 @@ Hooks.once('ready', async function () {
 
     game.socket.on("system.fate-core-official", onTop => {
         if (onTop?.drawingsOnTop == true && game.canvas.ready){
-                game.canvas.drawings.setParent(game.canvas.interface);
+            canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
+            canvas.drawings.foreground.sortableChildren = true;
+            for (let drawing of canvas.drawings.objects.children){
+                canvas.drawings.foreground.addChild(drawing.shape);
+                //drawing.shape.zIndex = drawing.document.z;
+            }
         }
         if (onTop?.drawingsOnTop == false && game.canvas.ready){
-            game.canvas.drawings.setParent(game.canvas.primary);
+            for (let drawing of canvas.drawings.objects.children){
+                canvas.primary.addChild(drawing.shape);
+                //drawing.shape.zIndex = drawing.document.z;
+            }
         }
     })
 })

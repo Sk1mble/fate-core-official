@@ -6,6 +6,8 @@
   * Fixed a bug that caused an actor to be deleted if dragged on to a character sheet.
   * The render drawings on top option is not currently functional due to API changes. Revisit once the changes to drawing ordering etc. are complete.
   * Refactored to use the async version of TextEditor.enrichHTML for all occurrences.
+  * Got an alternative method working to make drawings render on top in all cases.
+  * When you change the aspect name width setting in Fate Utilities, this now causes FU to re-render.
 
 # 4.4.05
   * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
