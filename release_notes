@@ -1,3 +1,6 @@
+# 4.3.27
+* Minor bug fix... spending a fate point on an unassigned character caused an error if the gm had no assigned character.
+
 # 4.3.26
   * Minor bug fix; exporting of settings was broken due to fco_roll-formulae being used rather than fco-roll-formulae in the output tool.
   
