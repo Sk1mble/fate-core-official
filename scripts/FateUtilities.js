@@ -1234,7 +1234,7 @@ class FateUtilities extends Application{
 
             // Never use GM fate points if the actor has a player owner
             // If the user is a GM, and the actor doesn't have a player owner, and isn't assigned to this GM, use GM fate points
-            if (!actor.hasPlayerOwner && user.character.id != actor.id) returnValue = true; 
+            if (!actor.hasPlayerOwner && user?.character?.id != actor.id) returnValue = true; 
 
             let shift_down = false; 
             if (isNewerVersion(game.version, "9.230")){

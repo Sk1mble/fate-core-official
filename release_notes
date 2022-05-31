@@ -8,6 +8,7 @@
   * Refactored to use the async version of TextEditor.enrichHTML for all occurrences.
   * Got an alternative method working to make drawings render on top in all cases.
   * When you change the aspect name width setting in Fate Utilities, this now causes FU to re-render.
+  * Minor bug fix... spending a fate point on an unassigned character caused an error if the gm had no assigned character.
 
 # 4.4.05
   * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
@@ -41,6 +42,8 @@
   * Known bugs:
     * There appear to be some issues with the functionality of updating embedded items on token actors. It often doesn't show the update until after you refresh the game.
     * Due to the above, for this phase of the prototype, don't use extras on token actors that you want to turn on and off to change their traits etc.
+
+# -- Branch point from 4.3.XX
 
 # 4.3.24
   * Fixed a critical bug in the import module code used to set up Fate Core modules provided by Evil Hat.
