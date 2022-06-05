@@ -1,4 +1,5 @@
-{
+{  "fate-core-official.Boost":"Boost",
+   "fate-core-official.Boosts":"Boosts",
    "fate-core-official.trackAspectFieldValidation1":"If track aspect doesn't equal 'No', exactly one of aspect.as_name and aspect.when_marked must be set to true.",
    "fate-core-official.trackAspectFieldValidation2":"The aspect.name key must be present on the aspect object.",
    "fate-core-official.diceFormula":"Dice Formula",

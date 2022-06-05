@@ -16,10 +16,15 @@
                             <div class="mfate-sheet__meta-label" style="text-align:center; padding:0px; padding-top:5px; font-size: 8pt; min-width:75px; max-width:75px; width:75px">{{localize 'fate-core-official.Current'}} </div>
                         </div>
                         {{/if}}
-                        <div style="display:block; padding-left:10px; margin-right:50px;">
+                        <div style="display:block; padding-left:10px;">
                             <input class="circle-input 
                             mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="system.details.fatePoints.refresh" name="system.details.fatePoints.refresh" value="{{system.details.fatePoints.refresh}}"></input>
                             <div class="mfate-sheet__meta-label" style="text-align:center; font-size:8pt; padding:0px; padding-top:5px; min-width:75px; max-width:75px; width:75px;">{{localize 'fate-core-official.Refresh'}} </div> 
+                        </div>
+                        <div style="display:block; padding-left:10px; margin-right:50px;">
+                            <input class="circle-input 
+                            mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="system.details.fatePoints.boosts" name="system.details.fatePoints.boosts" value="{{system.details.fatePoints.boosts}}"></input>
+                            <div class="mfate-sheet__meta-label" style="text-align:center; font-size:8pt; padding:0px; padding-top:5px; min-width:75px; max-width:75px; width:75px;">Boosts </div> 
                         </div>
                 <img src = "{{logo}}" style = "pointer-events:none; width:160px; height:auto; margin-bottom:15px; margin-right:1px"></img>
             </div>            

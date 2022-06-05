@@ -1126,7 +1126,7 @@ class FateUtilities extends Application{
                 }
 
                 if (boosts > 0){
-                    options+=`<option value="boost">Boost</option>`
+                    options+=`<option value="boost">${game.i18n.localize("fate-core-official.Boost")}</option>`
                 }                                
                 let content =`<br/><div style="min-width:100%; max-width:100%"><select style="min-width:100%; max-width:100%" class="free_i_r_selector">${options}</select></div><br/>`
 
@@ -1191,7 +1191,7 @@ class FateUtilities extends Application{
                         if (name == 'boost'){
                             flavor += ` (Boost)`;
                             await gp?.actor?.update({"system.details.fatePoints.boosts":gp?.actor?.system?.details?.fatePoints?.boosts - 1});
-                            invokedAspect = "Boost";
+                            invokedAspect = game.i18n.localize("fate-core-official.Boost");
                         }
                     }
                 }
