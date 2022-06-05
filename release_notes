@@ -9,6 +9,7 @@
   * Got an alternative method working to make drawings render on top in all cases.
   * When you change the aspect name width setting in Fate Utilities, this now causes FU to re-render.
   * Minor bug fix... spending a fate point on an unassigned character caused an error if the gm had no assigned character.
+  * Added tracking for boosts to the main tab of Fate Utilities. When the GM shift-clicks a +2 or reroll button in the rolls tab to modify a roll with free invokes, they can now select boosts to use on the roll, automatically subtracting the boosts from the character's sheet.
 
 # 4.4.05
   * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.

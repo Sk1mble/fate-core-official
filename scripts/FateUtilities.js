@@ -438,6 +438,9 @@ class FateUtilities extends Application{
         const playerfp = html.find("input[name='player_fps']");
         playerfp.on("change", event=> this._edit_player_points(event, html));
 
+        const playerboosts = html.find("input[name='player_boosts']");
+        playerboosts.on("change", event=> this._edit_player_boosts(event, html))
+
         const refresh_fate_points = html.find("button[id='refresh_fate_points']");
         refresh_fate_points.on("click", event => this.refresh_fate_points(event, html));    
 
@@ -958,7 +961,10 @@ class FateUtilities extends Application{
                 shift_down = keyboard.isDown("Shift");
             }
             
-            if (shift_down && game.user.isGM && Object.keys(asa).length > 0 && asa.filter(as => as.free_invokes > 0).length > 0){
+            let gp = await gmfp(roll);
+            let boosts = gp?.actor?.system?.details?.fatePoints?.boosts > 0 ? gp?.actor?.system?.details?.fatePoints?.boosts : 0;
+
+            if (shift_down && game.user.isGM && ((Object.keys(asa).length > 0 && asa.filter(as => as.free_invokes > 0).length > 0) || boosts > 0)){
                // Add dialog here to pick aspect(s) being invoked.
                // Dialogue should display all situation aspects in current scene with number of free invokes;
                // We then need to harvest the number of invokes being used on each and set bonus accordingly.
@@ -979,7 +985,14 @@ class FateUtilities extends Application{
                 
                 let content =`<br/><div>`
                 for (let aspect of sit_aspects){
-                    content += `<div style="display:flex; flex-direction:row"><div style="min-width:150px; padding:5px">${aspect.name}</div><div style="min-width:50px"><select class = "free_i_selector">${aspect.options}</select></div></div>`
+                    content += `<div style="display:flex; flex-direction:row"><div style="min-width:75%; max-width:75%; padding:5px">${aspect.name}</div><div style="min-width:50px"><select class = "free_i_selector">${aspect.options}</select></div></div>`
+                }
+                if (boosts > 0){
+                    let options = "";
+                    for (let i = 0; i < boosts+1; i++){
+                        options+=`<option value="boosts_${i}">${i}</option>`
+                    }
+                    content += `<div style="display:flex; flex-direction:row"><div style="min-width:75%; max-width:75%; padding:5px">Boosts </div><div style="min-width:50px"><select class = "free_i_selector">${options}</select></div></div>`
                 }
                 content += `</div><br/>`
 
@@ -1004,9 +1017,8 @@ class FateUtilities extends Application{
                     let updates = [];
                     for (let aspect of invokedAspects){                
                         let name = aspect.value.split("_")[0];
-                        
                         let num_invokes = aspect.value.split("_")[1];
-                        if (num_invokes > 0){
+                        if (num_invokes > 0 && name !== "boosts"){
                             bonus += parseInt(num_invokes, 10)*2;
                             aspectsInvoked.push(`${name} x${num_invokes}`);
                             let sit_aspect = all_sit_aspects.find(asp => asp.name == name);
@@ -1037,6 +1049,12 @@ class FateUtilities extends Application{
                                 let width = (text.length * size) / 1.5;
                                 updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
                             }
+                        }
+                        if (num_invokes > 0 && name == "boosts"){
+                            bonus += parseInt(num_invokes, 10)*2;
+                            aspectsInvoked.push(`Boost x ${num_invokes}`);
+                            let new_boosts = boosts - num_invokes;
+                            await gp?.actor?.update({"system.details.fatePoints.boosts":new_boosts})
                         }
                     }
                     if (bonus > 0){
@@ -1094,7 +1112,10 @@ class FateUtilities extends Application{
 
             let invokedAspects = false;
 
-            if (shift_down && game.user.isGM && Object.keys(asa).length >0 && asa.filter(as => as.free_invokes > 0).length > 0){
+            let gp = await gmfp(roll);
+            let boosts = gp?.actor?.system?.details?.fatePoints?.boosts > 0 ? gp?.actor?.system?.details?.fatePoints?.boosts : 0;
+
+            if (shift_down && game.user.isGM && ((Object.keys(asa).length > 0 && asa.filter(as => as.free_invokes > 0).length > 0) || boosts > 0)){
                 let options = ""
                 if (isNewerVersion(game.version, "9.230")){
                     game.system["fco-shifted"] = false;
@@ -1102,8 +1123,12 @@ class FateUtilities extends Application{
                 let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
                     options +=`<option value="${aspect.name}">${aspect.name}</option>`
-                }                
-                let content =`<br/><div><select class="free_i_r_selector">${options}</select></div><br/>`
+                }
+
+                if (boosts > 0){
+                    options+=`<option value="boost">Boost</option>`
+                }                                
+                let content =`<br/><div style="min-width:100%; max-width:100%"><select style="min-width:100%; max-width:100%" class="free_i_r_selector">${options}</select></div><br/>`
 
                invokedAspects = await new Promise(resolve => {
                     new Dialog({
@@ -1123,41 +1148,51 @@ class FateUtilities extends Application{
                 });
 
                 let updates = [];
+
                 if (invokedAspects && invokedAspects != "aborted"){
                     for (let aspect of invokedAspects){
                         let name = aspect.value;
-                        let sit_aspect = all_sit_aspects.find(asp => asp.name == name);
-                        sit_aspect.free_invokes -= 1;
-                        let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing?.document.text?.startsWith(name));
-                        if (drawing != undefined){
-                            let text;
-                            if (sit_aspect.free_invokes == 1){
-                                text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
-                            } else {
-                                text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
-                            }
-                            let size = game.settings.get("fate-core-official","fuAspectLabelSize");
-                            
-                            // Setup the aspect label font according to the user's settings
-                            let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-                            if (CONFIG.fontFamilies.indexOf(font) == -1){
-                                // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
-                            }
 
-                            if (size === 0){
-                                size = Math.floor(game.scenes.viewed.width*(1/100));
-                                if (size < 8) size = 8;
-                                if (size > 256) size = 256;
+                        if (name !== 'boost'){
+                            let sit_aspect = all_sit_aspects.find(asp => asp.name == name);
+                            sit_aspect.free_invokes -= 1;
+                            let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing?.document.text?.startsWith(name));
+                            if (drawing != undefined){
+                                let text;
+                                if (sit_aspect.free_invokes == 1){
+                                    text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvoke")})`;    
+                                } else {
+                                    text = name+` (${sit_aspect.free_invokes} ${game.i18n.localize("fate-core-official.freeinvokes")})`;
+                                }
+                                let size = game.settings.get("fate-core-official","fuAspectLabelSize");
+                                
+                                // Setup the aspect label font according to the user's settings
+                                let font = game.settings.get("fate-core-official","fuAspectLabelFont");
+                                if (CONFIG.fontFamilies.indexOf(font) == -1){
+                                    // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
+                                    font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                                }
+    
+                                if (size === 0){
+                                    size = Math.floor(game.scenes.viewed.width*(1/100));
+                                    if (size < 8) size = 8;
+                                    if (size > 256) size = 256;
+                                }
+                                let height = size * 2;
+                                let width = (text.length * size) / 1.5;
+                                updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
                             }
-                            let height = size * 2;
-                            let width = (text.length * size) / 1.5;
-                            updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
+                            flavor += ` (${sit_aspect.name})`
+                            await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
+                            await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
+                            invokedAspect = sit_aspect.name;
                         }
-                        flavor += ` (${sit_aspect.name})`
-                        await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
-                        await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
-                        invokedAspect = sit_aspect.name;
+
+                        if (name == 'boost'){
+                            flavor += ` (Boost)`;
+                            await gp?.actor?.update({"system.details.fatePoints.boosts":gp?.actor?.system?.details?.fatePoints?.boosts - 1});
+                            invokedAspect = "Boost";
+                        }
                     }
                 }
             }
@@ -1167,9 +1202,10 @@ class FateUtilities extends Application{
                 let r = new Roll (dicepart);
                 let r2 = await r.roll();
                 r2.dice[0].options.sfx = {id:"fate4df",result:r2.result};
-
                 let newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
-                if (invokedAspect) newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")} (${invokedAspect})</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
+                if (invokedAspect) {
+                    newFlavour = `<h1>${game.i18n.localize("fate-core-official.FreeRerollExplainer")} (${invokedAspect})</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>`
+                }
 
                 r2.toMessage({
                     flavor: newFlavour
@@ -1515,6 +1551,20 @@ class FateUtilities extends Application{
 
         await token.actor.update({
             ["system.details.fatePoints.current"]: fps
+        })
+        this.editing = false;
+        await this._render(false);
+    }
+
+    async _edit_player_boosts(event, html){
+        let id = event.target.id;
+        let parts = id.split("_");
+        let t_id = parts[0]
+        let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
+        let boosts = parseInt(event.target.value);
+
+        await token.actor.update({
+            ["system.details.fatePoints.boosts"]: boosts
         })
         this.editing = false;
         await this._render(false);
@@ -2167,7 +2217,6 @@ async getData(){
         enriched_tokens[tk.id]={aspects:ass, tracks:trks};
     }
     data.enriched_tokens = enriched_tokens;
-    console.log(enriched_tokens);
     data.GM=game.user.isGM;
     
     let GMUsers={};

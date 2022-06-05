@@ -19,7 +19,8 @@
 					},
 					"fatePoints": {
 						"current":"",
-						"refresh":""
+						"refresh":"",
+						"boosts":0
 					},
 					"sheet_mode":"minimal_at_refresh_0"
 				},
