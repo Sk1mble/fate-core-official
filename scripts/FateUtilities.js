@@ -616,9 +616,9 @@ class FateUtilities extends Application{
 
             // Setup the aspect label font according to the user's settings
             let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-            if (CONFIG.fontFamilies.indexOf(font) == -1){
+            if (FontConfig.getAvailableFonts().indexOf(font) == -1){
                  // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
             }
 
             if (size === 0){
@@ -1035,9 +1035,9 @@ class FateUtilities extends Application{
                                 
                                 // Setup the aspect label font according to the user's settings
                                 let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-                                if (CONFIG.fontFamilies.indexOf(font) == -1){
+                                if (FontConfig.getAvailableFonts().indexOf(font) == -1){
                                     // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                                    font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                                    font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
                                 }
                                 
                                 if (size === 0){
@@ -1168,9 +1168,9 @@ class FateUtilities extends Application{
                                 
                                 // Setup the aspect label font according to the user's settings
                                 let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-                                if (CONFIG.fontFamilies.indexOf(font) == -1){
+                                if (FontConfig.getAvailableFonts().indexOf(font) == -1){
                                     // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                                    font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                                    font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
                                 }
     
                                 if (size === 0){
@@ -1601,9 +1601,9 @@ class FateUtilities extends Application{
             
             // Setup the aspect label font according to the user's settings
             let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-            if (CONFIG.fontFamilies.indexOf(font) == -1){
+            if (FontConfig.getAvailableFonts().indexOf(font) == -1){
                 // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
             }
 
             if (size === 0){
@@ -1647,9 +1647,9 @@ class FateUtilities extends Application{
             
                 // Setup the aspect label font according to the user's settings
                 let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-                if (CONFIG.fontFamilies.indexOf(font) == -1){
+                if (FontConfig.getAvailableFonts().indexOf(font) == -1){
                     // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                    font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                    font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
                 }
 
                 if (size === 0){
@@ -1847,9 +1847,9 @@ class FateUtilities extends Application{
             
             // Setup the aspect label font according to the user's settings
             let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-            if (CONFIG.fontFamilies.indexOf(font) == -1){
+            if (FontConfig.getAvailableFonts().indexOf(font) == -1){
                  // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                font = CONFIG.fontFamilies[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
             }
 
             if (size === 0){
@@ -2620,10 +2620,10 @@ class FUAspectLabelClass extends FormApplication {
 
     async getData(){
         let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-        if (CONFIG.fontFamilies.indexOf(font) == -1) font = CONFIG.fontFamilies[font];
+        if (FontConfig.getAvailableFonts().indexOf(font) == -1) font = FontConfig.getAvailableFonts()[font];
         
         return {
-                    fonts:CONFIG.fontFamilies, 
+                    fonts:FontConfig.getAvailableFonts(),
                     currentFont:font,
                     fontSize:game.settings.get("fate-core-official", "fuAspectLabelSize"),
                     textColour:game.settings.get("fate-core-official","fuAspectLabelTextColour"),
@@ -2779,13 +2779,13 @@ Hooks.once('ready', async function () {
             canvas.drawings.foreground.sortableChildren = true;
             for (let drawing of canvas.drawings.objects.children){
                 canvas.drawings.foreground.addChild(drawing.shape);
-                //drawing.shape.zIndex = drawing.document.z;
+                drawing.shape.zIndex = drawing.document.z;
             }
         }
         if (onTop?.drawingsOnTop == false && game.canvas.ready){
             for (let drawing of canvas.drawings.objects.children){
                 canvas.primary.addChild(drawing.shape);
-                //drawing.shape.zIndex = drawing.document.z;
+                drawing.shape.zIndex = drawing.document.z;
             }
         }
     })

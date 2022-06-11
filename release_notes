@@ -4,7 +4,7 @@
   * Refactored skill editors on character sheet to use the fcoSkill model for creating or editing ad-hoc skills.
   * Repaired some mentions of token.image by switching to prototypetoken.src.img
   * Fixed a bug that caused an actor to be deleted if dragged on to a character sheet.
-  * The render drawings on top option is not currently functional due to API changes. Revisit once the changes to drawing ordering etc. are complete.
+  * 'Drawings on top' is functional again.
   * Refactored to use the async version of TextEditor.enrichHTML for all occurrences.
   * Got an alternative method working to make drawings render on top in all cases.
   * When you change the aspect name width setting in Fate Utilities, this now causes FU to re-render.
@@ -12,6 +12,9 @@
   * Added tracking for boosts to the main tab of Fate Utilities. When the GM shift-clicks a +2 or reroll button in the rolls tab to modify a roll with free invokes, they can now select boosts to use on the roll, automatically subtracting the boosts from the character's sheet.
   * Added boosts to character sheet
   * Localised 'Boost' and 'Boosts'
+  * Made compatible with Foundry v10 Development Release 1; this means that the new fontDefinitions API is being used for all fonts in the system.
+  * As of v10d1, changing items on token actors is updating their sheets etc. properly!
+  * As of v10d1, tokens are on top of drawings due to the new token masking protocol. This will be edited in a later development release so should not need any changes from me.
 
 # 4.4.05
   * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.

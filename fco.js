@@ -47,7 +47,7 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     const input = html[0].querySelector("[name='fate-core-official.fco-font-family']");
     input.remove(0);
 
-    CONFIG.fontFamilies.forEach(font => {
+    FontConfig.getAvailableFonts().forEach(font => {
         const option = document.createElement("option");
         option.value = font;
         option.text = font;
@@ -113,9 +113,9 @@ async function setupSheet(){
 function setupFont(){
     // Setup the system font according to the user's settings
     let val = game.settings.get("fate-core-official","fco-font-family");
-    if (CONFIG.fontFamilies.indexOf(val) == -1){
+    if (FontConfig.getAvailableFonts().indexOf(val) == -1){
         // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-        val = CONFIG.fontFamilies[game.settings.get("fate-core-official","fco-font-family")]
+        val = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
     }
     let override = game.settings.get("fate-core-official", "override-foundry-font");
     if (override) {
@@ -469,9 +469,38 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
 Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = fcoActor;
     CONFIG.Item.documentClass = fcoExtra;
-    CONFIG.fontFamilies.push("Montserrat");
-    CONFIG.fontFamilies.push("Jost");
-    CONFIG.fontFamilies.push("Fate");
+
+    CONFIG.fontDefinitions["Fate"] = {
+        "editor": true,
+        "fonts": [{urls: [`systems/fate-core-official/fonts/Fate Core Font.ttf`]}]
+      }
+
+      CONFIG.fontDefinitions["Fate Core"] = {
+        "editor": true,
+        "fonts": [{urls: [`systems/fate-core-official/fonts/Fate Core Font.ttf`]}]
+      }
+
+      CONFIG.fontDefinitions["Jost"] = {
+        editor: true,
+        fonts: [
+          {urls: ["systems/fate-core-official/fonts/Jost-variable.ttf"]},
+          {urls: ["systems/fate-core-official/fonts/Jost-italic.ttf"], style: "italic"}
+        ]
+      }
+
+      CONFIG.fontDefinitions["Montserrat"] = {
+          editor: true,
+          fonts: [
+              {urls:["systems/fate-core-official/fonts/Montserrat-Regular.otf"]},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Italic.otf"], style:"italic"},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Light.otf"], weight:300},
+              {urls:["systems/fate-core-official/fonts/Montserrat-LightItalic.otf"], style:"italic", weight:300},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Bold.otf"], weight:"bold"},
+              {urls:["systems/fate-core-official/fonts/Montserrat-BoldItalic.otf"], style:"italic", weight:"bold"},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Black.otf"], weight:900},
+              {urls:["systems/fate-core-official/fonts/Montserrat-BlackItalic.otf"], style:"italic", weight:900},
+          ]
+      }
 
     const includeRgx = new RegExp("/systems/fate-core-official/");
     CONFIG.compatibility.includePatterns.push(includeRgx);
