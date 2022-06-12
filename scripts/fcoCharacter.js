@@ -648,43 +648,46 @@ export class fcoCharacter extends ActorSheet {
             });
 
             const saveDefault = html.find("button[name='saveDefault']");
+
             saveDefault.on("click", async event => {
                 let f = new FateCharacterDefaults();
                 let content = 
-                                `<div style="display:table;">
-                                    <div style="display:table-row">
-                                        <div style="display:table-cell; width:25%; padding:5px">
-                                            ${game.i18n.localize("fate-core-official.name")}
+                                `<form>
+                                    <div style="display:table;">
+                                        <div style="display:table-row">
+                                            <div style="display:table-cell; width:25%; padding:5px">
+                                                ${game.i18n.localize("fate-core-official.name")}
+                                            </div>
+                                            <div style="display:table-cell; padding:5px">
+                                                <input tabindex="0" id="${this.document.id}_choose_default_name" type="text"></input>
+                                            </div>
                                         </div>
-                                        <div style="display:table-cell; padding:5px">
-                                            <input tabindex="1" id="${this.document.id}_choose_default_name" type="text"></input>
+                                        <div style="display:table-row">
+                                            <div style="display:table-cell; padding:5px">
+                                                ${game.i18n.localize("fate-core-official.description")}
+                                            </div>
+                                            <div style="display:table-cell; padding:5px">
+                                                <input tabindex="0" id = "${this.document.id}_choose_default_description" type="text"></input>
+                                            </div>
+                                        </div>
+                                        <div style="display:table-row">
+                                            <div style="display:table-cell: width:50%; padding:5px">
+                                                Keep Skill Ranks?
+                                            </div>
+                                            <div style="display:table-cell; padding:5px">
+                                                <input tabindex="0" id = "${this.document.id}_keep_skills" type="checkbox"></input>
+                                            </div>
+                                        </div>
+                                        <div style="display:table-row">
+                                            <div style="display:table-cell; width:50%; padding:5px">
+                                                Keep Aspect Values?
+                                            </div>
+                                            <div style="display:table-cell; padding:5px">
+                                                <input tabindex="0" id = "${this.document.id}_keep_aspects" type="checkbox"></input>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div style="display:table-row">
-                                        <div style="display:table-cell; padding:5px">
-                                            ${game.i18n.localize("fate-core-official.description")}
-                                        </div>
-                                        <div style="display:table-cell; padding:5px">
-                                            <input id = "${this.document.id}_choose_default_description" type="text"></input>
-                                        </div>
-                                    </div>
-                                    <div style="display:table-row">
-                                        <div style="display:table-cell: width:50%; padding:5px">
-                                            Keep Skill Ranks?
-                                        </div>
-                                        <div style="display:table-cell; padding:5px">
-                                            <input id = "${this.document.id}_keep_skills" type="checkbox"></input>
-                                        </div>
-                                    </div>
-                                    <div style="display:table-row">
-                                        <div style="display:table-cell; width:50%; padding:5px">
-                                            Keep Aspect Values?
-                                        </div>
-                                        <div style="display:table-cell; padding:5px">
-                                            <input id = "${this.document.id}_keep_aspects" type="checkbox"></input>
-                                        </div>
-                                    </div>
-                                </div>`
+                                </form>`
                     let d = new Dialog({
                     title: game.i18n.localize("fate-core-official.pickADefaultName"),
                     content: content,
