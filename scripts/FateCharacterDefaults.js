@@ -5,7 +5,7 @@ class FateCharacterDefaults {
         return name.slugify().split(".").join("-");
     }
 
-    async storeDefault (character_default, overwrite){
+    async storeDefault (character_default){
         // Store a character default (usually derived from extractDefault) in the game's settings.
         // If overwrite is true, automatically overwrite the existing default without asking.
         let defaults = duplicate(game.settings.get("fate-core-official", "defaults"));
@@ -82,13 +82,22 @@ class FateCharacterDefaults {
             stunt_names.push(d.stunts[stunt].name)
         }
         for (let aspect in d.aspects){
-            aspect_names.push(d.aspects[aspect].name)
+            if (d?.options?.keep_aspects){
+                aspect_names.push(d.aspects[aspect].name + " ("+d.aspects[aspect].value+")")
+            } else {
+                aspect_names.push(d.aspects[aspect].name)
+            }
         }
         for (let track in d.tracks){
             track_names.push(d.tracks[track].name)
         }
         for (let skill in d.skills){
-            skill_names.push(d.skills[skill].name)
+            if (d?.options?.keep_skills) {
+                skill_names.push(d.skills[skill].name + " ("+d.skills[skill].rank + ")");
+            }
+            else {
+                skill_names.push(d.skills[skill].name)
+            }
         }
         for (let extra of d.extras){
             extra_names.push(extra.name)
@@ -154,7 +163,7 @@ class FateCharacterDefaults {
         }
     }
 
-    async extractDefault(actorData, default_name, default_description){
+    async extractDefault(actorData, default_name, default_description, options){
         // This method takes actorData and returns an object to store as a default.
         // This default contains empty versions of the character's:
         // Tracks
@@ -190,24 +199,29 @@ class FateCharacterDefaults {
             }
         }
 
-        // For aspects we need to reset any aspect values to blank
         let aspects = data.system.aspects;
-        for (let a in aspects){
-            let aspect = aspects[a];
-            if (aspect?.value){
-                aspect.value = "";
-            }
-            if (aspect?.notes){
-                aspect.notes = "";
-            }
+        
+        if (!options?.keep_aspects){
+            // For aspects we need to reset any aspect values to blank
+            for (let a in aspects){
+                let aspect = aspects[a];
+                if (aspect?.value){
+                    aspect.value = "";
+                }
+                if (aspect?.notes){
+                    aspect.notes = "";
+                }
+            }    
         }
-
-        // For skills, we need to reset all ranks to 0.
+        
         let skills = data.system.skills;
-        for (let s in skills){
-            let skill = skills[s];
-            if (skill?.rank){
-                skill.rank = 0;
+        if (!options?.keep_skills){
+            // For skills, we need to reset all ranks to 0.
+            for (let s in skills){
+                let skill = skills[s];
+                if (skill?.rank){
+                    skill.rank = 0;
+                }
             }
         }
 

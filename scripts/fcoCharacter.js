@@ -651,24 +651,40 @@ export class fcoCharacter extends ActorSheet {
             saveDefault.on("click", async event => {
                 let f = new FateCharacterDefaults();
                 let content = 
-                                `<table style="background-color:transparent; border:none">
-                                    <tr>
-                                        <td>
+                                `<div style="display:table;">
+                                    <div style="display:table-row">
+                                        <div style="display:table-cell; width:25%; padding:5px">
                                             ${game.i18n.localize("fate-core-official.name")}
-                                        </td>
-                                        <td>
-                                            <input id="${this.document.id}_choose_default_name" type="text"></input>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
+                                        </div>
+                                        <div style="display:table-cell; padding:5px">
+                                            <input tabindex="1" id="${this.document.id}_choose_default_name" type="text"></input>
+                                        </div>
+                                    </div>
+                                    <div style="display:table-row">
+                                        <div style="display:table-cell; padding:5px">
                                             ${game.i18n.localize("fate-core-official.description")}
-                                        </td>
-                                        <td>
+                                        </div>
+                                        <div style="display:table-cell; padding:5px">
                                             <input id = "${this.document.id}_choose_default_description" type="text"></input>
-                                        </td>
-                                    </tr>
-                                </table>`
+                                        </div>
+                                    </div>
+                                    <div style="display:table-row">
+                                        <div style="display:table-cell: width:50%; padding:5px">
+                                            Keep Skill Ranks?
+                                        </div>
+                                        <div style="display:table-cell; padding:5px">
+                                            <input id = "${this.document.id}_keep_skills" type="checkbox"></input>
+                                        </div>
+                                    </div>
+                                    <div style="display:table-row">
+                                        <div style="display:table-cell; width:50%; padding:5px">
+                                            Keep Aspect Values?
+                                        </div>
+                                        <div style="display:table-cell; padding:5px">
+                                            <input id = "${this.document.id}_keep_aspects" type="checkbox"></input>
+                                        </div>
+                                    </div>
+                                </div>`
                     let d = new Dialog({
                     title: game.i18n.localize("fate-core-official.pickADefaultName"),
                     content: content,
@@ -680,7 +696,12 @@ export class fcoCharacter extends ActorSheet {
                                 let desc = $(`#${this.document.id}_choose_default_description`)[0].value;
                                 if (!name) name = this.document.name;
                                 let f = new FateCharacterDefaults();
-                                let def = await f.extractDefault(this.document, name, desc);
+                                let options = {
+                                                keep_skills:$(`#${this.document.id}_keep_skills`)[0].checked,
+                                                keep_aspects:$(`#${this.document.id}_keep_aspects`)[0].checked
+                                }
+                                let def = await f.extractDefault(this.document, name, desc, options);
+                                def.options = options;
                                 await f.storeDefault(def);
                                 ui.sidebar.render(false);
                             }

@@ -17,9 +17,10 @@
   * As of v10d1, tokens are on top of drawings due to the new token masking protocol. This will be edited in a later development release so should not need any changes from me.
   * Added the ability to hide skills provided by extras. This prevents them from showing up on the character sheet or dropdown list of skills to roll in FateUtilities. Useful when you want to modify tracks via the skill from an extra but it's never rolled.
   * Allow negative refresh costs for extras and stunts.
+  * Added ability to store character skill ranks and aspect values (independently) with a character default framework.
 
 # 4.4.05
-  * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
+  * Fixed bug in exporting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
 
 # 4.4.04
   * Edited some drag and drop functions to make them work with Foundry 10.262 following changes to the drag and drop workflow.
