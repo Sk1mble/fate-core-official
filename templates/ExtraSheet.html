@@ -27,7 +27,7 @@
 		<tr style="background-color:transparent">
 			<td style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.RefreshCost'}}:</td>
 			<td style="width:75%; color:var(--fco-sheet-text-colour);">
-				<input type="number" name="system.refresh" min="0" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour);; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family); width:50px" value="{{this.document.system.refresh}}">
+				<input type="number" name="system.refresh" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour);; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family); width:50px" value="{{this.document.system.refresh}}">
 				</input>
 				{{localize 'fate-core-official.active'}}
 				<input style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour);" name="system.active" type="checkbox" {{#if this.document.system.active}}checked="checked"{{/if}}></input>

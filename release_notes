@@ -16,6 +16,7 @@
   * As of v10d1, changing items on token actors is updating their sheets etc. properly!
   * As of v10d1, tokens are on top of drawings due to the new token masking protocol. This will be edited in a later development release so should not need any changes from me.
   * Added the ability to hide skills provided by extras. This prevents them from showing up on the character sheet or dropdown list of skills to roll in FateUtilities. Useful when you want to modify tracks via the skill from an extra but it's never rolled.
+  * Allow negative refresh costs for extras and stunts.
 
 # 4.4.05
   * Fixed bug in exporiting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
