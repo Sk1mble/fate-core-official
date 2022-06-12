@@ -56,6 +56,7 @@ class fcoSkill extends foundry.abstract.DataModel {
             "extra_id": new foundry.data.fields.StringField({ required: false, initial: undefined }),
             "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "adhoc": new foundry.data.fields.BooleanField({ required: false, initial:false }),
+            "hidden": new foundry.data.fields.BooleanField({ required: false, initial:false }),
         }
     }
 }

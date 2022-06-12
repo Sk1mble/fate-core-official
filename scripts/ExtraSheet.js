@@ -354,6 +354,13 @@ export class ExtraSheet extends ItemSheet {
             await this.document.update({"system.skills":{[`${skill.name}`]:skill}})
         })
 
+        const hideThisSkill = html.find("input[class='hide_this_skill']");
+        hideThisSkill.on('click', async event => {
+            let skill = duplicate(this.document.system.skills[event.target.getAttribute("data-skill")]);
+            skill.hidden = event.target.checked;
+            await this.document.update({"system.skills":{[`${skill.name}`]:skill}})
+        })
+
         const active = html.find("input[name='system.active']");
         active.on("change", async event => {
             let value = event.target.checked;

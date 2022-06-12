@@ -55,7 +55,9 @@
                                         <select title="{{localize 'fate-core-official.RollHelp'}}" class="skill_select" id="{{this.id}}_selectSkill" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:100px; font-size:{{../fontSize}}">
                                             <option disabled="disabled" selected="selected">{{localize 'fate-core-official.PickASkill'}}</option>
                                             {{#each this.actor.system.skills}}
+                                            {{#unless this.hidden}}
                                             <option>{{this.name}} ({{this.rank}})</option>
+                                            {{/unless}}
                                             {{/each}}
                                             {{#each this.actor.system.stunts}}
                                             {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">{{localize 'fate-core-official.Stunt'}}: {{this.name}} ({{this.linked_skill}} +{{this.bonus}})</option>{{/if}}
@@ -116,7 +118,9 @@
                                         <select class="skill_select" id="{{this.id}}_selectSkill" style="max-width:100px; color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour)">
                                             <option disabled="disabled" selected="selected">{{localize 'fate-core-official.PickASkill'}}</option>
                                             {{#each this.actor.system.skills}}
+                                            {{#unless this.hidden}}
                                             <option>{{this.name}} ({{this.rank}})</option>
+                                            {{/unless}}
                                             {{/each}}
                                             {{#each this.actor.system.stunts}}
                                             {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">{{localize 'fate-core-official.Stunt'}}: {{this.name}} ({{this.linked_skill}}: +{{this.bonus}})</option>{{/if}}

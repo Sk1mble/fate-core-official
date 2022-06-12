@@ -112,6 +112,7 @@
 								{{#if (eq ../this.document.system.combineSkills false)}}
 									<i style="color:var(--fco-sheet-text-colour); font-style:normal; padding-left:25px">Combine?</i><input type="checkbox" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour);" class = "combine_this_skill" data-skill="{{this.name}}" {{#if this.combineMe}}checked = "checked"{{/if}}></input>
 								{{/if}}
+								<i style="color:var(--fco-sheet-text-colour); font-style:normal; padding-left:25px">Hide?</i><input type="checkbox" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour);" class = "hide_this_skill" data-skill="{{this.name}}" {{#if this.hidden}}checked = "checked"{{/if}}></input>	
 							{{/if}}
 						</div>
 					</li>

@@ -111,6 +111,7 @@
 
 
                             {{#if sortByRank}} {{#each sorted_by_rank}}
+                            {{#unless this.hidden}}
                             <li class="mfate-skills-list__item">
                                 <div class="mfate-skills-list__number">{{this.rank}}</div>
                                 <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
@@ -122,7 +123,9 @@
                                     {{#if this.extra_id}}<i class="fas fa-plug fu_button" style="float:right; padding-right:10px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}
                                 </div>
                             </li>
+                            {{/unless}}
                             {{/each}} {{else}} {{#each ordered_skills}}
+                            {{#unless this.hidden}}
                             <li class="mfate-skills-list__item">
                                 <div class="mfate-skills-list__number">{{this.rank}}</div>
                                 <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
@@ -134,6 +137,7 @@
                                     {{#if this.extra_id}}<i class="fas fa-plug fu_button" style="float:right; padding-right:10px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}
                                 </div>
                             </li>
+                            {{/unless}}
                             {{/each}} {{/if}}
                         </ul>
                     </div>
