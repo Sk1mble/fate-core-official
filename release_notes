@@ -18,6 +18,8 @@
   * Added the ability to hide skills provided by extras. This prevents them from showing up on the character sheet or dropdown list of skills to roll in FateUtilities. Useful when you want to modify tracks via the skill from an extra but it's never rolled.
   * Allow negative refresh costs for extras and stunts.
   * Added ability to store character skill ranks and aspect values (independently) with a character default framework.
+  * Tweaked the behaviour of hidden skills on extra to ensure that the hidden/unhidden status immediately updates. Where a skill is set to combine with others, the skill will only be hidden on the character if all combining skills on relevant extras are set to Hidden.
+  * Fixed the presentation of stunts when hovered in the modified roll dialog so a stripped version of the description is shown rather than the full HTML.
 
 # 4.4.05
   * Fixed bug in exporting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.

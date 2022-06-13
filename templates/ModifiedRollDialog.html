@@ -71,10 +71,10 @@
             <td width="300px">
                 {{#each this.actor.system.stunts}}
                 {{#if (eq this.linked_skill ../activeSkill)}}
-                    <i style="font-style:normal;" title="{{this.description}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
+                    <i style="font-style:normal;" title="{{{fco_strip this.description}}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
                 {{/if}}
                 {{#if (eq this.linked_skill "Special")}}
-                    <i style="font-style:normal;" title="{{this.description}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
+                    <i style="font-style:normal;" title="{{{fco_strip this.description}}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
                 {{/if}}
                 {{/each}}
             </td>

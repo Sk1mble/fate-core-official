@@ -285,9 +285,11 @@ export class fcoActor extends Actor {
                 }
     
                 let skills = duplicate(extra.system.skills);
+
                 if (!Array.isArray(skills)){
                     let askills = duplicate(actor.system.skills);  
                     for (let skill in skills){
+                        let hidden = skills[skill].hidden;
                         // If this and its constituent skills are NOT set to combine skills, we need to create an entry for this skill.
                         if (!extra.system.combineSkills && !skills[skill].combineMe){
                             let count = this.getHighest(askills, skill, extra_id);
@@ -309,41 +311,44 @@ export class fcoActor extends Actor {
                                 skills[skill].name = skills[skill].name + ` ${count}`;
                             }
                             skills_output[skills[skill].name]=skills[skill];
-                        } 
-
-                        // We need to ensure the combined skills are setup correctly; if we've just removed the setting here then we need to rebuild
-                        // We need to build all the combined skills here and make sure that they're returned properly in skills_output
-                        let combined_skill;
-                        for (let ask in askills){
-                            if (ask == skill){
-                                // This is the skill that everything is being merged into; 
-                                // only the skill with the raw name of the extra_skill works for merging 
-                                combined_skill = askills[ask];
-                                if (combined_skill) combined_skill = duplicate(combined_skill);                                    
-                            }
-                        }
-                        if (combined_skill && !combined_skill.extra_id){
-                            // The skill is a real one from the character and we cannot combine with it.
                         } else {
-                            // If it is null, it needs to be created. That can only happen if this extra is newly creating a merged skill.
-                            if (!combined_skill){
-                                combined_skill = duplicate(skills[skill]);
-                                combined_skill.extra_id = extra_id;
+                            // We need to ensure the combined skills are setup correctly; if we've just removed the setting here then we need to rebuild
+                            // We need to build all the combined skills here and make sure that they're returned properly in skills_output
+                            let combined_skill;
+                            for (let ask in askills){
+                                if (ask == skill){
+                                    // This is the skill that everything is being merged into; 
+                                    // only the skill with the raw name of the extra_skill works for merging 
+                                    combined_skill = askills[ask];
+                                    if (combined_skill) combined_skill = duplicate(combined_skill);                                    
+                                }
                             }
-                            // Now we know for a fact that the base combined_skill is there and we have a reference to it, we can set its ranks.
-                            if (combined_skill){
-                                combined_skill.rank = 0;
-                                for (let extra of this.items){
-                                    if (extra.system.active){
-                                        if (extra.system.combineSkills || extra.system.skills[skill]?.combineMe || combined_skill.extra_id == extra.id){
-                                            let esk = extra.system.skills[skill];
-                                            if (esk){
-                                                combined_skill.rank += esk.rank;
+                            if (combined_skill && !combined_skill.extra_id){
+                                // The skill is a real one from the character and we cannot combine with it.
+                            } else {
+                                // If it is null, it needs to be created. That can only happen if this extra is newly creating a merged skill.
+                                if (!combined_skill){
+                                    combined_skill = duplicate(skills[skill]);
+                                    combined_skill.extra_id = extra_id;
+                                }
+                                // Now we know for a fact that the base combined_skill is there and we have a reference to it, we can set its ranks & hidden status:
+                                // Combined skills should only be hidden if ALL the skills that combine are set to hidden.
+                                if (combined_skill){
+                                    combined_skill.rank = 0;
+                                    for (let extra of this.items){
+                                        if (extra.system.active){
+                                            if (extra.system.combineSkills || extra.system.skills[skill]?.combineMe || combined_skill.extra_id == extra.id){
+                                                let esk = extra.system.skills[skill];
+                                                if (esk){
+                                                    if (!esk.hidden) hidden = false;
+                                                    combined_skill.rank += esk.rank;
+                                                    combined_skill.hidden = hidden;
+                                                }
                                             }
                                         }
                                     }
+                                    skills_output[combined_skill.name] = combined_skill;
                                 }
-                                skills_output[combined_skill.name] = combined_skill;
                             }
                         }
                     }
