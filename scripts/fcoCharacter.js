@@ -106,6 +106,16 @@ export class fcoCharacter extends ActorSheet {
             this.render(false);
         })
 
+        const sortStunts = html.find('div[name="sort_stunts"]');
+        sortStunts.on('click', (event) => {
+            if (this.sortStunts == undefined) {
+                this.sortStunts = game.settings.get("fate-core-official","sortStunts");
+            }
+            this.sortStunts = !this.sortStunts;
+            this.render(false);
+        })
+
+
         const expandStunt = html.find("i[name='expandStunt']");
 
         expandStunt.on("click", event => {
@@ -1178,7 +1188,7 @@ export class fcoCharacter extends ActorSheet {
     }
     async _onSortButton() {
         if (this.sortByRank == undefined) {
-            this.sortByRank == true;
+            this.sortByRank = game.settings.get("fate-core-official","sortSkills");
         }
         this.sortByRank = !this.sortByRank;
         this.render(false);
@@ -1249,6 +1259,14 @@ export class fcoCharacter extends ActorSheet {
         const sheetData = duplicate(superData.data);
         sheetData.document = superData.actor;
         sheetData.owner = superData.owner;
+
+        sheetData.system.displayStunts = duplicate(sheetData.system.stunts);
+
+        // Set the initial sort order for skills and stunts according to the user's preferences (defaulted to sorting by name for skills and not sorted for stunts)
+        if (this.sortByRank == undefined) this.sortByRank = game.settings.get("fate-core-official","sortSkills");
+        if (this.sortStunts == undefined) this.sortStunts = game.settings.get("fate-core-official","sortStunts");
+
+        if (this.sortStunts) sheetData.system.displayStunts = fcoConstants.sortByKey(sheetData.system.displayStunts);
 
         // Determine sheet view mode:
         // return minimal or full depending on:
@@ -1383,7 +1401,7 @@ export class fcoCharacter extends ActorSheet {
             ass[as].richNotes = await fcoConstants.fcoEnrich(ass[as].notes);
             ass[as].richDesc = await fcoConstants.fcoEnrich(ass[as].description)
         }
-        let sts = sheetData.system.stunts;
+        let sts = sheetData.system.displayStunts;
         for (let st in sts){
             sts[st].richDesc = await fcoConstants.fcoEnrich(sts[st].description);
         }

@@ -247,6 +247,7 @@
                 <div class="mfate-panel mfate-panel--stunts">
                     <div class="mfate-panel__header" name="stunts_header">
                         <b class="mfate-panel__header-label">{{localize 'fate-core-official.Stunts'}}</b>
+                        <div class="fas fa-sort mfate-panel__header-button" title="{{localize 'fate-core-official.SortByName'}}" name="sort_stunts" i icon></div>
                         <div class="i icon fas fa-expand mfate-panel__header-button" name="expandAllStunts" title="{{localize 'fate-core-official.MaximiseAll'}}"></div>
                         <div class="i icon fas fa-compress mfate-panel__header-button" name="compressAllStunts" title="{{localize 'fate-core-official.MinimiseAll'}}"></div>
                         {{#if this.document.isOwner}}
@@ -260,7 +261,7 @@
                         <!--Begin the stunts block-->
                         <div name="stunts_body mfate-stunts__body">
                             <div class="mfate-stunts__table">
-                                {{#each system.stunts}}
+                                {{#each system.displayStunts}}
                                 <div class="mfate-stunts__row">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">

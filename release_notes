@@ -20,6 +20,9 @@
   * Added ability to store character skill ranks and aspect values (independently) with a character default framework.
   * Tweaked the behaviour of hidden skills on extra to ensure that the hidden/unhidden status immediately updates. Where a skill is set to combine with others, the skill will only be hidden on the character if all combining skills on relevant extras are set to Hidden.
   * Fixed the presentation of stunts when hovered in the modified roll dialog so a stripped version of the description is shown rather than the full HTML.
+  * Added the ability to sort stunts on a character sheet alphabetically
+  * Added a user setting to define whether skills on character sheets should always default to being sorted by rank
+  * Added a user setting to define whether stunts on character sheets should always default to being sorted alphabetically
 
 # 4.4.05
   * Fixed bug in exporting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.

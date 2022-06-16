@@ -1221,6 +1221,24 @@ game.settings.register("fate-core-official","freeStunts", {
     Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
     Items.unregisterSheet('core', ItemSheet);
 
+    game.settings.register("fate-core-official", "sortSkills", {
+        name: "Sort skills on sheets by rank?",
+        scope:"client",
+        config:true,
+        type:Boolean,
+        restricted:false,
+        default:false
+    })
+
+    game.settings.register("fate-core-official", "sortStunts", {
+        name: "Sort stunts on sheets?",
+        scope:"client",
+        config:true,
+        type:Boolean,
+        restricted:false,
+        default:false
+    })
+
     game.settings.register("fate-core-official", "gameTime", {
         name: game.i18n.localize("fate-core-official.GameTime"),
         scope:"world",
