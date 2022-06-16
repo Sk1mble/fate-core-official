@@ -258,9 +258,10 @@ export class fcoCharacter extends ActorSheet {
 
         const plug = $('.fa-plug');
             plug.on("click", async event => {
-                let name = event.target.title;
+                let id = event.currentTarget.getAttribute("data-extra_id");
+                console.log(id);
                 let items = this.object.items;
-                let item = items.getName(name);
+                let item = items.get(id);
                 await item.sheet.render(true);
             })
 

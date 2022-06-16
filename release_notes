@@ -23,6 +23,7 @@
   * Added the ability to sort stunts on a character sheet alphabetically
   * Added a user setting to define whether skills on character sheets should always default to being sorted by rank
   * Added a user setting to define whether stunts on character sheets should always default to being sorted alphabetically
+  * Switched the plug icon on character sheets to find the related extra by ID rather than name.
 
 # 4.4.05
   * Fixed bug in exporting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
