@@ -34,6 +34,31 @@ import { Thing } from "./scripts/Thing.js"
 import { fcoActor } from "./scripts/fcoActor.js"
 import { fcoExtra } from "./scripts/fcoExtra.js"
 
+// The following hooks append the Fate Core Official settings to an Adventure document's flags so that they can be loaded/set on import of the adventure module.
+// Eventually I should probably add some code to this to check whether settings are already set and if they are, tell the user they'll be overwritten.
+
+Hooks.on("preCreateAdventure", (adventure, ...args) =>{
+    let flags = duplicate(adventure.flags);
+    let fco_settings = JSON.parse(fcoConstants.exportSettings());
+    if (!flags["fate-core-official"]) flags["fate-core-official"] = {};
+    flags["fate-core-official"].settings = fco_settings;
+    adventure.updateSource({flags:flags});
+})
+
+Hooks.on("preUpdateAdventure", (adventure, ...args) =>{
+    let flags = duplicate(adventure.flags);
+    let fco_settings = JSON.parse(fcoConstants.exportSettings());
+    if (!flags["fate-core-official"]) flags["fate-core-official"] = {};
+    flags["fate-core-official"].settings = fco_settings;
+    adventure.updateSource({flags:flags});
+})
+
+Hooks.on("importAdventure", (adventure, ...args) =>{
+    let flags = duplicate(adventure.flags);
+    let settings = flags["fate-core-official"]?.settings;
+    if (settings) fcoConstants.importSettings(settings);
+})
+
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
     if (actor.type == "Thing"){
         if (!options.thing){
@@ -254,7 +279,7 @@ Hooks.once('ready', async function () {
     if (game.settings.get("fate-core-official","run_once") == false && game.user.isGM){
         const ehmodules = [];
         game.modules.forEach(m => {
-            if (m?.flags?.ehproduct == "Fate Core"){
+            if (m?.flags?.ehproduct == "Fate Core Adventure"){
                 ehmodules.push(m);
             }
         })
@@ -316,30 +341,28 @@ Hooks.once('ready', async function () {
             }
 
             async installModule(module_name){
-                // Load the world settings from setup.json and install them
-                let setup = await fcoConstants.getJSON(`/modules/${module_name}/json/setup.json`);
-                let folders = await fcoConstants.getJSON(`/modules/${module_name}/json/folders.json`);
-                await fcoConstants.importSettings(setup);
-                await fcoConstants.createFolders(folders);
+                /*
+                    We will be switching to importing from Adventure modules, which use this format:
+                    const pack = game.packs.get("module.adventurename");
+                    await pack.getDocuments();
+                    await pack.getName("New Adventure").sheet._updateObject({}, new FormData())
+
+                    The core system now has code to export settings on creating an adventure as flags on the adventure, and to re-import them
+                    from flags on import of the module.
+                */
     
-                // Grab all of the compendium pack data for the module
-                let module = await game.modules.get(module_name);
+                // Grab the adventure pack and import it.
+                // The adventure to be imported is always the first adventure in the compendium called 'adventure'.
+                // The label of the adventure is unimportant.
                 
-                let packs = Array.from(module?.packs);
+                    let pack = await game.packs.get(`${module_name}.adventure`);
+                    await pack.getDocuments();
+                    await pack.contents[0].sheet._updateObject({}, new FormData())
 
-                //First we sort by entity - this is primarily because I want JournalEntries to be
-                //loaded before Scenes so that on first load the map pins aren't 'unknown'.
-
-                if (isNewerVersion(game.version, "9.224")){
-                    await fcoConstants.sort_key(packs, "type");
-                } else {
-                    await fcoConstants.sort_key(packs, "entity");
-                }
-
-                for (let pack of packs){
-                    if (!pack.name.includes("fatex")){
-                        await fcoConstants.importAllFromPack(await game.packs.get(`${module_name}.${pack.name}`))
-                    }
+                try {
+                    
+                } catch (error){
+                    ui.notifications.error(`Unable to import the adventure module from ${module_name}`)
                 }
 
                 // Set installing and run_once to the appropriate post-install values

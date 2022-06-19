@@ -24,6 +24,7 @@
   * Added a user setting to define whether skills on character sheets should always default to being sorted by rank
   * Added a user setting to define whether stunts on character sheets should always default to being sorted alphabetically
   * Switched the plug icon on character sheets to find the related extra by ID rather than name.
+  * Updated import code to use the new Foundry adventure module rather than having to home brew all the settings and folder exports. This is currently in testing, but seems to be working well.
 
 # 4.4.05
   * Fixed bug in exporting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.

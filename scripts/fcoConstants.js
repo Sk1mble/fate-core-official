@@ -373,7 +373,7 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "fuAspectLabelBorderColour", input.fuAspectLabelBorderColour)
         await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel)
         if (input?.fco_world_sheet_scheme) await game.settings.set("fate-core-official", "fco-world-sheet-scheme", input.fco_world_sheet_scheme);
-        if (input?.["fu-roll-formulae"]) await game.settings.set("fate-core-official","fu_roll-formulae", input.fu_roll-formulae);
+        if (input?.["fu-roll-formulae"]) await game.settings.set("fate-core-official","fu_roll-formulae", input["fu_roll-formulae"]);
         await ui.sidebar.render(false);
     }
 
