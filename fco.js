@@ -342,11 +342,6 @@ Hooks.once('ready', async function () {
 
             async installModule(module_name){
                 /*
-                    We will be switching to importing from Adventure modules, which use this format:
-                    const pack = game.packs.get("module.adventurename");
-                    await pack.getDocuments();
-                    await pack.getName("New Adventure").sheet._updateObject({}, new FormData())
-
                     The core system now has code to export settings on creating an adventure as flags on the adventure, and to re-import them
                     from flags on import of the module.
                 */
