@@ -356,13 +356,12 @@ Hooks.once('ready', async function () {
                 // All 'adventures' in this compendium will be imported. This would allow us to segregate content on occasion, for example
                 // allowing scenes and characters to be imported separately from the journal entries forming the text of the book.
                 
-                    let pack = await game.packs.get(`${module_name}.content`);
-                    await pack.getDocuments();
-                    for (let p of pack.contents){
-                        await p.sheet._updateObject({}, new FormData())
-                    }
                 try {
-                    
+                        let pack = await game.packs.get(`${module_name}.content`);
+                        await pack.getDocuments();
+                        for (let p of pack.contents){
+                            await p.sheet._updateObject({}, new FormData())
+                        }    
                 } catch (error){
                     ui.notifications.error(`Unable to import the adventure module from ${module_name}`)
                 }
