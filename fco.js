@@ -1088,18 +1088,18 @@ game.settings.register("fate-core-official","freeStunts", {
         default:false,
         onChange: () => {
             let val = game.settings.get("fate-core-official","drawingsOnTop");
-            if (val) {
+            if (val && canvas?.objects?.drawings?.children) {
                 canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
                 canvas.drawings.foreground.sortableChildren = true;
                 for (let drawing of canvas?.drawings?.objects?.children){
                     canvas.drawings.foreground.addChild(drawing.shape);
-                    //drawing.shape.zIndex = drawing.document.z;
                 }
             }
             else {
-                for (let drawing of canvas?.drawings?.objects?.children){
-                    canvas.primary.addChild(drawing.shape);
-                    //drawing.shape.zIndex = drawing.document.z;
+                if (canvas?.objects?.drawings?.children){
+                    for (let drawing of canvas?.drawings?.objects?.children){
+                        canvas.primary.addChild(drawing.shape);
+                    }
                 }
             }
         }
