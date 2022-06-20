@@ -1097,7 +1097,7 @@ game.settings.register("fate-core-official","freeStunts", {
                 }
             }
             else {
-                for (let drawing of canvas.drawings.objects.children){
+                for (let drawing of canvas?.drawings?.objects?.children){
                     canvas.primary.addChild(drawing.shape);
                     //drawing.shape.zIndex = drawing.document.z;
                 }
