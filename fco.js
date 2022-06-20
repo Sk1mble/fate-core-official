@@ -1091,7 +1091,7 @@ game.settings.register("fate-core-official","freeStunts", {
             if (val) {
                 canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
                 canvas.drawings.foreground.sortableChildren = true;
-                for (let drawing of canvas.drawings.objects?.children){
+                for (let drawing of canvas?.drawings?.objects?.children){
                     canvas.drawings.foreground.addChild(drawing.shape);
                     //drawing.shape.zIndex = drawing.document.z;
                 }
