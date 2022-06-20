@@ -797,6 +797,7 @@ class EditTracks extends FormApplication {
                     }
                     delete this.tracks[this.track.name]
                 }
+
                 let newTrack = new fcoTrack({
                     "name":name,
                     "category":this.category,

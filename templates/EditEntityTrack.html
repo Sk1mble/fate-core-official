@@ -48,7 +48,7 @@
             <td>
                 <select id="edit_entity_track_aspect" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
                     <option value="no" {{#if (eq this.track.aspect "No")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.No'}}</option>
-                    <option value="as_name"{{#if (eq this.track.aspect.as_name true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.NameAsAspect?'}}</option>
+                    <option value="as_name"{{#if (eq this.track.aspect.as_name true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.NameAsAspect'}}</option>
                     <option value="when_marked" {{#if (eq this.track.aspect.when_marked true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
                 </select>
             </td>

@@ -259,7 +259,6 @@ export class fcoCharacter extends ActorSheet {
         const plug = $('.fa-plug');
             plug.on("click", async event => {
                 let id = event.currentTarget.getAttribute("data-extra_id");
-                console.log(id);
                 let items = this.object.items;
                 let item = items.get(id);
                 await item.sheet.render(true);
@@ -1454,7 +1453,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         if (data.type == "track"){
             let track = data.dragged;
             if (!data.shift_down){
-                if (track?.aspect && track?.aspect !== "No" && track?.aspect != "Name As Aspect"){
+                if (track?.aspect && track?.aspect !== "No" && track?.aspect != game.i18n.localize("fate-core-official.AspectAsName") && track?.aspect != game.i18n.localize("fate-core-official.NameAsAspect")){
                     track.aspect.name = "";
                 }
     

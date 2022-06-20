@@ -281,7 +281,6 @@ class FateCharacterDefaults {
 
             }
         }
-        console.log(actor_data)
         return await Actor.create(actor_data, {renderSheet:render});
     }
 

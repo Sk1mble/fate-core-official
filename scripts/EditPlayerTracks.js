@@ -456,7 +456,7 @@ class EditPlayerTracks extends FormApplication {
                 <td>
                     ${game.i18n.localize("fate-core-official.RecoveryType")}:<br>
                     ${game.i18n.localize("fate-core-official.AspectWhenMarked")}:<br>
-                    ${game.i18n.localize("fate-core-official.NameAsAspect?")}:<br>
+                    ${game.i18n.localize("fate-core-official.NameAsAspect")}:<br>
                     ${game.i18n.localize("fate-core-official.Boxes")}:<br>
                     ${game.i18n.localize("fate-core-official.Box_Label")}:<br>
                     ${game.i18n.localize("fate-core-official.Harm")}:
@@ -520,11 +520,10 @@ class EditPlayerTracks extends FormApplication {
             track.aspect.when_marked = true;
             track.aspect.as_name = false;
         }
-        if (track.aspect == game.i18n.localize("aspectAsName")) {
+        if (track.aspect == game.i18n.localize("aspectAsName") || track.aspect == game.i18n.localize("NameAsAspect")) {
             track.aspect = {};
-            track.aspect.name = "";
-            track.aspect.when_marked = true;
-            track.aspect.as_name = false;
+            track.aspect.when_marked = false;
+            track.aspect.as_name = true;
         }
 
         //Initialise the box array for this track 

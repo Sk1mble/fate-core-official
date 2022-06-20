@@ -591,7 +591,6 @@ Hooks.once('ready', async function () {
             }  
             if (data.action == "delete_token"){
                 let scene = game.scenes.get(data.scene._id);
-                console.log(data.token);
                 await scene.deleteEmbeddedDocuments("Token", data.token);
             }
         })
