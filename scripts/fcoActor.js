@@ -126,7 +126,7 @@ export class fcoActor extends Actor {
                     track.aspect.when_marked = true;
                     track.aspect.as_name = false;
                 }
-                if (track.aspect == game.i18n.localize("fate-core-official.AspectAsName") || track.aspect == game.i18n.localize("fate-core-official.nameAsAspect")) {
+                if (track.aspect == game.i18n.localize("fate-core-official.AspectAsName") || track.aspect == game.i18n.localize("fate-core-official.NameAsAspect")) {
                     track.aspect = {};
                     track.aspect.when_marked = false;
                     track.aspect.as_name = true;
@@ -583,7 +583,60 @@ export class fcoActor extends Actor {
             });
         }
     }
-    
+
+    async rollTrack (trackName){
+        if (trackName){
+            let actor = this;
+            let track = actor.system.tracks[trackName];
+            let rank = 0;
+            if (track.rollable == "full"){
+                // Get the number of full boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (track.box_values[i]) rank++;
+                }
+            }
+            if (track.rollable == "empty"){
+                // Get the number of empty boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (!track.box_values[i]) rank++;
+                }
+            }
+            if (track.rollable != "empty" && track.rollable != "full") return;
+
+            let r = new Roll(`4dF + ${rank}`);
+            let ladder = fcoConstants.getFateLadder();
+            let rankS = rank.toString();
+            let rung = ladder[rankS];
+            let roll = await r.roll();
+            roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
+
+            let msg = ChatMessage.getSpeaker({actor:actor})
+            msg.alias = actor.name;
+
+            roll.toMessage({
+                flavor: `<h1>${track.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+                        ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})`,
+                speaker: msg,
+            });
+        }
+    }
+
+    async rollModifiedTrack (trackName) {
+        if (trackName){
+            let actor = this;
+            let track = actor.system.tracks[trackName];
+            if (track.rollable == "full" || track.rollable == "empty"){
+                let mrd = new ModifiedRollDialog(this, trackName, true);
+                mrd.render(true);
+                try {
+                    mrd.bringToTop();
+                } catch  {
+                    // Do nothing.
+                }
+            } 
+        }
+    }
+
     async rollStunt(stuntName){
         if (stuntName){
             let stunt = this.system.stunts[stuntName];

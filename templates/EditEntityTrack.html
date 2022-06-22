@@ -106,6 +106,18 @@
                 <input type="number" id="edit_entity_track_harm" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px" value="{{this.track.harm_can_absorb}}"> {{localize 'fate-core-official.HowMuchHarm'}}
             </td>
         </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.Rollable'}}
+            </td>
+            <td>
+                <select id = "entity_track_rollable" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
+                    <option value="false" {{#if (eq this.track.rollable "false")}} selected = "selected" {{/if}}> False</option>
+                    <option value="full" {{#if (eq this.track.rollable "full")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollFullBoxes'}} </option>
+                    <option value="empty" {{#if (eq this.track.rollable "empty")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollEmptyBoxes'}} </option>
+                </select>
+            </td>
+        </tr>
         <tr style="background-color: transparent;">
             <td colspan="2">
                 <button type="button" id="save_entity_track" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button>

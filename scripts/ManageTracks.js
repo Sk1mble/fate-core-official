@@ -224,6 +224,8 @@ class EditEntityTrack extends FormApplication {
         let paid = document.getElementById("edit_entity_track_paid").checked;
         let label = document.getElementById("entity_track_label_select").value;
         let custom_label = document.getElementById("entity_track_custom_label").value;
+        let rollable = document.getElementById("entity_track_rollable").value;
+
         if (label!="escalating" && label != "none") {
             label=custom_label;
         }
@@ -253,6 +255,7 @@ class EditEntityTrack extends FormApplication {
         track.harm_can_absorb=harm;
         track.paid = paid;
         track.label = label;
+        track.rollable = rollable;
 
         //If box_values < boxes, add
         if (!track.box_values){
@@ -706,6 +709,7 @@ class EditTracks extends FormApplication {
             document.getElementById("edit_linked_skills").disabled=false;
             document.getElementById("edit_track_paid").checked=false;
             document.getElementById("track_label_select").value = "none";
+            document.getElementById("edit_track_rollable").value = "false";
         } else {
             let track=this.tracks[name];
             this.track=track;
@@ -724,6 +728,7 @@ class EditTracks extends FormApplication {
             document.getElementById("edit_track_harm").value=track.harm_can_absorb;
             document.getElementById("edit_linked_skills").disabled=false;
             document.getElementById("edit_track_paid").checked=track.paid;
+            document.getElementById("edit_track_rollable").value = track.rollable ? track.rollable : "false";
             
             if (track.label=="none"){
                 document.getElementById("track_label_select").value = "none";
@@ -763,6 +768,8 @@ class EditTracks extends FormApplication {
         let paid = document.getElementById("edit_track_paid").checked;
         let label = document.getElementById("track_label_select").value;
         let custom_label = document.getElementById("track_custom_label").value;
+        let rollable = document.getElementById("edit_track_rollable").value;
+
         if (label=="custom") {
             label=custom_label;
         }
@@ -788,6 +795,7 @@ class EditTracks extends FormApplication {
                     track.harm_can_absorb=harm;
                     track.paid = paid;
                     track.label = label;
+                    track.rollable = rollable;
                 }
             }
             if (!existing){
@@ -812,7 +820,8 @@ class EditTracks extends FormApplication {
                     "harm_can_absorb":harm,
                     "paid":paid,
                     "linked_skills":linked_skills,
-                    "label":label
+                    "label":label,
+                    "rollable":rollable,
                 }).toJSON();
                 this.tracks[name]=newTrack;
             }

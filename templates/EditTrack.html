@@ -127,6 +127,18 @@
             </td>
         </tr>
         <tr>
+            <td>
+                {{localize 'fate-core-official.Rollable'}}
+            </td>
+            <td>
+                <select id = "edit_track_rollable" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
+                    <option value="false" selected="selected">False</option>
+                    <option value="full">{{localize 'fate-core-official.RollFullBoxes'}}</option>
+                    <option value="empty">{{localize 'fate-core-official.RollEmptyBoxes'}}</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <button type="button" id="save_track" style="width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" disabled>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:30px; height:30px" id="delete_track" i icon class="fas fa-trash"></button>
             </td>

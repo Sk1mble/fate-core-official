@@ -294,6 +294,19 @@ export class fcoCharacter extends ActorSheet {
             box.on("click", event => this._on_click_box(event, html));
             const skills_block = html.find("div[name='skills_block']");
             const track_name = html.find("div[class='mfate-tracks__list']");
+            const roll_track = html.find("i[name='roll_track']");
+
+            roll_track.on("click", async event => {
+                let name = event.target.id;
+                let track = this.object.system.tracks[name];
+                if (track.rollable == "full" || track.rollable == "empty") {
+                    let umr = false;
+                    if (game.system["fco-shifted"] && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+                    if (!game.system["fco-shifted"] && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+                    if (!umr) await this.object.rollTrack(track.name);
+                    if (umr) await this.object.rollModifiedTrack(track.name);
+                }
+            })
             track_name.on("contextmenu", event => {
                     let name = event.currentTarget.id.split("_")[1]
                     let track = this.object.system.tracks[name];
@@ -1197,7 +1210,7 @@ export class fcoCharacter extends ActorSheet {
         } catch  {
             // Do nothing.
         }
-    }
+    }llskill
 
     async _onSkill_name(event, html) {
         let target = this.object;

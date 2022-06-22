@@ -38,6 +38,28 @@ class FateUtilities extends Application{
                 fcoConstants.getPen(c.id);
             }
 
+            const roll_track = html.find("i[name='roll_track']");
+
+            roll_track.on("click", async event => {
+                let name = event.target.id;
+                let uuid = event.currentTarget.getAttribute("data-uuid");
+                let actor = await fromUuid(uuid);
+
+                if (actor instanceof TokenDocument) {
+                    actor = actor.actor;
+                }
+
+                let track = actor.system.tracks[name];
+
+                if (track.rollable == "full" || track.rollable == "empty") {
+                    let umr = false;
+                    if (game.system["fco-shifted"] && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+                    if (!game.system["fco-shifted"] && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
+                    if (!umr) await actor.rollTrack(track.name);
+                    if (umr) await actor.rollModifiedTrack(track.name);
+                }
+            })
+
             const countdowns_rich = $('.cd_datum_rich');
             countdowns_rich.on('click', async event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;

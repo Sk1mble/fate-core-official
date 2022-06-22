@@ -10,10 +10,11 @@ class ModifiedRollDialog extends Application {
         return options 
     } // End getDefaultOptions
 
-    constructor(actor, skill){
+    constructor(actor, skill, track){
         super();
         this.actor = actor;
         this.skill_name = skill;
+        this.track = track;
     }
 
     activateListeners(html){
@@ -33,7 +34,26 @@ class ModifiedRollDialog extends Application {
         let stunts = html.find("input[class='stunt_box']"); //This is an array
         let second_skill_rank = 0;
         let second_skill_text = ""
-        let skill_rank = this.actor.system.skills[this.skill_name].rank;
+        let skill_rank = 0;
+        if (this.track){
+            let track = this.actor.system.tracks[this.skill_name];
+            if (track.rollable == "full"){
+                // Get the number of full boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (track.box_values[i]) skill_rank++;
+                }
+            }
+            if (track.rollable == "empty"){
+                // Get the number of empty boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (!track.box_values[i]) skill_rank++;
+                }
+            }
+            if (track.rollable != "empty" && track.rollable != "full") return;
+        } else {
+            skill_rank = this.actor.system.skills[this.skill_name].rank;
+        }
+
         let manual_roll = html.find("select[id='manualRoll']")[0]?.value;
 
         total_modifier += parseInt(skill_rank);

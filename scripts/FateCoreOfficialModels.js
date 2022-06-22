@@ -148,7 +148,8 @@ class fcoTrack extends foundry.abstract.DataModel {
             "harm_can_absorb": new foundry.data.fields.NumberField({ required: true, initial:0 }),
             "boxes":new foundry.data.fields.NumberField({ required: true, initial:0 }),
             "box_values":new foundry.data.fields.ArrayField(new foundry.data.fields.BooleanField()),
-            "aspect":new trackAspectField({required: true, initial:"No"})
+            "aspect":new trackAspectField({required: true, initial:"No"}),
+            "rollable":new foundry.data.fields.StringField({ nullable:false, required: true, initial:"false", choices: ["false", "full", "empty"] })
         }
     }
 }
