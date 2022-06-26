@@ -44,7 +44,7 @@ class EditPlayerTracks extends FormApplication {
     async renderMe(id, data){
         if (this.object.isToken){
             if (this.object.token.id == id){
-                if (data.actorData.data != undefined && data.actorData.data.tracks != undefined)
+                if (data.actorData.system != undefined && data.actorData.system.tracks != undefined)
                     this.tracks_by_category=undefined;                   
                     if (!this.renderPending) {
                         this.renderPending = true;
@@ -58,7 +58,7 @@ class EditPlayerTracks extends FormApplication {
 
         else {
             if (this.object.id == id){
-                if (data.data != undefined && data.data.tracks != undefined)
+                if (data.system != undefined && data.system.tracks != undefined)
                     this.tracks_by_category=undefined;
                     if (!this.renderPending) {
                         this.renderPending = true;
@@ -98,7 +98,7 @@ class EditPlayerTracks extends FormApplication {
         checkbox.on("click", event => this._check(event,html));
         const edit = html.find("button[name='edit_entity_tracks']");
         edit.on('click', async event => {
-            let e = new EditEntityTrack(this.object.data.data.tracks[event.target.id], this.object).render(true);
+            let e = new EditEntityTrack(this.object.system.tracks[event.target.id], this.object).render(true);
             e.origin = this;
         })
     } //End activateListeners
@@ -107,7 +107,7 @@ class EditPlayerTracks extends FormApplication {
 
     async _ad_hoc (event, html){
 
-        let catText = `<select id="category">`
+        let catText = `<select id="category" style="color:black; background:white;">`
         for (let c in this.tracks_by_category){
             // Build the category list
             catText +=`<option> ${c}</option>`
@@ -130,7 +130,7 @@ class EditPlayerTracks extends FormApplication {
                 ${game.i18n.localize("fate-core-official.Name")}:
                 </td>
                 <td>
-                    <input id = "name" type="text" value="${game.i18n.localize("fate-core-official.NewTrack")}"></input>
+                    <input style="color:black; background:white;" id = "name" type="text" value="${game.i18n.localize("fate-core-official.NewTrack")}"></input>
                 </td>
             </tr>
             <tr>
@@ -138,7 +138,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.Description")}:
                 </td>
                 <td>
-                    <input id = "description" type="text"></input>
+                    <input style="color:black; background:white;" id = "description" type="text"></input>
                 </td>
             </tr>
             <tr>
@@ -162,7 +162,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.RecoveryType")}:
                 </td>
                 <td>
-                    <select id = "recovery_type"><option selected="selected">${game.i18n.localize("fate-core-official.Fleeting")}</option><option>${game.i18n.localize("fate-core-official.Sticky")}</option><option>${game.i18n.localize("fate-core-official.Lasting")}</option></Select>
+                    <select style="color:black; background:white;" id = "recovery_type"><option selected="selected">${game.i18n.localize("fate-core-official.Fleeting")}</option><option>${game.i18n.localize("fate-core-official.Sticky")}</option><option>${game.i18n.localize("fate-core-official.Lasting")}</option></Select>
                 </td>
             </tr>
             <tr>
@@ -186,7 +186,7 @@ class EditPlayerTracks extends FormApplication {
                 ${game.i18n.localize("fate-core-official.Boxes")}:
                 </td>
                 <td>
-                    <input id = "boxes" type="number" min = "0" value="0">
+                    <input style="color:black; background:white;" id = "boxes" type="number" min = "0" value="0">
                 <td>
             </tr>
             <tr>
@@ -213,15 +213,27 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.Harm")}:
                 </td>
                 <td>
-                    <input id = "harm" type="number" min = "0" value="0">
+                    <input style="color:black; background:white;" id = "harm" type="number" min = "0" value="0">
                 </td>
             </tr>
+            <tr>
+            <td>
+                ${game.i18n.localize('fate-core-official.Rollable')}
+            </td>
+            <td>
+                <select id = "rollable" style="color:black; background:white;">
+                    <option value="false"> False</option>
+                    <option value="full"> ${game.i18n.localize('fate-core-official.RollFullBoxes')} </option>
+                    <option value="empty"> ${game.i18n.localize('fate-core-official.RollEmptyBoxes')} </option>
+                </select>
+            </td>
+        </tr>
             <tr>
                 <td>
                     ${game.i18n.localize("fate-core-official.WhenMarked")}
                 </td>
                 <td>
-                    <input id="when_marked" type="text"></input>
+                    <input style="color:black; background:white;" id="when_marked" type="text"></input>
                 </td>
             </tr>
             <tr>
@@ -229,7 +241,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.HowRecover")}
                 </td>
                 <td>
-                    <input id="recovery_conditions" type="text"></input>
+                    <input style="color:black; background:white;" id="recovery_conditions" type="text"></input>
                 </td>
             </tr>
             <tr>
@@ -264,6 +276,7 @@ class EditPlayerTracks extends FormApplication {
                         newTrack.aspect.when_marked = html.find("input[id='aspect_when_marked']")[0].checked;
                         newTrack.aspect.as_name = html.find("input[id='aspect_as_name']")[0].checked;
                         newTrack.boxes = parseInt(html.find("input[id='boxes']")[0].value);
+                        newTrack.rollable = html.find("select[id='rollable']")[0].value
                         let box_values = []
                         for (let i = 0; i < newTrack.boxes; i++){
                             box_values.push(false);
@@ -386,12 +399,12 @@ class EditPlayerTracks extends FormApplication {
         ui.notifications.info(game.i18n.localize("fate-core-official.CharacterTrackChangesSaved"))   
         //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
-            let tracks = this.object.setupTracks(duplicate(this.object.data.data.skills), output);
-            await this.object.update({"data.tracks":[{"empty":"empty"}]}, {render:false, noHook:true}) //This is needed to make the game see a change in order of keys as a difference.
-            await this.object.update({"data.tracks":tracks});             
+            let tracks = this.object.setupTracks(duplicate(this.object.system.skills), output);
+            await this.object.update({"system.tracks":[{"empty":"empty"}]}, {render:false, noHook:true}) //This is needed to make the game see a change in order of keys as a difference.
+            await this.object.update({"system.tracks":tracks});             
         } else {
-            await this.object.update({"data.tracks":[{"empty":"empty"}]}, {render:false, noHook:true}) //This is needed to make the game see a change in order of keys as a difference.
-            await this.object.update({"data.tracks":output});             
+            await this.object.update({"system.tracks":[{"empty":"empty"}]}, {render:false, noHook:true}) //This is needed to make the game see a change in order of keys as a difference.
+            await this.object.update({"system.tracks":output});             
         }
     }
 
@@ -429,6 +442,11 @@ class EditPlayerTracks extends FormApplication {
             }
         }
 
+        let rollable = "False";
+        if (track.rollable == "false") rollable = "False";
+        if (track.rollable == "full") rollable = game.i18n.localize("fate-core-official.RollFullBoxes");
+        if (track.rollable == "empty") rollable = game.i18n.localize("fate-core-official.RollEmptyBoxes");
+
         let content = 
         `<h1>${game.i18n.localize("fate-core-official.DetailsFor")} ${track.name}</h1>
         <table border="1" cellpadding="4" cellspacing="4">
@@ -456,10 +474,11 @@ class EditPlayerTracks extends FormApplication {
                 <td>
                     ${game.i18n.localize("fate-core-official.RecoveryType")}:<br>
                     ${game.i18n.localize("fate-core-official.AspectWhenMarked")}:<br>
-                    ${game.i18n.localize("fate-core-official.NameAsAspect?")}:<br>
+                    ${game.i18n.localize("fate-core-official.NameAsAspect")}:<br>
                     ${game.i18n.localize("fate-core-official.Boxes")}:<br>
                     ${game.i18n.localize("fate-core-official.Box_Label")}:<br>
-                    ${game.i18n.localize("fate-core-official.Harm")}:
+                    ${game.i18n.localize("fate-core-official.Harm")}:<br>
+                    ${game.i18n.localize("fate-core-official.Rollable")}:
                 </td>
                 <td>
                     ${track.recovery_type}<br>
@@ -467,7 +486,8 @@ class EditPlayerTracks extends FormApplication {
                     ${track.aspect.as_name ? game.i18n.localize("fate-core-official.Yes"):game.i18n.localize("fate-core-official.No")}<br>
                     ${track.boxes}<br>
                     ${track.label}<br>
-                    ${track.harm_can_absorb}
+                    ${track.harm_can_absorb}<br>
+                    ${rollable}
                 </td>
             </tr>
             <tr>
@@ -520,11 +540,10 @@ class EditPlayerTracks extends FormApplication {
             track.aspect.when_marked = true;
             track.aspect.as_name = false;
         }
-        if (track.aspect == game.i18n.localize("aspectAsName")) {
+        if (track.aspect == game.i18n.localize("aspectAsName") || track.aspect == game.i18n.localize("NameAsAspect")) {
             track.aspect = {};
-            track.aspect.name = "";
-            track.aspect.when_marked = true;
-            track.aspect.as_name = false;
+            track.aspect.when_marked = false;
+            track.aspect.as_name = true;
         }
 
         //Initialise the box array for this track 
@@ -551,7 +570,7 @@ class EditPlayerTracks extends FormApplication {
             }
 
             //Let's get a working copy of this actor's track information. We will work with this throughout and only save it to the actor when we're finished.
-            this.tracks = await duplicate(this.object.data.data.tracks);
+            this.tracks = await duplicate(this.object.system.tracks);
             
             //The ones already on the player should be ticked as they already have them.DONE
 
@@ -579,7 +598,6 @@ class EditPlayerTracks extends FormApplication {
                         }
                     }
                 } catch(error){
-                    ////console.log(error)
                 }
         }
             

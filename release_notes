@@ -1,11 +1,67 @@
-# 4.3.27
-* Minor bug fix... spending a fate point on an unassigned character caused an error if the gm had no assigned character.
+# 4.4.06
+  * Refactored extra_tag to extra_id, adding another key for original_name as well where necessary. This is designed to allow us to get data models working properly for stunts, skills, tracks, and aspects.
+  * Refactored ManageSkills to use the fcoSkill model for creating and editing skills, ensuring data consistency.
+  * Refactored skill editors on character sheet to use the fcoSkill model for creating or editing ad-hoc skills.
+  * Repaired some mentions of token.image by switching to prototypetoken.src.img
+  * Fixed a bug that caused an actor to be deleted if dragged on to a character sheet.
+  * 'Drawings on top' is functional again.
+  * Refactored to use the async version of TextEditor.enrichHTML for all occurrences.
+  * Got an alternative method working to make drawings render on top in all cases.
+  * When you change the aspect name width setting in Fate Utilities, this now causes FU to re-render.
+  * Minor bug fix... spending a fate point on an unassigned character caused an error if the gm had no assigned character.
+  * Added tracking for boosts to the main tab of Fate Utilities. When the GM shift-clicks a +2 or reroll button in the rolls tab to modify a roll with free invokes, they can now select boosts to use on the roll, automatically subtracting the boosts from the character's sheet.
+  * Added boosts to character sheet
+  * Localised 'Boost' and 'Boosts'
+  * Made compatible with Foundry v10 Development Release 1; this means that the new fontDefinitions API is being used for all fonts in the system.
+  * As of v10d1, changing items on token actors is updating their sheets etc. properly!
+  * As of v10d1, tokens are on top of drawings due to the new token masking protocol. This will be edited in a later development release so should not need any changes from me.
+  * Added the ability to hide skills provided by extras. This prevents them from showing up on the character sheet or dropdown list of skills to roll in FateUtilities. Useful when you want to modify tracks via the skill from an extra but it's never rolled.
+  * Allow negative refresh costs for extras and stunts.
+  * Added ability to store character skill ranks and aspect values (independently) with a character default framework.
+  * Tweaked the behaviour of hidden skills on extra to ensure that the hidden/unhidden status immediately updates. Where a skill is set to combine with others, the skill will only be hidden on the character if all combining skills on relevant extras are set to Hidden.
+  * Fixed the presentation of stunts when hovered in the modified roll dialog so a stripped version of the description is shown rather than the full HTML.
+  * Added the ability to sort stunts on a character sheet alphabetically
+  * Added a user setting to define whether skills on character sheets should always default to being sorted by rank
+  * Added a user setting to define whether stunts on character sheets should always default to being sorted alphabetically
+  * Switched the plug icon on character sheets to find the related extra by ID rather than name.
+  * Updated import code to use the new Foundry adventure module rather than having to home brew all the settings and folder exports. This is currently in testing, but seems to be working well.
+  * Added the ability to roll a track (the track can be set to roll empty boxes or full boxes depending on the rules of a particular game). The track can also be rolled with the Modified Roll Dialog. For reasons of not wanting to expand the technical complexity overmuch you cannot add a second track to a track or a track to a skill roll with the Modified Roll Dialog. A track that's rollable will have a dice icon on the character sheet allowing it to be rolled.
+  * Similarly, a dice icon is added to tracks in Fate Utilities allowing them to be rolled from there.
 
-# 4.3.26
-  * Minor bug fix; exporting of settings was broken due to fco_roll-formulae being used rather than fco-roll-formulae in the output tool.
+# 4.4.05
+  * Fixed bug in exporting of settings caused by fco_roll-formulae being used instead of fco-roll-formula.
+
+# 4.4.04
+  * Edited some drag and drop functions to make them work with Foundry 10.262 following changes to the drag and drop workflow.
+  * Tided up the code surrounding creating Things by dropping items to canvas to follow the new workflow as well.
+
+# 4.4.03 
+ * Fixed a bug in Thing creation for players - parameter passed to createThing was the scene data not the scene itself meaning that getting the token failed.
+
+# 4.4.02
+  * Fixed a bug where attempting to change the name of an aspect with a drawing on the board caused an error and failure to change the name.
+
+# 4.4.01
+  * Reduced bottom padding on mfate-tracks__list element to make the gap between rows slightly less large. Was set to 1em, now set to 5px.
+  * Merged commit from 4.3.25 - Renamed the Fate Core Official concat handlebars helper to fco_concat as the original helper was causing a conflict with the built in Foundry helper. The result of this was to prevent the file picker for card faces from correctly allocating the chosen file to the relevant data field.
+
+# 4.4.00
+  * Refactored to eliminate deprecation warnings and ensure working normally in v10 prototype 1.
+    * The importModule code now uses the compendiums grabbed from game.packs.get() rather than building a compendiumcollection in memory, because that stopped working
+    * Calls to JSON.parse dice rolls are no longer necessary as rolls contain the parsed rolls in the first place now.
+    * All calls to message.roll translated to message.rolls as the chatmessage now holds an array of rolls. We only ever work with the first roll.
+    * CONST.DOCUMENT_PERMISSION_LEVELS changed to CONST.DOCUMENT_OWNERSHIP_LEVELS
+    * Amended _precreate method to use updateSource rather than data.update.
+    * All relevant calls to data.data changed to .system and all relevant updates for data changed to system (There were a lot).
+    * Overhauled the method used to import all compendium packs for an EH module to be more reliable, using built-in Foundry methods rather than my own.
+    * Fixed the sorting of extras on actors and Things
+  * Ensured fco_shifted initialised to false on start-up to ensure that the value is not just undefined.
   
-# 4.3.25
-  * Renamed the Fate Core Official concat handlebars helper to fco_concat as the original helper was causing a conflict with the built in Foundry helper. The result of this was to prevent the file picker for card faces from correctly allocating the chosen file to the relevant data field.
+  * Known bugs:
+    * There appear to be some issues with the functionality of updating embedded items on token actors. It often doesn't show the update until after you refresh the game.
+    * Due to the above, for this phase of the prototype, don't use extras on token actors that you want to turn on and off to change their traits etc.
+
+# -- Branch point from 4.3.XX
 
 # 4.3.24
   * Fixed a critical bug in the import module code used to set up Fate Core modules provided by Evil Hat.

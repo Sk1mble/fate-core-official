@@ -7,11 +7,11 @@ class EditPlayerAspects extends FormApplication{
                 } else {
                     this.options.title=`${game.i18n.localize("fate-core-official.EditAspectsTitle")} ${this.object.name}`
                 }
-                this.player_aspects=duplicate(this.object.data.data.aspects);
+                this.player_aspects=duplicate(this.object.system.aspects);
                 
                 game.system.apps["actor"].push(this);
                 game.system.apps["item"].push(this);
-                this.aspects=duplicate(this.object.data.data.aspects)
+                this.aspects=duplicate(this.object.system.aspects);
     }
 
     activateListeners(html){
@@ -77,13 +77,13 @@ class EditPlayerAspects extends FormApplication{
                 })
             }
     
-            $(`#${id}`).on('blur', event => {
+            $(`#${id}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc; 
                     if (isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true}));
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                     } else {
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true}));
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}));
                     }
 
                     $(`#${id}`).css('display', 'none');
@@ -104,13 +104,13 @@ class EditPlayerAspects extends FormApplication{
                 $(`#${id2}`).focus();
             })
     
-            $(`#${id2}`).on('blur', event => {
+            $(`#${id2}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc;
                     if (isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true}))
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))
                     } else {
-                        desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true}))
+                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))
                     }
                     
                     $(`#${id2}`).css('display', 'none');
@@ -126,15 +126,23 @@ class EditPlayerAspects extends FormApplication{
     async _on_name_change(event, html){
         let name = event.target.name.split("_")[1];
         let newName = event.target.value;
-        let newAspect = {};
-        newName = newName.split(".").join("․").trim();
-        newAspect.name = newName;
-    
-        newAspect.description = this.aspects[name].description;
-        newAspect.value = this.aspects[name].value;
-        delete this.aspects[name]
-        this.aspects[newName]=newAspect;
-        this.render(false);
+        if (!newName) {
+            ui.notifications.error(game.i18n.localize("fate-core-official.YouCannotHaveAnAspectWithABlankName"));
+            event.target.value = name;
+            return;
+        }
+        
+        let newAspect = new fcoAspect({
+            name:newName.split(".").join("․").trim(),
+            description:this.aspects[name].description,
+            value:this.aspects[name].value
+        }).toJSON();
+        
+        if (newAspect){
+            delete this.aspects[name]
+            this.aspects[newName]=newAspect;
+            this.render(false);
+        }
     }
 
     async _on_value_change(event, html){
@@ -172,10 +180,11 @@ class EditPlayerAspects extends FormApplication{
             }
         }
         let name = game.i18n.localize("fate-core-official.New_Aspect") + " "+ count;
-        let newAspect = {"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}
-       
-        this.aspects[newAspect.name] = newAspect;
-        this.render(false);
+        let newAspect = new fcoAspect({"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}).toJSON();
+        if (newAspect){
+            this.aspects[newAspect.name] = newAspect;
+            this.render(false);
+        }
     }
 
     //Set up the default options for instances of this class
@@ -194,7 +203,7 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async getData(){
-        let current = duplicate(this.object.data.data.aspects);
+        let current = duplicate(this.object.system.aspects);
         let updated = this.aspects;
         for (let aspect in current){
             if (current[aspect].notes == undefined){
@@ -206,12 +215,17 @@ class EditPlayerAspects extends FormApplication{
                 delete current[aspect];
             }
         }
-        return mergeObject(this.aspects, current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        let data = mergeObject (duplicate(this.aspects), current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        for (let as in data){
+            data[as].richDesc = await fcoConstants.fcoEnrich(data[as].description, this.object)
+            data[as].richNotes = await fcoConstants.fcoEnrich(data[as].notes, this.object)
+        }
+        return data;
     }
 
     async _updateObject(event, formData){
-        await this.object.update({"data.aspects":null}, {noHook:true, render:false})
-        await this.object.update({"data.aspects":this.aspects})
+        await this.object.update({"system.aspects":null}, {noHook:true, render:false})
+        await this.object.update({"system.aspects":this.aspects})
     }
 
     //This function is called when an actor or item update is called.

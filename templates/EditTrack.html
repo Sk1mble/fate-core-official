@@ -68,7 +68,7 @@
             <td>
                 <select id="edit_track_aspect" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
                     <option>{{localize 'fate-core-official.No'}}</option>
-                    <option>{{localize 'fate-core-official.NameAsAspect?'}}</option>
+                    <option>{{localize 'fate-core-official.NameAsAspect'}}</option>
                     <option>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
                 </select>
             </td>
@@ -124,6 +124,18 @@
             </td>
             <td>
                 <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> {{localize 'fate-core-official.HowMuchHarm'}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{localize 'fate-core-official.Rollable'}}
+            </td>
+            <td>
+                <select id = "edit_track_rollable" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
+                    <option value="false" selected="selected">False</option>
+                    <option value="full">{{localize 'fate-core-official.RollFullBoxes'}}</option>
+                    <option value="empty">{{localize 'fate-core-official.RollEmptyBoxes'}}</option>
+                </select>
             </td>
         </tr>
         <tr>

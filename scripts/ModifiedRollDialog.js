@@ -10,10 +10,11 @@ class ModifiedRollDialog extends Application {
         return options 
     } // End getDefaultOptions
 
-    constructor(actor, skill){
+    constructor(actor, skill, track){
         super();
         this.actor = actor;
         this.skill_name = skill;
+        this.track = track;
     }
 
     activateListeners(html){
@@ -33,7 +34,26 @@ class ModifiedRollDialog extends Application {
         let stunts = html.find("input[class='stunt_box']"); //This is an array
         let second_skill_rank = 0;
         let second_skill_text = ""
-        let skill_rank = this.actor.data.data.skills[this.skill_name].rank;
+        let skill_rank = 0;
+        if (this.track){
+            let track = this.actor.system.tracks[this.skill_name];
+            if (track.rollable == "full"){
+                // Get the number of full boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (track.box_values[i]) skill_rank++;
+                }
+            }
+            if (track.rollable == "empty"){
+                // Get the number of empty boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (!track.box_values[i]) skill_rank++;
+                }
+            }
+            if (track.rollable != "empty" && track.rollable != "full") return;
+        } else {
+            skill_rank = this.actor.system.skills[this.skill_name].rank;
+        }
+
         let manual_roll = html.find("select[id='manualRoll']")[0]?.value;
 
         total_modifier += parseInt(skill_rank);
@@ -46,7 +66,7 @@ class ModifiedRollDialog extends Application {
         }
 
         if (second_skill != game.i18n.localize("fate-core-official.None")){
-            second_skill_rank = this.actor.data.data.skills[second_skill].rank;
+            second_skill_rank = this.actor.system.skills[second_skill].rank;
             let ladder = fcoConstants.getFateLadder();
             let rs2 = ladder[`${second_skill_rank.toString()}`];
             second_skill_text = game.i18n.format("fate-core-official.secondSkillAtRank", {skill:second_skill, rank:second_skill_rank, ladder:rs2});
@@ -58,7 +78,7 @@ class ModifiedRollDialog extends Application {
         for (let i = 0; i < stunts.length; i++){
             if (stunts[i].checked){
                 let s_name = stunts[i].id.split("_")[1]
-                let s_modifier = this.actor.data.data.stunts[s_name].bonus;
+                let s_modifier = this.actor.system.stunts[s_name].bonus;
                 if (i > 0 ) stunt_text+="<br/>"
                 stunt_text += game.i18n.localize("fate-core-official.Stunt")+": "+ s_name + " (+" + s_modifier + ")"
                 total_modifier += parseInt(s_modifier);

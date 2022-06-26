@@ -58,7 +58,7 @@
             <td>
                 <select id="second_skill" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-fate-text-colour);">
                     <option selected="selected">{{localize 'fate-core-official.None'}}</option>
-                    {{#each this.actor.data.data.skills}}
+                    {{#each this.actor.system.skills}}
                     <option>{{this.name}}</option>
                     {{/each}}
                 </select>
@@ -69,12 +69,12 @@
                 {{localize 'fate-core-official.Stunt_s'}}:
             </td>
             <td width="300px">
-                {{#each this.actor.data.data.stunts}}
+                {{#each this.actor.system.stunts}}
                 {{#if (eq this.linked_skill ../activeSkill)}}
-                    <i style="font-style:normal;" title="{{this.description}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
+                    <i style="font-style:normal;" title="{{{fco_strip this.description}}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
                 {{/if}}
                 {{#if (eq this.linked_skill "Special")}}
-                    <i style="font-style:normal;" title="{{this.description}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
+                    <i style="font-style:normal;" title="{{{fco_strip this.description}}}"><input class="stunt_box" type="checkbox" id = "stunt_{{this.name}}"></input> {{this.name}} (+{{this.bonus}})</i><br>
                 {{/if}}
                 {{/each}}
             </td>

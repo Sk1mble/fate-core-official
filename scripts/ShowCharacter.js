@@ -47,12 +47,12 @@ class ShowCharacter extends Application {
         actorInfo = actorInfo.split("_");
         if (actorInfo[0]=="token"){
             let token = game.scenes.viewed.getEmbeddedDocument("Token", actorInfo[1]);
-            actor_data = token.actor.data;
+            actor_data = token.actor;
             elements.name=token.name;
         }
         if (actorInfo[0]=="actor"){
             let actor = game.actors.contents.find(actor => actor.id == actorInfo[1])
-            actor_data = actor.data;
+            actor_data = actor;
             elements.name=actor.data.name;
         }
         // Get values to be shown to the user
@@ -64,25 +64,33 @@ class ShowCharacter extends Application {
                     elements.avatar=actor_data.img;
                 }
                 if (element.id == "biography"){
-                    elements.biography = actor_data.data.details.biography;
+                    elements.biography = await fcoConstants.fcoEnrich(actor_data.system.details.biography.value, actor_data);
                 }
                 if (element.id == "description"){
-                    elements.description = actor_data.data.details.description;
+                    elements.description = await fcoConstants.fcoEnrich(actor_data.system.details.description.value, actor_data);
                 }
                 if (element.id == "aspects"){
-                    elements.aspects = actor_data.data.aspects;
+                    elements.aspects = actor_data.system.aspects;
                 }
                 if (element.id == "skills"){
-                    elements.skills = actor_data.data.skills;
+                    elements.skills = actor_data.system.skills;
                 }
                 if (element.id == "tracks"){
-                    elements.tracks = actor_data.data.tracks;
+                    elements.tracks = actor_data.system.tracks;
                 }
                 if (element.id == "stunts"){
-                    elements.stunts = actor_data.data.stunts;
+                    let stunts = duplicate (actor_data.system.stunts);
+                    for (let stunt in stunts){
+                        stunts[stunt].richDesc = await fcoConstants.fcoEnrich (stunts[stunt].description, actor_data);
+                    }
+                    elements.stunts = stunts;
                 }
                 if (element.id == "extras"){
-                    elements.extras = actor_data.items;
+                    let extras = duplicate (actor_data.items);
+                    for (let extra of extras){
+                        extra.richDesc = await fcoConstants.fcoEnrich (extra.system.description.value, actor_data);
+                    }
+                    elements.extras = extras;
                 }
             }
         }
@@ -104,7 +112,6 @@ class ShowCharacter extends Application {
 
     async getData(){
         const data = await super.getData();
-        ////console.log(data);
         data.users = game.users.players;
         data.tokens = game.scenes.viewed.tokens.contents;
         data.actors = game.actors.contents;

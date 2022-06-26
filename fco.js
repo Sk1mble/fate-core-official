@@ -34,8 +34,33 @@ import { Thing } from "./scripts/Thing.js"
 import { fcoActor } from "./scripts/fcoActor.js"
 import { fcoExtra } from "./scripts/fcoExtra.js"
 
+// The following hooks append the Fate Core Official settings to an Adventure document's flags so that they can be loaded/set on import of the adventure module.
+// Eventually I should probably add some code to this to check whether settings are already set and if they are, tell the user they'll be overwritten.
+
+Hooks.on("preCreateAdventure", (adventure, ...args) =>{
+    let flags = duplicate(adventure.flags);
+    let fco_settings = JSON.parse(fcoConstants.exportSettings());
+    if (!flags["fate-core-official"]) flags["fate-core-official"] = {};
+    flags["fate-core-official"].settings = fco_settings;
+    adventure.updateSource({flags:flags});
+})
+
+Hooks.on("preUpdateAdventure", (adventure, ...args) =>{
+    let flags = duplicate(adventure.flags);
+    let fco_settings = JSON.parse(fcoConstants.exportSettings());
+    if (!flags["fate-core-official"]) flags["fate-core-official"] = {};
+    flags["fate-core-official"].settings = fco_settings;
+    adventure.updateSource({flags:flags});
+})
+
+Hooks.on("importAdventure", (adventure, ...args) =>{
+    let flags = duplicate(adventure.flags);
+    let settings = flags["fate-core-official"]?.settings;
+    if (settings) fcoConstants.importSettings(settings);
+})
+
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
-    if (data.type == "Thing"){
+    if (actor.type == "Thing"){
         if (!options.thing){
             ui.notifications.error(game.i18n.localize("fate-core-official.CantCreateThing"));
             return false
@@ -47,7 +72,7 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     const input = html[0].querySelector("[name='fate-core-official.fco-font-family']");
     input.remove(0);
 
-    CONFIG.fontFamilies.forEach(font => {
+    FontConfig.getAvailableFonts().forEach(font => {
         const option = document.createElement("option");
         option.value = font;
         option.text = font;
@@ -113,9 +138,9 @@ async function setupSheet(){
 function setupFont(){
     // Setup the system font according to the user's settings
     let val = game.settings.get("fate-core-official","fco-font-family");
-    if (CONFIG.fontFamilies.indexOf(val) == -1){
+    if (FontConfig.getAvailableFonts().indexOf(val) == -1){
         // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-        val = CONFIG.fontFamilies[game.settings.get("fate-core-official","fco-font-family")]
+        val = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
     }
     let override = game.settings.get("fate-core-official", "override-foundry-font");
     if (override) {
@@ -128,7 +153,7 @@ function setupFont(){
 }
     
 Hooks.once('ready', () => {
-
+    game.system["fco-shifted"]=false;
     // Set up a reference to the Fate Core Official translations file or fallback file.
     if (game.i18n?.translations["fate-core-official"]) {
         game.system["lang"] = game.i18n.translations["fate-core-official"];
@@ -138,7 +163,8 @@ Hooks.once('ready', () => {
 
     if (game.settings.get ("fate-core-official", "drawingsOnTop")){
         try {
-            game.canvas.drawings.setParent(game.canvas.interface);
+            // This method doesn't work in v10
+            //game.canvas.drawings.setParent(game.canvas.interface);
         } catch {
             // This just means that the layers aren't instantiated yet.
         }
@@ -146,6 +172,34 @@ Hooks.once('ready', () => {
     setupSheet();
     setupFont();
 });
+
+Hooks.on('canvasReady' , (canvas) => {
+    if (game.settings.get("fate-core-official","drawingsOnTop")){
+        canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
+        canvas.drawings.foreground.sortableChildren = true;
+        for (let drawing of canvas.drawings.objects.children){
+            canvas.drawings.foreground.addChild(drawing.shape);
+            //drawing.shape.zIndex = drawing.document.z;
+        }
+    }
+})
+
+Hooks.on('createDrawing', (drawing) => {
+    if (game.settings.get("fate-core-official","drawingsOnTop")){
+        canvas.drawings.foreground.addChild(drawing.object.shape);
+        drawing.shape.zIndex = drawing.z;
+    }
+})
+
+Hooks.on('deleteDrawing', (drawing, render, id) => {
+    if (game.settings.get("fate-core-official","drawingsOnTop")){
+        for (let d of canvas.drawings.foreground.children){
+            if (d.object._destroyed){
+                canvas.drawings.foreground.removeChild(d);
+            }
+        }
+    }
+})
 
 Hooks.on('diceSoNiceReady', function() {
     game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);
@@ -181,8 +235,8 @@ Hooks.once('ready', async function () {
     // Now flags, let us write a convenience function
 
     async function changeFlags(doc){
-        let flags1 = doc.data.flags["ModularFate"];
-        let flags2 = doc.data.flags["FateCoreOfficial"];
+        let flags1 = doc.flags["ModularFate"];
+        let flags2 = doc.flags["FateCoreOfficial"];
         if ( flags1 ) {
             await doc.update({"flags.fate-core-official": flags1}, {recursive: false});
             await doc.update({"flags.-=ModularFate": null});
@@ -225,7 +279,7 @@ Hooks.once('ready', async function () {
     if (game.settings.get("fate-core-official","run_once") == false && game.user.isGM){
         const ehmodules = [];
         game.modules.forEach(m => {
-            if (m.data?.flags?.ehproduct == "Fate Core"){
+            if (m?.flags?.ehproduct == "Fate Core Adventure"){
                 ehmodules.push(m);
             }
         })
@@ -275,7 +329,10 @@ Hooks.once('ready', async function () {
 
            async getData(){
                 let data = super.getData();
-                data.ehmodules = ehmodules;
+                data.ehmodules = duplicate(ehmodules);
+                for (let ehm of data.ehmodules){
+                    ehm.richDesc = await fcoConstants.fcoEnrich(ehm.description);
+                }
                 data.num_modules = ehmodules.length;
                 data.h = window.innerHeight /2;
                 data.w = window.innerWidth /2;
@@ -284,29 +341,24 @@ Hooks.once('ready', async function () {
             }
 
             async installModule(module_name){
-                // Load the world settings from setup.json and install them
-                let setup = await fcoConstants.getJSON(`/modules/${module_name}/json/setup.json`);
-                let folders = await fcoConstants.getJSON(`/modules/${module_name}/json/folders.json`);
-                await fcoConstants.importSettings(setup);
-                await fcoConstants.createFolders(folders);
+                /*
+                    The core system now has code to export settings on creating an adventure as flags on the adventure, and to re-import them
+                    from flags on import of the module.
+                */
     
-                // Grab all of the compendium pack data for the module
-                let module = await game.modules.get(module_name);
-                let packs = Array.from(module.packs);
-                //First we sort by entity - this is primarily because I want JournalEntries to be
-                //loaded before Scenes so that on first load the map pins aren't 'unknown'.
-
-                if (isNewerVersion(game.version, "9.224")){
-                    await fcoConstants.sort_key(packs, "type");
-                } else {
-                    await fcoConstants.sort_key(packs, "entity");
-                }
-
-                for (let pack of packs){
-                    if (!pack.name.includes("fatex")){
-                        let cc = new CompendiumCollection (pack);
-                        await fcoConstants.importAllFromPack(cc)
-                    }
+                // Grab the adventure pack and import it.
+                // The compendium must be called 'content'
+                // All 'adventures' in this compendium will be imported. This would allow us to segregate content on occasion, for example
+                // allowing scenes and characters to be imported separately from the journal entries forming the text of the book.
+                
+                try {
+                        let pack = await game.packs.get(`${module_name}.content`);
+                        await pack.getDocuments();
+                        for (let p of pack.contents){
+                            await p.sheet._updateObject({}, new FormData())
+                        }    
+                } catch (error){
+                    ui.notifications.error(`Unable to import the adventure module from ${module_name}`)
                 }
 
                 // Set installing and run_once to the appropriate post-install values
@@ -323,7 +375,7 @@ Hooks.once('ready', async function () {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                       action: "editWorld",
-                      background: `modules/${module_name}/art/world.webp`, title:game.world.data.title, name:game.world.data.name, nextSession:null
+                      background: `modules/${module_name}/art/world.webp`, title:game.world.title, id:game.world.id, nextSession:null
                     })
                 });
 
@@ -436,9 +488,41 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
 Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = fcoActor;
     CONFIG.Item.documentClass = fcoExtra;
-    CONFIG.fontFamilies.push("Montserrat");
-    CONFIG.fontFamilies.push("Jost");
-    CONFIG.fontFamilies.push("Fate");
+
+    CONFIG.fontDefinitions["Fate"] = {
+        "editor": true,
+        "fonts": [{urls: [`systems/fate-core-official/fonts/Fate Core Font.ttf`]}]
+      }
+
+      CONFIG.fontDefinitions["Fate Core"] = {
+        "editor": true,
+        "fonts": [{urls: [`systems/fate-core-official/fonts/Fate Core Font.ttf`]}]
+      }
+
+      CONFIG.fontDefinitions["Jost"] = {
+        editor: true,
+        fonts: [
+          {urls: ["systems/fate-core-official/fonts/Jost-variable.ttf"]},
+          {urls: ["systems/fate-core-official/fonts/Jost-italic.ttf"], style: "italic"}
+        ]
+      }
+
+      CONFIG.fontDefinitions["Montserrat"] = {
+          editor: true,
+          fonts: [
+              {urls:["systems/fate-core-official/fonts/Montserrat-Regular.otf"]},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Italic.otf"], style:"italic"},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Light.otf"], weight:300},
+              {urls:["systems/fate-core-official/fonts/Montserrat-LightItalic.otf"], style:"italic", weight:300},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Bold.otf"], weight:"bold"},
+              {urls:["systems/fate-core-official/fonts/Montserrat-BoldItalic.otf"], style:"italic", weight:"bold"},
+              {urls:["systems/fate-core-official/fonts/Montserrat-Black.otf"], weight:900},
+              {urls:["systems/fate-core-official/fonts/Montserrat-BlackItalic.otf"], style:"italic", weight:900},
+          ]
+      }
+
+    const includeRgx = new RegExp("/systems/fate-core-official/");
+    CONFIG.compatibility.includePatterns.push(includeRgx);
 
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
@@ -853,7 +937,7 @@ game.settings.register("fate-core-official","freeStunts", {
     game.settings.register("fate-core-official","showPronouns", {
         name: game.i18n.localize("fate-core-official.showPronouns"),
         hint: game.i18n.localize("fate-core-official.showPronounsHint"),
-        scope:"user",
+        scope:"client",
         config:true,
         type: Boolean,
         restricted:false,
@@ -908,7 +992,7 @@ game.settings.register("fate-core-official","freeStunts", {
           OBSERVER:"Observer",
           OWNER:"Owner"
         },
-        default: "none"
+        default: "NONE"
       });
 
     game.settings.register("fate-core-official","sheet_template", {
@@ -988,7 +1072,7 @@ game.settings.register("fate-core-official","freeStunts", {
     game.settings.register("fate-core-official","confirmDeletion", {
         name: game.i18n.localize("fate-core-official.ConfirmDeletionName"),
         hint:game.i18n.localize("fate-core-official.ConfirmDeletionHint"),
-        scope:"user",
+        scope:"client",
         config:true,
         type:Boolean,
         restricted:false,
@@ -1004,13 +1088,19 @@ game.settings.register("fate-core-official","freeStunts", {
         default:false,
         onChange: () => {
             let val = game.settings.get("fate-core-official","drawingsOnTop");
-            if (val) {
-                game.canvas.drawings.setParent(game.canvas.interface);
-                game.socket.emit("system.fate-core-official",{"drawingsOnTop":true})
+            if (val && canvas?.objects?.drawings?.children) {
+                canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
+                canvas.drawings.foreground.sortableChildren = true;
+                for (let drawing of canvas?.drawings?.objects?.children){
+                    canvas.drawings.foreground.addChild(drawing.shape);
+                }
             }
             else {
-                game.canvas.drawings.setParent(game.canvas.primary);
-                game.socket.emit("system.fate-core-official",{"drawingsOnTop":false})
+                if (canvas?.objects?.drawings?.children){
+                    for (let drawing of canvas?.drawings?.objects?.children){
+                        canvas.primary.addChild(drawing.shape);
+                    }
+                }
             }
         }
     })
@@ -1021,7 +1111,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:Number,
         default:40,
-        scope:"user",
+        scope:"client",
         range: {             // If range is specified, the resulting setting will be a range slider
             min: 10,
             max: 90,
@@ -1038,7 +1128,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:false,
         type:Number,
         default:55,
-        scope:"user",
+        scope:"client",
         range: {             // If range is specified, the resulting setting will be a range slider
             min: 10,
             max: 90,
@@ -1067,7 +1157,7 @@ game.settings.register("fate-core-official","freeStunts", {
        type:String,
        default:"Montserrat",
        restricted:false,
-       scope:"user",
+       scope:"client",
        config:true,
        choices:"delete",
        onChange:() => {
@@ -1082,7 +1172,7 @@ game.settings.register("fate-core-official","freeStunts", {
         type:Boolean,
         default:false,
         restricted:false,
-        scope:"user",
+        scope:"client",
         config:true,
         onChange:() => {
             setupFont();
@@ -1101,7 +1191,7 @@ game.settings.register("fate-core-official","freeStunts", {
     game.settings.register("fate-core-official","fu_combatants_only", {
         name:"Display information only for combatants in the current 'encounter' rather than all tokens?",
         hint:"Toggle between display of all tokens or just active combatants in Fate Utilities",
-        scope:"user",
+        scope:"client",
         config:false,
         default:false,
         type:Boolean
@@ -1150,6 +1240,24 @@ game.settings.register("fate-core-official","freeStunts", {
     Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
     Items.unregisterSheet('core', ItemSheet);
 
+    game.settings.register("fate-core-official", "sortSkills", {
+        name: "Sort skills on sheets by rank?",
+        scope:"client",
+        config:true,
+        type:Boolean,
+        restricted:false,
+        default:false
+    })
+
+    game.settings.register("fate-core-official", "sortStunts", {
+        name: "Sort stunts on sheets?",
+        scope:"client",
+        config:true,
+        type:Boolean,
+        restricted:false,
+        default:false
+    })
+
     game.settings.register("fate-core-official", "gameTime", {
         name: game.i18n.localize("fate-core-official.GameTime"),
         scope:"world",
@@ -1188,7 +1296,7 @@ game.settings.register("fate-core-official","freeStunts", {
 
     game.settings.register("fate-core-official", "fuFontSize", {
         name: "Fate Utilities Font Size",
-        scope:"user",
+        scope:"client",
         config:false,
         type:Number,
         restricted:false,
@@ -1206,7 +1314,14 @@ game.settings.register("fate-core-official","freeStunts", {
             max: 50,
             step: 1,
         },
-        default:12
+        default:12,
+        onChange:() => {
+            for (let app in ui.windows){
+                if (ui.windows[app]?.options?.id == "FateUtilities"){
+                    ui.windows[app]?.render(false);
+                }
+            }
+        }
     });
 
     game.settings.register("fate-core-official", "fu-ignore-list", {
@@ -1325,21 +1440,12 @@ Combatant.prototype._getInitiativeFormula = function () {
     if (init_skill === "None" || init_skill === "Disable") {
         return "1d0";
     }else {
-        return `1d0+${this.actor.data.data.skills[init_skill].rank}`;
+        return `1d0+${this.actor.system.skills[init_skill].rank}`;
     }
 }
 
-// Return enriched text WITH secret blocks if the user is GM and otherwise WITHOUT
-Handlebars.registerHelper("enr", function(value, object) {
-    let secrets = false;
-    if (object) secrets = object.isOwner;
-    if (game.user.isGM) secrets = true;
-    //enrichHTML(content, secrets, entities, links, rolls, rollData) → {string}
-    if (isNewerVersion(game.version, '9.224')){
-        return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:secrets, documents:true}));
-    } else {
-        return DOMPurify.sanitize(TextEditor.enrichHTML(value, {secrets:secrets, entities:true}));
-    }
+Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, name, enriched_tokens) {
+    return enriched_tokens[token_id][type][name].richNotes;
 })
 
 Handlebars.registerHelper("fco_strip", function (value) {
@@ -1408,6 +1514,11 @@ Handlebars.registerHelper("hasBoxes", function(track) {
         return true;
     }
 });
+
+Handlebars.registerHelper("fco_item_name_from_id", function (actor, id){
+    let item = actor.items.get(id);
+    return item.name;
+})
 
 class CustomiseSheet extends FormApplication {
     static get defaultOptions (){
@@ -1592,17 +1703,21 @@ class FcoColourSchemes extends FormApplication {
             }
         })
 
-        mySchemes.forEach(scheme => {
-            if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
-                scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
-            }
-        })
+        if (mySchemes) {
+                mySchemes.forEach(scheme => {
+                if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
+                    scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
+                }
+            })
+        }
 
-        otherSchemes.forEach(scheme => {
-            if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
-                scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
-            }
-        })
+        if (otherSchemes){
+                otherSchemes.forEach(scheme => {
+                if (!scheme.scheme.hasOwnProperty("fco_user_sheet_logo") || scheme.scheme?.fco_user_sheet_logo == "world"){
+                    scheme.scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
+                }
+            })
+        }
 
         this.mySchemes = mySchemes;
         this.otherSchemes = otherSchemes;
@@ -1724,4 +1839,5 @@ class FcoColourSchemes extends FormApplication {
         })
     }
 }
+
 

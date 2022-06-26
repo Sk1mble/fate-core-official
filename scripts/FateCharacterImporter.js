@@ -51,7 +51,7 @@ class FateCharacterImporter {
         let actorData = {
             "name":"blank",
             "type":"fate-core-official",
-            "data":{
+            "system":{
                         details:{
                                     fatePoints:{
                                                     refresh:"0"
@@ -67,14 +67,14 @@ class FateCharacterImporter {
         if (data?.flags?.exportSource?.system === "fatex"){
             actorData.name = data.name;
             actorData.img = data.img;
-            actorData.token = data.token;
-            actorData.data.details = {
+            actorData.prototypeToken = data.prototypeToken;
+            actorData.system.details = {
                 fatePoints:{
-                    current:data.data.fatepoints.current, 
-                    refresh:data.data.fatepoints.refresh
+                    current:data.system.fatepoints.current, 
+                    refresh:data.system.fatepoints.refresh
                 },
                 biography:{
-                    value:data.data.biography.value
+                    value:data.system.biography.value
                 }
             };
 
@@ -91,7 +91,7 @@ class FateCharacterImporter {
                 aspect.description = rawAspect.data.description;
                 aspects[`${aspect.name}`] = aspect;
             })
-            actorData.data.aspects = aspects;
+            actorData.system.aspects = aspects;
 
             //Skills
             const rawSkills = items.filter(item => item.type === "skill");
@@ -103,7 +103,7 @@ class FateCharacterImporter {
                 skill.description = rawSkill.data.description;
                 skills[`${skill.name}`] = skill;
             })
-            actorData.data.skills = skills;
+            actorData.system.skills = skills;
 
             //Stunts
             const rawStunts = items.filter(item => item.type === "stunt");
@@ -115,7 +115,7 @@ class FateCharacterImporter {
                 stunt.refresh_cost = 0;
                 stunts[`${stunt.name}`] = stunt;
             })
-            actorData.data.stunts = stunts;
+            actorData.system.stunts = stunts;
 
             let tracks = {};
             
@@ -186,7 +186,7 @@ class FateCharacterImporter {
                         
                         if (skillReferenceSettings?.conjunction == 0){
                             //enable if one of conditions met OR
-                            if (actorData.data.skills[skill].rank >= condition){
+                            if (actorData.system.skills[skill].rank >= condition){
                                 linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
                                 linked_skills.push(linked_skill);
                                 track.enabled = true;
@@ -197,14 +197,14 @@ class FateCharacterImporter {
                             //enable if all conditions met AND
                             linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
                             linked_skills.push(linked_skill);
-                            if (actorData.data.skills[skill].rank >= condition){
+                            if (actorData.system.skills[skill].rank >= condition){
                                 track.enabled = true;
                             } else {
                                 track.enabled = false;
                             }
                         }
 
-                        if (actorData.data.skills[skill].rank >= condition){
+                        if (actorData.system.skills[skill].rank >= condition){
                             if (reference.type == 0){
                                 // Enables
                                 linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
@@ -213,7 +213,7 @@ class FateCharacterImporter {
                             }
                         }
                         
-                        if (actorData.data.skills[skill].rank >= condition){
+                        if (actorData.system.skills[skill].rank >= condition){
                             if (reference.type == 1) {
                                 //Modifies boxes
                                 track.enabled = true;
@@ -242,7 +242,7 @@ class FateCharacterImporter {
                 }
                 tracks[`${track.name}`] = track;
             })
-            actorData.data.tracks = tracks;
+            actorData.system.tracks = tracks;
 
             //Extras
             const rawExtras = items.filter (item => item.type === "extra");
@@ -251,7 +251,7 @@ class FateCharacterImporter {
                     let extra = {
                         name:rawExtra.name,
                         type:"Extra",
-                        data:{
+                        system:{
                             description:{value:rawExtra.data.description},
                             refresh:0,
                             countSkills:false,
@@ -264,7 +264,6 @@ class FateCharacterImporter {
         }
 
         // Import from Fari (only supports the newest version)
-        //console.log(data);
         let allSections=[];
         let rows;
 
@@ -298,7 +297,7 @@ class FateCharacterImporter {
                 aspect.value = rawAspect.value;
                 aspects[`${aspect.name}`] = aspect;
             })
-            actorData.data.aspects = aspects;
+            actorData.system.aspects = aspects;
 
             //Assign skills - Will add all sections that contain skill blocks.
             let skillSection = [];
@@ -324,7 +323,7 @@ class FateCharacterImporter {
                 skill.rank = rawSkill.value;
                 skills[`${skill.name}`] = skill;
             })
-            actorData.data.skills = skills;
+            actorData.system.skills = skills;
 
             //Assign Stunts
 
@@ -350,15 +349,15 @@ class FateCharacterImporter {
                 stunt.refresh_cost = 0; // Fari doesn't track the cost of stunts so this will have to be modified by the user after import.
                 stunts[`${stunt.name}`] = stunt;
             })
-            actorData.data.stunts = stunts;
+            actorData.system.stunts = stunts;
 
             // Assign refresh
             const fpSection = allSections.find (
                 (section) => section.label.toLowerCase() === "fate points"
             );
             const fpBlock = fpSection.blocks.find(block => block.label.toLowerCase() === "fate points");
-            actorData.data.details.fatePoints.current = parseInt(fpBlock.value);
-            actorData.data.details.fatePoints.refresh = parseInt(fpBlock.meta.max);
+            actorData.system.details.fatePoints.current = parseInt(fpBlock.value);
+            actorData.system.details.fatePoints.refresh = parseInt(fpBlock.meta.max);
 
             // Assign Notes, Biography, Description (if present)
 
@@ -377,7 +376,7 @@ class FateCharacterImporter {
             if (notes) notes.forEach(note => {
                 if (note) notesText += note.value +"\n"
             });
-            actorData.data.details.notes={value:notesText};
+            actorData.system.details.notes={value:notesText};
 
             //Biography
             const biographySection = allSections.find (
@@ -394,7 +393,7 @@ class FateCharacterImporter {
             if (biography) biography.forEach(bio => {
                 if (bio) biographyText += bio.value +"\n"
             });
-            actorData.data.details.biography={value:biographyText};
+            actorData.system.details.biography={value:biographyText};
 
             //Description
             const descriptionSection = allSections.find (
@@ -411,7 +410,7 @@ class FateCharacterImporter {
             if (description) description.forEach(desc => {
                 if (desc) descriptionText += desc.value +"\n"
             });
-            actorData.data.details.description={value:descriptionText};
+            actorData.system.details.description={value:descriptionText};
 
             //Assign stress & consequences
             //only works if there's exactly one Conseqences/Conditions section on the sheet.
@@ -466,7 +465,7 @@ class FateCharacterImporter {
                 tracks[`${track.name}`] = track;
             })
 
-            actorData.data.tracks = tracks;
+            actorData.system.tracks = tracks;
 
             // Assign name
             actorData.name = data?.name;

@@ -1,14 +1,15 @@
 {
-  "name": "fate-core-official",
+  "id": "fate-core-official",
   "title": "Fate Core Official",
-  "description": "Grab your plasma rifles, spell components, and jetpacks! Name your game; Fate Core is the foundation that can make it happen. Fate Core is a flexible system that can support whatever worlds you dream up. Have you always wanted to play a post-apocalyptic spaghetti western with tentacle monsters? Swords and sorcery in space? Wish there was a game based on your favorite series of books, film, or television, but it never happened? Fate Core is your answer. <p/>Fate Core is a tabletop roleplaying game about proactive, capable people who lead dramatic lives. The type of drama they experience is up to you. But wherever they go, you can expect a fun storytelling experience full of twists…of fate.<p/>This Foundry system is supported by Evil Hat Productions and will allow you to build almost any character from a system that's Powered by Fate.",
-  "author": "Richard Bellingham",
-  "authors": [],
+  "description": "Grab your plasma rifles, spell components, and jetpacks! Name your game; Fate Core is the foundation that can make it happen. Fate Core is a flexible system that can support whatever worlds you dream up. Have you always wanted to play a post-apocalyptic spaghetti western with tentacle monsters? Swords and sorcery in space? Wish there was a game based on your favorite series of books, film, or television, but it never happened? Fate Core is your answer. <p>Fate Core is a tabletop roleplaying game about proactive, capable people who lead dramatic lives. The type of drama they experience is up to you. But wherever they go, you can expect a fun storytelling experience full of twists…of fate.</p><p>This Foundry system is supported by Evil Hat Productions and will allow you to build almost any character from a system that's Powered by Fate.</p>",
+  "authors": [{"name":"Richard Bellingham"}],
   "url": "https://github.com/Sk1mble/fate-core-official",
   "flags": {},
-  "version": "4.3.27",
-  "minimumCoreVersion": "0.8.4",
-  "compatibleCoreVersion": "9",
+  "compatibility": {
+    "minimum":"10.270",
+    "verified":"10.270"
+  },
+  "version": "4.4.07",
   "scripts": [
     "./scripts/fcoConstants.js",
     "./scripts/ManageSkills.js",
@@ -23,6 +24,7 @@
     "./scripts/ShowCharacter.js",
     "./scripts/FateCharacterImporter.js",
     "./scripts/FateCharacterDefaults.js",
+    "./scripts/FateCoreOfficialModels.js",
     "./scripts/Pen/pen.js",
     "./scripts/Pen/markdown.js",
     "./scripts/purify.min.js"
@@ -39,12 +41,16 @@
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "system": "",
+      "module": ""
     },
     {
       "lang": "de",
       "name": "Deutsch",
-      "path": "lang/de.json"
+      "path": "lang/de.json",
+      "system": "",
+      "module": ""
     }
   ],
   "packs": [
@@ -52,8 +58,7 @@
       "name": "macros",
       "label": "Fate Core Official Macros",
       "path": "/packs/macros.db",
-      "entity": "Macro",
-      "type":"Macro",
+      "type": "Macro",
       "system": "fate-core-official",
       "private": false
     },
@@ -61,8 +66,7 @@
       "name": "documentation",
       "label": "Fate Core Official Documentation",
       "path": "/packs/documentation.db",
-      "entity": "JournalEntry",
-      "type":"JournalEntry",
+      "type": "JournalEntry",
       "system": "fate-core-official",
       "private": false
     }
@@ -71,7 +75,16 @@
   "dependencies": [],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.3.27.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.4.07.zip",
   "protected": false,
-  "gridDistance": 1
+  "gridDistance": 1,
+  "license": "",
+  "readme": "",
+  "bugs": "",
+  "changelog": "",
+  "background": "",
+  "initiative": "",
+  "gridUnits": "",
+  "primaryTokenAttribute": "",
+  "secondaryTokenAttribute": ""
 }

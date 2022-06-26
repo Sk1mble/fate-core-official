@@ -251,6 +251,7 @@
 
 .mfate-sheet__tabs-nav-link:not(.active) {
     box-shadow: inset 0px -6px 9px -6px var(--fco-foundry-interactable-color);
+    opacity:0.25;
 }
 
 .mfate-sheet__tabs-nav-link.active {
@@ -262,7 +263,6 @@
     padding: 7px 1em 1px;
     display: block;
 }
-
 
 /* Tabs */
 
@@ -489,7 +489,7 @@
 .mfate-tracks__list {
     display: table;
     width: 100%;
-    padding-bottom: 1em;
+    padding-bottom: 5px;
 }
 
 .mfate-tracks__item {
@@ -550,7 +550,7 @@
 }
 
 #tracks_body {
-    padding: 0 .5em;
+    padding: 5px 5px 0 0;
     overflow-y: auto;
 }
 

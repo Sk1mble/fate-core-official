@@ -10,10 +10,10 @@
             {{#each this.ehmodules}}
                 <tr>
                     <td style="width:200px; vertical-align:top; padding:25px">
-                        <button type="button" title="{{localize 'fate-core-official.clickToSetup'}} {{this.data.title}}" name="eh_install" id="install_{{this.data.name}}" style="width:260px; height:260px; border:none; background: url('/modules/{{this.data.name}}/art/thumb.webp') scroll no-repeat center center; background-size:260px 260px">
+                        <button type="button" title="{{localize 'fate-core-official.clickToSetup'}} {{this.title}}" name="eh_install" id="install_{{this.id}}" style="width:260px; height:260px; border:none; background: url('/modules/{{this.id}}/art/thumb.webp') scroll no-repeat center center; background-size:260px 260px">
                     </td>
                     <td>
-                        <span style="font-size:11pt; color:white">{{{enr this.data.description}}}</span>
+                        <span style="font-size:11pt; color:white">{{{this.richDesc}}}</span>
                     </td>
                 </tr>      
             {{/each}}

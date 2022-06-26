@@ -1,8 +1,8 @@
 <form id="CharacterView" style="font-family:var(--fco-font-family)">
     <h1>{{name}}</h1>
     {{#if (eq avatar undefined)}}{{else}}<img style="width:200px; height:auto" src = "{{avatar}}"/><p/>{{/if}}
-    {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'fate-core-official.Biography'}}</h2>{{{enr  biography.value}}}</div><p/>{{/if}}
-    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'fate-core-official.Description'}}</h2>{{{enr  description.value}}}</div><p/>{{/if}}
+    {{#if (eq biography undefined)}}{{else}}<h2>{{localize 'fate-core-official.Biography'}}</h2>{{{biography}}}</div><p/>{{/if}}
+    {{#if (eq description undefined)}}{{else}}<h2>{{localize 'fate-core-official.Description'}}</h2>{{{description}}}</div><p/>{{/if}}
     {{#if (eq aspects undefined)}}{{else}}<h2>{{localize 'fate-core-official.Aspects'}}</h2>
     <table style="border:none; background:none">
     {{#each aspects}}
@@ -46,7 +46,7 @@
                     <label class="box"><input type="checkbox" class="fco-box" disabled="disabled" style="opacity:0;width:25px; height:25px; float:left;" checked="checked"><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px white;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></label>{{else}}                          
                     <label class="box"><input type="checkbox" class="fco-box" disabled="disabled" style="opacity:0; width:25px; height:25px; float:left;"><span class = "checkmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 20px; color: #2f3542; text-shadow: 2px 2px 0px #f1f2f6;">{{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}</i></input></label>{{/if}}
                     {{/each}}
-                    {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input type="text" class="aspect_box" disabled="disabled" name = "data.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{/if}}
+                    {{#if this.aspect.when_marked}}{{#if (hasBoxes this)}}{{else}}<label style="font-weight:900; padding-left:2px">{{this.harm_can_absorb}}</label>{{/if}}<input type="text" class="aspect_box" disabled="disabled" name = "system.tracks.{{this.name}}.aspect.name" value ="{{this.aspect.name}}"><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 24px; color: #2f3542; text-shadow: 2px 2px 2px white;"></i></input>{{/if}}
                 </td>
             </tr>
             {{/if}}{{/each}}
@@ -58,7 +58,7 @@
     {{#each stunts}}
         <tr>
             <td width = 25%>{{this.name}}</td>
-            <td>{{{enr this.description}}}</td>
+            <td>{{{this.richDesc}}}</td>
         </tr>
     {{/each}}
     </table>
@@ -68,8 +68,8 @@
     <table style="border:none; background:none; padding:10px">
     {{#each extras}}
         <tr>
-            <td>{{this.name}}</td>
-            <td>{{{enr this.data.description.value}}}</td>
+            <td width = "25%">{{this.name}}</td>
+            <td>{{{this.richDesc}}}</td>
         </tr>
     {{/each}}
     </table>

@@ -50,13 +50,10 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async getData() {        
-        const data = this.document.data;
-        data.type = this.item.type;
-        data.stunts = this.object.data.data.stunts;
-        data.aspects = this.object.data.data.aspects;
-        data.skills = this.object.data.data.skills;
+        const data = {};
+        data.document = this.document;
         data.ladder = fcoConstants.getFateLadder();
-        let track_categories = this.object.data.data.tracks;
+        let track_categories = this.object.system.tracks;
         let cats = new Set();
         for (let c in track_categories){
             let cat = track_categories[c].category;
@@ -65,18 +62,29 @@ export class ExtraSheet extends ItemSheet {
         track_categories=Array.from(cats);
         data.category = this.track_category;
         data.track_categories = track_categories;
-        data.tracks = this.object.data.data.tracks;
         let skills_label = game.settings.get("fate-core-official", "skillsLabel");
         data.skillsLabel = skills_label || game.i18n.localize("fate-core-official.defaultSkillsLabel");
-
         data.dataTemplate = () => `systems/fate-core-official/templates/ExtraSheet.html`;
         data.GM=game.user.isGM;
-        if (this.object?.data?.data?.contents != undefined && !jQuery.isEmptyObject(this.object?.data?.data?.contents))
+        if (this.object?.system?.contents != undefined && !jQuery.isEmptyObject(this.object?.system?.contents))
         {
-            data.contents = this.object.data.data.contents;
+            data.contents = this.object.system.contents;
         }
         else {
             data.contents = false;
+        }
+
+        data.rich = {};
+        data.rich.description = await fcoConstants.fcoEnrich (data.document.system.description.value, this.object);
+        data.rich.costs = await fcoConstants.fcoEnrich (data.document.system.costs, this.object);
+        data.rich.permissions = await fcoConstants.fcoEnrich (data.document.system.permissions, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.overcome, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.create, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.attack, this.object);
+        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.defend, this.object);
+        data.rich.stunts = duplicate(data.document.system.stunts);
+        for (let st in data.rich.stunts){
+            data.rich.stunts[st].richDesc = await fcoConstants.fcoEnrich (data.rich.stunts[st].description, this.object);
         }
         return data;
     }
@@ -104,7 +112,7 @@ export class ExtraSheet extends ItemSheet {
         tracks_button.on("click", event => this._onTracks_click(event, html));
 
         const ul_all_stunts = html.find('div[name="ul_all_extra_stunts"]');
-        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.data.data.stunts));
+        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.system.stunts));
 
         const input = html.find('input[type="text"], input[type="number"], div[name="textIn"], textarea');
 
@@ -124,10 +132,10 @@ export class ExtraSheet extends ItemSheet {
                     }
 
                     let dragged;
-                    if (type == "skill") dragged = this.document.data.data.skills[dragged_name];
-                    if (type == "stunt") dragged = this.document.data.data.stunts[dragged_name];
-                    if (type == "aspect") dragged = this.document.data.data.aspects[dragged_name];
-                    if (type == "track") dragged = this.document.data.data.tracks[dragged_name]
+                    if (type == "skill") dragged = this.document.system.skills[dragged_name];
+                    if (type == "stunt") dragged = this.document.system.stunts[dragged_name];
+                    if (type == "aspect") dragged = this.document.system.aspects[dragged_name];
+                    if (type == "track") dragged = this.document.system.tracks[dragged_name]
                     let user = game.user.id;
                     let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
                     event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
@@ -141,13 +149,13 @@ export class ExtraSheet extends ItemSheet {
                 let name = event.currentTarget.getAttribute("data-mfname");
                 let entity;
                 if (type == "skill") {
-                    entity = this.document.data.data.skills[name];
+                    entity = this.document.system.skills[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Rank")}: </strong> ${entity.rank}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>`
                 }
                 if (type == "stunt") {
-                    entity = this.document.data.data.stunts[name];
+                    entity = this.document.system.stunts[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name} (${game.i18n.localize("fate-core-official.Refresh")} ${entity.refresh_cost})<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${entity.description}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Skill")}:</strong> ${entity.linked_skill}<br/>
@@ -160,14 +168,14 @@ export class ExtraSheet extends ItemSheet {
                     content += actions;
                 }
                 if (type == "aspect"){
-                    entity = this.document.data.data.aspects[name];
+                    entity = this.document.system.aspects[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Value")}: </strong> ${entity.value}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
                 } 
                 if (type == "track") {
-                    entity = this.document.data.data.tracks[name];
+                    entity = this.document.system.tracks[name];
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
@@ -194,7 +202,7 @@ export class ExtraSheet extends ItemSheet {
         const desc = $(`#${this.document.id}_descValue`);
         //Update the extra when the field loses focus.
         desc.on("blur", async event => {
-            await this.document.update({"data.description.value":DOMPurify.sanitize(event.target.innerHTML)})
+            await this.document.update({"system.description.value":DOMPurify.sanitize(event.target.innerHTML)})
         })
         //That's the description field; still to come permissions, costs, caa, attack,overcome, defend
         // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
@@ -248,25 +256,25 @@ export class ExtraSheet extends ItemSheet {
                 if (text != "discarded") {
                     this.editing = false;
                     if (field == "descValue"){
-                        await this.document.update({"data.description.value":text});
+                        await this.document.update({"system.description.value":text});
                     }
                     if (field == "overcomeValue"){
-                        await this.document.update({"data.actions.overcome":text});                        
+                        await this.document.update({"system.actions.overcome":text});                        
                     }
                     if (field == "permValue"){
-                        await this.document.update({"data.permissions":text});
+                        await this.document.update({"system.permissions":text});
                     }
                     if (field == "costsValue"){
-                        await this.document.update({"data.costs":text});
+                        await this.document.update({"system.costs":text});
                     }
                     if (field == "createValue"){
-                        await this.document.update({"data.actions.create":text});
+                        await this.document.update({"system.actions.create":text});
                     }
                     if (field == "attackValue"){
-                        await this.document.update({"data.actions.attack":text});
+                        await this.document.update({"system.actions.attack":text});
                     }
                     if (field == "defendValue"){
-                        await this.document.update({"data.actions.defend":text});
+                        await this.document.update({"system.actions.defend":text});
                     }
                     await this._render(false);
                 }
@@ -276,37 +284,37 @@ export class ExtraSheet extends ItemSheet {
                 if (!window.getSelection().toString()){
                     let data = DOMPurify.sanitize(event.target.innerHTML);
                     if (field == "descValue"){
-                        await this.document.update({"data.description.value":data});
+                        await this.document.update({"system.description.value":data});
                         this.editing = false;
                         await this._render(false);
                     }
                     if (field == "overcomeValue"){
-                        await this.document.update({"data.actions.overcome":data});
+                        await this.document.update({"system.actions.overcome":data});
                         this.editing = false;
                         await this._render(false);
                     }
                     if (field == "permValue"){
-                        await this.document.update({"data.permissions":data});
+                        await this.document.update({"system.permissions":data});
                         this.editing = false;
                         await this._render(false);
                     }
                     if (field == "costsValue"){
-                        await this.document.update({"data.costs":data});
+                        await this.document.update({"system.costs":data});
                         this.editing = false;
                         await this._render(false);
                     }
                     if (field == "createValue"){
-                        await this.document.update({"data.actions.create":data});
+                        await this.document.update({"system.actions.create":data});
                         this.editing = false;
                         await this._render(false);
                     }
                     if (field == "attackValue"){
-                        await this.document.update({"data.actions.attack":data});
+                        await this.document.update({"system.actions.attack":data});
                         this.editing = false;
                         await this._render(false);
                     }
                     if (field == "defendValue"){
-                        await this.document.update({"data.actions.defend":data});
+                        await this.document.update({"system.actions.defend":data});
                         this.editing = false;
                         await this._render(false)
                     }
@@ -314,49 +322,56 @@ export class ExtraSheet extends ItemSheet {
             })
         }
 
-        const refresh = html.find("input[name='data.refresh']");
+        const refresh = html.find("input[name='system.refresh']");
         refresh.on("change", async event => {
             let r = parseInt(event.target.value);
-            await this.document.update({"data.refresh":r});
+            await this.document.update({"system.refresh":r});
         })
 
-        const countSkills = html.find("input[name='data.countSkills']");
+        const countSkills = html.find("input[name='system.countSkills']");
         countSkills.on("change", async event => {
             let value = event.target.checked;
-            await this.document.update({"data.countSkills":value});
+            await this.document.update({"system.countSkills":value});
         })
 
-        const combineSkills = html.find("input[name='data.combineSkills']");
+        const combineSkills = html.find("input[name='system.combineSkills']");
         combineSkills.on("change", async event => {
             let value = event.target.checked;
-            await this.document.update({"data.combineSkills":value})
+            await this.document.update({"system.combineSkills":value})
         })
 
         const countThisSkill = html.find("input[class='count_this_skill']");
         countThisSkill.on('click', async event => {
-            let skill = duplicate(this.document.data.data.skills[event.target.getAttribute("data-skill")]);
+            let skill = duplicate(this.document.system.skills[event.target.getAttribute("data-skill")]);
             skill.countMe = event.target.checked;
-            await this.document.update({"data.skills":{[`${skill.name}`]:skill}});
+            await this.document.update({"system.skills":{[`${skill.name}`]:skill}});
         })
 
         const combineThisSkill = html.find("input[class='combine_this_skill']");
         combineThisSkill.on('click', async event => {
-            let skill = duplicate(this.document.data.data.skills[event.target.getAttribute("data-skill")]);
+            let skill = duplicate(this.document.system.skills[event.target.getAttribute("data-skill")]);
             skill.combineMe = event.target.checked;
-            await this.document.update({"data.skills":{[`${skill.name}`]:skill}})
+            await this.document.update({"system.skills":{[`${skill.name}`]:skill}})
         })
 
-        const active = html.find("input[name='data.active']");
+        const hideThisSkill = html.find("input[class='hide_this_skill']");
+        hideThisSkill.on('click', async event => {
+            let skill = duplicate(this.document.system.skills[event.target.getAttribute("data-skill")]);
+            skill.hidden = event.target.checked;
+            await this.document.update({"system.skills":{[`${skill.name}`]:skill}})
+        })
+
+        const active = html.find("input[name='system.active']");
         active.on("change", async event => {
             let value = event.target.checked;
             if (this.document.parent){
                 if (value){
-                    this.document.parent.updateFromExtra(this.document.data);
+                    this.document.parent.updateFromExtra(this.document);
                 } else {
                     this.document.parent.deactivateExtra(this.document);
                 }
             }
-            await this.document.update({"data.active":value})
+            await this.document.update({"system.active":value})
         })
 
         const aspect = html.find("textarea[class='cs_box mfate-aspects-list__input']");
@@ -395,15 +410,15 @@ export class ExtraSheet extends ItemSheet {
             if (extra.id == data.origin) return;
                 
             if (data.type == "stunt"){
-                let old = extra.data.data.stunts[data.dragged.name];
+                let old = extra.system.stunts[data.dragged.name];
                 if (old) {
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
                 } 
-                await extra.update({"data.stunts":{[data.dragged.name]:data.dragged}});
+                await extra.update({"system.stunts":{[data.dragged.name]:data.dragged}});
             }
             if (data.type == "aspect"){
-                let old = extra.data.data.aspects[data.dragged.name];
+                let old = extra.system.aspects[data.dragged.name];
                 if (old) {
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
@@ -412,10 +427,10 @@ export class ExtraSheet extends ItemSheet {
                     data.dragged.value = "";
                     data.dragged.notes = "";
                 }
-                await extra.update({"data.aspects":{[data.dragged.name]:data.dragged}});
+                await extra.update({"system.aspects":{[data.dragged.name]:data.dragged}});
             }
             if (data.type == "skill"){
-                let old = extra.data.data.skills[data.dragged.name];
+                let old = extra.system.skills[data.dragged.name];
                 if (old) {
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
@@ -423,7 +438,7 @@ export class ExtraSheet extends ItemSheet {
                 if (!data.shift_down){
                     data.dragged.rank = 0;
                 }
-                await extra.update({"data.skills":{[data.dragged.name]:data.dragged}});
+                await extra.update({"system.skills":{[data.dragged.name]:data.dragged}});
             }
             if (data.type == "track"){
                 let track = data.dragged;
@@ -442,12 +457,12 @@ export class ExtraSheet extends ItemSheet {
                         track.notes = "";
                     }
                 }
-                let old = extra.data.data.tracks[track.name];
+                let old = extra.system.tracks[track.name];
                 if (old) {
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
                 } 
-                await extra.update({"data.tracks":{[track.name]:track}});
+                await extra.update({"system.tracks":{[track.name]:track}});
             }
         }
     }
@@ -478,7 +493,7 @@ export class ExtraSheet extends ItemSheet {
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
         let db = duplicate(game.settings.get("fate-core-official","stunts"));
-        db[name]=this.object.data.data.stunts[name];
+        db[name]=this.object.system.stunts[name];
         await game.settings.set("fate-core-official","stunts",db);
         ui.notifications.info(`${game.i18n.localize("fate-core-official.Added")} ${name} ${game.i18n.localize("fate-core-official.ToTheStuntDatabase")}`);
     }
@@ -519,7 +534,7 @@ export class ExtraSheet extends ItemSheet {
     async _onEdit (event, html){
         let name=event.target.id.split("_")[0];
 
-        let editor = new EditPlayerStunts(this.object, this.object.data.data.stunts[name], {new:false});
+        let editor = new EditPlayerStunts(this.object, this.object.system.stunts[name], {new:false});
         editor.render(true);
         editor.setSheet(this);
         try {
@@ -533,7 +548,7 @@ export class ExtraSheet extends ItemSheet {
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let name = event.target.id.split("_")[0];
-            await this.object.update({"data.stunts":{[`-=${name}`]:null}});
+            await this.object.update({"system.stunts":{[`-=${name}`]:null}});
         }
     }
 
@@ -542,9 +557,7 @@ export class ExtraSheet extends ItemSheet {
     }
 
     async _on_boxes_change(html, event){
-        ////console.log(event.target.value)
         let num = parseInt(DOMPurify.sanitize(event.target.innerHTML));
-        ////console.log(num);
     }
     static get defaultOptions() {
         const options = super.defaultOptions;
@@ -560,10 +573,10 @@ export class ExtraSheet extends ItemSheet {
     async close(...args){
         await super.close(...args);
         if (this.document.parent){
-            if (this.document.parent.type == "fate-core-official" && this.document.data.data.active){
-                await this.document.parent.updateFromExtra(this.document.data);
+            if (this.document.parent.type == "fate-core-official" && this.document.system.active){
+                await this.document.parent.updateFromExtra(this.document);
             } else {
-                if (this.document.parent.type == "fate-core-official" && !this.document.data.data.active){
+                if (this.document.parent.type == "fate-core-official" && !this.document.system.active){
                     await this.document.parent.deactivateExtra(this.object)
                 }
                 

@@ -11,33 +11,42 @@ export class fcoActor extends Actor {
 
     // Override the standard createDialog to just spawn a character called 'New Actor'.
     static async createDialog (...args){
-
-        let perm;
-        if (isNewerVersion(game.version, '9.224')){
-            perm = {"default":CONST.DOCUMENT_PERMISSION_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
-        } else {
-            perm = {"default":CONST.ENTITY_PERMISSIONS[game.settings.get("fate-core-official", "default_actor_permission")]};
-        }
+        let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
 
         if (args[0].folder) {
-            Actor.create({"name":"New Character", "folder":args[0].folder, "type":"fate-core-official", permission: perm});
+            Actor.create({"name":"New Character", "folder":args[0].folder, "type":"fate-core-official", ownership: perm});
         } else {
-            Actor.create({"name":"New Character", "type":"fate-core-official", permission: perm});
+            Actor.create({"name":"New Character", "type":"fate-core-official", ownership: perm});
         }
-        
     }
 
     async _preCreate(...args){
         await super._preCreate(...args);
-        const data = this.data;
 
-        if (data.type == "ModularFate" || data.type == "FateCoreOfficial"){
-            data.update({type:"fate-core-official"})
+        if (this.type == "ModularFate" || this.type == "FateCoreOfficial"){
+            this.updateSource({type:"fate-core-official"})
         }
 
-        if (data?.data?.details?.fatePoints?.refresh === ""){
-            data.update(this.initialisefcoCharacter());
+        if (this?.system?.details?.fatePoints?.refresh === ""){
+            this.updateSource(this.initialisefcoCharacter());
         }
+    }
+
+    static migrateData (data){
+        // Convert all extra_tags to being extra_id.
+        if (data.system){
+            let toProcess = ["skills","stunts","aspects","tracks"];
+            for (let item of toProcess){
+                for (let sub_item in data.system[item]){
+                    if (data.system[item][sub_item]?.extra_tag?.extra_id){
+                        let id = data.system[item][sub_item]?.extra_tag?.extra_id;
+                        delete data.system[item][sub_item].extra_tag;
+                        data.system[item][sub_item].extra_id = id;
+                    }
+                }
+            }
+        }
+        return super.migrateData(data);
     }
 
     async _preUpdate(data, options, user){
@@ -50,15 +59,15 @@ export class fcoActor extends Actor {
     initialisefcoCharacter () {
         let actor = this;
         //Modifies the data of the supplied actor to add tracks, aspects, etc. from system settings, then returns the data.
-        let working_data = actor.data.toJSON();
+        let working_data = actor.toJSON();
         // Logic to set up Refresh and Current
     
         let refresh = game.settings.get("fate-core-official", "refreshTotal");
     
-        working_data.data.details.fatePoints.refresh = refresh;
-        working_data.data.details.fatePoints.current = refresh;
+        working_data.system.details.fatePoints.refresh = refresh;
+        working_data.system.details.fatePoints.current = refresh;
         
-        let p_skills=working_data.data.skills;
+        let p_skills=working_data.system.skills;
         
         //Check to see what skills the character has compared to the global skill list
             var skill_list = game.settings.get("fate-core-official","skills");
@@ -92,11 +101,11 @@ export class fcoActor extends Actor {
                 player_aspects[a].value = "";
             }
             //Now to store the aspect list to the character
-            working_data.data.aspects = player_aspects;
+            working_data.system.aspects = player_aspects;
         
             //Step one, get the list of universal tracks.
             let world_tracks = duplicate(game.settings.get("fate-core-official", "tracks"));
-            let tracks_to_write = working_data.data.tracks;
+            let tracks_to_write = working_data.system.tracks;
             for (let t in world_tracks) {
                 let track = world_tracks[t];
                 if (track.universal == true) {
@@ -117,11 +126,10 @@ export class fcoActor extends Actor {
                     track.aspect.when_marked = true;
                     track.aspect.as_name = false;
                 }
-                if (track.aspect == game.i18n.localize("fate-core-official.AspectAsName")) {
+                if (track.aspect == game.i18n.localize("fate-core-official.AspectAsName") || track.aspect == game.i18n.localize("fate-core-official.NameAsAspect")) {
                     track.aspect = {};
-                    track.aspect.name = "";
-                    track.aspect.when_marked = true;
-                    track.aspect.as_name = false;
+                    track.aspect.when_marked = false;
+                    track.aspect.as_name = true;
                 }
     
                 //Initialise the box array for this track 
@@ -133,8 +141,8 @@ export class fcoActor extends Actor {
                     track.box_values = box_values;
                 }
             }
-        working_data.data.tracks = tracks_to_write;
-        let tracks = working_data.data.tracks;
+        working_data.system.tracks = tracks_to_write;
+        let tracks = working_data.system.tracks;
         
         let categories = game.settings.get("fate-core-official", "track_categories");
         //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
@@ -146,8 +154,8 @@ export class fcoActor extends Actor {
             }
     
             // Check for linked skills and enable/add boxes as necessary.
-            if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(working_data.data.skills).length > 0) {
-                let skills = working_data.data.skills;
+            if (track.linked_skills != undefined && track.linked_skills.length > 0 && Object.keys(working_data.system.skills).length > 0) {
+                let skills = working_data.system.skills;
                 let linked_skills = tracks[t].linked_skills;
                 let box_mod = 0;
                 for (let i = 0; i < linked_skills.length; i++) {
@@ -157,10 +165,10 @@ export class fcoActor extends Actor {
                     let l_enables = linked_skills[i].enables;
     
                     //Get the value of the player's skill
-                    if (working_data.data.skills[l_skill] == undefined){
+                    if (working_data.system.skills[l_skill] == undefined){
     
                     }else {
-                        let skill_rank = working_data.data.skills[l_skill].rank;
+                        let skill_rank = working_data.system.skills[l_skill].rank;
                         //If this is 'enables' and the skill is too low, disable.
                         if (l_enables && skill_rank < l_skill_rank) {
                         track.enabled = false;
@@ -207,14 +215,14 @@ export class fcoActor extends Actor {
                 // If item = New Stunt, then New Stunt 2, New Stunt 3, etc. will all begin with this.
                 // We need to find the highest number on other items that start with this name, and go one higher.
                 // We should not add a number to ourselves if we're the only one that matches us.
-                if (data[item].extra_tag?.extra_id == extra_id){
+                if (data[item]?.extra_id == extra_id){
                     // The item on the character sheet is from the extra being investigated; do nothing.
                 } else {
                     // NOW we need to know how many other things there are that start with my name
                     for (let item2 in data){
                         if (item2.startsWith(test)){
                             // Increment the count, because this is something other than me that starts with the same name.
-                            if (data[item2].extra_tag?.extra_id !== extra_id){
+                            if (data[item2]?.extra_id !== extra_id){
                                 count ++;
                             }
                         }
@@ -228,7 +236,7 @@ export class fcoActor extends Actor {
     async updateFromExtra(itemData) {
         let actor = this;
 
-        if (!itemData.data.active && !itemData.data.data.active) {
+        if (!itemData.active && !itemData.system.active) {
             // This currently adds the stuff to the character sheet even if active is false, which we do not want.
             return;
         }
@@ -242,7 +250,7 @@ export class fcoActor extends Actor {
             //Done: Edit editplayerskills to be blind to any object with the extra data type defined
             //Done: Edit editplayeraspects to be blind to any object with the extra data type defined
             //Check to see if the thing is already on the character sheet. If it is, update with the version from the item (should take care of diffing for me and only do a database update if changed)
-            //Done: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_tag != undefined)
+            //Done: Remove the ability to delete stunts bestowed upon the character by their extras (disable the delete button if extra_id != undefined)
             
             let stunts_output = {};
             let skills_output = {};
@@ -251,13 +259,12 @@ export class fcoActor extends Actor {
     
                 let extra_name = extra.name;
                 let extra_id = extra._id;
-                let extra_tag = {"extra_name":extra_name, "extra_id":extra_id};
     
-                let stunts = duplicate(extra.data.stunts);
+                let stunts = duplicate(extra.system.stunts);
         
                 if (!Array.isArray(stunts)){
                     for (let stunt in stunts){
-                        let count = this.getHighest(actor.data.data.stunts, stunt, extra_id);
+                        let count = this.getHighest(actor.system.stunts, stunt, extra_id);
                         if (count > 1) {
                             let count2 = this.getHighest(stunts, stunt, extra_id);
                             // Count is the number of things starting with this on the actor
@@ -266,9 +273,8 @@ export class fcoActor extends Actor {
                             if (count2 > count) count = count2
                         }
 
-                        let modified_tag = duplicate(extra_tag);
-                        modified_tag.original_name = stunt;
-                        stunts[stunt].extra_tag = modified_tag;
+                        stunts[stunt].extra_id = extra_id;
+                        stunts[stunt].original_name = stunt;
                         
                         if (count > 1){    
                             stunts[stunt].name = stunts[stunt].name + ` ${count}`;
@@ -277,17 +283,18 @@ export class fcoActor extends Actor {
                     }
                 }
     
-                let skills = duplicate(extra.data.skills);
+                let skills = duplicate(extra.system.skills);
+
                 if (!Array.isArray(skills)){
-                    let askills = duplicate(actor.data.data.skills);  
+                    let askills = duplicate(actor.system.skills);  
                     for (let skill in skills){
+                        let hidden = skills[skill].hidden;
                         // If this and its constituent skills are NOT set to combine skills, we need to create an entry for this skill.
-                        if (!extra.data.combineSkills && !skills[skill].combineMe){
+                        if (!extra.system.combineSkills && !skills[skill].combineMe){
                             let count = this.getHighest(askills, skill, extra_id);
-                            
-                            let modified_tag = duplicate(extra_tag);
-                            modified_tag.original_name = skill;
-                            skills[skill].extra_tag = modified_tag;
+                        
+                            skills[skill].original_name = skill;
+                            skills[skill].extra_id = extra_id;
 
                             if (count > 1) {
                                 let count2 = this.getHighest(skills, skill, extra_id);
@@ -303,54 +310,56 @@ export class fcoActor extends Actor {
                                 skills[skill].name = skills[skill].name + ` ${count}`;
                             }
                             skills_output[skills[skill].name]=skills[skill];
-                        } 
-
-                        // We need to ensure the combined skills are setup correctly; if we've just removed the setting here then we need to rebuild
-                        // We need to build all the combined skills here and make sure that they're returned properly in skills_output
-                        let combined_skill;
-                        for (let ask in askills){
-                            if (ask == skill){
-                                // This is the skill that everything is being merged into; 
-                                // only the skill with the raw name of the extra_skill works for merging 
-                                combined_skill = askills[ask];
-                                if (combined_skill) combined_skill = duplicate(combined_skill);                                    
-                            }
-                        }
-                        if (combined_skill && !combined_skill.extra_tag){
-                            // The skill is a real one from the character and we cannot combine with it.
                         } else {
-                            // If it is null, it needs to be created. That can only happen if this extra is newly creating a merged skill.
-                            if (!combined_skill){
-                                combined_skill = duplicate(skills[skill]);
-                                combined_skill.extra_tag = extra_tag;
+                            // We need to ensure the combined skills are setup correctly; if we've just removed the setting here then we need to rebuild
+                            // We need to build all the combined skills here and make sure that they're returned properly in skills_output
+                            let combined_skill;
+                            for (let ask in askills){
+                                if (ask == skill){
+                                    // This is the skill that everything is being merged into; 
+                                    // only the skill with the raw name of the extra_skill works for merging 
+                                    combined_skill = askills[ask];
+                                    if (combined_skill) combined_skill = duplicate(combined_skill);                                    
+                                }
                             }
-                            // Now we know for a fact that the base combined_skill is there and we have a reference to it, we can set its ranks.
-                            if (combined_skill){
-                                combined_skill.rank = 0;
-                                for (let extra of this.items){
-                                    if (extra.data.data.active){
-                                        if (extra.data.data.combineSkills || extra.data.data.skills[skill]?.combineMe || combined_skill.extra_tag.extra_id == extra.id){
-                                            let esk = extra.data.data.skills[skill];
-                                            if (esk){
-                                                combined_skill.rank += esk.rank;
+                            if (combined_skill && !combined_skill.extra_id){
+                                // The skill is a real one from the character and we cannot combine with it.
+                            } else {
+                                // If it is null, it needs to be created. That can only happen if this extra is newly creating a merged skill.
+                                if (!combined_skill){
+                                    combined_skill = duplicate(skills[skill]);
+                                    combined_skill.extra_id = extra_id;
+                                }
+                                // Now we know for a fact that the base combined_skill is there and we have a reference to it, we can set its ranks & hidden status:
+                                // Combined skills should only be hidden if ALL the skills that combine are set to hidden.
+                                if (combined_skill){
+                                    combined_skill.rank = 0;
+                                    for (let extra of this.items){
+                                        if (extra.system.active){
+                                            if (extra.system.combineSkills || extra.system.skills[skill]?.combineMe || combined_skill.extra_id == extra.id){
+                                                let esk = extra.system.skills[skill];
+                                                if (esk){
+                                                    if (!esk.hidden) hidden = false;
+                                                    combined_skill.rank += esk.rank;
+                                                    combined_skill.hidden = hidden;
+                                                }
                                             }
                                         }
                                     }
+                                    skills_output[combined_skill.name] = combined_skill;
                                 }
-                                skills_output[combined_skill.name] = combined_skill;
                             }
                         }
                     }
                 }
-                let aspects = duplicate(extra.data.aspects);
+                let aspects = duplicate(extra.system.aspects);
 
                 if (!Array.isArray(aspects)){
                     for (let aspect in aspects){
-                        let count = this.getHighest(actor.data.data.aspects, aspect, extra_id);
+                        let count = this.getHighest(actor.system.aspects, aspect, extra_id);
                         
-                        let modified_tag = duplicate(extra_tag);
-                        modified_tag.original_name = aspect;
-                        aspects[aspect].extra_tag = modified_tag;
+                        aspects[aspect].original_name = aspect;
+                        aspects[aspect].extra_id = extra_id;
                         
                         if (count > 1){
                             let count2 = this.getHighest(aspects, aspect, extra_id);
@@ -361,14 +370,13 @@ export class fcoActor extends Actor {
                     }
                 }
                 
-                let tracks = duplicate(extra.data.tracks);
+                let tracks = duplicate(extra.system.tracks);
                 if (!Array.isArray(tracks)){
                     for (let track in tracks){
-                        let count = this.getHighest(actor.data.data.tracks, track, extra_id);
+                        let count = this.getHighest(actor.system.tracks, track, extra_id);
                         
-                        let modified_tag = duplicate(extra_tag);
-                        modified_tag.original_name = track;
-                        tracks[track].extra_tag = modified_tag;
+                        tracks[track].original_name = track;
+                        tracks[track].extra_id = extra_id;
                         
                         if (count >1 ){
                             let count2 = this.getHighest(tracks, track, extra_id);
@@ -379,12 +387,12 @@ export class fcoActor extends Actor {
                     }        
                 }
     
-            let actor_stunts = duplicate(actor.data.data.stunts);
+            let actor_stunts = duplicate(actor.system.stunts);
     
-            let actor_tracks = duplicate(actor.data.data.tracks);
+            let actor_tracks = duplicate(actor.system.tracks);
     
             //Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character
-            //Find all tracks on this actor that have the item's ID in their extra_tag attribute
+            //Find all tracks on this actor that have the item's ID in their extra_id attribute
             //Check to see that those tracks are also on the item's list of tracks
             //If they aren't, delete them from the character.
     
@@ -392,9 +400,9 @@ export class fcoActor extends Actor {
     
             for (let t in actor_tracks){
                 let track = actor_tracks[t];
-                if (track.extra_tag != undefined && track.extra_tag.extra_id == extra_id){
+                if (track.extra_id != undefined && track.extra_id == extra_id){
                     if (tracks_output[t] == undefined){
-                        update_object[`data.tracks.-=${t}`] = null;
+                        update_object[`system.tracks.-=${t}`] = null;
                     }
                 }
             }
@@ -409,26 +417,26 @@ export class fcoActor extends Actor {
                 }
             }
             
-            let actor_aspects = duplicate(actor.data.data.aspects);
+            let actor_aspects = duplicate(actor.system.aspects);
     
             //Ditto for orphaned aspects
             for (let a in actor_aspects){
                 let aspect = actor_aspects[a];
-                if (aspect != undefined && aspect.extra_tag != undefined && aspect.extra_tag.extra_id == extra_id){
+                if (aspect != undefined && aspect.extra_id != undefined && aspect.extra_id == extra_id){
                     if (aspects_output[a] == undefined){
-                        update_object[`data.aspects.-=${a}`] = null;
+                        update_object[`system.aspects.-=${a}`] = null;
                     }
                 }
             }
     
-            let actor_skills = duplicate(actor.data.data.skills);
+            let actor_skills = duplicate(actor.system.skills);
     
             //Ditto for orphaned skills
             for (let s in actor_skills){
                 let skill = actor_skills[s];
-                if (skill != undefined && skill.extra_tag != undefined && skill.extra_tag.extra_id == extra_id){
+                if (skill != undefined && skill.extra_id != undefined && skill.extra_id == extra_id){
                     if (skills_output[s] == undefined){
-                        update_object[`data.skills.-=${s}`] = null;
+                        update_object[`system.skills.-=${s}`] = null;
                     }
                 }
             }
@@ -436,129 +444,127 @@ export class fcoActor extends Actor {
             //Ditto for orphaned stunts
             for (let s in actor_stunts){
                 let stunt = actor_stunts[s];
-                if (stunt != undefined && stunt.extra_tag != undefined && stunt.extra_tag.extra_id == extra_id){
+                if (stunt != undefined && stunt.extra_id != undefined && stunt.extra_id == extra_id){
                     if (stunts_output[s] == undefined){
-                        update_object[`data.stunts.-=${s}`] = null;;
+                        update_object[`system.stunts.-=${s}`] = null;;
                     }
                 }
             }
             actor.sheet.editing = false;
             await actor.update(update_object);
 
-            let final_stunts = mergeObject(actor.data.data.stunts, stunts_output, {"inPlace":false});
-            let working_tracks = mergeObject(actor.data.data.tracks, tracks_output, {"inPlace":false});
-            let final_skills = mergeObject(actor.data.data.skills, skills_output, {"inPlace":false});
-            let final_aspects = mergeObject(actor.data.data.aspects, aspects_output, {"inPlace":false});
+            let final_stunts = mergeObject(actor.system.stunts, stunts_output, {"inPlace":false});
+            let working_tracks = mergeObject(actor.system.tracks, tracks_output, {"inPlace":false});
+            let final_skills = mergeObject(actor.system.skills, skills_output, {"inPlace":false});
+            let final_aspects = mergeObject(actor.system.aspects, aspects_output, {"inPlace":false});
             let final_tracks = this.setupTracks (duplicate(final_skills), duplicate(working_tracks));
 
             await actor.update({    
-                "data.tracks":final_tracks,
-                "data.aspects":final_aspects,
-                "data.skills":final_skills,
-                "data.stunts":final_stunts
+                "system.tracks":final_tracks,
+                "system.aspects":final_aspects,
+                "system.skills":final_skills,
+                "system.stunts":final_stunts
             })
     }
 
     async deactivateExtra (item, deleting){
         this.sheet.editing = true;
         let actor = this;
-        let itemData = item.data;
+        let itemData = item;
         if (deleting == undefined) deleting = true;
 
         //Add a parameter - 'deleting' - if false, push the existing track on the actor back to the extra
         //before removing it - if the extra is toggled on and off, any tracks on the character that are partially
         //filled in should remain that way. This should be as simple as adding a parameter to calls to this method
-        //and then removing extra_tag from each track and writing it back to the item in an update call.
+        //and then removing extra_id from each track and writing it back to the item in an update call.
         if (!deleting){
-            let trackUpdates = duplicate(item.data.data.tracks);
-            let tracks = actor?.data?.data?.tracks;
+            let trackUpdates = duplicate(item.system.tracks);
+            let tracks = actor?.system?.tracks;
 
             for (let t in trackUpdates){
                 // Need to grab the original name from the ACTOR, not from the extra. So we need to reverse the order of operations here
                 // to search through the actor's tracks to find one with an original name that matches this track.
                 for (let at in tracks){
-                    let name = tracks[at]?.extra_tag?.original_name;
-                    if (name == t){
+                    let name = tracks[at]?.original_name;
+                    if (name == t && tracks[at]?.extra_id == item.id){
                         let track = duplicate(tracks[at]);
                         track.name = name;
-                        delete track.extra_tag;
+                        delete track.extra_id;
+                        delete track.original_name;
                         trackUpdates[name] = track;
                     }
                 }
             }
-            let stuntUpdates = duplicate(item.data.data.stunts);
-            let stunts = actor?.data?.data?.stunts;
+            let stuntUpdates = duplicate(item.system.stunts);
+            let stunts = actor?.system?.stunts;
             for (let s in stuntUpdates){
                 for (let as in stunts){
-                    let name = stunts[as]?.extra_tag?.original_name;
-                    if (name == s){
+                    let name = stunts[as]?.original_name;
+                    if (name == s && stunts[as]?.extra_id == item.id){
                         let stunt = duplicate(stunts[as]);
                         stunt.name = name;
-                        delete stunt.extra_tag;
+                        delete stunt.extra_id;
+                        delete stunt.original_name;
                         stuntUpdates[name] = stunt;
                     }
                 }
             }
-            await item.update({"data.tracks":trackUpdates, "data.stunts":stuntUpdates},{renderSheet:false});
+            await item.update({"system.tracks":trackUpdates, "system.stunts":stuntUpdates},{renderSheet:false});
         }
         //Clean up any tracks, aspects, skills, or stunts that were on this extra but are now orphaned.
     
         let updateObject = {}
     
-        let actor_aspects = duplicate(actor.data.data.aspects)
+        let actor_aspects = duplicate(actor.system.aspects)
     
         for(let aspect in actor_aspects)
         {
-            let et = actor_aspects[aspect].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
-                updateObject[`data.aspects.-=${aspect}`] = null;
+            if ( actor_aspects[aspect]?.extra_id == itemData._id){
+                updateObject[`system.aspects.-=${aspect}`] = null;
             }
         }
         
-        let actor_stunts = duplicate(actor.data.data.stunts)
+        let actor_stunts = duplicate(actor.system.stunts)
     
         for (let stunt in actor_stunts){
-            let et = actor_stunts[stunt].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
-                updateObject[`data.stunts.-=${stunt}`] = null;
+            if (actor_stunts[stunt]?.extra_id == itemData._id){
+                updateObject[`system.stunts.-=${stunt}`] = null;
             }
         }
     
-        let actor_tracks = duplicate(actor.data.data.tracks)
+        let actor_tracks = duplicate(actor.system.tracks)
     
         for (let track in actor_tracks){
-            let et = actor_tracks[track].extra_tag;
-            if (et != undefined && et.extra_id == itemData._id){
-                updateObject[`data.tracks.-=${track}`] = null;
+            if (actor_tracks[track]?.extra_id == itemData._id){
+                updateObject[`system.tracks.-=${track}`] = null;
             }
         }
     
-        let actor_skills = duplicate(actor.data.data.skills)
+        let actor_skills = duplicate(actor.system.skills)
     
         for (let skill in actor_skills){
-            let et = actor_skills[skill].extra_tag;
-            if (et!= undefined && et.extra_id == itemData._id){
-                updateObject[`data.skills.-=${skill}`] = null;
+            if (actor_skills[skill]?.extra_id == itemData._id){
+                updateObject[`system.skills.-=${skill}`] = null;
             }
         }      
-        //ToDo: Rebuild/clean up combined skills.
 
         actor.sheet.editing = false;
         await actor.update(updateObject);
-        let ctracks = duplicate(actor.data.data.tracks);
-        let cskills = duplicate(actor.data.data.skills);
+        let ctracks = duplicate(actor.system.tracks);
+        let cskills = duplicate(actor.system.skills);
         let etracks = actor.setupTracks(cskills, ctracks);
-        await actor.update({"data.tracks":etracks});
+        await actor.update({"system.tracks":etracks});
         // This is required in order to make sure we get the combined skills setup correctly
         for (let extra of actor.items){
-            if (extra.id != item.id && extra.data.data.active) await actor.updateFromExtra(extra);
+            if (extra.id != item.id && extra.system.active) await actor.updateFromExtra(extra);
         }
+        this.render(false);
     }
     
     async rollSkill (skillName){
         if (skillName){
             let actor = this;
-            let skill = actor.data.data.skills[skillName];
+            let skill = actor.system.skills[skillName];
             let rank = skill.rank;
             let r = new Roll(`4dF + ${rank}`);
             let ladder = fcoConstants.getFateLadder();
@@ -577,10 +583,63 @@ export class fcoActor extends Actor {
             });
         }
     }
-    
+
+    async rollTrack (trackName){
+        if (trackName){
+            let actor = this;
+            let track = actor.system.tracks[trackName];
+            let rank = 0;
+            if (track.rollable == "full"){
+                // Get the number of full boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (track.box_values[i]) rank++;
+                }
+            }
+            if (track.rollable == "empty"){
+                // Get the number of empty boxes
+                for (let i = 0; i < track.box_values.length; i++){
+                    if (!track.box_values[i]) rank++;
+                }
+            }
+            if (track.rollable != "empty" && track.rollable != "full") return;
+
+            let r = new Roll(`4dF + ${rank}`);
+            let ladder = fcoConstants.getFateLadder();
+            let rankS = rank.toString();
+            let rung = ladder[rankS];
+            let roll = await r.roll();
+            roll.dice[0].options.sfx = {id:"fate4df",result:roll.result};
+
+            let msg = ChatMessage.getSpeaker({actor:actor})
+            msg.alias = actor.name;
+
+            roll.toMessage({
+                flavor: `<h1>${track.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+                        ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})`,
+                speaker: msg,
+            });
+        }
+    }
+
+    async rollModifiedTrack (trackName) {
+        if (trackName){
+            let actor = this;
+            let track = actor.system.tracks[trackName];
+            if (track.rollable == "full" || track.rollable == "empty"){
+                let mrd = new ModifiedRollDialog(this, trackName, true);
+                mrd.render(true);
+                try {
+                    mrd.bringToTop();
+                } catch  {
+                    // Do nothing.
+                }
+            } 
+        }
+    }
+
     async rollStunt(stuntName){
         if (stuntName){
-            let stunt = this.data.data.stunts[stuntName];
+            let stunt = this.system.stunts[stuntName];
             let skill = stunt.linked_skill;
             let bonus = parseInt(stunt.bonus);
     
@@ -589,14 +648,14 @@ export class fcoActor extends Actor {
             if (skill == "Special"){
                 // We need to pop up a dialog to get a skill to roll.
                 let skills = [];
-                for (let x in this.data.data.skills){
-                    skills.push(this.data.data.skills[x].name);
+                for (let x in this.system.skills){
+                    skills.push(this.system.skills[x].name);
                 }
                 let sk = await fcoConstants.getInputFromList (game.i18n.localize("fate-core-official.select_a_skill"), skills);
                 skill = sk;
-                rank = this.data.data.skills[skill].rank;
+                rank = this.system.skills[skill].rank;
             } else {
-                rank = this.data.data.skills[skill].rank;
+                rank = this.system.skills[skill].rank;
             }
     
             let rankS = rank.toString();
@@ -633,13 +692,13 @@ export class fcoActor extends Actor {
     prepareData(...args){
         super.prepareData(...args);
         if (this.type == "fate-core-official"){
-            this.data.data.details.fatePoints.max = this.data.data.details.fatePoints.refresh;
-            this.data.data.details.fatePoints.value = this.data.data.details.fatePoints.current;
+            this.system.details.fatePoints.max = this.system.details.fatePoints.refresh;
+            this.system.details.fatePoints.value = this.system.details.fatePoints.current;
 
-            let tracks = this.data.data.tracks;
+            let tracks = this.system.tracks;
             for (let track in tracks){
                 if (tracks[track].box_values){
-                    this.data.data.details[track] = {max:tracks[track].box_values.length, value:tracks[track].box_values.length-tracks[track].box_values.filter(b => b).length};
+                    this.system.details[track] = {max:tracks[track].box_values.length, value:tracks[track].box_values.length-tracks[track].box_values.filter(b => b).length};
                 }
             }
         }
@@ -717,6 +776,6 @@ export class fcoActor extends Actor {
     }
 
     get skills (){
-        return this.data.data.skills;
+        return this.system.skills;
     }
 }

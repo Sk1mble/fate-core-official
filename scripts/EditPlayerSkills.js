@@ -18,7 +18,7 @@ class EditPlayerSkills extends FormApplication{
                 if (this.object.type != "Extra"){
                     this.firstRun=true;
                 }
-                this.player_skills=duplicate(this.object.data.data.skills);
+                this.player_skills=duplicate(this.object.system.skills);
                 this.sortByRank = true;
                 this.temp_presentation_skills=[];
                 this.sorted = false;
@@ -66,7 +66,6 @@ class EditPlayerSkills extends FormApplication{
     // It is called when you call this.submit();
 
     async _updateObject(event, formData){
-        //this.player_skills=duplicate(this.object.data.data.skills);
         //Check if this is a player
         //Check if the player is currently allowed to save
         //OVerride these settings if the skill is being saved on an extra.
@@ -79,7 +78,7 @@ class EditPlayerSkills extends FormApplication{
         }
 
         if (this.object.type=="Extra"){
-            await this.object.update({"data.skills":this.player_skills}); 
+            await this.object.update({"system.skills":this.player_skills}); 
             ui.notifications.info(game.i18n.localize("fate-core-official.ExtraSkillsSaved"));   
             this.changed = false;
             this.close();
@@ -89,8 +88,8 @@ class EditPlayerSkills extends FormApplication{
             if (!game.user.isGM && isPlayer && !canSave){
                 ui.notifications.error(game.i18n.localize("fate-core-official.UnableToSave"));
             } else {
-                let tracks = this.object.setupTracks (duplicate(this.player_skills), duplicate(this.object.data.data.tracks));
-                await this.object.update({"data.tracks":tracks,"data.skills":this.player_skills}); 
+                let tracks = this.object.setupTracks (duplicate(this.player_skills), duplicate(this.object.system.tracks));
+                await this.object.update({"system.tracks":tracks,"system.skills":this.player_skills}); 
                 ui.notifications.info(game.i18n.localize("fate-core-official.SkillsSaved"));
                 this.changed = false;
                 this.close();
@@ -124,11 +123,11 @@ class EditPlayerSkills extends FormApplication{
                 let ranks = [0,0,0,0,0,0,0,0,0,0,0];
                 //Ignore skills from extras if the countSkills setting is false.
                 for (let sk in p_skills){
-                    if (p_skills[sk].extra_tag != undefined){
-                        let extra_id = p_skills[sk].extra_tag.extra_id;
+                    if (p_skills[sk].extra_id != undefined){
+                        let extra_id = p_skills[sk].extra_id;
                         let extra = this.object.items.find(item=>item.id == extra_id);
                 
-                        if (extra != undefined && extra.data.data.countSkills){
+                        if (extra != undefined && extra.system.countSkills){
                             ranks[p_skills[sk].rank]++    
                         }
                     }else {
@@ -171,11 +170,11 @@ class EditPlayerSkills extends FormApplication{
                 let player_total = 0;
             
                 for (let sk in p_skills){
-                    if (p_skills[sk].extra_tag != undefined){
-                        let extra_id = p_skills[sk].extra_tag.extra_id;
+                    if (p_skills[sk].extra_id != undefined){
+                        let extra_id = p_skills[sk].extra_id;
                         let extra = this.object.items.find(item=>item.id == extra_id);
                 
-                        if (extra != undefined && extra.data.data.countSkills){
+                        if (extra != undefined && extra.system.countSkills){
                             player_total+=p_skills[sk].rank;   
                         }
                     }else {
@@ -199,7 +198,7 @@ class EditPlayerSkills extends FormApplication{
     }
 //The function that returns the data model for this window. In this case, we need the character's sheet data/and the skill list.
     async getData(){
-        this.player_skills=duplicate(this.object.data.data.skills);
+        this.player_skills=duplicate(this.object.system.skills);
         this.player_skills=fcoConstants.sortByKey(this.player_skills);
 
         if (this.firstRun){
@@ -213,7 +212,7 @@ class EditPlayerSkills extends FormApplication{
             this.temp_presentation_skills=[];
         } else {
             for (let x in this.player_skills){
-                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank,"extra_tag":this.player_skills[x].extra_tag});
+                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank,"extra_id":this.player_skills[x].extra_id});
             }
         }
         
@@ -362,7 +361,7 @@ class EditGMSkills extends FormApplication{
                     this.options.title=`${game.i18n.localize("fate-core-official.GMSkillEditor")} ${this.object.name}`
                 }
             }
-            this.player_skills=duplicate(this.object.data.data.skills);
+            this.player_skills=duplicate(this.object.system.skills);
     }
 
     //Set up the default options for instances of this class
@@ -410,8 +409,8 @@ class EditGMSkills extends FormApplication{
             let oldSkill = event.target.getAttribute("data-oldName");
             let newSkill = event.target.value.split(".").join("․");
             if (oldSkill != newSkill){
-                let rank = this.object.data.data.skills[oldSkill].rank;
-                newSkill= {
+                let rank = this.object.system.skills[oldSkill].rank;
+                newSkill= new fcoSkill({
                     "name":newSkill,
                     "description":game.i18n.localize("fate-core-official.AdHocSkill"),
                     "pc":false,
@@ -421,11 +420,11 @@ class EditGMSkills extends FormApplication{
                     "defend":"",
                     "rank":rank,
                     "adhoc":true
-                }
+                }).toJSON();
     
                 if (newSkill != undefined){
                     newSkill.name=newSkill.name.split(".").join("․");
-                    this.object.update({"data.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
+                    this.object.update({"system.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
                 }
             }
         })
@@ -444,7 +443,7 @@ class EditGMSkills extends FormApplication{
 
             }
             if (cbox != undefined && !cbox.checked){
-                updateObject[`data.skills.-=${s}`] = null;
+                updateObject[`system.skills.-=${s}`] = null;
             }
         } 
         
@@ -462,7 +461,7 @@ class EditGMSkills extends FormApplication{
                 if (this.player_skills[w]==undefined){
                     let skill = world_skills[w];
                     skill.rank=0;
-                    updateObject[`data.skills.${w}`] = skill;
+                    updateObject[`system.skills.${w}`] = skill;
                 }
             }
         }
@@ -475,7 +474,7 @@ class EditGMSkills extends FormApplication{
         let name = html.find("input[id='ad_hoc_input']")[0].value
         var newSkill=undefined;
         if (name!= undefined && name !=""){
-            newSkill= {
+            newSkill= new fcoSkill({
                 "name":name,
                 "description":game.i18n.localize("fate-core-official.AdHocSkill"),
                 "pc":false,
@@ -485,11 +484,11 @@ class EditGMSkills extends FormApplication{
                 "defend":"",
                 "rank":0,
                 "adhoc":true
-            }
+            }).toJSON();
         }
         if (newSkill != undefined){
             newSkill.name=newSkill.name.split(".").join("․");
-            this.object.update({"data.skills": {[newSkill.name]:newSkill}}).then(() => this.render(false));
+            this.object.update({"system.skills": {[newSkill.name]:newSkill}}).then(() => this.render(false));
         }
     }
 
@@ -497,7 +496,7 @@ class EditGMSkills extends FormApplication{
     }
 
     async getData(){
-        this.player_skills=duplicate(this.object.data.data.skills);
+        this.player_skills=duplicate(this.object.system.skills);
 
         let world_skills=duplicate(game.settings.get("fate-core-official","skills"));
         let present = [];
@@ -508,11 +507,11 @@ class EditGMSkills extends FormApplication{
 
         for (let w in world_skills){
             let s = this.player_skills[w];
-            if (s == undefined || s?.extra_tag?.extra_name){
-                if (!world_skills[w].pc && !s?.extra_tag.extra_name){ 
+            if (s == undefined || s?.extra_id){
+                if (!world_skills[w].pc && !s?.extra_id){ 
                     non_pc_world_skills.push(world_skills[w])
                 } else {
-                    if (!s?.extra_tag?.extra_name)
+                    if (!s?.extra_id)
                     absent.push(world_skills[w])
                 }
             } else {

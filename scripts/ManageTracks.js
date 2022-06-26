@@ -8,11 +8,18 @@ class EditEntityTrack extends FormApplication {
         this.originalName = track.name;
     }
 
-    getData(){
+    async getData(){
+
+        let rich = {};
+        for (let part in this.track){
+            if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.track[part]);
+        }
+
         const templateData = {
             track:this.track,
-            skills:duplicate(this.entity.data.data.skills),
-            entity:this.entity
+            skills:duplicate(this.entity.system.skills),
+            entity:this.entity,
+            rich:rich
         }
         return templateData;
     }
@@ -76,9 +83,9 @@ class EditEntityTrack extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $('#edit_entity_track_when_recovers').css('display', 'none');
@@ -110,9 +117,9 @@ class EditEntityTrack extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 $('#edit_entity_track_when_marked').css('display', 'none');
                 $('#edit_entity_track_when_marked_rich')[0].innerHTML = desc;    
@@ -142,9 +149,9 @@ class EditEntityTrack extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 $('#edit_entity_track_description').css('display', 'none');
                 $('#edit_entity_track_description_rich')[0].innerHTML = desc;    
@@ -181,13 +188,13 @@ class EditEntityTrack extends FormApplication {
         // Copy this track to the existing actor with the name provided. If it already exists, create with 'copy' appended.
         let name = this.track.name;
         let num = 1;
-        for (let t in this.entity.data.data.tracks){
+        for (let t in this.entity.system.tracks){
             if (t.startsWith (name)) num ++
         }
         this.track.name = this.track.name+" "+num;
         await this.entity.update(
             {
-                "data.tracks":{
+                "system.tracks":{
                     [this.track.name]:this.track
                 }
             }
@@ -217,6 +224,8 @@ class EditEntityTrack extends FormApplication {
         let paid = document.getElementById("edit_entity_track_paid").checked;
         let label = document.getElementById("entity_track_label_select").value;
         let custom_label = document.getElementById("entity_track_custom_label").value;
+        let rollable = document.getElementById("entity_track_rollable").value;
+
         if (label!="escalating" && label != "none") {
             label=custom_label;
         }
@@ -246,6 +255,7 @@ class EditEntityTrack extends FormApplication {
         track.harm_can_absorb=harm;
         track.paid = paid;
         track.label = label;
+        track.rollable = rollable;
 
         //If box_values < boxes, add
         if (!track.box_values){
@@ -263,7 +273,7 @@ class EditEntityTrack extends FormApplication {
             }
         }
 
-        let tracks = duplicate(this.entity.data.data.tracks);
+        let tracks = duplicate(this.entity.system.tracks);
 
         if (this.track.name != this.originalName) {
             delete tracks[this.originalName];
@@ -274,7 +284,7 @@ class EditEntityTrack extends FormApplication {
             if (num > 1) this.track.name = this.track.name+" "+num;
 
             await this.entity.update({   
-                "data.tracks":[]
+                "system.tracks":[]
             })    
         }
 
@@ -282,10 +292,10 @@ class EditEntityTrack extends FormApplication {
 
         let final_tracks = tracks;
         if (this.entity.type == "fate-core-official") {
-            final_tracks = await this.entity.setupTracks(this.entity.data.data.skills, tracks);
+            final_tracks = await this.entity.setupTracks(this.entity.system.skills, tracks);
         }
         await this.entity.update({   
-                "data.tracks":final_tracks
+                "system.tracks":final_tracks
         })
         this.origin.render(false);
         this.close();
@@ -300,7 +310,7 @@ class EditEntityLinkedSkills extends FormApplication {
     getData(){
         const templateData = {
             track:this.track,
-            skills:duplicate (this.entity.data.data.skills),
+            skills:duplicate (this.entity.system.skills),
             entity:this.entity
         }
         return templateData;
@@ -528,12 +538,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_when_recovers').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
-                } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
-                }
+                let desc= await fcoConstants.fcoEnrich(event.target.innerHTML);
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $('#edit_track_when_recovers').css('display', 'none');
                 $('#edit_track_when_recovers_rich')[0].innerHTML = desc;    
@@ -562,12 +567,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_when_marked').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:game.user.isGM, documents:true}));
-                } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:game.user.isGM, entities:true}));
-                }
+                let desc = await fcoConstants.fcoEnrich(event.target.innerHTML);
                 $('#edit_track_when_marked').css('display', 'none');
                 $('#edit_track_when_marked_rich')[0].innerHTML = desc;    
                 $('#edit_track_when_marked_rich').css('display', 'block');
@@ -594,7 +594,7 @@ class EditTracks extends FormApplication {
         
         $('#edit_track_description').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(event.target.innerHTML);
+                let desc = await fcoConstants.fcoEnrich(event.target.innerHTML);
                 $('#edit_track_description').css('display', 'none');
                 $('#edit_track_description_rich')[0].innerHTML = desc;    
                 $('#edit_track_description_rich').css('display', 'block');
@@ -636,7 +636,6 @@ class EditTracks extends FormApplication {
     async _onCopyTrackButton (event, html){
         let edit_track_name=html.find("input[id='edit_track_name']");
         let name = edit_track_name[0].value;
-        ////console.log(edit_track_name[0].value)
         if (name == "" || name == game.i18n.localize("fate-core-official.NewTrack")){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectATrackToCopyFirst"));
         }
@@ -710,24 +709,26 @@ class EditTracks extends FormApplication {
             document.getElementById("edit_linked_skills").disabled=false;
             document.getElementById("edit_track_paid").checked=false;
             document.getElementById("track_label_select").value = "none";
+            document.getElementById("edit_track_rollable").value = "false";
         } else {
             let track=this.tracks[name];
             this.track=track;
             document.getElementById("edit_track_name").value=track.name;
             document.getElementById("edit_track_description").innerHTML=DOMPurify.sanitize(track.description);
-            document.getElementById("edit_track_description_rich").innerHTML=DOMPurify.sanitize(track.description);
+            document.getElementById("edit_track_description_rich").innerHTML= await fcoConstants.fcoEnrich(track.description);
             document.getElementById("edit_track_universal").checked=track.universal;
             document.getElementById("edit_track_unique").checked=track.unique;
             document.getElementById("edit_track_recovery_type").value=track.recovery_type;
             document.getElementById("edit_track_aspect").value=track.aspect;
             document.getElementById("edit_track_when_marked").innerHTML=DOMPurify.sanitize(track.when_marked);
-            document.getElementById("edit_track_when_marked_rich").innerHTML=DOMPurify.sanitize(track.when_marked);
+            document.getElementById("edit_track_when_marked_rich").innerHTML= await fcoConstants.fcoEnrich(track.when_marked);
             document.getElementById("edit_track_when_recovers").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
-            document.getElementById("edit_track_when_recovers_rich").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
+            document.getElementById("edit_track_when_recovers_rich").innerHTML= await fcoConstants.fcoEnrich(track.recovery_conditions);
             document.getElementById("edit_track_boxes").value=track.boxes;
             document.getElementById("edit_track_harm").value=track.harm_can_absorb;
             document.getElementById("edit_linked_skills").disabled=false;
             document.getElementById("edit_track_paid").checked=track.paid;
+            document.getElementById("edit_track_rollable").value = track.rollable ? track.rollable : "false";
             
             if (track.label=="none"){
                 document.getElementById("track_label_select").value = "none";
@@ -767,6 +768,8 @@ class EditTracks extends FormApplication {
         let paid = document.getElementById("edit_track_paid").checked;
         let label = document.getElementById("track_label_select").value;
         let custom_label = document.getElementById("track_custom_label").value;
+        let rollable = document.getElementById("edit_track_rollable").value;
+
         if (label=="custom") {
             label=custom_label;
         }
@@ -792,6 +795,7 @@ class EditTracks extends FormApplication {
                     track.harm_can_absorb=harm;
                     track.paid = paid;
                     track.label = label;
+                    track.rollable = rollable;
                 }
             }
             if (!existing){
@@ -801,7 +805,8 @@ class EditTracks extends FormApplication {
                     }
                     delete this.tracks[this.track.name]
                 }
-                let newTrack = {
+
+                let newTrack = new fcoTrack({
                     "name":name,
                     "category":this.category,
                     "description":description,
@@ -815,8 +820,9 @@ class EditTracks extends FormApplication {
                     "harm_can_absorb":harm,
                     "paid":paid,
                     "linked_skills":linked_skills,
-                    "label":label
-                }
+                    "label":label,
+                    "rollable":rollable,
+                }).toJSON();
                 this.tracks[name]=newTrack;
             }
             await game.settings.set("fate-core-official","tracks",this.tracks);
@@ -921,11 +927,25 @@ class TrackSetup extends FormApplication{
             if (tracks == undefined){
                 tracks = {};
             }
-            for (let track in imported_tracks){
-                tracks[track]=imported_tracks[track];
-                let cat = imported_tracks[track].category;
-                track_categories[cat]=cat;
+
+            if (!imported_tracks.hasOwnProperty("name")){
+                // This is a tracks object.
+                for (let track in imported_tracks){
+                    let tr = new fcoTrack(imported_tracks[track]).toJSON();
+                    if (tr){
+                        tracks[track]=tr;
+                    }
+                    let cat = imported_tracks[track].category;
+                    track_categories[cat]=cat;
+                }
+            } else {
+                // This is a track object
+                let tr = new fcoTrack(imported_tracks).toJSON();
+                    if (tr){
+                        tracks[tr.name]=tr;
+                    }
             }
+
             await game.settings.set("fate-core-official","tracks", tracks);
             await game.settings.set("fate-core-official", "track_categories", track_categories);
             this.render(false);

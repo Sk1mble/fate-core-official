@@ -18,6 +18,13 @@ class fcoConstants {
                 }
     }
 
+    static async fcoEnrich (value, object){
+        let secrets = false;
+        if (object) secrets = object.isOwner;
+        if (game.user.isGM) secrets = true;
+        return DOMPurify.sanitize(await TextEditor.enrichHTML(value, {secrets:secrets, documents:true, async:true}));
+    }
+
     static getAdjective(r){
         const ladder = this.getFateLadder()
         return (ladder[r])
@@ -117,7 +124,7 @@ class fcoConstants {
         if (!confirm){
             return true;
         } else {
-            let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.ConfirmDeletion"));
+            let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.Delete"),game.i18n.localize("fate-core-official.ConfirmDeletion"));
             if (del=="yes"){
                 return true;
             } else {
@@ -366,7 +373,7 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "fuAspectLabelBorderColour", input.fuAspectLabelBorderColour)
         await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel)
         if (input?.fco_world_sheet_scheme) await game.settings.set("fate-core-official", "fco-world-sheet-scheme", input.fco_world_sheet_scheme);
-        if (input?.["fu-roll-formulae"]) await game.settings.set("fate-core-official","fu_roll-formulae", input.fu_roll-formulae);
+        if (input?.["fu-roll-formulae"]) await game.settings.set("fate-core-official","fu_roll-formulae", input["fu_roll-formulae"]);
         await ui.sidebar.render(false);
     }
 
@@ -379,7 +386,8 @@ class fcoConstants {
 
         // First check for duplicates and permission to overwrite
         for (let st in stunts){
-            delete stunts[st].extra_tag;
+            delete stunts[st].extra_id;
+            delete stunts[st].original_name;
             
             if (db[st]){
                 let overwrite = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"),`${game.i18n.localize("fate-core-official.stunt")} "${db[st].name}": `+game.i18n.localize("fate-core-official.exists"));
@@ -416,25 +424,25 @@ class fcoConstants {
         // This requires the prototype module to be installed on the system so its compendiums are available.
         let packStructure = {};
         game.packs.forEach(pack => {
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Actor"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Actor"){
                 packStructure.actor = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "JournalEntry"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "JournalEntry"){
                 packStructure.journal = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "RollTable"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "RollTable"){
                 packStructure.table = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Macro"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Macro"){
                 packStructure.macro = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Playlist"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Playlist"){
                 packStructure.playlist = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Item"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Item"){
                 packStructure.item = pack.collection;
             }
-            if (pack.metadata.package == module && pack.documentClass.documentName == "Scene"){
+            if (pack.metadata.packageName == module && pack.documentClass.documentName == "Scene"){
                 packStructure.scene = pack.collection;
             }
         })
@@ -519,33 +527,12 @@ class fcoConstants {
     }
 
     static async importAllFromPack(pack) {
-        // Load all content
-        const documents = await pack.getDocuments();
-    
-        // Prepare import data
+        let documents = await pack.getDocuments();
         const collection = game.collections.get(pack.documentName);
-        const createData = documents.map(doc => {
-          const data = doc.toObject();
-          return data;
-        })
-    
-        // Create World Documents in batches
-        const chunkSize = 100;
-        const nBatches = Math.ceil(createData.length / chunkSize);
-        let created = [];
-        for ( let n=0; n<nBatches; n++ ) {
-          const chunk = createData.slice(n*chunkSize, (n+1)*chunkSize);
-          const docs = await pack.documentClass.createDocuments(chunk, {keepId:true}); // Keep the ID - this is important.
-          created = created.concat(docs);
+        for (let doc of documents){
+            await collection.importFromCompendium(pack, doc.id, {folder:doc.folder}, {keepId:true}); 
         }
-    
-        // Notify of success
-        ui.notifications.info(game.i18n.format("COMPENDIUM.ImportAllFinish", {
-          number: created.length,
-          folder: "correct",
-          type: pack.documentName,
-        }));
-        return created;
+        ui.notifications.info(`Imported ${documents.length} documents of type ${pack.documentName}`);
     }
 } 
 

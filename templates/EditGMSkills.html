@@ -7,7 +7,7 @@
         </td>
     </tr>
     {{#each present_skills}}
-    {{#if (eq this.extra_tag undefined)}}
+    {{#if (eq this.extra_id undefined)}}
     <tr>
         <td style="width:100px">
             <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -24,7 +24,7 @@
             </td>
         </tr>
         {{#each orphaned}}
-        {{#if (eq this.extra_tag undefined)}}
+        {{#if (eq this.extra_id undefined)}}
         <tr>
             <td style="width:100px">
                 <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
@@ -41,7 +41,7 @@
             </td>
         </tr>
     {{#each ad_hoc}}
-    {{#if (eq this.extra_tag undefined)}}
+    {{#if (eq this.extra_id undefined)}}
     <tr>
         <td style="width:100px">
             <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>

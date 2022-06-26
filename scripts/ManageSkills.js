@@ -122,9 +122,24 @@ class SkillSetup extends FormApplication{
             if (skills == undefined){
                 skills = {};
             }
-            for (let skill in imported_skills){
-                skills[skill]=imported_skills[skill];
+
+            if (!imported_skills.hasOwnProperty("name")){
+                // This is a skills object
+                // Validate the imported data to make sure they all match the schema.
+                for (let skill in imported_skills){
+                    let sk = new fcoSkill(imported_skills[skill]).toJSON();
+                    if (sk){
+                        skills[skill] = sk;  
+                    }
+                }
+            } else {
+                // This is a single skill
+                let sk = new fcoSkill(imported_skills).toJSON();
+                if (sk){
+                    skills[sk.name] = sk;
+                }
             }
+           
             await game.settings.set("fate-core-official","skills", skills);
             this.render(false);
         } catch (e) {
@@ -213,22 +228,14 @@ class EditSkill extends FormApplication{
             super(skill);
             this.skill=skill;
             if (this.skill==undefined){
-                this.skill={
-                    "name":"",
-                    "description":"",
-                    "overcome":"",
-                    "caa":"",
-                    "attack":"",
-                    "defend":"",
-                    "pc":"true"
-                }
+                this.skill= new fcoSkill().toObject();
             }
         }
 
         async _updateObject(event, f) {
             let skills=game.settings.get("fate-core-official","skills");
             let name = f.name.split(".").join("․").trim();
-            let newSkill = {"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc};
+            let newSkill = new fcoSkill({"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc}).toJSON();
             var existing = false;
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
             if (name == undefined || name ==""){
@@ -284,11 +291,10 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
-                    $('#edit_skill_description_rich')[0].innerHTML = desc;    
-                    $('#edit_skill_description')[0].innerHTML = desc;    
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
+                    $('#edit_skill_description_rich')[0].innerHTML = desc;     
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 
                 $('#edit_skill_description').css('display', 'none');
@@ -317,7 +323,7 @@ class EditSkill extends FormApplication{
         
         $('#edit_skill_overcome').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 $('#edit_skill_overcome').css('display', 'none');
                 $('#edit_skill_overcome_rich')[0].innerHTML = desc;    
                 $('#edit_skill_overcome_rich').css('display', 'block');
@@ -347,9 +353,9 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));   
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
                 }
                 $('#edit_skill_caa').css('display', 'none');
                 $('#edit_skill_caa_rich')[0].innerHTML = desc;    
@@ -380,9 +386,9 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));   
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
                 }
                 $('#edit_skill_attack').css('display', 'none');
                 $('#edit_skill_attack_rich')[0].innerHTML = desc;    
@@ -413,9 +419,9 @@ class EditSkill extends FormApplication{
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));   
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
                 }
                 $('#edit_skill_defend').css('display', 'none');
                 $('#edit_skill_defend_rich')[0].innerHTML = desc;    
@@ -441,9 +447,16 @@ class EditSkill extends FormApplication{
         options.resizable = true;
         return options;
     }
-    getData(){
+    async getData(){
+        let rich = {};
+        let sk = duplicate (this.skill);
+        for (let part in sk){
+            if (part != "name" && part != "pc") rich[part] = await fcoConstants.fcoEnrich(sk[part]);
+        }
+
         const templateData = {
-           skill:this.skill
+           skill:this.skill,
+           rich:rich
         }
         return templateData;
         }

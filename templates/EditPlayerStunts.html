@@ -15,12 +15,12 @@
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.Description'}}:</td>
                 <td colspan="2">
                     <div id="edit_stunt_desc" data-edit="description" contenteditable="true" name="description" style="padding:5px; min-height:1.5em; display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:500px;">{{{stunt.description}}}</div>
-                    <div id="edit_stunt_desc_rich" tabindex = "0" style="padding:5px; min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:500px;">{{{enr stunt.description this.actor}}}</div>
+                    <div id="edit_stunt_desc_rich" tabindex = "0" style="padding:5px; min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:500px;">{{{stunt.richDesc}}}</div>
                 </td>
             </tr>
             <tr style="background-color:transparent">
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.RefreshCost'}}:</td>
-                <td><input type="number" min="0" name="refresh_cost" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:50px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.refresh_cost}}"></input></td>
+                <td><input type="number" name="refresh_cost" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:50px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.refresh_cost}}"></input></td>
                 <td>     
                     <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Overcome'}}">O</b>
                     <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.CAA'}}">C</b></input>

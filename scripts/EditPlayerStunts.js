@@ -61,14 +61,14 @@ class EditPlayerStunts extends FormApplication {
         } else {
             if (this.new){
                 let count = 1;
-                for (let stunt in this.actor.data.data.stunts){
+                for (let stunt in this.actor.system.stunts){
                     if (stunt.startsWith(formData["name"])) count++;
                 }
                 if (count > 1) formData["name"] = this.stunt.name + " " + count;
             }
 
             if (formData["name"]!=this.stunt.name && !this.new) {
-                await this.object.update({"data.stunts":{[`-=${this.stunt.name}`]:null}});
+                await this.object.update({"system.stunts":{[`-=${this.stunt.name}`]:null}});
             }
             
             for (let t in formData){
@@ -91,7 +91,7 @@ class EditPlayerStunts extends FormApplication {
             }
             
             this.stunt.box_values = new_box_values;
-            await this.actor.update({"data.stunts":{[this.stunt.name]:this.stunt}})
+            await this.actor.update({"system.stunts":{[this.stunt.name]:this.stunt}})
             if (this.object.type == "Extra"){
                 //code to render editplayerstunts.
                 Hooks.call("updateItem", {"id":this.object.id})
@@ -141,9 +141,9 @@ class EditPlayerStunts extends FormApplication {
             if (!window.getSelection().toString()){
                 let desc;
                 if (isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
-                    desc = DOMPurify.sanitize(TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true}));
+                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
                 }
                 
                 $('#edit_stunt_desc').css('display', 'none');
@@ -161,14 +161,14 @@ class EditPlayerStunts extends FormApplication {
 
     renderMe(id,data){
         if (this.object.isToken){
-            if (this.actor.token.data.id == id){
+            if (this.actor.token.id == id){
                let name = this.stunt.name;
                 try {
-                    if (data.actorData.data.stunts[name]!=undefined){
+                    if (data.actorData.system.stunts[name]!=undefined){
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
-                                this.stunt = mergeObject(this.stunt, data.actorData.data.stunts[name]);
+                                this.stunt = mergeObject(this.stunt, data.actorData.system.stunts[name]);
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
@@ -185,12 +185,11 @@ class EditPlayerStunts extends FormApplication {
             if (this.actor.id == id){
                 let name = this.stunt.name;
                 try {
-                    if (data.data.stunts[name]!=undefined){
-                        
+                    if (data.system.stunts[name]!=undefined){
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
-                                this.stunt = mergeObject(this.stunt, data.data.stunts[name]);
+                                this.stunt = mergeObject(this.stunt, data.system.stunts[name]);
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
@@ -216,14 +215,15 @@ class EditPlayerStunts extends FormApplication {
 
     async getData(){
         let data={}
-        data.stunt=this.stunt;
+        data.stunt=duplicate(this.stunt);
+        data.stunt.richDesc = await fcoConstants.fcoEnrich(data.stunt.description, this.actor)
         if (this.actor == null){
             data.skills=game.settings.get("fate-core-official","skills");
         } else {
             if (this.actor.type=="Extra"){
-                data.skills=mergeObject(this.actor.data.data.skills, game.settings.get("fate-core-official","skills"), {inplace:false});
+                data.skills=mergeObject(this.actor.system.skills, game.settings.get("fate-core-official","skills"), {inplace:false});
             } else {
-                data.skills=this.actor.data.data.skills;
+                data.skills=this.actor.system.skills;
             }
         }
         data.gm = game.user.isGM;
@@ -248,6 +248,9 @@ class StuntDB extends Application {
         }
         let data = {};
         let stunts = duplicate(game.settings.get("fate-core-official","stunts"));
+        for (let stunt in stunts){
+            stunts[stunt].richDesc = await fcoConstants.fcoEnrich(stunts[stunt].description);
+        }
         this.stunts = stunts;
         let stuntsA = [];
     
@@ -386,7 +389,7 @@ class StuntDB extends Application {
         })
 
         add_stunt.on("click", event => {
-            let stunt = {
+            let stunt = new fcoStunt({
                 "name":game.i18n.localize("fate-core-official.NewStunt"),
                 "linked_skill":"None",
                 "description":"",
@@ -396,7 +399,7 @@ class StuntDB extends Application {
                 "attack":false,
                 "defend":false,
                 "bonus":0
-            }
+            }).toJSON();
             let editor = new EditPlayerStunts(null, stunt, {new:true});
             editor.originator = this;
             editor.render(true);
@@ -462,8 +465,22 @@ class StuntDB extends Application {
             if (stuntDB == undefined){
                 stuntDB = {};
             }
-            for (let stunt in imported_stunts){
-                stuntDB[stunt]=imported_stunts[stunt];
+
+            if (!imported_stunts.hasOwnProperty("name")){
+                //THis is a stunts object
+                // Validate the imported data to make sure they all match the schema
+                for (let stunt in imported_stunts){
+                    let st = new fcoStunt(imported_stunts[stunt]).toJSON();
+                    if (st){
+                        stuntDB[stunt] = st;  
+                    }
+                }
+            } else {
+                // This is a single stunt.
+                let st = new fcoStunt(imported_stunts).toJSON();
+                if (st){
+                    stuntDB[st.name] = st;
+                }
             }
             await game.settings.set("fate-core-official","stunts", stuntDB);
             this.render(false);
@@ -474,7 +491,7 @@ class StuntDB extends Application {
 
     async _onAddButton(event, html){
         let stunt = game.settings.get("fate-core-official","stunts")[event.target.id.split("_")[0]];
-        this.actor.update({"data.stunts":{[`${stunt.name}`]:stunt}});
+        this.actor.update({"system.stunts":{[`${stunt.name}`]:stunt}});
     }
 
     async _onDeleteButton(event, html){
