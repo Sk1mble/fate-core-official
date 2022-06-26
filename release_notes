@@ -1,4 +1,4 @@
-# 4.4.06
+# 4.4.06 & 4.4.07
   * Refactored extra_tag to extra_id, adding another key for original_name as well where necessary. This is designed to allow us to get data models working properly for stunts, skills, tracks, and aspects.
   * Refactored ManageSkills to use the fcoSkill model for creating and editing skills, ensuring data consistency.
   * Refactored skill editors on character sheet to use the fcoSkill model for creating or editing ad-hoc skills.
