@@ -9,6 +9,7 @@
     "minimum":"10.270",
     "verified":"10.270"
   },
+  "minimumCoreVersion":"10.270",
   "version": "4.4.07",
   "scripts": [
     "./scripts/fcoConstants.js",
