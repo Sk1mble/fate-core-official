@@ -1,6 +1,7 @@
 # 4.4.08 
  * Fixed a bug in FateUtilities that meant when you clicked on the track notes field, if you clicked on the text rather than an empty part of the field, it would throw an error and not edit the field
  * In the latest version of Foundry, activating a module does not cause a reload. Tweaked the code for installModule() so it manually reloads to ensure everything works properly.
+ * Updated system documentation to use a single paginated journal entry.
 
 # 4.4.06 & 4.4.07
   * Refactored extra_tag to extra_id, adding another key for original_name as well where necessary. This is designed to allow us to get data models working properly for stunts, skills, tracks, and aspects.
