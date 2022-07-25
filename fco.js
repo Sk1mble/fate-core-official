@@ -315,6 +315,7 @@ Hooks.once('ready', async function () {
                     let module = event.target.id.split("_")[1];
                     game.settings.set("fate-core-official", "installing", module);
                     // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
+                    // As of v10 it does not trigger a refresh, so we need to do it manually; let's use the debounceReload() function.
                     let mc = game.settings.get("core","moduleConfiguration");
                     if (mc[module] == true) {
                         this.installModule(module);
@@ -323,6 +324,7 @@ Hooks.once('ready', async function () {
                     else {
                         mc[module]=true;
                         await game.settings.set("core", "moduleConfiguration", mc);
+                        foundry.utils.debouncedReload();
                     }
                 })
             }
@@ -351,14 +353,10 @@ Hooks.once('ready', async function () {
                 // All 'adventures' in this compendium will be imported. This would allow us to segregate content on occasion, for example
                 // allowing scenes and characters to be imported separately from the journal entries forming the text of the book.
                 
-                try {
-                        let pack = await game.packs.get(`${module_name}.content`);
-                        await pack.getDocuments();
-                        for (let p of pack.contents){
-                            await p.sheet._updateObject({}, new FormData())
-                        }    
-                } catch (error){
-                    ui.notifications.error(`Unable to import the adventure module from ${module_name}`)
+                let pack = await game.packs.get(`${module_name}.content`);
+                await pack.getDocuments();
+                for (let p of pack.contents){
+                    await p.sheet._updateObject({}, new FormData())
                 }
 
                 // Set installing and run_once to the appropriate post-install values

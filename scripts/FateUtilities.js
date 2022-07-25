@@ -333,8 +333,9 @@ class FateUtilities extends Application{
         trackNotesRich.on("click", event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
             let id = event.currentTarget.id.split("_rich").join("");
-            let richid = event.target.id;
-            fcoConstants.getPen(id)
+            let richid = event.currentTarget.id;
+            if (!richid) richid = event.target.id;
+            fcoConstants.getPen(id);
             $(`#${richid}`).css('display', 'none');
             $(`#${id}`).css('display', 'block');
             $(`#${id}`).focus();
