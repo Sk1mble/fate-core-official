@@ -2365,7 +2365,7 @@ async _render(...args){
                 await setTimeout(async () => {
                     await super._render(...args);
                     this.renderPending = false;
-                }, 50);
+                }, 150);
         }
     } else this.renderBanked = true;
 }
@@ -2415,7 +2415,7 @@ async renderMe(...args){
           this._render(false);
           this.delayedRender = false;
           this.renderPending = false;
-        }, 50);
+        }, 150);
       } 
     }
 }

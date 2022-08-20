@@ -1,3 +1,7 @@
+# 4.4.09
+ * GMs only: Added a + option in the skills header. This provides a quick dialog for adding an ad-hoc skill, allowing the name and rank to be set immediately.
+ * Tested system in Foundry 10.278 and ensured everything was still working as expected.
+
 # 4.4.08 
  * Fixed a bug in FateUtilities that meant when you clicked on the track notes field, if you clicked on the text rather than an empty part of the field, it would throw an error and not edit the field
  * In the latest version of Foundry, activating a module does not cause a reload. Tweaked the code for installModule() so it manually reloads to ensure everything works properly.

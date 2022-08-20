@@ -272,8 +272,60 @@ export class fcoCharacter extends ActorSheet {
         // These events are for the owners only.
         if (this.actor.isOwner){
             skill_name.on("click", event => this._onSkill_name(event, html));
-            const skillsButton = html.find("div[name='edit_player_skills']");;
+            const skillsButton = html.find("div[name='edit_player_skills']");
             skillsButton.on("click", event => this._onSkillsButton(event, html));
+
+            const quick_add_skill = html.find("div[name='quick_add_skill']");
+            quick_add_skill.on("click", event => {
+                // Get name of skill and rank in a dialog (default to 0 if not defined)
+                let content = `<table style="border:none;">
+                <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-skill-name")}</td><td><input style="background-color:white" type="text" id="fco-qaskillname"></input></td></tr>
+                <tr><td>${game.i18n.localize("fate-core-official.Skill_Rank")}</td><td><input style="background-color:white" type="number" value = 0 id="fco-qaskillrank"></input></td></tr>
+                </tr></table>`;
+                let width = 400;
+                let height = "auto";
+
+                new Dialog({
+                            title: game.i18n.localize("fate-core-official.quick_add_skill"),
+                            content: content,
+                            buttons: {
+                                ok: {
+                                        label: game.i18n.localize("fate-core-official.OK"),
+                                        callback: async ()=> {
+                                            // Do the stuff here
+                                            // Construct a new skill
+                                            let name = undefined// Get name from dialog
+                                            name = $("#fco-qaskillname")[0].value;
+                                            let rank = 0; // get rank from dialog
+                                            rank = $("#fco-qaskillrank")[0].value;
+                                            var newSkill=undefined;
+                                            if (name!= undefined && name !=""){
+                                                newSkill= new fcoSkill({
+                                                    "name":name,
+                                                    "description":game.i18n.localize("fate-core-official.AdHocSkill"),
+                                                    "pc":false,
+                                                    "overcome":"",
+                                                    "caa":"",
+                                                    "attack":"",
+                                                    "defend":"",
+                                                    "rank":rank,
+                                                    "adhoc":true
+                                                }).toJSON();
+                                            }
+                                            if (newSkill != undefined){
+                                                newSkill.name=newSkill.name.split(".").join("․");
+                                                this.object.update({"system.skills": {[newSkill.name]:newSkill}});
+                                            }
+                                        }
+                                    },
+                                }, 
+                                default:"ok",
+                        },
+                        {
+                            width:width,
+                            height:height,
+                        }).render(true);
+            })
             
             const aspectButton = html.find("div[name='edit_player_aspects']");
             aspectButton.on("click", event => this._onAspectClick(event, html));
@@ -1064,7 +1116,7 @@ export class fcoCharacter extends ActorSheet {
                     setTimeout(async () => {
                         await super._render(...args);
                         this.renderPending = false;
-                    }, 50);
+                    }, 150);
             }
         } else this.renderBanked = true;
     }

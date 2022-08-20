@@ -38,7 +38,7 @@ export class ExtraSheet extends ItemSheet {
                             }
                         }).observe(avatar,{attributes:true,attributeFilter:["src"]})
                         this.renderPending = false;
-                    }, 50);
+                    }, 150);
             }
         } else this.renderBanked = true;
     }

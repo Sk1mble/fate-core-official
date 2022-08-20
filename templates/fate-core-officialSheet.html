@@ -103,6 +103,10 @@
                         <div class="mfate-panel__header-label">{{ skillsLabel }}</div>
                         <!-- <button class="mfate-panel__header-button">Settings</button>
                             <button class="mfate-panel__header-button">Sort</button> -->
+
+                        {{#if GM}}
+                            <div class="fas fa-plus mfate-panel__header-button" title="{{localize 'fate-core-official.quick_add_skill'}}" name="quick_add_skill" i icon></div>
+                        {{/if}}
                         <div name="sort_player_skills" i icon class="fas fa-sort mfate-panel__header-button" title="{{localize 'fate-core-official.SwitchSort'}}"></div>
                         {{#if this.document.isOwner}} <div title="{{localize 'fate-core-official.OpenTheSkillEditor'}}" name="edit_player_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>{{/if}}
                     </div>
@@ -343,8 +347,9 @@
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Biography'}}</div>
                 </div>
                 {{#if (expanded this.document '_biography')}}
-                <div class="mfate-biography__content long_text_rich" style="min-height:1.5em;" id="{{this.document.id}}_biography_rich" tabindex = "0">{{{system.details.biography.rich}}}</div>
-                <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="system.details.biography.value" name="system.details.biography.value">{{{system.details.biography.value}}}</div>{{/if}}
+                    <div class="mfate-biography__content long_text_rich" style="min-height:1.5em;" id="{{this.document.id}}_biography_rich" tabindex = "0">{{{system.details.biography.rich}}}</div>
+                    <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="system.details.biography.value" name="system.details.biography.value">{{{system.details.biography.value}}}</div>
+                {{/if}}
             </div>
             {{#if (expanded this.document '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}
                 <div class="mfate-panel__header" style="margin-bottom:5px">
