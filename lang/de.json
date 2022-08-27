@@ -71,7 +71,7 @@
 			"actorLink": true,
 			"stunts": {},
 			"tracks": {
-				"Physical Stress": {
+				"Physischer Stress": {
 					"name": "Physischer Stress",
 					"category": "Combat",
 					"description": "Stellt all die verschiedenen Gründe dar, warum Sie gerade noch vermeiden, die volle Wucht eines Angriffs zu bekommen. Vielleicht weicht man dem Schlag gerade noch aus, oder es sieht schlimm aus, ist aber in Wirklichkeit nur eine Fleischwunde, oder man erschöpft sich beim Ausweichen in letzter Sekunde.",
@@ -105,7 +105,7 @@
 					],
 					"enabled": true
 				},
-				"Mental Stress": {
+				"Psychische Belastung": {
 					"name": "Psychische Belastung",
 					"category": "Combat",
 					"description": "Repräsentiert die Art und Weise, wie Sie die schlimmsten Auswirkungen eines mentalen Angriffs vermieden haben. Vielleicht haben Sie es gerade noch geschafft, eine Beleidigung zu ignorieren, oder Sie haben eine instinktive emotionale Reaktion unterdrückt.",
@@ -139,7 +139,7 @@
 					],
 					"enabled": true
 				},
-				"Mild Consequence": {
+				"Leichte Konsequenz": {
 					"name": "Leichte Konsequenz",
 					"category": "Combat",
 					"description": "Milde Folgen erfordern keine sofortige medizinische Behandlung. Sie schmerzen, und sie können eine Unannehmlichkeit darstellen, aber sie werden Sie nicht zu einer Menge Bettruhe zwingen. Auf der mentalen Seite drücken milde Folgen Dinge wie kleine soziale Fauxpas oder Veränderungen in Ihren oberflächlichen Emotionen aus. Beispiele: Blaues Auge, geprellte Hand, erschöpft, verwirrt, launisch, vorübergehend erblindet.",
@@ -158,7 +158,7 @@
 					"notes": "",
 					"enabled": true
 				},
-				"Physical Mild Consequence": {
+				"Körperliche leichte Konsequenz": {
 					"name": "Körperliche leichte Konsequenz",
 					"category": "Combat",
 					"description": "Dies ist eine besonders milde Konsequenz, die nur verwendet werden kann, um physischen Schaden zu absorbieren.",
@@ -185,7 +185,7 @@
 					"notes": "",
 					"enabled": false
 				},
-				"Mental Mild Consequence": {
+				"Geistige leichte Konsequenz": {
 					"name": "Geistige leichte Konsequenz",
 					"category": "Combat",
 					"description": "Dies ist eine besonders milde Konsequenz, die nur verwendet werden kann, um mentalen Schaden zu absorbieren.",
@@ -212,7 +212,7 @@
 					"notes": "",
 					"enabled": false
 				},
-				"Moderate Consequence": {
+				"Mittlere Konsequenz": {
 					"name": "Mittlere Konsequenz",
 					"category": "Combat",
 					"description": "Mäßige Konsequenzen stellen ziemlich ernste Beeinträchtigungen dar, die engagierte Anstrengungen zur Wiederherstellung erfordern (einschließlich medizinischer Behandlung). Auf der mentalen Seite drücken sie Dinge wie Rufschädigung oder emotionale Probleme aus, die man nicht einfach mit einer Entschuldigung und einer guten Nachtruhe abtun kann. Beispiele: Tiefe Schnittwunde, Verbrennung ersten Grades, erschöpft, betrunken, verängstigt.",
@@ -231,7 +231,7 @@
 					"notes": "",
 					"enabled": true
 				},
-				"Severe Consequence": {
+				"Schwere Konsequenz": {
 					"name": "Schwere Konsequenz",
 					"category": "Combat",
 					"description": "Schwere Konsequenzen führen direkt in die Notaufnahme (oder was auch immer das Äquivalent in Ihrem Spiel ist) - sie sind extrem fies und hindern Sie daran, eine Menge Dinge zu tun, und werden Sie für eine Weile außer Gefecht setzen. Auf der mentalen Seite drücken sie Dinge wie ein ernsthaftes Trauma oder beziehungsverändernden Schaden aus. Beispiele: Verbrennung zweiten Grades, komplizierte Fraktur, heraushängende Eingeweide, lähmende Scham, traumabedingte Phobie.",
@@ -252,7 +252,7 @@
 				}
 			},
 			"skills": {
-				"Athletics": {
+				"Athletik": {
 					"name": "Athletik",
 					"description": "Die Fertigkeit \"Athletik\" repräsentiert das allgemeine Niveau der körperlichen Fitness Ihres Charakters, sei es durch Training, natürliche Gaben oder genrespezifische Mittel (wie Magie oder genetische Veränderung). Es geht darum, wie gut Sie Ihren Körper bewegen können. Als solche ist sie eine beliebte Wahl für fast jeden actiongeladenen Charakter. Athletik ist in jedem für Fate geeigneten Genre nahezu allgegenwärtig - sie wäre nur in einem Spiel unnötig, das sich ausschließlich auf zwischenmenschliche Interaktion konzentriert und keine physischen Konflikte hat.",
 					"overcame": "Mit Athletik können Sie jedes Hindernis überwinden, das körperliche Bewegung erfordert - Springen, Laufen, Klettern, Schwimmen, usw. Wenn es etwas ähnelt, das Sie im Zehnkampf machen würden, würfeln Sie Athletik. Du verwendest Überwindungsaktionen mit Athletik, um dich in einem Konflikt zwischen Zonen zu bewegen, wenn dir ein Situationsaspekt oder ein anderes Hindernis im Weg steht. Du würfelst auch Athletik, um in Wettbewerben oder Herausforderungen, die diese Art von Aktivitäten erfordern, zu jagen oder zu rennen.",
@@ -262,7 +262,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Burglary": {
+				"Diebeskunst": {
 					"name": "Diebeskunst",
 					"description": "Die Fertigkeit \"Diebeskunst\" deckt die Fähigkeit Ihres Charakters ab, Dinge zu stehlen und an Orte zu gelangen, die nicht zugänglich sind. In Genres, die sich auf den Einsatz von viel Technologie stützen, beinhaltet diese Fertigkeit auch eine Beherrschung der entsprechenden Technologie, die es dem Charakter ermöglicht, Sicherheitssysteme zu hacken, Alarmsysteme zu deaktivieren und dergleichen.",
 					"overcome": "Diebeskunst erlaubt es Ihnen, jedes Hindernis zu überwinden, das mit Diebstahl oder Infiltration zu tun hat. Das Umgehen von Schlössern und Fallen, Taschendiebstahl und Diebstahl, das Verwischen von Spuren und andere derartige Aktivitäten fallen alle in den Geltungsbereich dieser Fertigkeit.",
@@ -272,7 +272,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Contacts": {
+				"Kontakte": {
 					"name": "Kontakte",
 					"description": "Kontakte ist die Fähigkeit, Menschen zu kennen und Verbindungen zu ihnen herzustellen. Sie setzt die Beherrschung aller in der Umgebung verfügbaren Mittel zur Vernetzung voraus.",
 					"overcome": "Mit Kontakte überwinden Sie jedes Hindernis, das damit zusammenhängt, jemanden zu finden, den Sie finden müssen. Ob das nun die altmodische \"Mann auf der Straße\"-Arbeit ist, die Befragung Ihres Informationsnetzwerks oder das Durchsuchen von Archiven und Computerdatenbanken, Sie sind in der Lage, Leute aufzuspüren oder irgendwie Zugang zu ihnen zu bekommen.",
@@ -282,7 +282,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Crafts": {
+				"Handwerk": {
 					"name": "Handwerk",
 					"description": "Handwerk ist die Fähigkeit, mit Maschinen zu arbeiten, zum Guten oder zum Schlechten. Die Standard-Fertigkeit heißt Handwerk, weil sie in den Beispielen verwendet wird, aber diese Fertigkeit kann sehr stark variieren, je nach Setting und der verfügbaren Technologie. In einem modernen oder Sci-Fi-Setting könnte dies stattdessen Ingenieurwesen oder Mechanik sein.",
 					"overcome": "Handwerk erlaubt es Ihnen, Maschinen zu bauen, zu brechen oder zu reparieren, vorausgesetzt, Sie haben die Zeit und die Werkzeuge, die Sie benötigen. Oft geschehen Aktionen mit Crafts als eine Komponente einer komplexeren Situation, was es zu einer beliebten Fertigkeit für Herausforderungen macht. Wenn Sie zum Beispiel nur eine kaputte Tür reparieren, ist weder ein Erfolg noch ein Misserfolg interessant; Sie sollten einfach erfolgreich sein und weitermachen. Wenn Sie aber versuchen, Ihr Auto zum Starten zu bringen, während ein Rudel Werwölfe Sie jagt...",
@@ -292,7 +292,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Deceive": {
+				"Täuschung": {
 					"name": "Täuschung",
 					"description": "Täuschung ist die Fähigkeit, Menschen zu belügen und in die Irre zu führen.",
 					"overcome": "Verwenden Sie Täuschung, um sich an jemandem vorbeizumogeln, oder um jemanden dazu zu bringen, eine Lüge zu glauben, oder um etwas aus jemandem herauszubekommen, weil er an eine Ihrer Lügen glaubt. Für namenlose NSCs ist dies nur ein Überwindungswurf, aber für PCs oder benannte NSCs erfordert es einen Wettbewerb, und das Ziel widersetzt sich mit Empathie. Wenn Sie diesen Wettbewerb gewinnen, könnte es gerechtfertigt sein, einen Situationsaspekt auf Ihr Ziel zu legen, wenn es Ihnen in einer zukünftigen Szene helfen könnte, Ihre Lüge zu glauben.\n\nTäuschen ist die Fertigkeit, die Sie verwenden, um zu bestimmen, ob eine Verkleidung funktioniert, ob bei Ihnen selbst oder bei anderen. Sie müssen die Zeit und das Material haben, um den gewünschten Effekt zu erzielen. (Hinweis: Dies ist hauptsächlich ein Hearts of Steelthing; in manchen Spielen ist Täuschung standardmäßig nicht geeignet und sollte einen Stunt erfordern.)\n\nSie können Täuschung auch für kleine Taschenspielertricks und Irreführung verwenden.",
@@ -302,7 +302,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Drive": {
+				"Fahren": {
 					"name": "Fahren",
 					"description": "Bei der Fertigkeit \"Fahren\" dreht sich alles um das Bedienen von Fahrzeugen und Dingen, die sich schnell fortbewegen.\n\nWie bei den Fertigkeiten \"Handwerk\" hängt auch bei der Fertigkeit \"Fahren\" viel davon ab, wie viel Action in Fahrzeugen oder anderen Transportmitteln stattfinden soll und welche Art von Technologie in Ihrem Setting zur Verfügung steht.\n\n In einem technologiearmen Setting (wie \"Hearts of Steel\") könnte beispielsweise \"Fahren\" anstelle von \"Fahren\" verwendet werden, da die Haupttransportmittel auf Tieren basieren. Ein futuristisches Setting, das sich um Menschen in einer Weltraumoper dreht, könnte \"Fahren\" (für Autos), \"Pilot\" (für Raumschiffe) und \"Bedienen\" (für Panzer oder schwere Militärfahrzeuge) haben.\n\nVERSCHIEDENE FAHRZEUGE, VERSCHIEDENE FÄHIGKEITEN\nDer Ratschlag ist derselbe wie für \"Handwerk\" - machen Sie sich nicht verrückt mit dem Umgestalten dieser Fertigkeit, es sei denn, es macht einen echten, greifbaren Unterschied in Ihrem Spiel. Ziehen Sie insbesondere die Option in Betracht, eine Fertigkeit zu haben, die durch Stunts modifiziert wird (siehe \"Stunts bauen\").",
 					"overcome": "Fahren ist das Äquivalent zu \"Athletik\", wenn Sie sich in einem Fahrzeug befinden - Sie verwenden es, um Bewegungen trotz schwieriger Umstände, wie z. B. unwegsamem Gelände, geringem Spielraum oder Stuntfahren, erfolgreich auszuführen. Offensichtlich ist Fahren auch reif für Wettkämpfe, insbesondere Verfolgungsjagden und Rennen.",
@@ -312,7 +312,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Empathy": {
+				"Empathie": {
 					"name": "Empathie",
 					"description": "Empathie beinhaltet das Wissen und die Fähigkeit, Veränderungen in der Stimmung oder Haltung einer Person zu erkennen. Es ist im Grunde die Fähigkeit der emotionalen Wahrnehmung.",
 					"overcome": "Man benutzt Empathie nicht wirklich, um Hindernisse direkt zu überwinden - normalerweise findet man mit ihr einige Informationen heraus und benutzt dann eine andere Fertigkeit, um zu handeln. In manchen Fällen kann man Empathie jedoch wie Notice einsetzen, um zu sehen, ob man eine Veränderung in der Haltung oder Absicht einer Person bemerkt.",
@@ -322,7 +322,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Fight": {
+				"Kämpfen": {
 					"name": "Kämpfen",
 					"description": "Die Fertigkeit \"Kampf\" deckt alle Formen des Nahkampfes (also innerhalb derselben Zone) ab, sowohl unbewaffnet als auch mit Waffen. Für das Pendant mit Fernkampfwaffen siehe Schießen.",
 					"overcome": "Da Sie Kämpfen außerhalb eines Konflikts nicht wirklich benutzen, wird es nicht oft verwendet, um Hindernisse zu überwinden. Sie könnten es verwenden, um Ihr kämpferisches Können in einer Demonstration zu zeigen, oder um an einer Art von reguliertem Kampf oder Sportkampf teilzunehmen, was Ihnen erlauben würde, diese Fertigkeit in einem Wettbewerb zu verwenden.",
@@ -332,7 +332,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Investigate": {
+				"Nachforschung": {
 					"name": "Nachforschung",
 					"description": "Nachforschung ist die Fähigkeit, mit der Sie Dinge herausfinden. Sie ist das Gegenstück zu \"Notice\" - während es bei \"Notice\" um situationsbedingte Wachsamkeit und oberflächliche Beobachtung geht, geht es bei \"Nachforschung\" um konzentrierte Anstrengung und gründliches Hinterfragen.",
 					"overcome": "Bei Nachforschung-Hindernissen geht es um Informationen, die aus irgendeinem Grund schwer aufzudecken sind. Das Analysieren eines Tatorts nach Hinweisen, das Durchsuchen eines überfüllten Raums nach dem benötigten Gegenstand oder sogar das Durchstöbern eines verstaubten, alten Buchs, um die Passage zu finden, die alles sinnvoll macht.Ein Wettlauf gegen die Zeit, um Beweise zu sammeln, bevor die Polizei auftaucht oder eine Katastrophe eintritt, ist eine klassische Art, \"Nachforschung\" in einer Herausforderung einzusetzen.",
@@ -342,7 +342,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Lore": {
+				"Wissen": {
 					"name": "Wissen",
 					"description": "Bei der Fertigkeit \"Wissen\" geht es um Wissen und Bildung. Wie bei einigen anderen Fertigkeiten haben wir sie \"Macht\" genannt, weil das zum besonderen Geschmack unserer Beispiele passt - andere Spiele würden sie vielleicht \"Gelehrsamkeit\" oder \"Akademik\" oder etwas Ähnliches nennen.\n\nWenn Ihr Spiel einen Grund hat, verschiedene Wissensgebiete als voneinander getrennt zu priorisieren, könnten Sie mehrere Fertigkeiten haben, die der gleichen Grundvorlage folgen. Zum Beispiel könnten Sie eine Fertigkeit \"Macht\" haben, die für übernatürliches und arkanes Wissen reserviert ist, und eine Fertigkeit\"Gelehrter\" für eher traditionelle Bildung.",
 					"overcome": "Sie können Macht einsetzen, um jedes Hindernis zu überwinden, das die Anwendung des Wissens Ihres Charakters erfordert, um ein Ziel zu erreichen. Zum Beispiel könnten Sie Macht würfeln, um eine uralte Sprache an einer Grabwand zu entziffern, in der Annahme, dass Ihr Charakter sie irgendwann einmal erforscht hat.\n\nEhrlich gesagt, können Sie Wissen als Go-to-Skill immer dann verwenden, wenn Sie wissen müssen, ob Ihr Charakter eine schwierige Frage beantworten kann, bei der eine gewisse Spannung darin besteht, die Antwort nicht zu kennen.",
@@ -352,7 +352,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Notice": {
+				"Wahrnehmung": {
 					"name": "Wahrnehmung",
 					"description": "Die Fertigkeit \"Wahrnehmung\" beinhaltet genau das - Dinge zu bemerken. Sie ist das Gegenstück zu Investigate und repräsentiert die allgemeine Wahrnehmung eines Charakters, die Fähigkeit, Details auf einen Blick zu erkennen, und andere Beobachtungsfähigkeiten. Normalerweise ist die Fähigkeit \"Wahrnehmung\" im Vergleich zu \"Nachforschung\" sehr schnell, so dass die Details, die man mit ihr herausfindet, eher oberflächlich sind, aber man muss sich auch nicht so sehr anstrengen, sie zu finden.",
 					"overcome": "Man benutzt \"Wahrnehmung\" nicht wirklich oft, um Hindernisse zu überwinden, aber wenn man es tut, wird es reaktiv eingesetzt: etwas in einer Szene bemerken, ein schwaches Geräusch hören, die versteckte Pistole im Hosenbund des Mannes entdecken.\n\nBitte beachten Sie, dass dies kein Freibrief für Spielleiter ist, links und rechts Wahrnehmung-Würfe zu verlangen, um zu sehen, wie aufmerksam die Spielercharaktere im Allgemeinen sind; das ist langweilig. Rufen Sie stattdessen Aufmerksamkeitswürfe auf, wenn ein Erfolg dazu führen würde, dass etwas Interessantes passiert und ein Misserfolg zu etwas ebenso Interessantem führen würde.",
@@ -362,7 +362,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Physique": {
+				"Kraft": {
 					"name": "Kraft",
 					"description": "Die Fertigkeit \"Kraft\" ist das Gegenstück zu \"Athletics\" und repräsentiert die natürlichen körperlichen Fähigkeiten des Charakters, wie z. B. rohe Kraft und Ausdauer. In unserem Beispielspiel haben wir diese Fertigkeit als etwas Separates herausgebrochen, um zwei unterschiedliche Typen von physischen Charakteren zu schaffen - den flinken Kerl (repräsentiert durch Athletik) und den starken Mann (repräsentiert durch Körperbau). In Ihrem Spiel werden Sie diese Unterscheidung mit separaten Fertigkeiten vielleicht nicht für notwendig halten - obwohl Sie die Spieler diese Unterscheidung mit Stunts und Aspekten machen lassen könnten.",
 					"overcome": "Sie können Kraft verwenden, um alle Hindernisse zu überwinden, die den Einsatz roher Gewalt erfordern - am häufigsten, um einen Situationsaspekt in einer Zone zu überwinden - oder jedes andere physische Hindernis, wie Gefängnisgitter oder verschlossene Tore. Natürlich ist Kraft die klassische Fertigkeit für Armdrücken und andere Wettkämpfe mit angewandter Kraft, ebenso wie für Marathons oder andere ausdauerbasierte Herausforderungen.",
@@ -372,7 +372,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Provoke": {
+				"Provozieren": {
 					"name": "Provozieren",
 					"description": "Provozieren ist die Fertigkeit, bei der es darum geht, jemanden aus der Fassung zu bringen und ihm negative emotionale Reaktionen zu entlocken - Angst, Wut, Scham usw. Es ist die Fertigkeit \"Ein Idiot sein\".\n\nUm \"Provozieren\" zu verwenden, brauchen Sie eine Art Rechtfertigung. Das kann ganz aus der Situation heraus geschehen, oder weil Sie einen passenden Aspekt haben, oder weil Sie sich mit einer anderen Fertigkeit einen Vorteil verschafft haben (wie \"Charisma\" oder \"Täuschen\"), oder weil Sie die Aspekte Ihres Ziels eingeschätzt haben (siehe \"Empathie\").\n\nDiese Fertigkeit setzt voraus, dass Ihr Ziel Emotionen empfinden kann - Roboter und Zombies können normalerweise nicht provoziert werden.",
 					"overcome": "Sie können jemanden in einem Anfall von emotionaler Erregung dazu provozieren, das zu tun, was Sie wollen. Sie können sie einschüchtern, um Informationen zu erhalten, sie so verärgern, dass sie sich aufführen, oder sie erschrecken, damit sie weglaufen. Dies wird oft passieren, wenn Sie es mit namenlosen NSCs zu tun haben oder es sich nicht lohnt, die Einzelheiten auszuspielen. Gegen PCs oder wichtige NSCs müssen Sie einen Kampf gewinnen. Sie wehren sich mit Willen.",
@@ -382,7 +382,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Rapport": {
+				"Charisma": {
 					"name": "Charisma",
 					"description": "Bei der Fertigkeit \"Charisma\" geht es darum, positive Verbindungen zu Menschen herzustellen und positive Emotionen hervorzurufen. Es ist die Fähigkeit, gemocht zu werden und Vertrauen zu haben.",
 					"overcome": "Verwenden Sie Charisma, um Menschen zu bezaubern oder zu inspirieren, das zu tun, was Sie wollen, oder um eine gute Verbindung zu ihnen aufzubauen. Charmieren Sie sich an der Wache vorbei, überzeugen Sie jemanden, Sie ins Vertrauen zu ziehen, oder werden Sie der Mann der Stunde in der örtlichen Taverne. Bei namenlosen NSCs ist dies nur eine Überwindungsaktion, aber es kann sein, dass Sie an einem Wettbewerb teilnehmen müssen, um sich bei einem benannten NSC oder PC ausreichend einzuschmeicheln.",
@@ -392,7 +392,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Resources": {
+				"Ressourcen": {
 					"name": "Ressourcen",
 					"description": "Ressourcen beschreibt das allgemeine Niveau des materiellen Reichtums Ihres Charakters in der Spielwelt und die Fähigkeit, ihn einzusetzen. Dies spiegelt nicht immer den Bargeldbestand wider, da es verschiedene Möglichkeiten gibt, Reichtum in einem bestimmten Setting darzustellen - in einem mittelalterlichen Spiel könnte er an Land oder Vasallen ebenso wie an Gold gebunden sein; in der heutigen Zeit könnte er eine Anzahl guter Kreditlinien bedeuten.\n\nDiese Fertigkeit ist in der Standardliste enthalten, um Ihnen eine grundlegende, einfache Möglichkeit zu geben, Reichtum als Abstraktion zu handhaben, ohne sich mit Minutien oder Buchhaltung zu beschäftigen. Manche Leute mögen es als seltsam empfinden, eine statische Fertigkeitsbewertung für etwas zu geben, das wir gewohnt sind, als endliche Ressource zu sehen.",
 					"overcome": "Sie können Ressourcen verwenden, um sich aus jeder Situation zu befreien oder diese zu überwinden, in der es hilft, Geld auf das Problem zu werfen, wie z. B. Bestechung oder der Erwerb seltener und teurer Dinge. Herausforderungen oder Wettbewerbe können Auktionen oder Bieterkriege beinhalten.",
@@ -402,7 +402,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Shoot": {
+				"Schießen": {
 					"name": "Schießen",
 					"description": "Das Gegenstück zum Kampf ist die Fertigkeit \"Schießen\", mit der Fernkampfwaffen eingesetzt werden können, entweder in einem Konflikt oder auf Ziele, die sich nicht aktiv gegen Ihre Schießversuche wehren (z. B. eine Zielscheibe oder die Breitseite einer Scheune).\n\nAuch hier gilt wie bei \"Kampf\": Wenn es für Ihr Setting wichtig ist, zwischen verschiedenen Arten von Fernkampfwaffen zu unterscheiden, können Sie dies in Fertigkeiten wie \"Bogen\", \"Pistole\", \"Energiewaffen\" usw. aufteilen. Übertreiben Sie es damit nicht, es sei denn, es ist der Schlüssel zu Ihrem Spiel.",
 					"overcome": "Sofern Sie nicht aus irgendeinem Grund Ihre Fähigkeit \"Schießen\" in einer konfliktfreien Situation demonstrieren müssen, werden Sie diese Fertigkeit wahrscheinlich nicht oft für normale Hindernisse verwenden. Natürlich sind Wettkämpfe, die Schießen beinhalten, ein beliebtes Grundnahrungsmittel in der Abenteuerliteratur, und wir empfehlen, dass Sie nach einer Gelegenheit dafür suchen, wenn Sie einen Charakter haben, der sich darauf spezialisiert hat.",
@@ -412,7 +412,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Stealth": {
+				"Heimlichkeit": {
 					"name": "Heimlichkeit",
 					"description": "Die Fertigkeit \"Heimlichkeit\" ermöglicht es Ihnen, eine Entdeckung zu vermeiden, sowohl wenn Sie sich an einem Ort verstecken als auch wenn Sie versuchen, sich ungesehen zu bewegen. Sie lässt sich gut mit der Fertigkeit \"Diebeskunst\" kombinieren.\"",
 					"overcome": "Mit Heimlichkeit können Sie jede Situation überwinden, in der es hauptsächlich darauf ankommt, dass Sie nicht gesehen werden. Das Vorbeischleichen an Wachen und Sicherheitsleuten, das Verstecken vor einem Verfolger, das Vermeiden von Spuren beim Durchqueren eines Ortes und alle anderen derartigen Verwendungen fallen alle in den Bereich von Heimlichkeit.",
@@ -422,7 +422,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Will": {
+				"Wille": {
 					"name": "Wille",
 					"description": "Die Fertigkeit \"Wille\" repräsentiert das allgemeine Niveau der geistigen Stärke Ihres Charakters, so wie \"Körperbau\" Ihre körperliche Stärke repräsentiert.",
 					"overcome": "Mit Wille können Sie Hindernisse überwinden, die geistige Anstrengung erfordern. Puzzles und Rätsel können unter diese Kategorie fallen, ebenso wie jede geistig fesselnde Aufgabe, wie das Entschlüsseln eines Codes. Setzen Sie den Willen ein, wenn es nur eine Frage der Zeit ist, bis Sie die mentale Herausforderung überwinden, und Lore, wenn es etwas mehr als brachiale mentale Kraft braucht, um sie zu überwinden. Viele der Hindernisse, gegen die Sie mit Willenskraft antreten, könnten Teil von Herausforderungen sein, um die damit verbundene Anstrengung widerzuspiegeln.\n\nWettkämpfe des Willens könnten besonders herausfordernde Spiele widerspiegeln, wie z.B. Schach, oder das Bestehen einer harten Prüfung. In Umgebungen, in denen Magie oder übersinnliche Fähigkeiten weit verbreitet sind, sind Willenswettkämpfe beliebte Ereignisse.",
@@ -434,12 +434,12 @@
 				}
 			},
 			"aspects": {
-				"High Concept": {
+				"Konzept": {
 					"name": "Konzept",
 					"description": "Ihr hohes Konzept ist ein Satz, der zusammenfasst, was Ihr Charakter ausmacht - wer er ist und was er tut. Es ist ein Aspekt, einer der ersten und wichtigsten für Ihren Charakter.\n\nBetrachten Sie diesen Aspekt wie Ihren Job, Ihre Rolle im Leben oder Ihre Berufung - es ist das, was Sie gut können, aber es ist auch eine Pflicht, mit der Sie umgehen müssen, und sie ist ständig mit eigenen Problemen gefüllt. Das heißt, es gibt gute und schlechte Seiten. Es gibt ein paar verschiedene Richtungen, in die man das nehmen kann:\n\nDu könntest die Idee von \"wie dein Job\" wörtlich nehmen: Hauptdetektiv, Ritter der Runde, niederer Gangster.\n\nSie könnten ein Adjektiv oder einen anderen Deskriptor hinzufügen, um die Idee weiter zu definieren: Verachtenswerter Regent von Riverton, zurückhaltender Hauptdetektiv, ehrgeiziger niederer Gangster.\n\nSie könnten zwei Berufe oder Rollen miteinander kombinieren, die die meisten Leute seltsam finden würden: Zaubernder Privatdetektiv, singender Ritter der Tafelrunde, monstermordender Buchhalter.\n\nSie könnten eine wichtige Beziehung zu Ihrer Familie oder einer Organisation, mit der Sie eng verbunden sind, ausspielen (vor allem, wenn die Familie oder die Organisation gut vernetzt oder bekannt sind): Schwarzes Schaf der Thompson-Familie, Low-Level Thug für das Syndikat, Scar Triad's Patsy in Riverton.\n\nDies sind nicht die einzigen Möglichkeiten, mit Ihrem hohen Konzept zu spielen, aber sie bringen Sie auf den Weg. Aber machen Sie sich keinen Stress deswegen - das Schlimmste, was Sie tun können, ist, es zu einer zu großen Sache zu machen. Sie werden nach diesem einen Aspekt noch vier weitere finden - Sie müssen nicht gleich alles unter Dach und Fach bringen",
 					"value": ""
 				},
-				"Trouble": {
+				"Dilemma": {
 					"name": "Dilemma",
 					"description": "Zusätzlich zu einem Konzept hat jeder Charakter ein Dilemma, der Teil seines Lebens und seiner Geschichte ist. Wenn Ihr Konzept das ist, was oder wer Ihr Charakter ist, ist Ihr Dilemma die Antwort auf eine einfache Frage: Was verkompliziert die Existenz Ihres Charakters?\n\nTrouble bringt Chaos in das Leben eines Charakters und treibt ihn in interessante Situationen. Dilemma werden in zwei Arten unterteilt: persönliche Kämpfe und problematische Beziehungen.\n\nBei persönlichen Kämpfen geht es um Ihre dunklere Seite oder Impulse, die schwer zu kontrollieren sind. Wenn es sich um etwas handelt, zu dem Ihr Charakter versucht sein könnte oder das er unbewusst im ungünstigsten Moment tut, handelt es sich um diese Art von Ärger. Beispiele: Anger Management Issues, Sucker for a Pretty Face, The Bottle Calls to Me.\nProblematische Beziehungen beziehen sich auf Menschen oder Organisationen, die Ihnen das Leben schwer machen. Das kann eine Gruppe von Leuten sein, die Sie hassen und Sie leiden lassen wollen, Leute, für die Sie arbeiten und die Ihnen die Arbeit nicht leicht machen, oder sogar Ihre Familie oder Freunde, die zu oft ins Kreuzfeuer geraten. Beispiele: Family Man, Debt to the Mob, The Scar Triad Wants Me Dead.\nDein Problem sollte nicht einfach zu lösen sein. Wenn es das wäre, hätte Ihre Figur das schon getan, und das ist nicht interessant. Aber es sollte den Charakter auch nicht komplett lähmen. Wenn das Problem ständig das tägliche Leben des Charakters stört, wird er seine ganze Zeit damit verbringen, sich damit zu beschäftigen, anstatt sich mit anderen Dingen zu beschäftigen. Sie sollten sich nicht bei jeder Gelegenheit mit Ihrem Problem beschäftigen müssen - es sei denn, es ist der Kern eines bestimmten Abenteuers in der Geschichte (und selbst dann ist es nur ein Abenteuer).\n\nProbleme sollten auch nicht direkt mit Ihrem hohen Konzept zusammenhängen - wenn Sie einen Hauptdetektiv haben, ist es ein langweiliges Problem, wenn Sie sagen, dass Ihr Problem \"Die kriminelle Unterwelt hasst mich\" ist, weil es bereits mit Ihrem hohen Konzept angenommen wird. (Natürlich können Sie das noch eine Stufe höher schrauben, um es persönlich zu machen, wie z.B. \"Don Giovanni hasst mich\", damit es funktioniert.)\n\nBevor Sie weitermachen, sprechen Sie mit dem GM über das Problem Ihres Charakters. Stellen Sie sicher, dass Sie beide auf der gleichen Seite sind, was die Bedeutung angeht. Vielleicht wollen Sie beide einen Weg finden, wie dieser Aspekt heraufbeschworen oder erzwungen werden könnte, um sicherzustellen, dass Sie beide die gleichen Dinge sehen - oder um sich gegenseitig Ideen zu geben. Der GM sollte aus diesem Gespräch mit dem Wissen hervorgehen, was Sie aus Ihrem Problem herausholen wollen.",
 					"value": ""
@@ -449,7 +449,7 @@
 					"description": "Die erste Phase ist das erste richtige Abenteuer Ihres Charakters - sein erstes Buch, seine erste Episode, sein erster Fall, sein erster Film, was auch immer -, in dem er die Hauptrolle spielt.\n\n Sie müssen sich die grundlegenden Details dieser Geschichte für die Zusammenfassung der Phase ausdenken und aufschreiben. Die Geschichte muss nicht sehr detailliert sein - ein paar Sätze reichen völlig aus -, denn Ihre Mitspieler werden in den nächsten beiden Phasen ihre eigenen Details zu diesem vergangenen Abenteuer hinzufügen (so wie Sie zu ihren).\n\nWenn Sie nicht weiterkommen, schauen Sie sich das hohe Konzept Ihres Charakters und die Schwierigkeiten an. Finden Sie ein Dilemma, das eine Chance hat, diese Ideen in den Fokus zu rücken. In welches Problem werden Sie aufgrund Ihres hohen Konzepts oder Problems hineingezogen? Wie hilft oder verkompliziert der andere Aspekt Ihr Leben?",
 					"value": ""
 				},
-				"Crossing Paths 1": {
+				"Pfadkreuzung 1": {
 					"name": "Pfadkreuzung 1",
 					"description": "Sobald jeder sein Abenteuer aufgeschrieben hat (hier kommt der Vorschlag mit den Karteikarten sehr gelegen), sind Sie bereit für Phase zwei. Sie können nach links oder rechts weitergeben oder den Stapel mischen und die Karten zufällig verteilen (mit der Person zu Ihrer Rechten tauschen, bis jeder von Ihnen eine hat, die nicht Ihnen gehört). Wie auch immer Sie sich entscheiden, jeder Spieler sollte jetzt das Abenteuer eines anderen Spielers in der Hand halten.\n\nIhr Charakter hat eine Nebenrolle in der Geschichte, die Sie in der Hand halten, die Sie sich jetzt ausdenken dürfen. Besprechen Sie sie kurz mit dem Spieler, dessen Abenteuer es ist, und fügen Sie der Zusammenfassung einen Satz oder eine Phrase hinzu, die die Nebenrolle Ihres Charakters widerspiegelt. Unterstützende Rollen gibt es in drei Formen: Sie verkomplizieren das Abenteuer, lösen eine Situation oder beides.\n\nVerkomplizieren das Abenteuer: Ihr Charakter hat es geschafft, einen Teil des Abenteuers unsicher zu machen (möglicherweise durch ein Problem oder einen Problemaspekt). Da das in der Vergangenheit passiert ist, ist natürlich bekannt, dass Sie gut aus der Sache herausgekommen sind (oder größtenteils gut, wie der Aspekt angibt, den Sie nehmen). Wenn Sie dies beschreiben, machen Sie sich keine Gedanken darüber, wie die Situation gelöst wird - überlassen Sie das jemand anderem oder lassen Sie es offen. Beschreibungen wie \"Landon fängt Ärger an, als Cynere ihn ruhig braucht\" oder \"Zird wird von mysteriösen Räubern gefangen genommen\" reichen aus, um ein paar Ideen zu bekommen.\n\nLösung einer Situation: Ihr Charakter löst irgendwie eine Komplikation, mit der sich der Hauptcharakter im Abenteuer auseinandersetzen musste, oder Ihr Charakter hilft dem Hauptcharakter im zentralen Konflikt (was eine Gelegenheit ist, Ihren hohen Konzeptaspekt einzubringen). Wenn Sie dies beschreiben, müssen Sie nicht erwähnen, wie die Situation entstanden ist, sondern nur, wie Ihr Charakter sich darum kümmert. Beschreibungen wie \"Cynere hält die Feinde auf, um Landon Zeit zur Flucht zu geben\" oder \"Zird nutzt sein arkanes Wissen, um die Geister um Informationen zu bitten\" reichen aus, um uns eine Vorstellung davon zu geben, was passiert.\n\nKomplizieren und Lösen: Hier löst Ihr Charakter entweder eine Situation, schafft aber eine andere, oder er schafft eine Situation, löst aber später eine andere. Mischen Sie die beiden Ideen und verwenden Sie das Wort \"später\" dazwischen, z. B.: \"Landon beginnt einen Kampf mit der Narben-Triade, während Zird versucht, sich zu verstecken. Später hilft er Zird, indem er Untote abwehrt, während Zird einen Zauber wirkt.\"",
 					"value": ""
@@ -508,7 +508,7 @@
 					"notes": "",
 					"enabled": true
 				},
-				"Severe Consequence": {
+				"Schwere Folge": {
 					"name": "Schwere Folge",
 					"category": "Combat",
 					"description": "Schwere Konsequenzen führen direkt in die Notaufnahme (oder was auch immer das Äquivalent in Ihrem Spiel ist) - sie sind extrem fies und hindern Sie daran, eine Menge Dinge zu tun, und werden Sie für eine Weile außer Gefecht setzen. Auf der mentalen Seite drücken sie Dinge wie ein ernsthaftes Trauma oder beziehungsverändernden Schaden aus. Beispiele: Verbrennung zweiten Grades, komplizierte Fraktur, heraushängende Eingeweide, lähmende Scham, traumabedingte Phobie.",
@@ -527,7 +527,7 @@
 					"notes": "",
 					"enabled": true
 				},
-				"Physical Stress": {
+				"Physische Belastung": {
 					"name": "Physische Belastung",
 					"category": "Combat",
 					"description": "Einfach ausgedrückt, ist Stress ein Handlungspanzer. Es ist eine Ressource, die verwendet wird, um Ihren Charakter aufrecht und im Kampf zu halten, wenn seine Feinde ihn treffen. Wenn Sie Stress-Kästchen markieren, um einen Treffer zu absorbieren, sagen Sie damit Dinge wie \"Das hat mich knapp verfehlt\" oder \"Wow, das hat mich umgehauen, aber ich bin okay.\" Allerdings ist das eine begrenzte Ressource - die meisten Charaktere haben nur drei Kästchen für physischen Stress, obwohl Charaktere mit hohem Körperbau mehr haben.\n\n Sie finden zwei Stressspuren auf Ihrem Charakterbogen, eine für physischen Schaden und eine für mentalen Schaden. Wenn Sie einen Treffer einstecken, können Sie leere Stresskästchen des entsprechenden Typs markieren, um ihn zu absorbieren und im Kampf zu bleiben. Jedes Stressfeld, das Sie markieren, absorbiert eine Schicht. Sie können bei Bedarf mehrere Stresskästchen markieren.\n\nDie Kästchen sind binär - entweder sind sie leer und können benutzt werden oder sie sind voll und können nicht benutzt werden. Das ist jedoch in Ordnung. Die Stressspur wird gelöscht, sobald Sie die Szene überstanden haben - vorausgesetzt, die Monster fressen Sie nicht vorher auf.",
@@ -597,7 +597,7 @@
 					],
 					"enabled": true
 				},
-				"Mild Physical Consequence": {
+				"Milde körperliche Konsequenz": {
 					"name": "Milde körperliche Konsequenz",
 					"category": "Combat",
 					"description": "Siehe Milde Konsequenz.",
@@ -653,7 +653,7 @@
 				}
 			},
 			"skills": {
-				"Academics": {
+				"Akademiker": {
 					"name": "Akademiker",
 					"description": "Weltliches, alltägliches menschliches Wissen und Bildung, einschließlich Geschichte, Wissenschaften und Medizin. Akademiker-Stunts beziehen sich oft auf spezialisierte Wissensgebiete und medizinische Fähigkeiten.",
 					"overcome": "",
@@ -663,7 +663,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Athletics": {
+				"Leichtathletik": {
 					"name": "Leichtathletik",
 					"description": "Eine Messung des physischen Potenzials. Athletik-Stunts konzentrieren sich auf Bewegung - Laufen, Springen, Parkour - und das Ausweichen von Angriffen.",
 					"overcome": "",
@@ -1108,7 +1108,7 @@
 					],
 					"enabled": true
 				},
-				"Indebted": {
+				"Verschuldet": {
 					"name": "Verschuldet",
 					"category": "Sonstige",
 					"description": "Für Details siehe Seite 117 von Dresden Files Accelerated",
@@ -1220,27 +1220,27 @@
 				}
 			},
 			"aspects": {
-				"High Concept": {
+				"Konzept": {
 					"name": "Konzept",
 					"description": "Für Details siehe Seite 92 von Dresden Files Accelerated",
 					"value": ""
 				},
-				"Trouble": {
+				"Dilemma": {
 					"name": "Dilemma",
 					"description": "Für Details siehe Seite 93 von Dresden Files Accelerated",
 					"value": ""
 				},
-				"Third Aspect": {
+				"Dritter Aspekt": {
 					"name": "Dritter Aspekt",
 					"description": "Für Details siehe Seite 93 von Dresden Files Accelerated",
 					"value": ""
 				},
-				"Fourth Aspect": {
+				"Vierter Aspekt": {
 					"name": "Vierter Aspekt",
 					"description": "Für Details siehe Seite 96 von Dresden Files Accelerated",
 					"value": ""
 				},
-				"Fifth Aspect": {
+				"Fünfter Aspekt": {
 					"name": "Fünfter Aspekt",
 					"description": "Für Details siehe Seite 96 von Dresden Files Accelerated",
 					"value": ""
@@ -1685,7 +1685,7 @@
 	"fate-core-official.ConfirmDeletion": "Sind Sie sicher, dass Sie dies löschen möchten?",
 	"fate-core-official.PasteDataToOverwrite": "Fügen Sie hier Daten ein; WILL ALLE WELT-EINSTELLUNGEN ERSETZEN",
 	"fate-core-official.FateAcceleratedDefaultSkills": {
-		"Careful": {
+		"Sorgfältig": {
 			"name": "Sorgfältig",
 			"description": "Sorgfältig ist eine Aktion, bei der Sie auf Details achten und sich Zeit nehmen, um die Aufgabe richtig zu erledigen. Einen weitreichenden Pfeilschuss ausrichten. Aufmerksam Wache stehen. Die Alarmanlage einer Bank entschärfen.",
 			"overcome": "",
@@ -1694,7 +1694,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Clever": {
+		"Scharfsinnig": {
 			"name": "Scharfsinnig",
 			"description": "Eine clevere Aktion erfordert, dass Sie schnell denken, Probleme lösen oder komplexe Variablen berücksichtigen. Die Schwachstelle im Stil eines gegnerischen Schwertkämpfers finden. Die Schwachstelle in einer Festungsmauer finden. Reparieren eines Computers.",
 			"overcome": "",
@@ -1703,7 +1703,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Flashy": {
+		"Tollkühne": {
 			"name": "Tollkühne",
 			"description": "Eine Tollkühne-Aktion lenkt die Aufmerksamkeit auf Sie; sie ist voller Stil und Elan. Halten Sie eine inspirierende Rede vor Ihrer Armee. Den Gegner in einem Duell blamieren. Ein magisches Feuerwerk veranstalten.",
 			"overcome": "",
@@ -1712,7 +1712,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Forceful": {
+		"Kraftvoll": {
 			"name": "Kraftvoll",
 			"description": "Eine Kraftvolle-Aktion ist nicht subtil - es ist brachiale Kraft. Mit einem Bären ringen. Einen Verbrecher niederstarren. Einen großen, mächtigen Zauberspruch wirken.",
 			"overcome": "",
@@ -1721,7 +1721,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Quick": {
+		"Flink": {
 			"name": "Flink",
 			"description": "Eine Aktion \"Schnell\" erfordert, dass Sie sich schnell und mit Geschicklichkeit bewegen. Einem Pfeil ausweichen. Den ersten Schlag landen. Eine Bombe entschärfen, während es 3... 2... 1... tickt",
 			"overcome": "",
@@ -1730,7 +1730,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Sneaky": {
+		"Tückisch": {
 			"name": "Tückisch",
 			"description": "Eine Tückisch-Aktion wird mit einem Schwerpunkt auf Irreführung, Heimlichkeit oder Täuschung durchgeführt. Sich aus einer Verhaftung herausreden. Eine Tasche stehlen. Finten in einem Schwertkampf.",
 			"overcome": "",
@@ -1741,7 +1741,7 @@
 		}
 	},
 	"fate-core-official.FateCoreDefaultSkills": {
-		"Athletics": {
+		"Athletik": {
 			"name": "Athletik",
 			"description": "Die Fertigkeit \"Athletik\" repräsentiert das allgemeine Niveau der körperlichen Fitness Ihres Charakters, sei es durch Training, natürliche Gaben oder genrespezifische Mittel (wie Magie oder genetische Veränderung). Es geht darum, wie gut Sie Ihren Körper bewegen können. Als solche ist sie eine beliebte Wahl für fast jeden actiongeladenen Charakter. Athletik ist in jedem für Fate geeigneten Genre nahezu allgegenwärtig - sie wäre nur in einem Spiel unnötig, das sich ausschließlich auf zwischenmenschliche Interaktion konzentriert und keine physischen Konflikte hat.",
 			"overcome": "Mit Athletik können Sie jedes Hindernis überwinden, das körperliche Bewegung erfordert - Springen, Laufen, Klettern, Schwimmen, usw. Wenn es etwas ähnelt, das Sie im Zehnkampf machen würden, würfeln Sie Athletik. Du verwendest Überwindungsaktionen mit Athletik, um dich in einem Konflikt zwischen Zonen zu bewegen, wenn dir ein Situationsaspekt oder ein anderes Hindernis im Weg steht. Du würfelst auch Athletik, um in Wettbewerben oder Herausforderungen, die diese Art von Aktivitäten erfordern, zu jagen oder zu rennen.",
@@ -1750,7 +1750,7 @@
 			"defend": "Athletik ist eine Sammelfähigkeit, um für die Verteidigung in einem physischen Konflikt zu würfeln, gegen Nah- und Fernkampfattacken. Sie können sie auch verwenden, um sich gegen Charaktere zu verteidigen, die versuchen, sich an Ihnen vorbei zu bewegen, wenn Sie in der Lage sind, denjenigen, der den Versuch unternimmt, physisch zu stören.",
 			"pc": true
 		},
-		"Burglary": {
+		"Diebeskunst": {
 			"name": "Diebeskunst",
 			"description": "Die Fertigkeit \"Diebeskunst\" deckt die Fähigkeit Ihres Charakters ab, Dinge zu stehlen und an Orte zu gelangen, die nicht zugänglich sind. In Genres, die sich auf den Einsatz von viel Technologie stützen, beinhaltet diese Fertigkeit auch eine Beherrschung der entsprechenden Technologie, die es dem Charakter ermöglicht, Sicherheitssysteme zu hacken, Alarmsysteme zu deaktivieren und dergleichen.",
 			"overcome": "Diebeskunst erlaubt es Ihnen, jedes Hindernis zu überwinden, das mit Diebstahl oder Infiltration zu tun hat. Das Umgehen von Schlössern und Fallen, Taschendiebstahl und Diebstahl, das Verwischen von Spuren und andere derartige Aktivitäten fallen alle in den Geltungsbereich dieser Fertigkeit.",
@@ -1759,7 +1759,7 @@
 			"defend": "Same here. Es ist nicht wirklich eine Konfliktfertigkeit, also gibt es nicht viele Möglichkeiten, sie zur Verteidigung zu verwenden.",
 			"pc": true
 		},
-		"Contacts": {
+		"Kontakte": {
 			"name": "Kontakte",
 			"description": "Kontakte ist die Fähigkeit, Menschen zu kennen und Verbindungen zu ihnen herzustellen. Sie setzt die Beherrschung aller in der Umgebung verfügbaren Mittel zur Vernetzung voraus.",
 			"overcome": "Mit Kontakte überwinden Sie jedes Hindernis, das damit zusammenhängt, jemanden zu finden, den Sie finden müssen. Ob das nun die altmodische \"Mann auf der Straße\"-Arbeit ist, die Befragung Ihres Informationsnetzwerks oder das Durchsuchen von Archiven und Computerdatenbanken, Sie sind in der Lage, Leute aufzuspüren oder irgendwie Zugang zu ihnen zu bekommen.",
@@ -1768,7 +1768,7 @@
 			"defend": "Kontakte können verwendet werden, um sich gegen Personen zu verteidigen, die sich soziale Vorteile gegen Sie verschaffen, vorausgesetzt, Ihr Informationsnetzwerk kann in der Situation zum Einsatz kommen. Sie können es auch verwenden, um jemanden davon abzuhalten, Täuschung oder Kontakte zu benutzen, um \"unterzutauchen\", oder um Nachforschung-Versuche, Sie zu finden, zu behindern.",
 			"pc": true
 		},
-		"Crafts": {
+		"Handwerk": {
 			"name": "Handwerk",
 			"description": "Handwerk ist die Fähigkeit, mit Maschinen zu arbeiten, zum Guten oder zum Schlechten. Die Standard-Fertigkeit heißt \"Handwerk\", weil sie in den Beispielen verwendet wird, aber diese Fertigkeit kann sehr stark variieren, je nach Setting und der verfügbaren Technologie. In einem modernen oder Sci-Fi-Setting könnte dies stattdessen Ingenieurwesen oder Mechanik sein.",
 			"overcome": "Handwerk erlaubt es Ihnen, Maschinen zu bauen, zu brechen oder zu reparieren, vorausgesetzt, Sie haben die Zeit und die Werkzeuge, die Sie benötigen. Oft geschehen Aktionen mit Handwerk als eine Komponente einer komplexeren Situation, was es zu einer beliebten Fertigkeit für Herausforderungen macht. Wenn Sie zum Beispiel nur eine kaputte Tür reparieren, ist weder ein Erfolg noch ein Misserfolg interessant; Sie sollten einfach erfolgreich sein und weitermachen. Wenn Sie aber versuchen, Ihr Auto zum Starten zu bringen, während ein Rudel Werwölfe Sie jagt...",
@@ -1777,7 +1777,7 @@
 			"defend": "Wie bei \"Angriff\" gilt auch für \"Handwerk\", dass man sich nicht verteidigen kann, es sei denn, man nutzt die Fertigkeit irgendwie, um ein Gerät zu kontrollieren, mit dem man blockt.",
 			"pc": true
 		},
-		"Deceive": {
+		"Täuschung": {
 			"name": "Täuschung",
 			"description": "Täuschung ist die Fähigkeit, Menschen zu belügen und in die Irre zu führen.",
 			"overcome": "Verwenden Sie Täuschung, um sich an jemandem vorbeizumogeln, oder um jemanden dazu zu bringen, eine Lüge zu glauben, oder um etwas aus jemandem herauszubekommen, weil er an eine Ihrer Lügen glaubt. Für namenlose NSCs ist dies nur ein Überwindungswurf, aber für PCs oder benannte NSCs erfordert es einen Wettbewerb, und das Ziel widersetzt sich mit Empathie. Wenn Sie diesen Wettbewerb gewinnen, könnte es gerechtfertigt sein, einen Situationsaspekt auf Ihr Ziel zu legen, wenn es Ihnen in einer zukünftigen Szene helfen könnte, Ihre Lüge zu glauben.\n\nTäuschen ist die Fertigkeit, die Sie verwenden, um zu bestimmen, ob eine Verkleidung funktioniert, ob bei Ihnen selbst oder bei anderen. Sie müssen die Zeit und das Material haben, um den gewünschten Effekt zu erzielen. (Hinweis: Dies ist hauptsächlich ein Hearts of Steelthing; in manchen Spielen ist Täuschung standardmäßig nicht geeignet und sollte einen Stunt erfordern.)\n\nSie können Täuschung auch für kleine Taschenspielertricks und Irreführung verwenden.",
@@ -1786,7 +1786,7 @@
 			"defend": "Mit Täuschung können Sie Ermittlungsversuche mit falschen Informationen ablenken und sich gegen Versuche verteidigen, Ihre wahren Motive mit der Fertigkeit Empathie zu erkennen.",
 			"pc": true
 		},
-		"Drive": {
+		"Fahren": {
 			"name": "Fahren",
 			"description": "Bei der Fertigkeit \"Fahren\" dreht sich alles um das Bedienen von Fahrzeugen und Dingen, die sich schnell fortbewegen.\n\nWie bei den Fertigkeiten \"Handwerk\" hängt auch bei der Fertigkeit \"Fahren\" viel davon ab, wie viel Action in Fahrzeugen oder anderen Transportmitteln stattfinden soll und welche Art von Technologie in Ihrem Setting zur Verfügung steht.\n\n In einem technologiearmen Setting (wie \"Hearts of Steel\") könnte beispielsweise \"Fahren\" anstelle von \"Fahren\" verwendet werden, da die Haupttransportmittel auf Tieren basieren. Ein futuristisches Setting, das sich um Menschen in einer Weltraumoper dreht, könnte \"Fahren\" (für Autos), \"Pilot\" (für Raumschiffe) und \"Bedienen\" (für Panzer oder schwere Militärfahrzeuge) haben.\n\nVERSCHIEDENE FAHRZEUGE, VERSCHIEDENE FÄHIGKEITEN\nDer Ratschlag ist derselbe wie für \"Handwerk\" - machen Sie sich nicht verrückt mit dem Umgestalten dieser Fertigkeit, es sei denn, es macht einen echten, greifbaren Unterschied in Ihrem Spiel. Ziehen Sie insbesondere die Option in Betracht, eine Fertigkeit zu haben, die durch Stunts modifiziert wird (siehe \"Stunts bauen\").",
 			"overcome": "Fahren ist das Äquivalent zu \"Athletics\", wenn Sie sich in einem Fahrzeug befinden - Sie verwenden es, um Bewegungen trotz schwieriger Umstände, wie z. B. unwegsamem Gelände, geringem Spielraum oder Stuntfahren, erfolgreich auszuführen. Offensichtlich ist Fahren auch reif für Wettkämpfe, insbesondere Verfolgungsjagden und Rennen.",
@@ -1795,7 +1795,7 @@
 			"defend": "Das Vermeiden von Schaden an einem Fahrzeug in einem physischen Konflikt ist eine der häufigsten Verwendungen von Fahren. Sie können es auch verwenden, um sich gegen Vorteile zu verteidigen, die gegen Sie geschaffen werden, oder um Aktionen von jemandem zu überwinden, der versucht, sich mit einem Fahrzeug an Ihnen vorbeizuschieben.",
 			"pc": true
 		},
-		"Empathy": {
+		"Empathie": {
 			"name": "Empathie",
 			"description": "Empathie beinhaltet das Wissen und die Fähigkeit, Veränderungen in der Stimmung oder Haltung einer Person zu erkennen. Es ist im Grunde die Fähigkeit der emotionalen Wahrnehmung.",
 			"overcome": "Man benutzt Empathie nicht wirklich, um Hindernisse direkt zu überwinden - normalerweise findet man mit ihr einige Informationen heraus und benutzt dann eine andere Fertigkeit, um zu handeln. In manchen Fällen kann man Empathie jedoch wie Wahrnehmung einsetzen, um zu sehen, ob man eine Veränderung in der Haltung oder Absicht einer Person bemerkt.",
@@ -1804,7 +1804,7 @@
 			"defend": "Mit dieser Fertigkeit können Sie sich gegen Täuschungsaktionen verteidigen. Sie ermöglicht es Ihnen, Lügen zu durchdringen und die wahren Absichten der Person zu erkennen. Sie können sich damit auch gegen diejenigen verteidigen, die sich generell soziale Vorteile gegen Sie verschaffen.\n\nSpecial: Empathie ist die Hauptfertigkeit, mit der Sie anderen helfen können, sich von Folgen zu erholen, die mentaler Natur sind.",
 			"pc": true
 		},
-		"Fight": {
+		"Kämpfen": {
 			"name": "Kämpfen",
 			"description": "Die Fertigkeit \"Kampf\" deckt alle Formen des Nahkampfes (also innerhalb derselben Zone) ab, sowohl unbewaffnet als auch mit Waffen. Für das Pendant mit Fernkampfwaffen siehe Schießen.",
 			"overcome": "Da Sie Kämpfen außerhalb eines Konflikts nicht wirklich benutzen, wird es nicht oft verwendet, um Hindernisse zu überwinden. Sie könnten es verwenden, um Ihr kämpferisches Können in einer Demonstration zu zeigen, oder um an einer Art von reguliertem Kampf oder Sportkampf teilzunehmen, was Ihnen erlauben würde, diese Fertigkeit in einem Wettbewerb zu verwenden.",
@@ -1813,7 +1813,7 @@
 			"defend": "Sie verwenden Kämpfen, um sich gegen jeden anderen Angriff oder Vorteilsversuch zu verteidigen, der mit Kämpfen ausgeführt wird, sowie gegen so ziemlich jede Aktion, bei der ein gewaltsames Eingreifen die Ausführung verhindern könnte. Sie können diese Fertigkeit nicht verwenden, um sich gegen Schießangriffe zu verteidigen, es sei denn, das Setting ist fantastisch genug, dass Sie Raketen fangen oder aus der Luft abwehren oder Laserschwerter zum Ablenken von Blastern verwenden können.",
 			"pc": true
 		},
-		"Investigate": {
+		"Nachforschung": {
 			"name": "Nachforschung",
 			"description": "Nachforschung ist die Fähigkeit, mit der Sie Dinge herausfinden. Sie ist das Gegenstück zu \"Wahrnehmung\" - während es bei \"Wahrnehmung\" um situationsbedingte Wachsamkeit und oberflächliche Beobachtung geht, geht es bei \"Nachforschung\" um konzentrierte Anstrengung und gründliches Hinterfragen.",
 			"overcome": "Bei Nachforschung-Hindernissen geht es um Informationen, die aus irgendeinem Grund schwer aufzudecken sind. Das Analysieren eines Tatorts nach Hinweisen, das Durchsuchen eines überfüllten Raums nach dem benötigten Gegenstand oder sogar das Durchstöbern eines verstaubten, alten Buchs, um die Passage zu finden, die alles sinnvoll macht.Ein Wettlauf gegen die Zeit, um Beweise zu sammeln, bevor die Polizei auftaucht oder eine Katastrophe eintritt, ist eine klassische Art, \"Nachforschung\" in einer Herausforderung einzusetzen.",
@@ -1822,7 +1822,7 @@
 			"defend": "Auch hier.",
 			"pc": true
 		},
-		"Lore": {
+		"Wissen": {
 			"name": "Wissen",
 			"description": "Bei der Fertigkeit \"Wissen\" geht es um Wissen und Bildung. Wie bei einigen anderen Fertigkeiten haben wir sie \"Macht\" genannt, weil das zum besonderen Geschmack unserer Beispiele passt - andere Spiele würden sie vielleicht \"Gelehrsamkeit\" oder \"Akademik\" oder etwas Ähnliches nennen.\n\nWenn Ihr Spiel einen Grund hat, verschiedene Wissensgebiete als voneinander getrennt zu priorisieren, könnten Sie mehrere Fertigkeiten haben, die der gleichen Grundvorlage folgen. Zum Beispiel könnten Sie eine Fertigkeit \"Macht\" haben, die für übernatürliches und arkanes Wissen reserviert ist, und eine Fertigkeit \"Gelehrter\" für eher traditionelle Bildung.",
 			"overcome": "Sie können Macht einsetzen, um jedes Hindernis zu überwinden, das die Anwendung des Wissens Ihres Charakters erfordert, um ein Ziel zu erreichen. Zum Beispiel könnten Sie Macht würfeln, um eine uralte Sprache an einer Grabwand zu entziffern, in der Annahme, dass Ihr Charakter sie irgendwann einmal erforscht hat.\n\nFrankly, you can use Wissen as a go-to skill any time you need to know if your character can answer a difficult question, where some tension exists in not knowing the answer.",
@@ -1831,7 +1831,7 @@
 			"defend": "Wissen wird nicht zur Verteidigung verwendet.",
 			"pc": true
 		},
-		"Notice": {
+		"Wahrnehmung": {
 			"name": "Wahrnehmung",
 			"description": "Die Fertigkeit \"Wahrnehmung\" beinhaltet genau das - Dinge zu bemerken. Sie ist das Gegenstück zu Nachforschung und repräsentiert die allgemeine Wahrnehmung eines Charakters, die Fähigkeit, Details auf einen Blick zu erkennen, und andere Beobachtungsfähigkeiten. Normalerweise ist die Fähigkeit \"Wahrnehmung\" im Vergleich zu \"Nachforschung\" sehr schnell, so dass die Details, die man mit ihr herausfindet, eher oberflächlich sind, aber man muss sich auch nicht so sehr anstrengen, sie zu finden.",
 			"overcome": "Man benutzt \"Wahrnehmung\" nicht wirklich oft, um Hindernisse zu überwinden, aber wenn man es tut, wird es reaktiv eingesetzt: etwas in einer Szene bemerken, ein schwaches Geräusch hören, die versteckte Pistole im Hosenbund des Mannes entdecken.\n\nBitte beachten Sie, dass dies kein Freibrief für Spielleiter ist, links und rechts Wahrnehmung-Würfe zu verlangen, um zu sehen, wie aufmerksam die Spielercharaktere im Allgemeinen sind; das ist langweilig. Rufen Sie stattdessen Aufmerksamkeitswürfe auf, wenn ein Erfolg dazu führen würde, dass etwas Interessantes passiert und ein Misserfolg zu etwas ebenso Interessantem führen würde.",
@@ -1840,7 +1840,7 @@
 			"defend": "Sie können Wahrnehmung verwenden, um sich gegen die Verwendung von Heimlichkeit zu verteidigen, um Ihnen auf die Schliche zu kommen oder Sie in einen Hinterhalt zu locken, oder um zu entdecken, dass Sie beobachtet werden.",
 			"pc": true
 		},
-		"Physique": {
+		"Kraft": {
 			"name": "Kraft",
 			"description": "Die Fertigkeit \"Kraft\" ist das Gegenstück zu \"Athletics\" und repräsentiert die natürlichen körperlichen Fähigkeiten des Charakters, wie z. B. rohe Kraft und Ausdauer. In unserem Beispielspiel haben wir diese Fertigkeit als etwas Separates herausgebrochen, um zwei unterschiedliche Typen von physischen Charakteren zu schaffen - den flinken Kerl (repräsentiert durch Athletik) und den starken Mann (repräsentiert durch Körperbau). In Ihrem Spiel werden Sie diese Unterscheidung mit separaten Fertigkeiten vielleicht nicht für notwendig halten - obwohl Sie die Spieler diese Unterscheidung mit Stunts und Aspekten machen lassen könnten.",
 			"overcome": "Sie können Kraft verwenden, um alle Hindernisse zu überwinden, die den Einsatz roher Gewalt erfordern - am häufigsten, um einen Situationsaspekt in einer Zone zu überwinden - oder jedes andere physische Hindernis, wie Gefängnisgitter oder verschlossene Tore. Natürlich ist Kraft die klassische Fertigkeit für Armdrücken und andere Wettkämpfe mit angewandter Kraft, ebenso wie für Marathons oder andere ausdauerbasierte Herausforderungen.",
@@ -1849,7 +1849,7 @@
 			"defend": "Obwohl man Kraft im Allgemeinen nicht zur Verteidigung gegen Angriffe einsetzt, kann man sich damit aktiv gegen die Bewegung eines anderen wehren, vorausgesetzt, man befindet sich in einem so kleinen Raum, dass man seinen Körper effektiv einsetzen kann, um den Zugang zu blockieren. Sie können auch etwas Schweres dazwischenstellen und es abstützen, um jemanden am Durchkommen zu hindern: Die Fertigkeit \"Körperbau\" gibt Ihnen zusätzliche Slots für körperliche Belastung oder Konsequenz. Durchschnittlich (+1) oder Fair (+2) gibt Ihnen ein 3-Punkte-Stressfeld. Gut (+3) oder Großartig (+4) gibt Ihnen ein 3-Punkte- und ein 4-Punkte-Stressfeld. Superb (+5) und höher geben Ihnen einen zusätzlichen Slot für leichte Konsequenzen zusammen mit den zusätzlichen Stressfeldern. Dieser Slot kann nur für physischen Schaden verwendet werden.",
 			"pc": true
 		},
-		"Provoke": {
+		"Provozieren": {
 			"name": "Provozieren",
 			"description": "Provozieren ist die Fertigkeit, bei der es darum geht, jemanden aus der Fassung zu bringen und ihm negative emotionale Reaktionen zu entlocken - Angst, Wut, Scham usw. Es ist die Fertigkeit \"Ein Idiot sein\".\n\nUm \"Provozieren\" zu verwenden, brauchen Sie eine Art Rechtfertigung. Das kann ganz aus der Situation heraus geschehen, oder weil Sie einen passenden Aspekt haben, oder weil Sie sich mit einer anderen Fertigkeit einen Vorteil verschafft haben (wie \"Charisma\" oder \"Täuschen\"), oder weil Sie die Aspekte Ihres Ziels eingeschätzt haben (siehe \"Empathie\").\n\nDiese Fertigkeit setzt voraus, dass Ihr Ziel Emotionen empfinden kann - Roboter und Zombies können normalerweise nicht provoziert werden.",
 			"overcome": "Sie können jemanden in einem Anfall von emotionaler Erregung dazu provozieren, das zu tun, was Sie wollen. Sie können sie einschüchtern, um Informationen zu erhalten, sie so verärgern, dass sie sich aufführen, oder sie erschrecken, damit sie weglaufen. Dies wird oft passieren, wenn Sie es mit namenlosen NSCs zu tun haben oder es sich nicht lohnt, die Einzelheiten auszuspielen. Gegen PCs oder wichtige NSCs müssen Sie einen Kampf gewinnen. Sie wehren sich mit Willen.",
@@ -1858,7 +1858,7 @@
 			"defend": "Gut darin zu sein, andere zu provozieren, macht Sie nicht besser darin, es selbst zu vermeiden. Dafür brauchen Sie Wille.",
 			"pc": true
 		},
-		"Rapport": {
+		"Charisma": {
 			"name": "Charisma",
 			"description": "Bei der Fertigkeit \"Charisma\" geht es darum, positive Verbindungen zu Menschen herzustellen und positive Emotionen hervorzurufen. Es ist die Fähigkeit, gemocht zu werden und Vertrauen zu haben.",
 			"overcome": "Verwenden Sie Charisma, um Menschen zu bezaubern oder zu inspirieren, das zu tun, was Sie wollen, oder um eine gute Verbindung zu ihnen aufzubauen. Charmieren Sie sich an der Wache vorbei, überzeugen Sie jemanden, Sie ins Vertrauen zu ziehen, oder werden Sie der Mann der Stunde in der örtlichen Taverne. Bei namenlosen NSCs ist dies nur eine Überwindungsaktion, aber es kann sein, dass Sie an einem Wettbewerb teilnehmen müssen, um sich bei einem benannten NSC oder PC ausreichend einzuschmeicheln.",
@@ -1867,7 +1867,7 @@
 			"defend": "Charisma verteidigt sich gegen jede Fähigkeit, die dazu dient, Ihren Ruf zu schädigen, eine von Ihnen geschaffene Stimmung zu versauen oder Sie vor anderen Leuten schlecht aussehen zu lassen. Es verteidigt jedoch nicht gegen mentale Angriffe. Dafür ist der Wille erforderlich.",
 			"pc": true
 		},
-		"Resources": {
+		"Ressourcen": {
 			"name": "Ressourcen",
 			"description": "Ressourcen beschreibt das allgemeine Niveau des materiellen Reichtums Ihres Charakters in der Spielwelt und die Fähigkeit, ihn einzusetzen. Dies spiegelt nicht immer den Bargeldbestand wider, da es verschiedene Möglichkeiten gibt, Reichtum in einem bestimmten Setting darzustellen - in einem mittelalterlichen Spiel könnte er an Land oder Vasallen ebenso wie an Gold gebunden sein; in der heutigen Zeit könnte er eine Anzahl guter Kreditlinien bedeuten.\n\nDiese Fertigkeit ist in der Standardliste enthalten, um Ihnen eine grundlegende, einfache Möglichkeit zu geben, Reichtum als Abstraktion zu handhaben, ohne sich mit Minutien oder Buchhaltung zu beschäftigen. Manche Leute mögen es als seltsam empfinden, eine statische Fertigkeitsbewertung für etwas zu geben, das wir gewohnt sind, als endliche Ressource zu sehen.",
 			"overcome": "Sie können Ressourcen verwenden, um sich aus jeder Situation zu befreien oder diese zu überwinden, in der es hilft, Geld auf das Problem zu werfen, wie z. B. Bestechung oder der Erwerb seltener und teurer Dinge. Herausforderungen oder Wettbewerbe können Auktionen oder Bieterkriege beinhalten.",
@@ -1876,7 +1876,7 @@
 			"defend": "Ressourcen wird nicht zur Verteidigung verwendet.",
 			"pc": true
 		},
-		"Shoot": {
+		"Schießen": {
 			"name": "Schießen",
 			"description": "Das Gegenstück zum Kampf ist die Fertigkeit \"Schießen\", mit der Fernkampfwaffen eingesetzt werden können, entweder in einem Konflikt oder auf Ziele, die sich nicht aktiv gegen Ihre Schießversuche wehren (z. B. eine Zielscheibe oder die Breitseite einer Scheune).\n\nAuch hier gilt wie bei \"Kampf\": Wenn es für Ihr Setting wichtig ist, zwischen verschiedenen Arten von Fernkampfwaffen zu unterscheiden, können Sie dies in Fertigkeiten wie \"Bogen\", \"Pistole\", \"Energiewaffen\" usw. aufteilen. Übertreiben Sie es damit nicht, es sei denn, es ist der Schlüssel zu Ihrem Spiel.",
 			"overcome": "Sofern Sie nicht aus irgendeinem Grund Ihre Fähigkeit \"Schießen\" in einer konfliktfreien Situation demonstrieren müssen, werden Sie diese Fertigkeit wahrscheinlich nicht oft für normale Hindernisse verwenden. Natürlich sind Wettkämpfe, die Schießen beinhalten, ein beliebtes Grundnahrungsmittel in der Abenteuerliteratur, und wir empfehlen, dass Sie nach einer Gelegenheit dafür suchen, wenn Sie einen Charakter haben, der sich darauf spezialisiert hat.",
@@ -1885,7 +1885,7 @@
 			"defend": "Schießen ist insofern einzigartig, als dass es keine wirkliche Verteidigungskomponente hat - dafür würde man Athletik verwenden. Sie könnten damit ein Deckungsfeuer abgeben, das als Verteidigung für Ihre Verbündeten oder als Widerstand gegen die Bewegung eines anderen dienen könnte, obwohl es genauso gut durch das Erzeugen eines Vorteils dargestellt werden könnte (Deckungsfeuer oder Kugelhagel zum Beispiel).",
 			"pc": true
 		},
-		"Stealth": {
+		"Heimlichkeit": {
 			"name": "Heimlichkeit",
 			"description": "Die Fertigkeit \"Heimlichkeit\" ermöglicht es Ihnen, eine Entdeckung zu vermeiden, sowohl wenn Sie sich an einem Ort verstecken als auch wenn Sie versuchen, sich ungesehen zu bewegen. Sie lässt sich gut mit der Fertigkeit \"Diebeskunst\" kombinieren.",
 			"overcome": "Mit Heimlichkeit können Sie jede Situation überwinden, in der es hauptsächlich darauf ankommt, dass Sie nicht gesehen werden. Das Vorbeischleichen an Wachen und Sicherheitsleuten, das Verstecken vor einem Verfolger, das Vermeiden von Spuren beim Durchqueren eines Ortes und alle anderen derartigen Verwendungen fallen alle in den Bereich von Heimlichkeit.",
@@ -1894,7 +1894,7 @@
 			"defend": "Sie können dies verwenden, um Aufklärungsversuche zu vereiteln, die Sie lokalisieren oder aufspüren wollen, sowie um einen Aufklärungsversuch von jemandem abzuschütteln, der versucht, Sie aufzuspüren.",
 			"pc": true
 		},
-		"Will": {
+		"Wille": {
 			"name": "Wille",
 			"description": "Die Fertigkeit \"Wille\" repräsentiert das allgemeine Niveau der geistigen Stärke Ihres Charakters, so wie \"Körperbau\" Ihre körperliche Stärke repräsentiert.",
 			"overcome": "Mit Wille können Sie Hindernisse überwinden, die geistige Anstrengung erfordern. Puzzles und Rätsel können unter diese Kategorie fallen, ebenso wie jede geistig fesselnde Aufgabe, wie das Entschlüsseln eines Codes. Setzen Sie den Willen ein, wenn es nur eine Frage der Zeit ist, bis Sie die mentale Herausforderung überwinden, und Lore, wenn es etwas mehr als brachiale mentale Kraft braucht, um sie zu überwinden. Viele der Hindernisse, gegen die Sie mit Willenskraft antreten, könnten Teil von Herausforderungen sein, um die damit verbundene Anstrengung widerzuspiegeln.\n\nWettkämpfe des Willens könnten besonders herausfordernde Spiele widerspiegeln, wie z.B. Schach, oder das Bestehen einer harten Prüfung. In Umgebungen, in denen Magie oder übersinnliche Fähigkeiten weit verbreitet sind, sind Willenswettkämpfe beliebte Ereignisse.",
@@ -1905,7 +1905,7 @@
 		}
 	},
 	"fate-core-official.FateCondensedDefaultSkills": {
-		"Academics": {
+		"Akademiker": {
 			"name": "Akademiker",
 			"description": "Weltliches, alltägliches menschliches Wissen und Bildung, einschließlich Geschichte, Wissenschaften und Medizin. Akademiker-Stunts beziehen sich oft auf spezialisierte Wissensgebiete und medizinische Fähigkeiten.",
 			"overcome": "",
@@ -1914,7 +1914,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Athletics": {
+		"Leichtathletik": {
 			"name": "Leichtathletik",
 			"description": "Eine Messung des physischen Potenzials. Athletik-Stunts konzentrieren sich auf Bewegung - Laufen, Springen, Parkour - und das Ausweichen von Angriffen.",
 			"overcome": "",
@@ -1923,7 +1923,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Burglary": {
+		"Einbrecher": {
 			"name": "Einbrecher",
 			"description": "Wissen über und Fähigkeit zum Umgehen von Sicherheitssystemen, Taschendiebstahl und allgemein zum Begehen von Verbrechen. Diebeskunstsstunts geben Boni auf die verschiedenen Phasen der Begehung eines Verbrechens, von der Planung über die Ausführung bis zur Flucht.",
 			"overcome": "",
@@ -1932,7 +1932,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Contacts": {
+		"Kontakte": {
 			"name": "Kontakte",
 			"description": "Wissen um die richtigen Leute und Verbindungen, die Ihnen helfen können. Kontakte geben Ihnen einsatzbereite Verbündete und ein Informationsnetzwerk, wo immer Sie sich in der Welt aufhalten.",
 			"overcome": "",
@@ -1941,7 +1941,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Crafts": {
+		"Handwerk": {
 			"name": "Handwerk",
 			"description": "Die Fähigkeit, Maschinen herzustellen oder zu zerstören, Apparate zu bauen und MacGyver-ähnliche Kunststücke zu vollbringen. Handwerks-Stunts lassen Sie das Dingsbums zur Hand haben, geben Boni auf das Bauen und Zerbrechen von Dingen und bieten eine Rechtfertigung für die Verwendung von Handwerk anstelle von Fertigkeiten wie Diebeskunst oder Akademiker unter bestimmten Umständen.",
 			"overcome": "",
@@ -1950,7 +1950,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Deceive": {
+		"Täuschung": {
 			"name": "Täuschung",
 			"description": "Fähigkeit, überzeugend und souverän zu lügen und zu betrügen. Täuschung-Stunts können Ihre Fähigkeit verbessern, eine bestimmte Art von Lügen zu erzählen oder helfen, falsche Identitäten zu erfinden.",
 			"overcome": "",
@@ -1959,7 +1959,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Drive": {
+		"Fahren": {
 			"name": "Fahren",
 			"description": "Beherrschen von Fahrzeugen unter den schwierigsten Bedingungen, verrückte Manöver und einfach das Beste aus Ihrem Fahrzeug herausholen. Bei den \"Drive\"-Stunts kann es sich um Signaturmanöver, ein eigenes Spezialfahrzeug oder die Fähigkeit handeln, \"Fahren\" unter bestimmten Umständen anstelle einer Fertigkeit wie \"Diebeskunst\" oder \"Akademiker\" zu verwenden.",
 			"overcome": "",
@@ -1968,70 +1968,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Empathy": {
-			"name": "Empathie",
-			"description": "Fähigkeit, die Stimmung und Absichten einer Person genau zu beurteilen. Bei Empathie-Stunts kann es darum gehen, eine Menschenmenge einzuschätzen, Lügen aufzuschnappen oder anderen zu helfen, sich von psychischen Folgen zu erholen.",
-			"overcome": "",
-			"caa": "",
-			"attack": "",
-			"defend": "",
-			"pc": true
-		},
-		"Fight": {
-			"name": "Kämpfen",
-			"description": "Fähigkeit, im Nahkampf zu brillieren, sei es mit Waffen oder Fäusten. Zu den Kampfstunts gehören Signaturwaffen und Spezialtechniken.",
-			"overcome": "",
-			"caa": "",
-			"attack": "",
-			"defend": "",
-			"pc": true
-		},
-		"Investigate": {
-			"name": "Nachforschung",
-			"description": "Bewusstes, sorgfältiges Studieren und Rätseln. Verwenden Sie dies, um Hinweise zusammenzusetzen oder einen Tatort zu rekonstruieren. Investigate Stunts helfen Ihnen, brillante Schlussfolgerungen zu ziehen oder Informationen schneller zusammenzusetzen.",
-			"overcome": "",
-			"caa": "",
-			"attack": "",
-			"defend": "",
-			"pc": true
-		},
-		"Lore": {
-			"name": "Wissen",
-			"description": "Spezialisiertes, arkanes Wissen, das nicht in den Bereich der Akademiker fällt, einschließlich übernatürlicher Themen der einen oder anderen Art. Hier passieren die merkwürdigen Dinge. Macht-Stunts unterstützen oft praktische Anwendungen Ihres arkanen Wissens, wie zum Beispiel das Wirken von Zaubersprüchen. In manchen Szenarien wird Macht entfernt, durch eine andere Fertigkeit ersetzt oder mit Akademikern kombiniert.",
-			"overcome": "",
-			"caa": "",
-			"attack": "",
-			"defend": "",
-			"pc": true
-		},
-		"Notice": {
-			"name": "Wahrnehmung",
-			"description": "Die Fähigkeit, Details im Moment aufzuschnappen, Probleme zu erkennen, bevor sie passieren, und generell scharfsinnig zu sein. Sie steht im Gegensatz zu \"Investigate\", das für langsames, überlegtes Beobachten steht. Wahrnehmung stunts schärfen Ihre Sinne, verbessern Ihre Reaktionszeit oder machen es schwieriger, sich anzuschleichen.",
-			"overcome": "",
-			"caa": "",
-			"attack": "",
-			"defend": "",
-			"pc": true
-		},
-		"Physique": {
-			"name": "Kraft",
-			"description": "Rohe Kraft und Haltbarkeit. Mit Kraft-Stunts können Sie übermenschliche Kraftakte vollbringen, beim Ringen Ihr Gewicht in die Waagschale werfen und körperliche Konsequenzen abwehren. Außerdem gibt Ihnen eine hohe Kraft-Bewertung mehr Slots für physische Belastungen oder Konsequenzen.",
-			"overcome": "",
-			"caa": "",
-			"attack": "",
-			"defend": "",
-			"pc": true
-		},
-		"Provoke": {
-			"name": "Provozieren",
-			"description": "Die Fähigkeit, Menschen dazu zu bringen, sich so zu verhalten, wie Sie es wollen. Das ist grob und manipulativ, keine positive Interaktion. Mit \"Provozieren\" können Sie Gegner zu waghalsigen Aktionen drängen, Aggressionen auf sich ziehen oder Feinde erschrecken (vorausgesetzt, sie können Angst empfinden).",
-			"overcome": "",
-			"caa": "",
-			"attack": "",
-			"defend": "",
-			"pc": true
-		},
-		"Rapport": {
+		"Empathie": {
 			"name": "Empathie",
 			"description": "Verbindungen mit anderen aufbauen und zusammenarbeiten. Wo Provozieren Manipulation ist, ist Empathie Aufrichtigkeit, Vertrauen und Wohlwollen. Mit Empathie-Stunts können Sie die Menge beeinflussen, Beziehungen verbessern oder Kontakte aufbauen.",
 			"overcome": "",
@@ -2040,7 +1977,61 @@
 			"defend": "",
 			"pc": true
 		},
-		"Resources": {
+		"Kämpfen": {
+			"name": "Kämpfen",
+			"description": "Fähigkeit, im Nahkampf zu brillieren, sei es mit Waffen oder Fäusten. Zu den Kampfstunts gehören Signaturwaffen und Spezialtechniken.",
+			"overcome": "",
+			"caa": "",
+			"attack": "",
+			"defend": "",
+			"pc": true
+		},
+		"Nachforschung": {
+			"name": "Nachforschung",
+			"description": "Bewusstes, sorgfältiges Studieren und Rätseln. Verwenden Sie dies, um Hinweise zusammenzusetzen oder einen Tatort zu rekonstruieren. Investigate Stunts helfen Ihnen, brillante Schlussfolgerungen zu ziehen oder Informationen schneller zusammenzusetzen.",
+			"overcome": "",
+			"caa": "",
+			"attack": "",
+			"defend": "",
+			"pc": true
+		},
+		"Wissen": {
+			"name": "Wissen",
+			"description": "Spezialisiertes, arkanes Wissen, das nicht in den Bereich der Akademiker fällt, einschließlich übernatürlicher Themen der einen oder anderen Art. Hier passieren die merkwürdigen Dinge. Macht-Stunts unterstützen oft praktische Anwendungen Ihres arkanen Wissens, wie zum Beispiel das Wirken von Zaubersprüchen. In manchen Szenarien wird Macht entfernt, durch eine andere Fertigkeit ersetzt oder mit Akademikern kombiniert.",
+			"overcome": "",
+			"caa": "",
+			"attack": "",
+			"defend": "",
+			"pc": true
+		},
+		"Wahrnehmung": {
+			"name": "Wahrnehmung",
+			"description": "Die Fähigkeit, Details im Moment aufzuschnappen, Probleme zu erkennen, bevor sie passieren, und generell scharfsinnig zu sein. Sie steht im Gegensatz zu \"Investigate\", das für langsames, überlegtes Beobachten steht. Wahrnehmung stunts schärfen Ihre Sinne, verbessern Ihre Reaktionszeit oder machen es schwieriger, sich anzuschleichen.",
+			"overcome": "",
+			"caa": "",
+			"attack": "",
+			"defend": "",
+			"pc": true
+		},
+		"Kraft": {
+			"name": "Kraft",
+			"description": "Rohe Kraft und Haltbarkeit. Mit Kraft-Stunts können Sie übermenschliche Kraftakte vollbringen, beim Ringen Ihr Gewicht in die Waagschale werfen und körperliche Konsequenzen abwehren. Außerdem gibt Ihnen eine hohe Kraft-Bewertung mehr Slots für physische Belastungen oder Konsequenzen.",
+			"overcome": "",
+			"caa": "",
+			"attack": "",
+			"defend": "",
+			"pc": true
+		},
+		"Provozieren": {
+			"name": "Provozieren",
+			"description": "Die Fähigkeit, Menschen dazu zu bringen, sich so zu verhalten, wie Sie es wollen. Das ist grob und manipulativ, keine positive Interaktion. Mit \"Provozieren\" können Sie Gegner zu waghalsigen Aktionen drängen, Aggressionen auf sich ziehen oder Feinde erschrecken (vorausgesetzt, sie können Angst empfinden).",
+			"overcome": "",
+			"caa": "",
+			"attack": "",
+			"defend": "",
+			"pc": true
+		},
+		"Ressourcen": {
 			"name": "Ressourcen",
 			"description": "Zugang zu materiellen Dingen, nicht nur zu Geld oder direktem Besitz. Es könnte Ihre Fähigkeit widerspiegeln, sich von Freunden etwas zu leihen oder in die Waffenkammer einer Organisation einzutauchen. Ressourcen-Stunts lassen Sie Ressourcen anstelle von Empathie oder Kontakten verwenden oder geben Ihnen zusätzliche kostenlose Beschwörungen, wenn Sie für das Beste bezahlen.",
 			"overcome": "",
@@ -2049,7 +2040,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Shoot": {
+		"Schießen": {
 			"name": "Schießen",
 			"description": "Alle Formen des Fernkampfes, ob Pistolen, Wurfmesser oder Pfeil und Bogen. Mit \"Schießen\" können Sie gerufene Schüsse abgeben, schnell ziehen oder immer eine Waffe griffbereit haben.",
 			"overcome": "",
@@ -2058,7 +2049,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Stealth": {
+		"Heimlichkeit": {
 			"name": "Heimlichkeit",
 			"description": "Ungesehen oder ungehört bleiben und fliehen, wenn man sich verstecken muss. Mit Heimlichkeit-Stunts können Sie in der Öffentlichkeit verschwinden, sich in Menschenmengen einfügen oder sich ungesehen durch Schatten bewegen.",
 			"overcome": "",
@@ -2067,7 +2058,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Will": {
+		"Wille": {
 			"name": "Wille",
 			"description": "Mentale Stärke, die Fähigkeit, Versuchungen zu überwinden und Traumata zu widerstehen. Willensstärken lassen Sie mentale Konsequenzen ignorieren, die mentalen Qualen fremder Kräfte aushalten und gegen Feinde standhaft bleiben, die Sie provozieren. Darüber hinaus gibt Ihnen ein hoher Willenswert mehr Slots für mentalen Stress oder Konsequenzen.",
 			"overcome": "",
@@ -2078,7 +2069,7 @@
 		}
 	},
 	"fate-core-official.DresdenFilesAcceleratedDefaultSkills": {
-		"Flair": {
+		"Gespür": {
 			"name": "Gespür",
 			"description": "Für Details siehe Seite 100 von Dresden Files Accelerated",
 			"overcome": "",
@@ -2087,7 +2078,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Focus": {
+		"Fokus": {
 			"name": "Fokus",
 			"description": "Für Details siehe Seite 100 von Dresden Files Accelerated",
 			"overcome": "",
@@ -2096,7 +2087,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Force": {
+		"Kraft": {
 			"name": "Kraft",
 			"description": "Für Details siehe Seite 100 von Dresden Files Accelerated",
 			"overcome": "",
@@ -2105,7 +2096,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Guile": {
+		"Arglist": {
 			"name": "Arglist",
 			"description": "Für Details siehe Seite 100 von Dresden Files Accelerated",
 			"overcome": "",
@@ -2114,7 +2105,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Haste": {
+		"Eile": {
 			"name": "Eile",
 			"description": "Für Details siehe Seite 100 von Dresden Files Accelerated",
 			"overcome": "",
@@ -2123,7 +2114,7 @@
 			"defend": "",
 			"pc": true
 		},
-		"Intellect": {
+		"Intellekt": {
 			"name": "Intellekt",
 			"description": "Für Details siehe Seite 100 von Dresden Files Accelerated",
 			"overcome": "",
@@ -2134,95 +2125,95 @@
 		}
 	},
 	"fate-core-official.FateCoreDefaultAspects": {
-		"High Concept": {
+		"Konzept": {
 			"name": "Konzept",
 			"description": "Ihr hohes Konzept ist ein Satz, der zusammenfasst, was Ihr Charakter ausmacht - wer er ist und was er tut. Es ist ein Aspekt, einer der ersten und wichtigsten für Ihren Charakter.\n\nBetrachten Sie diesen Aspekt wie Ihren Job, Ihre Rolle im Leben oder Ihre Berufung - es ist das, was Sie gut können, aber es ist auch eine Pflicht, mit der Sie umgehen müssen, und sie ist ständig mit eigenen Problemen gefüllt. Das heißt, es gibt gute und schlechte Seiten. Es gibt ein paar verschiedene Richtungen, in die man das nehmen kann:\n\nDu könntest die Idee von \"wie dein Job\" wörtlich nehmen: Hauptdetektiv, Ritter der Runde, niederer Gangster.\n\nSie könnten ein Adjektiv oder einen anderen Deskriptor hinzufügen, um die Idee weiter zu definieren: Verachtenswerter Regent von Riverton, zurückhaltender Hauptdetektiv, ehrgeiziger niederer Gangster.\n\nSie könnten zwei Berufe oder Rollen miteinander kombinieren, die die meisten Leute seltsam finden würden: Zaubernder Privatdetektiv, singender Ritter der Tafelrunde, monstermordender Buchhalter.\n\nSie könnten eine wichtige Beziehung zu Ihrer Familie oder einer Organisation, mit der Sie eng verbunden sind, ausspielen (vor allem, wenn die Familie oder die Organisation gut vernetzt oder bekannt sind): Schwarzes Schaf der Thompson-Familie, Low-Level Thug für das Syndikat, Scar Triad's Patsy in Riverton.\n\nDies sind nicht die einzigen Möglichkeiten, mit Ihrem hohen Konzept zu spielen, aber sie bringen Sie auf den Weg. Aber machen Sie sich keinen Stress deswegen - das Schlimmste, was Sie tun können, ist, es zu einer zu großen Sache zu machen. Sie werden nach diesem einen Aspekt noch vier weitere finden - Sie müssen nicht gleich alles unter Dach und Fach bringen."
 		},
-		"Trouble": {
+		"Dilemma": {
 			"name": "Dilemma",
 			"description": "Zusätzlich zu einem High Concept hat jeder Charakter eine Art Trouble-Aspekt, der Teil seines Lebens und seiner Geschichte ist. Wenn Ihr High Concept das ist, was oder wer Ihr Charakter ist, ist Ihr Trouble die Antwort auf eine einfache Frage: Was verkompliziert die Existenz Ihres Charakters?\n\nDilemma bringt Chaos in das Leben eines Charakters und treibt ihn in interessante Situationen. Dilemma werden in zwei Arten unterteilt: persönliche Kämpfe und problematische Beziehungen.\n\nBei persönlichen Kämpfen geht es um Ihre dunklere Seite oder Impulse, die schwer zu kontrollieren sind. Wenn es sich um etwas handelt, zu dem Ihr Charakter versucht sein könnte oder das er unbewusst im ungünstigsten Moment tut, handelt es sich um diese Art von Ärger. Beispiele: Anger Management Issues, Sucker for a Pretty Face, The Bottle Calls to Me.\nProblematische Beziehungen beziehen sich auf Menschen oder Organisationen, die Ihnen das Leben schwer machen. Das kann eine Gruppe von Leuten sein, die Sie hassen und Sie leiden lassen wollen, Leute, für die Sie arbeiten und die Ihnen die Arbeit nicht leicht machen, oder sogar Ihre Familie oder Freunde, die zu oft ins Kreuzfeuer geraten. Beispiele: Family Man, Debt to the Mob, The Scar Triad Wants Me Dead.\nDein Problem sollte nicht einfach zu lösen sein. Wenn es das wäre, hätte Ihre Figur das schon getan, und das ist nicht interessant. Aber es sollte den Charakter auch nicht komplett lähmen. Wenn das Problem ständig das tägliche Leben des Charakters stört, wird er seine ganze Zeit damit verbringen, sich damit zu beschäftigen, anstatt sich mit anderen Dingen zu beschäftigen. Sie sollten sich nicht bei jeder Gelegenheit mit Ihrem Problem beschäftigen müssen - es sei denn, es ist der Kern eines bestimmten Abenteuers in der Geschichte (und selbst dann ist es nur ein Abenteuer).\n\nProbleme sollten auch nicht direkt mit Ihrem hohen Konzept zusammenhängen - wenn Sie einen Hauptdetektiv haben, ist es ein langweiliges Problem, wenn Sie sagen, dass Ihr Problem \"Die kriminelle Unterwelt hasst mich\" ist, weil es bereits mit Ihrem hohen Konzept angenommen wird. (Natürlich können Sie das noch eine Stufe höher schrauben, um es persönlich zu machen, wie z.B. \"Don Giovanni hasst mich\", damit es funktioniert.)\n\nBevor Sie weitermachen, sprechen Sie mit dem GM über das Problem Ihres Charakters. Stellen Sie sicher, dass Sie beide auf der gleichen Seite sind, was die Bedeutung angeht. Vielleicht wollen Sie beide einen Weg finden, wie dieser Aspekt heraufbeschworen oder erzwungen werden könnte, um sicherzustellen, dass Sie beide die gleichen Dinge sehen - oder um sich gegenseitig Ideen zu geben. Der Spielleiter sollte aus diesem Gespräch mit dem Wissen hervorgehen, was Sie aus Ihrem Problem herausholen wollen."
 		},
-		"First Adventure": {
+		"Erstes Abenteuer": {
 			"name": "Erstes Abenteuer",
 			"description": "Die erste Phase ist das erste richtige Abenteuer Ihres Charakters - sein erstes Buch, seine erste Episode, sein erster Fall, sein erster Film, was auch immer -, in dem er die Hauptrolle spielt.\n\n Sie müssen sich die grundlegenden Details dieser Geschichte für die Zusammenfassung der Phase ausdenken und aufschreiben. Die Geschichte muss nicht sehr detailliert sein - ein paar Sätze reichen völlig aus -, denn Ihre Mitspieler werden in den nächsten beiden Phasen ihre eigenen Details zu diesem vergangenen Abenteuer hinzufügen (so wie Sie zu ihren).\n\nWenn Sie nicht weiterkommen, schauen Sie sich das hohe Konzept Ihres Charakters und die Schwierigkeiten an. Finden Sie ein Dilemma, das eine Chance hat, diese Ideen in den Fokus zu rücken. In welches Problem werden Sie aufgrund Ihres hohen Konzepts oder Problems hineingezogen? Wie hilft oder verkompliziert der andere Aspekt Ihr Leben?"
 		},
-		"Crossing Paths 1": {
+		"Wege kreuzen 1": {
 			"name": "Wege kreuzen 1",
 			"description": "Sobald jeder sein Abenteuer aufgeschrieben hat (hier kommt der Vorschlag mit den Karteikarten sehr gelegen), sind Sie bereit für Phase zwei. Sie können nach links oder rechts weitergeben oder den Stapel mischen und die Karten zufällig verteilen (mit der Person zu Ihrer Rechten tauschen, bis jeder von Ihnen eine hat, die nicht Ihnen gehört). Wie auch immer Sie sich entscheiden, jeder Spieler sollte jetzt das Abenteuer eines anderen Spielers in der Hand halten.\n\nIhr Charakter hat eine Nebenrolle in der Geschichte, die Sie in der Hand halten, die Sie sich jetzt ausdenken dürfen. Besprechen Sie sie kurz mit dem Spieler, dessen Abenteuer es ist, und fügen Sie der Zusammenfassung einen Satz oder eine Phrase hinzu, die die Nebenrolle Ihres Charakters widerspiegelt. Unterstützende Rollen gibt es in drei Formen: Sie verkomplizieren das Abenteuer, lösen eine Situation oder beides.\n\nVerkomplizieren das Abenteuer: Ihr Charakter hat es geschafft, einen Teil des Abenteuers unsicher zu machen (möglicherweise durch ein Problem oder einen Problemaspekt). Da das in der Vergangenheit passiert ist, ist natürlich bekannt, dass Sie gut aus der Sache herausgekommen sind (oder größtenteils gut, wie der Aspekt angibt, den Sie nehmen). Wenn Sie dies beschreiben, machen Sie sich keine Gedanken darüber, wie die Situation gelöst wird - überlassen Sie das jemand anderem oder lassen Sie es offen. Beschreibungen wie \"Landon fängt Ärger an, als Cynere ihn ruhig braucht\" oder \"Zird wird von mysteriösen Räubern gefangen genommen\" reichen aus, um ein paar Ideen zu bekommen.\n\nLösung einer Situation: Ihr Charakter löst irgendwie eine Komplikation, mit der sich der Hauptcharakter im Abenteuer auseinandersetzen musste, oder Ihr Charakter hilft dem Hauptcharakter im zentralen Konflikt (was eine Gelegenheit ist, Ihren hohen Konzeptaspekt einzubringen). Wenn Sie dies beschreiben, müssen Sie nicht erwähnen, wie die Situation entstanden ist, sondern nur, wie Ihr Charakter sich darum kümmert. Beschreibungen wie \"Cynere hält die Feinde auf, um Landon Zeit zur Flucht zu geben\" oder \"Zird nutzt sein arkanes Wissen, um die Geister um Informationen zu bitten\" reichen aus, um uns eine Vorstellung davon zu geben, was passiert.\n\nKomplizieren und Lösen: Hier löst Ihr Charakter entweder eine Situation, schafft aber eine andere, oder er schafft eine Situation, löst aber später eine andere. Mischen Sie die beiden Ideen und verwenden Sie das Wort \"später\" dazwischen, z. B.: \"Landon beginnt einen Kampf mit der Narben-Triade, während Zird versucht, sich zu verstecken. Später hilft er Zird, indem er Untote abwehrt, während Zird einen Zauber wirkt.\""
 		},
-		"Crossing Paths 2": {
+		"Wege kreuzen 2": {
 			"name": "Wege kreuzen 2",
 			"description": "Sobald alle mit Phase zwei fertig sind, tauschen Sie die Abenteuer mit der Methode, die Sie zuvor gewählt haben, solange jeder ein Abenteuer hat, das nicht sein eigenes ist oder das, zu dem er gerade beigetragen hat. Dann seid ihr bereit für Phase drei, in der ihr zu diesem zweiten Abenteuer beitragt und euren nächsten Aspekt bestimmt. Befolgen Sie die Anweisungen aus Phase zwei."
 		}
 	},
 	"fate-core-official.FateCondensedDefaultAspects": {
-		"High Concept": {
+		"Konzept": {
 			"name": "Konzept",
 			"description": "Ihr hohes Konzept ist eine umfassende Beschreibung des Charakters, die die wichtigsten Punkte abdeckt. So würden Sie Ihren Pitch für den Charakter eröffnen, wenn Sie einem Freund von ihm erzählen."
 		},
-		"Trouble": {
+		"Dilemma": {
 			"name": "Dilemma",
 			"description": "Der nächste Punkt ist das Problem Ihres Charakters - etwas, das das Leben Ihres Charakters kompliziert macht. Es könnte eine persönliche Schwäche, familiäre Verstrickungen oder andere Verpflichtungen sein. Wählen Sie etwas, das Sie gerne im Rollenspiel spielen!"
 		},
-		"Relationship": {
+		"Beziehung": {
 			"name": "Beziehung",
 			"description": "Ihre Beziehung beschreibt eine Verbindung zu einem anderen PC. Sie können sich bereits kennen oder sich gerade erst kennengelernt haben.\n\nGute Beziehungsaspekte sollten einen Konflikt einführen oder andeuten, oder zumindest ein Ungleichgewicht, das der Beziehung ein wenig Schwung verleiht. Das bedeutet nicht, dass sie offen antagonistisch sind, aber sie sollten auch nicht alles rosig sein.\n\nWenn Sie möchten, können Sie mit dem Aufschreiben von Beziehungsaspekten warten, bis alle ihre Charaktere mehr oder weniger fertiggestellt haben."
 		},
-		"Free Aspect 1": {
+		"Feier Aspekt 1": {
 			"name": "Feier Aspekt 1",
 			"description": "Du kannst die letzten beiden Aspekte deines Charakters so gestalten, wie du willst - es gibt keine Einschränkungen außer der Verpflichtung, zum Setting zu passen. Wähle irgendetwas, von dem du denkst, dass es deinen Charakter interessanter macht, mehr Spaß beim Spielen oder eine bessere Verbindung zu der Welt, in der er lebt."
 		},
-		"Free Aspect 2": {
+		"Freier Aspekt 2": {
 			"name": "Freier Aspekt 2",
 			"description": "Du kannst die letzten beiden Aspekte deines Charakters so gestalten, wie du willst - es gibt keine Einschränkungen außer der Verpflichtung, zum Setting zu passen. Wähle irgendetwas, von dem du denkst, dass es deinen Charakter interessanter macht, dass es mehr Spaß macht, ihn zu spielen, oder dass er besser mit der Welt verbunden ist, in der er lebt."
 		}
 	},
 	"fate-core-official.FateAcceleratedDefaultAspects": {
-		"High Concept": {
+		"Konzept": {
 			"name": "Konzept",
 			"description": "Entscheiden Sie sich zunächst für das hohe Konzept Ihres Charakters. Dies ist eine einzelne Phrase oder ein Satz, der Ihren Charakter auf den Punkt bringt, der sagt, wer Sie sind, was Sie tun, was Ihr \"Deal\" ist. Wenn Sie über Ihr hohes Konzept nachdenken, versuchen Sie, an zwei Dinge zu denken: wie dieser Aspekt Ihnen helfen könnte, und wie er die Dinge für Sie erschweren könnte. Gute High-Concept-Aspekte tun beides.\n\nBeispiele: Feline Captain des Cirrus Skimmer; Suncaller der Andral-Wüste; Chief Field Agent der IGEMA"
 		},
-		"Trouble": {
+		"Dilemma": {
 			"name": "Dilemma",
 			"description": "Als Nächstes entscheiden Sie sich für die Sache, die Sie immer in Schwierigkeiten bringt. Es könnte eine persönliche Schwäche sein oder ein wiederkehrender Feind oder eine wichtige Verpflichtung - irgendetwas, das Ihr Leben kompliziert macht.\n\nBeispiele: Steel Assassins Want Me Dead; Cast Now, Ask Questions Later; Gotta Look Out for My Little Brother"
 		},
-		"Other Aspect 1": {
+		"Anderer Aspekt 1": {
 			"name": "Anderer Aspekt 1",
 			"description": "Verfassen Sie nun einen weiteren Aspekt. Denken Sie an etwas wirklich Wichtiges oder Interessantes über Ihren Charakter. Sind sie die stärkste Person in ihrer Heimatstadt? Tragen sie ein mächtiges Schwert, das in der Geschichte bekannt ist? Reden sie zu viel? Sind sie stinkreich?"
 		},
-		"Other Aspect 2": {
+		"Anderer Aspekt 2": {
 			"name": "Anderer Aspekt 2",
 			"description": "Dieser Aspekt könnte die Beziehung Ihres Charakters zu anderen Spielercharakteren oder zu einem NPC beschreiben. Oder, wie der dritte Aspekt, den Sie oben verfasst haben, könnte er etwas besonders Interessantes über Ihren Charakter beschreiben."
 		},
-		"Other Aspect 3": {
+		"Anderer Aspekt 3": {
 			"name": "Anderer Aspekt 3",
 			"description": "Dieser Aspekt könnte die Beziehung Ihres Charakters zu anderen Spielercharakteren oder zu einem NPC beschreiben. Oder, wie der dritte Aspekt, den Sie oben verfasst haben, könnte er etwas besonders Interessantes über Ihren Charakter beschreiben."
 		}
 	},
 	"fate-core-official.DresdenFilesAcceleratedDefaultAspects": {
-		"High Concept": {
+		"Konzept": {
 			"name": "Konzept",
 			"description": "Für Details siehe Seite 92 von Dresden Files Accelerated"
 		},
-		"Trouble": {
+		"Dilemma": {
 			"name": "Dilemma",
 			"description": "Für Details siehe Seite 93 von Dresden Files Accelerated"
 		},
-		"Third Aspect": {
+		"Dritter Aspekt": {
 			"name": "Dritter Aspekt",
 			"description": "Für Details siehe Seite 93 von Dresden Files Accelerated"
 		},
-		"Fourth Aspect": {
+		"Vierter Aspekt": {
 			"name": "Vierter Aspekt",
 			"description": "Für Details siehe Seite 96 von Dresden Files Accelerated"
 		},
-		"Fifth Aspect": {
+		"Fünfter Aspekt": {
 			"name": "Fünfter Aspekt",
 			"description": "Für Details siehe Seite 96 von Dresden Files Accelerated"
 		}
 	},
 	"fate-core-official.FateCoreDefaultTracks": {
-		"Physical Stress": {
+		"Physikalischer Stress": {
 			"name": "Physikalischer Stress",
 			"category": "Combat",
 			"description": "Stellt all die verschiedenen Gründe dar, warum Sie gerade noch vermeiden, die volle Wucht eines Angriffs zu bekommen. Vielleicht weicht man dem Schlag gerade noch aus, oder es sieht schlimm aus, ist aber in Wirklichkeit nur eine Fleischwunde, oder man erschöpft sich beim Ausweichen in letzter Sekunde.",
@@ -2250,7 +2241,7 @@
 				}
 			]
 		},
-		"Mental Stress": {
+		"Menatler Stress": {
 			"name": "Menatler Stress",
 			"category": "Combat",
 			"description": "Repräsentiert die Art und Weise, wie Sie die schlimmsten Auswirkungen eines mentalen Angriffs vermieden haben. Vielleicht haben Sie es gerade noch geschafft, eine Beleidigung zu ignorieren, oder Sie haben eine instinktive emotionale Reaktion unterdrückt.",
@@ -2278,7 +2269,7 @@
 				}
 			]
 		},
-		"Milde Konsequenz": {
+		"Leichte Konsequenz": {
 			"name": "Leichte Konsequenz",
 			"category": "Combat",
 			"description": "Milde Folgen erfordern keine sofortige medizinische Behandlung. Sie schmerzen, und sie können eine Unannehmlichkeit darstellen, aber sie werden Sie nicht zu einer Menge Bettruhe zwingen. Auf der mentalen Seite drücken milde Folgen Dinge wie kleine soziale Fauxpas oder Veränderungen in Ihren oberflächlichen Emotionen aus. Beispiele: Blaues Auge, geprellte Hand, erschöpft, verwirrt, launisch, vorübergehend erblindet.",
@@ -2291,7 +2282,7 @@
 			"boxes": 0,
 			"harm_can_absorb": 2
 		},
-		"Physical Mild Consequence": {
+		"Körperliche leichte Konsequenz": {
 			"name": "Körperliche leichte Konsequenz",
 			"category": "Combat",
 			"description": "Dies ist eine besonders milde Konsequenz, die nur verwendet werden kann, um physischen Schaden zu absorbieren.",
@@ -2312,7 +2303,7 @@
 				}
 			]
 		},
-		"Mental Mild Consequence": {
+		"Geistige leichte Konsequenz": {
 			"name": "Geistige leichte Konsequenz",
 			"category": "Combat",
 			"description": "Dies ist eine besonders milde Konsequenz, die nur verwendet werden kann, um mentalen Schaden zu absorbieren.",
@@ -2333,7 +2324,7 @@
 				}
 			]
 		},
-		"Moderate Consequence": {
+		"Mittlere Konsequenz": {
 			"name": "Mittlere Konsequenz",
 			"category": "Combat",
 			"description": "Mäßige Konsequenzen stellen ziemlich ernste Beeinträchtigungen dar, die engagierte Anstrengungen zur Wiederherstellung erfordern (einschließlich medizinischer Behandlung). Auf der mentalen Seite drücken sie Dinge wie Rufschädigung oder emotionale Probleme aus, die man nicht einfach mit einer Entschuldigung und einer guten Nachtruhe abtun kann. Beispiele: Tiefe Schnittwunde, Verbrennung ersten Grades, erschöpft, betrunken, verängstigt.",
@@ -2346,7 +2337,7 @@
 			"boxes": 0,
 			"harm_can_absorb": 4
 		},
-		"Severe Consequence": {
+		"Schwere Konsequenz": {
 			"name": "Schwere Konsequenz",
 			"category": "Combat",
 			"description": "Schwere Konsequenzen führen direkt in die Notaufnahme (oder was auch immer das Äquivalent in Ihrem Spiel ist) - sie sind extrem fies und hindern Sie daran, eine Menge Dinge zu tun, und werden Sie für eine Weile außer Gefecht setzen. Auf der mentalen Seite drücken sie Dinge wie ein ernsthaftes Trauma oder beziehungsverändernden Schaden aus. Beispiele: Verbrennung zweiten Grades, komplizierte Fraktur, heraushängende Eingeweide, lähmende Scham, traumabedingte Phobie.",
@@ -2361,7 +2352,7 @@
 		}
 	},
 	"fate-core-official.FateCondensedDefaultTracks": {
-		"Mild Consequence": {
+		"Leichte Konsequenz": {
 			"name": "Leichte Konsequenz",
 			"category": "Combat",
 			"description": "Wenn Sie eine Konsequenz nehmen, um einen Treffer zu absorbieren, schreiben Sie einen Aspekt in einen leeren Konsequenz-Slot, der beschreibt, welcher Schaden Ihrem Charakter zugefügt wird. Verwenden Sie den Schweregrad der Konsequenz als Richtwert: Wenn Sie von einer Sternenbrut gebissen wurden, könnte eine leichte Konsequenz \"Fieser Biss\" sein.",
@@ -2374,7 +2365,7 @@
 			"boxes": 0,
 			"harm_can_absorb": 2
 		},
-		"Moderate Consequence": {
+		"Mittlere Konsequenz": {
 			"name": "Mittlere Konsequenz",
 			"category": "Combat",
 			"description": "Wenn Sie eine Konsequenz nehmen, um einen Treffer zu absorbieren, schreiben Sie einen Aspekt in einen leeren Konsequenz-Slot, der beschreibt, welcher Schaden Ihrem Charakter zugefügt wird. Verwenden Sie den Schweregrad der Konsequenz als Richtwert: Wenn Sie von einer Sternenbrut gebissen wurden, könnte eine moderate Konsequenz ein Biss sein, der nicht aufhört zu bluten.",
@@ -2387,7 +2378,7 @@
 			"boxes": 0,
 			"harm_can_absorb": 4
 		},
-		"Severe Consequence": {
+		"Schwere Konsequenz": {
 			"name": "Schwere Konsequenz",
 			"category": "Combat",
 			"description": "Schwere Konsequenzen führen direkt in die Notaufnahme (oder was auch immer das Äquivalent in Ihrem Spiel ist) - sie sind extrem fies und hindern Sie daran, eine Menge Dinge zu tun, und werden Sie für eine Weile außer Gefecht setzen. Auf der mentalen Seite drücken sie Dinge wie ein ernsthaftes Trauma oder beziehungsverändernden Schaden aus. Beispiele: Verbrennung zweiten Grades, komplizierte Fraktur, heraushängende Eingeweide, lähmende Scham, traumabedingte Phobie.",
@@ -2400,7 +2391,7 @@
 			"boxes": 0,
 			"harm_can_absorb": 6
 		},
-		"Physical Stress": {
+		"Körperlicher Stress": {
 			"name": "Körperlicher Stress",
 			"category": "Combat",
 			"description": "Einfach ausgedrückt, ist Stress ein Handlungspanzer. Es ist eine Ressource, die verwendet wird, um Ihren Charakter aufrecht und im Kampf zu halten, wenn seine Feinde ihn treffen. Wenn Sie Stress-Kästchen markieren, um einen Treffer zu absorbieren, sagen Sie damit Dinge wie \"Das hat mich knapp verfehlt\" oder \"Wow, das hat mich umgehauen, aber ich bin okay.\" Allerdings ist das eine begrenzte Ressource - die meisten Charaktere haben nur drei Kästchen für physischen Stress, obwohl Charaktere mit hohem Körperbau mehr haben.\n\n Sie finden zwei Stressspuren auf Ihrem Charakterbogen, eine für physischen Schaden und eine für mentalen Schaden. Wenn Sie einen Treffer einstecken, können Sie leere Stresskästchen des entsprechenden Typs markieren, um ihn zu absorbieren und im Kampf zu bleiben. Jedes Stressfeld, das Sie markieren, absorbiert eine Schicht. Sie können bei Bedarf mehrere Stresskästchen markieren.\n\nDie Kästchen sind binär - entweder sind sie leer und können benutzt werden oder sie sind voll und können nicht benutzt werden. Das ist jedoch in Ordnung. Die Stressspur wird gelöscht, sobald Sie die Szene überstanden haben - vorausgesetzt, die Monster fressen Sie nicht vorher auf.",
@@ -2428,7 +2419,7 @@
 				}
 			]
 		},
-		"Mental Stress": {
+		"Geistiger Stress": {
 			"name": "Geistiger Stress",
 			"category": "Combat",
 			"description": "Einfach ausgedrückt, ist Stress eine Handlungsrüstung. Es ist eine Ressource, die verwendet wird, um Ihren Charakter aufrecht und im Kampf zu halten, wenn seine Feinde ihn treffen. Wenn Sie Stresskästchen markieren, um einen Treffer zu absorbieren, sagen Sie Dinge wie \"Das hat mich knapp verfehlt\" oder \"Wow, das hat mir den Wind aus den Segeln genommen, aber ich bin okay.\" Allerdings ist das eine begrenzte Ressource - die meisten Charaktere haben nur drei Kästchen für mentalen Stress, obwohl Charaktere mit hohem Willen mehr haben.\n\n Auf Ihrem Charakterbogen finden Sie zwei Stressspuren, eine für körperlichen Schaden und eine für mentalen Schaden. Wenn Sie einen Treffer einstecken, können Sie leere Stresskästchen des entsprechenden Typs markieren, um ihn zu absorbieren und im Kampf zu bleiben. Jedes Stressfeld, das Sie markieren, absorbiert eine Schicht. Sie können bei Bedarf mehrere Stresskästchen markieren.\n\nDie Kästchen sind binär - entweder sind sie leer und können verwendet werden oder sie sind voll und können nicht verwendet werden. Das ist jedoch in Ordnung. Die Stressspur wird gelöscht, sobald Sie die Szene überstanden haben - vorausgesetzt, die Monster fressen Sie nicht vorher auf.",
@@ -2456,7 +2447,7 @@
 				}
 			]
 		},
-		"Milde körperliche Folge": {
+		"Milde körperliche Konsequenz": {
 			"name": "Milde körperliche Konsequenz",
 			"category": "Combat",
 			"description": "Siehe Mild Consequence",
@@ -2477,7 +2468,7 @@
 				}
 			]
 		},
-		"Mild Mental Consequence": {
+		"Leichte geistige Konsequenz": {
 			"name": "Leichte geistige Konsequenz",
 			"category": "Combat",
 			"description": "Siehe leichte Konsequenz",
@@ -2500,7 +2491,7 @@
 		}
 	},
 	"fate-core-official.FateAcceleratedDefaultTracks": {
-		"Mild Consequence": {
+		"Leichte Konsequenz": {
 			"name": "Leichte Konsequenz",
 			"category": "Combat",
 			"description": "Milde Folgen erfordern keine sofortige medizinische Behandlung. Sie schmerzen, und sie können eine Unannehmlichkeit darstellen, aber sie werden Sie nicht zu einer Menge Bettruhe zwingen. Auf der mentalen Seite drücken milde Folgen Dinge wie kleine soziale Fauxpas oder Veränderungen in Ihren oberflächlichen Emotionen aus. Beispiele: Blaues Auge, geprellte Hand, erschöpft, verwirrt, launisch, vorübergehend erblindet.",
@@ -2513,7 +2504,7 @@
 			"boxes": 0,
 			"harm_can_absorb": 2
 		},
-		"Moderate Consequence": {
+		"Mittlere Konsequenz": {
 			"name": "Mittlere Konsequenz",
 			"category": "Combat",
 			"description": "Mäßige Konsequenzen stellen ziemlich ernste Beeinträchtigungen dar, die engagierte Anstrengungen zur Wiederherstellung erfordern (einschließlich medizinischer Behandlung). Auf der mentalen Seite drücken sie Dinge wie Rufschädigung oder emotionale Probleme aus, die man nicht einfach mit einer Entschuldigung und einer guten Nachtruhe abtun kann. Beispiele: Tiefe Schnittwunde, Verbrennung ersten Grades, erschöpft, betrunken, verängstigt.",
@@ -2526,7 +2517,7 @@
 			"boxes": 0,
 			"harm_can_absorb": 4
 		},
-		"Severe Consequence": {
+		"Schwere Konsequenz": {
 			"name": "Schwere Konsequenz",
 			"category": "Combat",
 			"description": "Schwere Konsequenzen führen direkt in die Notaufnahme (oder was auch immer das Äquivalent in Ihrem Spiel ist) - sie sind extrem fies und hindern Sie daran, eine Menge Dinge zu tun, und werden Sie für eine Weile außer Gefecht setzen. Auf der mentalen Seite drücken sie Dinge wie ein ernsthaftes Trauma oder beziehungsverändernden Schaden aus. Beispiele: Verbrennung zweiten Grades, komplizierte Fraktur, heraushängende Eingeweide, lähmende Scham, traumabedingte Phobie.",
@@ -2585,7 +2576,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Indebted": {
+		"Verschuldet": {
 			"name": "Verschuldet",
 			"category": "Sonstige",
 			"description": "Für Details siehe Seite 117 von Dresden Files Accelerated",
@@ -2615,7 +2606,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Knowledge": {
+		"Wissen": {
 			"name": "Wissen",
 			"category": "Erkannte Sterbliche",
 			"description": "Für Details siehe Seite 120 von Dresden Files Accelerated",
@@ -2645,7 +2636,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Heat": {
+		"Wärme": {
 			"name": "Wärme",
 			"category": "Kriminell",
 			"description": "Für Details siehe Seite 122 von Dresden Files Accelerated",
@@ -2660,7 +2651,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Police Powers": {
+		"Polizeibefugnisse": {
 			"name": "Polizeibefugnisse",
 			"category": "Strafverfolgung",
 			"description": "Für Details siehe Seite 124 von Dresden Files Accelerated",
@@ -2675,7 +2666,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Warned": {
+		"Gewarnt": {
 			"name": "Gewarnt",
 			"category": "Law Enforcement",
 			"description": "",
@@ -2690,7 +2681,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Suspended": {
+		"Suspendiert": {
 			"name": "Suspendiert",
 			"category": "Strafverfolgung",
 			"description": "Für Details siehe Seite 124 von Dresden Files Accelerated. Wenn diese Bedingung markiert ist, unmarkierte Polizeibefugnisse.",
@@ -2705,7 +2696,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Followers": {
+		"Follower": {
 			"name": "Follower",
 			"category": "Führer des Volkes",
 			"description": "Für Details siehe Seite 126 von Dresden Files Accelerated",
@@ -2720,7 +2711,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Disfavored": {
+		"Missbilligt": {
 			"name": "Missbilligt",
 			"category": "Anführer des Volkes",
 			"description": "Für Details siehe Seite 126 von Dresden Files Accelerated",
@@ -2735,7 +2726,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Medical License": {
+		"Medizinische Lizenz": {
 			"name": "Medizinische Lizenz",
 			"category": "Medic",
 			"description": "Für Details siehe Seite 128 von Dresden Files Accelerated",
@@ -2765,7 +2756,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Wealthy": {
+		"Wohlhabend": {
 			"name": "Wohlhabend",
 			"category": "One-Percenter",
 			"description": "Für Details siehe Seite 132 von Dresden Files Accelerated",
@@ -2780,7 +2771,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Press Credentials": {
+		"Presse-Berechtigungsnachweis": {
 			"name": "Presse-Berechtigungsnachweis",
 			"category": "Reporter",
 			"description": "",
@@ -2810,7 +2801,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"The Third Eye": {
+		"Das dritte Auge": {
 			"name": "Das dritte Auge",
 			"category": "Magical Practitioner",
 			"description": "Für Details siehe Seite 139 von Dresden Files Accelerated",
@@ -2825,7 +2816,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Combat Wizard": {
+		"Kampfzauberer": {
 			"name": "Kampfzauberer",
 			"category": "Magie-Praktiker",
 			"description": "Für Details siehe Seite 141 von Dresden Files Accelerated",
@@ -2840,7 +2831,7 @@
 			"paid": false,
 			"label": "1"
 		},
-		"Called": {
+		"Angerufen": {
 			"name": "Angerufen",
 			"category": "Wechselnd",
 			"description": "Für Details siehe Seite 143 von Dresden Files Accelerated",
@@ -2855,7 +2846,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Exhausted": {
+		"Erschöpft": {
 			"name": "Erschöpft",
 			"category": "Practitioner",
 			"description": "Für Details siehe Seite 136 von Dresden Files Accelerated (Focused Practitioner) oder 139 (Magical Practitioner)",
@@ -2870,7 +2861,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Burned Out": {
+		"Ausgebrannt": {
 			"name": "Ausgebrannt",
 			"category": "Practitioner",
 			"description": "Für Details siehe Seite 136 von Dresden Files Accelerated (Focused Practitioner) oder 139 (Magical Practitioner)",
@@ -2885,7 +2876,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Impaled by Cold Iron": {
+		"Aufgespießt durch kaltes Eisen": {
 			"name": "Aufgespießt durch kaltes Eisen",
 			"category": "Fae",
 			"description": "Für Details siehe Seite 144 von Dresden Files Accelerated",
@@ -2930,7 +2921,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Summer Power": {
+		"Sommerstrom": {
 			"name": "Sommerstrom",
 			"category": "Ritter eines Feenhofs",
 			"description": "Für Details siehe Seite 146 von Dresden Files Accelerated",
@@ -2945,7 +2936,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Winter Power": {
+		"Winterstrom": {
 			"name": "Winterstrom",
 			"category": "Ritter eines Feenhofs",
 			"description": "Für Details siehe Seite 146 von Dresden Files Accelerated",
@@ -2960,7 +2951,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Summer's Disfavor": {
+		"Summers Missgunst": {
 			"name": "Summers Missgunst",
 			"category": "Ritter eines Feengerichts",
 			"description": "Für Details siehe Missgunst, Seite 146 von Dresden Files Accelerated",
@@ -2990,7 +2981,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"On a Mission from God": {
+		"Im Auftrag von Gott": {
 			"name": "Im Auftrag von Gott",
 			"category": "Ritter des Kreuzes",
 			"description": "Für Details siehe Seite 148 von Dresden Files Accelerated",
@@ -3020,7 +3011,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Hunger for Blood": {
+		"Hunger nach Blut": {
 			"name": "Hunger nach Blut",
 			"category": "Vampir",
 			"description": "Siehe \"Hunger\" auf Seite 151 für Jungfrauen des Roten Hofes oder \"Hunger\" auf Seite 164 für vollständige Vampire des Roten Hofes",
@@ -3035,7 +3026,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Hunger for Emotion": {
+		"Hunger nach Emotionen": {
 			"name": "Hunger nach Emotionen",
 			"category": "Vampir",
 			"description": "Siehe \"Hunger\" auf Seite 156 für Jungfrauen des Weißen Hofes oder \"Hunger\" auf Seite 166 für vollständige Vampire des Weißen Hofes",
@@ -3065,7 +3056,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Injured": {
+		"Verletzt": {
 			"name": "Verletzt",
 			"category": "Combat",
 			"description": "Walkürenbahn - siehe Seite 152 von Dresden Files Accelerated",
@@ -3080,7 +3071,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Wounded": {
+		"Verwundet": {
 			"name": "Verwundet",
 			"category": "Combat",
 			"description": "Monster Hunter Track, für Details siehe Seite 130 von Dresden Files Accelerated",
@@ -3095,7 +3086,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Physical Transformation": {
+		"Physikalische Umwandlung": {
 			"name": "Physikalische Umwandlung",
 			"category": "Werecreature",
 			"description": "Für Details siehe Seite 154 von Dresden Files Accelerated",
@@ -3110,7 +3101,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Vampire Heritage": {
+		"Erbe der Vampire": {
 			"name": "Erbe der Vampire",
 			"category": "Vampir",
 			"description": "Spur des Weißen Hofes. Siehe Seite Dresden Files Accelerated 156 für White Court Jungfrauen und Seite 166 für vollständige White Court Vampire.",
@@ -3170,7 +3161,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Oathbreaker": {
+		"Eidbrecher": {
 			"name": "Eidbrecher",
 			"category": "Fae",
 			"description": "Echte Fae-Spur. Für Details siehe Seite 158 von Dresden Files Accelerated",
@@ -3185,7 +3176,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Summer Courtier": {
+		"Sommerhöfling": {
 			"name": "Sommerhöfling",
 			"category": "Fae",
 			"description": "Echte Fae-Spur. Für Details siehe Seite 160 von Dresden Files Accelerated",
@@ -3200,7 +3191,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Winter Courtier": {
+		"Winterhöfling": {
 			"name": "Winterhöfling",
 			"category": "Fae",
 			"description": "Echte Fae-Spur. Für Details siehe Seite 160 von Dresden Files Accelerated",
@@ -3215,7 +3206,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Sunburned": {
+		"Sonnenverbrannt": {
 			"name": "Sonnenverbrannt",
 			"category": "Vampir",
 			"description": "Rote Hof-Vampirspur. Siehe Seite 164 von Dresden Files Accelerated",
@@ -3230,7 +3221,7 @@
 			"paid": false,
 			"label": "none"
 		},
-		"Saliva Addict": {
+		"Speichelsüchtig": {
 			"name": "Speichelsüchtig",
 			"category": "Vampir",
 			"description": "Rote Hofspur. Siehe Seite 164 von Dresden Files Accelerated",

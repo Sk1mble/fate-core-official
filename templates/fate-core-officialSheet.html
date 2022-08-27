@@ -338,6 +338,7 @@
                 </div>
                 {{#if (expanded this.document '_description')}}
                 <div class="mfate-description__content long_text" style="display:none" id="{{this.document.id}}_description" name="system.details.description.value" data-edit="system.details.description.value">{{{system.details.description.value}}}</div>
+                <!-- ProseMirror alternative {{editor this.system.details.description.rich target="system.details.description.value" engine="prosemirror" button=true editable = this.owner owner = this.owner}}-->
                 <div class="mfate-description__content long_text_rich" style="min-height:1.5em;" id="{{this.document.id}}_description_rich" tabindex = "0">{{{system.details.description.rich}}}</div>
                 {{/if}}
             </div>

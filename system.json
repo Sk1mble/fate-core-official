@@ -8,10 +8,10 @@
   "flags": {},
   "compatibility": {
     "minimum":"10.275",
-    "verified":"10.278"
+    "verified":"10.279"
   },
   "minimumCoreVersion":"10.275",
-  "version": "4.4.09",
+  "version": "4.4.10",
   "scripts": [
     "./scripts/fcoConstants.js",
     "./scripts/ManageSkills.js",
@@ -76,7 +76,7 @@
   "system": [],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.4.09.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.4.10.zip",
   "protected": false,
   "gridDistance": 1,
   "license": "",

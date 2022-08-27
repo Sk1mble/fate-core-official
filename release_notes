@@ -1,3 +1,6 @@
+# 4.4.10
+ * Fixed a major bug in the German translation that prevented character sheets from working properly; keys and names were mismatched for the various system defaults.
+
 # 4.4.09
  * GMs only: Added a + option in the skills header. This provides a quick dialog for adding an ad-hoc skill, allowing the name and rank to be set immediately.
  * Tested system in Foundry 10.278 and ensured everything was still working as expected.
