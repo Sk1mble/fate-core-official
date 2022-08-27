@@ -919,7 +919,7 @@
 					"notes": "",
 					"enabled": true
 				},
-				"Severe Consequence": {
+				"Schwere Folge": {
 					"name": "Schwere Folge",
 					"category": "Combat",
 					"description": "Schwere Konsequenzen führen direkt in die Notaufnahme (oder was auch immer das Äquivalent in Ihrem Spiel ist) - sie sind extrem fies und hindern Sie daran, eine Menge Dinge zu tun, und werden Sie für eine Weile außer Gefecht setzen. Auf der mentalen Seite drücken sie Dinge wie ein ernsthaftes Trauma oder beziehungsverändernden Schaden aus. Beispiele: Verbrennung zweiten Grades, komplizierte Fraktur, heraushängende Eingeweide, lähmende Scham, traumabedingte Phobie.",
@@ -961,7 +961,7 @@
 				}
 			},
 			"skills": {
-				"Careful": {
+				"Sorgfältig": {
 					"name": "Sorgfältig",
 					"description": "Sorgfältig ist eine Aktion, bei der Sie auf Details achten und sich Zeit nehmen, um die Aufgabe richtig zu erledigen. Einen weitreichenden Pfeilschuss ausrichten. Aufmerksam Wache stehen. Die Alarmanlage einer Bank entschärfen.",
 					"overcome": "",
@@ -991,7 +991,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Forceful": {
+				"Forciert": {
 					"name": "Forciert",
 					"description": "Eine \"Forceful\"-Aktion ist nicht subtil - es ist brachiale Kraft. Mit einem Bären ringen. Einen Verbrecher niederstarren. Einen großen, mächtigen Zauberspruch wirken.",
 					"overcome": "",
@@ -1011,7 +1011,7 @@
 					"pc": true,
 					"rank": 0
 				},
-				"Sneaky": {
+				"Heimtückisch": {
 					"name": "Heimtückisch",
 					"description": "Eine Sneaky-Aktion wird mit einem Schwerpunkt auf Irreführung, Heimlichkeit oder Täuschung durchgeführt. Sich aus einer Verhaftung herausreden. Eine Tasche stehlen. Finten in einem Schwertkampf.",
 					"overcome": "",
