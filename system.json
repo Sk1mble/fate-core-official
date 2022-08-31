@@ -1,35 +1,37 @@
 {
   "id": "fate-core-official",
-  "name": "fate-core-official",
   "title": "Fate Core Official",
   "description": "Grab your plasma rifles, spell components, and jetpacks! Name your game; Fate Core is the foundation that can make it happen. Fate Core is a flexible system that can support whatever worlds you dream up. Have you always wanted to play a post-apocalyptic spaghetti western with tentacle monsters? Swords and sorcery in space? Wish there was a game based on your favorite series of books, film, or television, but it never happened? Fate Core is your answer. <p>Fate Core is a tabletop roleplaying game about proactive, capable people who lead dramatic lives. The type of drama they experience is up to you. But wherever they go, you can expect a fun storytelling experience full of twists…of fate.</p><p>This Foundry system is supported by Evil Hat Productions and will allow you to build almost any character from a system that's Powered by Fate.</p>",
-  "authors": [{"name":"Richard Bellingham"}],
+  "authors": [
+    {
+      "name": "Richard Bellingham",
+      "flags": {}
+    }
+  ],
   "url": "https://github.com/Sk1mble/fate-core-official",
-  "flags": {},
   "compatibility": {
-    "minimum":"10.275",
-    "verified":"10.279"
+    "minimum": "10.275",
+    "verified":"10.283"
   },
-  "minimumCoreVersion":"10.275",
-  "version": "4.4.10",
+  "version": "4.4.11",
   "scripts": [
-    "./scripts/fcoConstants.js",
-    "./scripts/ManageSkills.js",
-    "./scripts/ManageAspects.js",
-    "./scripts/ManageTracks.js",
-    "./scripts/EditPlayerSkills.js",
-    "./scripts/EditPlayerTracks.js",
-    "./scripts/EditPlayerStunts.js",
-    "./scripts/FateUtilities.js",
-    "./scripts/EditPlayerAspects.js",
-    "./scripts/ModifiedRollDialog.js",
-    "./scripts/ShowCharacter.js",
-    "./scripts/FateCharacterImporter.js",
-    "./scripts/FateCharacterDefaults.js",
-    "./scripts/FateCoreOfficialModels.js",
-    "./scripts/Pen/pen.js",
-    "./scripts/Pen/markdown.js",
-    "./scripts/purify.min.js"
+    "scripts/fcoConstants.js",
+    "scripts/ManageSkills.js",
+    "scripts/ManageAspects.js",
+    "scripts/ManageTracks.js",
+    "scripts/EditPlayerSkills.js",
+    "scripts/EditPlayerTracks.js",
+    "scripts/EditPlayerStunts.js",
+    "scripts/FateUtilities.js",
+    "scripts/EditPlayerAspects.js",
+    "scripts/ModifiedRollDialog.js",
+    "scripts/ShowCharacter.js",
+    "scripts/FateCharacterImporter.js",
+    "scripts/FateCharacterDefaults.js",
+    "scripts/FateCoreOfficialModels.js",
+    "scripts/Pen/pen.js",
+    "scripts/Pen/markdown.js",
+    "scripts/purify.min.js"
   ],
   "esmodules": [
     "fco.js"
@@ -37,22 +39,20 @@
   "styles": [
     "fco.css",
     "mfate-sheet.css",
-    "./scripts/Pen/pen.css"
+    "scripts/Pen/pen.css"
   ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
       "path": "lang/en.json",
-      "system": "",
-      "module": ""
+      "flags": {}
     },
     {
       "lang": "de",
       "name": "Deutsch",
       "path": "lang/de.json",
-      "system": "",
-      "module": ""
+      "flags": {}
     }
   ],
   "packs": [
@@ -62,7 +62,8 @@
       "path": "/packs/macros.db",
       "type": "Macro",
       "system": "fate-core-official",
-      "private": false
+      "private": false,
+      "flags": {}
     },
     {
       "name": "documentation",
@@ -70,22 +71,12 @@
       "path": "/packs/documentation.db",
       "type": "JournalEntry",
       "system": "fate-core-official",
-      "private": false
+      "private": false,
+      "flags": {}
     }
   ],
-  "system": [],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.4.10.zip",
-  "protected": false,
-  "gridDistance": 1,
-  "license": "",
-  "readme": "",
-  "bugs": "",
-  "changelog": "",
-  "background": "",
-  "initiative": "",
-  "gridUnits": "",
-  "primaryTokenAttribute": "",
-  "secondaryTokenAttribute": ""
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/v4.4.11.zip",
+  "gridDistance": 1
 }

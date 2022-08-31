@@ -1,3 +1,6 @@
+# 4.4.11 
+* Checked for v 10.283 compatibility.
+
 # 4.4.10
  * Fixed a major bug in the German translation that prevented character sheets from working properly; keys and names were mismatched for the various system defaults.
 
