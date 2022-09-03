@@ -7,6 +7,10 @@
   text-transform: uppercase;
 }
 
+.journal-entry-page.pdf {
+  height:100%;
+}
+
 .rolls h1,
 .rolls h2,
 .rolls h3 {
@@ -323,6 +327,10 @@ textarea [name="command"] {
   display: block;
 }
 
+.cd_datum_rich:hover {
+  background-color: var(--fco-foundry-interactable-color);
+}
+
 /* Countdown Checkbox - The container */
 .cdbox {
   display: flex-row;
@@ -433,6 +441,10 @@ textarea [name="command"] {
 }
 
 .fu_aspect_box:hover {
+  background-color: var(--fco-foundry-interactable-color) !important;
+}
+
+.fu_notes:hover {
   background-color: var(--fco-foundry-interactable-color) !important;
 }
 
