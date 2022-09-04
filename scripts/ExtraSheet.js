@@ -1,5 +1,4 @@
 export class ExtraSheet extends ItemSheet {
-
     constructor (...args){
         super(...args);
         this.options.title = `${game.i18n.localize("fate-core-official.Extra")}: ${this.object.name}`
@@ -12,11 +11,18 @@ export class ExtraSheet extends ItemSheet {
                     this.renderPending = true;
                     setTimeout(async () => {
                         await super._render(...args);
-                        var avatar = document.querySelector('.mfate-sheet_extra-avatar')
+                        var avatar = $('.mfate-sheet_extra-avatar')
                         let doc = this.document;
                         let newsrc;
                         let target_id;
                         let this_id = this.document.id;
+
+                        for (let av of avatar){
+                            if (av.id.split("_")[0] == this_id){
+                                avatar = av;
+                            }
+                        }
+
                         new MutationObserver(async function onSrcChange(MutationRecord){
                             // Code to update avatar goes here
                             target_id = MutationRecord[0].target.id.split("_")[0];
@@ -26,7 +32,6 @@ export class ExtraSheet extends ItemSheet {
                             // Otherwise though we want a local link, to prevent a file set on localhost from breaking if connecting from outside, or a move of dynamic DNS service breaking it.
 
                             let src = MutationRecord[0].target.src;
-
                             if (src.startsWith(window.location.origin)){
                                 newsrc = (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
                             } else {
@@ -35,6 +40,16 @@ export class ExtraSheet extends ItemSheet {
                     
                             if (target_id == this_id){
                                 await doc.update({"img":newsrc});
+                                if (doc.parent.type == "Thing" && !doc.parent.system.container.isContainer){
+                                    await doc.parent.update({"img":newsrc});  
+                                    let tokens=game.scenes.viewed.tokens.contents;
+                                    let token = tokens.find(tk => {
+                                        if (tk.actorId == doc.parent._id) return tk;
+                                    })
+                                    console.log(token);
+                                    game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":newsrc}]);
+
+                                }
                             }
                         }).observe(avatar,{attributes:true,attributeFilter:["src"]})
                         this.renderPending = false;
