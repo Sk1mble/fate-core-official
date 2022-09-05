@@ -1,5 +1,14 @@
+# 4.4.14
+  * Applied a temporary patch to fix issue: https://github.com/foundryvtt/foundryvtt/issues/7945 (lines 1445-1518 of fco.js)
+
+# 4.4.13
+  * Fixed a bug that prevented the avatar from an item embedded in a Thing from being updated when the image file was changed. This bugfix also causes the image change to be propagated to the Thing's token avatar in the current scene. Note: This only works for non-container items. To change the avatar for a container, do it from the item entry in the main system item list, or change the avater before turning the item into a container.
+
+# 4.4.12
+  * A couple of small css tweaks and fixed a broken link in the FCO documentation.
+
 # 4.4.11 
-* Checked for v 10.283 compatibility.
+  * Checked for v 10.283 compatibility.
 
 # 4.4.10
  * Fixed a major bug in the German translation that prevented character sheets from working properly; keys and names were mismatched for the various system defaults.
