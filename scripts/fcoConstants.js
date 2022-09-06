@@ -312,6 +312,14 @@ class fcoConstants {
         if (scheme) output.fco_world_sheet_scheme = scheme;
         let formulae = game.settings.get("fate-core-official","fu-roll-formulae");
         if (formulae) output["fu-roll-formulae"] = formulae;
+        let default_actor_permission = game.settings.get("fate-core-official","default_actor_permission");
+        if (default_actor_permission) output["default_actor_permission"] = default_actor_permission;
+        let fuAspectLabelBorderAlpha = game.settings.get("fate-core-official","fuAspectLabelBorderAlpha");
+        if (fuAspectLabelBorderAlpha) output["fuAspectLabelBorderAlpha"] = fuAspectLabelBorderAlpha;
+        let fuAspectLabelFillAlpha = game.settings.get("fate-core-official","fuAspectLabelFillAlpha");
+        if (fuAspectLabelFillAlpha) output["fuAspectLabelFillAlpha"] = fuAspectLabelFillAlpha;
+        let fu_ignore_list = game.settings.get("fate-core-official","fu-ignore-list");
+        if (fu_ignore_list) output["fu-ignore-list"] = fu_ignore_list;
         return JSON.stringify(output, null, 5);
     }
 
@@ -344,7 +352,6 @@ class fcoConstants {
     
     static async importSettings (input){
         if (input.constructor === String) input = await JSON.parse(input);
-
         //This function parses a text string in JSON notation containing all of the game's settings and writes those settings to System.settings.
         await game.settings.set("fate-core-official","stunts",input?.stunts);
         await game.settings.set("fate-core-official","skills",input?.skills);
@@ -374,6 +381,10 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel)
         if (input?.fco_world_sheet_scheme) await game.settings.set("fate-core-official", "fco-world-sheet-scheme", input.fco_world_sheet_scheme);
         if (input?.["fu-roll-formulae"]) await game.settings.set("fate-core-official","fu-roll-formulae", input["fu_roll-formulae"]);
+        if (input?.["default_actor_permission"]) await game.settings.set("fate-core-official", "default_actor_permission", input["default_actor_permission"])
+        if (input?.["fuAspectLabelBorderAlpha"]) await game.settings.set("fate-core-official", "fuAspectLabelBorderAlpha", input["fuAspectLabelBorderAlpha"])
+        if (input?.["fuAspectLabelFillAlpha"]) await game.settings.set("fate-core-official", "fuAspectLabelFillAlpha", input["fuAspectLabelFillAlpha"])
+        if (input?.["fu-ignore-list"]) await game.settings.set("fate-core-official", "fu-ignore-list", input["fu-ignore-list"])
         await ui.sidebar.render(false);
     }
 

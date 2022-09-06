@@ -1,3 +1,6 @@
+# 4.4.15
+  * Updated the code for importing/exporting settings with Fate Core Official modules to cover some newer settings that hadn't been included.
+
 # 4.4.14
   * Applied a temporary patch to fix issue: https://github.com/foundryvtt/foundryvtt/issues/7945 (lines 1445-1518 of fco.js)
 
