@@ -1,4 +1,7 @@
-{  "fate-core-official.Boost":"Boost",
+{  
+   "fate-core-official.overrideSettings":"Choose 'yes' to override this world's settings (including defaults, character sheet appearance, stunts, etc.) with those from the following adventure:",
+   "fate-core-official.overrideSettingsTitle":"Override World Settings?",
+   "fate-core-official.Boost":"Boost",
    "fate-core-official.Boosts":"Boosts",
    "fate-core-official.quick_add_skill":"Quickly add an ad-hoc skill",
    "fate-core-official.trackAspectFieldValidation1":"If track aspect doesn't equal 'No', exactly one of aspect.as_name and aspect.when_marked must be set to true.",

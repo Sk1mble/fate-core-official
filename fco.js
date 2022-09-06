@@ -35,7 +35,6 @@ import { fcoActor } from "./scripts/fcoActor.js"
 import { fcoExtra } from "./scripts/fcoExtra.js"
 
 // The following hooks append the Fate Core Official settings to an Adventure document's flags so that they can be loaded/set on import of the adventure module.
-// Eventually I should probably add some code to this to check whether settings are already set and if they are, tell the user they'll be overwritten.
 
 Hooks.on("preCreateAdventure", (adventure, ...args) =>{
     let flags = duplicate(adventure.flags);
@@ -53,10 +52,38 @@ Hooks.on("preUpdateAdventure", (adventure, ...args) =>{
     adventure.updateSource({flags:flags});
 })
 
-Hooks.on("importAdventure", (adventure, ...args) =>{
+// We can mess around with the data in the preImportAdventure hook to do what we need to it, if it's not quite in the right condition.
+Hooks.on("preImportAdventure", (adventure, formData, toCreate, toUpdate) => {
+    // const allowed = Hooks.call("preImportAdventure", this.adventure, formData, toCreate, toUpdate);
+    let cScene = toCreate?.Scene;
+    let uScene = toUpdate?.Scene;
+    if (uScene){
+        delete toUpdate.Scene;
+        toUpdate.Scene = uScene;
+    }
+    if (cScene){ 
+        delete toCreate.Scene;
+        toCreate.Scene = cScene;
+    }
+    adventure.updateSource({toCreate:toCreate, toUpdate:toUpdate});
+})
+
+Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
+    let replace = false;
     let flags = duplicate(adventure.flags);
     let settings = flags["fate-core-official"]?.settings;
-    if (settings) fcoConstants.importSettings(settings);
+    if (settings && !formData.overrideSettings){
+        const confirm = await Dialog.confirm({
+            title:  game.i18n.localize("fate-core-official.overrideSettingsTitle"),
+            content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`
+          });
+      if ( confirm ) replace = true;;
+    } else {
+        if (settings && formData.overrideSettings) replace = true;  
+    }
+    if (replace){
+        if (settings) fcoConstants.importSettings(settings); 
+    }
 })
 
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
@@ -352,24 +379,22 @@ Hooks.once('ready', async function () {
                 // The compendium must be called 'content'
                 // All 'adventures' in this compendium will be imported. This would allow us to segregate content on occasion, for example
                 // allowing scenes and characters to be imported separately from the journal entries forming the text of the book.
+                // When imported using the fate_splash installer, the settings from each adventure will be imported automatically, each overwriting the last.
                 
                 let pack = await game.packs.get(`${module_name}.content`);
                 await pack.getDocuments();
+                //Todo: Consider whether we want to restrict to installing just the first adventure in the pack, allowing others to be for characters, etc.
                 for (let p of pack.contents){
-                    await p.sheet._updateObject({}, new FormData())
+                    await p.sheet._updateObject({}, {"overrideSettings":true})
                 }
 
                 // Set installing and run_once to the appropriate post-install values
                 await game.settings.set("fate-core-official", "run_once", true);
                 await game.settings.set("fate-core-official", "installing", "none");
 
-                // Set the 'welcome' scene we grabbed from the scenes compendium to active
-                let scene = game.scenes.getName("Welcome");
-                if (scene) await scene.activate();
-
-                // Set this game's image to the world's default
-                await fetch(foundry.utils.getRoute("setup"), {
-                    method: "POST",
+                //Set this game's image to the world's default
+                await fetch(foundry.utils.getRoute("setup"), { 
+                   method: "POST",
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                       action: "editWorld",
@@ -386,7 +411,7 @@ Hooks.once('ready', async function () {
             if (game.settings.get("fate-core-official","installing") === "none") {
                 let f = new fate_splash().render(true);
             } else {
-                new fate_splash().installModule(game.settings.get("fate-core-official","installing"))
+                new fate_splash().installModule(game.settings.get("fate-core-official","installing"));
             }
         }
     }
