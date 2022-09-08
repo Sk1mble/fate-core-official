@@ -353,15 +353,58 @@ class fcoConstants {
     static async importSettings (input){
         if (input.constructor === String) input = await JSON.parse(input);
         //This function parses a text string in JSON notation containing all of the game's settings and writes those settings to System.settings.
-        await game.settings.set("fate-core-official","stunts",input?.stunts);
-        await game.settings.set("fate-core-official","skills",input?.skills);
-        await game.settings.set("fate-core-official","skillTotal",input?.skillTotal);
+         
+        let current_stunts = game.settings.get("fate-core-official","stunts");
+        let stunts = input?.stunts;
+
+        let current_defaults = game.settings.get("fate-core-official", "defaults");
+        let defaults = input?.defaults;
+
+        // Give option to merge stunts, if there are stunts in the new settings AND stunts in the existing settings.
+
+        if (Object.keys(current_stunts).length > 0){
+            if (Object.keys(stunts).length > 0){
+                const confirm = await Dialog.confirm({
+                    title:  game.i18n.localize("fate-core-official.mergeStuntsTitle"),
+                    content: `<p>${game.i18n.localize("fate-core-official.mergeStunts")}</p>`
+                });
+                if ( confirm ) {
+                    let final_stunts = mergeObject(current_stunts, stunts);
+                    await game.settings.set("fate-core-official","stunts", final_stunts);
+                } else {
+                    await game.settings.set("fate-core-official","stunts", stunts);
+                }
+            }   
+        } else {
+            await game.settings.set("fate-core-official","stunts", stunts);
+        }
+
+        // Give option to merge character default frameworks, if there are stunts in the new settings AND stunts in the existing settings.
+
+        if (Object.keys(current_defaults).length > 0){
+            if (Object.keys(defaults).length > 0){
+                const confirm = await Dialog.confirm({
+                    title:  game.i18n.localize("fate-core-official.mergeDefaultsTitle"),
+                    content: `<p>${game.i18n.localize("fate-core-official.mergeDefaults")}</p>`
+                });
+                if ( confirm ) {
+                    let final_defaults = mergeObject(current_defaults, defaults);
+                    await game.settings.set("fate-core-official","defaults", final_defaults);
+                } else {
+                    await game.settings.set("fate-core-official","defaults", defaults);
+                }
+            }   
+        } else {
+            await game.settings.set("fate-core-official","defaults", defaults);
+        }
+          
         await game.settings.set("fate-core-official","tracks",input?.tracks);
+        await game.settings.set("fate-core-official","skills",input?.skills);
+        await game.settings.set("fate-core-official","track_categories",input?.track_categories);   
+        await game.settings.set("fate-core-official","skillTotal",input?.skillTotal);
         await game.settings.set("fate-core-official","aspects",input?.aspects);
         await game.settings.set("fate-core-official","freeStunts",input?.freeStunts);
         await game.settings.set("fate-core-official","refreshTotal",input?.refreshTotal);
-        await game.settings.set("fate-core-official","track_categories",input?.track_categories);
-        await game.settings.set("fate-core-official", "defaults", input?.defaults) 
         await game.settings.set("fate-core-official", "enforceSkillTotal", input?.enforceSkillTotal);
         await game.settings.set("fate-core-official", "enforceColumn", input?.enforceColumn);
         await game.settings.set("fate-core-official", "init_skill", input?.init_skill);

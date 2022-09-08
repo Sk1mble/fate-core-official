@@ -1,6 +1,10 @@
 {  
-   "fate-core-official.overrideSettings":"Choose 'yes' to override this world's settings (including defaults, character sheet appearance, stunts, etc.) with those from the following adventure:",
+   "fate-core-official.mergeStuntsTitle":"Merge Stunts?",
+   "fate-core-official.mergeStunts":"Choose 'Yes' to merge the stunts from these settings into the existing stunt database. This will replace any stunts of the same name. Choose 'No' to erase the existing list of stunts and replace them with those from these settings.",
+   "fate-core-official.mergeDefaultsTitle":"Merge Default Frameworks?",
+   "fate-core-official.mergeDefaults":"Choose 'Yes' to merge the default character frameworks from these settings into the existing list. This will replace any default character frameworks with the same name. Choose 'No' to erase the existing list of defaults and replace them with those from these settings.",
    "fate-core-official.overrideSettingsTitle":"Override World Settings?",
+   "fate-core-official.overrideSettings":"Choose 'yes' to override this world's settings (including defaults, character sheet appearance, stunts, etc.) with those from the following adventure:",
    "fate-core-official.Boost":"Boost",
    "fate-core-official.Boosts":"Boosts",
    "fate-core-official.quick_add_skill":"Quickly add an ad-hoc skill",

@@ -1,3 +1,7 @@
+# 4.4.17
+  * You can now right click the avatar on a Thing, Extra, or Actor to display that character's actor avatar image in a large format.
+  * Added an option to merge stunts and/or default character frameworks upon importing settings into a world.
+
 # 4.4.16
   * Tweaked the import advanture code in Fate Core Official so that scenes are imported last; this means that journal bookmarks are no longer shown as 'unknown' on first importing an adventure.
   * Added a confirmation dialog on importing an adventure using a tool other than the fate_splash importer to check whether the user wants to also import the settings from the world that created the adventure. This will allow characters or journal entries from other Fate compendiums to be imported without overriding all world settings.

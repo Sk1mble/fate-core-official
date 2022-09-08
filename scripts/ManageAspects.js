@@ -15,7 +15,7 @@ class AspectSetup extends FormApplication{
         options.template = "systems/fate-core-official/templates/AspectSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.SetupAspectsForWorld")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.SetupAspectsForWorld")} ${game.world.title}`;
         options.closeOnSubmit = false;
         options.id = "AspectSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -340,7 +340,7 @@ class OrderAspects extends FormApplication {
         options.template = "systems/fate-core-official/templates/OrderAspects.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.OrderAspectsTitle")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.OrderAspectsTitle")} ${game.world.title}`;
         options.closeOnSubmit = true;
         options.id = "OrderAspects"; // CSS id if you want to override default behaviors
         options.resizable = false;

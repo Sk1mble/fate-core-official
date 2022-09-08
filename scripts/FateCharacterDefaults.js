@@ -439,7 +439,7 @@ class ManageDefaults extends FormApplication {
         options.template = "systems/fate-core-official/templates/ManageDefaults.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.defaultSetup")} in ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.defaultSetup")} in ${game.world.title}`;
         options.closeOnSubmit = true;
         options.id = "DefaultSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;

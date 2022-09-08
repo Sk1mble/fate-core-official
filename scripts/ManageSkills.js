@@ -28,7 +28,7 @@ class SkillSetup extends FormApplication{
         options.template = "systems/fate-core-official/templates/SkillSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.SetupSkillsTitle")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.SetupSkillsTitle")} ${game.world.title}`;
         options.closeOnSubmit = false;
         options.id = "SkillSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;

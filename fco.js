@@ -77,7 +77,7 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
             title:  game.i18n.localize("fate-core-official.overrideSettingsTitle"),
             content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`
           });
-      if ( confirm ) replace = true;;
+      if ( confirm ) replace = true;
     } else {
         if (settings && formData.overrideSettings) replace = true;  
     }
@@ -1937,5 +1937,20 @@ class FcoColourSchemes extends FormApplication {
         })
     }
 }
+
+$(document).on('contextmenu', '.fco_popviewable', async event => {
+    // Construct the Application instance
+    let uuid = event.target.getAttribute("data-uuid");
+    let actor = await fromUuid(uuid);
+    let title = actor.name;
+    console.log(actor);
+    const ip = new ImagePopout(event.target.src, {
+        "title": title,
+        "uuid":uuid
+     });
+    
+     // Display the image popout
+     ip.render(true);
+})
 
 

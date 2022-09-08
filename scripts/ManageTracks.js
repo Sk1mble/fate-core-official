@@ -844,7 +844,7 @@ class TrackSetup extends FormApplication{
         options.template = "systems/fate-core-official/templates/TrackSetup.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.TrackCategorySetup")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.TrackCategorySetup")} ${game.world.title}`;
         options.closeOnSubmit = false;
         options.id = "TrackSetup"; // CSS id if you want to override default behaviors
         options.resizable = false;
@@ -1058,7 +1058,7 @@ class OrderTracks extends FormApplication {
         options.template = "systems/fate-core-official/templates/OrderTracks.html"; 
         options.width = "auto";
         options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.OrderTracksTitle")} ${game.world.data.title}`;
+        options.title = `${game.i18n.localize("fate-core-official.OrderTracksTitle")} ${game.world.title}`;
         options.closeOnSubmit = true;
         options.id = "OrderTracks"; // CSS id if you want to override default behaviors
         options.resizable = false;

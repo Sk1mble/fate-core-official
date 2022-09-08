@@ -1,6 +1,6 @@
 <form style="background: var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); width:100%; height: 100%; border:none !important; padding:10px">
     <div style="display:flex; flex-direction:row">
-        <table style="background-color:transparent; border:none; width:100px"><tr><td><img width="100" height="auto" style="padding:0px; border:0;" id="avatar" src="{{document.img}}"></img></td></tr></table>
+        <table style="background-color:transparent; border:none; width:100px"><tr><td><img  data-uuid="{{this.document.uuid}}" class="fco_popviewable" width="100" height="auto" style="padding:0px; border:0;" id="avatar" src="{{document.img}}"></img></td></tr></table>
         <textarea class="mfate-sheet__identity-name" rows="2" disabled="disabled" style="width:70%">{{document.name}}</textarea>
         <span style="vertical-align:middle; width:30%">
             <div {{#unless this.GM}} style="opacity:0.6" {{/unless}}>{{localize 'fate-core-official.container'}}</div>

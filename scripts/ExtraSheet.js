@@ -40,7 +40,7 @@ export class ExtraSheet extends ItemSheet {
                     
                             if (target_id == this_id){
                                 await doc.update({"img":newsrc});
-                                if (doc.parent.type == "Thing" && !doc.parent.system.container.isContainer){
+                                if (doc?.parent?.type == "Thing" && !doc?.parent?.system?.container?.isContainer){
                                     await doc.parent.update({"img":newsrc});  
                                     let tokens=game.scenes.viewed.tokens.contents;
                                     let token = tokens.find(tk => {
