@@ -1,5 +1,9 @@
+# 4.4.19
+  * Fixed a couple of bugs in the avater view function from 4.4.17; was not displaying to remote players due to the image link being absolute.
+
 # 4.4.18
   * Fixed a bug in saving a character default framework with the same name as an existing one.
+  * Fixed a bug in saving settings to an adventure when updating it.
 
 # 4.4.17
   * You can now right click the avatar on a Thing, Extra, or Actor to display that character's actor avatar image in a large format.

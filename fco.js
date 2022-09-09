@@ -1867,10 +1867,21 @@ class FcoColourSchemes extends FormApplication {
 $(document).on('contextmenu', '.fco_popviewable', async event => {
     // Construct the Application instance
     let uuid = event.target.getAttribute("data-uuid");
-    let actor = await fromUuid(uuid);
-    let title = actor.name;
-    console.log(actor);
-    const ip = new ImagePopout(event.target.src, {
+    let source = await fromUuid(uuid);
+    let title = "Unknown";
+    let src = "";
+    // Case token
+    if (source.constructor.name == "TokenDocument"){
+        title = source.actor.name;
+        src = source.actor.img;
+    } 
+    // Case not a token
+    if (source.constructor.name.startsWith("fco")){
+        title = source.name;
+        src = source.img;
+    }
+
+    const ip = new ImagePopout(src, {
         "title": title,
         "uuid":uuid
      });
