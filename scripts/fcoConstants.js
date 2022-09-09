@@ -359,12 +359,13 @@ class fcoConstants {
 
         let current_defaults = game.settings.get("fate-core-official", "defaults");
         let defaults = input?.defaults;
+        console.log(defaults);
 
         // Give option to merge stunts, if there are stunts in the new settings AND stunts in the existing settings.
 
         if (Object.keys(current_stunts).length > 0){
             if (Object.keys(stunts).length > 0){
-                const confirm = await Dialog.confirm({
+                let confirm = await Dialog.confirm({
                     title:  game.i18n.localize("fate-core-official.mergeStuntsTitle"),
                     content: `<p>${game.i18n.localize("fate-core-official.mergeStunts")}</p>`
                 });
@@ -383,7 +384,7 @@ class fcoConstants {
 
         if (Object.keys(current_defaults).length > 0){
             if (Object.keys(defaults).length > 0){
-                const confirm = await Dialog.confirm({
+                let confirm = await Dialog.confirm({
                     title:  game.i18n.localize("fate-core-official.mergeDefaultsTitle"),
                     content: `<p>${game.i18n.localize("fate-core-official.mergeDefaults")}</p>`
                 });

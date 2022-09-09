@@ -13,7 +13,7 @@ class FateCharacterDefaults {
             return;
         }
         // Check to see if this default already exists
-        if (defaults[this.getSafeName(character_default.default_name)] && overwrite !== true){
+        if (defaults[this.getSafeName(character_default.default_name)]){
             let response  = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.checkDefaultOverwritePrompt"),character_default.default_name + game.i18n.localize("fate-core-official.checkDefaultOverwriteContent"));
             if (response === "yes"){
                 defaults[this.getSafeName(character_default.default_name)] = character_default;
