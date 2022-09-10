@@ -7,7 +7,6 @@ class FateCharacterDefaults {
 
     async storeDefault (character_default){
         // Store a character default (usually derived from extractDefault) in the game's settings.
-        // If overwrite is true, automatically overwrite the existing default without asking.
         let defaults = duplicate(game.settings.get("fate-core-official", "defaults"));
         if (!character_default?.default_name){
             return;
