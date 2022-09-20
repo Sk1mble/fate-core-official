@@ -1,5 +1,7 @@
-# 4.4.21 (Unreleased)
+# 4.4.21
   * Fixed a deprecation warning relating to use of message.roll rather than message.rolls[0].
+  * Removed the import adventure code workaround from 4.4.16 for versions of Foundry at 10.286+ as this is now natively handled in the same way by Foundry.
+  * Verified working fine with Foundry 10.286.
 
 # 4.4.20
   * Fixed a bug that was causing the initial mystery man avatar not to have its colours inverted.

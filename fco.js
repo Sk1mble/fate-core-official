@@ -53,20 +53,25 @@ Hooks.on("preUpdateAdventure", (adventure, changes, options, userId) =>{
 })
 
 // We can mess around with the data in the preImportAdventure hook to do what we need to it, if it's not quite in the right condition.
-Hooks.on("preImportAdventure", (adventure, formData, toCreate, toUpdate) => {
-    // const allowed = Hooks.call("preImportAdventure", this.adventure, formData, toCreate, toUpdate);
-    let cScene = toCreate?.Scene;
-    let uScene = toUpdate?.Scene;
-    if (uScene){
-        delete toUpdate.Scene;
-        toUpdate.Scene = uScene;
-    }
-    if (cScene){ 
-        delete toCreate.Scene;
-        toCreate.Scene = cScene;
-    }
-    adventure.updateSource({toCreate:toCreate, toUpdate:toUpdate});
-})
+// This next piece of code is unnecessary if the user is running Foundry 10.286 or higher. In previous versions of Foundry, this was needed
+// to change the order of import from scenes then journals to journals then scenes, required to prevent bookmarks on the canvas from being 'unknown'.
+
+if (!isNewerVersion(game.version, "10.285")){
+    Hooks.on("preImportAdventure", (adventure, formData, toCreate, toUpdate) => {
+        // const allowed = Hooks.call("preImportAdventure", this.adventure, formData, toCreate, toUpdate);
+        let cScene = toCreate?.Scene;
+        let uScene = toUpdate?.Scene;
+        if (uScene){
+            delete toUpdate.Scene;
+            toUpdate.Scene = uScene;
+        }
+        if (cScene){ 
+            delete toCreate.Scene;
+            toCreate.Scene = cScene;
+        }
+        adventure.updateSource({toCreate:toCreate, toUpdate:toUpdate});
+    })
+}
 
 Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let replace = false;
@@ -82,7 +87,6 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
         if (settings && formData.overrideSettings) replace = true;  
     }
     if (replace){
-        console.log(settings);
         if (settings) fcoConstants.importSettings(settings); 
     }
 })
