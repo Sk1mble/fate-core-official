@@ -2815,6 +2815,7 @@ Hooks.once('ready', async function () {
 })
 
 async function updateRolls (rolls) {
+    console.log("updateRolls Called");
     if (rolls.rolls != undefined && game.users.contents.find(user => user.active && user.isGM) == game.user){
         let scene = game.scenes.get(rolls.scene._id);
         let currRolls = scene.getFlag("fate-core-official","rolls"); 
@@ -2828,10 +2829,10 @@ async function updateRolls (rolls) {
             let message;
             if (r.message_id) message = game.messages.get(r.message_id)
             if (message) {
-                let mroll = duplicate(message.roll);
+                let mroll = duplicate(message.rolls[0]);
                 if (r.roll) mroll = r.roll;
                 mroll.total = r.total;
-                await message.update({flavor:r.flavor, content:r.total, roll:JSON.stringify(mroll)})
+                await message.update({flavor:r.flavor, content:r.total, rolls:[JSON.stringify(mroll)]})
             }
         }
     }
