@@ -1,3 +1,6 @@
+# 4.4.22
+  * Fixed a bug that was preventing the roll history in FateUtilities from being updated when rolls were made.
+
 # 4.4.21
   * Fixed a deprecation warning relating to use of message.roll rather than message.rolls[0].
   * Removed the import adventure code workaround from 4.4.16 for versions of Foundry at 10.286+ as this is now natively handled in the same way by Foundry.
