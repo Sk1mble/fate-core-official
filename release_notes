@@ -1,3 +1,7 @@
+# 4.4.23
+  * Fixed a bug where tabbing out of the player fate point field in FateUtilities would not update their fate points.
+  * Fixed a bug where clicking on the avatar of a character in FateUtilities when that character sheet was already rendered would put the character sheet in a dirty state that meant it wouldn't be updated when changes were made and couldn't be closed.
+
 # 4.4.22
   * Fixed a bug that was preventing the roll history in FateUtilities from being updated when rolls were made.
 

@@ -470,13 +470,15 @@ class FateUtilities extends Application{
         const avatar = html.find("img[name='avatar']");
         avatar.on("contextmenu", event=> this._on_avatar_click(event,html));
         
-        avatar.on("click", event => {
+        avatar.on("click", async event => {
             let t_id = event.target.id.split("_")[0];
             let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
-            const sheet = token.actor.sheet;
-            sheet.render(true, {token: token});
-            sheet.maximize();
-            sheet.toFront();
+            if (token.actor.sheet.rendered){
+                token.actor.sheet.maximize();
+                token.actor.sheet.bringToTop();
+            } else {
+                token.actor.sheet.render(true);
+            }
         })
 
         const fu_clear_rolls = html.find("button[id='fu_clear_rolls']");
