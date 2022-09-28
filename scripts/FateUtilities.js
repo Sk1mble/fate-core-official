@@ -2064,9 +2064,13 @@ class FateUtilities extends Application{
             let combatant = game.combat.getCombatantByToken(t_id);
             let token = combatant.token;
             const sheet = token.actor.sheet;
-            sheet.render(true, {token: token});
-            sheet.maximize();
-            sheet.toFront();
+
+            if (sheet.rendered){
+                sheet.maximize();
+                sheet.bringToTop();
+            } else {
+                sheet.render(true);
+            }
         }
     }
 
