@@ -1484,6 +1484,8 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         //First check it's not from the same sheet
         if (data.ident !== "mf_draggable") return;
         if (actor.id == data.origin) return;
+        delete data.dragged?.extra_id;
+        delete data.dragged?.original_name;
         if (data.type == "stunt"){
             let old = actor.system.stunts[data.dragged.name];
             if (old) {

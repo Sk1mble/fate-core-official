@@ -490,7 +490,7 @@ class StuntDB extends Application {
     }
 
     async _onAddButton(event, html){
-        let stunt = game.settings.get("fate-core-official","stunts")[event.target.id.split("_")[0]];
+        let stunt = duplicate(game.settings.get("fate-core-official","stunts")[event.target.id.split("_")[0]]);
         this.actor.update({"system.stunts":{[`${stunt.name}`]:stunt}});
     }
 

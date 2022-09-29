@@ -1,3 +1,6 @@
+# 4.4.25
+ * Fixed a bug that could result in dragged stunts, tracks, etc. ending up in a bad state due to not deleting extra_id and original_name on copying.
+
 # 4.4.24
  * Applied the bug fix for clicking on the character's avatar in FateUtilities from release 4.4.23 to the avatar of each character in the FU combat tracker as well as the main avatar on the aspects tab.
 
