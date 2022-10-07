@@ -1,3 +1,6 @@
+# 4.4.26
+  * The user configuration menu will now not offer Things as characters which can be bound to players.
+
 # 4.4.25
  * Fixed a bug that could result in dragged stunts, tracks, etc. ending up in a bad state due to not deleting extra_id and original_name on copying.
 

@@ -513,6 +513,17 @@ Hooks.on('getSceneControlButtons', function(hudButtons)
             }
 })
 
+// This next hook is required to prevent Things from showing up in the player configuration menu. 
+Hooks.on('renderUserConfig', (user, html, data) => {
+    let actors = html.find("li");
+    for (let actor of actors){
+        let id = actor.getAttribute("data-actor-id");
+        if (game.actors.get(id).type == "Thing"){
+            actor.remove();
+        }
+    }
+})
+
 Hooks.once('init', async function () {
     CONFIG.Actor.documentClass = fcoActor;
     CONFIG.Item.documentClass = fcoExtra;
