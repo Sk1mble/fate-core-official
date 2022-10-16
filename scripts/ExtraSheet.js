@@ -53,7 +53,7 @@ export class ExtraSheet extends ItemSheet {
                             }
                         }).observe(avatar,{attributes:true,attributeFilter:["src"]})
                         this.renderPending = false;
-                    }, 150);
+                    }, 50);
             }
         } else this.renderBanked = true;
     }
@@ -94,9 +94,9 @@ export class ExtraSheet extends ItemSheet {
         data.rich.costs = await fcoConstants.fcoEnrich (data.document.system.costs, this.object);
         data.rich.permissions = await fcoConstants.fcoEnrich (data.document.system.permissions, this.object);
         data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.overcome, this.object);
-        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.create, this.object);
-        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.attack, this.object);
-        data.rich.overcome = await fcoConstants.fcoEnrich (data.document.system.actions.defend, this.object);
+        data.rich.create = await fcoConstants.fcoEnrich (data.document.system.actions.create, this.object);
+        data.rich.attack = await fcoConstants.fcoEnrich (data.document.system.actions.attack, this.object);
+        data.rich.defend = await fcoConstants.fcoEnrich (data.document.system.actions.defend, this.object);
         data.rich.stunts = duplicate(data.document.system.stunts);
         for (let st in data.rich.stunts){
             data.rich.stunts[st].richDesc = await fcoConstants.fcoEnrich (data.rich.stunts[st].description, this.object);
