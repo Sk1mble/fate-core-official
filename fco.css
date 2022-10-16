@@ -45,6 +45,7 @@
 
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: inner-spin-button;
+    appearance: inner-spin-button;
 }
 
 body, button, label, select, input {

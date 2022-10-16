@@ -308,7 +308,7 @@ export class Thing extends ActorSheet {
                     setTimeout(async () => {
                         await super._render(...args);
                         this.renderPending = false;
-                    }, 150);
+                    }, 50);
             }
         } else this.renderBanked = true;
     }

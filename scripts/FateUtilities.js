@@ -2371,7 +2371,7 @@ async _render(...args){
                 await setTimeout(async () => {
                     await super._render(...args);
                     this.renderPending = false;
-                }, 150);
+                }, 50);
         }
     } else this.renderBanked = true;
 }
@@ -2421,7 +2421,7 @@ async renderMe(...args){
           this._render(false);
           this.delayedRender = false;
           this.renderPending = false;
-        }, 150);
+        }, 50);
       } 
     }
 }
@@ -2841,7 +2841,7 @@ async function updateRolls (rolls) {
     }
 }
 
-Hooks.on('renderFateUtilities', function(){
+Hooks.on('renderFateUtilities', async function(){
     let numAspects = document.getElementsByName("sit_aspect").length;
     if (numAspects == undefined){
         numAspects = 0;
@@ -2852,8 +2852,10 @@ Hooks.on('renderFateUtilities', function(){
     
     if (numAspects > game.system.sit_aspects){
         let pane = document.getElementById("fu_aspects_pane");
-        pane.scrollTop=pane.scrollHeight;
-        game.system.sit_aspects = numAspects;
+        await setTimeout(async () => {
+            pane.scrollTop=pane.scrollHeight;
+            game.system.sit_aspects = numAspects;
+        }, 50);
     }
     
     if (numAspects < game.system.sit_aspects){
@@ -2870,8 +2872,10 @@ Hooks.on('renderFateUtilities', function(){
     
     if (numRolls > game.system.num_rolls){
         let pane = document.getElementById("fu_rolls_tab")
-        pane.scrollTop=pane.scrollHeight;
-        game.system.num_rolls = numRolls;
+        await setTimeout(async () => {
+            pane.scrollTop=pane.scrollHeight;
+            game.system.num_rolls = numRolls;
+        }, 50);
     }
     
     if (numRolls < game.system.num_rolls){

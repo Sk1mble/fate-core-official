@@ -40,7 +40,7 @@ class EditPlayerSkills extends FormApplication{
                 setTimeout(() => {
                 this.render(false);
                 this.renderPending = false;
-                }, 150);
+                }, 50);
             }
         }
     }

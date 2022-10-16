@@ -1,3 +1,6 @@
+# 4.4.27
+  * Fixed the issue that was preventing the roll tab and situation aspects pane from scrolling to the bottom of the list when a new roll/situation aspect is added to Fate Utilities.
+
 # 4.4.26
   * The user configuration menu will now not offer Things as characters which can be bound to players.
 
