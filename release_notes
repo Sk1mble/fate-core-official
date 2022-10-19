@@ -1,3 +1,6 @@
+# 4.4.29
+  * Made a small change to the logic handling drag and drop of extras between characters. Any tracks and stunts with boxes will now have their aspect names and boxes copied on transfer/copy, allowing for consistent behaviour when copying and when turning extras off and on again.
+
 # 4.4.28
   * Fixed a major bug in the sheet for extras that was causing issues with the display and saving of the extra's information.
 

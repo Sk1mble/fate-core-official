@@ -1018,6 +1018,43 @@ export class fcoCharacter extends ActorSheet {
 
     async _on_item_drag (event, html){
         let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
+        if (item?.parent){
+            // Store the status of stress tracks on the parent back to the extra if this extra is being dragged from a character.
+            let trackUpdates = duplicate(item.system.tracks);
+            let tracks = item?.parent?.system?.tracks;
+
+            for (let t in trackUpdates){
+                // Need to grab the original name from the ACTOR, not from the extra. So we need to reverse the order of operations here
+                // to search through the actor's tracks to find one with an original name that matches this track.
+                for (let at in tracks){
+                    let name = tracks[at]?.original_name;
+                    if (name == t && tracks[at]?.extra_id == item.id){
+                        let track = duplicate(tracks[at]);
+                        track.name = name;
+                        delete track.extra_id;
+                        delete track.original_name;
+                        trackUpdates[name] = track;
+                    }
+                }
+            }
+            let stuntUpdates = duplicate(item.system.stunts);
+            let stunts = item?.parent?.system?.stunts;
+            for (let s in stuntUpdates){
+                for (let as in stunts){
+                    let name = stunts[as]?.original_name;
+                    if (name == s && stunts[as]?.extra_id == item.id){
+                        let stunt = duplicate(stunts[as]);
+                        stunt.name = name;
+                        delete stunt.extra_id;
+                        delete stunt.original_name;
+                        stuntUpdates[name] = stunt;
+                    }
+                }
+            }
+            // If we await this next update it causes an issue with the data below not being populated if the track is being
+            // dragged from an actor.
+            item.update({"system.tracks":trackUpdates, "system.stunts":stuntUpdates},{renderSheet:false});
+        }
         let data = {
             "type":"Item", 
             "uuid":item.uuid
