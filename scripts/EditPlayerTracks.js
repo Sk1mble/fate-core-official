@@ -110,6 +110,7 @@ class EditPlayerTracks extends FormApplication {
         let catText = `<select id="category" style="color:black; background:white;">`
         for (let c in this.tracks_by_category){
             // Build the category list
+            if (c !== game.i18n.localize("fate-core-official.All"))
             catText +=`<option> ${c}</option>`
         }
         catText += '</select>'

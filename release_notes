@@ -1,3 +1,8 @@
+# 4.4.30
+  * Changed ad-hoc track editor to prevent the creation of a track in the not-real 'All' category.
+  * Added a function to make it possible to change the categoy applied to any or all tracks in the ManageTracks utility.
+  * Added a function to change the category of a track on an entity with the Entity Track Editor.
+
 # 4.4.29
   * Made a small change to the logic handling drag and drop of extras between characters. Any tracks and stunts with boxes will now have their aspect names and boxes copied on transfer/copy, allowing for consistent behaviour when copying and when turning extras off and on again.
 

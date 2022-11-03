@@ -17,6 +17,7 @@ class EditEntityTrack extends FormApplication {
 
         const templateData = {
             track:this.track,
+            categories:game.settings.get("fate-core-official","track_categories"),
             skills:duplicate(this.entity.system.skills),
             entity:this.entity,
             rich:rich
@@ -225,6 +226,7 @@ class EditEntityTrack extends FormApplication {
         let label = document.getElementById("entity_track_label_select").value;
         let custom_label = document.getElementById("entity_track_custom_label").value;
         let rollable = document.getElementById("entity_track_rollable").value;
+        let category = document.getElementById("edit_entity_track_category").value;
 
         if (label!="escalating" && label != "none") {
             label=custom_label;
@@ -256,6 +258,7 @@ class EditEntityTrack extends FormApplication {
         track.paid = paid;
         track.label = label;
         track.rollable = rollable;
+        track.category = category;
 
         //If box_values < boxes, add
         if (!track.box_values){
@@ -868,6 +871,7 @@ class TrackSetup extends FormApplication{
         const deleteCategoryButton = html.find("button[id='delete_category']");
         const addCategoryButton = html.find("button[id='add_category']");
         const editTracksButton = html.find("button[id='edit_tracks']");
+        const setCategoriesButton = html.find("button[id='set_track_categories']");
         const selectBox = html.find("select[id='track_categories_select']");
         const importTracks = html.find("button[id='import_tracks']");
         const exportTracks = html.find("button[id='export_tracks']");
@@ -876,6 +880,49 @@ class TrackSetup extends FormApplication{
         deleteCategoryButton.on("click", event => this._onDeleteCategoryButton(event, html));
         addCategoryButton.on("click", event => this._onAddCategoryButton(event, html));
         editTracksButton.on("click", event => this._onEditTracksButton(event, html));
+        setCategoriesButton.on("click", event => {
+            let content = `<div style="display:flex; flex-direction:column;">`;
+            let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
+            let categories = game.settings.get("fate-core-official","track_categories");
+
+            for (let track in tracks){
+                let categories_select = `<select name="fco_track_cat_select" data-track="${track}">`
+                for (let category in categories){
+                    if (tracks[track].category == category){
+                        categories_select += `<option selected = "selected">${category}</option>`
+                    }else {
+                        categories_select += `<option>${category}</option>`
+                    }
+                }
+                categories_select += `</select>`;
+                content += `<div style="display:flex; flex-direction:row; padding:5px"><div style="width:25rem">${track}</div><div>${categories_select}</div></div>`
+            }
+            content += `</div>`
+            let width = 800;
+            new Dialog({
+                        title: `Change Track Categories`,
+                        content: content,
+                        buttons: {
+                            ok: {
+                                label: game.i18n.localize("fate-core-official.OK"),
+                                callback: async ()=> {
+                                // Do the stuff here
+                                    let results = $('select[name="fco_track_cat_select"]');
+
+                                    for (let result of results){
+                                        let track = result.getAttribute("data-track");
+                                        tracks[track].category = result.value;
+                                    }
+                                    game.settings.set("fate-core-official","tracks",tracks);
+                                }
+                                }
+                            }
+                    },
+                    {
+                        width:width,
+                        height:"auto",
+                    }).render(true);
+        })
         selectBox.on("dblclick", event => this._onEditTracksButton(event,html));
         importTracks.on("click", event => this._importTracks(event,html));
         exportTracks.on("click", event => this._exportTracks(event,html));

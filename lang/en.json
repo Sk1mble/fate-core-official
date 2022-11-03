@@ -1606,6 +1606,7 @@
     "fate-core-official.ExportStunts":"Export Stunts",
     "fate-core-official.ImportStunts":"Import Stunts",
     "fate-core-official.EditTracksInCategory":"Edit the tracks in this category",
+    "fate-core-official.SetTrackCategories":"Set the category for each existing track",
     "fate-core-official.ImportTracks":"Import Tracks",
     "fate-core-official.ExportTracks":"Export Tracks",
     "fate-core-official.EditTokenAspectsTitle":"Aspect editor for [Token]",
