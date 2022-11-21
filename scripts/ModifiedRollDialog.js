@@ -67,7 +67,8 @@ class ModifiedRollDialog extends Application {
 
         if (second_skill != game.i18n.localize("fate-core-official.None")){
             second_skill_rank = this.actor.system.skills[second_skill].rank;
-            let ladder = fcoConstants.getFateLadder();
+            let fcoc = new fcoConstants();
+            let ladder = fcoc.getFateLadder();
             let rs2 = ladder[`${second_skill_rank.toString()}`];
             second_skill_text = game.i18n.format("fate-core-official.secondSkillAtRank", {skill:second_skill, rank:second_skill_rank, ladder:rs2});
             total_modifier += parseInt(second_skill_rank);
@@ -146,7 +147,8 @@ class ModifiedRollDialog extends Application {
         let msg = ChatMessage.getSpeaker({actor:this.actor})
         msg.alias = this.actor.name;
 
-        let ladder = fcoConstants.getFateLadder();
+        let fcoc = new fcoConstants();
+        let ladder = fcoc.getFateLadder();
         let rs = ladder[`${skill_rank.toString()}`];
         roll.toMessage({
             flavor: `<h1>${this.skill_name}</h1>${formula} ${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>

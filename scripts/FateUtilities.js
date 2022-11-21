@@ -771,7 +771,8 @@ class FateUtilities extends Application{
             rank = token.actor.system.skills[skill].rank;
         }
 
-        let ladder = fcoConstants.getFateLadder();
+        let fcoc = new fcoConstants();
+        data.ladder = fcoc.getFateLadder();
         let rankS = rank.toString();
         let rung = ladder[rankS];
 

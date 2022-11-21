@@ -1470,7 +1470,8 @@ export class fcoCharacter extends ActorSheet {
         sheetData.skillTotal = skillTotal;
         let skills_label = game.settings.get("fate-core-official", "skillsLabel");
         sheetData.skillsLabel = skills_label || game.i18n.localize("fate-core-official.defaultSkillsLabel");
-        sheetData.ladder = fcoConstants.getFateLadder();
+        let fcoc = new fcoConstants();
+        sheetData.ladder = fcoc.getFateLadder();
         sheetData.sortByRank = this.sortByRank;
         sheetData.gameSkillPoints = game.settings.get("fate-core-official", "skillTotal")
         sheetData.GM = game.user.isGM;

@@ -146,7 +146,8 @@ class EditPlayerSkills extends FormApplication{
                 }
                 for (let i = 0; i<columnErrors.length; i++){
                     if (columnErrors[i]){
-                        columnErrorText+=`<li>${game.i18n.localize('fate-core-official.MoreSkillsAt')} ${fcoConstants.getAdjective(11-i)}(+${11-i}) ${game.i18n.localize("fate-core-official.ThanAt")} ${fcoConstants.getAdjective(10-i)}(+${10-i})</li>`
+                        let fcoc = new fcoConstants();
+                        columnErrorText+=`<li>${game.i18n.localize('fate-core-official.MoreSkillsAt')} ${fcoc.getAdjective(11-i)}(+${11-i}) ${game.i18n.localize("fate-core-official.ThanAt")} ${fcoc.getAdjective(10-i)}(+${10-i})</li>`
                     }
                 }
                 columnErrorText+-`</div>`;

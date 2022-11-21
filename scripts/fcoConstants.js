@@ -1,6 +1,6 @@
 class fcoConstants { 
 
-    static getFateLadder(){
+    getFateLadder(){
         return  {
                     "10":"",
                     "9":"",
@@ -25,7 +25,7 @@ class fcoConstants {
         return DOMPurify.sanitize(await TextEditor.enrichHTML(value, {secrets:secrets, documents:true, async:true}));
     }
 
-    static getAdjective(r){
+    getAdjective(r){
         const ladder = this.getFateLadder()
         return (ladder[r])
     }

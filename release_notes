@@ -1,3 +1,6 @@
+# 4.4.31 
+  * Changed the fcoConstants.getFateLadder method to be a non-static method, allowing it to be overridden with fcoConstants.prototype.getFateLadder = function () { return {"10":"", "9":"", "8":"Fantastic"}} and so on.
+
 # 4.4.30
   * Changed ad-hoc track editor to prevent the creation of a track in the not-real 'All' category.
   * Added a function to make it possible to change the categoy applied to any or all tracks in the ManageTracks utility.

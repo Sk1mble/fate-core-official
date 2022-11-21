@@ -567,7 +567,8 @@ export class fcoActor extends Actor {
             let skill = actor.system.skills[skillName];
             let rank = skill.rank;
             let r = new Roll(`4dF + ${rank}`);
-            let ladder = fcoConstants.getFateLadder();
+            let fcoc = new fcoConstants();
+            let ladder = fcoc.getFateLadder();
             let rankS = rank.toString();
             let rung = ladder[rankS];
             let roll = await r.roll();
@@ -604,7 +605,8 @@ export class fcoActor extends Actor {
             if (track.rollable != "empty" && track.rollable != "full") return;
 
             let r = new Roll(`4dF + ${rank}`);
-            let ladder = fcoConstants.getFateLadder();
+            let fcoc = new fcoConstants();
+            let ladder = fcoc.getFateLadder();
             let rankS = rank.toString();
             let rung = ladder[rankS];
             let roll = await r.roll();
@@ -643,7 +645,8 @@ export class fcoActor extends Actor {
             let skill = stunt.linked_skill;
             let bonus = parseInt(stunt.bonus);
     
-            let ladder = fcoConstants.getFateLadder();
+            let fcoc = new fcoConstants();
+            let ladder = fcoc.getFateLadder();
             let rank = 0;
             if (skill == "Special"){
                 // We need to pop up a dialog to get a skill to roll.
