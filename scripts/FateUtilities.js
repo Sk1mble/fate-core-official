@@ -772,7 +772,7 @@ class FateUtilities extends Application{
         }
 
         let fcoc = new fcoConstants();
-        data.ladder = fcoc.getFateLadder();
+        let ladder = fcoc.getFateLadder();
         let rankS = rank.toString();
         let rung = ladder[rankS];
 

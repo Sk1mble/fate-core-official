@@ -67,7 +67,8 @@ export class ExtraSheet extends ItemSheet {
     async getData() {        
         const data = {};
         data.document = this.document;
-        data.ladder = fcoConstants.getFateLadder();
+        let fcoc = new fcoConstants();
+        data.ladder = fcoc.getFateLadder();
         let track_categories = this.object.system.tracks;
         let cats = new Set();
         for (let c in track_categories){
