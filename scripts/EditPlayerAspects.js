@@ -238,7 +238,7 @@ class EditPlayerAspects extends FormApplication{
                         setTimeout(() => {
                         this.render(false);
                         this.renderPending = false;
-                        }, 150);
+                        }, 50);
                     }
                 }    
             }, 50);

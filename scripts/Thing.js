@@ -69,7 +69,7 @@ export class Thing extends ActorSheet {
             // Create the container item if it does not already exist
             let container = new Item({name: this.actor.name, "description": this.actor.description, "type": "Extra"});
 
-            if ( foundry.utils.isObjectEmpty(this.actor.system.container.extra) ) {
+            if ( foundry.utils.isOEmpty(this.actor.system.container.extra) ) {
                 await this.actor.update({"system.container.extra": container.toObject()});
               } else container = duplicate(this.actor.system.container.extra);
 

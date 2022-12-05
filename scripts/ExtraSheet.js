@@ -46,7 +46,6 @@ export class ExtraSheet extends ItemSheet {
                                     let token = tokens.find(tk => {
                                         if (tk.actorId == doc.parent._id) return tk;
                                     })
-                                    console.log(token);
                                     game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":newsrc}]);
 
                                 }

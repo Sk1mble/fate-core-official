@@ -1,4 +1,9 @@
-# 4.4.31 
+# 4.4.33
+* Deployed a fix for the behaviour that was broken by this Foundry bug fix:
+  https://github.com/foundryvtt/foundryvtt/issues/6978
+  The hook check for the modifier keybinding now checks for event.isTrusted on the keyUp event and ignores it if isTrusted is false (as this was emulated by Foundry rather than triggered by the user letting go of the shift key).
+
+# 4.4.31 and 4.4.32
   * Changed the fcoConstants.getFateLadder method to be a non-static method, allowing it to be overridden with fcoConstants.prototype.getFateLadder = function () { return {"10":"", "9":"", "8":"Fantastic"}} and so on.
 
 # 4.4.30

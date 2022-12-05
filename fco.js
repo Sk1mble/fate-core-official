@@ -587,8 +587,8 @@ Hooks.once('init', async function () {
         game.keybindings.register("fate-core-official", "fcoInteractionModifier", {
             name: "Fate Core Official modifier key for dragging and clicking",
             editable: bindings,
-            onDown: () => { game.system["fco-shifted"] = true; },
-            onUp: () => { game.system["fco-shifted"] = false; }
+            onDown: (...args) => { game.system["fco-shifted"] = true;},
+            onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
           })
     }
     

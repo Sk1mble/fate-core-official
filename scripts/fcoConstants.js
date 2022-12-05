@@ -359,7 +359,7 @@ class fcoConstants {
 
         let current_defaults = game.settings.get("fate-core-official", "defaults");
         let defaults = input?.defaults;
-        console.log(defaults);
+        //console.log(defaults);
 
         // Give option to merge stunts, if there are stunts in the new settings AND stunts in the existing settings.
 
