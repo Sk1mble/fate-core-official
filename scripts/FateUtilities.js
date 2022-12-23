@@ -1520,8 +1520,8 @@ class FateUtilities extends Application{
                                     speaker: msg
                                 });
                             }
-                            },
-                        }
+                            }
+                        }, default:"ok"
                 },
                 {
                     width:width,
