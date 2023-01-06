@@ -733,7 +733,7 @@ class FateUtilities extends Application{
     async tokenNameChange(event, html){
         let t_id = event.target.id.split("_")[0];
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
-        if (token != undefined){
+        if (token != undefined && token.actor.isOwner){
             let name = await fcoConstants.updateShortText(game.i18n.localize("fate-core-official.whatShouldTokenNameBe"),token.name);
             await token.update({"name":name});
         }

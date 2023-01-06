@@ -1,3 +1,7 @@
+# 4.4.35
+* Made some changes to the way metadata is displayed in Fate Utilities - players now can't see the eye icon if a character is visible to them but not visible to everyone by default; this was always intended to be GM information. 
+* Only owners of tokens can now double click the name in Fate Utilities to change it. (Before, they could double click and the dialog would pop up but they would be unable to make the changes due to lack of permissions)
+
 # 4.4.34
 * Ad-hoc roll dialog now performs the roll if enter is pressed.
 

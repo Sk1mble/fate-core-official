@@ -46,9 +46,9 @@
                                         <img name="avatar" src="{{this.actor.img}}" id="{{this.id}}_avatar" style="width:50px; cursor: pointer; height:auto; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
-                                    <td id="{{this.id}}_tokenNameA" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
+                                    <td id="{{this.id}}_tokenNameA" {{#if this.isOwner}}title="{{localize 'fate-core-official.DoubleClickToChangeName'}}"{{/if}} class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                         {{this.name}}
-                                        {{#if (eq this.actor.ownership.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                        {{#if (eq this.actor.ownership.default 0)}}{{#if ../GM}}<i class="fas fa-eye-slash"></i>{{/if}}{{/if}}
                                         {{#if this.hidden}}<i class="fas fa-ghost"></i>{{/if}}<br>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
                                         {{#if this.isOwner}}
@@ -108,9 +108,9 @@
                                         <img name="avatar" src="{{this.actor.img}}" id="{{this.id}}_avatar" style="width:50px; cursor: pointer; height:auto; cursor: pointer; border:none"/>{{/if}}
                                         {{/if}}
                                     </td>
-                                    <td id="{{this.id}}_tokenNameA" title="Double click to change the name shown on this token" class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
+                                    <td id="{{this.id}}_tokenNameA" {{#if this.isOwner}}title="{{localize 'fate-core-official.DoubleClickToChangeName'}}"{{/if}} class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                         {{this.name}}
-                                        {{#if (eq this.actor.ownership.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                        {{#if (eq this.actor.ownership.default 0)}}{{#if ../GM}}<i class="fas fa-eye-slash"></i>{{/if}}{{/if}}
                                         {{#if this.hidden}}<i class="fas fa-ghost"></i>{{/if}}
                                         <br>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
@@ -185,10 +185,10 @@
                         {{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
                         <table style="border-bottom:none; margin:0" class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
                             <tr style="border-top:4px var(--fco-accent-colour) solid; background-color:transparent;">
-                                <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
+                                <td id="{{this.id}}_tokenNameA" {{#if this.isOwner}}title="{{localize 'fate-core-official.DoubleClickToChangeName'}}"{{/if}} class="tName" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                     <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     {{this.name}}
-                                    {{#if (eq this.actor.ownership.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                    {{#if (eq this.actor.ownership.default 0)}}{{#if ../GM}}<i class="fas fa-eye-slash"></i>{{/if}}{{/if}}
                                     {{#if this.hidden}}<i class="fas fa-ghost"></i>{{/if}}
                                 </td>
                             </tr>
@@ -235,10 +235,10 @@
                         {{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
                         <table style="border-bottom:none; margin:0"  class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
                             <tr style="border-top:4px var(--fco-accent-colour) solid; background-color:transparent;">
-                                <td colspan="2" id="{{this.id}}_tokenNameT" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}" class="tName" style="font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
+                                <td colspan="2" id="{{this.id}}_tokenNameT" {{#if this.isOwner}}title="{{localize 'fate-core-official.DoubleClickToChangeName'}}"{{/if}} class="tName" style="font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                     <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseTracks" id="{{this.id}}_iseTracks" {{#if (eq this.tracksMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     {{this.name}}
-                                    {{#if (eq this.actor.ownership.default 0)}}<i class="fas fa-eye-slash"></i>{{/if}}
+                                    {{#if (eq this.actor.ownership.default 0)}}{{#if ../GM}}<i class="fas fa-eye-slash"></i>{{/if}}{{/if}}
                                     {{#if this.hidden}}<i class="fas fa-ghost"></i>{{/if}}
                                 </td>
                             </tr>
