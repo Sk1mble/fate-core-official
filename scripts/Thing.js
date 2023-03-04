@@ -471,13 +471,13 @@ async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord
     await scene.createEmbeddedDocuments("Token", [token]); //createEmbeddedDocuments takes an array of creation data.
     //Now we need to create the contents and set the container parameters.
     if (contents?.extras != undefined){
+        await itemActor.createEmbeddedDocuments("Item", contents.extras);
         await itemActor.update({
             "system.container.locked":contents.locked,
             "system.container.security":contents.security,
             "system.container.movable":true,
             "system.img":newItem.img,
         })
-        await itemActor.createEmbeddedDocuments("Item", contents.extras);
     }
 }
 
@@ -520,6 +520,7 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
 })
 
 Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
+    console.log(data);
 
     if (data?.ident == "mf_draggable"){
         return;
