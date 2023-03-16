@@ -1,5 +1,6 @@
 # 4.4.36
 * Updated the order of operations in CreateThing so that objects can be created in an object that was locked in a character's inventory.
+* Added an unobtrusive sync button next to the actor name. This will cause the current actor's name to be applied to the prototype token name attribute (for a real actor) or te token name attribute (for a token character).
 
 # 4.4.35
 * Made some changes to the way metadata is displayed in Fate Utilities - players now can't see the eye icon if a character is visible to them but not visible to everyone by default; this was always intended to be GM information. 

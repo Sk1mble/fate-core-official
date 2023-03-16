@@ -115,6 +115,18 @@ export class fcoCharacter extends ActorSheet {
             this.render(false);
         })
 
+        const syncToken =html.find("i[name='syncNameToToken']");
+        syncToken.on("click", async event => {
+            if (this.actor.isToken){
+                // Change token name
+                await this.actor.token.update({"name":this.actor.name});
+                ui.notifications.info("Token name set to token actor's name.")
+            } else {
+                //Change protype token name
+                await this.actor.update({"prototypeToken.name":this.actor.name});
+                ui.notifications.info("Prototype Token name set to actor's name.")
+            }
+        })
 
         const expandStunt = html.find("i[name='expandStunt']");
 
