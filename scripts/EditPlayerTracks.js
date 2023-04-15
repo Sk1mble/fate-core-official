@@ -44,7 +44,15 @@ class EditPlayerTracks extends FormApplication {
     async renderMe(id, data){
         if (this.object.isToken){
             if (this.object.token.id == id){
-                if (data.actorData.system != undefined && data.actorData.system.tracks != undefined)
+                let check = false;
+                if (isNewerVersion(game.version, "11.293")){
+                    if (data.delta.system != undefined && data.delta.system.tracks != undefined) check = true;
+                }
+                else {
+                    if (data.actorData.system != undefined && data.actorData.system.tracks != undefined) check = true;
+                }
+
+                if (check)
                     this.tracks_by_category=undefined;                   
                     if (!this.renderPending) {
                         this.renderPending = true;

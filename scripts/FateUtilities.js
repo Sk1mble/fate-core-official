@@ -1812,7 +1812,12 @@ class FateUtilities extends Application{
                 if (!actor.isToken){  
                     updates.push({"_id":actor.id, "system.tracks":tracks});
                 } else {
-                    tokenUpdates.push({"_id":tokens[i].id, "actorData.system.tracks":tracks});
+                    if (isNewerVersion(game.version, "11.293")){
+                        tokenUpdates.push({"_id":tokens[i].id, "delta.system.tracks":tracks});
+                    }
+                    else {
+                        tokenUpdates.push({"_id":tokens[i].id, "actorData.system.tracks":tracks});
+                    }
                 }    
             }
         } 

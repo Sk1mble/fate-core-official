@@ -53,7 +53,7 @@ class ShowCharacter extends Application {
         if (actorInfo[0]=="actor"){
             let actor = game.actors.contents.find(actor => actor.id == actorInfo[1])
             actor_data = actor;
-            elements.name=actor.data.name;
+            elements.name=actor_data.name;
         }
         // Get values to be shown to the user
         let element_boxes = html.find("input[class='element_select']")

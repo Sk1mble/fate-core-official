@@ -464,7 +464,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord
         hidden: false,
         actorId: itemActor.id,
         actorLink: true,
-        actorData: {}
+        //actorData: {}
       }
 
     let scene = game.scenes.get(canvas_scene._id);

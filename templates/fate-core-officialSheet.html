@@ -7,7 +7,7 @@
                         {{#if this.showPronouns}}{{#if (eq this.sheetMode 'full')}}<div style="display:flex; flex-direction:row; margin-top:5px;"><div class="mfate-sheet__meta-label" style="font-family:Jost">{{localize 'fate-core-official.pronouns'}}:</div><input type="text" class="cs_box" style="width:10em" data-edit="system.details.pronouns.value" name="system.details.pronouns.value" value="{{system.details.pronouns.value}}"</input></div>{{/if}}{{/if}}
                 </div>
                 <div>
-                    <i style="font-style:normal; float:left; margin-left:5px" class="fas fa-sync fu_button" name="syncNameToToken" title="Sync name with Token"></i>
+                    {{#if this.document.isOwner}}<i style="font-style:normal; float:left; margin-left:5px" class="fas fa-sync fu_button" name="syncNameToToken" title="Sync name with Token"></i>{{/if}}
                 </div>
         </div>
         </div>    
