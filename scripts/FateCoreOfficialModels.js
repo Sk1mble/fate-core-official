@@ -42,6 +42,8 @@
 * To create a field with a random ID in it: new foundry.data.fields.StringField({initial: () => foundry.utils.randomID()})
 */
 
+/* To make a stringfield searchable, add the property textSearch: true */
+
 class fcoSkill extends foundry.abstract.DataModel {
     static defineSchema(){
         return {

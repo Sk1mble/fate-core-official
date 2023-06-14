@@ -691,6 +691,7 @@ Hooks.once('init', async function () {
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
+        requiresReload: true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
             "nothing":game.i18n.localize("fate-core-official.No"),
             "fateCore":game.i18n.localize("fate-core-official.YesFateCore"),
@@ -746,6 +747,7 @@ Hooks.once('init', async function () {
             config: true,        // This specifies that the setting appears in the configuration view
             type: String,
             restricted:true,
+            requiresReload: true,
             choices: {           // If choices are defined, the resulting setting will be a select menu
                 "nothing":game.i18n.localize("No"),
                 "fateCore":game.i18n.localize("fate-core-official.YesFateCore"),
@@ -797,6 +799,7 @@ Hooks.once('init', async function () {
         config: true,        // This specifies that the setting appears in the configuration view
         type: String,
         restricted:true,
+        requiresReload: true,
         choices: {           // If choices are defined, the resulting setting will be a select menu
             "nothing":game.i18n.localize("fate-core-official.No"),
             "fateCore":game.i18n.localize("fate-core-official.YesFateCore"),
@@ -880,6 +883,7 @@ Hooks.once('init', async function () {
                 let text = await fcoConstants.getSettings();
                 fcoConstants.importSettings(text);
                 game.settings.set("fate-core-official","importSettings",false);
+                foundry.utils.debouncedReload();
             }
         }
     })

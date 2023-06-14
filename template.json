@@ -27,7 +27,12 @@
 				"tracks":{},
 				"aspects":{},
 				"skills":{},
-				"stunts":{}
+				"stunts":{},
+				"override":{
+					"active":false,
+					"refresh":0,
+					"skillPoints":0
+				}
 			}
 		},
 		"fate-core-official": {

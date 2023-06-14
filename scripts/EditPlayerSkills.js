@@ -168,6 +168,11 @@ class EditPlayerSkills extends FormApplication{
             if (game.settings.get("fate-core-official","enforceSkillTotal")){
                 let actor = this.object;
                 let skill_total = game.settings.get("fate-core-official","skillTotal");
+
+                if (actor.system?.override?.active){
+                    if (actor.system?.override?.skillPoints) skill_total = actor.system?.override?.skillPoints;
+                }
+
                 let player_total = 0;
             
                 for (let sk in p_skills){

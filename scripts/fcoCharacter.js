@@ -87,6 +87,11 @@ export class fcoCharacter extends ActorSheet {
             this.render(false);
         })
 
+        const override_world = html.find(`input[name='${this.object.name}_override']`);
+        override_world.on("change", async event => {
+            await this.object.update({"system.override.active":event.target.checked});
+        })
+
         const expandTrack = html.find("i[name='expandTrack']");
 
         expandTrack.on("click", event => {
@@ -1433,6 +1438,11 @@ export class fcoCharacter extends ActorSheet {
             // Refresh spent + refresh should = the game's refresh.
             let checkSpent = sheetData.system.details.fatePoints.refresh + sheetData.refreshSpent;
             let worldRefresh = game.settings.get("fate-core-official", "refreshTotal");
+            
+            if (sheetData.system?.override?.active){
+                if (sheetData.system?.override?.refresh) worldRefresh = sheetData.system?.override?.refresh
+            }
+            
             let checkWorld = worldRefresh - sheetData.system.details.fatePoints.refresh;
 
             let message = game.i18n.localize("fate-core-official.SheetDoesNotAddUp")
