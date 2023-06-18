@@ -1,3 +1,6 @@
+# 4.4.39
+Fixed a bug in the new feature from 4.4.38. Was breaking on character names with apostrophes in them due to the identifier used to find the relevant data items.
+
 # 4.4.38
 * Forced a refresh after a bunch of settings that had relied upon this being done after the settings were changed. Without this, it was impossible to, say, set a skill as the initiative skill until after a reload following installation of skill default settings.
 * Added settings that allows a character to be set to override the refresh total and skill total of the game, using their own total instead.

@@ -87,7 +87,7 @@ export class fcoCharacter extends ActorSheet {
             this.render(false);
         })
 
-        const override_world = html.find(`input[name='${this.object.name}_override']`);
+        const override_world = html.find(`input[name="${this.object._id}_override"]`);
         override_world.on("change", async event => {
             await this.object.update({"system.override.active":event.target.checked});
         })
