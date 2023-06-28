@@ -1,3 +1,6 @@
+# 4.4.40
+* Fixed a bug in the schema for fcoAspect which incorrectly did not allow it to have a value upon creation.
+
 # 4.4.39
 Fixed a bug in the new feature from 4.4.38. Was breaking on character names with apostrophes in them due to the identifier used to find the relevant data items.
 

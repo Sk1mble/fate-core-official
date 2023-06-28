@@ -131,10 +131,11 @@ class EditPlayerAspects extends FormApplication{
             event.target.value = name;
             return;
         }
-        
+
         let newAspect = new fcoAspect({
             name:newName.split(".").join("․").trim(),
             description:this.aspects[name].description,
+            notes:this.aspects[name].notes,
             value:this.aspects[name].value
         }).toJSON();
         

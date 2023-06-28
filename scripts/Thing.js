@@ -520,7 +520,6 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
 })
 
 Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
-    console.log(data);
 
     if (data?.ident == "mf_draggable"){
         return;
