@@ -1560,6 +1560,7 @@
     "fate-core-official.NoConflictDetected":"No conflict detected.",
     "fate-core-official.AlreadyActed":"Already Acted",
     "fate-core-official.NextExchange":"Next Exchange",
+    "fate-core-official.BeginConflict":"Begin Conflict",
     "fate-core-official.TimedEvent":"Timed Event",
     "fate-core-official.EndConflict":"End Conflict",
     "fate-core-official.Modifier":"Modifier",

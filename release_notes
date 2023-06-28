@@ -1,3 +1,6 @@
+# 4.4.41
+* Added code to integrate the chosen combat sound board into the Fate Utilities popcorn initiative tracker. It works a bit differently from the core version (as 'your turn is coming up' is meaningless for Popcorn initiative) and just plays the 'Your turn' sound for players, not GMs.
+
 # 4.4.40
 * Fixed a bug in the schema for fcoAspect which incorrectly did not allow it to have a value upon creation.
 
