@@ -629,7 +629,7 @@
                     {{#if GM}}
                     <tr>
                         <td>
-                            <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="next_exchange" title="{{localize 'fate-core-official.NextExchange'}}" i icon class="fas fa-forward"></button>
+                            <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="next_exchange" title="{{#if (eq conflictExchange 0)}}{{localize 'fate-core-official.BeginConflict'}}{{else}}{{localize 'fate-core-official.NextExchange'}}{{/if}}" i icon class="fas fa-forward"></button>
                             <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="timed_event" title="{{localize 'fate-core-official.TimedEvent'}}" i icon class="fas fa-clock"></button>  
                         </td>
                         <td style="padding-right:5px">
@@ -657,7 +657,7 @@
                                         <span {{#if ../GM}}id="{{this.id}}_tokenNameA_AT" class="tName" title="{{localize 'fate-core-official.DoubleClickToChangeName'}}"{{/if}}>{{this.name}}</span>
                                     </td>
                                     <td style="white-space:nowrap; padding-right:5px; text-align:right">
-                                        {{#if ../GM}}<button name = "popcorn" type="button" id = "{{this.id}}_act" title="{{localize 'fate-core-official.pocornAvatarHint'}}" i icon class="fas fa-play" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px"></button>{{else}}{{/if}}
+                                        {{#if ../GM}}{{#unless (eq ../conflictExchange 0)}}<button name = "popcorn" type="button" id = "{{this.id}}_act" title="{{localize 'fate-core-official.pocornAvatarHint'}}" i icon class="fas fa-play" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px"></button>{{else}}{{/unless}}{{/if}}
                                         <button name = "popcorn" type="button" id = "{{this.id}}_find" title="{{localize 'fate-core-official.pocornFindHint'}}" i icon class="fas fa-search" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px"></button>
                                     </td>
                                 </tr>

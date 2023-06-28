@@ -1009,7 +1009,10 @@ game.settings.register("fate-core-official","freeStunts", {
         "restricted":true,
         type:String,
         default:"None",
-        choices:skill_choices
+        choices:skill_choices,
+        onChange: () => {
+            foundry.utils.debouncedReload();
+        }
     })
 
     game.settings.register("fate-core-official","modifiedRollDefault", {

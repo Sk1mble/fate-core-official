@@ -2030,6 +2030,7 @@ class FateUtilities extends Application{
             let combatants = game.combat.combatants;
             let combatant = combatants.find(comb => comb.token.id == id);
             await combatant.setFlag("fate-core-official","hasActed", true);
+            await game.socket.emit("system.fate-core-official",{"yourTurn":true, "tokenId":id});
         }
 
         if (type === "unact"){
@@ -2097,6 +2098,7 @@ class FateUtilities extends Application{
             updates.push({"_id":comb.id, "flags.fate-core-official.hasActed":false})
         }
         await game.combat.updateEmbeddedDocuments("Combatant", updates);
+        if (game.combat.round == 0) game.combat._playCombatSound("startEncounter")
         game.combat.nextRound();
     }
 
@@ -2140,6 +2142,7 @@ async getData(){
     } else {
         data.conflict = true;
         data.conflictName = game.combat.getFlag("fate-core-official","name");
+        data.conflictExchange = game.combat.round;
         if (!data.conflictName) {
             let conflictNum = game.combats.combats.indexOf(game.combat)+1;
             data.conflictName = game.i18n.localize("fate-core-official.word_for_conflict") + " "+conflictNum;
@@ -2436,6 +2439,28 @@ Hooks.on('ready', function()
 {
     if (!canvas.ready && game.settings.get("core", "noCanvas")) {
         let fu = new FateUtilities().render(true);
+    }
+
+    // Override the Foundry combat sound process to account for popcorn initiative, if we're using that.
+    let init_skill = game.settings.get("fate-core-official","init_skill");
+    if (init_skill == "None") {
+        Combat.prototype._playCombatSound = function (announcement) {
+            if (announcement == "nextUp") return;
+            if (announcement == "yourTurn") return;
+            if (announcement == "yourAction") announcement = "yourTurn";
+
+            if ( !CONST.COMBAT_ANNOUNCEMENTS.includes(announcement) ) {
+                throw new Error(`"${announcement}" is not a valid Combat announcement type`);
+              }
+              const theme = CONFIG.Combat.sounds[game.settings.get("core", "combatTheme")];
+              console.log(theme);
+              if ( !theme || theme === "none" ) return;
+              const sounds = theme[announcement];
+              if ( !sounds ) return;
+              const src = sounds[Math.floor(Math.random() * sounds.length)];
+              const volume = game.settings.get("core", "globalInterfaceVolume");
+              game.audio.play(src, {volume});
+        }
     }
 })
 
@@ -2804,6 +2829,13 @@ Hooks.once('ready', async function () {
                     FU.render(false);
                 }
             }
+        }
+    })
+
+    game.socket.on("system.fate-core-official", yourTurn => {
+        if (yourTurn.yourTurn) {
+            let combatant = game.combat.combatants.find(comb => comb.token.id == yourTurn.tokenId);
+            if (combatant && !game.user.isGM && combatant.isOwner) game.combat._playCombatSound("yourAction");
         }
     })
 
