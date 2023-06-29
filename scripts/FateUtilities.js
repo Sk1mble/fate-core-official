@@ -2031,6 +2031,8 @@ class FateUtilities extends Application{
             let combatant = combatants.find(comb => comb.token.id == id);
             await combatant.setFlag("fate-core-official","hasActed", true);
             await game.socket.emit("system.fate-core-official",{"yourTurn":true, "tokenId":id});
+            // Set combat tracker turn to index of current actor
+            game.combat.update({turn:game.combat.turns.indexOf(combatant)});
         }
 
         if (type === "unact"){
@@ -2099,7 +2101,7 @@ class FateUtilities extends Application{
         }
         await game.combat.updateEmbeddedDocuments("Combatant", updates);
         if (game.combat.round == 0) game.combat._playCombatSound("startEncounter")
-        game.combat.nextRound();
+        game.combat.update({turn:null, round:game.combat.round+1});
     }
 
     //Set up the default options for instances of this class

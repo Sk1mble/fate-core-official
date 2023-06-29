@@ -1,3 +1,6 @@
+# 4.4.42
+* Found a way to make the Popcorn tracker play better with the Foundry standard initiative system, so that now Foundry and FCO agree on whose turn it is. This enables modules like Maestro to correctly cue off of changes of turn to play hype tracks etc.
+
 # 4.4.41
 * Added code to integrate the chosen combat sound board into the Fate Utilities popcorn initiative tracker. It works a bit differently from the core version (as 'your turn is coming up' is meaningless for Popcorn initiative) and just plays the 'Your turn' sound for players, not GMs.
 
