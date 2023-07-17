@@ -4,8 +4,12 @@
   "description": "Autor: Richard Bellingham, teilweise basierend auf Arbeiten von Nick van Oosten (NickEast)",
   "main": "fco.js",
   "scripts": {
+    "css": "npx tailwindcss -i ./stylesheets/input.css -o ./stylesheets/main.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
 }
