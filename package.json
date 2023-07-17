@@ -1,0 +1,11 @@
+{
+  "name": "fate-core-official",
+  "version": "4.5.0",
+  "description": "Autor: Richard Bellingham, teilweise basierend auf Arbeiten von Nick van Oosten (NickEast)",
+  "main": "fco.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
