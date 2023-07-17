@@ -1,28 +1,43 @@
-<form class="editable" onsubmit="event.preventDefault();" style="background:var(--fco-sheet-background-colour); padding:10px">
-<div style="width:20vw; height:75vh; max-height:75vh" id="skills_editor">
-    <div style = "max-height:70vh; overflow-y:auto">
-    {{#each character_skills}}
-    {{#if (eq this.extra_id undefined)}}
-    <div class="row">
-        <div class="column" style="float:left; width:20%; margin:auto; padding:3px;">
-            <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank" class="rank_input" value={{this.rank}} style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; height:35px; text-align:left"></input>
-        </div> 
-        <div style="float:left; width:80%; margin:auto; padding:3px">
-            <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button" style="text-align:left; width:200px; height:35px; background-color: var(--fco-foundry-interactable-color); overflow-y:scroll; width:100%">{{this.name}}</button>
+<form class="editable" onsubmit="event.preventDefault();"
+    style="background:var(--fco-sheet-background-colour); padding:10px">
+    <div style="width:20vw; height:75vh; " id="skills_editor">
+        <div style=" overflow-y:auto">
+            {{#each character_skills}}
+            {{#if (eq this.extra_id undefined)}}
+            <div class="row">
+                <div class="column" style="float:left; width:20%; margin:auto; padding:3px;">
+                    <input type="number" min="-2" max="10" name="{{this.name}}_rank" id="{{this.name}}_rank"
+                        class="rank_input" value={{this.rank}}
+                        style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; height:35px; text-align:left"></input>
+                </div>
+                <div style="float:left; width:80%; margin:auto; padding:3px">
+                    <button type="button" id="{{this.name}}" tabindex="-1" class="skill_button"
+                        style="text-align:left; width:200px; height:35px; background-color: var(--fco-foundry-interactable-color); overflow-y:scroll; width:100%">{{this.name}}</button>
+                </div>
+            </div>
+            {{else}}{{/if}}
+            {{/each}}
+        </div>
+        <div style="float:left;  margin:auto; padding: 3px"><button type="button" id="save_player_skills"
+                style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); float:left; width:50px; height:35px"
+                tabindex="-1">{{localize 'fate-core-official.Save'}}</button><button type="button" id="sort" i icon
+                class="fas fa-sort" title="{{localize 'fate-core-official.Toggle'}}"
+                style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px"
+                tabindex="-1"></button>
+            {{#if isGM}}
+            {{#if isExtra}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit"
+                style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px"
+                tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>
+            {{else}}
+            <button type="button" id="edit_p_skills" i icon class="fas fa-edit"
+                style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px"
+                tabindex="-1" title="{{localize 'fate-core-official.manuallyEditPlayerSkills'}}"></button>
+            {{/if}}
+            {{else}}
+            {{#if isExtra}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit"
+                style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px"
+                tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>{{/if}}
+            {{/if}}
         </div>
     </div>
-    {{else}}{{/if}}
-    {{/each}}
-    </div>
-    <div style="float:left; max-height: 5vh; margin:auto; padding: 3px"><button type="button" id="save_player_skills" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); float:left; width:50px; height:35px" tabindex="-1">{{localize 'fate-core-official.Save'}}</button><button type="button" id="sort" i icon class="fas fa-sort" title="{{localize 'fate-core-official.Toggle'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1"></button>
-        {{#if isGM}}
-        {{#if isExtra}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>
-        {{else}}
-        <button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyEditPlayerSkills'}}"></button>
-        {{/if}}
-        {{else}}
-            {{#if isExtra}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>{{/if}}
-        {{/if}}
-    </div>
-</div>
 </form>

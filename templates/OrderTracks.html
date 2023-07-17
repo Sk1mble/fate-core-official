@@ -1,16 +1,18 @@
 <form>
-    <div style="max-height:75vh; display:flex; flex-flow:column">
+    <div style=" display:flex; flex-flow:column">
         {{#each this}}
-            <div style="height:30px; vertical-align:center">
-                <span>
-                    {{this.name}}
-                </span>
-                <span style="float:right">
-                    <button type="button" name = "ot_up" id="ot_up_{{@key}}" style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-up"></button>
-                    <button type="button" name = "ot_down" id="ot_down_{{@key}}" style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-down"></button>
-                </span>
-            </div>
+        <div style="height:30px; vertical-align:center">
+            <span>
+                {{this.name}}
+            </span>
+            <span style="float:right">
+                <button type="button" name="ot_up" id="ot_up_{{@key}}"
+                    style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-up"></button>
+                <button type="button" name="ot_down" id="ot_down_{{@key}}"
+                    style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-down"></button>
+            </span>
+        </div>
         {{/each}}
         <button type="button" id="ot_save" icon class="fas fa-save"></button>
-    </div>    
+    </div>
 </form>

@@ -1,0 +1,4 @@
+name: fate_foundry
+recipe: lamp
+config:
+  webroot: .

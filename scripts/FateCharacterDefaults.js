@@ -354,7 +354,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
     let defaults = f.defaults.map(d => `<option>${d}</option>`).join("\n");
     let options = standard+blank+defaults;
     targetElement.before(`
-        <div style="max-height:45px; text-align:center">
+        <div style=" text-align:center">
             <input type="text" value = "New Character" style="background-color:#f0f0e0; width:35%; height:25px;" id="MF_actor_to_create">
             <select style="width:35%; height:25px; background-color:#f0f0e0;" id="MF_default_to_use">${options}
             </select>
@@ -501,7 +501,7 @@ class ManageDefaults extends FormApplication {
                 actorLink = '<i class = "far fa-square fa-2x" title="Off"/>';
             }
             let content = `
-                <div style="max-height:100em; max-width:50em; scroll-y:auto">
+                <div style=" max-width:50em; scroll-y:auto">
                     <table style="background-color:transparent; border:0px; text-align:left; vertical-align:middle">
                         <th style="width:6em">
                             ${game.i18n.localize("fate-core-official.item")}
