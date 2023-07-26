@@ -53,6 +53,12 @@
       "name": "Deutsch",
       "path": "lang/de.json",
       "flags": {}
+    },
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json",
+      "flags": {}
     }
   ],
   "packs": [
