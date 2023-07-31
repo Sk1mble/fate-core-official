@@ -56,7 +56,7 @@
     },
     {
       "lang": "es",
-      "name": "Español",
+      "name": "Español (experimental)",
       "path": "lang/es.json",
       "flags": {}
     }
