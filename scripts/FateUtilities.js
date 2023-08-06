@@ -2744,8 +2744,8 @@ function checkFormula(formula){
 }
 
 Hooks.on('createChatMessage', (message) => {
-    // We're only interested if this is a chat message with a roll in it
-    if (message.rolls.length == 0 || message?.flavor?.startsWith("<h1>Reroll")){
+    // We're only interested if this is a chat message with a roll in it, the roll isn't whispered, and the roll isn't blind
+    if (message.rolls.length == 0 || message?.flavor?.startsWith("<h1>Reroll") || message.blind || message.whisper.length > 0){
         return;
     }
 

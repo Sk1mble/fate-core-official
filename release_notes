@@ -1,3 +1,6 @@
+# 4.4.43 (Unreleased)
+* Changed the logic for tracking rolls in Fate Utilities so that blind rolls and whispered (GM only( rolls do not show up in Fate Utilities.
+
 # 4.4.42
 * Found a way to make the Popcorn tracker play better with the Foundry standard initiative system, so that now Foundry and FCO agree on whose turn it is. This enables modules like Maestro to correctly cue off of changes of turn to play hype tracks etc.
 
