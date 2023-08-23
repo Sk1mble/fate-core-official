@@ -333,7 +333,7 @@
     color:var(--fco-sheet-text-colour) !important;
     background-color:var(--fco-sheet-input-colour) !important;
     font-family: var(--fco-font-family) !important;
-    font-size:10pt;
+    font-size:1em;
     cursor:text;
 }
 
@@ -374,7 +374,7 @@
 }
 
 .mfate-panel__header-label {
-    font-size: 14pt;
+    font-size: 1.5em;
     font-family: var(--fco-font-family);
     font-weight: bold;
     margin: 0 .5em 0 0;
@@ -464,14 +464,15 @@
 }
 
 .mfate-aspects-list__input {
-    font-size: 11px;
-    min-height:12px;
-    max-height:30px;
+    font-size: 1em;
+    min-height:1.1em;
+    max-height:3em;
+    margin-top:5px;
 }
 
 .mfate-aspects-notes__input {
     margin-left:25px;
-    font-size: 11px;
+    font-size: 1em;
     min-height:3em;
     max-height:500px;
     padding-left:2px;
@@ -507,7 +508,7 @@
 
 .mfate-tracks-notes__input {
     margin-left:25px;
-    font-size: 11px;
+    font-size: 1em;
     min-height:3em;
     max-height:500px;
     width: 90%;
@@ -616,7 +617,7 @@
 
 .mfate-stunts__row-body {
     font-family: var(--fco-font-family);
-    font-size: 11px;
+    font-size: 1em;
     color:var(--fco-sheet-text-colour);
     padding: 5px;
     margin-left:20px;
