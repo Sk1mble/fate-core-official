@@ -1,3 +1,6 @@
+# 4.4.45
+* Bugfix to the world import code - calls weren't awaited so everything broke when I added a debouncedreload to make sure the settings were updated correctly.
+
 # 4.4.44
 * Changed some CSS to stop using fixed font sizes on the Fate Core character sheet so various elements change size with the font size aetting in Foundry Core settings.
 

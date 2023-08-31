@@ -881,8 +881,8 @@ Hooks.once('init', async function () {
         onChange: async value => {
             if (value == true && game.user.isGM){
                 let text = await fcoConstants.getSettings();
-                fcoConstants.importSettings(text);
-                game.settings.set("fate-core-official","importSettings",false);
+                await fcoConstants.importSettings(text);
+                await game.settings.set("fate-core-official","importSettings",false);
                 foundry.utils.debouncedReload();
             }
         }
