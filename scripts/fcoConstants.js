@@ -588,6 +588,16 @@ class fcoConstants {
         }
         ui.notifications.info(`Imported ${documents.length} documents of type ${pack.documentName}`);
     }
+
+    // Function to get an object by looking up its name in an object by 'name filed'
+    static gbn (object, name){
+        return Object.values(object).find(i=> i.name === name);
+    }
+
+    // Function to get the key of an object by looking up its name in an object's 'name' field
+    static gkfn (object, name){
+        return Object.entries(object).find(i=> i[1].name === name)[0];
+    }
 } 
 
 String.prototype.hashCode = function() {

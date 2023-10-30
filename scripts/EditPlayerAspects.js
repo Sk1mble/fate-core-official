@@ -62,7 +62,8 @@ class EditPlayerAspects extends FormApplication{
                         $(`#${id}`)[0].innerHTML = text;   
                         $(`#${id}_rich`)[0].innerHTML = text; 
                         let name = event.currentTarget.getAttribute("name").split("_")[1];
-                        this.aspects[name].description=text;
+                        let aspect = fcoConstants.gbn(this.aspects, name)
+                        aspect.description=text;
                     }
                 })
 
@@ -72,7 +73,8 @@ class EditPlayerAspects extends FormApplication{
                         $(`#${id2}`)[0].innerHTML = text;   
                         $(`#${id2}_rich`)[0].innerHTML = text;  
                         let name = event.currentTarget.getAttribute("name").split("_")[1];
-                        this.aspects[name].notes=text;
+                        let aspect = fcoConstants.gbn(this.aspects, name)
+                        aspect.notes=text;
                     }
                 })
             }
@@ -90,7 +92,8 @@ class EditPlayerAspects extends FormApplication{
                     $(`#${id}_rich`)[0].innerHTML = desc;    
                     $(`#${id}_rich`).css('display', 'block');
                     let name = event.target.getAttribute("name").split("_")[1];
-                    this.aspects[name].description=event.target.innerHTML;
+                    let aspect = fcoConstants.gbn(this.aspects, name)
+                    aspect.description=event.target.innerHTML;
                 }
             })
             $(`#${id2}_rich`).on('keyup', event => {
@@ -117,7 +120,8 @@ class EditPlayerAspects extends FormApplication{
                     $(`#${id2}_rich`)[0].innerHTML = desc;    
                     $(`#${id2}_rich`).css('display', 'block');
                     let name = event.target.getAttribute("name").split("_")[1];
-                    this.aspects[name].notes=event.target.innerHTML;
+                    let aspect = fcoConstants.gbn(this.aspects, name)
+                    aspect.notes=event.target.innerHTML;
                 }
             })    
         }
@@ -148,12 +152,14 @@ class EditPlayerAspects extends FormApplication{
 
     async _on_value_change(event, html){
         let name = event.target.name.split("_")[1];
-        this.aspects[name].value=event.target.value;
+        let aspect = fcoConstants.gbn(this.aspects, name);
+        aspect.value=event.target.value;
     }
 
     async _on_notes_change(event, html){
         let name = event.target.name.split("_")[1];
-        this.aspects[name].notes=event.target.value;
+        let aspect = fcoConstants.gbn(this.aspects, name);
+        aspect.notes=event.target.value;
     }
 
     async _on_move(event,html, direction){
@@ -168,7 +174,8 @@ class EditPlayerAspects extends FormApplication{
         if (del){
             let info = event.target.id.split("_");
             let name = info[1];
-            delete this.aspects[name];
+            let aspectKey = fcoConstants.gkfn(this.aspects, name);
+            delete this.aspects[aspectKey];
             this.render(false);
         }
     }

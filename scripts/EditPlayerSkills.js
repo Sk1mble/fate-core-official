@@ -73,7 +73,7 @@ class EditPlayerSkills extends FormApplication{
         for (let skill in formData){ //This goes through every field in the JSON object.
             let skill_name = skill.split("_")[0];
             let rank = parseInt(formData[skill]);//We can lookup JSON keys with a variable using square brackets
-            let player_skill = this.player_skills[skill_name];//Find the player skill entry matching this item
+            let player_skill = fcoConstants.gbn(this.player_skills, skill_name);//Find the player skill entry matching this item
             player_skill.rank = rank;//Set it to this value.
         }
 
@@ -218,7 +218,7 @@ class EditPlayerSkills extends FormApplication{
             this.temp_presentation_skills=[];
         } else {
             for (let x in this.player_skills){
-                presentation_skills.push({"name":x,"rank":this.player_skills[x].rank,"extra_id":this.player_skills[x].extra_id});
+                presentation_skills.push({"name":this.player_skills[x].name,"rank":this.player_skills[x].rank,"extra_id":this.player_skills[x].extra_id});
             }
         }
         
@@ -301,7 +301,7 @@ class EditPlayerSkills extends FormApplication{
 
     async _onSkillButton(event,html){
         let name = event.target.id;
-        let skill = this.player_skills[name];
+        let skill = fcoConstants.gbn(this.player_skills, name);
         fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
                                             <table cellspacing ="4" cellpadding="4" border="1">
                                                 <h2>${skill.name}</h2>
@@ -415,7 +415,7 @@ class EditGMSkills extends FormApplication{
             let oldSkill = event.target.getAttribute("data-oldName");
             let newSkill = event.target.value.split(".").join("․");
             if (oldSkill != newSkill){
-                let rank = this.object.system.skills[oldSkill].rank;
+                let rank = fcoConstants.gbn(this.object.system.skills, oldSkill).rank;
                 newSkill= new fcoSkill({
                     "name":newSkill,
                     "description":game.i18n.localize("fate-core-official.AdHocSkill"),

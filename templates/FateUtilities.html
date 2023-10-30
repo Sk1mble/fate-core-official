@@ -65,8 +65,8 @@
                                         </select>
                                         {{/if}}
                                         {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" tabindex="-1" name="player_fps" value="{{this.actor.system.details.fatePoints.current}}" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; font-family:var(--fco-font-family); font-style:normal; font-size:{{../fontSize}}pt; border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid" {{#if this.isOwner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:var(--fco-font-family); font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> {{localize 'fate-core-official.FatePoints'}}</i>{{/if}}
-                                        {{/if}}
                                         <p/><input type="number" title = {{localize 'fate-core-official.Boosts'}} min="0" tabindex="-1" name="player_boosts" id="{{this.id}}_numBoosts" value="{{this.actor.system.details.fatePoints.boosts}}" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; font-family:var(--fco-font-family); font-style:normal; font-size:{{../fontSize}}pt; border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid" {{#if this.isOwner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:var(--fco-font-family); font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> Boosts</i>
+                                        {{/if}}
                                     </td>
                                     <td>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
@@ -128,8 +128,8 @@
                                         </select>
                                         {{/if}}
                                         {{#if this.actor.hasPlayerOwner}}<p/><input type="number" id="{{this.id}}_fatepoints" min="0" tabindex="-1" name="player_fps" value="{{this.actor.system.details.fatePoints.current}}" style="width:50px; font-family:var(--fco-font-family); font-style:normal; font-size:{{../fontSize}}pt" {{#if this.isOwner}}{{else}}disabled="disabled"{{/if}}/> <i style="font-family:var(--fco-font-family); font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> {{localize 'fate-core-official.FatePoints'}}</i>{{/if}}
-                                        {{/if}}
                                         <p/><input type="number" title = "Boosts" min="0" tabindex="-1" name="player_boosts" id="{{this.id}}_numBoosts" value="{{this.actor.system.details.fatePoints.boosts}}" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; font-family:var(--fco-font-family); font-style:normal; font-size:{{../fontSize}}pt; border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid" {{#if this.isOwner}}{{else}}disabled="disabled"{{/if}}/><i style="font-family:var(--fco-font-family); font-size:{{../fontSize}}pt; font-style:bold; font-style:normal;"> Boosts</i>
+                                        {{/if}}                                        
                                     </td>
                                     <td>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}

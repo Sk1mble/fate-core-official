@@ -1,3 +1,6 @@
+# 4.4.46 (Unreleased)
+* Fixed a minor issue with Fate Utilities; boosts were showing on the aspects tab of Fate Utilities even when everything was supposed to be minimised.
+
 # 4.4.45
 * Bugfix to the world import code - calls weren't awaited so everything broke when I added a debouncedreload to make sure the settings were updated correctly.
 
