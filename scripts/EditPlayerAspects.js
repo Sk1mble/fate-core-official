@@ -144,7 +144,9 @@ class EditPlayerAspects extends FormApplication{
         }).toJSON();
         
         if (newAspect){
-            delete this.aspects[name]
+            // Find the aspect with the same name as the old name and delete it
+            let aspectKey = fcoConstants.gkfn(this.aspects, name);
+            delete this.aspects[aspectKey]
             this.aspects[newName]=newAspect;
             this.render(false);
         }
@@ -219,7 +221,7 @@ class EditPlayerAspects extends FormApplication{
             }
         }
         for (let aspect in current){
-            if (updated[aspect] == undefined){
+            if (fcoConstants.gbn(updated, current[aspect].name) == undefined){
                 delete current[aspect];
             }
         }

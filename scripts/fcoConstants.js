@@ -596,7 +596,7 @@ class fcoConstants {
 
     // Function to get the key of an object by looking up its name in an object's 'name' field
     static gkfn (object, name){
-        return Object.entries(object).find(i=> i[1].name === name)[0];
+        return Object.entries(object).find(i=> i[1]?.name === name)?.[0];
     }
 } 
 

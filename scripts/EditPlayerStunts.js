@@ -44,31 +44,38 @@ class EditPlayerStunts extends FormApplication {
             if (this.new){
                 let count = 1;
                 for (let stunt in stunts){
-                    if (stunt.startsWith(formData["name"])) count++;
+                    if (stunts[stunt].name.startsWith(formData["name"])) count++;
                 }
                 if (count >1) formData["name"] = this.stunt.name + " " + count;
             }
             if (formData["name"]!=this.stunt.name && !this.new) {
-                delete stunts[this.stunt.name];
+                let stuntKey = fcoConstants.gkfn(stunts, this.stunt.name);
+                delete stunts[stuntKey];
             }
             for (let t in formData){
                 this.stunt[t]=formData[t];
             }
             this.stunt.name=this.stunt.name.split(".").join("․");
-            stunts[this.stunt.name] = this.stunt;
+            let stuntKey = fcoConstants.gkfn(stunts, this.stunt.name);
+            if (stuntKey) {
+                stunts[stuntKey] = this.stunt 
+            } else {
+                stunts[this.stunt.name] = this.stunt;
+            }
             await game.settings.set("fate-core-official","stunts",stunts);
             this.originator.render(false);
         } else {
             if (this.new){
                 let count = 1;
                 for (let stunt in this.actor.system.stunts){
-                    if (stunt.startsWith(formData["name"])) count++;
+                    if (this.actor.system.stunts[stunt].name.startsWith(formData["name"])) count++;
                 }
                 if (count > 1) formData["name"] = this.stunt.name + " " + count;
             }
 
-            if (formData["name"]!=this.stunt.name && !this.new) {
-                await this.object.update({"system.stunts":{[`-=${this.stunt.name}`]:null}});
+            if (formData["name"] != this.stunt.name && !this.new) {
+                let stuntKey = fcoConstants.gkfn(this.actor.system.stunts, this.stunt.name);
+                await this.object.update({"system.stunts":{[`-=${stuntKey}`]:null}});
             }
             
             for (let t in formData){
@@ -163,23 +170,26 @@ class EditPlayerStunts extends FormApplication {
         if (this.object.isToken){
             if (this.actor.token.id == id){
                let name = this.stunt.name;
+               let key;
                 try {
                     let check = false;
                     if (isNewerVersion(game.version, "11.293")){
-                        if (data.delta.system.stunts[name]!=undefined) check = true;
+                        key = fcoConstants.gkfn(data.delta.system.stunts, name);
+                        if (key && data.delta.system.stunts[key]!=undefined) check = true;
                     }
                     else {
-                        if (data.actorData.system.stunts[name]!=undefined) check = true;
+                        key = fcoConstants.gkfn(data.actorData.system.stunts, name);
+                        if (key && data.actorData.system.stunts[key]!=undefined) check = true;
                     }
                     if (check){
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
                                 if (isNewerVersion(game.version, "11.293")){
-                                    this.stunt = mergeObject(this.stunt, data.delta.system.stunts[name]);
+                                    this.stunt = mergeObject(this.stunt, data.delta.system.stunts[key]);
                                 }
                                 else {
-                                    this.stunt = mergeObject(this.stunt, data.actorData.system.stunts[name]);
+                                    this.stunt = mergeObject(this.stunt, data.actorData.system.stunts[key]);
                                 }
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
@@ -196,12 +206,13 @@ class EditPlayerStunts extends FormApplication {
         else {
             if (this.actor.id == id){
                 let name = this.stunt.name;
+                let key = fcoConstants.gkfn (data.system.stunts, name);
                 try {
-                    if (data.system.stunts[name]!=undefined){
+                    if (data.system.stunts[key]!=undefined){
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
-                                this.stunt = mergeObject(this.stunt, data.system.stunts[name]);
+                                this.stunt = mergeObject(this.stunt, data.system.stunts[key]);
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
@@ -349,7 +360,7 @@ class StuntDB extends Application {
                     shift_down = keyboard.isDown("Shift");
                 }
 
-                let dragged= this.stunts[dragged_name];
+                let dragged= fcoConstants.gbn(this.stunts, dragged_name);
                 let user = game.user.id;
                 let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
                 event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
@@ -365,7 +376,7 @@ class StuntDB extends Application {
             let name = event.target.getAttribute("data-mfname");
             let entity;
             if (type == "stunt") {
-                entity = this.stunts[name];
+                entity = fcoConstants.gbn(this.stunts, name);
                 content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name} (${game.i18n.localize("fate-core-official.Refresh")} ${entity.refresh_cost})<br/>
                             <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${entity.description}<br/>
                             <strong>${game.i18n.localize("fate-core-official.Skill")}:</strong> ${entity.linked_skill}<br/>
@@ -447,7 +458,7 @@ class StuntDB extends Application {
         //Create a stunt editor with a null actor
         //Edit the stunt editor so if the actor is null it knows to save the stunt to the stunt DB on exit rather than to an actor's sheet.
         let stunt_name = event.target.id.split("_")[0];
-        let stunt = game.settings.get("fate-core-official","stunts")[stunt_name];
+        let stunt = fcoConstants.gbn(game.settings.get("fate-core-official","stunts"), stunt_name);
         let eps = new EditPlayerStunts(null, stunt, {new:false}).render(true);
         eps.originator = this;
     }
@@ -502,7 +513,9 @@ class StuntDB extends Application {
     }
 
     async _onAddButton(event, html){
-        let stunt = duplicate(game.settings.get("fate-core-official","stunts")[event.target.id.split("_")[0]]);
+        let stunts = game.settings.get("fate-core-official","stunts");
+        let name = event.target.id.split("_")[0];
+        let stunt = duplicate(fcoConstants.gbn(stunts, name));
         this.actor.update({"system.stunts":{[`${stunt.name}`]:stunt}});
     }
 
@@ -510,7 +523,8 @@ class StuntDB extends Application {
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let stunts = duplicate (game.settings.get("fate-core-official","stunts"));
-            await delete stunts[event.target.id.split("_")[0]];
+            let key = fcoConstants.gkfn(stunts, event.target.id.split("_")[0]);
+            await delete stunts[key];
             await game.settings.set("fate-core-official","stunts",stunts);
             await this.render(false);
         }

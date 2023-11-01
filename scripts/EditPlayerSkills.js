@@ -430,7 +430,8 @@ class EditGMSkills extends FormApplication{
     
                 if (newSkill != undefined){
                     newSkill.name=newSkill.name.split(".").join("․");
-                    this.object.update({"system.skills": {[newSkill.name]:newSkill, [`-=${oldSkill}`]:null}}).then(() => this.render(false));
+                    let oldSkillKey = fcoConstants.gkfn(this.object.system.skills, oldSkill);
+                    this.object.update({"system.skills": {[newSkill.name]:newSkill, [`-=${oldSkillKey}`]:null}}).then(() => this.render(false));
                 }
             }
         })
@@ -442,9 +443,10 @@ class EditGMSkills extends FormApplication{
         let updateObject = {};
         for (let s in this.player_skills){
             let cbox;
+            let name = this.player_skills[s].name;
             try{
-                cbox = html.find(`input[id='${s}']`)[0];
-                if (!cbox) cbox = html.find(`input[id="${s}"]`)[0];
+                cbox = html.find(`input[id='${name}']`)[0];
+                if (!cbox) cbox = html.find(`input[id="${name}"]`)[0];
             } catch {
 
             }
@@ -456,15 +458,16 @@ class EditGMSkills extends FormApplication{
         //Now we need to add skills that have checks and which aren't already checked.
         let world_skills=game.settings.get("fate-core-official","skills")
         for (let w in world_skills){
+            let name = world_skills[w].name;
             let cbox;
             try{
-                cbox = html.find(`input[id="${w}"]`)[0];
-                if (!cbox) cbox = html.find(`input[id='${w}']`)[0];
+                cbox = html.find(`input[id="${name}"]`)[0];
+                if (!cbox) cbox = html.find(`input[id='${name}']`)[0];
             } catch {
         
             }  
             if (cbox && cbox.checked){
-                if (this.player_skills[w]==undefined){
+                if (fcoConstants.gbn(this.player_skills, name) == undefined){
                     let skill = world_skills[w];
                     skill.rank=0;
                     updateObject[`system.skills.${w}`] = skill;
@@ -512,7 +515,8 @@ class EditGMSkills extends FormApplication{
         let orphaned = [];
 
         for (let w in world_skills){
-            let s = this.player_skills[w];
+            let wname = world_skills[w].name;
+            let s = fcoConstants.gbn(this.player_skills, wname);
             if (s == undefined || s?.extra_id){
                 if (!world_skills[w].pc && !s?.extra_id){ 
                     non_pc_world_skills.push(world_skills[w])
@@ -529,7 +533,7 @@ class EditGMSkills extends FormApplication{
             if (ps.adhoc){
                 ad_hoc.push(ps)
             }
-            if (world_skills[s]==undefined && !ps.adhoc){
+            if (fcoConstants.gbn(world_skills, ps.name) == undefined && !ps.adhoc){
                 orphaned.push(ps);
             }
         }
