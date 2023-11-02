@@ -81,7 +81,7 @@
 
 				<li name="aspect" title="{{fco_strip this.description}}" class="mfate-aspects-list__item">
 					<div style="color:var(--fco-sheet-text-colour);" id="{{this.name}}" name="{{this.name}}" class="mfate-aspects-list__label mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">{{this.name}}</div>
-					<textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" name="system.aspects.{{this.name}}.value">{{this.value}}</textarea>
+					<textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" name="{{this.name}}">{{this.value}}</textarea>
 				</li>
 				{{/each}}
 			</ul>

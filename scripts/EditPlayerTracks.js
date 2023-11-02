@@ -106,7 +106,8 @@ class EditPlayerTracks extends FormApplication {
         checkbox.on("click", event => this._check(event,html));
         const edit = html.find("button[name='edit_entity_tracks']");
         edit.on('click', async event => {
-            let e = new EditEntityTrack(this.object.system.tracks[event.target.id], this.object).render(true);
+            let track = fcoConstants.gbn(this.object.system.tracks, event.target.id);
+            let e = new EditEntityTrack(track, this.object).render(true);
             e.origin = this;
         })
     } //End activateListeners
@@ -320,14 +321,16 @@ class EditPlayerTracks extends FormApplication {
     
     async _numChange (event, html){
         let name = event.target.id.split("_")[0]
-        this.tracks_by_category[this.selected_category][name].number = parseInt(event.target.value);
+        let track = fcoConstants.gbn(this.tracks_by_category[this.selected_category], name);
+        track.number = parseInt(event.target.value);
     }
 
     async _check(event, html){
         let name = event.target.id;
-        this.tracks_by_category[this.selected_category][name].toCopy=event.target.checked;
+        let track = fcoConstants.gbn(this.tracks_by_category[this.selected_category], name);
+        track.toCopy=event.target.checked;
         //The copy/don't copy checkbox overrides this; we only needed the present checkbox when we initialised.
-        delete this.tracks_by_category[this.selected_category][name].present;
+        delete track.present;
     }
 
     async _save(event, html){
@@ -351,17 +354,18 @@ class EditPlayerTracks extends FormApplication {
         for (let t in input)
         {    
             let number = input[t].number;
-            if (this.tracks[t]!=undefined){ //If this exists in the player's current track list
+            let track = fcoConstants.gbn(this.tracks, input[t].name);
+            if (track){ //If this exists in the player's current track list
                 if (input[t].toCopy == true  || input[t].present == true) { //If the track is selected in the editor)
-                    this.tracks[t].enabled=true;
-                    output[t]=this.tracks[t]; //Write this track to the output object.
+                    track.enabled=true;
+                    output[t]=track; //Write this track to the output object.
                     //If this is non-unique and the number >1, we need to add more copies if there aren't already enough copies.
                     //To manage this, we'll set a 'parent' attribute on copies that gives the name of the original track.
 
                     if (number > 1){
                         let numCopies = 1;
                         for (let t in this.tracks){
-                            if ( this.tracks[t].parent==t){
+                            if ( this.tracks[t].parent==input[t].name){
                                 numCopies ++;
                             }
                         }
@@ -370,7 +374,7 @@ class EditPlayerTracks extends FormApplication {
                         if (numCopies < number){
                             for (let i = 0; i < number - numCopies; i++){
                                 let dupeTrack = duplicate(input[t]);
-                                dupeTrack.parent = t;
+                                dupeTrack.parent = input[t].name;
                                 dupeTrack.name = dupeTrack.name+" "+(i+2)
                                 await this.prepareTrack(dupeTrack);
                                 output[dupeTrack.name]=dupeTrack;
@@ -389,7 +393,7 @@ class EditPlayerTracks extends FormApplication {
                             if ( i == 0) {
                                 
                             } else {
-                                dupeTrack.parent = t;
+                                dupeTrack.parent = input[t].name;
                                 dupeTrack.name = dupeTrack.name+" "+(i+1)
                             }
                             await this.prepareTrack(dupeTrack);
@@ -404,7 +408,7 @@ class EditPlayerTracks extends FormApplication {
                     }
                 }
             }
-        }
+        } 
         ui.notifications.info(game.i18n.localize("fate-core-official.CharacterTrackChangesSaved"))   
         //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
@@ -421,29 +425,30 @@ class EditPlayerTracks extends FormApplication {
         this.selected_category = event.target.value;
         this.render(false);
     }
-
+    
     async _onMove (event, html, direction){
         let info = event.target.name.split("_");
         let category = info[0]
-        let track = info[1]
         let tracks = this.tracks_by_category[category]
-        tracks = fcoConstants.moveKey(tracks, track, direction);
+        let trackKey = fcoConstants.gkfn(tracks, info[1]);
+        tracks = fcoConstants.moveKey(tracks, trackKey, direction);
         this.tracks_by_category[category]=tracks;
         this.render(false);
     }
-
+  
     async _onNameField (event, html){
         let name = event.target.id.split("_")[0];
         let track;
         for (let c in this.tracks_by_category){
             let cat = this.tracks_by_category[c];
-            if (cat[name] != undefined) {
-                track = cat[name]
+            let t = fcoConstants.gbn(cat, name);
+           if (t != undefined) {
+                track = t;
             }
         }
 
         let linked_skills_text =""
-        if (track.linked_skills != undefined && track.linked_skills.length >0){
+        if (track?.linked_skills != undefined && track?.linked_skills.length >0){
             for (let i = 0; i<track.linked_skills.length;i++)
             {
                 let skill = track.linked_skills[i];
@@ -529,7 +534,6 @@ class EditPlayerTracks extends FormApplication {
     }
 
     async prepareTrack(track){
-        
         if (track.toCopy){
             track.enabled = true;
         }
@@ -587,7 +591,6 @@ class EditPlayerTracks extends FormApplication {
             
             try {
                     for (let t in this.tracks) {
-
                         if (this.tracks_by_category != undefined){
                             let track = await duplicate(this.tracks[t]);
                             track.present=true;
@@ -598,19 +601,23 @@ class EditPlayerTracks extends FormApplication {
                     }
 
                     let player_track_keys = Object.keys(this.tracks);
+                    // Now we match the character tracks to world tracks - better to do this via name.
                     for (let t in world_tracks){
-                        let present = player_track_keys.indexOf(t);
+                        let present = false;
+                        //t is the world track key. We want to get the track name and match to the player's tracks.
+                        let pt = fcoConstants.gbn(this.tracks, world_tracks[t].name);
+                        if (pt) present = true;
                         world_tracks[t].number = 1;
-                        if (present < 0){
+                        if (!present){
                             this.tracks_by_category[world_tracks[t].category][t]=world_tracks[t];
                             this.tracks_by_category["All"][t]=world_tracks[t];
                         }
                     }
                 } catch(error){
+                    console.log(error);
                 }
         }
             
-        
         //TemplateData is returned to the form for use with HandleBars.
         const templateData = {
                 tracks_by_category:this.tracks_by_category,

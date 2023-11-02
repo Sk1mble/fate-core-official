@@ -1,5 +1,7 @@
 # 4.4.46 (Unreleased)
 * Fixed a minor issue with Fate Utilities; boosts were showing on the aspects tab of Fate Utilities even when everything was supposed to be minimised.
+* Fixed a bug in the track editor on character sheets that was not correctly showing the track category.
+* Work to change all references directly to object keys to search by name instead, or to find keys from the name. This will hopefully reduce issues with unicode characters and other unusual names that were causing key references to break.
 
 # 4.4.45
 * Bugfix to the world import code - calls weren't awaited so everything broke when I added a debouncedreload to make sure the settings were updated correctly.

@@ -147,10 +147,10 @@ export class ExtraSheet extends ItemSheet {
                     }
 
                     let dragged;
-                    if (type == "skill") dragged = this.document.system.skills[dragged_name];
-                    if (type == "stunt") dragged = this.document.system.stunts[dragged_name];
-                    if (type == "aspect") dragged = this.document.system.aspects[dragged_name];
-                    if (type == "track") dragged = this.document.system.tracks[dragged_name]
+                    if (type == "skill") dragged = fcoConstants.gbn(this.document.system.skills, dragged_name);
+                    if (type == "stunt") dragged = fcoConstants.gbn(this.document.system.stunts, dragged_name);
+                    if (type == "aspect") dragged = fcoConstants.gbn(this.document.system.aspects, dragged_name);
+                    if (type == "track") dragged = fcoConstants.gbn(this.document.system.tracks, dragged_name);
                     let user = game.user.id;
                     let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
                     event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
@@ -164,13 +164,13 @@ export class ExtraSheet extends ItemSheet {
                 let name = event.currentTarget.getAttribute("data-mfname");
                 let entity;
                 if (type == "skill") {
-                    entity = this.document.system.skills[name];
+                    entity = fcoConstants.gbn(this.document.system.skills, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Rank")}: </strong> ${entity.rank}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>`
                 }
                 if (type == "stunt") {
-                    entity = this.document.system.stunts[name];
+                    entity = fcoConstants.gbn(this.document.system.stunts, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name} (${game.i18n.localize("fate-core-official.Refresh")} ${entity.refresh_cost})<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${entity.description}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Skill")}:</strong> ${entity.linked_skill}<br/>
@@ -183,14 +183,14 @@ export class ExtraSheet extends ItemSheet {
                     content += actions;
                 }
                 if (type == "aspect"){
-                    entity = this.document.system.aspects[name];
+                    entity = entity = fcoConstants.gbn(this.document.system.aspects, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Value")}: </strong> ${entity.value}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
                 } 
                 if (type == "track") {
-                    entity = this.document.system.tracks[name];
+                    entity = entity = fcoConstants.gbn(this.document.system.tracks, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
@@ -357,23 +357,26 @@ export class ExtraSheet extends ItemSheet {
 
         const countThisSkill = html.find("input[class='count_this_skill']");
         countThisSkill.on('click', async event => {
-            let skill = duplicate(this.document.system.skills[event.target.getAttribute("data-skill")]);
+            let skill = duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.countMe = event.target.checked;
-            await this.document.update({"system.skills":{[`${skill.name}`]:skill}});
+            let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
+            await this.document.update({"system.skills":{[`${key}`]:skill}});
         })
 
         const combineThisSkill = html.find("input[class='combine_this_skill']");
         combineThisSkill.on('click', async event => {
-            let skill = duplicate(this.document.system.skills[event.target.getAttribute("data-skill")]);
+            let skill = duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.combineMe = event.target.checked;
-            await this.document.update({"system.skills":{[`${skill.name}`]:skill}})
+            let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
+            await this.document.update({"system.skills":{[`${key}`]:skill}})
         })
 
         const hideThisSkill = html.find("input[class='hide_this_skill']");
         hideThisSkill.on('click', async event => {
-            let skill = duplicate(this.document.system.skills[event.target.getAttribute("data-skill")]);
+            let skill = duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.hidden = event.target.checked;
-            await this.document.update({"system.skills":{[`${skill.name}`]:skill}})
+            let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
+            await this.document.update({"system.skills":{[`${key}`]:skill}})
         })
 
         const active = html.find("input[name='system.active']");
@@ -391,8 +394,10 @@ export class ExtraSheet extends ItemSheet {
 
         const aspect = html.find("textarea[class='cs_box mfate-aspects-list__input']");
         aspect.on("change", async event => {
-            let field = event.target.name;
+            let name = event.target.name;
+            let key = fcoConstants.gkfn(this.document.system.aspects, name);
             let value = event.target.value;
+            let field = `system.aspects.${key}.value`
             await this.document.update({[field]:value});
         })
     }
@@ -425,16 +430,20 @@ export class ExtraSheet extends ItemSheet {
             if (extra.id == data.origin) return;
                 
             if (data.type == "stunt"){
-                let old = extra.system.stunts[data.dragged.name];
+                let old = fcoConstants.gbn(extra.system.stunts, data.dragged.name);
+                let key = data.dragged.name;
                 if (old) {
+                    key = fcoConstants.gkfn(extra.system.stunts, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
                 } 
-                await extra.update({"system.stunts":{[data.dragged.name]:data.dragged}});
+                await extra.update({"system.stunts":{[key]:data.dragged}});
             }
             if (data.type == "aspect"){
-                let old = extra.system.aspects[data.dragged.name];
+                let old = fcoConstants.gbn(extra.system.aspects, data.dragged.name);
+                let key = data.dragged.name;
                 if (old) {
+                    key = fcoConstants.gkfn(extra.system.aspects, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
                 } 
@@ -442,18 +451,20 @@ export class ExtraSheet extends ItemSheet {
                     data.dragged.value = "";
                     data.dragged.notes = "";
                 }
-                await extra.update({"system.aspects":{[data.dragged.name]:data.dragged}});
+                await extra.update({"system.aspects":{[key]:data.dragged}});
             }
             if (data.type == "skill"){
-                let old = extra.system.skills[data.dragged.name];
+                let old = fcoConstants.gbn(extra.system.skills, data.dragged.name);
+                let key = data.dragged.name;
                 if (old) {
+                    key = fcoConstants.gkfn(extra.system.skills, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
                 } 
                 if (!data.shift_down){
                     data.dragged.rank = 0;
                 }
-                await extra.update({"system.skills":{[data.dragged.name]:data.dragged}});
+                await extra.update({"system.skills":{[key]:data.dragged}});
             }
             if (data.type == "track"){
                 let track = data.dragged;
@@ -472,12 +483,14 @@ export class ExtraSheet extends ItemSheet {
                         track.notes = "";
                     }
                 }
-                let old = extra.system.tracks[track.name];
+                let old = fcoConstants.gbn(extra.system.tracks, data.dragged.name);
+                let key = data.dragged.name;
                 if (old) {
+                    key = fcoConstants.gkfn(extra.system.tracks, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                     if (answer == "no") return
                 } 
-                await extra.update({"system.tracks":{[track.name]:track}});
+                await extra.update({"system.tracks":{[key]:track}});
             }
         }
     }
@@ -548,8 +561,7 @@ export class ExtraSheet extends ItemSheet {
 
     async _onEdit (event, html){
         let name=event.target.id.split("_")[0];
-
-        let editor = new EditPlayerStunts(this.object, this.object.system.stunts[name], {new:false});
+        let editor = new EditPlayerStunts(this.object, fcoConstants.gbn(this.object.system.stunts, name), {new:false});
         editor.render(true);
         editor.setSheet(this);
         try {
@@ -563,7 +575,8 @@ export class ExtraSheet extends ItemSheet {
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let name = event.target.id.split("_")[0];
-            await this.object.update({"system.stunts":{[`-=${name}`]:null}});
+            let key = fcoConstants.gkfn(this.object.system.stunts, name)
+            await this.object.update({"system.stunts":{[`-=${key}`]:null}});
         }
     }
 

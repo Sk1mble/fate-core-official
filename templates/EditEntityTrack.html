@@ -19,7 +19,7 @@
             <td>
                 <select type="text" id ="edit_entity_track_category" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">
                     {{#each categories}}
-                        {{#if (eq this this.track.category)}}
+                        {{#if (eq this ../this.track.category)}}
                             <option selected = "selected">{{this}}</option>
                         {{else}}
                             <option>{{this}}</option>
