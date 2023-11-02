@@ -49,7 +49,7 @@ class FateUtilities extends Application{
                     actor = actor.actor;
                 }
 
-                let track = actor.system.tracks[name];
+                let track = fcoConstants.gbn(actor.system.tracks, name);
 
                 if (track.rollable == "full" || track.rollable == "empty") {
                     let umr = false;
@@ -344,7 +344,7 @@ class FateUtilities extends Application{
         trackNotesRich.on('contextmenu', async event => {
             let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
             if (text != "discarded") {
-                let id = event.cusrrentTarget.id.split("_rich").join("");
+                let id = event.currentTarget.id.split("_rich").join("");
                 $(`#${id}`)[0].innerHTML = text;
                 event.currentTarget.innerHTML = text;
                 $(`#${id}`).trigger('blur');
@@ -538,7 +538,8 @@ class FateUtilities extends Application{
                 let aspect = event.target.getAttribute("data-name");
                 let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
                 let actor = token.actor;
-                await actor.update({[`system.aspects.${aspect}.notes`]:desc});
+                let key = fcoConstants.gkfn(actor.system.aspects, aspect);
+                await actor.update({[`system.aspects.${key}.notes`]:desc});
                 this.editing = false;
                 await this._render(false);
             }
@@ -553,7 +554,8 @@ class FateUtilities extends Application{
                 let track = event.target.getAttribute("data-name");//This is a much better way of accessing data than splitting the id.
                 let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
                 let actor = token.actor;
-                await actor.update({[`system.tracks.${track}.notes`]:text});
+                let key = fcoConstants.gkfn(actor.system.tracks, track);
+                await actor.update({[`system.tracks.${key}.notes`]:text});
                 this.editing = false;
                 await this._render(false)
             }
@@ -766,9 +768,11 @@ class FateUtilities extends Application{
             }
             let sk = await fcoConstants.getInputFromList (game.i18n.localize("fate-core-official.select_a_skill"), skills);
             skill = sk;
-            rank = token.actor.system.skills[skill].rank;
+            let key = fcoConstants.gkfn(token.actor.system.skills, skill);
+            rank = token.actor.system.skills[key].rank;
         } else {
-            rank = token.actor.system.skills[skill].rank;
+            let key = fcoConstants.gkfn(token.actor.system.skills, skill);
+            rank = token.actor.system.skills[key].rank;
         }
 
         let fcoc = new fcoConstants();
@@ -1833,10 +1837,11 @@ class FateUtilities extends Application{
         let text = event.target.value;
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
         let tracks = duplicate(token.actor.system.tracks);
-        let track = tracks[name]
+        let key =fcoConstants.gkfn(tracks, name);
+        let track = tracks[key]
         track.aspect.name=text;
         let previousText = `${token.actor.system.tracks[name].aspect.name} (${token.actor.name})`;
-        token.actor.update({[`system.tracks.${name}.aspect`]:track.aspect})
+        token.actor.update({[`system.tracks.${key}.aspect`]:track.aspect})
 
         // See if this aspect exists in the list of game aspects and update it if so.
         let newText = `${text} (${token.actor.name})`;
@@ -1915,11 +1920,12 @@ class FateUtilities extends Application{
         }
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
         let tracks = duplicate(token.actor.system.tracks);
-        let track = tracks[name]
+        let key = fcoConstants.gkfn(tracks, name);
+        let track = tracks[key]
         track.box_values[index] = checked;
         await token.actor.update({
             // By using this format, we can JUST update the box_values attribute.
-            ["system.tracks"]:{[name]:{["box_values"]:track.box_values}}
+            ["system.tracks"]:{[key]:{["box_values"]:track.box_values}}
         })
     }
 
@@ -2022,7 +2028,6 @@ class FateUtilities extends Application{
     }
 
     async _onPopcornButton(event, html){
-
         let type = event.target.id.split("_")[1];
         let id = event.target.id.split("_")[0];
 
@@ -2455,7 +2460,6 @@ Hooks.on('ready', function()
                 throw new Error(`"${announcement}" is not a valid Combat announcement type`);
               }
               const theme = CONFIG.Combat.sounds[game.settings.get("core", "combatTheme")];
-              console.log(theme);
               if ( !theme || theme === "none" ) return;
               const sounds = theme[announcement];
               if ( !sounds ) return;

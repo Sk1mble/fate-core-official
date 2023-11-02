@@ -12,10 +12,11 @@ class FateCharacterDefaults {
             return;
         }
         // Check to see if this default already exists
-        if (defaults[this.getSafeName(character_default.default_name)]){
+        let key = fcoConstants.gkfn(defaults, character_default.default_name, "default_name");
+        if (key){
             let response  = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.checkDefaultOverwritePrompt"),character_default.default_name + game.i18n.localize("fate-core-official.checkDefaultOverwriteContent"));
             if (response === "yes"){
-                defaults[this.getSafeName(character_default.default_name)] = character_default;
+                defaults[key] = character_default;
                 await game.settings.set("fate-core-official", "defaults", defaults)
             } else {
                 let count = 0;
@@ -51,8 +52,9 @@ class FateCharacterDefaults {
         // Remove a character default from the game's settings.
         let defaults = duplicate(game.settings.get("fate-core-official", "defaults"));
         // Check to see if this default already exists, then delete it
-        if (defaults[this.getSafeName(name)]){
-            delete defaults[this.getSafeName(name)];
+        let key = fcoConstants.gkfn(defaults, name, "default_name")
+        if (key){
+            delete defaults[key];
             await game.settings.set("fate-core-official", "defaults", defaults);
             ui.sidebar.render(false);
             if (game.system.mdf) game.system.mdf.render(false);
@@ -112,7 +114,7 @@ class FateCharacterDefaults {
 
     async renameDefault (old_name, new_name){
         let defaults = duplicate(game.settings.get("fate-core-official", "defaults"));
-        let de = duplicate(defaults[this.getSafeName(old_name)]);
+        let de = duplicate(fcoConstants.gbn(defaults, old_name, "default_name"));
         await this.removeDefault(old_name);
         de.default_name = new_name;
         await this.storeDefault(de);
@@ -122,7 +124,7 @@ class FateCharacterDefaults {
 
     async editDescription (name, new_desc){
         let defaults = await duplicate(game.settings.get("fate-core-official", "defaults"));
-        let de = defaults[this.getSafeName(name)];
+        let de = fcoConstants.gbn(defaults, name, "default_name")
         de.default_description = new_desc;
         await game.settings.set("fate-core-official","defaults",defaults);
         if (game.system.mdf) game.system.mdf.render(false);
@@ -131,9 +133,8 @@ class FateCharacterDefaults {
     async getDefault(name){
         // Get a named character default from the game's settings.
         let defaults = await duplicate(game.settings.get("fate-core-official", "defaults"));
-        if (defaults[this.getSafeName(name)]){
-            return(defaults[this.getSafeName(name)]);
-        } 
+        let def = fcoConstants.gbn(defaults, name, "default_name");
+        if (def) return def;
     }
 
     async importDefaults(default_text){
@@ -648,13 +649,6 @@ class ManageDefaults extends FormApplication {
             let f = new FateCharacterDefaults();
             let del = await fcoConstants.confirmDeletion();
             if (del) await f.removeDefault(event.target.getAttribute("data-default_name"));
-        })
-
-        const inspect_default = html.find("button[name='inspect_default']");
-        inspect_default.on("click", async (event, html) => {
-            let f = new FateCharacterDefaults();
-            let name = event.target.getAttribute("data-default_name");
-            let d = await f.getDefault(name);
         })
     }
 }

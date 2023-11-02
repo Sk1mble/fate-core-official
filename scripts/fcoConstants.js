@@ -590,13 +590,22 @@ class fcoConstants {
     }
 
     // Function to get an object by looking up its name in an object by 'name filed'
-    static gbn (object, name){
-        return Object.values(object).find(i=> i.name === name);
+    static gbn (object, name, name_string){
+        if (name_string) {
+            return Object.values(object).find(i=> i?.[name_string] === name);
+        } else {
+            return Object.values(object).find(i=> i.name === name);
+        }
     }
 
     // Function to get the key of an object by looking up its name in an object's 'name' field
-    static gkfn (object, name){
-        return Object.entries(object).find(i=> i[1]?.name === name)?.[0];
+    static gkfn (object, name, name_string){
+        if (name_string) {
+            return Object.entries(object).find(i=> i[1]?.[name_string] === name)?.[0];
+        } else {
+            return Object.entries(object).find(i=> i[1]?.name === name)?.[0];
+        }
+        
     }
 } 
 
