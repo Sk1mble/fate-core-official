@@ -128,9 +128,9 @@ class ModifiedRollDialog extends Application {
             // First, set to 4dF
             formula = '4dF'
             // Then get the value from the dialog, doing nothing if it's blank or not displayed
-            // ToDo: Set up the custom formula field in the HTML with id 'customFormula'
-            // ToDo: Add custom formulae from setting to the custom formula field
-            // ToDo: Ensure custom formula field is shown if there's more than 4dF in the custom formula setting.
+            // Set up the custom formula field in the HTML with id 'customFormula'
+            // Add custom formulae from setting to the custom formula field
+            // Ensure custom formula field is shown if there's more than 4dF in the custom formula setting.
             let customFormula = html.find("select[id='customFormula']")[0]?.value;
             if (customFormula) formula = customFormula;
 

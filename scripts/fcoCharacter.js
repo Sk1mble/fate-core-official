@@ -68,7 +68,7 @@ export class fcoCharacter extends ActorSheet {
     //Here are the action listeners
     activateListeners(html) {
         // The following functions need to be available to everyone, not just the owners
-        const expandAspect = html.find("i[name='expandAspect']"); //TODO: Change these expandy buttons to icons rather than a button.
+        const expandAspect = html.find("i[name='expandAspect']"); 
 
         expandAspect.on("click", event => {
             let a = event.target.id.split("_")[0];
