@@ -438,15 +438,14 @@ class EditGMSkills extends FormApplication{
     }
 
     async _confirm(event,html){
-
         let actor=undefined;
         let updateObject = {};
         for (let s in this.player_skills){
             let cbox;
             let name = this.player_skills[s].name;
             try{
-                cbox = html.find(`input[id='${name}']`)[0];
-                if (!cbox) cbox = html.find(`input[id="${name}"]`)[0];
+                cbox = html.find(`input[id="${name}"]`)[0];
+                if (!cbox) cbox = html.find(`input[id='${name}']`)[0];
             } catch {
 
             }

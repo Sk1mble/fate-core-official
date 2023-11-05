@@ -2448,24 +2448,27 @@ Hooks.on('ready', function()
         let fu = new FateUtilities().render(true);
     }
 
-    // Override the Foundry combat sound process to account for popcorn initiative, if we're using that.
-    let init_skill = game.settings.get("fate-core-official","init_skill");
-    if (init_skill == "None") {
-        Combat.prototype._playCombatSound = function (announcement) {
-            if (announcement == "nextUp") return;
-            if (announcement == "yourTurn") return;
-            if (announcement == "yourAction") announcement = "yourTurn";
+    if (CONST.COMBAT_ANNOUNCEMENTS){
+        // Override the Foundry combat sound process to account for popcorn initiative, if we're using that.
+        let init_skill = game.settings.get("fate-core-official","init_skill");
+        
+        if (init_skill == "None") {
+            Combat.prototype._playCombatSound = function (announcement) {
+                if (announcement == "nextUp") return;
+                if (announcement == "yourTurn") return;
+                if (announcement == "yourAction") announcement = "yourTurn";
 
-            if ( !CONST.COMBAT_ANNOUNCEMENTS.includes(announcement) ) {
-                throw new Error(`"${announcement}" is not a valid Combat announcement type`);
-              }
-              const theme = CONFIG.Combat.sounds[game.settings.get("core", "combatTheme")];
-              if ( !theme || theme === "none" ) return;
-              const sounds = theme[announcement];
-              if ( !sounds ) return;
-              const src = sounds[Math.floor(Math.random() * sounds.length)];
-              const volume = game.settings.get("core", "globalInterfaceVolume");
-              game.audio.play(src, {volume});
+                if ( !CONST.COMBAT_ANNOUNCEMENTS.includes(announcement) ) {
+                    throw new Error(`"${announcement}" is not a valid Combat announcement type`);
+                }
+                const theme = CONFIG.Combat.sounds[game.settings.get("core", "combatTheme")];
+                if ( !theme || theme === "none" ) return;
+                const sounds = theme[announcement];
+                if ( !sounds ) return;
+                const src = sounds[Math.floor(Math.random() * sounds.length)];
+                const volume = game.settings.get("core", "globalInterfaceVolume");
+                game.audio.play(src, {volume});
+            }
         }
     }
 })
