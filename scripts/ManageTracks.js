@@ -691,7 +691,7 @@ class EditTracks extends FormApplication {
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectTrackBeforeAddingLinkedSkill"));
         }
         else {
-            let track=fcoConstant.gbn(this.tracks, name);
+            let track=fcoConstants.gbn(this.tracks, name);
             let linked_skill_editor = new EditLinkedSkills(track);
             linked_skill_editor.render(true);
             try {

@@ -1,3 +1,6 @@
+# 4.4.47
+* Bugfix - a single missing s meant that it wasn't possible to add linked skills.
+
 # 4.4.46
 * Fixed a minor issue with Fate Utilities; boosts were showing on the aspects tab of Fate Utilities even when everything was supposed to be minimised.
 * Fixed a bug in the track editor on character sheets that was not correctly showing the track category.

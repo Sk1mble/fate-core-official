@@ -63,7 +63,7 @@ export class fcoCharacter extends ActorSheet {
         let token = ""; 
         if (this.object.isToken) token = "[Token] "
         return token + this.object.name + mode;
-    }
+    }S
 
     //Here are the action listeners
     activateListeners(html) {
@@ -72,7 +72,7 @@ export class fcoCharacter extends ActorSheet {
 
         expandAspect.on("click", event => {
             let a = event.target.id.split("_")[0];
-            let aspect = this.actor.system.aspects[a];
+            let aspect = fcoConstants.gbn(this.actor.system.aspects, a);
             let key = this.actor.id+aspect.name+"_aspect";
     
             if (game.user.expanded == undefined){
@@ -96,7 +96,7 @@ export class fcoCharacter extends ActorSheet {
 
         expandTrack.on("click", event => {
             let t = event.target.id.split("_")[0];
-            let track = this.object.system.tracks[t];
+            let track =fcoConstants.gbn(this.object.system.tracks, t)
             let key = this.actor.id+track.name+"_track";
         
             if (game.user.expanded == undefined){
@@ -137,7 +137,7 @@ export class fcoCharacter extends ActorSheet {
 
         expandStunt.on("click", event => {
             let s = event.target.id.split("_")[0];
-            let stunt = this.object.system.stunts[s];
+            let stunt = fcoConstants.gbn(this.object.system.stunts, s);
             let key = this.actor.id+stunt.name+"_stunt";
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
@@ -227,7 +227,8 @@ export class fcoCharacter extends ActorSheet {
             }
 
             for (let s in stunts){
-                let key = this.actor.id+s+"_stunt";
+                let name = stunts[s].name;
+                let key = this.actor.id+name+"_stunt";
                 game.user.expanded[key] = true;
             }
             this.render(false);
@@ -240,7 +241,8 @@ export class fcoCharacter extends ActorSheet {
             }
 
             for (let s in stunts){
-                let key = this.actor.id+s+"_stunt";
+                let name = stunts[s].name;
+                let key = this.actor.id+name+"_stunt";
                 game.user.expanded[key] = false;
             }
             this.render(false);
@@ -280,6 +282,8 @@ export class fcoCharacter extends ActorSheet {
                 let item = items.get(id);
                 await item.sheet.render(true);
             })
+            
+        //TODO: Refactor to avoid direct key lookups from here onwards.//
 
         const skill_name = html.find("div[name='skill']");
         skill_name.on("contextmenu", event=> this._onSkillR(event, html));
