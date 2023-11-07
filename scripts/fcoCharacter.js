@@ -1095,9 +1095,14 @@ export class fcoCharacter extends ActorSheet {
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
         let db = duplicate(game.settings.get("fate-core-official","stunts"));
-        db[name]=this.object.system.stunts[name];
-        await game.settings.set("fate-core-official","stunts",db);
-        ui.notifications.info(game.i18n.localize("fate-core-official.Added")+" "+name+" "+game.i18n.localize("fate-core-official.ToTheStuntDatabase"));
+        let key = fcoConstants.gkfn(this.object.system.stunts, name);
+        let stunt = this.object.system.stunts[key];
+        
+        if (stunt) {
+            db[key]=stunt;
+            await game.settings.set("fate-core-official","stunts",db);
+            ui.notifications.info(game.i18n.localize("fate-core-official.Added")+" "+name+" "+game.i18n.localize("fate-core-official.ToTheStuntDatabase"));
+        }
     }
 
     async _stunt_db_click(event, html){
@@ -1394,7 +1399,7 @@ export class fcoCharacter extends ActorSheet {
         if (this.sortByRank == undefined) this.sortByRank = game.settings.get("fate-core-official","sortSkills");
         if (this.sortStunts == undefined) this.sortStunts = game.settings.get("fate-core-official","sortStunts");
 
-        if (this.sortStunts) sheetData.system.displayStunts = fcoConstants.sortByKey(sheetData.system.displayStunts);
+        if (this.sortStunts) sheetData.system.displayStunts = fcoConstants.sortByName(sheetData.system.displayStunts);
 
         // Determine sheet view mode:
         // return minimal or full depending on:
@@ -1473,13 +1478,8 @@ export class fcoCharacter extends ActorSheet {
             }
         }
         const unordered_skills = sheetData.system.skills;
-        const ordered_skills = {};
         let sorted_by_rank = fcoConstants.sortByRank(unordered_skills);
-
-        // Sort the skills to display them on the character sheet.
-        Object.keys(unordered_skills).sort().forEach(function(key) {
-            ordered_skills[key] = unordered_skills[key];
-        }); //You can use this code to sort a JSON object by creating a replacement object.
+        let ordered_skills = fcoConstants.sortByName(unordered_skills);
         sheetData.ordered_skills = ordered_skills;
         sheetData.sorted_by_rank = sorted_by_rank;
         sheetData.gameRefresh = game.settings.get("fate-core-official", "refreshTotal");

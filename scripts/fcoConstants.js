@@ -227,6 +227,17 @@ class fcoConstants {
         return ordered_object;
     }
 
+    static sortByName (json_object){
+        let ordered_object ={};
+        let unordered_object = Object.values(duplicate(json_object));
+        fcoConstants.sort_name(unordered_object);
+        unordered_object.forEach (obj => {
+            let key = fcoConstants.gkfn(json_object, obj.name);
+            ordered_object[key] = obj;
+        })
+        return ordered_object;
+    }
+
     static sortByRank(json_object){
         //Sort a JSON object by rank.
         let toSort = []
@@ -455,9 +466,9 @@ class fcoConstants {
         for (let st in stunts){
             delete stunts[st].extra_id;
             delete stunts[st].original_name;
-            
-            if (db[st]){
-                let overwrite = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"),`${game.i18n.localize("fate-core-official.stunt")} "${db[st].name}": `+game.i18n.localize("fate-core-official.exists"));
+            let existing = fcoConstants.gbn (db, stunts[st].name);
+            if (existing){
+                let overwrite = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"),`${game.i18n.localize("fate-core-official.stunt")} "${existing.name}": `+game.i18n.localize("fate-core-official.exists"));
                 if (overwrite == "no") delete stunts[st];
             }
         }

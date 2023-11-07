@@ -36,7 +36,7 @@ class SkillSetup extends FormApplication{
     }
     //The function that returns the data model for this window. In this case, we only need the game's skill list.
     getData(){
-        this.skills=fcoConstants.sortByKey(game.settings.get("fate-core-official","skills"))
+        this.skills=fcoConstants.sortByName(game.settings.get("fate-core-official","skills"))
         this.skills_label = game.settings.get("fate-core-official", "skillsLabel");
         const templateData = {
            skills: this.skills,

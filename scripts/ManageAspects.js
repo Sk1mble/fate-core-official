@@ -65,8 +65,9 @@ class AspectSetup extends FormApplication{
     async _onExportAspect(event, html){
         let aspects = game.settings.get("fate-core-official","aspects");
         let slb = html.find("select[id='aspectListBox']")[0].value;
-        let sk = aspects[slb];
-        let aspect_text = `{"${slb}":${JSON.stringify(sk, null, 5)}}`
+        let key = fcoConstants.gkfn(aspects, slb)
+        let aspect = aspects[key];
+        let aspect_text = `{"${key}":${JSON.stringify(aspect, null, 5)}}`
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyPasteToSaveAspect"), 
@@ -147,7 +148,7 @@ class AspectSetup extends FormApplication{
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectAnAspectFirst"));
         } else {
             let aspects=await game.settings.get("fate-core-official", "aspects");
-            let aspect = duplicate(aspects[name]);
+            let aspect = duplicate(fcoConstants.gbn(aspects, name));
             name = aspect.name+" "+game.i18n.localize("fate-core-official.copy");
             aspect.name=name;
             aspects[name]=aspect;
@@ -164,8 +165,9 @@ class AspectSetup extends FormApplication{
     async _onEditButton(event,html){
         //Launch the EditAspect FormApplication.
         let aspects = game.settings.get("fate-core-official","aspects");       
-        let aspect = html.find("select[id='aspectListBox']")[0].value;
-        let e = new EditAspect(aspects[aspect]);
+        let aspectName = html.find("select[id='aspectListBox']")[0].value;
+        let aspect = fcoConstants.gbn(aspects, aspectName);
+        let e = new EditAspect(aspect);
         e.render(true);
         try {
             e.bringToTop();
@@ -179,12 +181,14 @@ class AspectSetup extends FormApplication{
         if (del){
             //Code to delete the selected aspect
             //First, get the name of the aspect from the HTML element aspectListBox
-            let aspect = html.find("select[id='aspectListBox'")[0].value;
+            let aspectName = html.find("select[id='aspectListBox'")[0].value;
             
             //Find that aspect in the list of aspects
             let aspects=game.settings.get("fate-core-official","aspects");
-            if (aspects[aspect] != undefined){
-                delete aspects[aspect];
+            let aspect = fcoConstants.gbn(aspects, aspectName);
+            if (aspect != undefined){
+                let key = fcoConstants.gkfn(aspects, aspect.name);
+                delete aspects[key];
                 await game.settings.set("fate-core-official","aspects",aspects);
                 this.render(true);
                 try {
@@ -224,17 +228,20 @@ class EditAspect extends FormApplication{
                 ui.notifications.error(game.i18n.localize("fate-core-official.YouCannotHaveAnAspectWithABlankName"))
                 return;
             } else {
-                if (aspects[name] != undefined){
-                    aspects[name] = newAspect;
+                let aspect = fcoConstants.gbn(aspects, name);
+                if (aspect != undefined){
+                    let key = fcoConstants.gkfn(aspects, name);
+                    aspects[key] = newAspect;
                     existing = true;
                 }
             }
             if (!existing){
                 if (this.aspect.name != ""){
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
-                    delete aspects[this.aspect.name]
+                    let key = fcoConstants.gkfn(aspects, this.aspect.name);
+                    delete aspects[key];
                 }            
-                aspects[name]=newAspect;
+                aspects[key]=newAspect;
             }
             await game.settings.set("fate-core-official","aspects",aspects);
             this.close();

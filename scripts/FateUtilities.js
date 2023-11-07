@@ -1689,8 +1689,16 @@ class FateUtilities extends Application{
                 }
                 let height = size * 2;
                 let width = (text.length * size / 1.5);
+
+                let rec;
+                if (isNewerVersion(game.version, "10")){
+                    rec = data.ShapeData.TYPES.RECTANGLE;
+                } else {
+                    rec = CONST.DRAWING_TYPES.RECTANGLE;
+                }
+                
                 await DrawingDocument.create({
-                    type: CONST.DRAWING_TYPES.RECTANGLE,
+                    type: rec,
                     author: game.user.id,
                     x: x,
                     y: y,
@@ -2451,7 +2459,7 @@ Hooks.on('ready', function()
     if (CONST.COMBAT_ANNOUNCEMENTS){
         // Override the Foundry combat sound process to account for popcorn initiative, if we're using that.
         let init_skill = game.settings.get("fate-core-official","init_skill");
-        
+
         if (init_skill == "None") {
             Combat.prototype._playCombatSound = function (announcement) {
                 if (announcement == "nextUp") return;

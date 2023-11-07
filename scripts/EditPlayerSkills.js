@@ -205,7 +205,7 @@ class EditPlayerSkills extends FormApplication{
 //The function that returns the data model for this window. In this case, we need the character's sheet data/and the skill list.
     async getData(){
         this.player_skills=duplicate(this.object.system.skills);
-        this.player_skills=fcoConstants.sortByKey(this.player_skills);
+        this.player_skills=fcoConstants.sortByName(this.player_skills);
 
         if (this.firstRun){
             await this.checkSkills(this.player_skills);
@@ -536,6 +536,11 @@ class EditGMSkills extends FormApplication{
                 orphaned.push(ps);
             }
         }
+        if (present.length > 0) fcoConstants.sort_name(present);
+        if (absent.length > 0) fcoConstants.sort_name(absent);
+        if (non_pc_world_skills.length > 0) fcoConstants.sort_name(non_pc_world_skills);
+        if (ad_hoc.length > 0) fcoConstants.sort_name(ad_hoc);
+        if (orphaned.length > 0) fcoConstants.sort_name(orphaned);
 
         const templateData = {
             skill_list:game.settings.get("fate-core-official","skills"),

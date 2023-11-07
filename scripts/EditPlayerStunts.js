@@ -166,7 +166,7 @@ class EditPlayerStunts extends FormApplication {
         await this.submit();
     }
 
-    renderMe(id,data){
+    renderMe(id, data){
         if (this.object.isToken){
             if (this.actor.token.id == id){
                let name = this.stunt.name;
@@ -442,9 +442,12 @@ class StuntDB extends Application {
     }
 
     async _onExportStunt(event, html){
-        let stunt = event.target.id.split("_")[0];
+        let stuntName = event.target.id.split("_")[0];
+        let stunts = game.settings.get("fate-core-official","stunts");
+        let stunt = fcoConstants.gbn(stunts, stuntName);
+        let key = fcoConstants.gkfn(stunts, stuntName);
 
-        let stunt_text = `{"${stunt}":${JSON.stringify(game.settings.get("fate-core-official","stunts")[stunt],null,5)}}`;
+        let stunt_text = `{"${key}":${JSON.stringify(stunt,null,5)}}`;
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunt"), 
