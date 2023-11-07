@@ -435,6 +435,19 @@ class fcoConstants {
         return text.hashCode();
     }
 
+    static tob64 (text){
+        let bytes = new TextEncoder().encode(text);
+        const binString = String.fromCodePoint(...bytes);
+        return btoa(binString);
+    }
+
+    static fromb64 (base64){
+        const binString = atob(base64);
+        let bytes = Uint8Array.from(binString, (m) => m.codePointAt(0));
+        return new TextDecoder().decode(bytes);
+    }
+
+    
     static async ulStunts(stunts){
         let db = await duplicate(game.settings.get("fate-core-official", "stunts"))
 
@@ -590,22 +603,32 @@ class fcoConstants {
     }
 
     // Function to get an object by looking up its name in an object by 'name filed'
-    static gbn (object, name, name_string){
+    // If the object can be found by looking directly for the base 64 version of the name, do that first. If not, search by name. 
+    // This is in preparation to eventually change all existing string keys into base 64 keys to lookup by hashing the name, as this will be much safer.
+   static gbn (object, name, name_string){
         if (name_string) {
-            return Object.values(object).find(i=> i?.[name_string] === name);
+            return Object.values(object).find(i=> i?.[name_string] === name);      
         } else {
-            return Object.values(object).find(i=> i.name === name);
+            if (object[fcoConstants.tob64(name)]){
+                return object[fcoConstants.tob64(name)];
+            } else {
+                return Object.values(object).find(i=> i.name === name);
+            }
         }
     }
 
     // Function to get the key of an object by looking up its name in an object's 'name' field
+    // If the key exists as a hash of the name, we can just immediately return that. 
     static gkfn (object, name, name_string){
         if (name_string) {
             return Object.entries(object).find(i=> i[1]?.[name_string] === name)?.[0];
         } else {
-            return Object.entries(object).find(i=> i[1]?.name === name)?.[0];
+            if (object[fcoConstants.tob64(name)]){
+                return fcoConstants.tob64(name);
+            } else {
+                return Object.entries(object).find(i=> i[1]?.name === name)?.[0];    
+            }
         }
-        
     }
 } 
 

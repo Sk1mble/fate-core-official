@@ -238,7 +238,7 @@
                                             <label style="font-weight:900; padding-left:2px">
                                                 {{this.harm_can_absorb}}
                                                 </label> {{/if}}
-                                            <input type="text" class="aspect_box" name="system.tracks.{{this.name}}.aspect.name" value="{{this.aspect.name}}">
+                                            <input type="text" class="aspect_box" name="system.tracks.{{@key}}.aspect.name" value="{{this.aspect.name}}">
                                             </input>
                                             {{/if}}
                                             {{#if this.extra_id}}<i data-extra_id="{{this.extra_id}}" class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}
@@ -246,8 +246,8 @@
                                     </div>
                                 </div>
                                 {{#if (expanded ../this.document (fco_concat this.name '_track'))}}<div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "system.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
-                                    <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none;" data-edit= "system.tracks.{{this.name}}.notes" id="{{fco_getKey this.name}}_track_notes" name="system.tracks.{{this.name}}.notes">{{{this.notes}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none;" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}_track_notes" name="system.tracks.{{@key}}.notes">{{{this.notes}}}</div>
                                 {{/if}}
                                 {{/if}}{{/if}}                                
                                 {{/each}}
@@ -274,11 +274,11 @@
                         <li name="aspect" class="mfate-aspects-list__item">
                             <div id="{{this.name}}" name="{{this.name}}" title='{{{fco_strip this.richDesc}}}' class="mfate-aspects-list__label "><i name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></i><i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; padding-left:5px">{{this.name}}</i>
                             {{#if this.extra_id}}<i data-extra_id="{{this.extra_id}}" class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}</div>
-                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_id undefined)}}{{else}}disabled="disabled"{{/if}} name="system.aspects.{{this.name}}.value">{{this.value}}</textarea><br>
+                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_id undefined)}}{{else}}disabled="disabled"{{/if}} name="system.aspects.{{@key}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (fco_concat this.name '_aspect'))}}
                                 <div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                <div class="cs_box mfate-aspects-notes__input" data-edit="system.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
-                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="display:none;" data-edit="system.aspects.{{this.name}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="system.aspects.{{this.name}}.notes" {{#if this.extra_id}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
+                                <div class="cs_box mfate-aspects-notes__input" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
+                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="display:none;" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="system.aspects.{{@key}}.notes" {{#if this.extra_id}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
                                 {{/if}}
                         </li>
                         {{/each}}

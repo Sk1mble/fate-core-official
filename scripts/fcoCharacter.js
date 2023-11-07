@@ -282,8 +282,6 @@ export class fcoCharacter extends ActorSheet {
                 let item = items.get(id);
                 await item.sheet.render(true);
             })
-            
-        //TODO: Refactor to avoid direct key lookups from here onwards.//
 
         const skill_name = html.find("div[name='skill']");
         skill_name.on("contextmenu", event=> this._onSkillR(event, html));
@@ -371,7 +369,7 @@ export class fcoCharacter extends ActorSheet {
 
             roll_track.on("click", async event => {
                 let name = event.target.id;
-                let track = this.object.system.tracks[name];
+                let track = fcoConstants.gbn(this.object.system.tracks, name);
                 if (track.rollable == "full" || track.rollable == "empty") {
                     let umr = false;
                     if (game.system["fco-shifted"] && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
@@ -382,7 +380,7 @@ export class fcoCharacter extends ActorSheet {
             })
             track_name.on("contextmenu", event => {
                     let name = event.currentTarget.id.split("_")[1]
-                    let track = this.object.system.tracks[name];
+                    let track = fcoConstants.gbn(this.object.system.tracks, name);
             
                     let linked_skills_text =""
                     if (track.linked_skills != undefined && track.linked_skills.length >0){
@@ -663,10 +661,10 @@ export class fcoCharacter extends ActorSheet {
                     }
 
                     let dragged;
-                    if (type == "skill") dragged = this.actor.system.skills[dragged_name];
-                    if (type == "stunt") dragged = this.actor.system.stunts[dragged_name];
-                    if (type == "aspect") dragged = this.actor.system.aspects[dragged_name];
-                    if (type == "track") dragged = this.actor.system.tracks[dragged_name]
+                    if (type == "skill") dragged = fcoConstants.gbn(this.actor.system.skills, dragged_name);
+                    if (type == "stunt") dragged = fcoConstants.gbn(this.actor.system.stunts, dragged_name);
+                    if (type == "aspect") dragged = fcoConstants.gbn(this.actor.system.aspects, dragged_name);
+                    if (type == "track") dragged = fcoConstants.gbn(this.actor.system.tracks, dragged_name)
                     let user = game.user.id;
                     let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
                     event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
@@ -682,13 +680,13 @@ export class fcoCharacter extends ActorSheet {
                 let name = event.target.getAttribute("data-mfname");
                 let entity;
                 if (type == "skill") {
-                    entity = this.actor.system.skills[name];
+                    entity = fcoConstants.gbn(this.actor.system.skills, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Rank")}: </strong> ${entity.rank}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>`
                 }
                 if (type == "stunt") {
-                    entity = this.actor.system.stunts[name];
+                    entity = fcoConstants.gbn(this.actor.system.stunts, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name} (${game.i18n.localize("fate-core-official.Refresh")} ${entity.refresh_cost})<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${entity.description}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Skill")}:</strong> ${entity.linked_skill}<br/>
@@ -701,14 +699,14 @@ export class fcoCharacter extends ActorSheet {
                     content += actions;
                 }
                 if (type == "aspect"){
-                    entity = this.actor.system.aspects[name];
+                    entity = fcoConstants.gbn(this.actor.system.aspects, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Value")}: </strong> ${entity.value}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
                 } 
                 if (type == "track") {
-                    entity = this.actor.system.tracks[name];
+                    entity = fcoConstants.gbn(this.actor.system.tracks, name);
                     content += `<strong>${game.i18n.localize("fate-core-official.Name")}: </strong> ${entity.name}<br/>
                                 <strong>${game.i18n.localize("fate-core-official.Description")}: </strong> ${entity.description}</br>
                                 <strong>${game.i18n.localize("fate-core-official.Notes")}: </strong> ${entity.notes}`
@@ -988,7 +986,7 @@ export class fcoCharacter extends ActorSheet {
 
     async _onSkillR(event,html){
         let name = event.target.id;
-        let skill = this.actor.system.skills[name];
+        let skill = fcoConstants.gbn(this.actor.system.skills, name);
         fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
                                             <div style="background-color:white">
                                             <table cellspacing ="4" cellpadding="4" border="1" style="background-color:white">
@@ -1041,16 +1039,19 @@ export class fcoCharacter extends ActorSheet {
         let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
         if (item?.parent){
             // Store the status of stress tracks on the parent back to the extra if this extra is being dragged from a character.
-            let trackUpdates = duplicate(item.system.tracks);
-            let tracks = item?.parent?.system?.tracks;
+            let trackUpdates = duplicate(item.system.tracks); // Trackupdates is the item tracks
+            let tracks = item?.parent?.system?.tracks; // Tracks is the actor tracks
 
             for (let t in trackUpdates){
                 // Need to grab the original name from the ACTOR, not from the extra. So we need to reverse the order of operations here
                 // to search through the actor's tracks to find one with an original name that matches this track.
+                let extraTrack = trackUpdates[t];
                 for (let at in tracks){
-                    let name = tracks[at]?.original_name;
-                    if (name == t && tracks[at]?.extra_id == item.id){
-                        let track = duplicate(tracks[at]);
+                    let actorTrack = tracks[at];
+                    let name = actorTrack?.original_name;
+                    
+                    if (name == extraTrack.name && actorTrack?.extra_id == item.id){
+                        let track = duplicate(actorTrack);
                         track.name = name;
                         delete track.extra_id;
                         delete track.original_name;
@@ -1060,11 +1061,14 @@ export class fcoCharacter extends ActorSheet {
             }
             let stuntUpdates = duplicate(item.system.stunts);
             let stunts = item?.parent?.system?.stunts;
+
             for (let s in stuntUpdates){
+                let extraStunt = stuntUpdates[s];
                 for (let as in stunts){
-                    let name = stunts[as]?.original_name;
-                    if (name == s && stunts[as]?.extra_id == item.id){
-                        let stunt = duplicate(stunts[as]);
+                    let actorStunt = stunts[as];
+                    let name = actorStunt.original_name;
+                    if (name == extraStunt.name && actorStunt?.extra_id == item.id){
+                        let stunt = duplicate(actorStunt);
                         stunt.name = name;
                         delete stunt.extra_id;
                         delete stunt.original_name;
@@ -1138,7 +1142,8 @@ export class fcoCharacter extends ActorSheet {
     async updateNotes (event, html){
         if (!window.getSelection().toString()){
             let text = DOMPurify.sanitize(event.target.innerHTML);            
-            let item = event.target.getAttribute("data-edit");//This is a much better way of accessing data than splitting the id.
+            let item = event.target.getAttribute("data-edit");
+            //This is a much better way of accessing data than splitting the id.
             await this.actor.update({[item]:text});
             this.editing = false;
             await this._render(false)
@@ -1202,15 +1207,14 @@ export class fcoCharacter extends ActorSheet {
     async _onDelete(event, html){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            let name = event.target.id.split("_")[0];
-            await this.object.update({"system.stunts":{[`-=${name}`]:null}});
+            let key = fcoConstants.gkfn(this.object.system.stunts, event.target.id.split("_")[0]);
+            await this.object.update({"system.stunts":{[`-=${key}`]:null}});
         }
     }
 
     async _onEdit (event, html){
         let name=event.target.id.split("_")[0];
-
-        let editor = new EditPlayerStunts(this.actor, this.object.system.stunts[name], {new:false});
+        let editor = new EditPlayerStunts(this.actor, fcoConstants.gbn(this.object.system.stunts, name), {new:false});
         editor.render(true);
         editor.setSheet(this);
         try {
@@ -1234,11 +1238,12 @@ export class fcoCharacter extends ActorSheet {
             checked = false
         }
         let tracks = duplicate(this.object.system.tracks);
-        let track = tracks[name]
+        let track = fcoConstants.gbn(tracks, name);
+        let key = fcoConstants.gkfn (tracks, name);
         track.box_values[index] = checked;
         await this.object.update({
             // By using this format for the update we can drill right down to the box_values array and avoid updating anything else.
-            ["system.tracks"]:{[name]:{["box_values"]:track.box_values}}
+            ["system.tracks"]:{[key]:{["box_values"]:track.box_values}}
         })
     }
 
@@ -1248,7 +1253,7 @@ export class fcoCharacter extends ActorSheet {
         let checked = event.target.checked;
 
         let stunts = duplicate(this.object.system.stunts);
-        let stunt = stunts[name];
+        let stunt = fcoConstants.gbn(stunts, name);
         stunt.box_values[index] = checked;
         await this.object.update({["system.stunts"]:stunts});
     }

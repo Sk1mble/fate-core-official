@@ -39,8 +39,8 @@ class EditPlayerAspects extends FormApplication{
         notes.on("change", event => this._on_notes_change(event, html));
 
         for (let aspect in this.aspects){
-            let id = `aspect_description_${fcoConstants.getKey(aspect)}`;
-            let id2 = `notes_${fcoConstants.getKey(aspect)}`;
+            let id = `aspect_description_${fcoConstants.getKey(this.aspects[aspect].name)}`;
+            let id2 = `notes_${fcoConstants.getKey(this.aspects[aspect].name)}`;
             fcoConstants.getPen(id);
             fcoConstants.getPen(id2);
 
@@ -128,25 +128,25 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _on_name_change(event, html){
-        let name = event.target.name.split("_")[1];
-        let newName = event.target.value;
+        let key = event.target.name.split("_")[1]
+        let newName = event.target.value.split(".").join("․").trim();;
+
         if (!newName) {
             ui.notifications.error(game.i18n.localize("fate-core-official.YouCannotHaveAnAspectWithABlankName"));
-            event.target.value = name;
+            event.target.value = this.aspects[key].name;
             return;
         }
 
         let newAspect = new fcoAspect({
-            name:newName.split(".").join("․").trim(),
-            description:this.aspects[name].description,
-            notes:this.aspects[name].notes,
-            value:this.aspects[name].value
+            name:newName,
+            description:this.aspects[key].description,
+            notes:this.aspects[key].notes,
+            value:this.aspects[key].value
         }).toJSON();
         
         if (newAspect){
             // Find the aspect with the same name as the old name and delete it
-            let aspectKey = fcoConstants.gkfn(this.aspects, name);
-            delete this.aspects[aspectKey]
+            delete this.aspects[key]
             this.aspects[newName]=newAspect;
             this.render(false);
         }
@@ -175,8 +175,7 @@ class EditPlayerAspects extends FormApplication{
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let info = event.target.id.split("_");
-            let name = info[1];
-            let aspectKey = fcoConstants.gkfn(this.aspects, name);
+            let aspectKey = info[1];
             delete this.aspects[aspectKey];
             this.render(false);
         }
