@@ -61,8 +61,8 @@ class EditPlayerAspects extends FormApplication{
                     if (text != "discarded") {
                         $(`#${id}`)[0].innerHTML = text;   
                         $(`#${id}_rich`)[0].innerHTML = text; 
-                        let name = event.currentTarget.getAttribute("name").split("_")[1];
-                        let aspect = fcoConstants.gbn(this.aspects, name)
+                        let key = event.currentTarget.getAttribute("data-key");
+                        let aspect = this.aspects[key];
                         aspect.description=text;
                     }
                 })
@@ -72,8 +72,8 @@ class EditPlayerAspects extends FormApplication{
                     if (text != "discarded") {
                         $(`#${id2}`)[0].innerHTML = text;   
                         $(`#${id2}_rich`)[0].innerHTML = text;  
-                        let name = event.currentTarget.getAttribute("name").split("_")[1];
-                        let aspect = fcoConstants.gbn(this.aspects, name)
+                        let key = event.currentTarget.getAttribute("data-key");
+                        let aspect = this.aspects[key];
                         aspect.notes=text;
                     }
                 })
@@ -91,8 +91,8 @@ class EditPlayerAspects extends FormApplication{
                     $(`#${id}`).css('display', 'none');
                     $(`#${id}_rich`)[0].innerHTML = desc;    
                     $(`#${id}_rich`).css('display', 'block');
-                    let name = event.target.getAttribute("name").split("_")[1];
-                    let aspect = fcoConstants.gbn(this.aspects, name)
+                    let key = event.target.getAttribute("data-key");
+                    let aspect = this.aspects[key];
                     aspect.description=event.target.innerHTML;
                 }
             })
@@ -119,8 +119,8 @@ class EditPlayerAspects extends FormApplication{
                     $(`#${id2}`).css('display', 'none');
                     $(`#${id2}_rich`)[0].innerHTML = desc;    
                     $(`#${id2}_rich`).css('display', 'block');
-                    let name = event.target.getAttribute("name").split("_")[1];
-                    let aspect = fcoConstants.gbn(this.aspects, name)
+                    let key = event.target.getAttribute("data-key");
+                    let aspect = this.aspects[key];
                     aspect.notes=event.target.innerHTML;
                 }
             })    
@@ -153,14 +153,14 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _on_value_change(event, html){
-        let name = event.target.name.split("_")[1];
-        let aspect = fcoConstants.gbn(this.aspects, name);
+        let key = event.target.getAttribute("data-key");
+        let aspect = this.aspects[key];
         aspect.value=event.target.value;
     }
 
     async _on_notes_change(event, html){
-        let name = event.target.name.split("_")[1];
-        let aspect = fcoConstants.gbn(this.aspects, name);
+        let key = event.target.getAttribute("data-key");
+        let aspect = this.aspects[key];
         aspect.notes=event.target.value;
     }
 
