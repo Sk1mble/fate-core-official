@@ -60,7 +60,7 @@ class EditPlayerStunts extends FormApplication {
             if (stuntKey) {
                 stunts[stuntKey] = this.stunt 
             } else {
-                stunts[this.stunt.name] = this.stunt;
+                stunts[fcoConstants.tob64(this.stunt.name)] = this.stunt;
             }
             await game.settings.set("fate-core-official","stunts",stunts);
             this.originator.render(false);
@@ -98,7 +98,7 @@ class EditPlayerStunts extends FormApplication {
             }
             
             this.stunt.box_values = new_box_values;
-            await this.actor.update({"system.stunts":{[this.stunt.name]:this.stunt}})
+            await this.actor.update({"system.stunts":{[fcoConstants.tob64(this.stunt.name)]:this.stunt}})
             if (this.object.type == "Extra"){
                 //code to render editplayerstunts.
                 Hooks.call("updateItem", {"id":this.object.id})
@@ -256,7 +256,6 @@ class EditPlayerStunts extends FormApplication {
 } //End EditPlayerStunts
 
 class StuntDB extends Application {
-
     constructor(actor){
         super();
         this.filter = "";
@@ -498,14 +497,14 @@ class StuntDB extends Application {
                 for (let stunt in imported_stunts){
                     let st = new fcoStunt(imported_stunts[stunt]).toJSON();
                     if (st){
-                        stuntDB[stunt] = st;  
+                        stuntDB[fcoConstants.tob64(st.name)] = st;  
                     }
                 }
             } else {
                 // This is a single stunt.
                 let st = new fcoStunt(imported_stunts).toJSON();
                 if (st){
-                    stuntDB[st.name] = st;
+                    stuntDB[fcoConstants.tob64(st.name)] = st;
                 }
             }
             await game.settings.set("fate-core-official","stunts", stuntDB);
@@ -519,7 +518,7 @@ class StuntDB extends Application {
         let stunts = game.settings.get("fate-core-official","stunts");
         let name = event.target.id.split("_")[0];
         let stunt = duplicate(fcoConstants.gbn(stunts, name));
-        this.actor.update({"system.stunts":{[`${stunt.name}`]:stunt}});
+        this.actor.update({"system.stunts":{[`${fcoConstants.tob64(stunt.name)}`]:stunt}});
     }
 
     async _onDeleteButton(event, html){
