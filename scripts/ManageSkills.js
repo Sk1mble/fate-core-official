@@ -10,7 +10,6 @@ Hooks.once('ready', async function () {
         default: defaultLabel,
       });
 })
-
 // SkillSetup: This is the class called from the options to view and edit the skills.
 class SkillSetup extends FormApplication{
     constructor(...args){
@@ -70,12 +69,12 @@ class SkillSetup extends FormApplication{
     }
     
     //Here are the event listener functions.
-
     async _onExportSkill(event, html){
         let skills = game.settings.get("fate-core-official","skills");
         let slb = html.find("select[id='skillListBox']")[0].value;
-        let sk = skills[slb];
-        let skill_text = `{"${slb}":${JSON.stringify(sk, null, 5)}}`
+        let sk = fcoConstants.gbn(skills, slb);
+        let key = fcoConstants.gkfn(skills, slb);
+        let skill_text = `{"${key}":${JSON.stringify(sk, null, 5)}}`
  
         new Dialog({
             title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkill"),
@@ -170,7 +169,7 @@ class SkillSetup extends FormApplication{
         //Launch the EditSkill FormApplication.
         let skills = game.settings.get("fate-core-official","skills");
         let slb = html.find("select[id='skillListBox']")[0].value;
-        let sk = skills[slb]
+        let sk = fcoConstants.gbn(skills, slb)
         let e = new EditSkill(sk);
         e.render(true);
     }
@@ -183,8 +182,9 @@ class SkillSetup extends FormApplication{
             
             //Find that skill in the list of skills
             let skills=game.settings.get("fate-core-official","skills");
-            if (skills[slb] != undefined){
-                delete skills[slb];
+            let key = fcoConstants.gkfn(skills, slb);
+            if (skills[key] != undefined){
+                delete skills[key];
                 await game.settings.set("fate-core-official","skills",skills);
                 this.render(true);
             }
@@ -197,7 +197,7 @@ class SkillSetup extends FormApplication{
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectASkillToCopyFirst"));
         } else {
             let skills=await game.settings.get("fate-core-official", "skills");
-            let skill = duplicate(skills[name]);
+            let skill = duplicate(fcoConstants.gbn (skills, name));
             name = skill.name+" "+game.i18n.localize("fate-core-official.copy");
             skill.name=name;
             skills[name]=skill;
@@ -241,17 +241,19 @@ class EditSkill extends FormApplication{
             if (name == undefined || name ==""){
                 ui.notifications.error(game.i18n.localize("fate-core-official.YouCannotHaveASkillWithABlankName"))
             } else {
-                if (skills[name] != undefined){
-                    skills[name]=newSkill;
+                let key = fcoConstants.gkfn(skills, name);
+                if (skills[key] != undefined){
+                    skills[key] = newSkill;
                     existing = true;
                 }
             }
             if (!existing){  
                 if (this.skill.name != ""){
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
-                    delete skills[this.skill.name]
+                    let key = fcoConstants.gkfn(skills, this.skill.name);
+                    delete skills[key];
                 }                      
-                skills[name]=newSkill;
+                skills[name] = newSkill;
             }
             await game.settings.set("fate-core-official","skills",skills);
         }

@@ -704,7 +704,7 @@ export class fcoActor extends Actor {
             let tracks = this.system.tracks;
             for (let track in tracks){
                 if (tracks[track].box_values){
-                    this.system.details[track] = {max:tracks[track].box_values.length, value:tracks[track].box_values.length-tracks[track].box_values.filter(b => b).length};
+                    this.system.details[tracks[track].name] = {max:tracks[track].box_values.length, value:tracks[track].box_values.length-tracks[track].box_values.filter(b => b).length};
                 }
             }
         }

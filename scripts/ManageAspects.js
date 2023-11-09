@@ -129,7 +129,7 @@ class AspectSetup extends FormApplication{
                 // This is a single aspect
                 let as = new fcoAspect(imported_aspects).toJSON();
                 if (as){
-                    skills[as.name] = as;
+                    aspects[as.name] = as;
                 }
             }
             
@@ -236,9 +236,9 @@ class EditAspect extends FormApplication{
                 }
             }
             if (!existing){
+                let key = fcoConstants.gkfn(aspects, this.aspect.name);
                 if (this.aspect.name != ""){
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
-                    let key = fcoConstants.gkfn(aspects, this.aspect.name);
                     delete aspects[key];
                 }            
                 aspects[key]=newAspect;

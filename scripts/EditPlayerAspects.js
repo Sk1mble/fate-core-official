@@ -147,7 +147,7 @@ class EditPlayerAspects extends FormApplication{
         if (newAspect){
             // Find the aspect with the same name as the old name and delete it
             delete this.aspects[key]
-            this.aspects[newName]=newAspect;
+            this.aspects[fcoConstants.tob64(newName)]=newAspect;
             this.render(false);
         }
     }
@@ -184,14 +184,14 @@ class EditPlayerAspects extends FormApplication{
     async _onAdd(event, html){
         let count = 0;
         for (let a in this.aspects){
-            if (a.startsWith(game.i18n.localize("fate-core-official.New_Aspect"))){
+            if (this.aspects[a].name.startsWith(game.i18n.localize("fate-core-official.New_Aspect"))){
                 count++
             }
         }
         let name = game.i18n.localize("fate-core-official.New_Aspect") + " "+ count;
         let newAspect = new fcoAspect({"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}).toJSON();
         if (newAspect){
-            this.aspects[newAspect.name] = newAspect;
+            this.aspects[fcoConstants.tob64(newAspect.name)] = newAspect;
             this.render(false);
         }
     }

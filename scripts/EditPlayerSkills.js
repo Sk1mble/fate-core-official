@@ -431,7 +431,7 @@ class EditGMSkills extends FormApplication{
                 if (newSkill != undefined){
                     newSkill.name=newSkill.name.split(".").join("․");
                     let oldSkillKey = fcoConstants.gkfn(this.object.system.skills, oldSkill);
-                    this.object.update({"system.skills": {[newSkill.name]:newSkill, [`-=${oldSkillKey}`]:null}}).then(() => this.render(false));
+                    this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill, [`-=${oldSkillKey}`]:null}}).then(() => this.render(false));
                 }
             }
         })
@@ -496,7 +496,7 @@ class EditGMSkills extends FormApplication{
         }
         if (newSkill != undefined){
             newSkill.name=newSkill.name.split(".").join("․");
-            this.object.update({"system.skills": {[newSkill.name]:newSkill}}).then(() => this.render(false));
+            this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill}}).then(() => this.render(false));
         }
     }
 

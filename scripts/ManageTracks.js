@@ -1043,7 +1043,7 @@ class TrackSetup extends FormApplication{
                                         let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
                                         let toDelete = [];
                                         for (let tr in tracks){
-                                            if (tracks[tr].category == cat) toDelete.push(tracks[tr])
+                                            if (tracks[tr].category == cat) toDelete.push(tracks[tr]);
                                         }
 
                                         if (toDelete.length == 0){
