@@ -304,8 +304,8 @@ class EditPlayerTracks extends FormApplication {
                         newTrack.label = label;
 
                         newTrack.toCopy=true;
-                        this.tracks_by_category[newTrack.category][newTrack.name]=newTrack;
-                        this.tracks_by_category["All"][newTrack.name]=newTrack;
+                        this.tracks_by_category[newTrack.category][fcoConstants.tob64(newTrack.name)]=newTrack;
+                        this.tracks_by_category["All"][fcoConstants.tob64(newTrack.name)]=newTrack;
                         this.render(false);
                     }
                 }
@@ -377,7 +377,7 @@ class EditPlayerTracks extends FormApplication {
                                 dupeTrack.parent = input[t].name;
                                 dupeTrack.name = dupeTrack.name+" "+(i+2)
                                 await this.prepareTrack(dupeTrack);
-                                output[dupeTrack.name]=dupeTrack;
+                                output[fcoConstants.tob64(dupeTrack.name)]=dupeTrack;
                             }
                         }
                     }
@@ -397,7 +397,7 @@ class EditPlayerTracks extends FormApplication {
                                 dupeTrack.name = dupeTrack.name+" "+(i+1)
                             }
                             await this.prepareTrack(dupeTrack);
-                            output[dupeTrack.name]=dupeTrack;
+                            output[fcoConstants.tob64(dupeTrack.name)]=dupeTrack;
                         }
                     }
                 } else {

@@ -431,7 +431,7 @@ export class ExtraSheet extends ItemSheet {
                 
             if (data.type == "stunt"){
                 let old = fcoConstants.gbn(extra.system.stunts, data.dragged.name);
-                let key = data.dragged.name;
+                let key = fcoConstants.tob64(data.dragged.name);
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.stunts, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
@@ -441,7 +441,7 @@ export class ExtraSheet extends ItemSheet {
             }
             if (data.type == "aspect"){
                 let old = fcoConstants.gbn(extra.system.aspects, data.dragged.name);
-                let key = data.dragged.name;
+                let key = fcoConstants.tob64(data.dragged.name);
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.aspects, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
@@ -455,7 +455,7 @@ export class ExtraSheet extends ItemSheet {
             }
             if (data.type == "skill"){
                 let old = fcoConstants.gbn(extra.system.skills, data.dragged.name);
-                let key = data.dragged.name;
+                let key = fcoConstants.tob64(data.dragged.name);
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.skills, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
@@ -484,7 +484,7 @@ export class ExtraSheet extends ItemSheet {
                     }
                 }
                 let old = fcoConstants.gbn(extra.system.tracks, data.dragged.name);
-                let key = data.dragged.name;
+                let key = fcoConstants.tob64(data.dragged.name);
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.tracks, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
@@ -521,7 +521,7 @@ export class ExtraSheet extends ItemSheet {
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
         let db = duplicate(game.settings.get("fate-core-official","stunts"));
-        db[name]=this.object.system.stunts[name];
+        db[fcoConstants.tob64(name)]=fcoConstants.gbn(this.object.system.stunts, name);
         await game.settings.set("fate-core-official","stunts",db);
         ui.notifications.info(`${game.i18n.localize("fate-core-official.Added")} ${name} ${game.i18n.localize("fate-core-official.ToTheStuntDatabase")}`);
     }

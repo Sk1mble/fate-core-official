@@ -1,7 +1,6 @@
 import { ExtraSheet } from "./ExtraSheet.js";
 
 export class fcoCharacter extends ActorSheet {
-
     async close(options){
         this.editing = false;
         await super.close(options);
@@ -333,7 +332,7 @@ export class fcoCharacter extends ActorSheet {
                                             }
                                             if (newSkill != undefined){
                                                 newSkill.name=newSkill.name.split(".").join("․");
-                                                this.object.update({"system.skills": {[newSkill.name]:newSkill}});
+                                                this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill}});
                                             }
                                         }
                                     },
@@ -1055,7 +1054,7 @@ export class fcoCharacter extends ActorSheet {
                         track.name = name;
                         delete track.extra_id;
                         delete track.original_name;
-                        trackUpdates[name] = track;
+                        trackUpdates[fcoConstants.tob64(name)] = track;
                     }
                 }
             }
@@ -1072,7 +1071,7 @@ export class fcoCharacter extends ActorSheet {
                         stunt.name = name;
                         delete stunt.extra_id;
                         delete stunt.original_name;
-                        stuntUpdates[name] = stunt;
+                        stuntUpdates[fcoConstants.tob64(name)] = stunt;
                     }
                 }
             }
@@ -1556,15 +1555,15 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         delete data.dragged?.extra_id;
         delete data.dragged?.original_name;
         if (data.type == "stunt"){
-            let old = actor.system.stunts[data.dragged.name];
+            let old = fcoConstants.gbn(actor.system.stunts, data.dragged.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
-            await actor.update({"system.stunts":{[data.dragged.name]:data.dragged}});
+            await actor.update({"system.stunts":{[fcoConstants.tob64(data.dragged.name)]:data.dragged}});
         }
         if (data.type == "aspect"){
-            let old = actor.system.aspects[data.dragged.name];
+            let old = fcoConstants.gbn(actor.system.aspects, data.dragged.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
@@ -1573,10 +1572,10 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
                 data.dragged.value = "";
                 data.dragged.notes = "";
             }
-            await actor.update({"system.aspects":{[data.dragged.name]:data.dragged}});
+            await actor.update({"system.aspects":{[fcoConstants.tob64(data.dragged.name)]:data.dragged}});
         }
         if (data.type == "skill"){
-            let old = actor.system.skills[data.dragged.name];
+            let old = fcoConstants.gbn(actor.system.skills, data.dragged.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
@@ -1584,7 +1583,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
             if (!data.shift_down){
                 data.dragged.rank = 0;
             }
-            await actor.update({"system.skills":{[data.dragged.name]:data.dragged}});
+            await actor.update({"system.skills":{[fcoConstants.tob64(data.dragged.name)]:data.dragged}});
         }
         if (data.type == "track"){
             let track = data.dragged;
@@ -1603,12 +1602,12 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
                     track.notes = "";
                 }
             }
-            let old = actor.system.tracks[track.name];
+            let old = fcoConstants.gbn(actor.system.tracks, track.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
                 if (answer == "no") return
             } 
-            await actor.update({"system.tracks":{[track.name]:track}});
+            await actor.update({"system.tracks":{[fcoConstants.tob64(track.name)]:track}});
         }
     }
 })

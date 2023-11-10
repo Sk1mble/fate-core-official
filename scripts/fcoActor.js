@@ -34,7 +34,8 @@ export class fcoActor extends Actor {
 
     static migrateData (data){
         // Convert all extra_tags to being extra_id.
-        if (data.system){
+        // Convert all keys on skills, aspects, stunts, and tracks to base-64 encoded versions of their names.
+        if (data.system && data.name){//This restricts the process to when the whole model is being migrated.
             let toProcess = ["skills","stunts","aspects","tracks"];
             for (let item of toProcess){
                 for (let sub_item in data.system[item]){
@@ -44,6 +45,16 @@ export class fcoActor extends Actor {
                         data.system[item][sub_item].extra_id = id;
                     }
                 }
+            }
+            for (let item of toProcess){
+                let output = {};
+                for (let sub_item in data.system[item]){
+                    let object = data.system[item][sub_item];
+                    if (object.name){
+                        output[fcoConstants.tob64(object.name)] = object;
+                    }
+                }
+                data.system[item] = output;
             }
         }
         return super.migrateData(data);

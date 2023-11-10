@@ -457,7 +457,6 @@ class fcoConstants {
         let bytes = Uint8Array.from(binString, (m) => m.codePointAt(0));
         return new TextDecoder().decode(bytes);
     }
-
     
     static async ulStunts(stunts){
         let db = await duplicate(game.settings.get("fate-core-official", "stunts"))

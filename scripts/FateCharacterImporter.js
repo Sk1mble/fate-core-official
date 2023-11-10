@@ -89,7 +89,7 @@ class FateCharacterImporter {
                 aspect.name = rawAspect.name.split(".").join("․");
                 aspect.value = rawAspect.data.value;
                 aspect.description = rawAspect.data.description;
-                aspects[`${aspect.name}`] = aspect;
+                aspects[`${fcoConstants.tob64(aspect.name)}`] = aspect;
             })
             actorData.system.aspects = aspects;
 
@@ -101,7 +101,7 @@ class FateCharacterImporter {
                 skill.name = rawSkill.name.split(".").join("․");
                 skill.rank = rawSkill.data.rank;
                 skill.description = rawSkill.data.description;
-                skills[`${skill.name}`] = skill;
+                skills[`${fcoConstants.tob64(skill.name)}`] = skill;
             })
             actorData.system.skills = skills;
 
@@ -113,7 +113,7 @@ class FateCharacterImporter {
                 stunt.name = rawStunt.name.split(".").join("․");
                 stunt.description = rawStunt.data.description;
                 stunt.refresh_cost = 0;
-                stunts[`${stunt.name}`] = stunt;
+                stunts[`${fcoConstants.tob64(stunt.name)}`] = stunt;
             })
             actorData.system.stunts = stunts;
 
@@ -240,7 +240,7 @@ class FateCharacterImporter {
                 for (let i = 1; i <= track.boxes; i++){
                     track.box_values.push((parseInt(boxValues) & (2 **i)) != 0) //Should be false if 0 and true otherwise
                 }
-                tracks[`${track.name}`] = track;
+                tracks[`${fcoConstants.tob64(track.name)}`] = track;
             })
             actorData.system.tracks = tracks;
 
@@ -295,7 +295,7 @@ class FateCharacterImporter {
                 let aspect = {};
                 aspect.name = rawAspect.name.split(".").join("․"); //Prevents issues in keys with periods.
                 aspect.value = rawAspect.value;
-                aspects[`${aspect.name}`] = aspect;
+                aspects[`${fcoConstants.tob64(aspect.name)}`] = aspect;
             })
             actorData.system.aspects = aspects;
 
@@ -321,7 +321,7 @@ class FateCharacterImporter {
                 let skill = {};
                 skill.name = rawSkill.name.split(".").join("․"); //Prevents issues in keys with periods.
                 skill.rank = rawSkill.value;
-                skills[`${skill.name}`] = skill;
+                skills[`${fcoConstants.tob64(skill.name)}`] = skill;
             })
             actorData.system.skills = skills;
 
@@ -347,7 +347,7 @@ class FateCharacterImporter {
                 stunt.name = rawStunt.name.split(".").join("․"); //Prevents issues in keys with periods.
                 stunt.description = rawStunt.value;
                 stunt.refresh_cost = 0; // Fari doesn't track the cost of stunts so this will have to be modified by the user after import.
-                stunts[`${stunt.name}`] = stunt;
+                stunts[`${fcoConstants.tob64(stunt.name)}`] = stunt;
             })
             actorData.system.stunts = stunts;
 
@@ -448,7 +448,7 @@ class FateCharacterImporter {
                     consequence.category = "Combat";
                     consequence.unique = true;
                     consequence.enabled = true;
-                    tracks[`${consequence.name}`] = consequence;
+                    tracks[`${fcoConstants.tob64(consequence.name)}`] = consequence;
                 }
             })
 
@@ -462,7 +462,7 @@ class FateCharacterImporter {
                 else track.recovery_type = "Sticky"
                 track.boxes = rawStress.value.length;
                 track.box_values = rawStress.value.map(box => box.checked);
-                tracks[`${track.name}`] = track;
+                tracks[`${fcoConstants.tob64(track.name)}`] = track;
             })
 
             actorData.system.tracks = tracks;
