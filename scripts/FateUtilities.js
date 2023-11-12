@@ -1692,7 +1692,7 @@ class FateUtilities extends Application{
 
                 let rec;
                 if (isNewerVersion(game.version, "10")){
-                    rec = data.ShapeData.TYPES.RECTANGLE;
+                    rec = foundry.data.ShapeData.TYPES.RECTANGLE;
                 } else {
                     rec = CONST.DRAWING_TYPES.RECTANGLE;
                 }
@@ -2827,11 +2827,11 @@ Hooks.on('createChatMessage', (message) => {
 })
 
 Hooks.once('ready', async function () {
-    if (game.user.isGM){
-        game.socket.on("system.fate-core-official", rolls => {
+    game.socket.on("system.fate-core-official", rolls => {
+        if (game.user == game.users.activeGM) {
             updateRolls(rolls);
-        })
-    }
+        }
+    })
 
     game.socket.on("system.fate-core-official", render => {
         if (render.render){
@@ -2853,23 +2853,6 @@ Hooks.once('ready', async function () {
         if (yourTurn.yourTurn) {
             let combatant = game.combat.combatants.find(comb => comb.token.id == yourTurn.tokenId);
             if (combatant && !game.user.isGM && combatant.isOwner) game.combat._playCombatSound("yourAction");
-        }
-    })
-
-    game.socket.on("system.fate-core-official", onTop => {
-        if (onTop?.drawingsOnTop == true && game.canvas.ready){
-            canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
-            canvas.drawings.foreground.sortableChildren = true;
-            for (let drawing of canvas.drawings.objects.children){
-                canvas.drawings.foreground.addChild(drawing.shape);
-                drawing.shape.zIndex = drawing.document.z;
-            }
-        }
-        if (onTop?.drawingsOnTop == false && game.canvas.ready){
-            for (let drawing of canvas.drawings.objects.children){
-                canvas.primary.addChild(drawing.shape);
-                drawing.shape.zIndex = drawing.document.z;
-            }
         }
     })
 })

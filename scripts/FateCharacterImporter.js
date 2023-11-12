@@ -86,7 +86,7 @@ class FateCharacterImporter {
             let aspects = {};
             rawAspects.forEach(rawAspect => {
                 let aspect = {};
-                aspect.name = rawAspect.name.split(".").join("․");
+                aspect.name = rawAspect.name;
                 aspect.value = rawAspect.data.value;
                 aspect.description = rawAspect.data.description;
                 aspects[`${fcoConstants.tob64(aspect.name)}`] = aspect;
@@ -98,7 +98,7 @@ class FateCharacterImporter {
             let skills = {};
             rawSkills.forEach(rawSkill => {
                 let skill = {};
-                skill.name = rawSkill.name.split(".").join("․");
+                skill.name = rawSkill.name;
                 skill.rank = rawSkill.data.rank;
                 skill.description = rawSkill.data.description;
                 skills[`${fcoConstants.tob64(skill.name)}`] = skill;
@@ -110,7 +110,7 @@ class FateCharacterImporter {
             let stunts = {};
             rawStunts.forEach(rawStunt => {
                 let stunt = {};
-                stunt.name = rawStunt.name.split(".").join("․");
+                stunt.name = rawStunt.name;
                 stunt.description = rawStunt.data.description;
                 stunt.refresh_cost = 0;
                 stunts[`${fcoConstants.tob64(stunt.name)}`] = stunt;
@@ -123,7 +123,7 @@ class FateCharacterImporter {
             const rawTracks = items.filter (item => item.type === "stress" || item.type === "consequence");
             rawTracks.forEach(rawTrack => {
                 let track = {};
-                track.name = rawTrack.name.split(".").join("․");
+                track.name = rawTrack.name;
                 track.category = "Combat";
                 track.description = rawTrack.data.description;
                 track.unique = true;
@@ -293,7 +293,7 @@ class FateCharacterImporter {
             let aspects = {};
             rawAspects.forEach(rawAspect => {
                 let aspect = {};
-                aspect.name = rawAspect.name.split(".").join("․"); //Prevents issues in keys with periods.
+                aspect.name = rawAspect.name;
                 aspect.value = rawAspect.value;
                 aspects[`${fcoConstants.tob64(aspect.name)}`] = aspect;
             })
@@ -319,7 +319,7 @@ class FateCharacterImporter {
             let skills = {};
             rawSkills.forEach(rawSkill => {
                 let skill = {};
-                skill.name = rawSkill.name.split(".").join("․"); //Prevents issues in keys with periods.
+                skill.name = rawSkill.name;
                 skill.rank = rawSkill.value;
                 skills[`${fcoConstants.tob64(skill.name)}`] = skill;
             })
@@ -344,7 +344,7 @@ class FateCharacterImporter {
             let stunts = {};
             rawStunts.forEach(rawStunt => {
                 let stunt = {};
-                stunt.name = rawStunt.name.split(".").join("․"); //Prevents issues in keys with periods.
+                stunt.name = rawStunt.name;
                 stunt.description = rawStunt.value;
                 stunt.refresh_cost = 0; // Fari doesn't track the cost of stunts so this will have to be modified by the user after import.
                 stunts[`${fcoConstants.tob64(stunt.name)}`] = stunt;
@@ -443,7 +443,7 @@ class FateCharacterImporter {
                     rawStresses.push(rawConsequence);
                 } else {
                     let consequence = {};
-                    consequence.name = rawConsequence.name.split(".").join("․"); //Prevents issues in keys with periods.
+                    consequence.name = rawConsequence.name;
                     consequence.aspect = {"when_marked":true, "name":rawConsequence.value};
                     consequence.category = "Combat";
                     consequence.unique = true;
@@ -454,7 +454,7 @@ class FateCharacterImporter {
 
             rawStresses.forEach(rawStress => {
                 let track = {};
-                track.name = rawStress.name.split(".").join("․"); //Prevents issues in keys with periods.
+                track.name = rawStress.name;
                 track.category = "Combat";
                 track.unique = true;
                 track.enabled = true;

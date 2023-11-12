@@ -55,7 +55,6 @@ class EditPlayerStunts extends FormApplication {
             for (let t in formData){
                 this.stunt[t]=formData[t];
             }
-            this.stunt.name=this.stunt.name.split(".").join("․");
             let stuntKey = fcoConstants.gkfn(stunts, this.stunt.name);
             if (stuntKey) {
                 stunts[stuntKey] = this.stunt 
@@ -81,7 +80,6 @@ class EditPlayerStunts extends FormApplication {
             for (let t in formData){
                 this.stunt[t]=formData[t];
             }
-            this.stunt.name=this.stunt.name.split(".").join("․");
 
             let boxes = this.stunt.boxes;
             let old_box_values = this.stunt.box_values;

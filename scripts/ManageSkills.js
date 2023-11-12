@@ -128,14 +128,14 @@ class SkillSetup extends FormApplication{
                 for (let skill in imported_skills){
                     let sk = new fcoSkill(imported_skills[skill]).toJSON();
                     if (sk){
-                        skills[skill] = sk;  
+                        skills[fcoConstants.tob64(sk.name)] = sk;  
                     }
                 }
             } else {
                 // This is a single skill
                 let sk = new fcoSkill(imported_skills).toJSON();
                 if (sk){
-                    skills[sk.name] = sk;
+                    skills[fcoConstants.tob64(sk.name)] = sk;
                 }
             }
            
@@ -200,7 +200,7 @@ class SkillSetup extends FormApplication{
             let skill = duplicate(fcoConstants.gbn (skills, name));
             name = skill.name+" "+game.i18n.localize("fate-core-official.copy");
             skill.name=name;
-            skills[name]=skill;
+            skills[fcoConstants.tob64(name)]=skill;
             await game.settings.set("fate-core-official","skills",skills);
             this.render(true);
             try {
@@ -234,7 +234,7 @@ class EditSkill extends FormApplication{
 
         async _updateObject(event, f) {
             let skills=game.settings.get("fate-core-official","skills");
-            let name = f.name.split(".").join("․").trim();
+            let name = f.name;
             let newSkill = new fcoSkill({"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc}).toJSON();
             var existing = false;
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
@@ -253,7 +253,7 @@ class EditSkill extends FormApplication{
                     let key = fcoConstants.gkfn(skills, this.skill.name);
                     delete skills[key];
                 }                      
-                skills[name] = newSkill;
+                skills[fcoConstants.tob64(name)] = newSkill;
             }
             await game.settings.set("fate-core-official","skills",skills);
         }

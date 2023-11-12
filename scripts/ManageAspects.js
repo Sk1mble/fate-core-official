@@ -129,7 +129,7 @@ class AspectSetup extends FormApplication{
                 // This is a single aspect
                 let as = new fcoAspect(imported_aspects).toJSON();
                 if (as){
-                    aspects[as.name] = as;
+                    aspects[fcoConstants.tob64(as.name)] = as;
                 }
             }
             
@@ -151,7 +151,7 @@ class AspectSetup extends FormApplication{
             let aspect = duplicate(fcoConstants.gbn(aspects, name));
             name = aspect.name+" "+game.i18n.localize("fate-core-official.copy");
             aspect.name=name;
-            aspects[name]=aspect;
+            aspects[fcoConstants.tob64(name)]=aspect;
             await game.settings.set("fate-core-official","aspects",aspects);
             this.render(true);
             try {
@@ -295,9 +295,8 @@ class EditAspect extends FormApplication{
     //Here are the event listener functions.
     async _onSaveButton(event,html){
         //Get the name and description of the aspect
-        let name = html.find("input[id='edit_aspect_name']")[0].value.split(".").join("․").trim();
+        let name = html.find("input[id='edit_aspect_name']")[0].value;
         let description = DOMPurify.sanitize(html.find("div[id='edit_aspect_description']")[0].innerHTML);
-
         this._updateObject(event, {"name":name, "description":description})
     }    
 
@@ -387,7 +386,7 @@ class OrderAspects extends FormApplication {
         oa_save.on("click", async event => {
             let aspects = {};
             for (let i = 0; i < this.data.length; i++){
-                aspects[this.data[i].name] = this.data[i];
+                aspects[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
             await game.settings.set("fate-core-official", "aspects", aspects);
             this.close();

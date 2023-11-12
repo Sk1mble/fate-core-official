@@ -579,22 +579,17 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
 })
 
 Hooks.once('ready', async function () {
-    if (game.user.isGM){
-        game.socket.on("system.fate-core-official", async (data) => {
-            let GMs = game.users.filter(user => user.isGM && user.active).sort((a,b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
-                
-            if (GMs[0].id != game.user.id){
-                    return;
-            }
+    game.socket.on("system.fate-core-official", async (data) => {
+        if (game.user == game.users.activeGM){
             if (data.action == "create_thing"){
-                    await createThing (data.scene, data.data, data.id, data.shiftDown, data.x, data.y, data.actor);                
+                await createThing (data.scene, data.data, data.id, data.shiftDown, data.x, data.y, data.actor);                
             }  
             if (data.action == "delete_token"){
                 let scene = game.scenes.get(data.scene._id);
                 await scene.deleteEmbeddedDocuments("Token", data.token);
             }
-        })
-    }
+        }
+    })    
 
     game.socket.on("system.fate-core-official", async (data) => {
         if (data.action == "error_msg" && data.id == game.user.id){

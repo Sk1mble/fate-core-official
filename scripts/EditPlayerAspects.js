@@ -129,7 +129,7 @@ class EditPlayerAspects extends FormApplication{
 
     async _on_name_change(event, html){
         let key = event.target.name.split("_")[1]
-        let newName = event.target.value.split(".").join("․").trim();;
+        let newName = event.target.value;
 
         if (!newName) {
             ui.notifications.error(game.i18n.localize("fate-core-official.YouCannotHaveAnAspectWithABlankName"));

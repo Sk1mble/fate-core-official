@@ -183,6 +183,19 @@ function setupFont(){
         document.documentElement.style.setProperty('--fco-foundry-font-family', `${val}`);
     }
 }
+
+function rationaliseKeys(){
+    let types = ["stunts","aspects","tracks","skills"];
+    for (let type of types){
+        let data = game.settings.get("fate-core-official", type);
+        let export_data = {};
+        for (let sub_item in data){
+            let key = fcoConstants.tob64(data[sub_item].name);
+            export_data[key] = data[sub_item];
+        }
+        game.settings.set("fate-core-official", type, export_data);
+    }
+}
     
 Hooks.once('ready', () => {
     game.system["fco-shifted"]=false;
@@ -192,45 +205,32 @@ Hooks.once('ready', () => {
     } else {
         game.system["lang"] = game.i18n._fallback["fate-core-official"];
     }
-
-    if (game.settings.get ("fate-core-official", "drawingsOnTop")){
-        try {
-            // This method doesn't work in v10
-            //game.canvas.drawings.setParent(game.canvas.interface);
-        } catch {
-            // This just means that the layers aren't instantiated yet.
-        }
-    }
     setupSheet();
     setupFont();
+    if (game.user == game.users.activeGM) rationaliseKeys();
 });
 
-Hooks.on('canvasReady' , (canvas) => {
-    if (game.settings.get("fate-core-official","drawingsOnTop")){
-        canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
-        canvas.drawings.foreground.sortableChildren = true;
-        for (let drawing of canvas.drawings.objects.children){
-            canvas.drawings.foreground.addChild(drawing.shape);
-            //drawing.shape.zIndex = drawing.document.z;
-        }
-    }
-})
-
 Hooks.on('createDrawing', (drawing) => {
-    if (game.settings.get("fate-core-official","drawingsOnTop")){
-        canvas.drawings.foreground.addChild(drawing.object.shape);
-        drawing.shape.zIndex = drawing.z;
-    }
-})
-
-Hooks.on('deleteDrawing', (drawing, render, id) => {
-    if (game.settings.get("fate-core-official","drawingsOnTop")){
-        for (let d of canvas.drawings.foreground.children){
-            if (d.object._destroyed){
-                canvas.drawings.foreground.removeChild(d);
-            }
+    if (game.settings.get("fate-core-official","drawingsOnTop")){  
+        const siblings = canvas.drawings.placeables;
+        // Determine target sort index
+        let z = 0;
+        let up = true;
+        let controlled = [drawing];
+        if ( up ) {
+            controlled.sort((a, b) => a.document.z - b.document.z);
+            z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
+        } else {
+            controlled.sort((a, b) => b.document.z - a.document.z);
+            z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
         }
-    }
+        // Update all controlled objects
+        const updates = controlled.map((o, i) => {
+        let d = up ? i : i * -1;
+            return {_id: o.id, z: z + d};
+        });
+            return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
+        }
 })
 
 Hooks.on('diceSoNiceReady', function() {
@@ -243,7 +243,7 @@ Hooks.once('ready', async function () {
     game.actors.contents.forEach(actor => {
         if (actor.type == "ModularFate" || actor.type == "FateCoreOfficial") updates.push({_id:actor.id, type:"fate-core-official"})
     });
-    if (game.user.isGM) await Actor.updateDocuments(updates)
+    if (game.user == game.users.activeGM) await Actor.updateDocuments(updates)
 
     // We need to port any and all settings over from ModularFate/Fate Core Official and any or all flags.
 
@@ -258,7 +258,7 @@ Hooks.once('ready', async function () {
                 systemSettings.push({_id: s._id, key: s.key.replace("FateCoreOfficial.", "fate-core-official.")});
             }
         }
-        if (game.user.isGM) await Setting.updateDocuments(systemSettings);
+        if (game.user == game.users.activeGM) await Setting.updateDocuments(systemSettings);
     }
     catch (error){
         //Do nothing, just don't stop what you're doing!
@@ -281,27 +281,27 @@ Hooks.once('ready', async function () {
 
     // Users
     for (let doc of game.users){
-        if (game.user.isGM) await changeFlags(doc);
+        if (game.user == game.users.activeGM) await changeFlags(doc);
     }
 
     // Actors
     for (let doc of game.actors){
-        if (game.user.isGM) await changeFlags(doc);
+        if (game.user == game.users.activeGM) await changeFlags(doc);
     }
 
     // Scenes & Token actors
     for (let doc of game.scenes){
-        if (game.user.isGM) await changeFlags(doc);
+        if (game.user == game.users.activeGM) await changeFlags(doc);
         for (let tok of doc.tokens){
-            if (game.user.isGM) await changeFlags(tok);
+            if (game.user == game.users.activeGM) await changeFlags(tok);
         }
     }
 
     // Combats & combatants
     for (let doc of game.combats) {
-        if (game.user.isGM) await changeFlags (doc);
+        if (game.user == game.users.activeGM) await changeFlags (doc);
         for (let com of doc.combatants){
-            if (game.user.isGM) await changeFlags (com);
+            if (game.user == game.users.activeGM) await changeFlags (com);
         }
     }
 
@@ -1138,24 +1138,7 @@ game.settings.register("fate-core-official","freeStunts", {
         scope:"world",
         config:"true",
         type:Boolean,
-        default:false,
-        onChange: () => {
-            let val = game.settings.get("fate-core-official","drawingsOnTop");
-            if (val && canvas?.objects?.drawings?.children) {
-                canvas.drawings.foreground = canvas.drawings.addChildAt(new PIXI.Container(), 0);
-                canvas.drawings.foreground.sortableChildren = true;
-                for (let drawing of canvas?.drawings?.objects?.children){
-                    canvas.drawings.foreground.addChild(drawing.shape);
-                }
-            }
-            else {
-                if (canvas?.objects?.drawings?.children){
-                    for (let drawing of canvas?.drawings?.objects?.children){
-                        canvas.primary.addChild(drawing.shape);
-                    }
-                }
-            }
-        }
+        default:false
     })
 
     game.settings.register("fate-core-official","fco-aspects-pane-mheight", {

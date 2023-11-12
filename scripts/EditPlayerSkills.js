@@ -413,7 +413,7 @@ class EditGMSkills extends FormApplication{
         const asn = $('input[name="adhoc_skill_name"]');
         asn.on('blur', async (event, html)=>{
             let oldSkill = event.target.getAttribute("data-oldName");
-            let newSkill = event.target.value.split(".").join("․");
+            let newSkill = event.target.value;
             if (oldSkill != newSkill){
                 let rank = fcoConstants.gbn(this.object.system.skills, oldSkill).rank;
                 newSkill= new fcoSkill({
@@ -429,7 +429,7 @@ class EditGMSkills extends FormApplication{
                 }).toJSON();
     
                 if (newSkill != undefined){
-                    newSkill.name=newSkill.name.split(".").join("․");
+                    newSkill.name=newSkill.name;
                     let oldSkillKey = fcoConstants.gkfn(this.object.system.skills, oldSkill);
                     this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill, [`-=${oldSkillKey}`]:null}}).then(() => this.render(false));
                 }
@@ -495,7 +495,6 @@ class EditGMSkills extends FormApplication{
             }).toJSON();
         }
         if (newSkill != undefined){
-            newSkill.name=newSkill.name.split(".").join("․");
             this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill}}).then(() => this.render(false));
         }
     }

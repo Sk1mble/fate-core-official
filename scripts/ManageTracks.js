@@ -196,7 +196,7 @@ class EditEntityTrack extends FormApplication {
         await this.entity.update(
             {
                 "system.tracks":{
-                    [this.track.name]:this.track
+                    [fcoConstants.tob64(this.track.name)]:this.track
                 }
             }
         )
@@ -214,7 +214,7 @@ class EditEntityTrack extends FormApplication {
     }
 
     async _onSaveTrackButton(event,html){
-        let name = document.getElementById("edit_entity_track_name").value.split(".").join("․").trim();
+        let name = document.getElementById("edit_entity_track_name").value;
         let description = DOMPurify.sanitize(document.getElementById("edit_entity_track_description").innerHTML);
         let recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
         let aspect = document.getElementById("edit_entity_track_aspect").value;
@@ -291,7 +291,7 @@ class EditEntityTrack extends FormApplication {
             })    
         }
         let key = fcoConstants.gkfn(tracks, this.track.name);
-        if (!key) key = this.track.name;
+        if (!key) key = fcoConstants.tob64(this.track.name);
         
         tracks [key] = this.track;
 
@@ -433,7 +433,7 @@ class EditLinkedSkills extends FormApplication {
                 }
             }
             let key = fcoConstants.gkfn(tracks, this.track.name);
-            if (!key) key = this.track.name;
+            if (!key) key = fcoConstants.tob64(this.track.name);
             tracks[key]=this.track;
             await game.settings.set("fate-core-official","tracks",tracks);
             this.render(false);
@@ -459,7 +459,7 @@ class EditLinkedSkills extends FormApplication {
             )
             let tracks=game.settings.get("fate-core-official","tracks");
             let key = fcoConstants.gkfn(tracks, this.track.name);
-            if (!key) key = this.track.name;
+            if (!key) key = fcoConstants.tob64(this.track.name);
             tracks[key]=this.track;
             await game.settings.set("fate-core-official","tracks",tracks);
             this.render(false);
@@ -632,8 +632,7 @@ class EditTracks extends FormApplication {
         }
         else {
             let t = fcoConstants.gkfn(this.tracks, name);
-            if (!t) t = name;
-            let track = `{"${t}":${JSON.stringify(this.tracks[t], null, 5)}}`;
+            let track = `{"${fcoConstants.tob64(name)}":${JSON.stringify(this.tracks[t], null, 5)}}`;
             new Dialog({
                 title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
                 content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${track}</textarea></div>`,
@@ -653,14 +652,14 @@ class EditTracks extends FormApplication {
         else {
             let track = duplicate(fcoConstants.gbn(this.tracks, name));
             track.name = track.name+" copy"
-            this.tracks[track.name]=track;
+            this.tracks[fcoConstants.tob64(track.name)]=track;
             await game.settings.set("fate-core-official","tracks",this.tracks);
             this.render(false);
         }
     }
 
     async _edit_track_name_change(event, html){
-        let name = event.target.value.split(".").join("․").trim();
+        let name = event.target.value;
         let track = fcoConstants.gbn(this.tracks, name);
         if (track == undefined){
             document.getElementById("edit_linked_skills").disabled=true;
@@ -675,7 +674,6 @@ class EditTracks extends FormApplication {
              let name = document.getElementById("track_select").value;
             try {
                     let key = fcoConstants.gkfn(this.tracks, name);
-                    if (!key) key = name;
                     delete this.tracks[key];
                     await game.settings.set("fate-core-official","tracks",this.tracks);
                     this.render(false);
@@ -768,7 +766,7 @@ class EditTracks extends FormApplication {
     }
 
     async _onSaveTrackButton(event,html){
-        let name = document.getElementById("edit_track_name").value.split(".").join("․").trim();
+        let name = document.getElementById("edit_track_name").value;
         let description = DOMPurify.sanitize(document.getElementById("edit_track_description").innerHTML);
         let universal = document.getElementById("edit_track_universal").checked;
         let unique = document.getElementById("edit_track_unique").checked;
@@ -836,7 +834,7 @@ class EditTracks extends FormApplication {
                     "label":label,
                     "rollable":rollable,
                 }).toJSON();
-                this.tracks[name]=newTrack;
+                this.tracks[fcoConstants.tob64(name)]=newTrack;
             }
             await game.settings.set("fate-core-official","tracks",this.tracks);
             this.render(false);
@@ -999,7 +997,7 @@ class TrackSetup extends FormApplication{
                 // This is a track object
                 let tr = new fcoTrack(imported_tracks).toJSON();
                     if (tr){
-                        tracks[tr.name]=tr;
+                        tracks[fcoConstants.tob64(tr.name)]=tr;
                     }
             }
 
@@ -1155,7 +1153,7 @@ class OrderTracks extends FormApplication {
         ot_save.on("click", event => {
             let tracks = {};
             for (let i = 0; i < this.data.length; i++){
-                tracks[this.data[i].name] = this.data[i];
+                tracks[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
             game.settings.set("fate-core-official", "tracks", tracks);
             this.close();

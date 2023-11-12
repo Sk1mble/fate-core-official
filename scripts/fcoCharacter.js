@@ -331,7 +331,7 @@ export class fcoCharacter extends ActorSheet {
                                                 }).toJSON();
                                             }
                                             if (newSkill != undefined){
-                                                newSkill.name=newSkill.name.split(".").join("․");
+                                                newSkill.name=newSkill.name;
                                                 this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill}});
                                             }
                                         }
@@ -1390,6 +1390,7 @@ export class fcoCharacter extends ActorSheet {
         const superData = super.getData();
         const sheetData = duplicate(superData.data);
         sheetData.document = superData.actor;
+        sheetData.actor = sheetData.document;
         sheetData.owner = superData.owner;
 
         sheetData.system.displayStunts = duplicate(sheetData.system.stunts);
