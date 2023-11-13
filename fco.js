@@ -1480,8 +1480,8 @@ Combatant.prototype._getInitiativeFormula = function () {
     }
 }
 
-Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, name, enriched_tokens) {
-    return enriched_tokens[token_id][type][name].richNotes;
+Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, key, enriched_tokens) {
+    return enriched_tokens[token_id][type][key].richNotes;
 })
 
 Handlebars.registerHelper("fco_strip", function (value) {

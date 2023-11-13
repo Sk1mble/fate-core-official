@@ -449,7 +449,7 @@ class fcoConstants {
     static tob64 (text){
         let bytes = new TextEncoder().encode(text);
         const binString = String.fromCodePoint(...bytes);
-        return btoa(binString);
+        return btoa(binString).split("=").join("");
     }
 
     static fromb64 (base64){

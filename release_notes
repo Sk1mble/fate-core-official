@@ -1,4 +1,8 @@
-# 4.5.00 (Unreleased)
+# 4.5.01
+* Urgent bugfix release - Saving changes to aspects and track aspects on character sheets was broken.
+* Fixed expand track/aspect buttons in FateUtilities.
+
+# 4.5.00
 * Preparing to use a base64 encoded version of names as keys, ensuring proper support for unusual characters. Some helper functions added to fcoConstants for this, and also amended my functions that search objects by name field to look for the encoded name as a key first before falling back on searching by the name string itself. (fcoCosntants.tob64(text) and fcoConstants.fromb64(b64))
 * Fixed a bug in saving aspect names that meant a character would break if a period was included in the name of the aspect.
 * fcoCharacter has now been edited to work without reliance on a 1:1 relationship between object 'name' fields and the same object's key. fcoExtra didn't need any work. Next up is to work on ManageAspects etc. and consider refactoring all handlebars files to contain object keys as data items where it can simplify this refactoring.
