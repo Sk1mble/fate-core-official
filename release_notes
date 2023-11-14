@@ -1,3 +1,8 @@
+# 4.5.02
+* Bug fixes and improvements to new logic for object key/name migration. 
+* Character data migrations only occur if the key is not already an encoded version of the item's name, this should increase efficiency.
+* Game stunts, tracks, aspects, and skills are now only migrated if there are any migrations required.
+
 # 4.5.01
 * Urgent bugfix release - Saving changes to aspects and track aspects on character sheets was broken.
 * Fixed expand track/aspect buttons in FateUtilities.

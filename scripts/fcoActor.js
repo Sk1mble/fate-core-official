@@ -44,17 +44,15 @@ export class fcoActor extends Actor {
                         delete data.system[item][sub_item].extra_tag;
                         data.system[item][sub_item].extra_id = id;
                     }
-                }
-            }
-            for (let item of toProcess){
-                let output = {};
-                for (let sub_item in data.system[item]){
-                    let object = data.system[item][sub_item];
+                    let object = duplicate(data.system[item][sub_item]);
                     if (object.name){
-                        output[fcoConstants.tob64(object.name)] = object;
+                        let newKey = fcoConstants.tob64(object.name);
+                        if (newKey != sub_item){
+                            delete data.system[item][sub_item];
+                            data.system[item][newKey] = object;
+                        }
                     }
-                }
-                if (Object.keys(output).length > 1) data.system[item] = output;
+                };
             }
         }
         return super.migrateData(data);
@@ -662,6 +660,7 @@ export class fcoActor extends Actor {
             let rank = 0;
             if (skill == "Special"){
                 // We need to pop up a dialog to get a skill to roll.
+                //TODO: Consider whether should be able to select a 'No Skill option' to roll at Mediocre.
                 let skills = [];
                 for (let x in this.system.skills){
                     skills.push(this.system.skills[x].name);
@@ -670,6 +669,7 @@ export class fcoActor extends Actor {
                 skill = fcoConstants.gbn(this.system.skills, sk);
                 rank = skill?.rank;
             } else {
+                //TODO: Consider whether should be able to roll a skill they don't have at Mediocre.
                 skill = fcoConstants.gbn(this.system.skills, skill);
                 if (!skill) return;
                 rank = skill?.rank;

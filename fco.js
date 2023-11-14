@@ -193,7 +193,12 @@ function rationaliseKeys(){
             let key = fcoConstants.tob64(data[sub_item].name);
             export_data[key] = data[sub_item];
         }
-        game.settings.set("fate-core-official", type, export_data);
+        
+        let oldKeys = JSON.stringify(Object.keys(data));
+        let newKeys = JSON.stringify(Object.keys(export_data));
+        if (newKeys != oldKeys) {
+            game.settings.set("fate-core-official", type, export_data);
+        }
     }
 }
     
