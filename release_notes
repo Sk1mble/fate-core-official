@@ -1,3 +1,7 @@
+# 4.5.03
+* Added buttons to chat messages to allow rerolls etc. to be performed from chat messages as well as Fate Utilities.
+* Changed logic for reroll messages so that they are also attached to the current scene rather than orphaned.
+
 # 4.5.02
 * Bug fixes and improvements to new logic for object key/name migration. 
 * Character data migrations only occur if the key is not already an encoded version of the item's name, this should increase efficiency.
