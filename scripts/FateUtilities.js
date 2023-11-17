@@ -835,16 +835,50 @@ class FateUtilities extends Application{
         let msg_id = event.target.getAttribute("data-msg_id");
         let index = detail[1];
         let action = detail[2];
-        let rolls = duplicate(game.scenes.viewed.getFlag("fate-core-official","rolls"));
+        let rolls = game.scenes.viewed.getFlag("fate-core-official","rolls");
+        if (rolls) rolls = duplicate(rolls);
         let roll = undefined;
         if (index > -1){
             roll = rolls[index];
         } else {
-            roll = rolls.find(r => r.message_id == msg_id);
-            console.log(rolls);
+            if (rolls) roll = rolls.find(r => r.message_id == msg_id);
         }
         let message;
-        if (roll.message_id) message = game.messages.get(roll.message_id)
+        if (roll?.message_id) message = game.messages.get(roll.message_id)
+        if (!message) message = game.messages.get(msg_id);
+
+        if (!roll){
+            let dice_formula = message.rolls[0].options?.fco_formula;
+            if (!dice_formula) dice_formula = message.rolls[0].formula.split("+")[0].split("-")[0].trim();
+            let speaker = message.speaker.alias;
+            let fullSpeaker = message.speaker;
+            let flavor = message.flavor;
+            let formula = message.rolls[0].formula;
+            let total = message.rolls[0].total;
+            let message_id = message.id;
+            let diceResult = message.rolls[0].dice[0].values;
+            if (diceResult == undefined){
+                let d = message.roll.dice[0].rolls;
+                diceResult = [];
+                for (let i=0; i< d.length; i++){
+                    diceResult.push(d[i].roll)
+                }
+            }
+            let user = {name:message.user.name, _id:message.user._id};
+            roll = {
+                "message_id":message_id,
+                "speaker":speaker,
+                "fullSpeaker":fullSpeaker,
+                "formula":formula,
+                "dice_formula":dice_formula,
+                "flavor":flavor,
+                "total":total,
+                "dice":diceResult,
+                "user":user,
+                "roll":roll
+            }
+
+        }
         
         if (action == "manual" || action == "manualfp"){
             let gp = await gmfp(roll);
@@ -2772,8 +2806,9 @@ Hooks.on('renderChatMessage', (message, html, data) => {
     if (message.rolls.length < 1) return;
     let scene = game.scenes.viewed;
     let rolls = scene.getFlag("fate-core-official", "rolls");
-    let roll = rolls.find(roll => roll.message_id == message.id);
-    let index = rolls.indexOf(roll);
+    let roll = undefined;
+    if (rolls) roll = rolls.find(roll => roll.message_id == message.id);
+    let index = rolls?.indexOf(roll);
 
     if (!message.flavor.startsWith("<h1>Reroll") && (message.speaker.actor == game?.user?.character?.id || game.user.isGM)){
         // Add roll buttons here
@@ -2786,10 +2821,10 @@ Hooks.on('renderChatMessage', (message, html, data) => {
                         </tr>
                         <tr style="background:transparent;"">
                             <td>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_${index}_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PlusOneExplainer'}}">+1</button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_${index}_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreePlusTwoExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-plus"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_${index}_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreeRerollExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-dice"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_${index}_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PlusOneExplainer'}}">+1</button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreePlusTwoExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-plus"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreeRerollExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-dice"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools"></button>
                             </td>
                         </tr>
                         <tr style="background:transparent;"">
@@ -2797,9 +2832,9 @@ Hooks.on('renderChatMessage', (message, html, data) => {
                         </tr>
                         <tr style="background:transparent;"">
                             <td>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_${index}_plus2fp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_${index}_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidRerollExplainer'}}" i icon class="fas fa-dice"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_${index}_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2fp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidRerollExplainer'}}" i icon class="fas fa-dice"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools"></button>
                             </td>
                     </tr>
                     </table>

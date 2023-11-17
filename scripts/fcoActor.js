@@ -34,7 +34,6 @@ export class fcoActor extends Actor {
 
     static migrateData (data){
         // Convert all extra_tags to being extra_id.
-        // Convert all keys on skills, aspects, stunts, and tracks to base-64 encoded versions of their names.
         if (data.system && data.name){
             let toProcess = ["skills","stunts","aspects","tracks"];
             for (let item of toProcess){
@@ -43,14 +42,6 @@ export class fcoActor extends Actor {
                         let id = data.system[item][sub_item]?.extra_tag?.extra_id;
                         delete data.system[item][sub_item].extra_tag;
                         data.system[item][sub_item].extra_id = id;
-                    }
-                    let object = duplicate(data.system[item][sub_item]);
-                    if (object.name){
-                        let newKey = fcoConstants.tob64(object.name);
-                        if (newKey != sub_item){
-                            delete data.system[item][sub_item];
-                            data.system[item][newKey] = object;
-                        }
                     }
                 };
             }
@@ -289,7 +280,7 @@ export class fcoActor extends Actor {
                         if (count > 1){    
                             stunts[stunt].name = stunts[stunt].name + ` ${count}`;
                         }
-                        stunts_output[stunts[stunt].name]=stunts[stunt];
+                        stunts_output[fcoConstants.tob64(stunts[stunt].name)]=stunts[stunt];
                     }
                 }
 
@@ -314,7 +305,7 @@ export class fcoActor extends Actor {
                                 if (count2 > count) count = count2;
                                 skills[skill].name = skills[skill].name + ` ${count}`;
                             }
-                            skills_output[skills[skill].name]=skills[skill];
+                            skills_output[fcoConstants.tob64(skills[skill].name)]=skills[skill];
                         } else {
                             // We need to ensure the combined skills are setup correctly; if we've just removed the setting here then we need to rebuild
                             // We need to build all the combined skills here and make sure that they're returned properly in skills_output
@@ -351,7 +342,7 @@ export class fcoActor extends Actor {
                                             }
                                         }
                                     }
-                                    skills_output[combined_skill.name] = combined_skill;
+                                    skills_output[fcoConstants.tob64(combined_skill.name)] = combined_skill;
                                 }
                             }
                         }
@@ -371,7 +362,7 @@ export class fcoActor extends Actor {
                             if (count2 > count) count = count2;
                             aspects[aspect].name = aspects[aspect].name + ` ${count}`;
                         }
-                        aspects_output[aspects[aspect].name]=aspects[aspect];
+                        aspects_output[fcoConstants.tob64(aspects[aspect].name)]=aspects[aspect];
                     }
                 }
                 
@@ -388,7 +379,7 @@ export class fcoActor extends Actor {
                             if (count2 > count) count = count2;
                             tracks[track].name = tracks[track].name +` ${count}`;
                         }
-                        tracks_output[tracks[track].name]=tracks[track];
+                        tracks_output[fcoConstants.tob64(tracks[track].name)]=tracks[track];
                     }        
                 }
     
@@ -419,7 +410,7 @@ export class fcoActor extends Actor {
                     for (let i = 0; i < tracks_output[track]?.box_values?.length; i++){
                         tracks_output[track].box_values[i] = tr.box_values[i];
                     }
-                    if (tr?.when_marked) tracks_output[track].aspect.name = tr.aspect?.name;
+                    if (tr?.when_marked && tracks_output[track].aspect?.name) tracks_output[track].aspect.name = tr.aspect?.name;
                     if (tr?.notes) tracks_output[track].notes = tr.notes;
                 }
             }
@@ -501,7 +492,7 @@ export class fcoActor extends Actor {
                         track.name = name;
                         delete track.extra_id;
                         delete track.original_name;
-                        trackUpdates[name] = track;
+                        trackUpdates[t] = track;
                     }
                 }
             }
@@ -515,7 +506,7 @@ export class fcoActor extends Actor {
                         stunt.name = name;
                         delete stunt.extra_id;
                         delete stunt.original_name;
-                        stuntUpdates[name] = stunt;
+                        stuntUpdates[s] = stunt;
                     }
                 }
             }
