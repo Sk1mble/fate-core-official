@@ -241,7 +241,7 @@ class EditAspect extends FormApplication{
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
                     delete aspects[key];
                 }            
-                aspects[key]=newAspect;
+                aspects[fcoConstants.tob64(name)]=newAspect;
             }
             await game.settings.set("fate-core-official","aspects",aspects);
             this.close();

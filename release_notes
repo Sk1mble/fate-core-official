@@ -1,3 +1,6 @@
+# 4.5.06
+* Bugfix; aspects were not saving properly in the Setup Aspects menu option because all aspects were being created with the key 'undefined'.
+
 # 4.5.05
 * Wrote new methods for migrating all data to use base64 encoded keys - permanently - on start-up (this is a GM operation). Extras and characters also have their keys migrated automatically on creation, which will include use cases like importing from compendiums or raw data, etc.
 
