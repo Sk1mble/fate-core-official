@@ -20,6 +20,25 @@ export class fcoActor extends Actor {
         }
     }
 
+    async rationaliseKeys(){
+        if (this.type == "fate-core-official"){
+            let types = ["aspects", "tracks", "stunts", "skills"];
+            for (let type of types) {
+                let block = this.system[type];
+                let output= {};
+                for (let item in block){
+                    output[fcoConstants.tob64(block[item].name)] = block[item];
+                }
+                let oldKeys = JSON.stringify(Object.keys(block));
+                let newKeys = JSON.stringify(Object.keys(output));
+                if (oldKeys != newKeys){
+                    await this.update({"system":{[type]:null}})
+                    await this.update({"system":{[type]:output}})
+                }    
+            }
+        }
+    }
+
     async _preCreate(...args){
         await super._preCreate(...args);
 
@@ -29,6 +48,23 @@ export class fcoActor extends Actor {
 
         if (this?.system?.details?.fatePoints?.refresh === ""){
             this.updateSource(this.initialisefcoCharacter());
+        }
+
+        if (this.type == "fate-core-official"){
+            let types = ["aspects", "tracks", "stunts", "skills"];
+            for (let type of types) {
+                let block = this.system[type];
+                let output= {};
+                for (let item in block){
+                    output[fcoConstants.tob64(block[item].name)] = block[item];
+                }
+                let oldKeys = JSON.stringify(Object.keys(block));
+                let newKeys = JSON.stringify(Object.keys(output));
+                if (oldKeys != newKeys){
+                    this.updateSource({"system":{[type]:null}})
+                    this.updateSource({"system":{[type]:output}})
+                }
+            }
         }
     }
 

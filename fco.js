@@ -212,7 +212,11 @@ Hooks.once('ready', () => {
     }
     setupSheet();
     setupFont();
-    if (game.user == game.users.activeGM) rationaliseKeys();
+    if (game.user == game.users.activeGM){
+        rationaliseKeys();
+        game.actors.contents.forEach(async actor => await actor.rationaliseKeys());
+        game.items.contents.forEach(async extra => await extra.rationaliseKeys());
+    } 
 });
 
 Hooks.on('createDrawing', (drawing) => {
@@ -537,6 +541,7 @@ Hooks.on('renderUserConfig', (user, html, data) => {
 })
 
 Hooks.once('init', async function () {
+    console.log(game.actors);
     CONFIG.Actor.documentClass = fcoActor;
     CONFIG.Item.documentClass = fcoExtra;
 

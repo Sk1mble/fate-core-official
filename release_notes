@@ -1,3 +1,6 @@
+# 4.5.05
+* Wrote new methods for migrating all data to use base64 encoded keys - permanently - on start-up (this is a GM operation). Extras and characters also have their keys migrated automatically on creation, which will include use cases like importing from compendiums or raw data, etc.
+
 # 4.5.04
 * Rolled back automatic migration in migrateData method of actors and extras as it was causing skills to be unable to be saved. Encoded keys can co-exist without issue with normal name keys, but there may be unexpected behaviour if you create a track, skill, or aspect with exactly the same name as an existing item (e.g. using the aspect editor to give a player a second High Concept aspect). Any glitches caused by such duplicate entries should be resolved upon changing the name of the duplicate item. I am researching potenital alternative methods for forcing migration of data to use appropriate keys.
 * Changed the logic for handling rolls from chat messages so it will work after the roll history for the scene has been cleared.

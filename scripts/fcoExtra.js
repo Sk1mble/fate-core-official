@@ -1,4 +1,44 @@
 export class fcoExtra extends Item {
+
+    async _preCreate(...args){
+        await super._preCreate(...args);
+        let types = ["aspects", "tracks", "stunts", "skills"];
+        if (this.type == "Extra"){
+            for (let type of types) {
+                let block = this.system[type];
+                let output= {};
+                for (let item in block){
+                    output[fcoConstants.tob64(block[item].name)] = block[item];
+                }
+                let oldKeys = JSON.stringify(Object.keys(block));
+                let newKeys = JSON.stringify(Object.keys(output));
+                if (oldKeys != newKeys){
+                    this.updateSource({"system":{[type]:null}})
+                    this.updateSource({"system":{[type]:output}})
+                }
+            }
+        }
+    }
+
+    async rationaliseKeys(){
+        let types = ["aspects", "tracks", "stunts", "skills"];
+        if (this.type == "Extra"){
+            for (let type of types) {
+                let block = this.system[type];
+                let output= {};
+                for (let item in block){
+                    output[fcoConstants.tob64(block[item].name)] = block[item];
+                }
+                let oldKeys = JSON.stringify(Object.keys(block));
+                let newKeys = JSON.stringify(Object.keys(output));
+                if (oldKeys != newKeys){
+                    await this.update({"system":{[type]:null}})
+                    await this.update({"system":{[type]:output}})
+                }
+            }
+        }
+    }
+
     async _onCreate(...args){
         if ( args[2] !== game.user.id ) return;
         let itemData;
