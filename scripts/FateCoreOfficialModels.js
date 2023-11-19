@@ -130,7 +130,7 @@ class fcoTrack extends foundry.abstract.DataModel {
         recovery_type.choices = ["Fleeting","Sticky","Lasting"];
 
         let category = new foundry.data.fields.StringField({ nullable: false, required: true, initial:"Combat"});
-        category.choices = Object.keys(game.settings.get("fate-core-official","track_categories"));
+        category.choices = () => {return Object.keys(game.settings.get("fate-core-official","track_categories"))};
 
         return {
             "category":category,

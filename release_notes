@@ -1,3 +1,8 @@
+# 4.5.07
+* Added migration of keys on extras attached to actors for consistency.
+* Bugfix - Was not possible to save a track to a newly created cateogry because the list of valid categories was loaded on start-up rather than dynamically. You would have been able to add tracks to that category after a refresh. I've modified the functionality in this release so that the list of categories is dynamically generated when the track model is tested.
+* Bufix - the skill options in the initiative skill setting now show the name rather than the illegible key.
+
 # 4.5.06
 * Bugfix; aspects were not saving properly in the Setup Aspects menu option because all aspects were being created with the key 'undefined'.
 

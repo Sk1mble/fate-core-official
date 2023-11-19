@@ -36,6 +36,9 @@ export class fcoActor extends Actor {
                     await this.update({"system":{[type]:output}})
                 }    
             }
+            for (let extra of this.items) {
+                await extra.rationaliseKeys();
+            }
         }
     }
 

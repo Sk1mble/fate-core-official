@@ -1003,13 +1003,6 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:false,
         default:true,
     })
-    
-    let skill_choices = {};
-    let skills = game.settings.get("fate-core-official", "skills")
-    
-    skill_choices["None"]="None";
-    skill_choices["Disable"]="Disable";
-    for (let skill in skills){skill_choices[skill]=skill};
 
     game.settings.register("fate-core-official","init_skill", {
         name:game.i18n.localize("fate-core-official.initiativeSkill"),
@@ -1019,7 +1012,15 @@ game.settings.register("fate-core-official","freeStunts", {
         "restricted":true,
         type:String,
         default:"None",
-        choices:skill_choices,
+        choices:() => {
+            let skill_choices = {};
+            let skills = game.settings.get("fate-core-official", "skills")
+            
+            skill_choices["None"]="None";
+            skill_choices["Disable"]="Disable";
+            for (let skill in skills){skill_choices[skill]=skills[skill].name};
+            return skill_choices;
+        },
         onChange: () => {
             foundry.utils.debouncedReload();
         }

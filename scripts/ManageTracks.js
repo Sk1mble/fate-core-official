@@ -1020,7 +1020,7 @@ class TrackSetup extends FormApplication{
                 duplicate = true;
             }
             if (!duplicate && category != "" && category != undefined){
-                track_categories[category]=category;
+                track_categories[category.split(".").join("․")]=category;
             }
             await game.settings.set("fate-core-official","track_categories",track_categories);
             this.render(false);
@@ -1041,7 +1041,7 @@ class TrackSetup extends FormApplication{
                                         let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
                                         let toDelete = [];
                                         for (let tr in tracks){
-                                            if (tracks[tr].category == cat) toDelete.push(tracks[tr]);
+                                            if (tracks[tr].category == track_categories[cat]) toDelete.push(tracks[tr]);
                                         }
 
                                         if (toDelete.length == 0){
@@ -1057,7 +1057,7 @@ class TrackSetup extends FormApplication{
                                             if (del == "yes") {
                                                 delete track_categories[cat];
                                                 for (let ttd of toDelete){
-                                                    delete tracks[ttd.name];
+                                                    delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
                                                 }
                                                 await game.settings.set("fate-core-official","track_categories",track_categories);
                                                 await game.settings.set("fate-core-official", "tracks", tracks);
