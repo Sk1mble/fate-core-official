@@ -835,7 +835,7 @@ class FateUtilities extends Application{
         let msg_id = event.target.getAttribute("data-msg_id");
         let index = detail[1];
         let action = detail[2];
-        let rolls = game.scenes.viewed.getFlag("fate-core-official","rolls");
+        let rolls = game.scenes.viewed?.getFlag("fate-core-official","rolls");
         if (rolls) rolls = duplicate(rolls);
         let roll = undefined;
         if (index > -1){
@@ -940,7 +940,7 @@ class FateUtilities extends Application{
                         let sign = ""
                         if (m >= 0) sign = "+"; 
                         roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
-                        game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                         if (message) {
                             let mrolls = duplicate(message.rolls)
                             let mroll = mroll[0];
@@ -963,7 +963,7 @@ class FateUtilities extends Application{
                         if (m >= 0) sign = "+"; 
                         roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
                         if (game.user.isGM){
-                            game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                            if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                             if (message) {
                                 let mrolls = duplicate(message.rolls);
                                 let mroll = mrolls[0];
@@ -985,7 +985,7 @@ class FateUtilities extends Application{
             }
 
             if (game.user.isGM){
-                await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                if (game.scenes.viewed) await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 if (message) {
                     let mrolls = duplicate(message.rolls);
                     let mroll = mrolls[0];
@@ -1003,7 +1003,9 @@ class FateUtilities extends Application{
             roll.total+=1;
             roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PlusOne")}`
             if (game.user.isGM){
-                await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                if (game.scenes.viewed) {
+                    await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                }
                 if (message) {
                     let mrolls = duplicate (message.rolls);
                     let mroll = mrolls[0];
@@ -1021,7 +1023,7 @@ class FateUtilities extends Application{
             let bonus = 2;
             let flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvoke")}`
             let aspectsInvoked = [];
-            let asa = game.scenes.viewed.getFlag("fate-core-official", "situation_aspects");
+            let asa = game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects");
             if (!asa) asa = {};
             let all_sit_aspects = duplicate(asa);
 
@@ -1041,7 +1043,7 @@ class FateUtilities extends Application{
                // We then need to harvest the number of invokes being used on each and set bonus accordingly.
                // Ideally we should add the flavour to the below.
                 bonus = 0;
-                let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
+                let sit_aspects = duplicate(game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
                     let options = "";
                     for (let i = 0; i < parseInt(aspect.free_invokes, 10)+1; i++){
@@ -1112,7 +1114,7 @@ class FateUtilities extends Application{
                                 }
                                 
                                 if (size === 0){
-                                    size = Math.floor(game.scenes.viewed.width*(1/100));
+                                    size = Math.floor(game.scenes.viewed?.width*(1/100));
                                     if (size < 8) size = 8;
                                     if (size > 256) size = 256;
                                 }
@@ -1129,9 +1131,11 @@ class FateUtilities extends Application{
                         }
                     }
                     if (bonus > 0){
-                        await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
-                        flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokes")} +${bonus} (${aspectsInvoked.join(", ")})`
-                        await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
+                        if (game.scenes.viewed){ 
+                            await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
+                            flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokes")} +${bonus} (${aspectsInvoked.join(", ")})`
+                            await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
+                        }
                     }
                 }
             }
@@ -1146,7 +1150,9 @@ class FateUtilities extends Application{
                         roll.roll = mroll;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
                     } 
-                    await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    if (game.scenes.viewed) {
+                        await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    }
                 }
                 else {
                     //Create a socket call to update the scene's roll data
@@ -1168,7 +1174,7 @@ class FateUtilities extends Application{
             }            
             let flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokeReroll")} ${oldRoll}`
 
-            let asa = game.scenes.viewed.getFlag("fate-core-official", "situation_aspects");
+            let asa = game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects");
             if (!asa) asa = {};
             let all_sit_aspects = duplicate(asa);
 
@@ -1191,7 +1197,7 @@ class FateUtilities extends Application{
                 if (isNewerVersion(game.version, "9.230")){
                     game.system["fco-shifted"] = false;
                 }
-                let sit_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
+                let sit_aspects = duplicate(game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
                     options +=`<option value="${aspect.name}">${aspect.name}</option>`
                 }
@@ -1245,7 +1251,7 @@ class FateUtilities extends Application{
                                 }
     
                                 if (size === 0){
-                                    size = Math.floor(game.scenes.viewed.width*(1/100));
+                                    size = Math.floor(game.scenes.viewed?.width*(1/100));
                                     if (size < 8) size = 8;
                                     if (size > 256) size = 256;
                                 }
@@ -1254,8 +1260,10 @@ class FateUtilities extends Application{
                                 updates.push({_id:drawing.document.id, "text":text, "width":width, "height":height, "fontFamily":font})
                             }
                             flavor += ` (${sit_aspect.name})`
-                            await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
-                            await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
+                            if (game.scenes.viewed){
+                                await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
+                                await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);    
+                            }
                             invokedAspect = sit_aspect.name;
                         }
 
@@ -1304,7 +1312,7 @@ class FateUtilities extends Application{
                         mroll.total = roll.total;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                     }
-                    game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 } else {
                     //Create a socket call to update the scene's roll data
                     game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
@@ -1378,7 +1386,7 @@ class FateUtilities extends Application{
                         roll.roll = mroll;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
                     }
-                    game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 }
             } else {
                 let char = gp.actor;
@@ -1397,7 +1405,7 @@ class FateUtilities extends Application{
                             roll.roll = mroll;
                             await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
                         }
-                        game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                     } else {
                         game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
                     }
@@ -1455,7 +1463,7 @@ class FateUtilities extends Application{
                         mroll.total = roll.total;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                     }
-                    game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 }
             } else {
                 let char = gp.actor;
@@ -1487,7 +1495,7 @@ class FateUtilities extends Application{
                             mroll.total = roll.total;
                             await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                         }
-                        game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        if (games.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                     } else {
                         game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
                     }
@@ -2805,12 +2813,14 @@ function checkFormula(formula){
 Hooks.on('renderChatMessage', (message, html, data) => {
     if (message.rolls.length < 1) return;
     let scene = game.scenes.viewed;
-    let rolls = scene.getFlag("fate-core-official", "rolls");
+    let rolls = scene?.getFlag("fate-core-official", "rolls");
     let roll = undefined;
     if (rolls) roll = rolls.find(roll => roll.message_id == message.id);
     let index = rolls?.indexOf(roll);
 
     if (!message.flavor.startsWith("<h1>Reroll") && (message.speaker.actor == game?.user?.character?.id || game.user.isGM)){
+        let gmText = "";
+        if (game.user.isGM) gmText = game.i18n.localize('fate-core-official.gmHoldShiftToSelectAspects');
         // Add roll buttons here
         const targetElement = html.find('span[class="flavor-text"]');
         targetElement.after(`
@@ -2821,10 +2831,10 @@ Hooks.on('renderChatMessage', (message, html, data) => {
                         </tr>
                         <tr style="background:transparent;"">
                             <td>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PlusOneExplainer'}}">+1</button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreePlusTwoExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-plus"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreeRerollExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-dice"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PlusOneExplainer')}">+1</button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.FreePlusTwoExplainer')} ${gmText}" i icon class="fas fa-plus"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.FreeRerollExplainer')} ${gmText}" i icon class="fas fa-dice"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.manualExplainer')}" i icon class="fas fa-tools"></button>
                             </td>
                         </tr>
                         <tr style="background:transparent;"">
@@ -2832,9 +2842,9 @@ Hooks.on('renderChatMessage', (message, html, data) => {
                         </tr>
                         <tr style="background:transparent;"">
                             <td>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2fp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidRerollExplainer'}}" i icon class="fas fa-dice"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2fp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidPlusTwoExplainer')}" i icon class="fas fa-plus"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidRerollExplainer')}" i icon class="fas fa-dice"></button>
+                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.manualExplainer')}" i icon class="fas fa-tools"></button>
                             </td>
                     </tr>
                     </table>

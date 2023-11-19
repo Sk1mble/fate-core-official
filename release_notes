@@ -1,3 +1,8 @@
+# 4.5.08 (Unreleased)
+* Chat roll invoke etc. buttons will now work even if there's no scene active and associated with the roll.
+* Tooltips for chat roll buttons fixed; were not being correctly rendered.
+* Render on top code fixed so no error thrown from hook for non GM users.
+
 # 4.5.07
 * Added migration of keys on extras attached to actors for consistency.
 * Bugfix - Was not possible to save a track to a newly created cateogry because the list of valid categories was loaded on start-up rather than dynamically. You would have been able to add tracks to that category after a refresh. I've modified the functionality in this release so that the list of categories is dynamically generated when the track model is tested.

@@ -221,25 +221,27 @@ Hooks.once('ready', () => {
 
 Hooks.on('createDrawing', (drawing) => {
     if (game.settings.get("fate-core-official","drawingsOnTop")){  
-        const siblings = canvas.drawings.placeables;
-        // Determine target sort index
-        let z = 0;
-        let up = true;
-        let controlled = [drawing];
-        if ( up ) {
-            controlled.sort((a, b) => a.document.z - b.document.z);
-            z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
-        } else {
-            controlled.sort((a, b) => b.document.z - a.document.z);
-            z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
+        if (drawing.isOwner){
+            const siblings = canvas.drawings.placeables;
+            // Determine target sort index
+            let z = 0;
+            let up = true;
+            let controlled = [drawing];
+            if ( up ) {
+                controlled.sort((a, b) => a.document.z - b.document.z);
+                z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
+            } else {
+                controlled.sort((a, b) => b.document.z - a.document.z);
+                z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
+            }
+            // Update all controlled objects
+            const updates = controlled.map((o, i) => {
+            let d = up ? i : i * -1;
+                return {_id: o.id, z: z + d};
+            });
+                return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
         }
-        // Update all controlled objects
-        const updates = controlled.map((o, i) => {
-        let d = up ? i : i * -1;
-            return {_id: o.id, z: z + d};
-        });
-            return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
-        }
+    }
 })
 
 Hooks.on('diceSoNiceReady', function() {
@@ -541,7 +543,6 @@ Hooks.on('renderUserConfig', (user, html, data) => {
 })
 
 Hooks.once('init', async function () {
-    console.log(game.actors);
     CONFIG.Actor.documentClass = fcoActor;
     CONFIG.Item.documentClass = fcoExtra;
 
