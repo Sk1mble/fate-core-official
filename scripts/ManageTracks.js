@@ -259,15 +259,17 @@ class EditEntityTrack extends FormApplication {
         track.rollable = rollable;
         track.category = category;
 
-        //If box_values < boxes, add
         if (!track.box_values){
             track.box_values = [];
         }
+
+        //If box_values < boxes, add
         if (track.box_values.length < track.boxes){
-            for (let i = 0; i <= (track.boxes - track.box_values.length); i++){
+            for (let i = track.box_values.length; i < track.boxes; i++){
                 track.box_values.push(false);
             }
         }
+
         //If box_values > boxes, trim
         if (track.box_values.length > track.boxes){
             for (let i = track.box_values.length; i > track.boxes; i--){
