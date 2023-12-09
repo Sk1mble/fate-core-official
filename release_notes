@@ -1,4 +1,10 @@
-# 4.5.08 (Unreleased)
+# 4.5.10
+* Bugfix - Game aspect notes in Fate Utilities will now save properly.
+
+# 4.5.09
+* Bugfix - adding boxes to a track in the track editor on a character sheet sometimes resulted in the wrong number of boxes being stored on the character.
+
+# 4.5.08
 * Chat roll invoke etc. buttons will now work even if there's no scene active and associated with the roll.
 * Tooltips for chat roll buttons fixed; were not being correctly rendered.
 * Render on top code fixed so no error thrown from hook for non GM users.

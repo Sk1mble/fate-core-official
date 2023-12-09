@@ -308,7 +308,7 @@ class FateUtilities extends Application{
         })
 
         const FUGameAspectNotes = html.find("textarea[name='FUGameAspectNotesText']");
-        FUGameAspectNotes.on("a", event => {
+        FUGameAspectNotes.on("change", event => {
             let details = event.target.id.split("_");
             let aspectName = details[1];
             let aspects = duplicate(game.settings.get("fate-core-official", "gameAspects"));
