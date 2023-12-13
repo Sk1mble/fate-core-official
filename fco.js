@@ -37,7 +37,7 @@ import { fcoExtra } from "./scripts/fcoExtra.js"
 // The following hooks append the Fate Core Official settings to an Adventure document's flags so that they can be loaded/set on import of the adventure module.
 
 Hooks.on("preCreateAdventure", (adventure, ...args) =>{
-    let flags = duplicate(adventure.flags);
+    let flags = foundry.utils.duplicate(adventure.flags);
     let fco_settings = JSON.parse(fcoConstants.exportSettings());
     if (!flags["fate-core-official"]) flags["fate-core-official"] = {};
     flags["fate-core-official"].settings = fco_settings;
@@ -45,7 +45,7 @@ Hooks.on("preCreateAdventure", (adventure, ...args) =>{
 })
 
 Hooks.on("preUpdateAdventure", (adventure, changes, options, userId) =>{
-    let flags = duplicate(adventure.flags);
+    let flags = foundry.utils.duplicate(adventure.flags);
     let fco_settings = JSON.parse(fcoConstants.exportSettings());
     if (!flags["fate-core-official"]) flags["fate-core-official"] = {};
     flags["fate-core-official"].settings = fco_settings;
@@ -56,7 +56,7 @@ Hooks.on("preUpdateAdventure", (adventure, changes, options, userId) =>{
 // This next piece of code is unnecessary if the user is running Foundry 10.286 or higher. In previous versions of Foundry, this was needed
 // to change the order of import from scenes then journals to journals then scenes, required to prevent bookmarks on the canvas from being 'unknown'.
 
-if (!isNewerVersion(game.version, "10.285")){
+if (!foundry.utils.isNewerVersion(game.version, "10.285")){
     Hooks.on("preImportAdventure", (adventure, formData, toCreate, toUpdate) => {
         // const allowed = Hooks.call("preImportAdventure", this.adventure, formData, toCreate, toUpdate);
         let cScene = toCreate?.Scene;
@@ -75,7 +75,7 @@ if (!isNewerVersion(game.version, "10.285")){
 
 Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let replace = false;
-    let flags = duplicate(adventure.flags);
+    let flags = foundry.utils.duplicate(adventure.flags);
     let settings = flags["fate-core-official"]?.settings;
     if (settings && !formData.overrideSettings){
         const confirm = await Dialog.confirm({
@@ -219,28 +219,37 @@ Hooks.once('ready', () => {
     } 
 });
 
+Hooks.on('preCreateDrawing', (drawing, data) => {
+    if (game.settings.get("fate-core-official", "drawingsOnTop")){
+        if (foundry.utils.isNewerVersion(game.version, 12)) drawing.updateSource({elevation:999999999});
+    }
+})
+
 Hooks.on('createDrawing', (drawing) => {
     if (game.settings.get("fate-core-official","drawingsOnTop")){  
         if (drawing.isOwner){
-            const siblings = canvas.drawings.placeables;
-            // Determine target sort index
-            let z = 0;
-            let up = true;
-            let controlled = [drawing];
-            if ( up ) {
-                controlled.sort((a, b) => a.document.z - b.document.z);
-                z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
+            if (foundry.utils.isNewerVersion(game.version, 12)){
             } else {
-                controlled.sort((a, b) => b.document.z - a.document.z);
-                z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
+                const siblings = canvas.drawings.placeables;
+                // Determine target sort index
+                let z = 0;
+                let up = true;
+                let controlled = [drawing];
+                if ( up ) {
+                    controlled.sort((a, b) => a.document.z - b.document.z);
+                    z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
+                } else {
+                    controlled.sort((a, b) => b.document.z - a.document.z);
+                    z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
+                }
+                // Update all controlled objects
+                const updates = controlled.map((o, i) => {
+                let d = up ? i : i * -1;
+                    return {_id: o.id, z: z + d};
+                });
+                    return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
             }
-            // Update all controlled objects
-            const updates = controlled.map((o, i) => {
-            let d = up ? i : i * -1;
-                return {_id: o.id, z: z + d};
-            });
-                return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
-        }
+        }   
     }
 })
 
@@ -374,7 +383,7 @@ Hooks.once('ready', async function () {
 
            async getData(){
                 let data = super.getData();
-                data.ehmodules = duplicate(ehmodules);
+                data.ehmodules = foundry.utils.duplicate(ehmodules);
                 for (let ehm of data.ehmodules){
                     ehm.richDesc = await fcoConstants.fcoEnrich(ehm.description);
                 }
@@ -437,7 +446,7 @@ Hooks.once('ready', async function () {
 // Needed to update with token name changes in FU.
 Hooks.on('updateToken', (token, data, userId) => {
     let check = false;
-    if (isNewerVersion(game.version, "11.293")){
+    if (foundry.utils.isNewerVersion(game.version, "11.293")){
         if (data.hidden != undefined || data.delta != undefined || data.flags != undefined || data.name!=undefined) check = true;
     }
     else {
@@ -584,14 +593,14 @@ Hooks.once('init', async function () {
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
 
-    if (isNewerVersion(game.version, "9.230")){
+    if (foundry.utils.isNewerVersion(game.version, "9.230")){
         let bindings = [
             {
                 key: "SHIFT"
             }
         ];
 
-        if (isNewerVersion(game.version, "9.235")){
+        if (foundry.utils.isNewerVersion(game.version, "9.235")){
             bindings = [
                 {
                   key: "ShiftLeft"
@@ -1262,7 +1271,7 @@ game.settings.register("fate-core-official","freeStunts", {
         default:"none"
     })
 
-    if (isNewerVersion(game.version, '9.220')){
+    if (foundry.utils.isNewerVersion(game.version, '9.220')){
         game.system.documentTypes.Item = ["Extra"];
         game.system.documentTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
     } else {

@@ -1,3 +1,12 @@
+# 4.6.0
+* Tested that the system works properly with Foundry v12.317 (prototype 1)
+* Foundry v12.317 deprecation compatibility changes
+* Added methods for changing the playmat backgrounds of Fate Worlds so if the data structure/documents/etc. changes again, we can update the system instead of every single module. The updated modules will require this version of Fate Core Official.
+* Some changes made to support localisation efforts.
+* Drawings on top setting in Foundry v12 now just sets the default Elevation for drawings to 999999999, meaning they'll render on top of all other canvas elements (unless you're dealing with tokens at ridiculous altitudes).
+* Preliminary work on adding an API for characters to have multiple shapes stored to facilitate rapid switching between stored sets of token and avatar artwork. The back-end is all in place, just the user interface needs to be completed.
+* Completed work on the token and avatar art switching utility. Look for the circular arrows on the token HUD.
+
 # 4.5.10
 * Bugfix - Game aspect notes in Fate Utilities will now save properly.
 

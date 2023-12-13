@@ -18,7 +18,7 @@ class EditPlayerSkills extends FormApplication{
                 if (this.object.type != "Extra"){
                     this.firstRun=true;
                 }
-                this.player_skills=duplicate(this.object.system.skills);
+                this.player_skills=foundry.utils.duplicate(this.object.system.skills);
                 this.sortByRank = true;
                 this.temp_presentation_skills=[];
                 this.sorted = false;
@@ -88,7 +88,7 @@ class EditPlayerSkills extends FormApplication{
             if (!game.user.isGM && isPlayer && !canSave){
                 ui.notifications.error(game.i18n.localize("fate-core-official.UnableToSave"));
             } else {
-                let tracks = this.object.setupTracks (duplicate(this.player_skills), duplicate(this.object.system.tracks));
+                let tracks = this.object.setupTracks (foundry.utils.duplicate(this.player_skills), foundry.utils.duplicate(this.object.system.tracks));
                 //await this.object.update({"system.tracks":null,"system.skills":null}, {noHook:true, render:false}); 
                 await this.object.update({"system.tracks":tracks,"system.skills":this.player_skills}); 
                 ui.notifications.info(game.i18n.localize("fate-core-official.SkillsSaved"));
@@ -112,7 +112,7 @@ class EditPlayerSkills extends FormApplication{
     }
 
     async checkSkills(p){
-            let p_skills=duplicate(p);
+            let p_skills=foundry.utils.duplicate(p);
             var playerCanSave = true;
             let skillColumnViolated = false;
             let skillTotalViolated = false;
@@ -205,7 +205,7 @@ class EditPlayerSkills extends FormApplication{
     }
 //The function that returns the data model for this window. In this case, we need the character's sheet data/and the skill list.
     async getData(){
-        this.player_skills=duplicate(this.object.system.skills);
+        this.player_skills=foundry.utils.duplicate(this.object.system.skills);
         this.player_skills=fcoConstants.sortByName(this.player_skills);
 
         if (this.firstRun){
@@ -215,7 +215,7 @@ class EditPlayerSkills extends FormApplication{
         let presentation_skills=[];
 
         if (this.temp_presentation_skills.length > 0){
-            presentation_skills=duplicate(this.temp_presentation_skills);
+            presentation_skills=foundry.utils.duplicate(this.temp_presentation_skills);
             this.temp_presentation_skills=[];
         } else {
             for (let x in this.player_skills){
@@ -368,7 +368,7 @@ class EditGMSkills extends FormApplication{
                     this.options.title=`${game.i18n.localize("fate-core-official.GMSkillEditor")} ${this.object.name}`
                 }
             }
-            this.player_skills=duplicate(this.object.system.skills);
+            this.player_skills=foundry.utils.duplicate(this.object.system.skills);
     }
 
     //Set up the default options for instances of this class
@@ -504,9 +504,9 @@ class EditGMSkills extends FormApplication{
     }
 
     async getData(){
-        this.player_skills=duplicate(this.object.system.skills);
+        this.player_skills=foundry.utils.duplicate(this.object.system.skills);
 
-        let world_skills=duplicate(game.settings.get("fate-core-official","skills"));
+        let world_skills=foundry.utils.duplicate(game.settings.get("fate-core-official","skills"));
         let present = [];
         let absent = [];
         let non_pc_world_skills=[];

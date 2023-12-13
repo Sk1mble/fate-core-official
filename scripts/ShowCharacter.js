@@ -79,14 +79,14 @@ class ShowCharacter extends Application {
                     elements.tracks = actor_data.system.tracks;
                 }
                 if (element.id == "stunts"){
-                    let stunts = duplicate (actor_data.system.stunts);
+                    let stunts = foundry.utils.duplicate(actor_data.system.stunts);
                     for (let stunt in stunts){
                         stunts[stunt].richDesc = await fcoConstants.fcoEnrich (stunts[stunt].description, actor_data);
                     }
                     elements.stunts = stunts;
                 }
                 if (element.id == "extras"){
-                    let extras = duplicate (actor_data.items);
+                    let extras = foundry.utils.duplicate(actor_data.items);
                     for (let extra of extras){
                         extra.richDesc = await fcoConstants.fcoEnrich (extra.system.description.value, actor_data);
                     }

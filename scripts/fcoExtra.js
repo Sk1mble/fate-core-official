@@ -43,11 +43,11 @@ export class fcoExtra extends Item {
         if ( args[2] !== game.user.id ) return;
         let itemData;
         args.forEach(arg =>{
-            if (arg.type == "Extra") itemData = duplicate (arg);
+            if (arg.type == "Extra") itemData = foundry.utils.duplicate(arg);
         })
         if (!itemData) return;
         if (this?.parent && this?.parent?.type == "fate-core-official") {
-            await this.parent.updateFromExtra (duplicate(itemData));
+            await this.parent.updateFromExtra (foundry.utils.duplicate(itemData));
             await this.parent.render(false);
         }
         await super._onCreate(...args)

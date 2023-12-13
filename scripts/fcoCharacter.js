@@ -18,7 +18,7 @@ export class fcoCharacter extends ActorSheet {
         options.scrollY = ["#skills_body", "#aspects_body","#tracks_body", "#stunts_body", "#biography_body", "#notes_body"]
         options.classes = options.classes.concat(['fcoSheet']);
         //options.viewPermission = 1; //This allows us to explicitly override the level of permissions needed to see the sheet.
-        mergeObject(options, {
+        foundry.utils.mergeObject(options, {
             tabs: [
                 {
                     navSelector: '.foo',
@@ -474,7 +474,7 @@ export class fcoCharacter extends ActorSheet {
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
                         let desc;
-                        if (isNewerVersion(game.version, '9.224')){
+                        if (foundry.utils.isNewerVersion(game.version, '9.224')){
                             desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            
                         } else {
                             desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))    
@@ -504,7 +504,7 @@ export class fcoCharacter extends ActorSheet {
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
                         let desc;
-                        if (isNewerVersion(game.version, '9.224')){
+                        if (foundry.utils.isNewerVersion(game.version, '9.224')){
                             desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))
                         } else {
                             desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))
@@ -608,7 +608,7 @@ export class fcoCharacter extends ActorSheet {
                 let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
                 let user = game.user;
                 let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
-                item = duplicate(item);
+                item = foundry.utils.duplicate(item);
                 
                 content += `<strong>${item.name}</strong><br/>
                             <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
@@ -653,7 +653,7 @@ export class fcoCharacter extends ActorSheet {
                     let dragged_name = event.target.getAttribute("data-mfname");
                     
                     let shift_down = false; 
-                    if (isNewerVersion(game.version, "9.230")){
+                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
                         shift_down = game.system["fco-shifted"];    
                     } else {
                         shift_down = keyboard.isDown("Shift");
@@ -1038,7 +1038,7 @@ export class fcoCharacter extends ActorSheet {
         let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
         if (item?.parent){
             // Store the status of stress tracks on the parent back to the extra if this extra is being dragged from a character.
-            let trackUpdates = duplicate(item.system.tracks); // Trackupdates is the item tracks
+            let trackUpdates = foundry.utils.duplicate(item.system.tracks); // Trackupdates is the item tracks
             let tracks = item?.parent?.system?.tracks; // Tracks is the actor tracks
 
             for (let t in trackUpdates){
@@ -1050,7 +1050,7 @@ export class fcoCharacter extends ActorSheet {
                     let name = actorTrack?.original_name;
                     
                     if (name == extraTrack.name && actorTrack?.extra_id == item.id){
-                        let track = duplicate(actorTrack);
+                        let track = foundry.utils.duplicate(actorTrack);
                         track.name = name;
                         delete track.extra_id;
                         delete track.original_name;
@@ -1058,7 +1058,7 @@ export class fcoCharacter extends ActorSheet {
                     }
                 }
             }
-            let stuntUpdates = duplicate(item.system.stunts);
+            let stuntUpdates = foundry.utils.duplicate(item.system.stunts);
             let stunts = item?.parent?.system?.stunts;
 
             for (let s in stuntUpdates){
@@ -1067,7 +1067,7 @@ export class fcoCharacter extends ActorSheet {
                     let actorStunt = stunts[as];
                     let name = actorStunt.original_name;
                     if (name == extraStunt.name && actorStunt?.extra_id == item.id){
-                        let stunt = duplicate(actorStunt);
+                        let stunt = foundry.utils.duplicate(actorStunt);
                         stunt.name = name;
                         delete stunt.extra_id;
                         delete stunt.original_name;
@@ -1093,7 +1093,7 @@ export class fcoCharacter extends ActorSheet {
 
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
-        let db = duplicate(game.settings.get("fate-core-official","stunts"));
+        let db = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
         let key = fcoConstants.gkfn(this.object.system.stunts, name);
         let stunt = this.object.system.stunts[key];
         
@@ -1241,7 +1241,7 @@ export class fcoCharacter extends ActorSheet {
         if (checked == "false") {
             checked = false
         }
-        let tracks = duplicate(this.object.system.tracks);
+        let tracks = foundry.utils.duplicate(this.object.system.tracks);
         let track = fcoConstants.gbn(tracks, name);
         let key = fcoConstants.gkfn (tracks, name);
         track.box_values[index] = checked;
@@ -1256,7 +1256,7 @@ export class fcoCharacter extends ActorSheet {
         let index = event.target.getAttribute("data-index");
         let checked = event.target.checked;
 
-        let stunts = duplicate(this.object.system.stunts);
+        let stunts = foundry.utils.duplicate(this.object.system.stunts);
         let stunt = fcoConstants.gbn(stunts, name);
         stunt.box_values[index] = checked;
         await this.object.update({["system.stunts"]:stunts});
@@ -1345,7 +1345,7 @@ export class fcoCharacter extends ActorSheet {
                 } else {
                     let umr = false;
 
-                    if (isNewerVersion(game.version, "9.230")){
+                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
                         if (game.system["fco-shifted"] && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;              
                         if (!game.system["fco-shifted"] && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;              
                     } else {
@@ -1388,12 +1388,12 @@ export class fcoCharacter extends ActorSheet {
                 };
         */
         const superData = super.getData();
-        const sheetData = duplicate(superData.data);
+        const sheetData = foundry.utils.duplicate(superData.data);
         sheetData.document = superData.actor;
         sheetData.actor = sheetData.document;
         sheetData.owner = superData.owner;
 
-        sheetData.system.displayStunts = duplicate(sheetData.system.stunts);
+        sheetData.system.displayStunts = foundry.utils.duplicate(sheetData.system.stunts);
 
         // Set the initial sort order for skills and stunts according to the user's preferences (defaulted to sorting by name for skills and not sorted for stunts)
         if (this.sortByRank == undefined) this.sortByRank = game.settings.get("fate-core-official","sortSkills");
@@ -1424,7 +1424,7 @@ export class fcoCharacter extends ActorSheet {
         sheetData.freeStunts = game.settings.get("fate-core-official", "freeStunts");
 
         //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value        
-        let tracks = sheetData.system.tracks; // Removed duplicate() here as we don't write to the tracks data, just read from it.
+        let tracks = sheetData.system.tracks; // Removed foundry.utils.duplicate() here as we don't write to the tracks data, just read from it.
         for (let track in tracks) {
             if (tracks[track].paid) {
                 sheetData.paidTracks++;
@@ -1539,7 +1539,7 @@ export class fcoCharacter extends ActorSheet {
         for (let st in sts){
             sts[st].richDesc = await fcoConstants.fcoEnrich(sts[st].description);
         }
-        let exs = duplicate(this.actor.items.contents);
+        let exs = foundry.utils.duplicate(this.actor.items.contents);
         for (let ex of items){
             ex.richName = await fcoConstants.fcoEnrich(ex.name);
             ex.richDesc = await fcoConstants.fcoEnrich(ex.system.description.value);

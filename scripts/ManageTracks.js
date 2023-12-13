@@ -3,7 +3,7 @@ class EditEntityTrack extends FormApplication {
     constructor (track, entity){
         // track is the entity's track being edited, entity is a reference to the actor or extra
         super(track, entity);
-        this.track = duplicate(track);
+        this.track = foundry.utils.duplicate(track);
         this.entity = entity;
         this.originalName = track.name;
     }
@@ -18,7 +18,7 @@ class EditEntityTrack extends FormApplication {
         const templateData = {
             track:this.track,
             categories:game.settings.get("fate-core-official","track_categories"),
-            skills:duplicate(this.entity.system.skills),
+            skills:foundry.utils.duplicate(this.entity.system.skills),
             entity:this.entity,
             rich:rich
         }
@@ -83,7 +83,7 @@ class EditEntityTrack extends FormApplication {
         $('#edit_entity_track_when_recovers').on('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
@@ -117,7 +117,7 @@ class EditEntityTrack extends FormApplication {
         $('#edit_entity_track_when_marked').on('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
@@ -149,7 +149,7 @@ class EditEntityTrack extends FormApplication {
         $('#edit_entity_track_description').on('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
@@ -277,7 +277,7 @@ class EditEntityTrack extends FormApplication {
             }
         }
 
-        let tracks = duplicate(this.entity.system.tracks);
+        let tracks = foundry.utils.duplicate(this.entity.system.tracks);
 
         if (this.track.name != this.originalName) {
             let key = fcoConstants.gkfn(tracks, this.originalName);
@@ -317,7 +317,7 @@ class EditEntityLinkedSkills extends FormApplication {
     getData(){
         const templateData = {
             track:this.track,
-            skills:duplicate (this.entity.system.skills),
+            skills:foundry.utils.duplicate(this.entity.system.skills),
             entity:this.entity
         }
         return templateData;
@@ -652,7 +652,7 @@ class EditTracks extends FormApplication {
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectATrackToCopyFirst"));
         }
         else {
-            let track = duplicate(fcoConstants.gbn(this.tracks, name));
+            let track = foundry.utils.duplicate(fcoConstants.gbn(this.tracks, name));
             track.name = track.name+" copy"
             this.tracks[fcoConstants.tob64(track.name)]=track;
             await game.settings.set("fate-core-official","tracks",this.tracks);
@@ -814,7 +814,7 @@ class EditTracks extends FormApplication {
             if (!existing){
                 if (this.track != undefined){
                     if (this.track.linked_skills != undefined){
-                        linked_skills = duplicate(this.track.linked_skills);
+                        linked_skills = foundry.utils.duplicate(this.track.linked_skills);
                     }
                     delete this.tracks[fcoConstants.gkfn(this.tracks, this.track.name)];
                 }
@@ -892,7 +892,7 @@ class TrackSetup extends FormApplication{
         editTracksButton.on("click", event => this._onEditTracksButton(event, html));
         setCategoriesButton.on("click", event => {
             let content = `<div style="display:flex; flex-direction:column;">`;
-            let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
+            let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
             let categories = game.settings.get("fate-core-official","track_categories");
 
             for (let track in tracks){
@@ -979,8 +979,8 @@ class TrackSetup extends FormApplication{
         let text = await this.getTracks();
         try {
             let imported_tracks = JSON.parse(text);
-            let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
-            let track_categories = duplicate (game.settings.get("fate-core-official", "track_categories"));
+            let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
+            let track_categories = foundry.utils.duplicate(game.settings.get("fate-core-official", "track_categories"));
             if (tracks == undefined){
                 tracks = {};
             }
@@ -1040,7 +1040,7 @@ class TrackSetup extends FormApplication{
                             if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
                                 ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${category} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`)
                             } else {
-                                        let tracks = duplicate(game.settings.get("fate-core-official","tracks"));
+                                        let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
                                         let toDelete = [];
                                         for (let tr in tracks){
                                             if (tracks[tr].category == track_categories[cat]) toDelete.push(tracks[tr]);

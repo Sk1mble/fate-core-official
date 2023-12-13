@@ -27,7 +27,7 @@
                         <div style="display:block; padding-left:10px; margin-right:50px;">
                             <input class="circle-input 
                             mfate-sheet__meta-value" type="number" style="text-align:center" data-edit="system.details.fatePoints.boosts" name="system.details.fatePoints.boosts" value="{{system.details.fatePoints.boosts}}"></input>
-                            <div class="mfate-sheet__meta-label" style="text-align:center; font-size:8pt; padding:0px; padding-top:5px; min-width:75px; max-width:75px; width:75px;">Boosts </div> 
+                            <div class="mfate-sheet__meta-label" style="text-align:center; font-size:8pt; padding:0px; padding-top:5px; min-width:75px; max-width:75px; width:75px;">{{localize 'fate-core-official.Boosts'}}</div> 
                         </div>
                 <img src = "{{logo}}" style = "pointer-events:none; width:160px; height:auto; margin-bottom:15px; margin-right:1px"></img>
             </div>            
@@ -108,7 +108,7 @@
             {{/if}}
             <div class="mfate-notes" style="max-width:80%">
                 <div class="mfate-panel__header">
-                    <div class="mfate-panel__header-label">{{localize 'fate-core-official.Notes'}}{{#if GM}}{{#if system.details.notes.GM}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-on mfate-panel__header-button"></i>{{else}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-off mfate-panel__header-button"></i>{{/if}}<span style="font-size:x-small">GM Only?</span>{{/if}}</div>
+                    <div class="mfate-panel__header-label">{{localize 'fate-core-official.Notes'}}{{#if GM}}{{#if system.details.notes.GM}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-on mfate-panel__header-button"></i>{{else}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-off mfate-panel__header-button"></i>{{/if}}<span style="font-size:x-small">{{localize 'fate-core-official.gmonlyquestion'}}</span>{{/if}}</div>
                 </div>
                 <div name="notes_body" id="notes_body" class="mfate-panel__body" style="padding-top:6px">
                     {{#if system.details.notes.GM}}
@@ -181,7 +181,7 @@
                         <div name="tracks_block" class="tracks-block">
                             <!--Begin the tracks block-->
                             <div class="mfate-panel__header" name="tracks_header">
-                                <b class="mfate-panel__header-label">Tracks</b>
+                                <b class="mfate-panel__header-label">{{localize 'fate-core-official.tracks'}}</b>
                                 {{#if this.document.isOwner}}
                                     <select class="mfate-panel__header-select" id="track_category">
                                         <option value="{{localize 'fate-core-official.All'}}" {{#if (eq category "{{localize 'fate-core-official.All'}}")}}selected{{/if}}>{{localize 'fate-core-official.All'}}</option>
@@ -262,7 +262,7 @@
             <div class="mfate-sheet__column">
                 <div id="{{this.document.id}}_aspects" class="mfate-panel mfate-panel--aspects">
                     <div class="mfate-panel__header">
-                        <div class="mfate-panel__header-label">Aspects</div>
+                        <div class="mfate-panel__header-label">{{localize 'fate-core-official.aspects'}}</div>
                         {{#if GM}}
                         <div title="{{localize 'fate-core-official.OpenTheAspectEditor'}}" name="edit_player_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
                         {{/if}}

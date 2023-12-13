@@ -25,6 +25,78 @@ class fcoConstants {
         return DOMPurify.sanitize(await TextEditor.enrichHTML(value, {secrets:secrets, documents:true, async:true}));
     }
 
+    // The methods used by the Evil Hat Worlds of Adventure to set a playmat background from the module's art folder
+    static async randomPlaymatBG (module)
+    {
+        async function getFiles(target, extensions = ``, source = `user`)
+        {
+            extensions = extensions instanceof Array ? extensions : [extensions];
+            let filePicker = await FilePicker.browse(source, target);
+            if(filePicker.files)
+                return [...filePicker.files];
+            return [];
+        }
+
+        async function getRandomPlaymat () {
+            let playmats = await getFiles(`/modules/${module}/art/playmats/`)
+            let min = 0;
+            let max = playmats.length - 1;
+            let rand = Math.floor(twist.random() * (max - min + 1) + min);    
+            return (playmats[rand]);
+        }
+
+        let newImage = false;
+        let img = "";
+        let pmImg = game.scenes.getName("Playmat").background.src;
+        let loopCounter = 0;
+
+        while (newImage == false){
+        loopCounter ++;
+        img = await getRandomPlaymat();
+        if (img != pmImg) newImage = true;
+        if (loopCounter >= 100) newImage = true;
+        }
+        let pm = game.scenes.getName("Playmat")
+        let thumb = await pm.createThumbnail({img});
+        await game.scenes.getName("Playmat").update({"background.src":img, thumb:thumb.thumb});
+    }
+
+    static async choosePlaymatBG (module){
+        async function getFiles(target, extensions = ``, source = `user`)
+        {
+            extensions = extensions instanceof Array ? extensions : [extensions];
+            let filePicker = await FilePicker.browse(source, target);
+            if(filePicker.files)
+                return [...filePicker.files];
+            return [];
+        }
+
+
+            let playmats = await getFiles(`/modules/${module}/art/playmats/`)
+            let scenes = `<div style="width:100%; height:50vh; background-color:white; overflow-y:auto">`
+            for (let playmat of playmats){
+                scenes += `<img style="width: 100%;" class="playmat-image" src = "${playmat}" data-img = "${playmat}"></img>`
+            }
+            
+            scenes += `</div>`
+
+        let dia = new Dialog({
+                        title: "Pick an image",
+                        content: scenes,
+                        buttons: {
+                        }
+                    }).render(true);
+
+
+        $(document).on('click', '.playmat-image', async event => {
+        let img = event.target.getAttribute("data-img")
+            let pm = game.scenes.getName("Playmat")
+            let thumb = await pm.createThumbnail({img});
+            await game.scenes.getName("Playmat").update({"background.src":img, thumb:thumb.thumb});
+            dia.close()
+        })
+    }
+
     getAdjective(r){
         const ladder = this.getFateLadder()
         return (ladder[r])
@@ -229,7 +301,7 @@ class fcoConstants {
 
     static sortByName (json_object){
         let ordered_object ={};
-        let unordered_object = Object.values(duplicate(json_object));
+        let unordered_object = Object.values(foundry.utils.duplicate(json_object));
         fcoConstants.sort_name(unordered_object);
         unordered_object.forEach (obj => {
             let key = fcoConstants.gkfn(json_object, obj.name);
@@ -380,7 +452,7 @@ class fcoConstants {
                     content: `<p>${game.i18n.localize("fate-core-official.mergeStunts")}</p>`
                 });
                 if ( confirm ) {
-                    let final_stunts = mergeObject(current_stunts, stunts);
+                    let final_stunts = foundry.utils.mergeObject(current_stunts, stunts);
                     await game.settings.set("fate-core-official","stunts", final_stunts);
                 } else {
                     await game.settings.set("fate-core-official","stunts", stunts);
@@ -399,7 +471,7 @@ class fcoConstants {
                     content: `<p>${game.i18n.localize("fate-core-official.mergeDefaults")}</p>`
                 });
                 if ( confirm ) {
-                    let final_defaults = mergeObject(current_defaults, defaults);
+                    let final_defaults = foundry.utils.mergeObject(current_defaults, defaults);
                     await game.settings.set("fate-core-official","defaults", final_defaults);
                 } else {
                     await game.settings.set("fate-core-official","defaults", defaults);
@@ -459,7 +531,7 @@ class fcoConstants {
     }
     
     static async ulStunts(stunts){
-        let db = await duplicate(game.settings.get("fate-core-official", "stunts"))
+        let db = await foundry.utils.duplicate(game.settings.get("fate-core-official", "stunts"))
 
         // First check for duplicates and permission to overwrite
         for (let st in stunts){
@@ -472,7 +544,7 @@ class fcoConstants {
             }
         }
         // Now prepare the merge
-        let toSet = await foundry.utils.mergeObject(db, stunts);
+        let toSet = await foundry.utils.foundry.utils.mergeObject(db, stunts);
         game.settings.set("fate-core-official", "stunts", toSet);
     }
 

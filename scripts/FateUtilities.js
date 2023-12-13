@@ -311,7 +311,7 @@ class FateUtilities extends Application{
         FUGameAspectNotes.on("change", event => {
             let details = event.target.id.split("_");
             let aspectName = details[1];
-            let aspects = duplicate(game.settings.get("fate-core-official", "gameAspects"));
+            let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official", "gameAspects"));
             let aspect = aspects.find(a => a.name == aspectName);
             aspect.notes = event.target.value;
             game.settings.set("fate-core-official","gameAspects",aspects);
@@ -321,7 +321,7 @@ class FateUtilities extends Application{
         const gameAspect = html.find("input[name='game_aspect']");
         gameAspect.on("change", async (event) => {
             let index = event.target.id.split("_")[0];
-            let aspects = duplicate(game.settings.get("fate-core-official", "gameAspects")); // Should contain an aspect with the current name.
+            let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official", "gameAspects")); // Should contain an aspect with the current name.
             let aspect = aspects[index];
             aspect.name = event.target.value;
             await game.settings.set("fate-core-official","gameAspects",aspects);
@@ -497,7 +497,7 @@ class FateUtilities extends Application{
         });
 
         select.on("click", event => {
-            if (isNewerVersion(game.version, "9.230")){
+            if (foundry.utils.isNewerVersion(game.version, "9.230")){
                 this.shift = game.system["fco-shifted"]
             } else {
                 if (event.shiftKey) {this.shift = true}
@@ -604,7 +604,7 @@ class FateUtilities extends Application{
 
     async _sit_aspect_change(event, html){
         let index = event.target.id.split("_")[0];
-        let aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
+        let aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
         let aspect = aspects[index];
 
         let drawing = undefined;
@@ -672,7 +672,7 @@ class FateUtilities extends Application{
         if (del){
             let id = event.target.id;
             let name = id.split("_")[1];
-            let game_aspects = duplicate(game.settings.get("fate-core-official", "gameAspects"));
+            let game_aspects = foundry.utils.duplicate(game.settings.get("fate-core-official", "gameAspects"));
             game_aspects.splice(game_aspects.findIndex(sit => sit.name == name),1);
             await game.settings.set("fate-core-official","gameAspects",game_aspects);
             game.socket.emit("system.fate-core-official",{"render":true});
@@ -689,7 +689,7 @@ class FateUtilities extends Application{
                                     "notes":""
                                 };
         try {
-            game_aspects = duplicate(game.settings.get("fate-core-official","gameAspects"));
+            game_aspects = foundry.utils.duplicate(game.settings.get("fate-core-official","gameAspects"));
         } catch {
         }                                
         game_aspects.push(aspect);
@@ -701,7 +701,7 @@ class FateUtilities extends Application{
     async _game_a_free_i_button(event,html){
         let index=event.target.id.split("_")[0];
         let value=html.find(`input[id="${index}_ga_free_invokes"]`)[0].value
-        let game_aspects = duplicate(game.settings.get("fate-core-official","gameAspects"));
+        let game_aspects = foundry.utils.duplicate(game.settings.get("fate-core-official","gameAspects"));
         let aspect = game_aspects[index];
         aspect.free_invokes = value;
         await game.settings.set("fate-core-official","gameAspects",game_aspects);
@@ -836,7 +836,7 @@ class FateUtilities extends Application{
         let index = detail[1];
         let action = detail[2];
         let rolls = game.scenes.viewed?.getFlag("fate-core-official","rolls");
-        if (rolls) rolls = duplicate(rolls);
+        if (rolls) rolls = foundry.utils.duplicate(rolls);
         let roll = undefined;
         if (index > -1){
             roll = rolls[index];
@@ -942,7 +942,7 @@ class FateUtilities extends Application{
                         roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
                         if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                         if (message) {
-                            let mrolls = duplicate(message.rolls)
+                            let mrolls = foundry.utils.duplicate(message.rolls)
                             let mroll = mroll[0];
                             mroll.total = roll.total;
                             await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
@@ -965,7 +965,7 @@ class FateUtilities extends Application{
                         if (game.user.isGM){
                             if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                             if (message) {
-                                let mrolls = duplicate(message.rolls);
+                                let mrolls = foundry.utils.duplicate(message.rolls);
                                 let mroll = mrolls[0];
                                 mroll.total = roll.total;
                                 await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
@@ -987,7 +987,7 @@ class FateUtilities extends Application{
             if (game.user.isGM){
                 if (game.scenes.viewed) await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 if (message) {
-                    let mrolls = duplicate(message.rolls);
+                    let mrolls = foundry.utils.duplicate(message.rolls);
                     let mroll = mrolls[0];
                     mroll.total = roll.total;
                     roll.roll = mroll;
@@ -1007,7 +1007,7 @@ class FateUtilities extends Application{
                     await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
                 }
                 if (message) {
-                    let mrolls = duplicate (message.rolls);
+                    let mrolls = foundry.utils.duplicate(message.rolls);
                     let mroll = mrolls[0];
                     mroll.total = roll.total;
                     roll.roll = mroll;
@@ -1025,10 +1025,10 @@ class FateUtilities extends Application{
             let aspectsInvoked = [];
             let asa = game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects");
             if (!asa) asa = {};
-            let all_sit_aspects = duplicate(asa);
+            let all_sit_aspects = foundry.utils.duplicate(asa);
 
             let shift_down = false; 
-            if (isNewerVersion(game.version, "9.230")){
+            if (foundry.utils.isNewerVersion(game.version, "9.230")){
                 shift_down = game.system["fco-shifted"];    
             } else {
                 shift_down = keyboard.isDown("Shift");
@@ -1043,7 +1043,7 @@ class FateUtilities extends Application{
                // We then need to harvest the number of invokes being used on each and set bonus accordingly.
                // Ideally we should add the flavour to the below.
                 bonus = 0;
-                let sit_aspects = duplicate(game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
+                let sit_aspects = foundry.utils.duplicate(game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
                     let options = "";
                     for (let i = 0; i < parseInt(aspect.free_invokes, 10)+1; i++){
@@ -1052,7 +1052,7 @@ class FateUtilities extends Application{
                     aspect.options = options;
                 }
 
-                if (isNewerVersion(game.version, "9.230")){
+                if (foundry.utils.isNewerVersion(game.version, "9.230")){
                     game.system["fco-shifted"] = false;
                 }
                 
@@ -1144,7 +1144,7 @@ class FateUtilities extends Application{
                 roll.flavor+=flavor;
                 if (game.user.isGM){
                     if (message) {
-                        let mrolls = duplicate(message.rolls);
+                        let mrolls = foundry.utils.duplicate(message.rolls);
                         let mroll = mrolls[0];
                         mroll.total = roll.total;
                         roll.roll = mroll;
@@ -1176,12 +1176,12 @@ class FateUtilities extends Application{
 
             let asa = game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects");
             if (!asa) asa = {};
-            let all_sit_aspects = duplicate(asa);
+            let all_sit_aspects = foundry.utils.duplicate(asa);
 
             let invokedAspect = undefined;
 
             let shift_down = false; 
-            if (isNewerVersion(game.version, "9.230")){
+            if (foundry.utils.isNewerVersion(game.version, "9.230")){
                 shift_down = game.system["fco-shifted"];    
             } else {
                 shift_down = keyboard.isDown("Shift");
@@ -1194,10 +1194,10 @@ class FateUtilities extends Application{
 
             if (shift_down && game.user.isGM && ((Object.keys(asa).length > 0 && asa.filter(as => as.free_invokes > 0).length > 0) || boosts > 0)){
                 let options = ""
-                if (isNewerVersion(game.version, "9.230")){
+                if (foundry.utils.isNewerVersion(game.version, "9.230")){
                     game.system["fco-shifted"] = false;
                 }
-                let sit_aspects = duplicate(game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
+                let sit_aspects = foundry.utils.duplicate(game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
                     options +=`<option value="${aspect.name}">${aspect.name}</option>`
                 }
@@ -1308,7 +1308,7 @@ class FateUtilities extends Application{
                 roll.roll = r2;
                 if (game.user.isGM){
                     if (message) {
-                        let mroll = duplicate(r2);
+                        let mroll = foundry.utils.duplicate(r2);
                         mroll.total = roll.total;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                     }
@@ -1353,7 +1353,7 @@ class FateUtilities extends Application{
             if (!actor.hasPlayerOwner && user?.character?.id != actor.id) returnValue = true; 
 
             let shift_down = false; 
-            if (isNewerVersion(game.version, "9.230")){
+            if (foundry.utils.isNewerVersion(game.version, "9.230")){
                 shift_down = game.system["fco-shifted"];    
             } else {
                 shift_down = keyboard.isDown("Shift");
@@ -1380,7 +1380,7 @@ class FateUtilities extends Application{
                     roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvoke")}`
 
                     if (message) {
-                        let mrolls = duplicate (message.rolls)
+                        let mrolls = foundry.utils.duplicate(message.rolls)
                         let mroll = mrolls[0];
                         mroll.total = roll.total;
                         roll.roll = mroll;
@@ -1399,7 +1399,7 @@ class FateUtilities extends Application{
                     roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvoke")}`
                     if (game.user.isGM){
                         if (message) {
-                            let mrolls = duplicate (message.rolls)
+                            let mrolls = foundry.utils.duplicate(message.rolls)
                             let mroll = mrolls[0];
                             mroll.total = roll.total;
                             roll.roll = mroll;
@@ -1457,9 +1457,9 @@ class FateUtilities extends Application{
                     }
                     roll.total += r2.total;
                     roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PaidInvokeReroll")} ${oldRoll}`
-                    roll.roll = duplicate(r2);
+                    roll.roll = foundry.utils.duplicate(r2);
                     if (message) {
-                        let mroll = duplicate(r2);
+                        let mroll = foundry.utils.duplicate(r2);
                         mroll.total = roll.total;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                     }
@@ -1488,10 +1488,10 @@ class FateUtilities extends Application{
                     roll.total -= oldDiceValue;
                     roll.dice = r2.dice[0].values;
                     roll.total += r2.total;
-                    roll.roll = duplicate(r2);
+                    roll.roll = foundry.utils.duplicate(r2);
                     if (game.user.isGM){
                         if (message) {
-                            let mroll = duplicate(r2);
+                            let mroll = foundry.utils.duplicate(r2);
                             mroll.total = roll.total;
                             await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                         }
@@ -1665,7 +1665,7 @@ class FateUtilities extends Application{
     async _free_i_button(event,html){
         let index=event.target.id.split("_")[0];
         let value=html.find(`input[id="${index}_free_invokes"]`)[0].value
-        let situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"))
+        let situation_aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"))
         let aspect = situation_aspects[index];
         let name = aspect.name;
         aspect.free_invokes = value;
@@ -1743,19 +1743,20 @@ class FateUtilities extends Application{
                 let width = (text.length * size / 1.5);
 
                 let rec;
-                if (isNewerVersion(game.version, "10")){
+                if (foundry.utils.isNewerVersion(game.version, "10")){
                     rec = foundry.data.ShapeData.TYPES.RECTANGLE;
                 } else {
                     rec = CONST.DRAWING_TYPES.RECTANGLE;
                 }
-                
                 await DrawingDocument.create({
                     type: rec,
                     author: game.user.id,
                     x: x,
                     y: y,
-                    width: width,
-                    height: height,
+                    shape:{
+                        width: width,
+                        height: height
+                    },
                     fillType: CONST.DRAWING_FILL_TYPES.SOLID,
                     fillColor: game.settings.get("fate-core-official", "fuAspectLabelFillColour"),
                     fillAlpha: game.settings.get("fate-core-official", "fuAspectLabelFillAlpha"),
@@ -1788,7 +1789,7 @@ class FateUtilities extends Application{
         if (del){
             let id = event.target.id;
             let index = id.split("_")[1];
-            let situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects"));
+            let situation_aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official", "situation_aspects"));
             let name = situation_aspects[index].name;
             situation_aspects.splice(index,1);
             game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
@@ -1812,7 +1813,7 @@ class FateUtilities extends Application{
                                     "free_invokes":0
                                 };
         try {
-            situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
+            situation_aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
         } catch {
         }                                
         situation_aspects.push(situation_aspect);
@@ -1830,7 +1831,7 @@ class FateUtilities extends Application{
                                     "linked":true
                                 };
         try {
-            situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
+            situation_aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
         } catch {
         }
         let exists = false;
@@ -1861,7 +1862,7 @@ class FateUtilities extends Application{
             if (actor == null || actor == undefined) continue;
 
             if (actor?.system?.tracks != undefined) {
-                tracks = duplicate (actor.system.tracks);
+                tracks = foundry.utils.duplicate(actor.system.tracks);
                 for (let t in tracks){
                     let track = tracks[t];
                     if (track.recovery_type == "Fleeting"){
@@ -1876,7 +1877,7 @@ class FateUtilities extends Application{
                 if (!actor.isToken){  
                     updates.push({"_id":actor.id, "system.tracks":tracks});
                 } else {
-                    if (isNewerVersion(game.version, "11.293")){
+                    if (foundry.utils.isNewerVersion(game.version, "11.293")){
                         tokenUpdates.push({"_id":tokens[i].id, "delta.system.tracks":tracks});
                     }
                     else {
@@ -1896,7 +1897,7 @@ class FateUtilities extends Application{
         let name = parts[1];
         let text = event.target.value;
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
-        let tracks = duplicate(token.actor.system.tracks);
+        let tracks = foundry.utils.duplicate(token.actor.system.tracks);
         let key =fcoConstants.gkfn(tracks, name);
         let track = tracks[key]
         track.aspect.name=text;
@@ -1906,7 +1907,7 @@ class FateUtilities extends Application{
         // See if this aspect exists in the list of game aspects and update it if so.
         let newText = `${text} (${token.actor.name})`;
 
-        let situation_aspects = duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
+        let situation_aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
         let aspect = situation_aspects.find(aspect => aspect.name == previousText);
 
         if (aspect == undefined){
@@ -1979,7 +1980,7 @@ class FateUtilities extends Application{
             checked = false
         }
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
-        let tracks = duplicate(token.actor.system.tracks);
+        let tracks = foundry.utils.duplicate(token.actor.system.tracks);
         let key = fcoConstants.gkfn(tracks, name);
         let track = tracks[key]
         track.box_values[index] = checked;
@@ -2023,7 +2024,7 @@ class FateUtilities extends Application{
         // Valid values are visible, hidden, show_boxes
 
         let shift_down = false; 
-        if (isNewerVersion(game.version, "9.230")){
+        if (foundry.utils.isNewerVersion(game.version, "9.230")){
             shift_down = game.system["fco-shifted"];    
         } else {
             shift_down = keyboard.isDown("Shift");
@@ -2062,7 +2063,7 @@ class FateUtilities extends Application{
                         event.target.innerHTML=oldname;
                         return ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
                     }
-                    let newCountdown = duplicate(countdown);
+                    let newCountdown = foundry.utils.duplicate(countdown);
                     newCountdown.name = newname;
                     delete countdowns[fcoConstants.getKey(countdown.name)];
                     countdowns[fcoConstants.getKey(newname)]=newCountdown;
@@ -2181,7 +2182,7 @@ class FateUtilities extends Application{
         options.resizable = true;
         options.scrollY=["#aspects", "#cd_panel", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane"]
 
-        mergeObject(options, {
+        foundry.utils.mergeObject(options, {
             tabs: [
                 {
                     navSelector: '.foo',
@@ -2204,7 +2205,7 @@ async getData(){
     }
     
     const data = {};
-    if (game.combat==null || tracker_disabled || (game?.combat?.scene == null && !isNewerVersion(game.version, "9.230"))){
+    if (game.combat==null || tracker_disabled || (game?.combat?.scene == null && !foundry.utils.isNewerVersion(game.version, "9.230"))){
         data.conflict = false;
     } else {
         data.conflict = true;
@@ -2303,7 +2304,7 @@ async getData(){
     if (situation_aspects == undefined){
         situation_aspects = [];
     }
-    situation_aspects = duplicate(situation_aspects);
+    situation_aspects = foundry.utils.duplicate(situation_aspects);
     
     data.situation_aspects = situation_aspects;
     fcoConstants.sort_key(all_tokens, "name");
@@ -2311,8 +2312,8 @@ async getData(){
 
     let enriched_tokens = {};
     for (let tk of all_tokens){
-        let ass = duplicate (tk.actor.system.aspects);
-        let trks = duplicate (tk.actor.system.tracks);
+        let ass = foundry.utils.duplicate(tk.actor.system.aspects);
+        let trks = foundry.utils.duplicate(tk.actor.system.tracks);
         for (let as in ass){
             ass[as].richNotes = await fcoConstants.fcoEnrich(ass[as].notes);
         }
@@ -2348,7 +2349,7 @@ async getData(){
     if (rolls == undefined){
         rolls = [];
     }
-    data.rolls = duplicate(rolls);
+    data.rolls = foundry.utils.duplicate(rolls);
     
     for (let roll of data.rolls){
         roll.richFlavor = await fcoConstants.fcoEnrich(roll.flavor);
@@ -2379,7 +2380,7 @@ async getData(){
     }
     data.numConflicts = (game.combats.contents.filter(c => c.scene?.id == game?.scenes?.viewed?.id).length)+(game.combats.contents.filter(c => c.scene == null).length);
     
-    let countdowns = duplicate(game.settings.get("fate-core-official", "countdowns"));
+    let countdowns = foundry.utils.duplicate(game.settings.get("fate-core-official", "countdowns"));
     if (countdowns?.keys?.length < 1){
         data.countdowns = "none";
     }
@@ -2431,7 +2432,7 @@ static async createCountdown (data){
         boxes:data.boxes,
         visible:data.visible
     }
-    let countdowns = await duplicate(game.settings.get("fate-core-official","countdowns"));
+    let countdowns = await foundry.utils.duplicate(game.settings.get("fate-core-official","countdowns"));
     let safeName = fcoConstants.getKey(countdown.name); 
     countdowns[safeName]=countdown;
     await game.settings.set("fate-core-official","countdowns",countdowns);
@@ -2592,7 +2593,7 @@ class acd extends FormApplication {
             visible:data.visible
         }
         
-        let countdowns = await duplicate(game.settings.get("fate-core-official","countdowns"));
+        let countdowns = await foundry.utils.duplicate(game.settings.get("fate-core-official","countdowns"));
         let safeName = fcoConstants.getKey(countdown.name); 
         countdowns[safeName]=countdown;
         await game.settings.set("fate-core-official","countdowns",countdowns);
@@ -2905,7 +2906,7 @@ Hooks.on('createChatMessage', async (message) => {
             if (rolls == undefined){
                 rolls = [];
             }
-            rolls=duplicate(rolls);
+            rolls=foundry.utils.duplicate(rolls);
             
             let mFRoll = {
                 "message_id":message_id,
@@ -2963,14 +2964,14 @@ async function updateRolls (rolls) {
         if (currRolls == undefined){
             currRolls = [];
         }
-        currRolls = duplicate(currRolls);
-        let endRolls = mergeObject(currRolls, rolls.rolls);
+        currRolls = foundry.utils.duplicate(currRolls);
+        let endRolls = foundry.utils.mergeObject(currRolls, rolls.rolls);
         scene.setFlag("fate-core-official","rolls",endRolls);
         for (let r of endRolls){
             let message;
             if (r.message_id) message = game.messages.get(r.message_id)
             if (message) {
-                let mrolls = duplicate(message.rolls);
+                let mrolls = foundry.utils.duplicate(message.rolls);
                 mrolls[0].total = r.total;
                 await message.update({flavor:r.flavor, content:r.total, rolls:mrolls})
             }

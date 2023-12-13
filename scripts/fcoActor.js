@@ -14,9 +14,9 @@ export class fcoActor extends Actor {
         let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
 
         if (args[0].folder) {
-            Actor.create({"name":"New Character", "folder":args[0].folder, "type":"fate-core-official", ownership: perm});
+            Actor.create({"name":game.i18n.localize("fate-core-official.newCharacter"), "folder":args[0].folder, "type":"fate-core-official", ownership: perm});
         } else {
-            Actor.create({"name":"New Character", "type":"fate-core-official", ownership: perm});
+            Actor.create({"name":game.i18n.localize("fate-core-official.newCharacter"), "type":"fate-core-official", ownership: perm});
         }
     }
 
@@ -95,6 +95,70 @@ export class fcoActor extends Actor {
         }
     }
 
+    /** Methods for dealing with multiple shapes (sets of token and avatar artwork that can be easily switched between) 
+     *  Designed to be triggered from a token HUD.
+     * Shapes are stored in the fate-core-official.shapes flag of actors, 
+    */
+    getShape (shapeName){
+        let shapes = this.getFlag("fate-core-official", "shapes");
+        return fcoConstants.gbn(shapes, shapeName);
+    }
+
+    async deleteShape (shapeName){
+        let shapes = foundry.utils.duplicate(this.getFlag("fate-core-official", "shapes"));
+        let shape = fcoConstants.gkfn(shapes, shapeName);
+        if (shape) {
+            delete shapes[shape];
+            await this.unsetFlag ("fate-core-official","shapes");
+            await this.setFlag("fate-core-official","shapes", shapes);
+        }
+    }
+
+    async changeShape (shapeName, token){
+        // Get shape from list of shapes stored in flags
+        let shape = this.getShape(shapeName);
+        if (!shape || !this.isOwner) return;
+        // Set avatar and token artwork for this token or actor accordingly
+        // If we're a token actor we need to change the texture for the token. .
+        if (token.document.actorLink == false) {
+            // This is a token actor; change the token texture and token actor avatar
+            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg}]);
+            await token.actor.update({"img":shape.avatarImg})
+        } else {
+            // This is a real actor; change the token texture, the actor's prototype token texture, and the actor's avatar
+            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg}]);
+            await token.actor.update({"img":shape.avatarImg, "prototypeToken.texture.src":shape.tokenImg});
+        }
+    }
+
+    async storeShape (shapeName, tokenImg, avatarImg){
+        if (!this.isOwner) return;
+        let shapes = this.getFlag("fate-core-official", "shapes");
+        // If no shapes stored in flags, initialise an empty object.
+        if (!shapes) shapes = {};
+        let existing = fcoConstants.gbn(shapes, shapeName);
+        let token = canvas.tokens.controlled[0];
+        if (token.document.actorLink == false) {
+            // This is a token actor; store the token texture and token actor avatar unless specific values provided
+            if (!tokenImg) tokenImg = token.document.texture.src;
+            if (!avatarImg) avatarImg = token.actor.img;
+        } else {
+            // This is a real actor; store the token texture and the actor's avatar
+            if (!tokenImg) tokenImg = token.document.texture.src;
+            if (!avatarImg) avatarImg = this.img;
+        }
+
+        let response = "no";
+        if (existing) response  = await fcoConstants.awaitYesNoDialog(shapeName, game.i18n.localize("fate-core-official.checkShapeOverwrite"));
+        if (!existing || response == "yes"){
+            // Safe to store this shape
+            let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg};
+            shapes[fcoConstants.tob64(shapeName)] = newShape;
+            await this.setFlag("fate-core-official", "shapes", shapes);
+        }
+    }
+    /** End methods for dealing with multiple shapes */
+
     initialisefcoCharacter () {
         let actor = this;
         //Modifies the data of the supplied actor to add tracks, aspects, etc. from system settings, then returns the data.
@@ -136,7 +200,7 @@ export class fcoActor extends Actor {
             }        
     
             let aspects = game.settings.get("fate-core-official", "aspects");
-            let player_aspects = duplicate(aspects);
+            let player_aspects = foundry.utils.duplicate(aspects);
             for (let a in player_aspects) {
                 player_aspects[a].value = "";
             }
@@ -144,7 +208,7 @@ export class fcoActor extends Actor {
             working_data.system.aspects = player_aspects;
         
             //Step one, get the list of universal tracks.
-            let world_tracks = duplicate(game.settings.get("fate-core-official", "tracks"));
+            let world_tracks = foundry.utils.duplicate(game.settings.get("fate-core-official", "tracks"));
             let tracks_to_write = working_data.system.tracks;
             for (let t in world_tracks) {
                 let track = world_tracks[t];
@@ -282,7 +346,7 @@ export class fcoActor extends Actor {
         }
 
         actor.sheet.editing = true;
-            let extra = duplicate(itemData);
+            let extra = foundry.utils.duplicate(itemData);
     
             //Find each aspect, skill, stunt, and track attached to each extra
             //Add an extra data item to the data type containing the id of the original item.
@@ -300,7 +364,7 @@ export class fcoActor extends Actor {
                 let extra_name = extra.name;
                 let extra_id = extra._id;
     
-                let stunts = duplicate(extra.system.stunts);
+                let stunts = foundry.utils.duplicate(extra.system.stunts);
         
                 if (!Array.isArray(stunts)){
                     for (let stunt in stunts){
@@ -323,9 +387,9 @@ export class fcoActor extends Actor {
                     }
                 }
 
-                let skills = duplicate(extra.system.skills);
+                let skills = foundry.utils.duplicate(extra.system.skills);
                 if (!Array.isArray(skills)){
-                    let askills = duplicate(actor.system.skills);  
+                    let askills = foundry.utils.duplicate(actor.system.skills);  
                     for (let skill in skills){
                         let hidden = skills[skill].hidden;
                         // If this and its constituent skills are NOT set to combine skills, we need to create an entry for this skill.
@@ -354,7 +418,7 @@ export class fcoActor extends Actor {
                                     // This is the skill that everything is being merged into; 
                                     // only the skill with the raw name of the extra_skill works for merging 
                                     combined_skill = askills[ask];
-                                    if (combined_skill) combined_skill = duplicate(combined_skill);                                    
+                                    if (combined_skill) combined_skill = foundry.utils.duplicate(combined_skill);                                    
                                 }
                             }
                             if (combined_skill && !combined_skill.extra_id){
@@ -362,7 +426,7 @@ export class fcoActor extends Actor {
                             } else {
                                 // If it is null, it needs to be created. That can only happen if this extra is newly creating a merged skill.
                                 if (!combined_skill){
-                                    combined_skill = duplicate(skills[skill]);
+                                    combined_skill = foundry.utils.duplicate(skills[skill]);
                                     combined_skill.extra_id = extra_id;
                                 }
                                 // Now we know for a fact that the base combined_skill is there and we have a reference to it, we can set its ranks & hidden status:
@@ -387,7 +451,7 @@ export class fcoActor extends Actor {
                         }
                     }
                 }
-                let aspects = duplicate(extra.system.aspects);
+                let aspects = foundry.utils.duplicate(extra.system.aspects);
 
                 if (!Array.isArray(aspects)){
                     for (let aspect in aspects){
@@ -405,7 +469,7 @@ export class fcoActor extends Actor {
                     }
                 }
                 
-                let tracks = duplicate(extra.system.tracks);
+                let tracks = foundry.utils.duplicate(extra.system.tracks);
                 if (!Array.isArray(tracks)){
                     for (let track in tracks){
                         let count = this.getHighest(actor.system.tracks, tracks[track].name, extra_id);
@@ -422,9 +486,9 @@ export class fcoActor extends Actor {
                     }        
                 }
     
-            let actor_stunts = duplicate(actor.system.stunts);
+            let actor_stunts = foundry.utils.duplicate(actor.system.stunts);
     
-            let actor_tracks = duplicate(actor.system.tracks);
+            let actor_tracks = foundry.utils.duplicate(actor.system.tracks);
     
             //Look for orphaned tracks on the character that aren't on the item any longer and delete them from the character
             //Find all tracks on this actor that have the item's ID in their extra_id attribute
@@ -454,7 +518,7 @@ export class fcoActor extends Actor {
                 }
             }
             
-            let actor_aspects = duplicate(actor.system.aspects);
+            let actor_aspects = foundry.utils.duplicate(actor.system.aspects);
     
             //Ditto for orphaned aspects
             for (let a in actor_aspects){
@@ -467,7 +531,7 @@ export class fcoActor extends Actor {
                 }
             }
     
-            let actor_skills = duplicate(actor.system.skills);
+            let actor_skills = foundry.utils.duplicate(actor.system.skills);
     
             //Ditto for orphaned skills
             for (let s in actor_skills){
@@ -493,11 +557,11 @@ export class fcoActor extends Actor {
             actor.sheet.editing = false;
             await actor.update(update_object);
 
-            let final_stunts = mergeObject(actor.system.stunts, stunts_output, {"inPlace":false});
-            let working_tracks = mergeObject(actor.system.tracks, tracks_output, {"inPlace":false});
-            let final_skills = mergeObject(actor.system.skills, skills_output, {"inPlace":false});
-            let final_aspects = mergeObject(actor.system.aspects, aspects_output, {"inPlace":false});
-            let final_tracks = this.setupTracks (duplicate(final_skills), duplicate(working_tracks));
+            let final_stunts = foundry.utils.mergeObject(actor.system.stunts, stunts_output, {"inPlace":false});
+            let working_tracks = foundry.utils.mergeObject(actor.system.tracks, tracks_output, {"inPlace":false});
+            let final_skills = foundry.utils.mergeObject(actor.system.skills, skills_output, {"inPlace":false});
+            let final_aspects = foundry.utils.mergeObject(actor.system.aspects, aspects_output, {"inPlace":false});
+            let final_tracks = this.setupTracks (foundry.utils.duplicate(final_skills), foundry.utils.duplicate(working_tracks));
 
             await actor.update({    
                 "system.tracks":final_tracks,
@@ -518,7 +582,7 @@ export class fcoActor extends Actor {
         //filled in should remain that way. This should be as simple as adding a parameter to calls to this method
         //and then removing extra_id from each track and writing it back to the item in an update call.
         if (!deleting){
-            let trackUpdates = duplicate(item.system.tracks);
+            let trackUpdates = foundry.utils.duplicate(item.system.tracks);
             let tracks = actor?.system?.tracks;
 
             for (let t in trackUpdates){
@@ -527,7 +591,7 @@ export class fcoActor extends Actor {
                 for (let at in tracks){
                     let name = tracks[at]?.original_name;
                     if (name == trackUpdates[t].name && tracks[at]?.extra_id == item.id){
-                        let track = duplicate(tracks[at]);
+                        let track = foundry.utils.duplicate(tracks[at]);
                         track.name = name;
                         delete track.extra_id;
                         delete track.original_name;
@@ -535,13 +599,13 @@ export class fcoActor extends Actor {
                     }
                 }
             }
-            let stuntUpdates = duplicate(item.system.stunts);
+            let stuntUpdates = foundry.utils.duplicate(item.system.stunts);
             let stunts = actor?.system?.stunts;
             for (let s in stuntUpdates){
                 for (let as in stunts){
                     let name = stunts[as]?.original_name;
                     if (name == stuntUpdates[s].name && stunts[as]?.extra_id == item.id){
-                        let stunt = duplicate(stunts[as]);
+                        let stunt = foundry.utils.duplicate(stunts[as]);
                         stunt.name = name;
                         delete stunt.extra_id;
                         delete stunt.original_name;
@@ -555,7 +619,7 @@ export class fcoActor extends Actor {
     
         let updateObject = {}
     
-        let actor_aspects = duplicate(actor.system.aspects)
+        let actor_aspects = foundry.utils.duplicate(actor.system.aspects)
     
         for(let aspect in actor_aspects)
         {
@@ -564,7 +628,7 @@ export class fcoActor extends Actor {
             }
         }
         
-        let actor_stunts = duplicate(actor.system.stunts)
+        let actor_stunts = foundry.utils.duplicate(actor.system.stunts)
     
         for (let stunt in actor_stunts){
             if (actor_stunts[stunt]?.extra_id == itemData._id){
@@ -572,7 +636,7 @@ export class fcoActor extends Actor {
             }
         }
     
-        let actor_tracks = duplicate(actor.system.tracks)
+        let actor_tracks = foundry.utils.duplicate(actor.system.tracks)
     
         for (let track in actor_tracks){
             if (actor_tracks[track]?.extra_id == itemData._id){
@@ -580,7 +644,7 @@ export class fcoActor extends Actor {
             }
         }
     
-        let actor_skills = duplicate(actor.system.skills)
+        let actor_skills = foundry.utils.duplicate(actor.system.skills)
     
         for (let skill in actor_skills){
             if (actor_skills[skill]?.extra_id == itemData._id){
@@ -590,8 +654,8 @@ export class fcoActor extends Actor {
 
         actor.sheet.editing = false;
         await actor.update(updateObject);
-        let ctracks = duplicate(actor.system.tracks);
-        let cskills = duplicate(actor.system.skills);
+        let ctracks = foundry.utils.duplicate(actor.system.tracks);
+        let cskills = foundry.utils.duplicate(actor.system.skills);
         let etracks = actor.setupTracks(cskills, ctracks);
         await actor.update({"system.tracks":etracks});
         // This is required in order to make sure we get the combined skills setup correctly
@@ -827,3 +891,70 @@ export class fcoActor extends Actor {
         return this.system.skills;
     }
 }
+
+    /** HUD interface for changing shape */
+
+    Hooks.on('renderTokenHUD', function (hudButtons, html, data) {
+        //hudButtons.object is the token itself.
+        let token = hudButtons.object;
+        if (token.actor.type != "fate-core-official") return;
+        let shapes = token.actor.getFlag("fate-core-official","shapes");
+        let shapeButtons = `<div style="font-size:0.8em; position:absolute; min-width:450px; max-width:450px;   text-overflow: ellipsis; overflow-x:auto; max-height:1000px; overflow-y:auto; left:75px; top:-75px; display:flex-row"><table style="background:transparent;">
+        <tr style="background-color:var(--fco-accent-colour); height:75px; border:none">
+            <td width = "300px">
+                <input type="text" style="margin-left:10px; background:var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour)" id = fcoShapeAddName_${token.id}></input>
+            </td>
+            <td width = "100px">
+                <div style="margin-left:50px; width:50px" id="fcoShapeAdd_${token.id}"><i class="fas fa-plus fu_button"></i></div>
+            </td>
+        </tr>
+        </table>`;
+        let allowDeletion = true;
+        let deleteButton = "";
+
+        for (let shape in shapes){
+            if (allowDeletion) deleteButton=`<td width="50px"><div class= "fu_button" id="fcoShapeDelete_${token.id}_${shape}"><i icon class ="fas fa-trash"</i></div></td>`
+            shapeButtons += `<div class="fu_button" style="background:var(--fco-sheet-background-colour); display:flex; left:75px; padding:10px; min-width:400px; margin:5px; color:black; font-family:var(--fco-font-family)" id="fcoShape_${token.id}_${shape}">
+            <table style="background:transparent; border:none; color:black; font-family:var(--fco-font-family)">
+                <tr>
+                    <td style="color:var(--fco-sheet-text-colour); padding-left:5px; text-align:left; min-width:100px; max-width:100px; overflow:hidden; text-overflow:ellipsis;">${shapes[shape].name}</td>
+                    <td width="80px"><img src="${shapes[shape].tokenImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
+                    <td width "80px"><img src="${shapes[shape].avatarImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
+                    ${deleteButton}
+                </tr>
+            </table>
+            </div>`
+        }
+        shapeButtons += `</div>`
+        let button = $(`<div class="control-icon fco-changeShape" id="fco-changeShape"><i class="fa fa-arrows-rotate"></i></div>`);
+        let col = html.find('.col.right');
+        col.prepend(button);
+
+        button.click(async (ev) => {
+            if (ev.target.closest('div').id.split("_")[0] == "fcoShapeDelete"){
+                let shapes = token.actor.getFlag("fate-core-official","shapes");
+                let shape = shapes[ev.target.closest('div').id.split("_")[2]];
+                let del = await fcoConstants.confirmDeletion();
+                if (del){
+                    await token.actor.deleteShape(shape.name)
+                }
+            } else {
+                if (ev.target.closest('div').id.split("_")[0] == "fcoShapeAdd"){
+                    let name = $(`#fcoShapeAddName_${token.id}`)[0].value;
+                    if (name) {
+                        await token.actor.storeShape(name);
+                    } else {
+                        ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
+                    }
+                } else {
+                    let shapes = token.actor.getFlag("fate-core-official","shapes");
+                    if (ev.target.closest('div').id == "fco-changeShape") button.append(shapeButtons);
+                    let shape = undefined;
+                    if (shapes) shape = shapes[ev.target.closest('div').id.split("_")[2]];
+                    if (shape) await token.actor.changeShape(shape.name, token);
+                }
+            }
+        });
+    });
+    
+    /** End HUD interface for changing shape */

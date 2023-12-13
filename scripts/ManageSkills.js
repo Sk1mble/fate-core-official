@@ -117,7 +117,7 @@ class SkillSetup extends FormApplication{
         let text = await this.getSkills();
         try {
             let imported_skills = JSON.parse(text);
-            let skills = duplicate(game.settings.get("fate-core-official","skills"));
+            let skills = foundry.utils.duplicate(game.settings.get("fate-core-official","skills"));
             if (skills == undefined){
                 skills = {};
             }
@@ -197,7 +197,7 @@ class SkillSetup extends FormApplication{
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectASkillToCopyFirst"));
         } else {
             let skills=await game.settings.get("fate-core-official", "skills");
-            let skill = duplicate(fcoConstants.gbn (skills, name));
+            let skill = foundry.utils.duplicate(fcoConstants.gbn (skills, name));
             name = skill.name+" "+game.i18n.localize("fate-core-official.copy");
             skill.name=name;
             skills[fcoConstants.tob64(name)]=skill;
@@ -292,7 +292,7 @@ class EditSkill extends FormApplication{
         skill_description.on ('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                     $('#edit_skill_description_rich')[0].innerHTML = desc;     
                 } else {
@@ -354,7 +354,7 @@ class EditSkill extends FormApplication{
         $('#edit_skill_caa').on('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
@@ -387,7 +387,7 @@ class EditSkill extends FormApplication{
         $('#edit_skill_attack').on('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
@@ -420,7 +420,7 @@ class EditSkill extends FormApplication{
         $('#edit_skill_defend').on('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
@@ -451,7 +451,7 @@ class EditSkill extends FormApplication{
     }
     async getData(){
         let rich = {};
-        let sk = duplicate (this.skill);
+        let sk = foundry.utils.duplicate(this.skill);
         for (let part in sk){
             if (part != "name" && part != "pc") rich[part] = await fcoConstants.fcoEnrich(sk[part]);
         }

@@ -7,11 +7,11 @@ class EditPlayerAspects extends FormApplication{
                 } else {
                     this.options.title=`${game.i18n.localize("fate-core-official.EditAspectsTitle")} ${this.object.name}`
                 }
-                this.player_aspects=duplicate(this.object.system.aspects);
+                this.player_aspects=foundry.utils.duplicate(this.object.system.aspects);
                 
                 game.system.apps["actor"].push(this);
                 game.system.apps["item"].push(this);
-                this.aspects=duplicate(this.object.system.aspects);
+                this.aspects=foundry.utils.duplicate(this.object.system.aspects);
     }
 
     activateListeners(html){
@@ -82,7 +82,7 @@ class EditPlayerAspects extends FormApplication{
             $(`#${id}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc; 
-                    if (isNewerVersion(game.version, '9.224')){
+                    if (foundry.utils.isNewerVersion(game.version, '9.224')){
                         desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                     } else {
                         desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}));
@@ -110,7 +110,7 @@ class EditPlayerAspects extends FormApplication{
             $(`#${id2}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc;
-                    if (isNewerVersion(game.version, '9.224')){
+                    if (foundry.utils.isNewerVersion(game.version, '9.224')){
                         desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))
                     } else {
                         desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))
@@ -212,7 +212,7 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async getData(){
-        let current = duplicate(this.object.system.aspects);
+        let current = foundry.utils.duplicate(this.object.system.aspects);
         let updated = this.aspects;
         for (let aspect in current){
             if (current[aspect].notes == undefined){
@@ -224,7 +224,7 @@ class EditPlayerAspects extends FormApplication{
                 delete current[aspect];
             }
         }
-        let data = mergeObject (duplicate(this.aspects), current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        let data = foundry.utils.mergeObject(foundry.utils.duplicate(this.aspects), current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
         for (let as in data){
             data[as].richDesc = await fcoConstants.fcoEnrich(data[as].description, this.object)
             data[as].richNotes = await fcoConstants.fcoEnrich(data[as].notes, this.object)

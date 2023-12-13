@@ -128,7 +128,7 @@
             </td>
             <td>
                 <select id = "entity_track_rollable" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value="false" {{#if (eq this.track.rollable "false")}} selected = "selected" {{/if}}> False</option>
+                    <option value="false" {{#if (eq this.track.rollable "false")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.False'}}</option>
                     <option value="full" {{#if (eq this.track.rollable "full")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollFullBoxes'}} </option>
                     <option value="empty" {{#if (eq this.track.rollable "empty")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollEmptyBoxes'}} </option>
                 </select>

@@ -71,7 +71,7 @@ export class Thing extends ActorSheet {
 
             if ( foundry.utils.isEmpty(this.actor.system.container.extra) ) {
                 await this.actor.update({"system.container.extra": container.toObject()});
-              } else container = duplicate(this.actor.system.container.extra);
+              } else container = foundry.utils.duplicate(this.actor.system.container.extra);
 
             // Populate the container contents
             container.system.contents = {
@@ -184,7 +184,7 @@ export class Thing extends ActorSheet {
             let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
             let user = game.user;
             let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
-            item = duplicate(item);
+            item = foundry.utils.duplicate(item);
             
             content += `<strong>${item.name}</strong><br/>
                         <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
@@ -279,7 +279,7 @@ export class Thing extends ActorSheet {
         if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
 
         const superData = super.getData();
-        const sheetData = duplicate(superData.data);
+        const sheetData = foundry.utils.duplicate(superData.data);
         sheetData.document = superData.actor;
         let items = this.object.items.contents;
         items.sort((a, b) => (a.sort || 0) - (b.sort || 0)); // Sort according to each item's sort parameter.
@@ -387,7 +387,7 @@ async function checkContainer (actor){
         
             if (actor.system.container.isContainer === false && actor.items.contents.length === 0){
                 if (actor?.system?.container?.extra?.name !== undefined){
-                    let item = duplicate(actor.system.container.extra);
+                    let item = foundry.utils.duplicate(actor.system.container.extra);
                     actor.createEmbeddedDocuments("Item",[item]);
                 }
             }
@@ -409,7 +409,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord
         
     //Let's get the contents, if there are any, so we can do some stuff with them later.
     if (newItem?.system?.contents){
-        contents = duplicate(newItem.system.contents);
+        contents = foundry.utils.duplicate(newItem.system.contents);
         delete newItem.system.contents;
     }
 
@@ -494,7 +494,7 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
 
         if (game.user.isGM){
             let shift_down = false; 
-            if (isNewerVersion(game.version, "9.230")){
+            if (foundry.utils.isNewerVersion(game.version, "9.230")){
                 shift_down = game.system["fco-shifted"];    
             } else {
                 shift_down = keyboard.isDown("Shift");
@@ -507,7 +507,7 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
                     ui.notifications.error("A GM has to be logged in for you to create item tokens.")
                 } else {
                     let shift_down = false; 
-                    if (isNewerVersion(game.version, "9.230")){
+                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
                         shift_down = game.system["fco-shifted"];    
                     } else {
                         shift_down = keyboard.isDown("Shift");
@@ -561,7 +561,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
 
     if (target.isOwner){
         let shift_down = false; 
-            if (isNewerVersion(game.version, "9.230")){
+            if (foundry.utils.isNewerVersion(game.version, "9.230")){
                 shift_down = game.system["fco-shifted"];    
             } else {
                 shift_down = keyboard.isDown("Shift");

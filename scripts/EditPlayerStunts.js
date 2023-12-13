@@ -3,7 +3,7 @@ class EditPlayerStunts extends FormApplication {
     constructor(actor, stunt, options){
         super(actor, stunt);
         this.actor = actor;
-        this.stunt=duplicate(stunt);
+        this.stunt=foundry.utils.duplicate(stunt);
         this.new = options?.new;
 
         //This is a good place to set up some variables at the top level so we can access them with this.
@@ -39,7 +39,7 @@ class EditPlayerStunts extends FormApplication {
 
     async _updateObject(event, formData){
         if (this.actor == null){ // This is a stunt in the database
-            let stunts = duplicate(game.settings.get("fate-core-official","stunts"));
+            let stunts = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
 
             if (this.new){
                 let count = 1;
@@ -145,7 +145,7 @@ class EditPlayerStunts extends FormApplication {
         stunt_desc.on ('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
@@ -171,7 +171,7 @@ class EditPlayerStunts extends FormApplication {
                let key;
                 try {
                     let check = false;
-                    if (isNewerVersion(game.version, "11.293")){
+                    if (foundry.utils.isNewerVersion(game.version, "11.293")){
                         key = fcoConstants.gkfn(data.delta.system.stunts, name);
                         if (key && data.delta.system.stunts[key]!=undefined) check = true;
                     }
@@ -183,11 +183,11 @@ class EditPlayerStunts extends FormApplication {
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
-                                if (isNewerVersion(game.version, "11.293")){
-                                    this.stunt = mergeObject(this.stunt, data.delta.system.stunts[key]);
+                                if (foundry.utils.isNewerVersion(game.version, "11.293")){
+                                    this.stunt = foundry.utils.mergeObject(this.stunt, data.delta.system.stunts[key]);
                                 }
                                 else {
-                                    this.stunt = mergeObject(this.stunt, data.actorData.system.stunts[key]);
+                                    this.stunt = foundry.utils.mergeObject(this.stunt, data.actorData.system.stunts[key]);
                                 }
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
@@ -210,7 +210,7 @@ class EditPlayerStunts extends FormApplication {
                         if (!this.renderPending) {
                             this.renderPending = true;
                             setTimeout(() => {
-                                this.stunt = mergeObject(this.stunt, data.system.stunts[key]);
+                                this.stunt = foundry.utils.mergeObject(this.stunt, data.system.stunts[key]);
                                 ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
@@ -236,13 +236,13 @@ class EditPlayerStunts extends FormApplication {
 
     async getData(){
         let data={}
-        data.stunt=duplicate(this.stunt);
+        data.stunt=foundry.utils.duplicate(this.stunt);
         data.stunt.richDesc = await fcoConstants.fcoEnrich(data.stunt.description, this.actor)
         if (this.actor == null){
             data.skills=game.settings.get("fate-core-official","skills");
         } else {
             if (this.actor.type=="Extra"){
-                data.skills=mergeObject(this.actor.system.skills, game.settings.get("fate-core-official","skills"), {inplace:false});
+                data.skills=foundry.utils.mergeObject(this.actor.system.skills, game.settings.get("fate-core-official","skills"), {inplace:false});
             } else {
                 data.skills=this.actor.system.skills;
             }
@@ -259,7 +259,7 @@ class StuntDB extends Application {
         this.filter = "";
         this.ignoreCase = false;
         this.actor=actor;
-        this.stunts=duplicate(game.settings.get("fate-core-official","stunts"));
+        this.stunts=foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
     }    
 
     async getData(){
@@ -267,7 +267,7 @@ class StuntDB extends Application {
             this.sort="name";
         }
         let data = {};
-        let stunts = duplicate(game.settings.get("fate-core-official","stunts"));
+        let stunts = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
         for (let stunt in stunts){
             stunts[stunt].richDesc = await fcoConstants.fcoEnrich(stunts[stunt].description);
         }
@@ -351,7 +351,7 @@ class StuntDB extends Application {
                 let dragged_name = event.target.getAttribute("data-mfname");
                 
                 let shift_down = false; 
-                if (isNewerVersion(game.version, "9.230")){
+                if (foundry.utils.isNewerVersion(game.version, "9.230")){
                     shift_down = game.system["fco-shifted"];    
                 } else {
                     shift_down = keyboard.isDown("Shift");
@@ -484,7 +484,7 @@ class StuntDB extends Application {
         let text = await this.getStunts();
         try {
             let imported_stunts = JSON.parse(text);
-            let stuntDB = duplicate(game.settings.get("fate-core-official","stunts"));
+            let stuntDB = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
             if (stuntDB == undefined){
                 stuntDB = {};
             }
@@ -515,14 +515,14 @@ class StuntDB extends Application {
     async _onAddButton(event, html){
         let stunts = game.settings.get("fate-core-official","stunts");
         let name = event.target.id.split("_")[0];
-        let stunt = duplicate(fcoConstants.gbn(stunts, name));
+        let stunt = foundry.utils.duplicate(fcoConstants.gbn(stunts, name));
         this.actor.update({"system.stunts":{[`${fcoConstants.tob64(stunt.name)}`]:stunt}});
     }
 
     async _onDeleteButton(event, html){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            let stunts = duplicate (game.settings.get("fate-core-official","stunts"));
+            let stunts = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
             let key = fcoConstants.gkfn(stunts, event.target.id.split("_")[0]);
             await delete stunts[key];
             await game.settings.set("fate-core-official","stunts",stunts);

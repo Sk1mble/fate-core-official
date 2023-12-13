@@ -45,7 +45,7 @@ class EditPlayerTracks extends FormApplication {
         if (this.object.isToken){
             if (this.object.token.id == id){
                 let check = false;
-                if (isNewerVersion(game.version, "11.293")){
+                if (foundry.utils.isNewerVersion(game.version, "11.293")){
                     if (data.delta.system != undefined && data.delta.system.tracks != undefined) check = true;
                 }
                 else {
@@ -232,7 +232,7 @@ class EditPlayerTracks extends FormApplication {
             </td>
             <td>
                 <select id = "rollable" style="color:black; background:white;">
-                    <option value="false"> False</option>
+                    <option value="false">${game.i18n.localize('fate-core-official.False')}</option>
                     <option value="full"> ${game.i18n.localize('fate-core-official.RollFullBoxes')} </option>
                     <option value="empty"> ${game.i18n.localize('fate-core-official.RollEmptyBoxes')} </option>
                 </select>
@@ -373,7 +373,7 @@ class EditPlayerTracks extends FormApplication {
     
                         if (numCopies < number){
                             for (let i = 0; i < number - numCopies; i++){
-                                let dupeTrack = duplicate(input[t]);
+                                let dupeTrack = foundry.utils.duplicate(input[t]);
                                 dupeTrack.parent = input[t].name;
                                 dupeTrack.name = dupeTrack.name+" "+(i+2)
                                 await this.prepareTrack(dupeTrack);
@@ -389,7 +389,7 @@ class EditPlayerTracks extends FormApplication {
                     //Copy from the input array rather than the current array as this is a new track.
                     if (numCopies < number){
                         for (let i = 0; i< number - numCopies; i++){
-                            let dupeTrack = duplicate(input[t]);
+                            let dupeTrack = foundry.utils.duplicate(input[t]);
                             if ( i == 0) {
                                 
                             } else {
@@ -412,7 +412,7 @@ class EditPlayerTracks extends FormApplication {
         ui.notifications.info(game.i18n.localize("fate-core-official.CharacterTrackChangesSaved"))   
         //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
-            let tracks = this.object.setupTracks(duplicate(this.object.system.skills), output);
+            let tracks = this.object.setupTracks(foundry.utils.duplicate(this.object.system.skills), output);
             await this.object.update({"system.tracks":[{"empty":"empty"}]}, {render:false, noHook:true}) //This is needed to make the game see a change in order of keys as a difference.
             await this.object.update({"system.tracks":tracks});             
         } else {
@@ -570,12 +570,12 @@ class EditPlayerTracks extends FormApplication {
     }
         
     async getData(){
-        let world_tracks = await duplicate(game.settings.get("fate-core-official","tracks"))
+        let world_tracks = await foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"))
         //We need the list of track categories
         //We will use a dropdown list of categories in the editor to select which tracks are displayed
 
         if (this.tracks_by_category == undefined){
-            this.tracks_by_category = await duplicate(game.settings.get("fate-core-official","track_categories"));
+            this.tracks_by_category = await foundry.utils.duplicate(game.settings.get("fate-core-official","track_categories"));
              //Initialise the values from text (used in the category editor) to JSON objects (used here)
             this.tracks_by_category["All"]={};
             for (let c in this.tracks_by_category){
@@ -583,7 +583,7 @@ class EditPlayerTracks extends FormApplication {
             }
 
             //Let's get a working copy of this actor's track information. We will work with this throughout and only save it to the actor when we're finished.
-            this.tracks = await duplicate(this.object.system.tracks);
+            this.tracks = await foundry.utils.duplicate(this.object.system.tracks);
             
             //The ones already on the player should be ticked as they already have them.DONE
 
@@ -592,7 +592,7 @@ class EditPlayerTracks extends FormApplication {
             try {
                     for (let t in this.tracks) {
                         if (this.tracks_by_category != undefined){
-                            let track = await duplicate(this.tracks[t]);
+                            let track = await foundry.utils.duplicate(this.tracks[t]);
                             track.present=true;
                             track.number=1;
                             this.tracks_by_category["All"][t]=track;

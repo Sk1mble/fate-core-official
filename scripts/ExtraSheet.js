@@ -97,7 +97,7 @@ export class ExtraSheet extends ItemSheet {
         data.rich.create = await fcoConstants.fcoEnrich (data.document.system.actions.create, this.object);
         data.rich.attack = await fcoConstants.fcoEnrich (data.document.system.actions.attack, this.object);
         data.rich.defend = await fcoConstants.fcoEnrich (data.document.system.actions.defend, this.object);
-        data.rich.stunts = duplicate(data.document.system.stunts);
+        data.rich.stunts = foundry.utils.duplicate(data.document.system.stunts);
         for (let st in data.rich.stunts){
             data.rich.stunts[st].richDesc = await fcoConstants.fcoEnrich (data.rich.stunts[st].description, this.object);
         }
@@ -140,7 +140,7 @@ export class ExtraSheet extends ItemSheet {
                     let dragged_name = event.target.getAttribute("data-mfname");
 
                     let shift_down = false; 
-                    if (isNewerVersion(game.version, "9.230")){
+                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
                         shift_down = game.system["fco-shifted"];    
                     } else {
                         shift_down = keyboard.isDown("Shift");
@@ -357,7 +357,7 @@ export class ExtraSheet extends ItemSheet {
 
         const countThisSkill = html.find("input[class='count_this_skill']");
         countThisSkill.on('click', async event => {
-            let skill = duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
+            let skill = foundry.utils.duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.countMe = event.target.checked;
             let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
             await this.document.update({"system.skills":{[`${key}`]:skill}});
@@ -365,7 +365,7 @@ export class ExtraSheet extends ItemSheet {
 
         const combineThisSkill = html.find("input[class='combine_this_skill']");
         combineThisSkill.on('click', async event => {
-            let skill = duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
+            let skill = foundry.utils.duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.combineMe = event.target.checked;
             let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
             await this.document.update({"system.skills":{[`${key}`]:skill}})
@@ -373,7 +373,7 @@ export class ExtraSheet extends ItemSheet {
 
         const hideThisSkill = html.find("input[class='hide_this_skill']");
         hideThisSkill.on('click', async event => {
-            let skill = duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
+            let skill = foundry.utils.duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.hidden = event.target.checked;
             let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
             await this.document.update({"system.skills":{[`${key}`]:skill}})
@@ -520,7 +520,7 @@ export class ExtraSheet extends ItemSheet {
 
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
-        let db = duplicate(game.settings.get("fate-core-official","stunts"));
+        let db = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
         db[fcoConstants.tob64(name)]=fcoConstants.gbn(this.object.system.stunts, name);
         await game.settings.set("fate-core-official","stunts",db);
         ui.notifications.info(`${game.i18n.localize("fate-core-official.Added")} ${name} ${game.i18n.localize("fate-core-official.ToTheStuntDatabase")}`);

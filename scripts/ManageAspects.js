@@ -111,7 +111,7 @@ class AspectSetup extends FormApplication{
         try {
             let imported_aspects = JSON.parse(text);
 
-            let aspects = duplicate(game.settings.get("fate-core-official","aspects"));
+            let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official","aspects"));
             if (aspects == undefined){
                 aspects = {};
             }
@@ -148,7 +148,7 @@ class AspectSetup extends FormApplication{
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectAnAspectFirst"));
         } else {
             let aspects=await game.settings.get("fate-core-official", "aspects");
-            let aspect = duplicate(fcoConstants.gbn(aspects, name));
+            let aspect = foundry.utils.duplicate(fcoConstants.gbn(aspects, name));
             name = aspect.name+" "+game.i18n.localize("fate-core-official.copy");
             aspect.name=name;
             aspects[fcoConstants.tob64(name)]=aspect;
@@ -280,7 +280,7 @@ class EditAspect extends FormApplication{
             if (!window.getSelection().toString()){
                 
                 let desc;
-                if (isNewerVersion(game.version, '9.224')){
+                if (foundry.utils.isNewerVersion(game.version, '9.224')){
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 } else {
                     desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
