@@ -1,7 +1,5 @@
-2023/12/15-03:29:36.793 b8e0 Recovering log #731
-2023/12/15-03:29:36.911 b8e0 Delete type=0 #731
-2023/12/15-03:29:36.911 b8e0 Delete type=3 #729
-2023/12/15-03:42:22.624 65c Level-0 table #736: started
-2023/12/15-03:42:22.624 65c Level-0 table #736: 0 bytes OK
-2023/12/15-03:42:22.670 65c Delete type=0 #734
-2023/12/15-03:42:22.759 65c Manual compaction at level-0 from '!macros!3rIISB1ysvBlB77Z' @ 72057594037927935 : 1 .. '!macros!UPf3gd6MXJEAUiJD' @ 0 : 0; will stop at (end)
+2023/12/15-04:20:27.361 b8e0 Log #747: 0 ops saved to Table #748 OK
+2023/12/15-04:20:27.361 b8e0 Archiving e:\foundryvttstorage\Data\systems\fate-core-official\packs\macros/000747.log: OK
+2023/12/15-04:20:27.361 b8e0 Table #666: 4 entries OK
+2023/12/15-04:20:27.425 b8e0 Archiving e:\foundryvttstorage\Data\systems\fate-core-official\packs\macros/MANIFEST-000745: OK
+2023/12/15-04:20:27.482 b8e0 **** Repaired leveldb e:\foundryvttstorage\Data\systems\fate-core-official\packs\macros; recovered 1 files; 4556 bytes. Some data may have been lost. ****

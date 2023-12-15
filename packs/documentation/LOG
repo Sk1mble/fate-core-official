@@ -1,10 +1,19 @@
-2023/12/15-04:13:50.593 b4f0 Recovering log #805
-2023/12/15-04:13:50.674 b4f0 Delete type=0 #805
-2023/12/15-04:13:50.674 b4f0 Delete type=3 #803
-2023/12/15-04:17:08.056 65c Level-0 table #810: started
-2023/12/15-04:17:08.056 65c Level-0 table #810: 0 bytes OK
-2023/12/15-04:17:08.095 65c Delete type=0 #801
-2023/12/15-04:17:08.095 65c Delete type=0 #808
-2023/12/15-04:17:08.095 65c Delete type=3 #799
-2023/12/15-04:17:08.178 65c Manual compaction at level-0 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
-2023/12/15-04:17:08.178 65c Manual compaction at level-1 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
+2023/12/15-04:20:27.927 b84 Delete type=3 #1
+2023/12/15-04:20:27.967 65c Moved #504 to level-1 3202742 bytes OK: files[ 4 1 0 0 0 0 0 ]
+2023/12/15-04:20:27.992 65c Moved #505 to level-1 2152099 bytes OK: files[ 3 2 0 0 0 0 0 ]
+2023/12/15-04:30:21.299 65c Level-0 table #814: started
+2023/12/15-04:30:21.299 65c Level-0 table #814: 0 bytes OK
+2023/12/15-04:30:21.380 65c Delete type=0 #812
+2023/12/15-04:30:21.380 65c Manual compaction at level-0 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 106 : 1
+2023/12/15-04:30:21.380 65c Compacting 3@0 + 0@1 files
+2023/12/15-04:30:21.564 65c Generated table #815@0: 1 keys, 3062954 bytes
+2023/12/15-04:30:21.685 65c Generated table #816@0: 1 keys, 4063460 bytes
+2023/12/15-04:30:21.752 65c Generated table #817@0: 2 keys, 1839902 bytes
+2023/12/15-04:30:21.752 65c Compacted 3@0 + 0@1 files => 8966316 bytes
+2023/12/15-04:30:21.780 65c compacted to: files[ 0 5 0 0 0 0 0 ]
+2023/12/15-04:30:21.780 65c Delete type=2 #506
+2023/12/15-04:30:21.781 65c Delete type=2 #507
+2023/12/15-04:30:21.781 65c Delete type=2 #508
+2023/12/15-04:30:21.805 65c Moved #504 to level-2 3202742 bytes OK: files[ 0 4 1 0 0 0 0 ]
+2023/12/15-04:30:21.805 65c Manual compaction at level-0 from '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 106 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
+2023/12/15-04:30:21.836 65c Moved #505 to level-2 2152099 bytes OK: files[ 0 3 2 0 0 0 0 ]

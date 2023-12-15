@@ -1,3 +1,6 @@
+# 4.6.1
+* Bugfix, and the token name is now also stored in the shape (this is not the name used to store the shape)
+
 # 4.6.0
 * Tested that the system works properly with Foundry v12.317 (prototype 1)
 * Foundry v12.317 deprecation compatibility changes

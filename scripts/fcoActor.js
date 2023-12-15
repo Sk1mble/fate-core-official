@@ -119,25 +119,26 @@ export class fcoActor extends Actor {
         let shape = this.getShape(shapeName);
         if (!shape || !this.isOwner) return;
         // Set avatar and token artwork for this token or actor accordingly
-        // If we're a token actor we need to change the texture for the token. .
+        // If we're a token actor we need to change the texture for the token.
+        let name = shape.tokenName;
+        if (!name) name = token.name; 
         if (token.document.actorLink == false) {
             // This is a token actor; change the token texture and token actor avatar
-            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg}]);
+            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg, "name":name}]);
             await token.actor.update({"img":shape.avatarImg})
         } else {
             // This is a real actor; change the token texture, the actor's prototype token texture, and the actor's avatar
-            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg}]);
+            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg, "name":name}]);
             await token.actor.update({"img":shape.avatarImg, "prototypeToken.texture.src":shape.tokenImg});
         }
     }
 
-    async storeShape (shapeName, tokenImg, avatarImg){
+    async storeShape (shapeName, tokenImg, avatarImg, token){
         if (!this.isOwner) return;
         let shapes = this.getFlag("fate-core-official", "shapes");
         // If no shapes stored in flags, initialise an empty object.
         if (!shapes) shapes = {};
         let existing = fcoConstants.gbn(shapes, shapeName);
-        let token = canvas.tokens.controlled[0];
         if (token.document.actorLink == false) {
             // This is a token actor; store the token texture and token actor avatar unless specific values provided
             if (!tokenImg) tokenImg = token.document.texture.src;
@@ -152,7 +153,7 @@ export class fcoActor extends Actor {
         if (existing) response  = await fcoConstants.awaitYesNoDialog(shapeName, game.i18n.localize("fate-core-official.checkShapeOverwrite"));
         if (!existing || response == "yes"){
             // Safe to store this shape
-            let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg};
+            let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg, tokenName:token.name};
             shapes[fcoConstants.tob64(shapeName)] = newShape;
             await this.setFlag("fate-core-official", "shapes", shapes);
         }
@@ -942,7 +943,7 @@ export class fcoActor extends Actor {
                 if (ev.target.closest('div').id.split("_")[0] == "fcoShapeAdd"){
                     let name = $(`#fcoShapeAddName_${token.id}`)[0].value;
                     if (name) {
-                        await token.actor.storeShape(name);
+                        await token.actor.storeShape(name, null, null, token);
                     } else {
                         ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
                     }
