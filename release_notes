@@ -1,3 +1,7 @@
+# 4.6.2
+* Bugfix that makes sure skills update properly on character sheet after editing them.
+* Bugfix to ensure that Things are created with the correct ownership level (required because of the switch from 'permission' to 'ownership' now being enforced)
+
 # 4.6.1
 * Bugfix, and the token name is now also stored in the shape (this is not the name used to store the shape)
 

@@ -271,7 +271,7 @@ class FateCharacterDefaults {
             items:character_default.extras,
             img:character_default.img,
             prototypeToken:{texture:{src:character_default.token_img}, actorLink:a_link},
-            permission: perm,
+            ownership: perm,
             system:{
                 details:{fatePoints:{refresh:refresh, current:refresh}},
                 skills:character_default.skills,
@@ -392,7 +392,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
             let actorData = {
                 "name":actor_name,
                 "type":"fate-core-official",
-                "permission": perm,
+                "ownership": perm,
                 "system.details.fatePoints.refresh":"0",
                 "prototypeToken.actorLink":true
              }
@@ -401,7 +401,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
         }
 
         if (default_name === "fate-core-official"){
-            await Actor.create({"name":actor_name, "type":"fate-core-official", permission: perm, "prototypeToken.actorLink":true},{renderSheet:true});
+            await Actor.create({"name":actor_name, "type":"fate-core-official", ownership: perm, "prototypeToken.actorLink":true},{renderSheet:true});
             return;
         }
         await f.createCharacterFromDefault(default_name, actor_name, true);
@@ -497,7 +497,7 @@ class ManageDefaults extends FormApplication {
             let presentation = await f.presentDefault(def.default_name);
             let actorLink;
             if (presentation.actorLink){
-                actorLink = '<i class = "far fa-check-square fa-2x" title="On"/>';
+                actorLink = '<i class = "far fa-toggle-on-square fa-2x" title="On"/>';
             } else {
                 actorLink = '<i class = "far fa-square fa-2x" title="Off"/>';
             }

@@ -426,7 +426,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord
                 system:{"container.isContainer":isContainer, "container.extra":newItem.toJSON()},
                 img:newItem.img,
                 sort: 12000,
-                permission:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
+                ownership:{"default":3} // Owner permissions are really necessary to succesfully interact with objects.
             }
             if (!isContainer) toCreate.items = [newItem.toJSON()];
 
