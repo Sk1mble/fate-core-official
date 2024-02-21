@@ -219,39 +219,42 @@ Hooks.once('ready', () => {
     } 
 });
 
-Hooks.on('preCreateDrawing', (drawing, data) => {
-    if (game.settings.get("fate-core-official", "drawingsOnTop")){
-        if (foundry.utils.isNewerVersion(game.version, 12)) drawing.updateSource({elevation:999999999});
-    }
-})
-
-Hooks.on('createDrawing', (drawing) => {
-    if (game.settings.get("fate-core-official","drawingsOnTop")){  
-        if (drawing.isOwner){
-            if (foundry.utils.isNewerVersion(game.version, 12)){
-            } else {
-                const siblings = canvas.drawings.placeables;
-                // Determine target sort index
-                let z = 0;
-                let up = true;
-                let controlled = [drawing];
-                if ( up ) {
-                    controlled.sort((a, b) => a.document.z - b.document.z);
-                    z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
+if (!foundry.utils.isNewerVersion(game.version, "12.316")){
+    Hooks.on('preCreateDrawing', (drawing, data) => {
+        if (game.settings.get("fate-core-official", "drawingsOnTop")){
+            if (foundry.utils.isNewerVersion(game.version, 12)) drawing.updateSource({elevation:999999999});
+        }
+    })
+    
+    Hooks.on('createDrawing', (drawing) => {
+        if (game.settings.get("fate-core-official","drawingsOnTop")){  
+            if (drawing.isOwner){
+                if (foundry.utils.isNewerVersion(game.version, 12)){
                 } else {
-                    controlled.sort((a, b) => b.document.z - a.document.z);
-                    z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
+                    const siblings = canvas.drawings.placeables;
+                    // Determine target sort index
+                    let z = 0;
+                    let up = true;
+                    let controlled = [drawing];
+                    if ( up ) {
+                        controlled.sort((a, b) => a.document.z - b.document.z);
+                        z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
+                    } else {
+                        controlled.sort((a, b) => b.document.z - a.document.z);
+                        z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
+                    }
+                    // Update all controlled objects
+                    const updates = controlled.map((o, i) => {
+                    let d = up ? i : i * -1;
+                        return {_id: o.id, z: z + d};
+                    });
+                        return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
                 }
-                // Update all controlled objects
-                const updates = controlled.map((o, i) => {
-                let d = up ? i : i * -1;
-                    return {_id: o.id, z: z + d};
-                });
-                    return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
-            }
-        }   
-    }
-})
+            }   
+        }
+    })
+}
+
 
 Hooks.on('diceSoNiceReady', function() {
     game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);
@@ -1153,14 +1156,16 @@ game.settings.register("fate-core-official","freeStunts", {
         default:false
     });
 
-    game.settings.register("fate-core-official","drawingsOnTop", {
-        name:game.i18n.localize("fate-core-official.DrawingsOnTop"),
-        hint:game.i18n.localize("fate-core-official.DrawingsOnTopHint"),
-        scope:"world",
-        config:"true",
-        type:Boolean,
-        default:false
-    })
+    if (!foundry.utils.isNewerVersion(game.version, "12.316")){
+        game.settings.register("fate-core-official","drawingsOnTop", {
+            name:game.i18n.localize("fate-core-official.DrawingsOnTop"),
+            hint:game.i18n.localize("fate-core-official.DrawingsOnTopHint"),
+            scope:"world",
+            config:"true",
+            type:Boolean,
+            default:false
+        })
+    }
 
     game.settings.register("fate-core-official","fco-aspects-pane-mheight", {
         name:game.i18n.localize("fate-core-official.fcoAspectPaneHeight"),

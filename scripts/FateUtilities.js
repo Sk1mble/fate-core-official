@@ -1758,6 +1758,7 @@ class FateUtilities extends Application{
                         height: height
                     },
                     fillType: CONST.DRAWING_FILL_TYPES.SOLID,
+                    interface: true,
                     fillColor: game.settings.get("fate-core-official", "fuAspectLabelFillColour"),
                     fillAlpha: game.settings.get("fate-core-official", "fuAspectLabelFillAlpha"),
                     strokeWidth: 4,
@@ -2109,7 +2110,8 @@ class FateUtilities extends Application{
 
         if (type === "find"){
             let t_id = id;
-            let combatant = game.combat.getCombatantByToken(t_id);
+            let combatants = game.combat.combatants;
+            let combatant = combatants.find(comb => comb.token.id == id);
             let token = combatant.token;
             //let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
             if (game.combat.scene){
@@ -2136,7 +2138,8 @@ class FateUtilities extends Application{
 
         if (type === "sheet"){
             let t_id = id;
-            let combatant = game.combat.getCombatantByToken(t_id);
+            let combatants = game.combat.combatants;
+            let combatant = combatants.find(comb => comb.token.id == id);
             let token = combatant.token;
             const sheet = token.actor.sheet;
 
@@ -2151,7 +2154,8 @@ class FateUtilities extends Application{
 
     async _onPopcornRemove(event, html){
         let id = event.target.id.split("_")[0];
-        await game.combat.getCombatantByToken(id).delete();
+        let combatants = game.combat.combatants;
+        let combatant = combatants.find(comb => comb.token.id == id);
     }
 
     async _endButton(event, html){

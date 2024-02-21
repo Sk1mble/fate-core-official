@@ -431,7 +431,7 @@ async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord
             if (!isContainer) toCreate.items = [newItem.toJSON()];
 
             itemActor = await Actor.create(toCreate
-            ,{"temporary":false,"renderSheet":false,"thing":true});   
+            ,{"renderSheet":false,"thing":true});   
 
             if (itemActor != undefined){ //Creation was successful, delete the item from the original actor.
                 if (actord) {

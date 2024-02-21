@@ -382,7 +382,9 @@ class fcoConstants {
         output.limited_sheet_template = game.settings.get("fate-core-official", "limited_sheet_template")
         output.playerThings = game.settings.get("fate-core-official", "PlayerThings")
         output.DeleteOnTransfer = game.settings.get("fate-core-official", "DeleteOnTransfer")
-        output.drawingsOnTop = game.settings.get("fate-core-official", "drawingsOnTop")
+        if (!foundry.utils.isNewerVersion(game.version, "12.316")){
+            output.drawingsOnTop = game.settings.get("fate-core-official", "drawingsOnTop")
+        }
         output.fuFontSize = game.settings.get("fate-core-official", "fuFontSize")
         output.aspectWidth = game.settings.get("fate-core-official", "aspectwidth")
         output.fuAspectLabelSize = game.settings.get("fate-core-official", "fuAspectLabelSize")
@@ -496,7 +498,9 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "limited_sheet_template", input?.limited_sheet_template);
         await game.settings.set("fate-core-official", "PlayerThings", input.PlayerThings)
         await game.settings.set("fate-core-official", "DeleteOnTransfer", input.DeleteOnTransfer)
-        await game.settings.set("fate-core-official", "drawingsOnTop", input.drawingsOnTop)
+        if (!foundry.utils.isNewerVersion(game.version, "12.316")){
+            await game.settings.set("fate-core-official", "drawingsOnTop", input.drawingsOnTop)
+        }
         await game.settings.set("fate-core-official", "fuFontSize", input.fuFontSize)
         await game.settings.set("fate-core-official", "aspectwidth", input.aspectWidth)
         await game.settings.set("fate-core-official", "fuAspectLabelSize", input.fuAspectLabelSize)

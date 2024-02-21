@@ -2,6 +2,10 @@
     padding: 0;
 }
 
+*{
+    scrollbar-width:thin;
+}
+
 .mfate-sheet {
     display: grid;
     grid-template-areas: "header header" "content content";
@@ -11,6 +15,18 @@
     height: 100%;
     border: none !important;
     max-height: 100%;
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00;
+    scrollbar-width:thin;
+}
+
+.fate {
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00;
+    scrollbar-width:thin;
+}
+
+#FateUtilities {
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00;
+    scrollbar-width:thin
 }
 
 .mfate-sheet *::-webkit-scrollbar-thumb {
