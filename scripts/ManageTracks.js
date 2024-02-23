@@ -289,7 +289,7 @@ class EditEntityTrack extends FormApplication {
             if (num > 1) this.track.name = this.track.name+" "+num;
 
             await this.entity.update({   
-                "system.tracks":[]
+                "system.tracks":null
             })    
         }
         let key = fcoConstants.gkfn(tracks, this.track.name);

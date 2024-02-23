@@ -49,7 +49,9 @@ export class fcoActor extends Actor {
             this.updateSource({type:"fate-core-official"})
         }
 
-        if (this?.system?.details?.fatePoints?.refresh === ""){
+        if (this?.system?.details?.fatePoints?.refresh === null||
+            this?.system?.details?.fatePoints?.refresh === undefined &&
+            this.type == "fate-core-official"){
             this.updateSource(this.initialisefcoCharacter());
         }
 

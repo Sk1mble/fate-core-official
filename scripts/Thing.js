@@ -388,6 +388,7 @@ async function checkContainer (actor){
             if (actor.system.container.isContainer === false && actor.items.contents.length === 0){
                 if (actor?.system?.container?.extra?.name !== undefined){
                     let item = foundry.utils.duplicate(actor.system.container.extra);
+                    item.system.contents.extras = undefined;
                     actor.createEmbeddedDocuments("Item",[item]);
                 }
             }

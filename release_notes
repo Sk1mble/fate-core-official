@@ -1,3 +1,8 @@
+# 4.6.4
+* Converted the system to use a character data model in place of template.json.
+* Fixed a bug where changing an item back to not being a container and then taking it into the inventory would return it to being a container on re-deploying the item to the world.
+* Tweaked the way tracks are selected and presented to be used as 'health bars' as the old way didn't work now we're using a data model rather than template.json.
+
 # 4.6.3
 * Added css properties to make scrollbars narrow with the correct colour on sheets etc. in newer versions of Chrome that have disabled the webkit toolbar pseudo element.
 * Added support for hot reloading the EN translation file, hbs and css files to aid in development.

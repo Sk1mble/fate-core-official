@@ -54,7 +54,7 @@ class fcoSkill extends foundry.abstract.DataModel {
             "attack":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "defend":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "pc": new foundry.data.fields.BooleanField({ nullable: false, required: true, initial:true}),
-            "rank": new foundry.data.fields.NumberField({ required: true, initial:0 }),
+            "rank": new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "extra_id": new foundry.data.fields.StringField({ required: false, initial: undefined }),
             "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "adhoc": new foundry.data.fields.BooleanField({ required: false, initial:false }),
@@ -121,8 +121,8 @@ class fcoTrack extends foundry.abstract.DataModel {
     static defineSchema(){
         let linked_skills = new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField({
             "linked_skill":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-			"rank": new foundry.data.fields.NumberField({ required: true, initial:0 }),
-			"boxes": new foundry.data.fields.NumberField({ required: true, initial:0 }),
+			"rank": new foundry.data.fields.NumberField({ required: true, initial:0, integer:true}),
+			"boxes": new foundry.data.fields.NumberField({ required: true, initial:0, integer:true}),
 			"enables": new foundry.data.fields.BooleanField({ required: true, initial:false })
         }));
 
@@ -148,8 +148,8 @@ class fcoTrack extends foundry.abstract.DataModel {
             "recovery_type":recovery_type,
             "when_marked":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "recovery_conditions":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "harm_can_absorb": new foundry.data.fields.NumberField({ required: true, initial:0 }),
-            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0 }),
+            "harm_can_absorb": new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
+            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "box_values":new foundry.data.fields.ArrayField(new foundry.data.fields.BooleanField()),
             "aspect":new trackAspectField({required: true, initial:"No"}),
             "rollable":new foundry.data.fields.StringField({ nullable:false, required: true, initial:"false", choices: ["false", "full", "empty"] })
@@ -166,18 +166,147 @@ class fcoStunt extends foundry.abstract.DataModel {
             "extra_id": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "linked_skill": new foundry.data.fields.StringField({ required: true, initial:"None" }),
-            "refresh_cost":new foundry.data.fields.NumberField({ required: true, initial:1 }),
+            "refresh_cost":new foundry.data.fields.NumberField({ required: true, initial:1, integer:true }),
             "overcome":new foundry.data.fields.BooleanField({ required: true, initial:false }),
             "caa":new foundry.data.fields.BooleanField({ required: true, initial:false }),
             "attack":new foundry.data.fields.BooleanField({ required: true, initial:false }),
             "defend":new foundry.data.fields.BooleanField({ required: true, initial:false }),
-            "bonus":new foundry.data.fields.NumberField({ required: true, initial:0 }),
-            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0 }),
+            "bonus":new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
+            "boxes":new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "box_values":new foundry.data.fields.ArrayField(new foundry.data.fields.BooleanField()),
         }
     }
 }
 
+// Implement data models for characters instead of utilising template.json
+
+class fcoActorModel extends foundry.abstract.DataModel {
+    static defineSchema () {
+        const fields = foundry.data.fields;
+        return {
+            "details":new fields.SchemaField({
+                    "description":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
+                    "biography":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
+                    "pronouns":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
+                    "notes":new fields.SchemaField({
+                        "value":new fields.StringField({nullable:false, required: true, initial:""}),
+                        "GM":new fields.BooleanField({nullable:false, required: true, initial:false})
+                    }),
+                    "fatePoints":new fields.SchemaField({
+                        "current":new fields.NumberField({required:true, initial:0, integer:true}),
+                        "refresh":new fields.NumberField({nullable:true, required:true, initial:null, integer:true}),
+                        "boosts":new fields.NumberField({nullable:false, required:true, initial:0, integer:true}),
+                    }),
+                    "sheet_mode":new fields.StringField({ nullable:false, required: true, initial:"minimal_at_refresh_0", choices: ["minimal_at_refresh_0", "minimal", "full"]}),
+                }),
+            "tracks":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "stunts":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "skills":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "aspects":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "override":new fields.SchemaField({
+                "active":new fields.BooleanField ({nullable :false, required:true, initial:false}),
+                "refresh":new fields.NumberField ({nullable:false, required:true, initial:0, integer:true}),
+                "skillPoints":new fields.NumberField ({nullable:false, required:true, initial:0, integer:true}),
+            }),
+        }
+    }
+}
+
+class fcoThingModel extends foundry.abstract.DataModel {
+    static defineSchema () {
+        const fields = foundry.data.fields;
+        return {
+            "container":new fields.SchemaField({
+                "isContainer":new fields.BooleanField ({nullable :false, required:true, initial:false}),
+                "locked":new fields.BooleanField ({nullable :false, required:true, initial:false}),
+                "movable":new fields.BooleanField ({nullable :false, required:true, initial:true}),
+                "security":new fields.NumberField ({nullable:false, required:true, initial:0, integer:true}),
+                "extra":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            })
+        }
+    }
+}
+
+class fcoExtraModel extends foundry.abstract.DataModel {
+    static defineSchema () {
+        const fields = foundry.data.fields;
+        return {
+            "description":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
+            "permissions":new fields.StringField({nullable:false, required: true, initial:""}),
+            "costs":new fields.StringField({nullable:false, required: true, initial:""}),
+            "refresh":new fields.NumberField ({nullable:false, required:true, initial:0, integer:true}),
+            "tracks":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "stunts":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "skills":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "aspects":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "actions":new fields.SchemaField({
+                "overcome":new fields.StringField({nullable:false, required: true, initial:""}),
+                "create":new fields.StringField({nullable:false, required: true, initial:""}),
+                "attack":new fields.StringField({nullable:false, required: true, initial:""}),
+                "defend":new fields.StringField({nullable:false, required: true, initial:""}),
+            }),
+            "countSkills":new fields.BooleanField({required:true, initial:false, nullable:false}),
+            "combineSkills":new fields.BooleanField({required:true, initial:false, nullable:false}),
+            "contents":new fields.ObjectField({nullable:true, required:true, initial:{}}),
+            "active":new fields.BooleanField({required:true, initial:true, nullable:false}),
+        }
+    }
+}
+
+// Register the appropriate data models
+Hooks.on("init", () => {
+    CONFIG.Actor.dataModels["fate-core-official"] = fcoActorModel;
+    CONFIG.Actor.dataModels["Thing"] = fcoThingModel;
+    CONFIG.Item.dataModels["Extra"] = fcoExtraModel;
+});
+
+Hooks.on("renderTokenConfig", (tokenConfig) => {
+    let tracks = tokenConfig.token.actor.system.tracks;
+    let possibles = ["details.fatePoints"];
+    for (let track in tracks){
+        if (tracks[track]?.boxes > 0){
+            possibles.push(`details.${tracks[track].name}`);
+        }
+    }
+    let toSet = {
+        "fate-core-official": {
+            bar:possibles,
+            value:["details.fatePoints.value"]
+        }
+    }
+    let renderPending = false;
+    if (JSON.stringify(CONFIG.Actor.trackableAttributes) != JSON.stringify(toSet)) renderPending = true;
+    CONFIG.Actor.trackableAttributes = toSet;
+    if (renderPending) tokenConfig.render(true);
+})
+
 // Consider adding a model for character sheet colour schemes.
 // Consider using models on importing from Fari/FateX to standardize data (FateCharacterImporter)
 // Consider using models for character default frameworks to ensure consistency in using, exporting & importing them. (FateCharacterDefaults)
+
+/**
+ * When using the System template.json, the properties that can be used for a Token's resource bar are inferred from the template. This works well enough, but it can also include things like derived properties, properties that were intended to be hidden, or otherwise properties that are not suitable or ever useful as a resource bar, making it difficult for a user to locate the actual properties they want.
+
+When using a Data Model for your system data, the core software will no longer attempt to infer which properties can be used as Token resource bars. Instead, you are given full control to tailor this list to whatever makes sense for your System. To do so, you need to modify the CONFIG.Actor.trackableAttributes configuration variable. The below example shows how to configure one resource as a bar attribute, and another as a value attribute.
+
+Hooks.on("init", () => {
+  CONFIG.Actor.trackableAttributes = {
+    character: {
+      bar: ["attributes.hp"],
+      value: ["attributes.ac.value"]
+    }
+  };
+});
+For bar attributes, the property supplied must point to some object with both value and max properties, and these properties must both be numbers. For value attributes, the property supplied must simply point to any number. The attributes do not need to exist in your Data Model, they can be properties that are later derived as part of data preparation. If the attribute does not exist in the Data Model or is not a NumericField, then it will not be editable in the Token HUD.
+
+Registering a Data Model
+Once the Data Model is defined, the core API can be made aware of it and will automatically apply the data model to the system field of any registered types.
+
+The following code snippet will register the example CharacterData model to be automatically applied as the system data for every Actor of the character type.
+
+Hooks.on("init", () => {
+  CONFIG.Actor.systemDataModels.character = CharacterData;
+});
+
+See: https://foundryvtt.com/article/system-data-models/
+*/
