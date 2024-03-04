@@ -864,7 +864,13 @@ class FateUtilities extends Application{
                     diceResult.push(d[i].roll)
                 }
             }
-            let user = {name:message.user.name, _id:message.user._id};
+            let user = null;
+            if (foundry.utils.isNewerVersion(game.version,"12.316")){
+                user = {name:message.author.name, _id:message.author._id};
+            } else {
+                user = {name:message.user.name, _id:message.user._id};
+            }
+            
             roll = {
                 "message_id":message_id,
                 "speaker":speaker,
@@ -2905,7 +2911,12 @@ Hooks.on('createChatMessage', async (message) => {
                     diceResult.push(d[i].roll)
                 }
             }
-            let user = {name:message.user.name, _id:message.user._id};
+            let user = null;
+            if (foundry.utils.isNewerVersion(game.version,"12.316")){
+                user = {name:message.author.name, _id:message.author._id};
+            } else {
+                user = {name:message.user.name, _id:message.user._id};
+            }
             let rolls = game?.scenes?.viewed?.getFlag("fate-core-official","rolls");
             if (rolls == undefined){
                 rolls = [];

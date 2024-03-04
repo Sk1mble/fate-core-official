@@ -124,6 +124,9 @@ export class fcoActor extends Actor {
         // If we're a token actor we need to change the texture for the token.
         let name = shape.tokenName;
         if (!name) name = token.name; 
+        let aName = shape.actorName;
+        if (!aName) aName = token.actor.name; 
+
         if (token.document.actorLink == false) {
             // This is a token actor; change the token texture and token actor avatar
             await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg, "name":name}]);
@@ -131,7 +134,30 @@ export class fcoActor extends Actor {
         } else {
             // This is a real actor; change the token texture, the actor's prototype token texture, and the actor's avatar
             await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg, "name":name}]);
-            await token.actor.update({"img":shape.avatarImg, "prototypeToken.texture.src":shape.tokenImg});
+            await token.actor.update({"img":shape.avatarImg, name:aName, "prototypeToken.texture.src":shape.tokenImg});
+        }
+        if (shape.tokenData) {
+                shape.tokenData.x = token.document.x;
+                shape.tokenData.y = token.document.y;
+                shape.tokenData.elevation = token.document.elevation;
+                shape.tokenData.flags = token.document.flags;
+            await token.document.update(shape.tokenData);
+        }
+
+        if (shape.extra_status){
+            let extra_status = [];
+            for (let update of shape.extra_status){
+                let item = token.actor.items.get(update._id);
+                if (item != undefined) {
+                    extra_status.push(update);
+                }
+            }
+
+            await token.actor.updateEmbeddedDocuments("Item", extra_status);
+            for (let item of token.actor.items){
+                if (item.system.active) await token.actor.updateFromExtra(item);
+                if (!item.system.active) await token.actor.deactivateExtra(item);
+            }
         }
     }
 
@@ -150,12 +176,21 @@ export class fcoActor extends Actor {
             if (!tokenImg) tokenImg = token.document.texture.src;
             if (!avatarImg) avatarImg = this.img;
         }
+        let token_data = foundry.utils.duplicate(token.document);
+
+        let extra_status = [];
+        let items = token.actor.items;
+        for (let item of items){
+            let active = item.system.active;
+            let id = item.id;
+            extra_status.push({"_id":id, "system.active":active})
+        }
 
         let response = "no";
         if (existing) response  = await fcoConstants.awaitYesNoDialog(shapeName, game.i18n.localize("fate-core-official.checkShapeOverwrite"));
         if (!existing || response == "yes"){
             // Safe to store this shape
-            let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg, tokenName:token.name};
+            let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg, actorName:token.actor.name, tokenName:token.name, tokenData:token_data, extra_status:extra_status};
             shapes[fcoConstants.tob64(shapeName)] = newShape;
             await this.setFlag("fate-core-official", "shapes", shapes);
         }
