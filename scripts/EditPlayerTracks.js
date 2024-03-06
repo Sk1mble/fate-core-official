@@ -211,7 +211,7 @@ class EditPlayerTracks extends FormApplication {
                     <option value="custom">
                         ${game.i18n.localize("fate-core-official.Custom")}
                     </option>
-                    <option selected="selected" value="${game.i18n.localize("fate-core-official.none")}">
+                    <option selected="selected" value="none">
                         ${game.i18n.localize("fate-core-official.None")}
                     </option>
                 </select>

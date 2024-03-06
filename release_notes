@@ -1,3 +1,7 @@
+# 4.6.6
+* Fixed an inconsistency in the way the translation files work in respect of the label for tracks.
+* Added initial Brazillian Portuguese support courtesy of Discord community member LHLF - this is still being worked upon and support for language localisation in the system generally being improved.
+
 # 4.6.5
 * The shape function now stores all token data except x, y, elevation, and flags and sets these values on the token when the shape is changed. This means that size, lighting effects, etc. are stored in the shape data.
 * The shape also stores the on/off status of all extras on the shape, allowing an easy way to automatically change a character's stats by setting them on extras to be toggled between.

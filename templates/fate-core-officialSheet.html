@@ -219,7 +219,7 @@
                                                 <input type="checkbox" class="fco-box" id="{{../name}}_{{@index}}_false" style="opacity:0;width:25px; height:25px; float:left;" checked="checked">
                                                     <span class="checkmark"></span>
                                                     <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 14px; color: var(--fco-sheet-text-color);">
-                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'fate-core-official.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
+                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
                                                     </i>
                                                 </input>
                                             </label> {{else}}
@@ -227,7 +227,7 @@
                                                 <input type="checkbox" class="fco-box" id="{{../name}}_{{@index}}_true" style="opacity:0; width:25px; height:25px; float:left;">
                                                     <span class="checkmark"></span>
                                                     <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 14px; color: var(--fco-sheet-text-color)">
-                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label (localize 'fate-core-official.none'))}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
+                                                        {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
                                                     </i>
                                                 </input>
                                             </label>
