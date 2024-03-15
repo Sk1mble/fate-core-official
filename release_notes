@@ -1,3 +1,6 @@
+# 4.6.8
+* Added support for shape morph types in the Shape system. You can now store one of the transition types allowed for the system for each shape and it will be used instead of the default shape whenever you change from one shape to the other.
+
 # 4.6.7
 * Fixed an inconsistency in the way the translation files work in respect of the label for tracks.
 * Added initial Brazillian Portuguese support courtesy of Discord community member LHLF - this is still being worked upon and support for language localisation in the system generally being improved.

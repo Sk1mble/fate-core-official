@@ -127,21 +127,43 @@ export class fcoActor extends Actor {
         let aName = shape.actorName;
         if (!aName) aName = token.actor.name; 
 
+        // The list of valid animations is available as TextureTransitionFilter.TYPES. It returns an object like:
+        /*
+            {
+                "FADE": "fade",
+                "SWIRL": "swirl",
+                "WATER_DROP": "waterDrop",
+                "MORPH": "morph",
+                "CROSSHATCH": "crosshatch",
+                "WIND": "wind",
+                "WAVES": "waves",
+                "WHITE_NOISE": "whiteNoise",
+                "HOLOGRAM": "hologram",
+                "HOLE": "hole",
+                "HOLE_SWIRL": "holeSwirl"
+            }
+        */
+
         if (token.document.actorLink == false) {
             // This is a token actor; change the token texture and token actor avatar
-            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg, "name":name}]);
+            if (!shape.tokenData) await token.document.update({"texture.src":shape.tokenImg, "name":name}, {animation: {transition: "morph", duration: 2000}});
             await token.actor.update({"img":shape.avatarImg})
         } else {
             // This is a real actor; change the token texture, the actor's prototype token texture, and the actor's avatar
-            await game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":shape.tokenImg, "name":name}]);
+            if (!shape.tokenData) await token.document.update({"texture.src":shape.tokenImg, "name":name}, {animation: {transition: "morph", duration: 2000}});
             await token.actor.update({"img":shape.avatarImg, name:aName, "prototypeToken.texture.src":shape.tokenImg});
         }
         if (shape.tokenData) {
+                shape.tokenData.texture.src = shape.tokenImg;
                 shape.tokenData.x = token.document.x;
                 shape.tokenData.y = token.document.y;
                 shape.tokenData.elevation = token.document.elevation;
                 shape.tokenData.flags = token.document.flags;
-            await token.document.update(shape.tokenData);
+            if (foundry.utils.isNewerVersion(game.version,"12.317") && shape.transition){
+                await token.document.update(shape.tokenData, {animation: {transition: TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
+            }   else {
+                await token.document.update(shape.tokenData);
+            }   
         }
 
         if (shape.extra_status){
@@ -161,7 +183,7 @@ export class fcoActor extends Actor {
         }
     }
 
-    async storeShape (shapeName, tokenImg, avatarImg, token){
+    async storeShape (shapeName, tokenImg, avatarImg, token, transition){
         if (!this.isOwner) return;
         let shapes = this.getFlag("fate-core-official", "shapes");
         // If no shapes stored in flags, initialise an empty object.
@@ -190,7 +212,7 @@ export class fcoActor extends Actor {
         if (existing) response  = await fcoConstants.awaitYesNoDialog(shapeName, game.i18n.localize("fate-core-official.checkShapeOverwrite"));
         if (!existing || response == "yes"){
             // Safe to store this shape
-            let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg, actorName:token.actor.name, tokenName:token.name, tokenData:token_data, extra_status:extra_status};
+            let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg, actorName:token.actor.name, tokenName:token.name, tokenData:token_data, extra_status:extra_status, transition:transition};
             shapes[fcoConstants.tob64(shapeName)] = newShape;
             await this.setFlag("fate-core-official", "shapes", shapes);
         }
@@ -937,19 +959,36 @@ export class fcoActor extends Actor {
         let token = hudButtons.object;
         if (token.actor.type != "fate-core-official") return;
         let shapes = token.actor.getFlag("fate-core-official","shapes");
-        let shapeButtons = `<div style="font-size:0.8em; position:absolute; min-width:450px; max-width:450px;   text-overflow: ellipsis; overflow-x:auto; max-height:1000px; overflow-y:auto; left:75px; top:-75px; display:flex-row"><table style="background:transparent;">
+        let transitions = "";
+
+        if (foundry.utils.isNewerVersion(game.version, "12.317")){
+            transitions = `<select id="fcotransition_${token.id}" style="min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); left:75px;">`
+            for (let transition in TextureTransitionFilter.TYPES){
+                let selected="";
+                if (transition == "FADE") selected = `selected = "selected"`;   
+                transitions += `<option value = "${transition}" ${selected}>
+                    ${TextureTransitionFilter.TYPES[transition]}
+                </option>`
+            }
+            transitions += `</select>`
+        }
+
+        let shapeButtons = `<div style="font-size:0.8em; position:absolute; min-width:450px; max-width:450px; text-overflow: ellipsis; overflow-x:auto; max-height:1000px; overflow-y:auto; left:75px; top:-75px; display:flex-row"><table style="background:transparent;">
         <tr style="background-color:var(--fco-accent-colour); height:75px; border:none">
             <td width = "300px">
-                <input type="text" style="margin-left:10px; background:var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour)" id = fcoShapeAddName_${token.id}></input>
+                <input type="text" style="font-size:0.8em; margin-left:10px; margin-right:10px; max-width:225px; background:var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour)" id = fcoShapeAddName_${token.id}></input>
             </td>
-            <td width = "100px">
-                <div style="margin-left:50px; width:50px" id="fcoShapeAdd_${token.id}"><i class="fas fa-plus fu_button"></i></div>
+            <td width ="100px">
+                ${transitions}
+            </td>
+            <td width = "50px">
+                <div style="width:50px" id="fcoShapeAdd_${token.id}"><i class="fas fa-plus fu_button"></i></div>
             </td>
         </tr>
         </table>`;
         let allowDeletion = true;
         let deleteButton = "";
-
+        
         for (let shape in shapes){
             if (allowDeletion) deleteButton=`<td width="50px"><div class= "fu_button" id="fcoShapeDelete_${token.id}_${shape}"><i icon class ="fas fa-trash"</i></div></td>`
             shapeButtons += `<div class="fu_button" style="background:var(--fco-sheet-background-colour); display:flex; left:75px; padding:10px; min-width:400px; margin:5px; color:black; font-family:var(--fco-font-family)" id="fcoShape_${token.id}_${shape}">
@@ -979,8 +1018,10 @@ export class fcoActor extends Actor {
             } else {
                 if (ev.target.closest('div').id.split("_")[0] == "fcoShapeAdd"){
                     let name = $(`#fcoShapeAddName_${token.id}`)[0].value;
+                    let transition = null;
+                    if (foundry.utils.isNewerVersion(game.version, "12.317")) transition = $(`#fcotransition_${token.id}`)[0].value;
                     if (name) {
-                        await token.actor.storeShape(name, null, null, token);
+                        await token.actor.storeShape(name, null, null, token, transition);
                     } else {
                         ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
                     }
