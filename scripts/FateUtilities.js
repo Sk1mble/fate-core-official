@@ -1616,7 +1616,7 @@ class FateUtilities extends Application{
         for (let i = 0; i < tokens.length; i++){
             let token = tokens[i];
         
-            if (token.actor == null || !token.actor.hasPlayerOwner || token.actor.type == "Thing"){
+            if (token?.actor == null || !token?.actor?.hasPlayerOwner || token?.actor.type == "Thing"){
                 continue;
             }
             let current = parseInt(token.actor.system.details.fatePoints.current);
@@ -1905,10 +1905,10 @@ class FateUtilities extends Application{
         let text = event.target.value;
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
         let tracks = foundry.utils.duplicate(token.actor.system.tracks);
-        let key =fcoConstants.gkfn(tracks, name);
+        let key = fcoConstants.gkfn(tracks, name);
         let track = tracks[key]
         track.aspect.name=text;
-        let previousText = `${token.actor.system.tracks[name].aspect.name} (${token.actor.name})`;
+        let previousText = `${token.actor.system.tracks[key].aspect.name} (${token.actor.name})`;
         token.actor.update({[`system.tracks.${key}.aspect`]:track.aspect})
 
         // See if this aspect exists in the list of game aspects and update it if so.
@@ -2299,7 +2299,7 @@ async getData(){
         if (ignore_list){
             let ignore_array = ignore_list.split(",");
             for (let check of ignore_array){
-                if (token.actor.name.startsWith(check) || token.name.startsWith(check)){
+                if (token?.actor?.name.startsWith(check) || token.name.startsWith(check)){
                     ignore = true;
                 }
             }

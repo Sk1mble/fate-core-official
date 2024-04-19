@@ -1,3 +1,14 @@
-2024/03/07-00:36:53.172 171f0 Recovering log #861
-2024/03/07-00:36:53.293 171f0 Delete type=0 #861
-2024/03/07-00:36:53.293 171f0 Delete type=3 #860
+2024/04/18-22:57:13.681 b140 Recovering log #877
+2024/04/18-22:57:13.788 b140 Delete type=0 #877
+2024/04/18-22:57:13.788 b140 Delete type=3 #875
+2024/04/18-23:03:04.399 cd3c Level-0 table #882: started
+2024/04/18-23:03:04.448 cd3c Level-0 table #882: 4638 bytes OK
+2024/04/18-23:03:04.492 cd3c Delete type=0 #880
+2024/04/18-23:03:05.143 cd3c Manual compaction at level-0 from '!macros!3rIISB1ysvBlB77Z' @ 72057594037927935 : 1 .. '!macros!UPf3gd6MXJEAUiJD' @ 0 : 0; will stop at '!macros!UPf3gd6MXJEAUiJD' @ 33 : 1
+2024/04/18-23:03:05.143 cd3c Compacting 1@0 + 1@1 files
+2024/04/18-23:03:05.183 cd3c Generated table #883@0: 4 keys, 4638 bytes
+2024/04/18-23:03:05.183 cd3c Compacted 1@0 + 1@1 files => 4638 bytes
+2024/04/18-23:03:05.225 cd3c compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/04/18-23:03:05.225 cd3c Delete type=2 #868
+2024/04/18-23:03:05.225 cd3c Delete type=2 #882
+2024/04/18-23:03:05.348 cd3c Manual compaction at level-0 from '!macros!UPf3gd6MXJEAUiJD' @ 33 : 1 .. '!macros!UPf3gd6MXJEAUiJD' @ 0 : 0; will stop at (end)

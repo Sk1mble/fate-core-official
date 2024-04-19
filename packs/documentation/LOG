@@ -1,23 +1,8 @@
-2024/03/14-23:46:21.560 5cc Recovering log #939
-2024/03/14-23:46:21.727 5cc Delete type=0 #939
-2024/03/14-23:46:21.727 5cc Delete type=3 #938
-2024/03/15-02:15:15.458 11bc Level-0 table #943: started
-2024/03/15-02:15:15.848 11bc Level-0 table #943: 14320691 bytes OK
-2024/03/15-02:15:15.874 11bc Delete type=0 #941
-2024/03/15-02:15:16.236 11bc Manual compaction at level-0 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
-2024/03/15-02:15:16.236 11bc Manual compaction at level-1 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 140 : 1
-2024/03/15-02:15:16.236 11bc Compacting 1@1 + 5@2 files
-2024/03/15-02:15:16.496 11bc Generated table #944@1: 2 keys, 3202746 bytes
-2024/03/15-02:15:16.625 11bc Generated table #945@1: 8 keys, 2152123 bytes
-2024/03/15-02:15:16.745 11bc Generated table #946@1: 1 keys, 3062958 bytes
-2024/03/15-02:15:16.879 11bc Generated table #947@1: 1 keys, 4063464 bytes
-2024/03/15-02:15:16.968 11bc Generated table #948@1: 2 keys, 1839912 bytes
-2024/03/15-02:15:16.968 11bc Compacted 1@1 + 5@2 files => 14321203 bytes
-2024/03/15-02:15:17.007 11bc compacted to: files[ 0 0 5 0 0 0 0 ]
-2024/03/15-02:15:17.007 11bc Delete type=2 #889
-2024/03/15-02:15:17.018 11bc Delete type=2 #890
-2024/03/15-02:15:17.028 11bc Delete type=2 #891
-2024/03/15-02:15:17.033 11bc Delete type=2 #892
-2024/03/15-02:15:17.034 11bc Delete type=2 #893
-2024/03/15-02:15:17.034 11bc Delete type=2 #943
-2024/03/15-02:15:17.381 11bc Manual compaction at level-1 from '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 140 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
+2024/04/19-17:59:54.412 11980 Recovering log #961
+2024/04/19-17:59:54.490 11980 Delete type=0 #961
+2024/04/19-17:59:54.490 11980 Delete type=3 #959
+2024/04/19-21:12:16.139 e4ec Level-0 table #971: started
+2024/04/19-21:12:16.139 e4ec Level-0 table #971: 0 bytes OK
+2024/04/19-21:12:16.231 e4ec Delete type=0 #969
+2024/04/19-21:12:16.231 e4ec Manual compaction at level-0 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
+2024/04/19-21:12:16.231 e4ec Manual compaction at level-1 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)

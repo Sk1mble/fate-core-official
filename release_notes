@@ -1,3 +1,7 @@
+# 4.6.9
+* Fixed a bug that prevented track aspects entered in Fate Utilities from being saved properly.
+* Checked compatibility with Foundry v12 dev 2 preview.
+
 # 4.6.8
 * Added support for shape morph types in the Shape system. You can now store one of the transition types allowed for the system for each shape and it will be used instead of the default shape whenever you change from one shape to the other.
 

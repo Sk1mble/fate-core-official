@@ -1,3 +1,23 @@
-2024/03/07-00:36:53.347 fc14 Recovering log #937
-2024/03/07-00:36:53.443 fc14 Delete type=0 #937
-2024/03/07-00:36:53.443 fc14 Delete type=3 #936
+2024/04/18-22:57:13.815 10440 Recovering log #957
+2024/04/18-22:57:13.929 10440 Delete type=0 #957
+2024/04/18-22:57:13.929 10440 Delete type=3 #955
+2024/04/18-23:03:04.492 cd3c Level-0 table #962: started
+2024/04/18-23:03:04.876 cd3c Level-0 table #962: 14321359 bytes OK
+2024/04/18-23:03:04.905 cd3c Delete type=0 #960
+2024/04/18-23:03:05.225 cd3c Manual compaction at level-0 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
+2024/04/18-23:03:05.348 cd3c Manual compaction at level-1 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 154 : 1
+2024/04/18-23:03:05.348 cd3c Compacting 1@1 + 5@2 files
+2024/04/18-23:03:05.500 cd3c Generated table #963@1: 2 keys, 3202867 bytes
+2024/04/18-23:03:05.615 cd3c Generated table #964@1: 8 keys, 2152498 bytes
+2024/04/18-23:03:05.722 cd3c Generated table #965@1: 1 keys, 3063005 bytes
+2024/04/18-23:03:05.842 cd3c Generated table #966@1: 1 keys, 4063511 bytes
+2024/04/18-23:03:05.910 cd3c Generated table #967@1: 2 keys, 1839989 bytes
+2024/04/18-23:03:05.910 cd3c Compacted 1@1 + 5@2 files => 14321870 bytes
+2024/04/18-23:03:05.959 cd3c compacted to: files[ 0 0 5 0 0 0 0 ]
+2024/04/18-23:03:05.960 cd3c Delete type=2 #944
+2024/04/18-23:03:05.960 cd3c Delete type=2 #945
+2024/04/18-23:03:05.960 cd3c Delete type=2 #946
+2024/04/18-23:03:05.961 cd3c Delete type=2 #947
+2024/04/18-23:03:05.961 cd3c Delete type=2 #948
+2024/04/18-23:03:05.962 cd3c Delete type=2 #962
+2024/04/18-23:03:06.208 cd3c Manual compaction at level-1 from '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 154 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
