@@ -1,3 +1,7 @@
+# 4.7.0
+* This version is for v12 and up only
+* Added the ability to allocate a macro to a stunt which can be triggered via the lightning bolt on the character sheeet or via the skill roll dropdown in Fate Utilities. Any code you like can therefore be run in a single click from the stunt.
+
 # 4.6.9
 * Fixed a bug that prevented track aspects entered in Fate Utilities from being saved properly.
 * Checked compatibility with Foundry v12 dev 2 preview.

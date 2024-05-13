@@ -688,7 +688,7 @@ class fcoConstants {
         ui.notifications.info(`Imported ${documents.length} documents of type ${pack.documentName}`);
     }
 
-    // Function to get an object by looking up its name in an object by 'name filed'
+    // Function to get an object by looking up its name in an object by 'name field'
     // If the object can be found by looking directly for the base 64 version of the name, do that first. If not, search by name. 
     // This is in preparation to eventually change all existing string keys into base 64 keys to lookup by hashing the name, as this will be much safer.
    static gbn (object, name, name_string){

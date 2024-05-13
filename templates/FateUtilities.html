@@ -61,6 +61,9 @@
                                             {{/each}}
                                             {{#each this.actor.system.stunts}}
                                             {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">{{localize 'fate-core-official.Stunt'}}: {{this.name}} ({{this.linked_skill}} +{{this.bonus}})</option>{{/if}}
+                                            {{#if this.macro}}
+                                                <option value="macro_{{this.macro}}">{{localize 'fate-core-official.macro_linked_to_stunt'}}&nbsp;{{this.name}}</option>
+                                            {{/if}}
                                             {{/each}}
                                         </select>
                                         {{/if}}
@@ -124,6 +127,9 @@
                                             {{/each}}
                                             {{#each this.actor.system.stunts}}
                                             {{#if (eq this.linked_skill "None")}}{{else}}<option value="stunt_{{this.name}}_{{this.linked_skill}}_{{this.bonus}}">{{localize 'fate-core-official.Stunt'}}: {{this.name}} ({{this.linked_skill}}: +{{this.bonus}})</option>{{/if}}
+                                            {{#if this.macro}}
+                                                <option value="macro_{{this.macro}}">{{localize 'fate-core-official.macro_linked_to_stunt'}}&nbsp;{{this.name}}</option>
+                                            {{/if}}
                                             {{/each}}
                                         </select>
                                         {{/if}}

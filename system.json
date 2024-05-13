@@ -10,10 +10,10 @@
   ],
   "url": "https://github.com/Sk1mble/fate-core-official",
   "compatibility": {
-    "minimum": "11.00",
-    "verified": "12.319"
+    "minimum": "12.00",
+    "verified": "12.322"
   },
-  "version": "4.6.9",
+  "version": "4.7.0",
   "scripts": [
     "scripts/fcoConstants.js",
     "scripts/ManageSkills.js",
@@ -83,7 +83,7 @@
   ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/v4.6.9.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/v4.7.0.zip",
   "gridDistance": 1,
   "grid.distance": 1,
 	"flags": {

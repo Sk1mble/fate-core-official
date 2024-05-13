@@ -750,6 +750,13 @@ class FateUtilities extends Application{
         let stunt = undefined;
         let bonus=0;
 
+        if (sk.value.startsWith("macro")){
+            let macroID = sk.value.split("_")[1];
+            let macro = await fromUuid(macroID);
+            await macro.execute({actor:token.actor, token:token});
+            return;   
+        }
+
         if (sk.value.startsWith("stunt")){
             let items = sk.value.split("_");
             stunt=items[1]

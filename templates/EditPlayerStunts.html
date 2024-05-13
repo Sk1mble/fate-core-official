@@ -19,19 +19,30 @@
                 </td>
             </tr>
             <tr style="background-color:transparent">
+                <td>{{localize 'fate-core-official.macro'}}:</td>
+                <td>
+                    <input type="string" name="macro" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:300px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.macro}}"</input> <span style = "padding-left:10px" id="{{stunt.name}}_macroName">{{macroName}}</span>
+                </td>
+            </tr>
+            <tr style="background-color:transparent">
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.RefreshCost'}}:</td>
                 <td><input type="number" name="refresh_cost" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:50px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.refresh_cost}}"></input></td>
-                <td>     
-                    <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Overcome'}}">O</b>
-                    <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.CAA'}}">C</b></input>
-                    <input type="checkbox" name="attack" {{checked stunt.attack}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Attack'}}">A</b>
-                    <input type="checkbox" name="defend" {{checked stunt.defend}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Defend'}}">D</b>                   
-                </td>
             </tr>
             <tr style="background-color:transparent">
                 <td>{{localize 'fate-core-official.Boxes'}}:</td>
                 <td>
-                    <input type="number" name="boxes" min="0" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:50px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.boxes}}"></input>
+                    <input type="number" name="boxes" min="0" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:50px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.boxes}}"></input>    
+                </td>
+            </tr>
+            <tr style="background-color:transparent">
+                <td>
+                    {{localize 'fate-core-official.Actions'}}:
+                </td>
+                <td colspan="2">     
+                    <input type="checkbox" name="overcome" {{checked stunt.overcome}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Overcome'}}">O</b>
+                    <input type="checkbox" name="caa" {{checked stunt.caa}}><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.CAA'}}">C</b></input>
+                    <input type="checkbox" name="attack" {{checked stunt.attack}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Attack'}}">A</b>
+                    <input type="checkbox" name="defend" {{checked stunt.defend}}></input><b style="font-family:Fate Core; font-size:xx-large; padding-right:20px" title="{{localize 'fate-core-official.Defend'}}">D</b>                   
                 </td>
             </tr>
         </table>

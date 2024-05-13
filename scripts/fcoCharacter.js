@@ -589,6 +589,10 @@ export class fcoCharacter extends ActorSheet {
             desc.on("blur", event => this._onDescFocusOut(event, html));
             notes.on("blur", event => this._onNotesFocusOut(event, html));
 
+            const stunt_macro = html.find("button[name='stunt_macro']");
+            stunt_macro.on("click", event => this._on_stunt_macro_click(event,html));
+            stunt_macro.on("contextmenu", event => this._on_stunt_macro_contextmenu(event,html));
+            
             const stunt_roll = html.find("button[name='stunt_name']");
             stunt_roll.on("click", event => this._on_stunt_roll_click(event,html));
 
@@ -1118,6 +1122,20 @@ export class fcoCharacter extends ActorSheet {
         let items = event.target.id.split("_");
         let name = items[0];
         this.object.rollStunt(name);
+    }
+
+    async _on_stunt_macro_click(event,html){
+        let stunt = this.object.system.stunts[event.target.getAttribute("data-stunt")];
+        let macrouuid = stunt.macro;
+        let macro = await fromUuid(macrouuid);
+        await macro.execute({actor:this.object.actor});
+    }
+
+    async _on_stunt_macro_contextmenu(event,html){
+        let stunt = this.object.system.stunts[event.target.getAttribute("data-stunt")];
+        let macrouuid = stunt.macro;
+        let macro = await fromUuid(macrouuid);
+        await macro.sheet.render(true);
     }
 
     async _onBioFocusOut (event, html){

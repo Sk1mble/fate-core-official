@@ -78,7 +78,11 @@ class EditPlayerStunts extends FormApplication {
             }
             
             for (let t in formData){
-                this.stunt[t]=formData[t];
+                if (t == "macro" && formData[t] == ''){
+                    this.stunt[t] = null;
+                } else {
+                    this.stunt[t]=formData[t];
+                }
             }
 
             let boxes = this.stunt.boxes;
@@ -94,9 +98,12 @@ class EditPlayerStunts extends FormApplication {
                     }
                 }
             }
-            
             this.stunt.box_values = new_box_values;
-            await this.actor.update({"system.stunts":{[fcoConstants.tob64(this.stunt.name)]:this.stunt}})
+            await this.actor.update({"system.stunts":{[fcoConstants.tob64(this.stunt.name)]:this.stunt}});
+            // And now, a kludge to make sure the sheet refreshes after the macro details are changed.
+            setTimeout(async () => {
+                await this.actor.sheet.render(false);
+            }, 250);
             if (this.object.type == "Extra"){
                 //code to render editplayerstunts.
                 Hooks.call("updateItem", {"id":this.object.id})
@@ -120,6 +127,35 @@ class EditPlayerStunts extends FormApplication {
             textarea: '<textarea name="content"></textarea>', // fallback for old browsers
             linksInNewWindow: false // open hyperlinks in a new windows/tab
         }
+
+        // Edit the text field that shows the name of the macro when we edit the value of the macro UUid.
+        const macro = html.find("input[name='macro']")
+        macro.on("change", (event) => {
+            let search = `${this.stunt.name}_macroName`;
+            if (event.target.value == ''){
+                event.target.value = null;
+                document.getElementById(search).textContent = '';
+                return;
+            } 
+            let field = new foundry.data.fields.DocumentUUIDField({required:true, nullable:true, initial:null});
+            let invalid = field.validate(event.target.value);
+            if (invalid){
+                ui.notifications.error (invalid.message);
+                event.target.value = this.stunt.macro;
+            } else {
+                if (!event.target.value.includes("Macro")){
+                    ui.notifications.error(game.i18n.localize("fate-core-official.must_be_a_macro"))
+                    event.target.value = this.stunt.macro;
+                } else {
+                    let macro = fromUuidSync(event.target.value);
+                    if (!macro) {
+                        ui.notifications.error(game.i18n.localize("fate-core-official.macro_not_found"))
+                        event.target.value = this.stunt.macro;
+                    }
+                }
+            }
+            document.getElementById(search).textContent = fromUuidSync(event.target.value).name;
+        })
 
         const description_rich = html.find("div[id='edit_stunt_desc_rich']");
 
@@ -189,7 +225,6 @@ class EditPlayerStunts extends FormApplication {
                                 else {
                                     this.stunt = foundry.utils.mergeObject(this.stunt, data.actorData.system.stunts[key]);
                                 }
-                                ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
                             }, 50);
@@ -197,7 +232,6 @@ class EditPlayerStunts extends FormApplication {
                     }
                 }
                 catch {
-
                 }
             }
         }
@@ -211,7 +245,6 @@ class EditPlayerStunts extends FormApplication {
                             this.renderPending = true;
                             setTimeout(() => {
                                 this.stunt = foundry.utils.mergeObject(this.stunt, data.system.stunts[key]);
-                                ui.notifications.info(game.i18n.localize("fate-core-official.StuntEdited"))
                                 this.render(false);
                                 this.renderPending = false;
                             }, 50);
@@ -249,6 +282,7 @@ class EditPlayerStunts extends FormApplication {
         }
         data.gm = game.user.isGM;
         data.actor = this.actor;
+        data.macroName = fromUuidSync(this.stunt.macro)?.name;
         return data
     } //End getData
 } //End EditPlayerStunts

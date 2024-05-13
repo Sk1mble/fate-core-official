@@ -174,6 +174,7 @@ class fcoStunt extends foundry.abstract.DataModel {
             "bonus":new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "boxes":new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "box_values":new foundry.data.fields.ArrayField(new foundry.data.fields.BooleanField()),
+            "macro":new foundry.data.fields.DocumentUUIDField({required:true, nullable:true, initial:null})
         }
     }
 }

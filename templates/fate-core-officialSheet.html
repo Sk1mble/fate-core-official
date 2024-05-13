@@ -320,6 +320,9 @@
                                                 {{#if (eq this.linked_skill (localize 'fate-core-official.None'))}}{{else}}                                            
                                                     <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon fu_button"></button>                                            
                                                 {{/if}}
+                                                {{#if this.macro}}
+                                                    <button type="button" data-stunt="{{@key}}" name="stunt_macro"  i icon class="fas fa-bolt-lightning mfate-stunts__row-header-icon fu_button" title="{{localize 'fate-core-official.activate_macro'}}"></button>
+                                                {{/if}}
                                             {{/if}}
                                         </div>
                                     </div>

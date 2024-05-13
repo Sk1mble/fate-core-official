@@ -220,12 +220,6 @@ Hooks.once('ready', () => {
 });
 
 if (!foundry.utils.isNewerVersion(game.version, "12.316")){
-    Hooks.on('preCreateDrawing', (drawing, data) => {
-        if (game.settings.get("fate-core-official", "drawingsOnTop")){
-            if (foundry.utils.isNewerVersion(game.version, 12)) drawing.updateSource({elevation:999999999});
-        }
-    })
-    
     Hooks.on('createDrawing', (drawing) => {
         if (game.settings.get("fate-core-official","drawingsOnTop")){  
             if (drawing.isOwner){
@@ -467,7 +461,6 @@ Hooks.on('controlToken', (token, control) => {
             a.renderMe("controlToken",token.id, control);
     })
 })
-
 
 Hooks.on('updateUser',(...args) =>{
         game.system.apps["user"].forEach (a=> {
