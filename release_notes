@@ -1,3 +1,6 @@
+# 4.7.1
+* Edited CSS to prevent Foundry from overriding personalised colours for scrollbars in FateUtilities and on character sheets.
+
 # 4.7.0
 * This version is for v12 and up only
 * Added the ability to allocate a macro to a stunt which can be triggered via the lightning bolt on the character sheeet or via the skill roll dropdown in Fate Utilities. Any code you like can therefore be run in a single click from the stunt.

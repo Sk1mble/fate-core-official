@@ -18,7 +18,7 @@
 }
 
 #FateUtilities .window-content{
-      padding: 0;
+  padding: 0;
 }
 
 #EditEntityTrack .window-content {
@@ -27,6 +27,11 @@
 
 .fate .window-content {
   padding: 0;
+}
+
+.window-app .fcoSheet * {
+  scrollbar-color:var(--fco-accent-colour) #FFFFFF00;
+  scrollbar-width:thin
 }
 
 .long_text {
