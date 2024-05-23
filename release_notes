@@ -1,3 +1,6 @@
+# 4.7.2
+* Very minor release - added a workaround to ensure drawings on the canvas representing aspects update when their name changes or number of free invokes is changed. Also updated the system manifest to have the correct format for grid units.
+
 # 4.7.1
 * Edited CSS to prevent Foundry from overriding personalised colours for scrollbars in FateUtilities and on character sheets.
 
