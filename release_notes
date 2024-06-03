@@ -1,3 +1,6 @@
+# 4.7.4
+* Updated DOMPurify to version 3.1.5
+
 # 4.7.3
 * Added document types to system.json so template.json could be deleted. Deleted template.json
 * Switched a number of Stringfields to HTMLFields to allow server-side sanitation of inputs (the system already provides client-side sanitation of inputs when values are saved from character sheets)
