@@ -1,3 +1,7 @@
+# 4.7.3
+* Added document types to system.json so template.json could be deleted. Deleted template.json
+* Switched a number of Stringfields to HTMLFields to allow server-side sanitation of inputs (the system already provides client-side sanitation of inputs when values are saved from character sheets)
+
 # 4.7.2
 * Very minor release - added a workaround to ensure drawings on the canvas representing aspects update when their name changes or number of free invokes is changed. Also updated the system manifest to have the correct format for grid units.
 

@@ -661,9 +661,6 @@ class FateUtilities extends Application{
                 height: height,
                 fontFamily: font,
             });
-            await setTimeout(async () => {
-                canvas.drawings.draw(); //TEMP: Required due to a core bug    
-            }, 50);
         }
 
         game.scenes.viewed.setFlag("fate-core-official", "situation_aspects",aspects);
@@ -1149,9 +1146,6 @@ class FateUtilities extends Application{
                     if (bonus > 0){
                         if (game.scenes.viewed){ 
                             await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
-                            await setTimeout(async () => {
-                                canvas.drawings.draw(); //TEMP: Required due to a core bug    
-                            }, 50);
                             flavor = `<br>${game.i18n.localize("fate-core-official.FreeInvokes")} +${bonus} (${aspectsInvoked.join(", ")})`
                             await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);
                         }
@@ -1281,9 +1275,6 @@ class FateUtilities extends Application{
                             flavor += ` (${sit_aspect.name})`
                             if (game.scenes.viewed){
                                 await game.scenes.viewed.updateEmbeddedDocuments("Drawing", updates);
-                                await setTimeout(async () => {
-                                    canvas.drawings.draw(); //TEMP: Required due to a core bug    
-                                }, 50);
                                 await game.scenes.viewed.setFlag("fate-core-official", "situation_aspects", all_sit_aspects);    
                             }
                             invokedAspect = sit_aspect.name;
@@ -1723,9 +1714,6 @@ class FateUtilities extends Application{
                 height: height,
                 fontFamily: font,
             });
-            await setTimeout(async () => {
-                canvas.drawings.draw(); //TEMP: Required due to a core bug    
-            }, 50);
         }
     }
 
@@ -1988,9 +1976,6 @@ class FateUtilities extends Application{
                 height: height,
                 fontFamily: font,
             });
-            await setTimeout(async () => {
-                canvas.drawings.draw(); //TEMP: Required due to a core bug    
-            }, 50);
         }
     }
 

@@ -1,8 +1,0 @@
-{
-	"Actor": {
-		"types": ["fate-core-official", "ModularFate","FateCoreOfficial", "Thing"]
-	},
-	"Item": {
-		"types": ["Extra"]
-	}
-}

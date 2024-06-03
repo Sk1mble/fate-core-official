@@ -48,11 +48,11 @@ class fcoSkill extends foundry.abstract.DataModel {
     static defineSchema(){
         return {
             "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "description":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "overcome":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "caa":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "attack":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "defend":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "description":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "overcome":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "caa":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "attack":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "defend":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "pc": new foundry.data.fields.BooleanField({ nullable: false, required: true, initial:true}),
             "rank": new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "extra_id": new foundry.data.fields.StringField({ required: false, initial: undefined }),
@@ -68,8 +68,8 @@ class fcoAspect extends foundry.abstract.DataModel {
         return {
             "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
             "value":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "description":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "notes":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "description":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "notes":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "extra_id": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined })
         }
@@ -135,8 +135,8 @@ class fcoTrack extends foundry.abstract.DataModel {
         return {
             "category":category,
             "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "description":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "notes":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "description":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "notes":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "extra_id": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "linked_skills":linked_skills,
@@ -146,8 +146,8 @@ class fcoTrack extends foundry.abstract.DataModel {
             "enabled":new foundry.data.fields.BooleanField({ required: true, initial:true }),
             "label":new trackLabelField({nullable: false, required: true, initial:"escalating"}),
             "recovery_type":recovery_type,
-            "when_marked":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "recovery_conditions":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "when_marked":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "recovery_conditions":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "harm_can_absorb": new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "boxes":new foundry.data.fields.NumberField({ required: true, initial:0, integer:true }),
             "box_values":new foundry.data.fields.ArrayField(new foundry.data.fields.BooleanField()),
@@ -161,8 +161,8 @@ class fcoStunt extends foundry.abstract.DataModel {
     static defineSchema(){
         return {
             "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "description":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
-            "notes":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "description":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
+            "notes":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "extra_id": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "original_name": new foundry.data.fields.StringField({ required: false, initial:undefined }),
             "linked_skill": new foundry.data.fields.StringField({ required: true, initial:"None" }),
@@ -186,11 +186,11 @@ class fcoActorModel extends foundry.abstract.DataModel {
         const fields = foundry.data.fields;
         return {
             "details":new fields.SchemaField({
-                    "description":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
-                    "biography":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
+                    "description":new fields.SchemaField({"value":new fields.HTMLField({nullable:false, required: true, initial:""})}),
+                    "biography":new fields.SchemaField({"value":new fields.HTMLField({nullable:false, required: true, initial:""})}),
                     "pronouns":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
                     "notes":new fields.SchemaField({
-                        "value":new fields.StringField({nullable:false, required: true, initial:""}),
+                        "value":new fields.HTMLField({nullable:false, required: true, initial:""}),
                         "GM":new fields.BooleanField({nullable:false, required: true, initial:false})
                     }),
                     "fatePoints":new fields.SchemaField({
@@ -232,19 +232,19 @@ class fcoExtraModel extends foundry.abstract.DataModel {
     static defineSchema () {
         const fields = foundry.data.fields;
         return {
-            "description":new fields.SchemaField({"value":new fields.StringField({nullable:false, required: true, initial:""})}),
-            "permissions":new fields.StringField({nullable:false, required: true, initial:""}),
-            "costs":new fields.StringField({nullable:false, required: true, initial:""}),
+            "description":new fields.SchemaField({"value":new fields.HTMLField({nullable:false, required: true, initial:""})}),
+            "permissions":new fields.HTMLField({nullable:false, required: true, initial:""}),
+            "costs":new fields.HTMLField({nullable:false, required: true, initial:""}),
             "refresh":new fields.NumberField ({nullable:false, required:true, initial:0, integer:true}),
             "tracks":new fields.ObjectField({nullable:true, required:true, initial:{}}),
             "stunts":new fields.ObjectField({nullable:true, required:true, initial:{}}),
             "skills":new fields.ObjectField({nullable:true, required:true, initial:{}}),
             "aspects":new fields.ObjectField({nullable:true, required:true, initial:{}}),
             "actions":new fields.SchemaField({
-                "overcome":new fields.StringField({nullable:false, required: true, initial:""}),
-                "create":new fields.StringField({nullable:false, required: true, initial:""}),
-                "attack":new fields.StringField({nullable:false, required: true, initial:""}),
-                "defend":new fields.StringField({nullable:false, required: true, initial:""}),
+                "overcome":new fields.HTMLField({nullable:false, required: true, initial:""}),
+                "create":new fields.HTMLField({nullable:false, required: true, initial:""}),
+                "attack":new fields.HTMLField({nullable:false, required: true, initial:""}),
+                "defend":new fields.HTMLField({nullable:false, required: true, initial:""}),
             }),
             "countSkills":new fields.BooleanField({required:true, initial:false, nullable:false}),
             "combineSkills":new fields.BooleanField({required:true, initial:false, nullable:false}),

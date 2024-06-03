@@ -154,7 +154,7 @@ class EditPlayerStunts extends FormApplication {
                     }
                 }
             }
-            document.getElementById(search).textContent = fromUuidSync(event.target.value).name;
+            document.getElementById(search).textContent = fromUuidSync(event.target.value)?.name;
         })
 
         const description_rich = html.find("div[id='edit_stunt_desc_rich']");

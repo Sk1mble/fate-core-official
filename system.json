@@ -11,9 +11,9 @@
   "url": "https://github.com/Sk1mble/fate-core-official",
   "compatibility": {
     "minimum": "12",
-    "verified": "12.323"
+    "verified": "12.325"
   },
-  "version": "4.7.2",
+  "version": "4.7.3",
   "scripts": [
     "scripts/fcoConstants.js",
     "scripts/ManageSkills.js",
@@ -83,7 +83,7 @@
   ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/v4.7.2.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/v4.7.3.zip",
   "grid":{
     "distance":1
   },
@@ -92,5 +92,31 @@
 		  "extensions": ["css", "html", "hbs", "json"],
 		  "paths": ["system/templates", "css", "lang/en.json"]
 		  }
-	  }
+	  },
+    "documentTypes": {
+        "Actor": {
+            "fate-core-official": {
+              "htmlFields": [
+                "details.description.value",
+                "details.biography.value",
+                "details.notes.value"
+              ]
+            },
+            "ModularFate": {},
+            "Thing": {}
+        },
+        "Item": {
+            "Extra": {
+              "htmlFields": [
+                "description.value",
+                "permissions",
+                "costs",
+                "actions.overcome",
+                "actions.create",
+                "actions.attack",
+                "actions.defend"
+              ]
+            }
+        }
+    }
 }
