@@ -1,3 +1,6 @@
+# 4.7.6
+* Fixed the spinner buttons on numerical input fields in Chrome
+
 # 4.7.5
 * Bugfix: There was a conflict with the way Foundry now builds choices for settings that meant the setting for what initiative skill to use wasn't working properly and this prevented the FateUtilities combat tracker from loading upon starting a conflict.
 

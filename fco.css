@@ -50,7 +50,7 @@
 
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: inner-spin-button;
-    appearance: inner-spin-button;
+    appearance: auto;
 }
 
 body, button, label, select, input {
