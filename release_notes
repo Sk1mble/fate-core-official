@@ -1,3 +1,6 @@
+# 4.7.7
+* Bugfix. Applying a character default framework wasn't working due to a migration error that has only become apparent in Foundry v12.
+
 # 4.7.6
 * Fixed the spinner buttons on numerical input fields in Chrome
 

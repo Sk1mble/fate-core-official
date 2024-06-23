@@ -300,19 +300,18 @@ class FateCharacterDefaults {
             let updates = {};
             let sections = options.sections;
             for (let section of sections){
-                updates[`data.${section}`] = "blank";
+                updates[`system.${section}`] = "blank";
             }
             await actor.update(updates, {render:false, noHook:true});
 
             for (let section of sections){
-                updates[`data.${section}`] = character_default[section];
+                updates[`system.${section}`] = character_default[section];
             }
             //Replace the avatar and token images also
             if (options.avatar) {
                 updates["img"] = character_default["img"];
                 updates["prototypeToken.texture.src"] = character_default["token_img"];
             }
-        
             //Now commit the updates.
             await actor.update(updates);
 
@@ -326,7 +325,7 @@ class FateCharacterDefaults {
             let updates = {};
             let sections = options.sections;
             for (let section of sections){
-                updates[`data.${section}`] = foundry.utils.mergeObject(character_default[section], actor.system[`${section}`], {inplace:false});
+                updates[`system.${section}`] = foundry.utils.mergeObject(character_default[section], actor.system[`${section}`], {inplace:false});
             }
             if (options.avatar){
                 updates["img"] = character_default["img"];
