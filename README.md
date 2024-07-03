@@ -20,7 +20,7 @@ This work is based on Fate Condensed (found at http://www.faterpg.com/), a produ
 
 ## 1 What Is Fate Core Official?
 
-When I started using Foundry VTT, I found an existing system for Fate Core and Fate Accelerated by Nick East. The stress tracks specific to Fate Condensed and some other technology I needed like custom conditions wasn't supported in Nick's system, so I built some modules of my own to provide that functionality as a stopgap while Nick finishes working on Fate Condensed. Later, Nick decided to take a break from it to work on his own projects, so I decided to create my own implemnetation of Fate Core that had all of the features I wanted. This is that system.
+When I started using Foundry VTT, I found an existing system for Fate Core and Fate Accelerated by Nick East. The stress tracks specific to Fate Condensed and some other technology I needed like custom conditions wasn't supported in Nick's system, so I built some modules of my own to provide that functionality as a stopgap while Nick finishes working on Fate Condensed. Later, Nick decided to take a break from it to work on his own projects, so I decided to create my own implementation of Fate Core that had all of the features I wanted. This is that system.
 
 ### Who should use this system?
 
