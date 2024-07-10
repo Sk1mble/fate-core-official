@@ -1495,6 +1495,16 @@ Combatant.prototype._getInitiativeFormula = function () {
     }
 }
 
+Handlebars.registerHelper("fco_ladder", function(result){
+    let fc = new fcoConstants();
+    let lookup = fc.getFateLadder()[result];
+    if (lookup){
+        return `(${lookup})`;
+    } else {
+        return "";
+    }
+});
+
 Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, key, enriched_tokens) {
     return enriched_tokens[token_id][type][key].richNotes;
 })

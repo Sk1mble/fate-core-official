@@ -2834,12 +2834,28 @@ Hooks.on('renderChatMessage', (message, html, data) => {
     let rolls = scene?.getFlag("fate-core-official", "rolls");
     let roll = undefined;
     if (rolls) roll = rolls.find(roll => roll.message_id == message.id);
+
+    let r = message.rolls[0];
+
+    // Get the core dice formula specified for this roll.
+    let dice_formula = r?.options?.fco_formula;
+
+    // If there's no dice formula stored, make a best effort guess at working it out from the formula.
+    if (!dice_formula) dice_formula = r.formula.split("+")[0].split("-")[0].trim();
+
+    if (!(r.formula.startsWith("4df") || r.formula.startsWith("4dF") || checkFormula (dice_formula?.toLowerCase()))) return
+
     let index = rolls?.indexOf(roll);
+    const rollTotal = html.find('h4[class = "dice-total"]');
+    let ladder = new fcoConstants().getFateLadder();
+    let adjective = ladder[message.rolls[0].total];
+    if (adjective) rollTotal.append(`<span> (${adjective})</span>`);
 
     if (!message.flavor.startsWith("<h1>Reroll") && (message.speaker.actor == game?.user?.character?.id || game.user.isGM)){
         let gmText = "";
         if (game.user.isGM) gmText = game.i18n.localize('fate-core-official.gmHoldShiftToSelectAspects');
         // Add roll buttons here
+
         const targetElement = html.find('span[class="flavor-text"]');
         targetElement.after(`
                 <div>

@@ -613,6 +613,8 @@ export class fcoCharacter extends ActorSheet {
                 let user = game.user;
                 let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
                 item = foundry.utils.duplicate(item);
+                let activeIndicator = `<i class="fas fa-toggle-off"></i>`;
+                if (item.system.active) activeIndicator = `<i icon class="fas fa-toggle-on"></i>`;
                 
                 content += `<strong>${item.name}</strong><br/>
                             <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
@@ -644,6 +646,7 @@ export class fcoCharacter extends ActorSheet {
                     items.push (item.system.tracks[track].name);
                 }
                 content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
+                content += `<strong>${activeIndicator}</strong><br/>`;
 
                 ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
             })

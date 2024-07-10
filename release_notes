@@ -1,3 +1,8 @@
+# 4.7.8
+* Added the adjective from the Fate Ladder to dice results in Fate Utilities and chat messages with rolls.
+
+* Only valid rolls defined in the Fate Core settings will give ladder adjectives or provide reroll etc. buttons on the relevant chat message.
+
 # 4.7.7
 * Bugfix. Applying a character default framework wasn't working due to a migration error that has only become apparent in Foundry v12.
 
