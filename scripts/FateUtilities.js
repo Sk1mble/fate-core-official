@@ -2830,6 +2830,7 @@ function checkFormula(formula){
 
 Hooks.on('renderChatMessage', (message, html, data) => {
     if (message.rolls.length < 1) return;
+    if (!message.isContentVisible) return;
     let scene = game.scenes.viewed;
     let rolls = scene?.getFlag("fate-core-official", "rolls");
     let roll = undefined;
