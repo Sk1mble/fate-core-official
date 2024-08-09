@@ -1,3 +1,6 @@
+# 4.7.10
+* Moved away from using a handlebars if/else to choose whether skills sorted by name or sorted by rank are presented on the character sheet, instead calculating this in the getData method and only presenting the skills as required by the user.
+
 # 4.7.9
 * The adjective from the Fate ladder will now only be shown on chat messages that are visible to the user (checking message.isContentVisible)
 

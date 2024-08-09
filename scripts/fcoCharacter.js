@@ -62,7 +62,7 @@ export class fcoCharacter extends ActorSheet {
         let token = ""; 
         if (this.object.isToken) token = "[Token] "
         return token + this.object.name + mode;
-    }S
+    }
 
     //Here are the action listeners
     activateListeners(html) {
@@ -1350,7 +1350,7 @@ export class fcoCharacter extends ActorSheet {
         } catch  {
             // Do nothing.
         }
-    }llskill
+    }
 
     async _onSkill_name(event, html) {
         let target = this.object;
@@ -1499,16 +1499,21 @@ export class fcoCharacter extends ActorSheet {
             }
         }
         const unordered_skills = sheetData.system.skills;
-        let sorted_by_rank = fcoConstants.sortByRank(unordered_skills);
-        let ordered_skills = fcoConstants.sortByName(unordered_skills);
-        sheetData.ordered_skills = ordered_skills;
-        sheetData.sorted_by_rank = sorted_by_rank;
+        let presentation_skills = foundry.utils.duplicate(unordered_skills);
+        if(this.sortByRank) {
+            presentation_skills = fcoConstants.sortByRank(unordered_skills);
+        }
+        if (this.sortByName){
+            presentation_skills = fcoConstants.sortByName(unordered_skills);
+        }
+        sheetData.presentation_skills = presentation_skills;
+        
         sheetData.gameRefresh = game.settings.get("fate-core-official", "refreshTotal");
 
         let skillTotal = 0;
         // Exclude skills on extras which are not set to countMe/countSkills
-        for (let s in ordered_skills) {
-            skillTotal += ordered_skills[s].rank;
+        for (let s in unordered_skills) {
+            skillTotal += unordered_skills[s].rank;
         }
 
         for (let extra of sheetData.items){

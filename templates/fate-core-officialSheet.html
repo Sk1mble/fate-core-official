@@ -142,8 +142,7 @@
                     <div name="skills_body" id="skills_body" class="mfate-panel__body">
                         <ul class="mfate-skills-list">
 
-
-                            {{#if sortByRank}} {{#each sorted_by_rank}}
+                            {{#each presentation_skills}}
                             {{#unless this.hidden}}
                             <li class="mfate-skills-list__item">
                                 <div class="mfate-skills-list__number">{{this.rank}}</div>
@@ -157,21 +156,8 @@
                                 </div>
                             </li>
                             {{/unless}}
-                            {{/each}} {{else}} {{#each ordered_skills}}
-                            {{#unless this.hidden}}
-                            <li class="mfate-skills-list__item">
-                                <div class="mfate-skills-list__number">{{this.rank}}</div>
-                                <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
-                                <div class="mfate-skills-list__skill-name mf_draggable" name="skill" id="{{this.name}}" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
-                                    {{this.name}}
-                                    {{#if ../this.document.isOwner}}
-                                    <i id="{{this.name}}" style="float:right" icon class="fas fa-dice fu_button"></i>
-                                    {{/if}}
-                                    {{#if this.extra_id}}<i data-extra_id="{{this.extra_id}}" class="fas fa-plug fu_button" style="float:right; padding-right:10px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}
-                                </div>
-                            </li>
-                            {{/unless}}
-                            {{/each}} {{/if}}
+                            {{/each}}
+
                         </ul>
                     </div>
                 </div>
