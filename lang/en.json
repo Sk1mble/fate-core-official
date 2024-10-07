@@ -1544,6 +1544,8 @@
     "fate-core-official.Stunt":"Stunt",
     "fate-core-official.FatePoints":"Fate Points",
     "fate-core-official.Category":"Category",
+    "fate-core-official.Sort_skills_on_sheets_by_rank":"Sort skills on sheets by rank?",
+    "fate-core-official.Sort_stunts_on_sheets":"Sort stunts on sheets?",
     "fate-core-official.Clear":"Clear",
     "fate-core-official.AllFleetingTracks":"all Fleeting tracks in every category",
     "fate-core-official.SituationAspects":"Situation Aspects",
