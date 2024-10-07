@@ -1292,7 +1292,7 @@ game.settings.register("fate-core-official","freeStunts", {
     Items.unregisterSheet('core', ItemSheet);
 
     game.settings.register("fate-core-official", "sortSkills", {
-        name: "Sort skills on sheets by rank?",
+        name: game.i18n.localize("fate-core-official.Sort_skills_on_sheets_by_rank"),
         scope:"client",
         config:true,
         type:Boolean,
@@ -1301,7 +1301,7 @@ game.settings.register("fate-core-official","freeStunts", {
     })
 
     game.settings.register("fate-core-official", "sortStunts", {
-        name: "Sort stunts on sheets?",
+        name: game.i18n.localize("fate-core-official.Sort_stunts_on_sheets"),
         scope:"client",
         config:true,
         type:Boolean,
