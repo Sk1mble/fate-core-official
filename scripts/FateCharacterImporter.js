@@ -130,10 +130,10 @@ class FateCharacterImporter {
                 track.enabled = true;
                 track.universal = true;
                 if (track.type === "stress" && (track.name.toLowerCase().includes("physical") || track.name.toLowerCase().includes("mental"))) {
-                    track.recovery_type = "fleeting";
+                    track.recovery_type = "Fleeting";
                 }
                 else {
-                    track.recovery_type = "sticky";
+                    track.recovery_type = "Sticky";
                 }
                 
                 if (rawTrack.type == "stress") track.aspect = "No";

@@ -284,13 +284,21 @@ export class fcoActor extends Actor {
                 track.notes = "";
     
                 //If this box is an aspect when marked, it needs an aspect.name data field.
-                if (track.aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked")) {
+                if (track.aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked")
+                    || track.aspect == "Defined When Marked"
+                    || track.aspect == "when_marked"
+                ) {
                     track.aspect = {};
                     track.aspect.name = "";
                     track.aspect.when_marked = true;
                     track.aspect.as_name = false;
                 }
-                if (track.aspect == game.i18n.localize("fate-core-official.AspectAsName") || track.aspect == game.i18n.localize("fate-core-official.NameAsAspect")) {
+                if (track.aspect == "Aspect as Name" 
+                    || track.aspect == "Name as Aspect" 
+                    || track.aspect == game.i18n.localize("fate-core-official.AspectAsName") 
+                    || track.aspect == game.i18n.localize("fate-core-official.NameAsAspect")
+                    || track.aspect == "as_name"    
+                ) {
                     track.aspect = {};
                     track.aspect.when_marked = false;
                     track.aspect.as_name = true;

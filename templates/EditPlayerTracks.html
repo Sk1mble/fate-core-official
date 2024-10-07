@@ -3,7 +3,19 @@
         Filter: <select id = "select_box" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family)">
             <option selected disabled value="{{localize 'fate-core-official.ChooseACategory'}}">{{localize 'fate-core-official.ChooseACategory'}}</option>
             {{#each tracks_by_category}}
-            <option {{#if (eq ../cat @key)}} selected="selected"{{/if}}>{{@key}}</option>
+                {{#if (eq @key "Combat")}}
+                        <option value="Combat" {{#if (eq ../cat @key)}} selected="selected"{{/if}}>{{localize 'fate-core-official.Combat'}}</option>
+                    {{else}}
+                        {{#if (eq @key "Other")}}
+                                <option value="Other" {{#if (eq ../cat @key)}} selected="selected"{{/if}}>{{localize 'fate-core-official.Other'}}</option>
+                            {{else}}
+                                {{#if (eq @key "All")}}
+                                    <option value="All" {{#if (eq ../cat @key)}} selected="selected"{{/if}}>{{localize 'fate-core-official.All'}}</option>
+                                {{else}}
+                                    <option {{#if (eq ../cat @key)}} selected="selected"{{/if}}>{{@key}}</option>
+                                {{/if}}    
+                    {{/if}}
+                {{/if}}
             {{/each}}
             </select>
     <div id="edit_tracks_body" name = "tracks_body" style="overflow-y:auto; width:400px; height:250px; border:none"><!--Begin body-->

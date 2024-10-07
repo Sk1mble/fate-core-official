@@ -1,5 +1,16 @@
 <form onsubmit="event.preventDefault();">
-    <div align = "left"><h2>{{localize 'fate-core-official.EditingTracks'}} {{this.category}} {{localize 'fate-core-official.category'}}</h2></div>
+    <div align = "left"><h2>{{localize 'fate-core-official.EditingTracks'}} 
+        {{#if (eq this.category "Combat")}}
+            {{localize 'fate-core-official.Combat'}}
+        {{else}}
+            {{#if (eq this.category "Other")}}
+                {{localize 'fate-core-official.Other'}}
+            {{else}}
+                {{this.category}} 
+            {{/if}}
+        {{/if}}
+        {{localize 'fate-core-official.category'}}
+    </h2></div>
     <div><select id="track_select" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
         <option>{{localize 'fate-core-official.NewTrack'}}</option>
         {{#each tracks}}
@@ -55,9 +66,9 @@
             </td>
             <td>
                 <select id="edit_track_recovery_type" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option>{{localize 'fate-core-official.Fleeting'}}</option>
-                    <option>{{localize 'fate-core-official.Sticky'}}</option>
-                    <option>{{localize 'fate-core-official.Lasting'}}</option>
+                    <option value ="Fleeting">{{localize 'fate-core-official.Fleeting'}}</option>
+                    <option value ="Sticky">{{localize 'fate-core-official.Sticky'}}</option>
+                    <option value ="Lasting">{{localize 'fate-core-official.Lasting'}}</option>
                 </select>
             </td>
         </tr>
@@ -67,9 +78,9 @@
             </td>
             <td>
                 <select id="edit_track_aspect" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option>{{localize 'fate-core-official.No'}}</option>
-                    <option>{{localize 'fate-core-official.NameAsAspect'}}</option>
-                    <option>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
+                    <option value="no">{{localize 'fate-core-official.No'}}</option>
+                    <option value="as_name">{{localize 'fate-core-official.NameAsAspect'}}</option>
+                    <option value = "when_marked">{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
                 </select>
             </td>
         </tr>

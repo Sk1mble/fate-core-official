@@ -78,7 +78,17 @@ class fcoAspect extends foundry.abstract.DataModel {
 
 class trackAspectField extends foundry.data.fields.ObjectField {
     _validateType(data){
-        if (data == "No" || data == game.i18n.localize("fate-core-official.DefinedWhenMarked") || data == game.i18n.localize("fate-core-official.AspectAsName") || data == game.i18n.localize("fate-core-official.NameAsAspect")){
+        if (data == game.i18n.localize("fate-core-official.No") 
+            || data == game.i18n.localize("fate-core-official.DefinedWhenMarked") 
+            || data == game.i18n.localize("fate-core-official.AspectAsName") 
+            || data == game.i18n.localize("fate-core-official.NameAsAspect")
+            || data == "Aspect as Name" || data == "No" 
+            || data == "Defined when marked" 
+            || data == "Name As Aspect" 
+            || data == "as_name" 
+            || data == "no" 
+            || data == "when_marked"
+        ){
             return true;
         } else {
             if (Object.prototype.toString.call(data) === '[object Object]'){

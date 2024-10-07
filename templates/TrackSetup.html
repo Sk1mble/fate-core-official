@@ -7,7 +7,15 @@
             <td>
                 <select id="track_categories_select" size="25" style="background: white; color: black; font-family: var(--fco-font-family); width: 350px; height: 100px">
                     {{#each track_categories}}
-                        <option style="background:white; color:black; font-family: var(--fco-font-family);">{{this}}</option>                    
+                        {{#if (eq this "Combat")}}
+                            <option value = "Combat" style="background:white; color:black; font-family: var(--fco-font-family);">{{localize 'fate-core-official.Combat'}}</option>                    
+                        {{else}}
+                            {{#if (eq this "Other")}}
+                                <option value = "Other" style="background:white; color:black; font-family: var(--fco-font-family);">{{localize 'fate-core-official.Other'}}</option>    
+                            {{else}}
+                                <option style="background:white; color:black; font-family: var(--fco-font-family);">{{this}}</option>
+                            {{/if}}      
+                        {{/if}}              
                     {{/each}} 
                 </select>
             </td>

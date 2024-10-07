@@ -173,9 +173,21 @@
                     <div name="tracks" class="tab tracks" data-tab="tracks" style="color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); font-family:var(--fco-font-family); padding-top:10px; font-size:{{fontSize}}pt">
                         {{localize 'fate-core-official.Category'}}: 
                         <select style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); padding-right:100px" id = "category_select">
-                            <option value="{{localize 'fate-core-official.All'}}" {{#if (eq category "{{localize 'fate-core-official.All'}}")}}selected{{/if}}>{{localize 'fate-core-official.All'}}</option>
+                            <option value="All" {{#if (eq category "{{localize 'fate-core-official.All'}}")}}selected{{/if}}>{{localize 'fate-core-official.All'}}</option>
                             {{#each categories}}
-                                <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
+								{{#if (eq this "Combat")}}
+									<option value="Combat" {{#if (eq "Combat" ../category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Combat'}}</option>
+								{{else}}
+									{{#if (eq this "Other")}}
+										<option value="Other" {{#if (eq "Other" ../category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Other'}}</option>
+									{{else}}}
+										{{#if (eq this ../category)}}
+											<option selected = "selected">{{this}}</option>
+										{{else}}
+											<option>{{this}}</option>
+										{{/if}}
+									{{/if}}
+								{{/if}}      
                             {{/each}}
                         </select> 
                         {{#if GM}}

@@ -469,7 +469,11 @@ export class ExtraSheet extends ItemSheet {
             if (data.type == "track"){
                 let track = data.dragged;
                 if (!data.shift_down){
-                    if (track?.aspect && track?.aspect !== "No" && track?.aspect != "Name As Aspect"){
+                    if (track?.aspect && track?.aspect !== "No" 
+                        && track?.aspect != "Name As Aspect"
+                        && track?.aspect != "Aspect as name"
+                        && track?.aspect != "as_name"
+                    ){
                         track.aspect.name = "";
                     }
             

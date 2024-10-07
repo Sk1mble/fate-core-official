@@ -163,9 +163,21 @@
                             <div class="mfate-panel__header" name="tracks_header">
                                 <b class="mfate-panel__header-label">{{localize 'fate-core-official.Tracks'}}</b>
                                 <select class="mfate-panel__header-select" id="item_track_category">
-                                    <option value="{{localize 'fate-core-official.All'}}" {{#if (eq category "All")}}selected{{/if}}>All</option>
+                                    <option value="All" {{#if (eq category "All")}}selected="selected"{{/if}}>{{localize 'fate-core-official.All'}}</option>
                                     {{#each track_categories}}
-                                        <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
+										{{#if (eq this "Combat")}}
+											<option value="Combat" {{#if (eq "Combat" ../category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Combat'}}</option>
+										{{else}}
+											{{#if (eq this "Other")}}
+												<option value="Other" {{#if (eq "Other" ../category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Other'}}</option>
+											{{else}}}
+												{{#if (eq this ../category)}}
+													<option selected = "selected">{{this}}</option>
+												{{else}}
+													<option>{{this}}</option>
+												{{/if}}
+											{{/if}}
+										{{/if}}      
                                     {{/each}}
                                 </select>
                                 <div title="{{localize 'fate-core-official.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_item_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>

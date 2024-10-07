@@ -170,10 +170,22 @@
                                 <b class="mfate-panel__header-label">{{localize 'fate-core-official.tracks'}}</b>
                                 {{#if this.document.isOwner}}
                                     <select class="mfate-panel__header-select" id="track_category">
-                                        <option value="{{localize 'fate-core-official.All'}}" {{#if (eq category "{{localize 'fate-core-official.All'}}")}}selected{{/if}}>{{localize 'fate-core-official.All'}}</option>
+                                        <option value="All" {{#if (eq category "All")}}selected="selected"{{/if}}>{{localize 'fate-core-official.All'}}</option>
                                         {{#each track_categories}}
-                                            <option value="{{this}}"{{#if (eq ../category this)}} selected{{/if}}>{{this}}</option>
-                                        {{/each}}
+										{{#if (eq this "Combat")}}
+											<option value="Combat" {{#if (eq "Combat" ../category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Combat'}}</option>
+										{{else}}
+											{{#if (eq this "Other")}}
+												<option value="Other" {{#if (eq "Other" ../category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Other'}}</option>
+											{{else}}}
+												{{#if (eq this ../category)}}
+													<option selected = "selected">{{this}}</option>
+												{{else}}
+													<option>{{this}}</option>
+												{{/if}}
+											{{/if}}
+										{{/if}}      
+                                    {{/each}}
                                     </select>
                                 {{/if}}
                                 {{#if this.document.isOwner}}<div title="{{localize 'fate-core-official.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_player_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>{{/if}}

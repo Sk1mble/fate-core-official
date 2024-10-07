@@ -1615,7 +1615,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
         if (data.type == "track"){
             let track = data.dragged;
             if (!data.shift_down){
-                if (track?.aspect && track?.aspect !== "No" && track?.aspect != game.i18n.localize("fate-core-official.AspectAsName") && track?.aspect != game.i18n.localize("fate-core-official.NameAsAspect")){
+                if (track?.aspect && track?.aspect !== "No" && track?.aspect != "Name As Aspect" && track?.aspect != "Aspect as Name" && track?.aspect !== game.i18n.localize("fate-core-official.No") && track?.aspect != game.i18n.localize("fate-core-official.AspectAsName") && track?.aspect != game.i18n.localize("fate-core-official.NameAsAspect")){
                     track.aspect.name = "";
                 }
     

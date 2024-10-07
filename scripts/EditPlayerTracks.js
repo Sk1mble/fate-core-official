@@ -111,16 +111,21 @@ class EditPlayerTracks extends FormApplication {
             e.origin = this;
         })
     } //End activateListeners
-
     // Here are the action functions
 
     async _ad_hoc (event, html){
-
         let catText = `<select id="category" style="color:black; background:white;">`
         for (let c in this.tracks_by_category){
             // Build the category list
-            if (c !== game.i18n.localize("fate-core-official.All"))
-            catText +=`<option> ${c}</option>`
+            if (c !== "All"){
+                if (c == "Combat"){
+                    catText +=`<option value = "Combat"> ${game.i18n.localize("fate-core-official.Combat")}</option>`;
+                } else {
+                    if (c == "Other"){
+                        catText +=`<option value = "Other"> ${game.i18n.localize("fate-core-official.Other")}</option>`;
+                    }
+                }
+            }
         }
         catText += '</select>'
 
@@ -172,7 +177,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.RecoveryType")}:
                 </td>
                 <td>
-                    <select style="color:black; background:white;" id = "recovery_type"><option selected="selected">${game.i18n.localize("fate-core-official.Fleeting")}</option><option>${game.i18n.localize("fate-core-official.Sticky")}</option><option>${game.i18n.localize("fate-core-official.Lasting")}</option></Select>
+                    <select style="color:black; background:white;" id = "recovery_type"><option value="Fleeting" selected="selected">${game.i18n.localize("fate-core-official.Fleeting")}</option><option value="Sticky">${game.i18n.localize("fate-core-official.Sticky")}</option><option value="Lasting">${game.i18n.localize("fate-core-official.Lasting")}</option></Select>
                 </td>
             </tr>
             <tr>
@@ -302,7 +307,6 @@ class EditPlayerTracks extends FormApplication {
                             }
                         }
                         newTrack.label = label;
-
                         newTrack.toCopy=true;
                         this.tracks_by_category[newTrack.category][fcoConstants.tob64(newTrack.name)]=newTrack;
                         this.tracks_by_category["All"][fcoConstants.tob64(newTrack.name)]=newTrack;
@@ -547,13 +551,21 @@ class EditPlayerTracks extends FormApplication {
         track.notes = "";
 
         //If this box is an aspect when marked, it needs an aspect.name data field.
-        if (track.aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked")) {
+        if (track.aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked"
+            || track.aspect == "Defined when marked"
+            || track.aspect == "when_marked"
+        )) {
             track.aspect = {};
             track.aspect.name = "";
             track.aspect.when_marked = true;
             track.aspect.as_name = false;
         }
-        if (track.aspect == game.i18n.localize("aspectAsName") || track.aspect == game.i18n.localize("NameAsAspect")) {
+        if (track.aspect == "Aspect as Name" 
+            || track.aspect == "Name As Aspect" 
+            || track.aspect == game.i18n.localize("aspectAsName") 
+            || track.aspect == game.i18n.localize("NameAsAspect")
+            || track.aspect == "as_name"
+        ) {
             track.aspect = {};
             track.aspect.when_marked = false;
             track.aspect.as_name = true;

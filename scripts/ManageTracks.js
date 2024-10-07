@@ -480,10 +480,19 @@ class EditTracks extends FormApplication {
         let tracks_of_category = [];
         for (let t in this.tracks){
             if (this.tracks[t].category == this.category){
+                if (this.tracks[t].aspect == "No" || this.tracks[t].aspect == game.i18n.localize("No")){
+                    this.tracks[t].aspect = "no";
+                } 
+                if (this.tracks[t].aspect == "Defined when marked" || this.tracks[t].aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked") ){
+                    this.tracks[t].aspect = "when_marked";
+                }
+                if (this.tracks[t].aspect == "Aspect as name" || this.tracks[t].aspect == "Name As Aspect" || this.tracks[t].aspect == game.i18n.localize("fate-core-official.AspectAsName" || this.tracks[t].aspect == game.i18n.localize("fate-core-official.NameAsAspect")) ){
+                    this.tracks[t].aspect = "as_name";
+                }
                 tracks_of_category.push(this.tracks[t]);
             }
         }
-        
+        console.log(tracks_of_category);
         const templateData = {
             category:this.category,
             tracks:tracks_of_category, 
@@ -890,6 +899,7 @@ class TrackSetup extends FormApplication{
         deleteCategoryButton.on("click", event => this._onDeleteCategoryButton(event, html));
         addCategoryButton.on("click", event => this._onAddCategoryButton(event, html));
         editTracksButton.on("click", event => this._onEditTracksButton(event, html));
+
         setCategoriesButton.on("click", event => {
             let content = `<div style="display:flex; flex-direction:column;">`;
             let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
@@ -899,13 +909,22 @@ class TrackSetup extends FormApplication{
                 let categories_select = `<select name="fco_track_cat_select" data-track="${track}">`
                 for (let category in categories){
                     if (tracks[track].category == category){
-                        categories_select += `<option selected = "selected">${category}</option>`
+                        categories_select += `<option selected = "selected" value="${category}">`
                     }else {
-                        categories_select += `<option>${category}</option>`
+                        categories_select += `<option value = "${category}">`
+                    }
+                    if (category == "Combat"){
+                        categories_select += `${game.i18n.localize("fate-core-official.Combat")}</option>`   
+                    } else {
+                        if (category == "Other"){
+                            categories_select += `${game.i18n.localize("fate-core-official.Other")}</option>`
+                        } else {
+                            categories_select += `${category}</option>`   
+                        }
                     }
                 }
                 categories_select += `</select>`;
-                content += `<div style="display:flex; flex-direction:row; padding:5px"><div style="width:25rem">${track}</div><div>${categories_select}</div></div>`
+                content += `<div style="display:flex; flex-direction:row; padding:5px"><div style="width:25rem">${tracks[track].name}</div><div>${categories_select}</div></div>`
             }
             content += `</div>`
             let width = 800;
@@ -920,7 +939,7 @@ class TrackSetup extends FormApplication{
                                     let results = $('select[name="fco_track_cat_select"]');
 
                                     for (let result of results){
-                                        let track = fcoConstants.gbn(tracks, result.getAttribute("data-track"));
+                                        let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
                                     }
                                     game.settings.set("fate-core-official","tracks",tracks);
@@ -1038,7 +1057,7 @@ class TrackSetup extends FormApplication{
                     for (let cat in track_categories){
                         if (track_categories[cat].toUpperCase() == category.toUpperCase()){
                             if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
-                                ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${category} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`)
+                                ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${game.i18n.localize("fate-core-official",category)} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`);
                             } else {
                                         let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
                                         let toDelete = [];

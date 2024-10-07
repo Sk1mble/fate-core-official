@@ -19,11 +19,15 @@
             <td>
                 <select type="text" id ="edit_entity_track_category" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">
                     {{#each categories}}
-                        {{#if (eq this ../this.track.category)}}
-                            <option selected = "selected">{{this}}</option>
+                    {{#if (eq this "Combat")}}
+                        <option value="Combat" {{#if (eq this ../this.track.category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Combat'}}</option>
                         {{else}}
-                            <option>{{this}}</option>
-                        {{/if}}
+                            {{#if (eq this ../this.track.category)}}
+                                <option selected = "selected">{{this}}</option>
+                            {{else}}
+                                <option>{{this}}</option>
+                            {{/if}}
+                        {{/if}}        
                     {{/each}}
                 </select>
             </td>
@@ -51,9 +55,9 @@
             </td>
             <td>
                 <select id="edit_entity_track_recovery_type" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option {{#if (eq this.track.recovery_type "Fleeting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Fleeting'}}</option>
-                    <option {{#if (eq this.track.recovery_type "Sticky")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Sticky'}}</option>
-                    <option {{#if (eq this.track.recovery_type "Lasting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Lasting'}}</option>
+                    <option value="Fleeting" {{#if (eq this.track.recovery_type "Fleeting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Fleeting'}}</option>
+                    <option value="Sticky" {{#if (eq this.track.recovery_type "Sticky")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Sticky'}}</option>
+                    <option value="Lasting" {{#if (eq this.track.recovery_type "Lasting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Lasting'}}</option>
                 </select>
             </td>
         </tr>
@@ -63,7 +67,11 @@
             </td>
             <td>
                 <select id="edit_entity_track_aspect" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value="no" {{#if (eq this.track.aspect "No")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.No'}}</option>
+                    <option value="no" 
+                    {{#if (eq this.track.aspect "No")}} selected = "selected"{{/if}}
+                    {{#if (eq this.track.aspect "no")}} selected = "selected"{{/if}}
+                    {{#if (eq this.track.aspect (localize 'fate-core-official.No'))}} selected = "selected"{{/if}}
+                    >{{localize 'fate-core-official.No'}}</option>
                     <option value="as_name"{{#if (eq this.track.aspect.as_name true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.NameAsAspect'}}</option>
                     <option value="when_marked" {{#if (eq this.track.aspect.when_marked true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
                 </select>
