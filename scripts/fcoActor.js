@@ -961,8 +961,11 @@ export class fcoActor extends Actor {
 }
 
     /** HUD interface for changing shape */
-
-    Hooks.on('renderTokenHUD', function (hudButtons, html, data) {
+    // In v13, the change to app v2 may mean I'll need to change the functions below if the seocnd argument is changing to HTMLElement rather than jQuery.
+    // I will need to replace html.find with html.querySelector. I think .prepend() will still work but I may want to swap to insertAdjacentElement('afterbegin', innerEl) for consistency with other places.
+    // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
+    
+    Hooks.on("renderTokenHUD", function (hudButtons, html, data) {
         //hudButtons.object is the token itself.
         let token = hudButtons.object;
         if (token.actor.type != "fate-core-official") return;

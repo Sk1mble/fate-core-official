@@ -342,6 +342,10 @@ class FateCharacterDefaults {
 }
 
 // Add extra button to foundry's settings menu
+// In v13, the change to app v2 means I'll need to change the functions below as the seocnd argument is changing to HTMLElement rather than jQuery.
+// I will need to replace html.find with html.querySelector and targetElement.before with targetElement.insertAdjacentHTML("beforebegin", `htmltoinsert`)
+// See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
+
 Hooks.on("renderSidebarTab", (app, html) => {
     if (!(app instanceof ActorDirectory) || !game.user?.isGM) {
         return;

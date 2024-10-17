@@ -119,19 +119,21 @@ class ShowCharacter extends Application {
     }
 }
 
-Hooks.on('getSceneControlButtons', function(hudButtons)
-{
-    let hud = hudButtons.find(val => {return val.name == "token";})
-            if (hud && game.user.isGM){
-                hud.tools.push({
-                    name:"ShowCharacter",
-                    title:game.i18n.localize("fate-core-official.ShowCharacterTitle"),
-                    icon:"fas fa-binoculars",
-                    onClick: ()=> {let sc = new ShowCharacter; sc.render(true)},
-                    button:true
-                });
-            }
-})
+//v13This is now for v13 only!
+Hooks.on('getSceneControlButtons', controls => {
+    if ( !game.user.isGM ) return;
+    controls.tokens.tools.showCharacter = {
+      name: "showCharacter",
+      title: game.i18n.localize("fate-core-official.showCharacterTitle"),
+      icon: "fas fa-binoculars",
+      onChange: (event, active) => {
+        if ( active ) {
+            let sc = new ShowCharacter; sc.render(true);
+        }
+      },
+      button: true
+    };
+  });
 
 Hooks.once('ready', async function () {
     game.socket.on("system.fate-core-official", data => {

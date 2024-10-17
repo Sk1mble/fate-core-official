@@ -73,7 +73,7 @@
     row-gap: 6px;
     margin: 0 6px;
     display: flex;
-    flex-flow: row wrap;
+    /*flex-flow: row wrap;*/
 }
 
 :root {
@@ -132,9 +132,14 @@
     min-height: 50vh;
 }
 
+#biography_body.active {
+    display: grid;
+    /*display: flex;*/
+}
+
 .mfate-sheet .tab[data-tab].active {
     /* display: grid; */
-    display: flex !important;
+    display: flex;
 }
 
 .notes-body {
@@ -302,10 +307,13 @@
 
 .mfate-sheet__tab--secondary {
     display: none;
-    flex-direction: column;
+    /*flex-direction: column;*/
     padding: 0 6px;
 }
 
+.mfate.tab.biography {
+    display:grid;
+}
 
 /*  Column */
 

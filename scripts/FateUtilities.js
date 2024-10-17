@@ -2551,29 +2551,28 @@ Hooks.on('ready', function()
     }
 })
 
-Hooks.on('getSceneControlButtons', function(hudButtons)
-{
-    let hud = hudButtons.find(val => {return val.name == "token";})
-            if (hud){
-                hud.tools.push({
-                    name:"FateUtilities",//Completed
-                    title:game.i18n.localize("fate-core-official.LaunchFateUtilities"),
-                    icon:"fas fa-theater-masks",
-                    onClick: async ()=> {
-                        let fu = new FateUtilities;
-                        for (let app in ui.windows){
-                            if (ui.windows[app]?.options?.id == "FateUtilities"){
-                                fu = ui.windows[app]
-                                fu.maximize();
-                            }
-                        }
-                        await fu.render(true); 
-                        $('#FateUtilities').css({zIndex: Math.min(++_maxZ, 9999)});
-                    },
-                    button:true
-                });
+//v13This is now for v13 only!
+Hooks.on('getSceneControlButtons', controls => {
+    if ( !game.user.isGM ) return;
+    controls.tokens.tools.fateUtilities = {
+      name: "FateUtilities",
+      title: game.i18n.localize("fate-core-official.LaunchFateUtilities"),
+      icon: "fas fa-theater-masks",
+      onChange: async (event, active) => {
+        if ( active ) {
+            for (let app in ui.windows){
+                if (ui.windows[app]?.options?.id == "FateUtilities"){
+                    fu = ui.windows[app]
+                    fu.maximize();
+                }
             }
-})
+            await fu.render(true); 
+            $('#FateUtilities').css({zIndex: Math.min(++_maxZ, 9999)});
+        }
+      },
+      button: true
+    };
+  });
 
 class acd extends FormApplication {
     constructor(fu) {
@@ -2789,7 +2788,7 @@ class FUAspectLabelClass extends FormApplication {
     }
 }
 
-Hooks.on('renderCombatTracker', () => {
+Hooks.on("renderCombatTracker", () => {
     try {
         var r = game.combat.round;
         let pendingEvents = game.combat.getFlag("fate-core-official","timedEvents");
@@ -2828,7 +2827,26 @@ function checkFormula(formula){
     return validFormula;
 }
 
-Hooks.on('renderChatMessage', (message, html, data) => {
+// In v13, renderChatMessage is switching to renderChatMessageHTML which passes an HTMLElement instead of JQuery as the second paramater.
+// This means we'll need to switch to using queryselector and other HTML element methods instead of jQuery.
+// I will need to replace html.find with html.querySelector and targetElement.before with targetElement.insertAdjacentHTML("beforebegin", `htmltoinsert`)
+// For this particular one I think I'll want afterend.
+// OOOORRR instead of changing everything, we can use the quick and dirty $html = $(html); to convert it back to jQuery.
+/* valid parameters are: 
+    "beforebegin"
+    Before the element. Only valid if the element is in the DOM tree and has a parent element.
+
+    "afterbegin"
+    Just inside the element, before its first child.
+
+    "beforeend"
+    Just inside the element, after its last child.
+
+    "afterend"
+After the element. Only valid if the element is in the DOM tree and has a parent element.
+*/
+
+Hooks.on("renderChatMessage", (message, html, data) => {
     if (message.rolls.length < 1) return;
     if (!message.isContentVisible) return;
     let scene = game.scenes.viewed;
@@ -3018,7 +3036,7 @@ async function updateRolls (rolls) {
     }
 }
 
-Hooks.on('renderFateUtilities', async function(){
+Hooks.on("renderFateUtilities", async function(){
     let numAspects = document.getElementsByName("sit_aspect").length;
     if (numAspects == undefined){
         numAspects = 0;

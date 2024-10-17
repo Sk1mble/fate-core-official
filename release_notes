@@ -1,6 +1,6 @@
 # 4.7.11
 * Improvements to core files in respect of localisation
-* Added Spanish language translation courtesy of user Tyberial.
+* Added Spanish language translation courtesy of users Tyberial and DocBlackstone_GM.
 
 # 4.7.10
 * Moved away from using a handlebars if/else to choose whether skills sorted by name or sorted by rank are presented on the character sheet, instead calculating this in the getData method and only presenting the skills as required by the user.

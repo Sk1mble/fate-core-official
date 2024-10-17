@@ -468,7 +468,7 @@ Hooks.on('updateUser',(...args) =>{
         })
 })
 
-Hooks.on('renderPlayerList',(...args) =>{
+Hooks.on("renderPlayerList",(...args) =>{
     game.system.apps["user"].forEach (a=> {
         a.renderMe("updateUser");
     })
@@ -486,7 +486,7 @@ Hooks.on('updateItem', (item, data) => {
     })
 })
 
-Hooks.on('renderCombatTracker', () => {
+Hooks.on("renderCombatTracker", () => {
     game.system.apps["combat"].forEach(a=> {
         a.renderMe("renderCombatTracker");
     })
@@ -522,22 +522,29 @@ Hooks.on('updateScene', (...args) => {
     })
 })
 
-Hooks.on('getSceneControlButtons', function(hudButtons)
-{
-    let hud = hudButtons.find(val => {return val.name == "token";})
-            if (hud && game.user.isGM){
-                hud.tools.push({
-                    name:"StuntDB",
-                    title:game.i18n.localize("fate-core-official.ViewTheStuntDatabase"),
-                    icon:"fas fa-book",
-                    onClick: ()=> {let sd = new StuntDB("none"); sd.render(true)},
-                    button:true
-                });
-            }
-})
+//v13This is now for v13 only!
+Hooks.on('getSceneControlButtons', controls => {
+    if ( !game.user.isGM ) return;
+      controls.tokens.tools.stuntDB = {
+      name: "StuntDB",
+      title: game.i18n.localize("fate-core-official.ViewTheStuntDatabase"),
+      icon: "fas fa-book",
+      onChange: (event, active) => {
+        if ( active ) {
+          const sd = new StuntDB("none");
+          sd.render(true);
+        }
+      },
+      button:true
+    };
+  });
 
 // This next hook is required to prevent Things from showing up in the player configuration menu. 
-Hooks.on('renderUserConfig', (user, html, data) => {
+// In v13, the change to app v2 means I may need to change the functions below as the seocnd argument is changing to HTMLElement rather than jQuery.
+// I will need to replace html.find with html.querySelector
+// See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
+Hooks.on("renderUserConfig", (user, html, data) => {
+    html = $(html);
     let actors = html.find("li");
     for (let actor of actors){
         let id = actor.getAttribute("data-actor-id");
