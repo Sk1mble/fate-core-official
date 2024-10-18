@@ -1005,7 +1005,7 @@ export class fcoActor extends Actor {
                     <td width="80px"><img src="${shapes[shape].tokenImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
                     <td width="80px"><img src="${shapes[shape].avatarImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
                     <td width="200px" style= "min-width:100px; height:75px; opacity:1 !important">${shapes[shape].transition}</td>
-                    <td width="75px">${deleteButton}</td>
+                    ${deleteButton}
                 </tr>
             </table>
             </div>`
