@@ -1,15 +1,15 @@
 //v13This is now for v13 only!
 Hooks.on('getSceneControlButtons', controls => {
     if ( !game.user.isGM ) return;
-      controls.tokens.tools.importCharacter = {
-      name: "ImportCharacter",
+    controls.tokens.tools.importCharacter = {
+      name: "importCharacter",
       title: game.i18n.localize("fate-core-official.ImportCharacter"),
       icon: "fas fa-download",
       onChange: async (event, active) => {
         if ( active ) {
-          const fci = new FateCharacterImporter();
-          let data = await fci.getFCI_JSON();
-          fci.import(data);
+            let fci = new FateCharacterImporter();
+            let data = await fci.getFCI_JSON();
+            fci.import(data);
         }
       },
       button: true

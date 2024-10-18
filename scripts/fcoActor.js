@@ -12,7 +12,6 @@ export class fcoActor extends Actor {
     // Override the standard createDialog to just spawn a character called 'New Actor'.
     static async createDialog (...args){
         let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
-
         if (args[0].folder) {
             Actor.create({"name":game.i18n.localize("fate-core-official.newCharacter"), "folder":args[0].folder, "type":"fate-core-official", ownership: perm});
         } else {
@@ -160,7 +159,7 @@ export class fcoActor extends Actor {
                 shape.tokenData.elevation = token.document.elevation;
                 shape.tokenData.flags = token.document.flags;
             if (foundry.utils.isNewerVersion(game.version,"12.317") && shape.transition){
-                await token.document.update(shape.tokenData, {animation: {transition: TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
+                await token.document.update(shape.tokenData, {animation: {transition: foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
             }   else {
                 await token.document.update(shape.tokenData);
             }   
@@ -972,24 +971,22 @@ export class fcoActor extends Actor {
         let shapes = token.actor.getFlag("fate-core-official","shapes");
         let transitions = "";
 
-        if (foundry.utils.isNewerVersion(game.version, "12.317")){
-            transitions = `<select id="fcotransition_${token.id}" style="min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); left:75px;">`
-            for (let transition in TextureTransitionFilter.TYPES){
-                let selected="";
-                if (transition == "FADE") selected = `selected = "selected"`;   
-                transitions += `<option value = "${transition}" ${selected}>
-                    ${TextureTransitionFilter.TYPES[transition]}
-                </option>`
-            }
-            transitions += `</select>`
+        transitions = `<select id="fcotransition_${token.id}" style="min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); left:75px;">`
+        for (let transition in foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES){
+            let selected="";
+            if (transition == "FADE") selected = `selected = "selected"`;   
+            transitions += `<option value = "${transition}" ${selected}>
+                ${foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES[transition]}
+            </option>`
         }
+        transitions += `</select>`
 
-        let shapeButtons = `<div style="font-size:0.8em; position:absolute; min-width:450px; max-width:450px; text-overflow: ellipsis; overflow-x:auto; max-height:1000px; overflow-y:auto; left:75px; top:-75px; display:flex-row"><table style="background:transparent;">
+        let shapeButtons = `<div style="font-size:0.8em; position:absolute; min-width:750px; max-width:750px; text-overflow: ellipsis; overflow-x:auto; max-height:1000px; overflow-y:auto; left:75px; top:-75px; display:flex-row"><table style="background:transparent;">
         <tr style="background-color:var(--fco-accent-colour); height:75px; border:none">
-            <td width = "300px">
+            <td width = "350px">
                 <input type="text" style="font-size:0.8em; margin-left:10px; margin-right:10px; max-width:225px; background:var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour)" id = fcoShapeAddName_${token.id}></input>
             </td>
-            <td width ="100px">
+            <td width ="350px">
                 ${transitions}
             </td>
             <td width = "50px">
@@ -999,16 +996,16 @@ export class fcoActor extends Actor {
         </table>`;
         let allowDeletion = true;
         let deleteButton = "";
-        
         for (let shape in shapes){
             if (allowDeletion) deleteButton=`<td width="50px"><div class= "fu_button" id="fcoShapeDelete_${token.id}_${shape}"><i icon class ="fas fa-trash"</i></div></td>`
-            shapeButtons += `<div class="fu_button" style="background:var(--fco-sheet-background-colour); display:flex; left:75px; padding:10px; min-width:400px; margin:5px; color:black; font-family:var(--fco-font-family)" id="fcoShape_${token.id}_${shape}">
+            shapeButtons += `<div class="fu_button" style="background:var(--fco-sheet-background-colour); display:flex; left:75px; padding:10px; min-width:700px; margin:5px; color:black; font-family:var(--fco-font-family)" id="fcoShape_${token.id}_${shape}">
             <table style="background:transparent; border:none; color:black; font-family:var(--fco-font-family)">
                 <tr>
-                    <td style="color:var(--fco-sheet-text-colour); padding-left:5px; text-align:left; min-width:100px; max-width:100px; overflow:hidden; text-overflow:ellipsis;">${shapes[shape].name}</td>
+                    <td style="color:var(--fco-sheet-text-colour); padding-left:5px; text-align:left; min-width:300px; max-width:300px; overflow:hidden; text-overflow:ellipsis;">${shapes[shape].name}</td>
                     <td width="80px"><img src="${shapes[shape].tokenImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
-                    <td width "80px"><img src="${shapes[shape].avatarImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
-                    ${deleteButton}
+                    <td width="80px"><img src="${shapes[shape].avatarImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
+                    <td width="200px" style= "min-width:100px; height:75px; opacity:1 !important">${shapes[shape].transition}</td>
+                    <td width="75px">${deleteButton}</td>
                 </tr>
             </table>
             </div>`

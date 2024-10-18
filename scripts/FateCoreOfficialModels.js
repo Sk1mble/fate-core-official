@@ -272,7 +272,7 @@ Hooks.on("init", () => {
 });
 
 Hooks.on("renderTokenConfig", (tokenConfig) => {
-    let tracks = tokenConfig.token.actor.system.tracks;
+    let tracks = tokenConfig.actor.system.tracks;
     let possibles = ["details.fatePoints"];
     for (let track in tracks){
         if (tracks[track]?.boxes > 0){

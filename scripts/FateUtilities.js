@@ -2555,19 +2555,19 @@ Hooks.on('ready', function()
 Hooks.on('getSceneControlButtons', controls => {
     if ( !game.user.isGM ) return;
     controls.tokens.tools.fateUtilities = {
-      name: "FateUtilities",
+      name: "fateUtilities",
       title: game.i18n.localize("fate-core-official.LaunchFateUtilities"),
       icon: "fas fa-theater-masks",
       onChange: async (event, active) => {
         if ( active ) {
+            let fu = new FateUtilities();
             for (let app in ui.windows){
                 if (ui.windows[app]?.options?.id == "FateUtilities"){
                     fu = ui.windows[app]
                     fu.maximize();
                 }
             }
-            await fu.render(true); 
-            $('#FateUtilities').css({zIndex: Math.min(++_maxZ, 9999)});
+            await fu.render(true);
         }
       },
       button: true
@@ -2878,7 +2878,7 @@ Hooks.on("renderChatMessage", (message, html, data) => {
         const targetElement = html.find('span[class="flavor-text"]');
         targetElement.after(`
                 <div>
-                    <table style="background:transparent; border:none">
+                    <table style="background:transparent; width:100%; border:none">
                         <tr>
                             <th>${game.i18n.localize("fate-core-official.FreeActions")}</th>
                         </tr>

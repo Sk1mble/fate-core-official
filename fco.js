@@ -525,17 +525,17 @@ Hooks.on('updateScene', (...args) => {
 //v13This is now for v13 only!
 Hooks.on('getSceneControlButtons', controls => {
     if ( !game.user.isGM ) return;
-      controls.tokens.tools.stuntDB = {
-      name: "StuntDB",
+    controls.tokens.tools.stuntDB = {
+      name: "stuntDB",
       title: game.i18n.localize("fate-core-official.ViewTheStuntDatabase"),
       icon: "fas fa-book",
       onChange: (event, active) => {
         if ( active ) {
-          const sd = new StuntDB("none");
-          sd.render(true);
+            let sd = new StuntDB("none"); 
+            sd.render(true);
         }
       },
-      button:true
+      button: true
     };
   });
 
@@ -1217,7 +1217,7 @@ game.settings.register("fate-core-official","freeStunts", {
        restricted:false,
        scope:"client",
        config:true,
-       choices:"delete",
+       choices:{0:"delete"},
        onChange:() => {
            setupFont();
        }

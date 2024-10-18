@@ -532,19 +532,17 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
         return;
     }
 
-    if (target.system?.container?.isContainer == false){
+    if (target.system?.container?.isContainer == true && target.system?.container?.locked == true){
         return;
     }
 
     if (data.uuid.startsWith("Compendium")){
+        target.createEmbeddedDocuments("Item",[i]);
         return;
     }
 
     if (data.uuid.startsWith("Item")){
-        return;
-    }
-
-    if (target.system?.container?.isContainer == true && target.system?.container?.locked == true){
+        target.createEmbeddedDocuments("Item",[i]);
         return;
     }
 
@@ -556,17 +554,14 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
             // We need to check if the token IDs are the same rather than the actor IDs.
             if (target.token.id === i?.parent?.token?.id){ // Being dragged within token sheet.
                 return;
-            }
+            } 
         }
     }
 
     if (target.isOwner){
+        target.createEmbeddedDocuments("Item",[i]);
         let shift_down = false; 
-            if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                shift_down = game.system["fco-shifted"];    
-            } else {
-                shift_down = keyboard.isDown("Shift");
-            }
+        shift_down = game.system["fco-shifted"];  
         if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 
             if (!shift_down){
                 await i.delete();

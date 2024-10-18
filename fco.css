@@ -53,11 +53,19 @@ input[type="number"]::-webkit-inner-spin-button {
     appearance: auto;
 }
 
-body, button:not(.fas, .fa, .icon), label:not(.fas, .fa, .icon), select:not(.fas, .fa, .icon), input:not(.fas, .fa, .icon) {
+body, h1, h2, h3, h4, h5, button:not(.fas, .fa, .icon), label:not(.fas, .fa, .icon), select:not(.fas, .fa, .icon), input:not(.fas, .fa, .icon) {
   font-family:var(--fco-foundry-font-family);
 }
 
-button.fu_button.fas{
+button[name="fco_chat_roll_button"]  {
+  display:table-row;
+}
+
+.flavor-text h1 {
+  font-size:1.5rem;
+}
+
+button.fas{
   font-family: "Font Awesome 6 Pro";
 }
 
