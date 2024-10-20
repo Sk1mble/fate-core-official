@@ -2553,7 +2553,6 @@ Hooks.on('ready', function()
 
 //v13This is now for v13 only!
 Hooks.on('getSceneControlButtons', controls => {
-    if ( !game.user.isGM ) return;
     controls.tokens.tools.fateUtilities = {
       name: "fateUtilities",
       title: game.i18n.localize("fate-core-official.LaunchFateUtilities"),
