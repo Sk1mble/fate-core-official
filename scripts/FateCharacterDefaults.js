@@ -345,20 +345,23 @@ class FateCharacterDefaults {
 // In v13, the change to app v2 means I'll need to change the functions below as the seocnd argument is changing to HTMLElement rather than jQuery.
 // I will need to replace html.find with html.querySelector and targetElement.before with targetElement.insertAdjacentHTML("beforebegin", `htmltoinsert`)
 // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
+// html is still jquery as of version 13 prototype 1, so in preparation we'll switch away from using jQuery by converting to an HTMLElement ourselves if it's still returning jQuery.
 
 Hooks.on("renderSidebarTab", (app, html) => {
     if (!(app instanceof ActorDirectory) || !game.user?.isGM) {
         return;
     }
-    
-    const targetElement = html.find('ol[class="directory-list"]');
+    if (html instanceof jQuery){
+        html = $(html)[0];
+    }
+    const targetElement = html.querySelector ('ol[class="directory-list"]');
     const f = new FateCharacterDefaults();
     let standard = `<option value = "fate-core-official" selected = 'selected'>${game.i18n.localize("fate-core-official.system_settings")}</option>\n`
     let blank = "<option>Blank</option>\n"
     let defaults = f.defaults.map(d => `<option>${d}</option>`).join("\n");
     let options = standard+blank+defaults;
-    targetElement.before(`
-        <div style="max-height:45px; text-align:center; margin-bottom:5px">
+    targetElement.insertAdjacentHTML("beforebegin",
+        `<div style="max-height:45px; text-align:center; margin-bottom:5px">
             <input type="text" value = "${game.i18n.localize("fate-core-official.newCharacter")}" style="background-color:#f0f0e0; width:35%; height:25px;" id="MF_actor_to_create">
             <select style="width:35%; height:25px; background-color:#f0f0e0;" id="MF_default_to_use">${options}
             </select>
@@ -371,21 +374,23 @@ Hooks.on("renderSidebarTab", (app, html) => {
         </div>
     `);
 
-    html.on("click", 'input[id="MF_actor_to_create"]', (event) => {
+    let create = html.querySelector('#MF_actor_to_create');
+    create.onclick = (event) => {
         event.stopPropagation();
-        html.find('input[id="MF_actor_to_create"]')[0].select();
-    })
+        create.select();
+    }
 
-    html.on("click", 'button[id="manage_defaults"]', (event) => {
-        //Code to handle the defaults management (view list, delete)
+    let manageDefaults = html.querySelector('#manage_defaults');
+    manageDefaults.onclick = (event) => {
         event.stopPropagation()
         let md = new ManageDefaults().render(true);
-    })
+    }
 
-    html.on("click", 'button[id="create_from_default"]', async (event) => {
+    let createFromDefault = html.querySelector('#create_from_default');
+    createFromDefault.onclick = async (event) => {
         event.stopPropagation();
-        let actor_name = html.find('input[id="MF_actor_to_create"]')[0].value;
-        const default_name = html.find('select[id="MF_default_to_use"]')[0].value;
+        let actor_name = html.querySelector('#MF_actor_to_create').value;
+        let default_name = html.querySelector('#MF_default_to_use').value;
 
         if (! actor_name) actor_name = game.i18n.localize("fate-core-official.newCharacter");
 
@@ -408,7 +413,7 @@ Hooks.on("renderSidebarTab", (app, html) => {
             return;
         }
         await f.createCharacterFromDefault(default_name, actor_name, true);
-    });
+    }
 });
 
 class ManageDefaults extends FormApplication {

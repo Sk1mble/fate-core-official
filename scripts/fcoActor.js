@@ -965,6 +965,11 @@ export class fcoActor extends Actor {
     // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
     
     Hooks.on("renderTokenHUD", function (hudButtons, html, data) {
+        // if html is jquery, convert to HTMLElement - this is future proofing for when this does return an HTMLElement.
+        if (html instanceof jQuery){
+            html = $(html)[0];
+        }
+
         //hudButtons.object is the token itself.
         let token = hudButtons.object;
         if (token.actor.type != "fate-core-official") return;
@@ -1001,7 +1006,7 @@ export class fcoActor extends Actor {
             shapeButtons += `<div class="fu_button" style="background:var(--fco-sheet-background-colour); display:flex; left:75px; padding:10px; min-width:700px; margin:5px; color:black; font-family:var(--fco-font-family)" id="fcoShape_${token.id}_${shape}">
             <table style="background:transparent; border:none; color:black; font-family:var(--fco-font-family)">
                 <tr>
-                    <td style="color:var(--fco-sheet-text-colour); padding-left:5px; text-align:left; min-width:300px; max-width:300px; overflow:hidden; text-overflow:ellipsis;">${shapes[shape].name}</td>
+                    <td style="color:var(--fco-sheet-text-colour); padding-left:5px; text-align:left; min-width:200px; max-width:200px; overflow:hidden; text-overflow:ellipsis;">${shapes[shape].name}</td>
                     <td width="80px"><img src="${shapes[shape].tokenImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
                     <td width="80px"><img src="${shapes[shape].avatarImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
                     <td width="200px" style= "min-width:100px; height:75px; opacity:1 !important">${shapes[shape].transition}</td>
@@ -1011,11 +1016,11 @@ export class fcoActor extends Actor {
             </div>`
         }
         shapeButtons += `</div>`
-        let button = $(`<div class="control-icon fco-changeShape" id="fco-changeShape"><i class="fa fa-arrows-rotate"></i></div>`);
-        let col = html.find('.col.right');
-        col.prepend(button);
-
-        button.click(async (ev) => {
+        let button = `<div  class="control-icon fco-changeShape" id="fco-changeShape"><i class="fa fa-arrows-rotate"></i></div>`;
+        let col = html.querySelector('.col.right');
+        col.insertAdjacentHTML("afterbegin", button);
+        button = html.querySelector('#fco-changeShape');
+        button.onclick = (async (ev) => {
             if (ev.target.closest('div').id.split("_")[0] == "fcoShapeDelete"){
                 let shapes = token.actor.getFlag("fate-core-official","shapes");
                 let shape = shapes[ev.target.closest('div').id.split("_")[2]];
@@ -1025,9 +1030,9 @@ export class fcoActor extends Actor {
                 }
             } else {
                 if (ev.target.closest('div').id.split("_")[0] == "fcoShapeAdd"){
-                    let name = $(`#fcoShapeAddName_${token.id}`)[0].value;
+                    let name = html.querySelector(`#fcoShapeAddName_${token.id}`).value;
                     let transition = null;
-                    if (foundry.utils.isNewerVersion(game.version, "12.317")) transition = $(`#fcotransition_${token.id}`)[0].value;
+                    transition = html.querySelector(`#fcotransition_${token.id}`).value;
                     if (name) {
                         await token.actor.storeShape(name, null, null, token, transition);
                     } else {
@@ -1035,7 +1040,7 @@ export class fcoActor extends Actor {
                     }
                 } else {
                     let shapes = token.actor.getFlag("fate-core-official","shapes");
-                    if (ev.target.closest('div').id == "fco-changeShape") button.append(shapeButtons);
+                    if (ev.target.closest('div').id == "fco-changeShape") button.insertAdjacentHTML("afterbegin", shapeButtons);
                     let shape = undefined;
                     if (shapes) shape = shapes[ev.target.closest('div').id.split("_")[2]];
                     if (shape) await token.actor.changeShape(shape.name, token);

@@ -2846,7 +2846,7 @@ function checkFormula(formula){
 After the element. Only valid if the element is in the DOM tree and has a parent element.
 */
 
-Hooks.on("renderChatMessage", (message, html, data) => {
+Hooks.on("renderChatMessageHTML", (message, html, data) => {
     if (message.rolls.length < 1) return;
     if (!message.isContentVisible) return;
     let scene = game.scenes.viewed;
@@ -2865,18 +2865,19 @@ Hooks.on("renderChatMessage", (message, html, data) => {
     if (!(r.formula.startsWith("4df") || r.formula.startsWith("4dF") || checkFormula (dice_formula?.toLowerCase()))) return
 
     let index = rolls?.indexOf(roll);
-    const rollTotal = html.find('h4[class = "dice-total"]');
+    const rollTotal = html.querySelector('.dice-total');
     let ladder = new fcoConstants().getFateLadder();
     let adjective = ladder[message.rolls[0].total];
-    if (adjective) rollTotal.append(`<span> (${adjective})</span>`);
+    if (adjective) rollTotal.insertAdjacentHTML("beforeend",`<span> (${adjective})</span>`);
 
     if (!message.flavor.startsWith("<h1>Reroll") && (message.speaker.actor == game?.user?.character?.id || game.user.isGM)){
         let gmText = "";
         if (game.user.isGM) gmText = game.i18n.localize('fate-core-official.gmHoldShiftToSelectAspects');
         // Add roll buttons here
 
-        const targetElement = html.find('span[class="flavor-text"]');
-        targetElement.after(`
+        const targetElement = html.querySelector('.flavor-text');
+        if (targetElement){
+            targetElement.insertAdjacentHTML("beforeend",` 
                 <div>
                     <table style="background:transparent; width:100%; border:none">
                         <tr>
@@ -2903,10 +2904,13 @@ Hooks.on("renderChatMessage", (message, html, data) => {
                     </table>
                 </div>
             `);
-            const el = html.find("button[name='fco_chat_roll_button");
-            el.on("click", async event => {
+            const el = html.querySelector("button[name='fco_chat_roll_button']");
+
+            // This is how we add a click handler to an HTMLElement rather than a JQuery element.
+            el.onclick = async (event) => {
                 await FateUtilities._fu_roll_button(event, html);
-            }) 
+            }
+        }
     }
 });
 

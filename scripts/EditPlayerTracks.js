@@ -551,10 +551,10 @@ class EditPlayerTracks extends FormApplication {
         track.notes = "";
 
         //If this box is an aspect when marked, it needs an aspect.name data field.
-        if (track.aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked"
+        if (track.aspect == game.i18n.localize("fate-core-official.DefinedWhenMarked")
             || track.aspect == "Defined when marked"
             || track.aspect == "when_marked"
-        )) {
+        ) {
             track.aspect = {};
             track.aspect.name = "";
             track.aspect.when_marked = true;

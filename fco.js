@@ -544,11 +544,11 @@ Hooks.on('getSceneControlButtons', controls => {
 // I will need to replace html.find with html.querySelector
 // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
 Hooks.on("renderUserConfig", (user, html, data) => {
-    html = $(html);
-    let actors = html.find("li");
+    let actors = html.querySelectorAll("option");
     for (let actor of actors){
-        let id = actor.getAttribute("data-actor-id");
-        if (game.actors.get(id).type == "Thing"){
+        console.log(actor);
+        let id = actor.value;
+        if (game.actors.get(id)?.type == "Thing"){
             actor.remove();
         }
     }
@@ -590,8 +590,8 @@ Hooks.once('init', async function () {
           ]
       }
 
-    const includeRgx = new RegExp("/systems/fate-core-official/");
-    CONFIG.compatibility.includePatterns.push(includeRgx);
+    //const includeRgx = new RegExp("/systems/fate-core-official/");
+    //CONFIG.compatibility.includePatterns.push(includeRgx);
 
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
