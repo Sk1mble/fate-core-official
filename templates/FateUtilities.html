@@ -1,4 +1,4 @@
-<form id="FateUtilities" style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour) height:100%; padding-left:5px; padding-right:10p    x" onsubmit="event.preventDefault();">
+<form id="FateUtilities" style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour) height:100%; padding-left:5px; padding-right:10px" onsubmit="event.preventDefault();">
 <div style="height:100%; display:flex; flex-direction:column"> <!--Container div for absolutely everything-->
     <div> <!-- Container div for the Nav bar-->
         <nav class="navigation foo">
@@ -580,7 +580,7 @@
 
                     <!-----------------------BEGIN game information tab-->
                     <div name="game_info" id="game_info" class="tab game_info" data-tab="game_info" style="padding:10px">
-                            <div id="game_info_tab" style="color:var(--fco-sheet-text-colour); overflow-y:auto; max-height:calc({{height}}px - 150px);">
+                            <div id="game_info_tab" style="color:var(--fco-sheet-text-colour); overflow-y:auto; max-height:calc({{height}}px - 100px);">
                                 <h2 style="vertical-align:top">{{localize 'fate-core-official.DateAndTimeNotes'}}</h2>
                                 <div id="game_date_time_rich" class="long_text_rich" style="color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); padding-left:5px; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; max-height:3em; overflow-y:auto">{{{this.rich_game_time}}}</div>
                                 <div id="game_date_time" class="long_text" style="padding-left:5px; display:none; min-height:1.5em; background-color:white; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; max-height:3em; overflow-y:auto">{{{this.game_time}}}</div>
@@ -589,15 +589,15 @@
                                 
                                 {{#if GM}}<button type="button" id="add_game_aspect" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:auto; font-size:{{fontSize}}pt">{{localize 'fate-core-official.AddNewAspect'}}</button>{{/if}}
 
-                                <div style="max-height:{{gameAspectsHeight}}px; overflow-y:auto">
+                                <div style="min-height:150px; max-height:{{gameAspectsHeight}}px; overflow-y:auto">
                                     {{#each game_aspects}}
                                     <div style="padding-top: 10px; font-family:var(--fco-font-family); font-size:{{../fontSize}}pt; display: flex; flex-direction: row; align-items:center">
                                         <button type="button" name="FUexpandGameAspect" style="color:var(--fco-sheet-text-colour); vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button>
                                         <span style="width:100%; padding-left:10px; vertical-align:middle">
-                                                <input name="game_aspect" class="fu_aspect_box" type="text" value="{{this.name}}" id="{{@key}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; vertical-align:middle;"></input>
+                                                <input name="game_aspect" class="fu_aspect_box" type="text" value="{{this.name}}" id="{{@key}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; vertical-align:middle;"></input>
                                         </span>
                                         <span style="padding-left:10px; vertical-align:middle">
-                                            <input type="number" name="game_a_free_i" id="{{@key}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid" value="{{this.free_invokes}}"></input>
+                                            <input type="number" name="game_a_free_i" id="{{@key}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid" value="{{this.free_invokes}}"></input>
                                         </span>
                                         {{#if ../GM}}
                                             <span style="padding-left:5px; vertical-align:middle"><button type="button" name="del_game_aspect" id="delete_ga_{{this.name}}" title="{{localize 'fate-core-official.DeleteAspect'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); vertical-align:middle; width:30px; height:30px" i icon class="fas fa-trash"></button></span>
@@ -612,11 +612,13 @@
                                     {{/each}}
                                 </div>
                                 <!--Game notes-->
+                                <div id="fu_game_notes_container" style = "min-height:5em">
                                 <h2 style="vertical-align:top">{{localize 'fate-core-official.GameNotes'}}</h1>
                                     <div>
                                         <div id="game_notes_rich" class="long_text_rich" style="min-height:1.5em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.rich_game_notes}}}</div>
                                         <div id="game_notes" class="long_text" style="display:none; min-height:1.5em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
                                     </div>
+                                </div>    
                             </div><!--End of game info tab container pane-->
                     </div><!--End game information tab-->
              </section>

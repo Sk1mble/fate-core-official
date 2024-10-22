@@ -546,7 +546,6 @@ Hooks.on('getSceneControlButtons', controls => {
 Hooks.on("renderUserConfig", (user, html, data) => {
     let actors = html.querySelectorAll("option");
     for (let actor of actors){
-        console.log(actor);
         let id = actor.value;
         if (game.actors.get(id)?.type == "Thing"){
             actor.remove();

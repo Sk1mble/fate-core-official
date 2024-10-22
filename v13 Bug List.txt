@@ -1,0 +1,1 @@
+Right clicking isn't working to remove a character from a conflict. How come?

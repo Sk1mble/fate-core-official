@@ -1550,9 +1550,9 @@ class FateUtilities extends Application{
         <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-modifier")}</td><td><input style="background-color:white" type="number" id="fco-gmadhr-modifier"></input></td></tr>
         <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-description")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-flavour"></input></td></tr>
         </tr></table>`;
-        let width = 400;
-        let height = 230;
-        if (showFormulae) height = 270;
+        let width = 500;
+        let height = 300;
+        if (showFormulae) height = 330;
 
         new Dialog({
                     title: game.i18n.localize("fate-core-official.fu-adhoc-roll"),
@@ -2169,6 +2169,7 @@ class FateUtilities extends Application{
         let id = event.target.id.split("_")[0];
         let combatants = game.combat.combatants;
         let combatant = combatants.find(comb => comb.token.id == id);
+        combatant.delete();
     }
 
     async _endButton(event, html){
@@ -2419,13 +2420,12 @@ async getData(){
 
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
-
     data.fuNotesHeight = (this.position.height) - 350 - data.cdownheight - data.fuPaneHeight + modifier;
 
-    data.gameAspectsHeight = 180;
-    let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 45;
+    data.gameAspectsHeight = 230;
+    let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 55;
     if (gaModifier <0) gaModifier = 0;
-    data.gameNotesHeight = (this.position.height - 575) + gaModifier;
+    data.gameNotesHeight = (this.position.height - 625) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
     return data;
