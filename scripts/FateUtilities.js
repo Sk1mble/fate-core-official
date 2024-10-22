@@ -2169,6 +2169,7 @@ class FateUtilities extends Application{
         let id = event.target.id.split("_")[0];
         let combatants = game.combat.combatants;
         let combatant = combatants.find(comb => comb.token.id == id);
+        combatant.delete();
     }
 
     async _endButton(event, html){
