@@ -85,8 +85,8 @@ class FateCharacterImporter {
             rawAspects.forEach(rawAspect => {
                 let aspect = {};
                 aspect.name = rawAspect.name;
-                aspect.value = rawAspect.data.value;
-                aspect.description = rawAspect.data.description;
+                aspect.value = rawAspect.system.value;
+                aspect.description = rawAspect.system.description;
                 aspects[`${fcoConstants.tob64(aspect.name)}`] = aspect;
             })
             actorData.system.aspects = aspects;
@@ -97,8 +97,8 @@ class FateCharacterImporter {
             rawSkills.forEach(rawSkill => {
                 let skill = {};
                 skill.name = rawSkill.name;
-                skill.rank = rawSkill.data.rank;
-                skill.description = rawSkill.data.description;
+                skill.rank = rawSkill.system.rank;
+                skill.description = rawSkill.system.description;
                 skills[`${fcoConstants.tob64(skill.name)}`] = skill;
             })
             actorData.system.skills = skills;
@@ -109,7 +109,7 @@ class FateCharacterImporter {
             rawStunts.forEach(rawStunt => {
                 let stunt = {};
                 stunt.name = rawStunt.name;
-                stunt.description = rawStunt.data.description;
+                stunt.description = rawStunt.system.description;
                 stunt.refresh_cost = 0;
                 stunts[`${fcoConstants.tob64(stunt.name)}`] = stunt;
             })
@@ -123,7 +123,7 @@ class FateCharacterImporter {
                 let track = {};
                 track.name = rawTrack.name;
                 track.category = "Combat";
-                track.description = rawTrack.data.description;
+                track.description = rawTrack.system.description;
                 track.unique = true;
                 track.enabled = true;
                 track.universal = true;
@@ -136,19 +136,19 @@ class FateCharacterImporter {
                 
                 if (rawTrack.type == "stress") track.aspect = "No";
                 if (rawTrack.type == "consequence") {
-                    track.aspect = {name:rawTrack.data.value, when_marked:true, as_name:false};
-                    track.harm_can_absorb = rawTrack.data.icon;
+                    track.aspect = {name:rawTrack.system.value, when_marked:true, as_name:false};
+                    track.harm_can_absorb = rawTrack.system.icon;
                     track.label="none";
                 }
 
-                if (rawTrack.data.labelType == 0){
+                if (rawTrack.system.labelType == 0){
                     track.label="escalating";
                 }
-                if (rawTrack.data.labelType == 1){
+                if (rawTrack.system.labelType == 1){
                     track.label="1";
                 }
-                if (rawTrack.data.labelType == 2){
-                    track.label=rawTrack.data.customLabel.split(" ")[0];
+                if (rawTrack.system.labelType == 2){
+                    track.label=rawTrack.system.customLabel.split(" ")[0];
                 }
 
                 //Need to get the values from atomatiion here, if any, to ensure the number of stress boxes is correct.
@@ -184,7 +184,7 @@ class FateCharacterImporter {
                         
                         if (skillReferenceSettings?.conjunction == 0){
                             //enable if one of conditions met OR
-                            if (actorData.system.skills[skill].rank >= condition){
+                            if (actorData.system.skills[skill]?.rank >= condition){
                                 linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
                                 linked_skills.push(linked_skill);
                                 track.enabled = true;
@@ -202,7 +202,7 @@ class FateCharacterImporter {
                             }
                         }
 
-                        if (actorData.system.skills[skill].rank >= condition){
+                        if (actorData.system.skills[skill]?.rank >= condition){
                             if (reference.type == 0){
                                 // Enables
                                 linked_skill = {linked_skill:skill, rank:condition, boxes:0, enables:true}
@@ -211,7 +211,7 @@ class FateCharacterImporter {
                             }
                         }
                         
-                        if (actorData.system.skills[skill].rank >= condition){
+                        if (actorData.system.skills[skill]?.rank >= condition){
                             if (reference.type == 1) {
                                 //Modifies boxes
                                 track.enabled = true;
@@ -226,13 +226,13 @@ class FateCharacterImporter {
 
                 let boxValues = 0;
                 if (rawTrack.type == "stress"){
-                    track.boxes = rawTrack.data.size+boxModifier;
-                    boxValues = rawTrack.data.value;
+                    track.boxes = rawTrack.system.size+boxModifier;
+                    boxValues = rawTrack.system.value;
                 }
 
                 if (rawTrack.type == "consequence"){
-                    track.boxes = rawTrack.data.boxAmount+boxModifier;
-                    boxValues = rawTrack.data.boxValues;
+                    track.boxes = rawTrack.system.boxAmount+boxModifier;
+                    boxValues = rawTrack.system.boxValues;
                 }
                 track.box_values = [];
                 for (let i = 1; i <= track.boxes; i++){
@@ -250,7 +250,7 @@ class FateCharacterImporter {
                         name:rawExtra.name,
                         type:"Extra",
                         system:{
-                            description:{value:rawExtra.data.description},
+                            description:{value:rawExtra.system.description},
                             refresh:0,
                             countSkills:false,
                             active:true
