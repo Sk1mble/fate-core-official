@@ -139,13 +139,7 @@ export class ExtraSheet extends ItemSheet {
                     let origin = event.target.getAttribute("data-mfactorid");
                     let dragged_name = event.target.getAttribute("data-mfname");
 
-                    let shift_down = false; 
-                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                        shift_down = game.system["fco-shifted"];    
-                    } else {
-                        shift_down = keyboard.isDown("Shift");
-                    }
-
+                    let shift_down = game.system["fco-shifted"];  
                     let dragged;
                     if (type == "skill") dragged = fcoConstants.gbn(this.document.system.skills, dragged_name);
                     if (type == "stunt") dragged = fcoConstants.gbn(this.document.system.stunts, dragged_name);
@@ -499,7 +493,6 @@ export class ExtraSheet extends ItemSheet {
         }
     }
     
-
     async _onSkillsButton(event, html) {
         //Launch the EditPlayerSkills FormApplication.
         let editor = new EditPlayerSkills(this.object); //Passing the actor works SOO much easier.
@@ -524,9 +517,9 @@ export class ExtraSheet extends ItemSheet {
 
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
-        let db = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
-        db[fcoConstants.tob64(name)]=fcoConstants.gbn(this.object.system.stunts, name);
-        await game.settings.set("fate-core-official","stunts",db);
+        let stunt = foundry.utils.duplicate(fcoConstants.gbn(this.object.system.stunts, name));
+        let key = fcoConstants.tob64(stunt.name);
+        await fcoConstants.wd().update({"system.stunts":{[`${key}`]:stunt}});
         ui.notifications.info(`${game.i18n.localize("fate-core-official.Added")} ${name} ${game.i18n.localize("fate-core-official.ToTheStuntDatabase")}`);
     }
 

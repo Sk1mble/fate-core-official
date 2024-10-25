@@ -497,11 +497,7 @@ class FateUtilities extends Application{
         });
 
         select.on("click", event => {
-            if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                this.shift = game.system["fco-shifted"]
-            } else {
-                if (event.shiftKey) {this.shift = true}
-            }
+            this.shift = game.system["fco-shifted"];
         })
         select.on("change", event => this._selectRoll (event, html));
 
@@ -872,12 +868,7 @@ class FateUtilities extends Application{
                 }
             }
             let user = null;
-            if (foundry.utils.isNewerVersion(game.version,"12.316")){
-                user = {name:message.author.name, _id:message.author._id};
-            } else {
-                user = {name:message.user.name, _id:message.user._id};
-            }
-            
+            user = {name:message.author.name, _id:message.author._id};
             roll = {
                 "message_id":message_id,
                 "speaker":speaker,
@@ -1040,13 +1031,8 @@ class FateUtilities extends Application{
             if (!asa) asa = {};
             let all_sit_aspects = foundry.utils.duplicate(asa);
 
-            let shift_down = false; 
-            if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                shift_down = game.system["fco-shifted"];    
-            } else {
-                shift_down = keyboard.isDown("Shift");
-            }
-            
+            let shift_down = game.system["fco-shifted"];    
+
             let gp = await gmfp(roll);
             let boosts = gp?.actor?.system?.details?.fatePoints?.boosts > 0 ? gp?.actor?.system?.details?.fatePoints?.boosts : 0;
 
@@ -1065,9 +1051,9 @@ class FateUtilities extends Application{
                     aspect.options = options;
                 }
 
-                if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                    game.system["fco-shifted"] = false;
-                }
+                
+                game.system["fco-shifted"] = false;
+                
                 
                 let content =`<br/><div>`
                 for (let aspect of sit_aspects){
@@ -1193,12 +1179,7 @@ class FateUtilities extends Application{
 
             let invokedAspect = undefined;
 
-            let shift_down = false; 
-            if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                shift_down = game.system["fco-shifted"];    
-            } else {
-                shift_down = keyboard.isDown("Shift");
-            }
+            let shift_down = game.system["fco-shifted"];    
 
             let invokedAspects = false;
 
@@ -1207,9 +1188,7 @@ class FateUtilities extends Application{
 
             if (shift_down && game.user.isGM && ((Object.keys(asa).length > 0 && asa.filter(as => as.free_invokes > 0).length > 0) || boosts > 0)){
                 let options = ""
-                if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                    game.system["fco-shifted"] = false;
-                }
+                game.system["fco-shifted"] = false;
                 let sit_aspects = foundry.utils.duplicate(game.scenes.viewed?.getFlag("fate-core-official", "situation_aspects")).filter(as => as.free_invokes > 0);
                 for (let aspect of sit_aspects){
                     options +=`<option value="${aspect.name}">${aspect.name}</option>`
@@ -1365,13 +1344,7 @@ class FateUtilities extends Application{
             // If the user is a GM, and the actor doesn't have a player owner, and isn't assigned to this GM, use GM fate points
             if (!actor.hasPlayerOwner && user?.character?.id != actor.id) returnValue = true; 
 
-            let shift_down = false; 
-            if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                shift_down = game.system["fco-shifted"];    
-            } else {
-                shift_down = keyboard.isDown("Shift");
-            }
-
+            let shift_down = game.system["fco-shifted"];    
             if (shift_down) returnValue = true;
 
             return ({gmp:returnValue, actor:actor});
@@ -1754,13 +1727,8 @@ class FateUtilities extends Application{
                 }
                 let height = size * 2;
                 let width = (text.length * size / 1.5);
-
-                let rec;
-                if (foundry.utils.isNewerVersion(game.version, "10")){
-                    rec = foundry.data.ShapeData.TYPES.RECTANGLE;
-                } else {
-                    rec = CONST.DRAWING_TYPES.RECTANGLE;
-                }
+                let rec = foundry.data.ShapeData.TYPES.RECTANGLE;;
+                
                 await DrawingDocument.create({
                     type: rec,
                     author: game.user.id,
@@ -1891,12 +1859,7 @@ class FateUtilities extends Application{
                 if (!actor.isToken){  
                     updates.push({"_id":actor.id, "system.tracks":tracks});
                 } else {
-                    if (foundry.utils.isNewerVersion(game.version, "11.293")){
-                        tokenUpdates.push({"_id":tokens[i].id, "delta.system.tracks":tracks});
-                    }
-                    else {
-                        tokenUpdates.push({"_id":tokens[i].id, "actorData.system.tracks":tracks});
-                    }
+                    tokenUpdates.push({"_id":tokens[i].id, "delta.system.tracks":tracks});
                 }    
             }
         } 
@@ -2037,12 +2000,7 @@ class FateUtilities extends Application{
         let vis = countdown.visible;
         // Valid values are visible, hidden, show_boxes
 
-        let shift_down = false; 
-        if (foundry.utils.isNewerVersion(game.version, "9.230")){
-            shift_down = game.system["fco-shifted"];    
-        } else {
-            shift_down = keyboard.isDown("Shift");
-        }
+        let shift_down = game.system["fco-shifted"];    
 
         if (shift_down){
             if (vis == "hidden") countdown.visible = "visible";
@@ -2223,7 +2181,7 @@ async getData(){
     }
     
     const data = {};
-    if (game.combat==null || tracker_disabled || (game?.combat?.scene == null && !foundry.utils.isNewerVersion(game.version, "9.230"))){
+    if (game.combat==null || tracker_disabled){
         data.conflict = false;
     } else {
         data.conflict = true;
@@ -2956,12 +2914,7 @@ Hooks.on('createChatMessage', async (message) => {
                     diceResult.push(d[i].roll)
                 }
             }
-            let user = null;
-            if (foundry.utils.isNewerVersion(game.version,"12.316")){
-                user = {name:message.author.name, _id:message.author._id};
-            } else {
-                user = {name:message.user.name, _id:message.user._id};
-            }
+            let user = {name:message.author.name, _id:message.author._id};
             let rolls = game?.scenes?.viewed?.getFlag("fate-core-official","rolls");
             if (rolls == undefined){
                 rolls = [];

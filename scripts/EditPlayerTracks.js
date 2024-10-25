@@ -45,13 +45,7 @@ class EditPlayerTracks extends FormApplication {
         if (this.object.isToken){
             if (this.object.token.id == id){
                 let check = false;
-                if (foundry.utils.isNewerVersion(game.version, "11.293")){
-                    if (data.delta.system != undefined && data.delta.system.tracks != undefined) check = true;
-                }
-                else {
-                    if (data.actorData.system != undefined && data.actorData.system.tracks != undefined) check = true;
-                }
-
+                if (data.delta.system != undefined && data.delta.system.tracks != undefined) check = true;
                 if (check)
                     this.tracks_by_category=undefined;                   
                     if (!this.renderPending) {

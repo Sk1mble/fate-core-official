@@ -279,12 +279,7 @@ class EditAspect extends FormApplication{
         aspect_desc.on ('blur', async event => {
             if (!window.getSelection().toString()){
                 
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                }
+                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            ;
                 $('#edit_aspect_description').css('display', 'none');
                 $('#edit_aspect_description_rich')[0].innerHTML = desc;    
                 $('#edit_aspect_description_rich').css('display', 'block');

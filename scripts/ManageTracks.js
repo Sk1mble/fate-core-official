@@ -82,12 +82,7 @@ class EditEntityTrack extends FormApplication {
         
         $('#edit_entity_track_when_recovers').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                }
+                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 $('#edit_entity_track_when_recovers').css('display', 'none');
                 $('#edit_entity_track_when_recovers_rich')[0].innerHTML = desc;    
@@ -116,12 +111,7 @@ class EditEntityTrack extends FormApplication {
         
         $('#edit_entity_track_when_marked').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                }
+                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                 $('#edit_entity_track_when_marked').css('display', 'none');
                 $('#edit_entity_track_when_marked_rich')[0].innerHTML = desc;    
                 $('#edit_entity_track_when_marked_rich').css('display', 'block');
@@ -148,12 +138,7 @@ class EditEntityTrack extends FormApplication {
         
         $('#edit_entity_track_description').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                }
+                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                 $('#edit_entity_track_description').css('display', 'none');
                 $('#edit_entity_track_description_rich')[0].innerHTML = desc;    
                 $('#edit_entity_track_description_rich').css('display', 'block');

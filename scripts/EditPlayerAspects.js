@@ -81,13 +81,7 @@ class EditPlayerAspects extends FormApplication{
     
             $(`#${id}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
-                    let desc; 
-                    if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
-                    } else {
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}));
-                    }
-
+                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                     $(`#${id}`).css('display', 'none');
                     $(`#${id}_rich`)[0].innerHTML = desc;    
                     $(`#${id}_rich`).css('display', 'block');
@@ -109,13 +103,7 @@ class EditPlayerAspects extends FormApplication{
     
             $(`#${id2}`).on('blur', async event => {
                 if (!window.getSelection().toString()){
-                    let desc;
-                    if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))
-                    } else {
-                        desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))
-                    }
-                    
+                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true})); 
                     $(`#${id2}`).css('display', 'none');
                     $(`#${id2}_rich`)[0].innerHTML = desc;    
                     $(`#${id2}_rich`).css('display', 'block');

@@ -1,5 +1,10 @@
 class fcoConstants { 
 
+    // Convenience method to get the world data item
+    static wd(){
+        return fromUuidSync (game.settings.get("fate-core-official","wid"));
+    }
+
     getFateLadder(){
         return  {
                     "10":"",
@@ -365,7 +370,7 @@ class fcoConstants {
     static exportSettings (){
         //This function returns a text string in JSON notation containing all of the game's settings for backup or import into another world.
         let output = {};
-        output.stunts = game.settings.get("fate-core-official","stunts");
+        output.stunts = fcoConstants.wd().system.stunts;
         output.skills = game.settings.get("fate-core-official","skills");
         output.skillTotal = game.settings.get("fate-core-official", "skillTotal");
         output.tracks = game.settings.get("fate-core-official","tracks");
@@ -382,9 +387,6 @@ class fcoConstants {
         output.limited_sheet_template = game.settings.get("fate-core-official", "limited_sheet_template")
         output.playerThings = game.settings.get("fate-core-official", "PlayerThings")
         output.DeleteOnTransfer = game.settings.get("fate-core-official", "DeleteOnTransfer")
-        if (!foundry.utils.isNewerVersion(game.version, "12.316")){
-            output.drawingsOnTop = game.settings.get("fate-core-official", "drawingsOnTop")
-        }
         output.fuFontSize = game.settings.get("fate-core-official", "fuFontSize")
         output.aspectWidth = game.settings.get("fate-core-official", "aspectwidth")
         output.fuAspectLabelSize = game.settings.get("fate-core-official", "fuAspectLabelSize")
@@ -439,7 +441,7 @@ class fcoConstants {
         if (input.constructor === String) input = await JSON.parse(input);
         //This function parses a text string in JSON notation containing all of the game's settings and writes those settings to System.settings.
          
-        let current_stunts = game.settings.get("fate-core-official","stunts");
+        let current_stunts = fcoConstants.wd().system.stunts;
         let stunts = input?.stunts;
 
         let current_defaults = game.settings.get("fate-core-official", "defaults");
@@ -455,13 +457,13 @@ class fcoConstants {
                 });
                 if ( confirm ) {
                     let final_stunts = foundry.utils.mergeObject(current_stunts, stunts);
-                    await game.settings.set("fate-core-official","stunts", final_stunts);
+                    await fcoConstants.wd().update({"system.stunts":final_stunts});
                 } else {
-                    await game.settings.set("fate-core-official","stunts", stunts);
+                    await fcoConstants.wd().update({"system.stunts":stunts});
                 }
             }   
         } else {
-            await game.settings.set("fate-core-official","stunts", stunts);
+            await fcoConstants.wd().update({"system.stunts":stunts});
         }
 
         // Give option to merge character default frameworks, if there are stunts in the new settings AND stunts in the existing settings.
@@ -498,9 +500,6 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "limited_sheet_template", input?.limited_sheet_template);
         await game.settings.set("fate-core-official", "PlayerThings", input.PlayerThings)
         await game.settings.set("fate-core-official", "DeleteOnTransfer", input.DeleteOnTransfer)
-        if (!foundry.utils.isNewerVersion(game.version, "12.316")){
-            await game.settings.set("fate-core-official", "drawingsOnTop", input.drawingsOnTop)
-        }
         await game.settings.set("fate-core-official", "fuFontSize", input.fuFontSize)
         await game.settings.set("fate-core-official", "aspectwidth", input.aspectWidth)
         await game.settings.set("fate-core-official", "fuAspectLabelSize", input.fuAspectLabelSize)
@@ -535,7 +534,7 @@ class fcoConstants {
     }
     
     static async ulStunts(stunts){
-        let db = await foundry.utils.duplicate(game.settings.get("fate-core-official", "stunts"))
+        let db = await foundry.utils.duplicate(fcoConstants.wd().system.stunts);
 
         // First check for duplicates and permission to overwrite
         for (let st in stunts){
@@ -547,9 +546,7 @@ class fcoConstants {
                 if (overwrite == "no") delete stunts[st];
             }
         }
-        // Now prepare the merge
-        let toSet = await foundry.utils.foundry.utils.mergeObject(db, stunts);
-        game.settings.set("fate-core-official", "stunts", toSet);
+        await fcoConstants.wd().update({"system.stunts":stunts});
     }
 
     static async exportFolderStructure(){
@@ -727,4 +724,4 @@ String.prototype.hashCode = function() {
       hash |= 0; // Convert to 32bit integer
     }
     return hash;
-  }
+}

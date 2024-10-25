@@ -473,12 +473,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc;
-                        if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            
-                        } else {
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))    
-                        }
+                        let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            ;
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
@@ -503,12 +498,7 @@ export class fcoCharacter extends ActorSheet {
                 
                 $(`#${id}`).on('blur', async event => {
                     if (!window.getSelection().toString()){
-                        let desc;
-                        if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))
-                        } else {
-                            desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, entities:true, async:true}))
-                        }
+                        let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            ;
                         $(`#${id}`).css('display', 'none');
                         $(`#${id}_rich`)[0].innerHTML = desc;    
                         $(`#${id}_rich`).css('display', 'block');
@@ -659,12 +649,7 @@ export class fcoCharacter extends ActorSheet {
                     let origin = event.target.getAttribute("data-mfactorid");
                     let dragged_name = event.target.getAttribute("data-mfname");
                     
-                    let shift_down = false; 
-                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                        shift_down = game.system["fco-shifted"];    
-                    } else {
-                        shift_down = keyboard.isDown("Shift");
-                    }
+                    let shift_down = game.system["fco-shifted"];    
 
                     let dragged;
                     if (type == "skill") dragged = fcoConstants.gbn(this.actor.system.skills, dragged_name);
@@ -1098,15 +1083,13 @@ export class fcoCharacter extends ActorSheet {
         this.render(false);
     }
 
+
     async _db_add_click(event, html){
         let name = event.target.id.split("_")[0];
-        let db = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
         let key = fcoConstants.gkfn(this.object.system.stunts, name);
         let stunt = this.object.system.stunts[key];
-        
         if (stunt) {
-            db[key]=stunt;
-            await game.settings.set("fate-core-official","stunts",db);
+            await fcoConstants.wd().update({"system.stunts":{[`${key}`]:stunt}});
             ui.notifications.info(game.i18n.localize("fate-core-official.Added")+" "+name+" "+game.i18n.localize("fate-core-official.ToTheStuntDatabase"));
         }
     }
@@ -1365,14 +1348,8 @@ export class fcoCharacter extends ActorSheet {
                     return;
                 } else {
                     let umr = false;
-
-                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                        if (game.system["fco-shifted"] && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;              
-                        if (!game.system["fco-shifted"] && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;              
-                    } else {
-                        if (event.shiftKey && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
-                        if (!event.shiftKey && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;
-                    }
+                    if (game.system["fco-shifted"] && !game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;              
+                    if (!game.system["fco-shifted"] && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;        
                 
                     if (umr){
                         await target.rollModifiedSkill(event.target.id);

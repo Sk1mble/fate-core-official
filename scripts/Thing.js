@@ -494,12 +494,7 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
         let actor = item?.actor?.uuid;
 
         if (game.user.isGM){
-            let shift_down = false; 
-            if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                shift_down = game.system["fco-shifted"];    
-            } else {
-                shift_down = keyboard.isDown("Shift");
-            }
+            let shift_down = game.system["fco-shifted"];    
             createThing (canvas.scene, itemd, game.user.id, shift_down, data.x, data.y, actor);
         } else {
             if (game.settings.get("fate-core-official","PlayerThings")){
@@ -507,12 +502,7 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
                 if (GMs.length == 0) {
                     ui.notifications.error("A GM has to be logged in for you to create item tokens.")
                 } else {
-                    let shift_down = false; 
-                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                        shift_down = game.system["fco-shifted"];    
-                    } else {
-                        shift_down = keyboard.isDown("Shift");
-                    }
+                    let shift_down = game.system["fco-shifted"];    
                     game.socket.emit("system.fate-core-official", {"action":"create_thing", "scene":canvas.scene, "data":itemd, "id":game.user.id, "shiftDown":shift_down, "x":data.x, "y":data.y, "actor":actor})
                 }
             }

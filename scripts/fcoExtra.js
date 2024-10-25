@@ -1,4 +1,15 @@
 export class fcoExtra extends Item {
+    
+    // Hide the object that has been set to store the settings for this World so it can't be accidentally tampered with.
+    /*
+    get visible(){
+        if (this.type === "Extra" && fromUuidSync(game.settings.get("fate-core-official","wid")).id == this.id){
+            return false;
+        } 
+        else {
+            return super.visible;
+        }
+    }*/
 
     async _preCreate(...args){
         await super._preCreate(...args);

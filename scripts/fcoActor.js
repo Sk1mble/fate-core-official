@@ -158,7 +158,7 @@ export class fcoActor extends Actor {
                 shape.tokenData.y = token.document.y;
                 shape.tokenData.elevation = token.document.elevation;
                 shape.tokenData.flags = token.document.flags;
-            if (foundry.utils.isNewerVersion(game.version,"12.317") && shape.transition){
+            if (shape.transition){
                 await token.document.update(shape.tokenData, {animation: {transition: foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
             }   else {
                 await token.document.update(shape.tokenData);

@@ -52,27 +52,6 @@ Hooks.on("preUpdateAdventure", (adventure, changes, options, userId) =>{
     changes.flags = flags;
 })
 
-// We can mess around with the data in the preImportAdventure hook to do what we need to it, if it's not quite in the right condition.
-// This next piece of code is unnecessary if the user is running Foundry 10.286 or higher. In previous versions of Foundry, this was needed
-// to change the order of import from scenes then journals to journals then scenes, required to prevent bookmarks on the canvas from being 'unknown'.
-
-if (!foundry.utils.isNewerVersion(game.version, "10.285")){
-    Hooks.on("preImportAdventure", (adventure, formData, toCreate, toUpdate) => {
-        // const allowed = Hooks.call("preImportAdventure", this.adventure, formData, toCreate, toUpdate);
-        let cScene = toCreate?.Scene;
-        let uScene = toUpdate?.Scene;
-        if (uScene){
-            delete toUpdate.Scene;
-            toUpdate.Scene = uScene;
-        }
-        if (cScene){ 
-            delete toCreate.Scene;
-            toCreate.Scene = cScene;
-        }
-        adventure.updateSource({toCreate:toCreate, toUpdate:toUpdate});
-    })
-}
-
 Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let replace = false;
     let flags = foundry.utils.duplicate(adventure.flags);
@@ -97,6 +76,14 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
             ui.notifications.error(game.i18n.localize("fate-core-official.CantCreateThing"));
             return false
         }
+    }
+});
+
+Hooks.on("preDeleteItem", (item, data, options, userId) => {
+    // Prevent deletion of the world data item.
+    if (item.uuid == game.settings.get("fate-core-official", "wid")){
+        ui.notifications.error(game.i18n.localize("fate-core-official.CantDeleteWorldDataObject"));
+        return false;
     }
 });
 
@@ -201,9 +188,35 @@ function rationaliseKeys(){
         }
     }
 }
+
+async function prepareWorldItem(){
+    let wid = game.settings.get("fate-core-official","wid");
+    if (!wid){
+        // Create the world data extra
+        let name = `${game.world.name}_worldData_extra`;
+        let tracks = game.settings.get("fate-core-official","tracks");
+        let aspects = game.settings.get("fate-core-official","aspects");
+        let stunts = game.settings.get("fate-core-official","stunts");
+        let skills = game.settings.get("fate-core-official","skills");
+        let widItem = await Item.create({"name":name, "type":"Extra", "system.tracks":tracks, "system.stunts":stunts, "system.skills":skills, "system.aspects":aspects});
+        
+        // Set the world setting to have the correct uuid
+        game.settings.set("fate-core-official","wid",widItem.uuid);
+
+        /* Don't touch this until refactor to use settings object completed.
+            // When we're done, we need to reset the versions of the data in the settings
+            // We can't do that until we have finished the refactor.
+            game.settings.set("fate-core-official","tracks",{});
+            game.settings.set("fate-core-official","stunts",{});
+            game.settings.set("fate-core-official","aspects",{});
+            game.settings.set("fate-core-official","skills",{});
+        */
+    }
+}
     
-Hooks.once('ready', () => {
+Hooks.once('ready', async () => {
     game.system["fco-shifted"]=false;
+    prepareWorldItem();
     // Set up a reference to the Fate Core Official translations file or fallback file.
     if (game.i18n?.translations["fate-core-official"]) {
         game.system["lang"] = game.i18n.translations["fate-core-official"];
@@ -218,37 +231,6 @@ Hooks.once('ready', () => {
         game.items.contents.forEach(async extra => await extra.rationaliseKeys());
     } 
 });
-
-if (!foundry.utils.isNewerVersion(game.version, "12.316")){
-    Hooks.on('createDrawing', (drawing) => {
-        if (game.settings.get("fate-core-official","drawingsOnTop")){  
-            if (drawing.isOwner){
-                if (foundry.utils.isNewerVersion(game.version, 12)){
-                } else {
-                    const siblings = canvas.drawings.placeables;
-                    // Determine target sort index
-                    let z = 0;
-                    let up = true;
-                    let controlled = [drawing];
-                    if ( up ) {
-                        controlled.sort((a, b) => a.document.z - b.document.z);
-                        z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
-                    } else {
-                        controlled.sort((a, b) => b.document.z - a.document.z);
-                        z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
-                    }
-                    // Update all controlled objects
-                    const updates = controlled.map((o, i) => {
-                    let d = up ? i : i * -1;
-                        return {_id: o.id, z: z + d};
-                    });
-                        return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
-                }
-            }   
-        }
-    })
-}
-
 
 Hooks.on('diceSoNiceReady', function() {
     game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);
@@ -443,12 +425,7 @@ Hooks.once('ready', async function () {
 // Needed to update with token name changes in FU.
 Hooks.on('updateToken', (token, data, userId) => {
     let check = false;
-    if (foundry.utils.isNewerVersion(game.version, "11.293")){
-        if (data.hidden != undefined || data.delta != undefined || data.flags != undefined || data.name!=undefined) check = true;
-    }
-    else {
-        if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined) check = true;
-    }
+    if (data.hidden != undefined || data.delta != undefined || data.flags != undefined || data.name!=undefined) check = true;
     if (check){
         game.system.apps["actor"].forEach(a=> {
             a.renderMe(token.id, data, token);
@@ -595,32 +572,30 @@ Hooks.once('init', async function () {
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
 
-    if (foundry.utils.isNewerVersion(game.version, "9.230")){
-        let bindings = [
-            {
-                key: "SHIFT"
-            }
-        ];
-
-        if (foundry.utils.isNewerVersion(game.version, "9.235")){
-            bindings = [
-                {
-                  key: "ShiftLeft"
-                },
-                {
-                  key: "ShiftRight"
-                }
-            ];
+    let bindings = [
+        {
+          key: "ShiftLeft"
+        },
+        {
+          key: "ShiftRight"
         }
-        
-        game.keybindings.register("fate-core-official", "fcoInteractionModifier", {
-            name: "Fate Core Official modifier key for dragging and clicking",
-            editable: bindings,
-            onDown: (...args) => { game.system["fco-shifted"] = true;},
-            onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
-          })
-    }
+    ];
     
+    game.keybindings.register("fate-core-official", "fcoInteractionModifier", {
+        name: "Fate Core Official modifier key for dragging and clicking",
+        editable: bindings,
+        onDown: (...args) => { game.system["fco-shifted"] = true;},
+        onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
+    })
+    
+    game.settings.register("fate-core-official","wid", {
+        name:"world data extra uuid",
+        scope:"world",
+        config:false,
+        type: String,
+        default: undefined
+    });
+
     game.settings.register("fate-core-official","tracks",{
         name:"tracks",
         hint:game.i18n.localize("fate-core-official.TrackManagerHint"),
@@ -1151,17 +1126,6 @@ game.settings.register("fate-core-official","freeStunts", {
         default:false
     });
 
-    if (!foundry.utils.isNewerVersion(game.version, "12.316")){
-        game.settings.register("fate-core-official","drawingsOnTop", {
-            name:game.i18n.localize("fate-core-official.DrawingsOnTop"),
-            hint:game.i18n.localize("fate-core-official.DrawingsOnTopHint"),
-            scope:"world",
-            config:"true",
-            type:Boolean,
-            default:false
-        })
-    }
-
     game.settings.register("fate-core-official","fco-aspects-pane-mheight", {
         name:game.i18n.localize("fate-core-official.fcoAspectPaneHeight"),
         hint:game.i18n.localize("fate-core-official.fcoAspectPaneHeightHint"),
@@ -1271,15 +1235,9 @@ game.settings.register("fate-core-official","freeStunts", {
         default:"none"
     })
 
-    if (foundry.utils.isNewerVersion(game.version, '9.220')){
-        game.system.documentTypes.Item = ["Extra"];
-        game.system.documentTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
-    } else {
-        game.system.entityTypes.Item = ["Extra"];
-        game.system.entityTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
-    }
+    game.system.documentTypes.Item = ["Extra"];
+    game.system.documentTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
     
-
     game.system.apps= {
         actor:[],
         combat:[],
