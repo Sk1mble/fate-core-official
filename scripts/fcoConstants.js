@@ -371,6 +371,7 @@ class fcoConstants {
         //This function returns a text string in JSON notation containing all of the game's settings for backup or import into another world.
         let output = {};
         output.stunts = fcoConstants.wd().system.stunts;
+        output.defaults = fcoConstants.wd().system.defaults;
         output.skills = game.settings.get("fate-core-official","skills");
         output.skillTotal = game.settings.get("fate-core-official", "skillTotal");
         output.tracks = game.settings.get("fate-core-official","tracks");
@@ -378,7 +379,6 @@ class fcoConstants {
         output.freeStunts = game.settings.get("fate-core-official","freeStunts");
         output.refreshTotal = game.settings.get("fate-core-official","refreshTotal");
         output.track_categories = game.settings.get("fate-core-official","track_categories");
-        output.defaults = game.settings.get("fate-core-official", "defaults");
         output.enforceSkillTotal = game.settings.get("fate-core-official", "enforceSkillTotal");
         output.enforceColumn = game.settings.get("fate-core-official", "enforceColumn");
         output.init_skill = game.settings.get("fate-core-official", "init_skill");
@@ -444,7 +444,7 @@ class fcoConstants {
         let current_stunts = fcoConstants.wd().system.stunts;
         let stunts = input?.stunts;
 
-        let current_defaults = game.settings.get("fate-core-official", "defaults");
+        let current_defaults = fcoConstants.wd().system.defaults;
         let defaults = input?.defaults;
 
         // Give option to merge stunts, if there are stunts in the new settings AND stunts in the existing settings.
@@ -476,13 +476,13 @@ class fcoConstants {
                 });
                 if ( confirm ) {
                     let final_defaults = foundry.utils.mergeObject(current_defaults, defaults);
-                    await game.settings.set("fate-core-official","defaults", final_defaults);
+                    await fcoConstants.wd().update({"system.defaults":final_defaults});
                 } else {
-                    await game.settings.set("fate-core-official","defaults", defaults);
+                    await fcoConstants.wd().update({"system.defaults":defaults});
                 }
             }   
         } else {
-            await game.settings.set("fate-core-official","defaults", defaults);
+            await fcoConstants.wd().update({"system.defaults":defaults});
         }
           
         await game.settings.set("fate-core-official","tracks",input?.tracks);

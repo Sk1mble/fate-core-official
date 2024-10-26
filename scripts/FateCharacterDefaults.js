@@ -7,7 +7,7 @@ class FateCharacterDefaults {
 
     async storeDefault (character_default){
         // Store a character default (usually derived from extractDefault) in the game's settings.
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         if (!character_default?.default_name){
             return;
         }
@@ -16,8 +16,11 @@ class FateCharacterDefaults {
         if (key){
             let response  = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.checkDefaultOverwritePrompt"),character_default.default_name + game.i18n.localize("fate-core-official.checkDefaultOverwriteContent"));
             if (response === "yes"){
-                defaults[key] = character_default;
-                await game.settings.set("fate-core-official", "defaults", defaults)
+                await fcoConstants.wd().update({
+                    "system.defaults":{
+                        [`${key}`]:character_default,
+                    }
+                });
             } else {
                 let count = 0;
                 for (let d in defaults){
@@ -25,14 +28,20 @@ class FateCharacterDefaults {
                 }
                 let newName = `${character_default.default_name} ${count + 1}`;
                 character_default.default_name = newName;
-                defaults[this.getSafeName(newName)] = character_default;
-                await game.settings.set("fate-core-official", "defaults", defaults)
+                await fcoConstants.wd().update({
+                    "system.defaults":{
+                        [`${fcoConstants.tob64("newName")}`]:character_default,
+                    }
+                });
                 ui.sidebar.render(false);
                 if (game.system.mdf) game.system.mdf.render(false);
             }
         } else {
-            defaults[this.getSafeName(character_default.default_name)] = character_default;
-            await game.settings.set("fate-core-official", "defaults", defaults)
+            await fcoConstants.wd().update({
+                "system.defaults":{
+                    [`${fcoConstants.tob64("character_default.default_name")}`]:character_default,
+                }
+            });
             ui.sidebar.render(false);
             if (game.system.mdf) game.system.mdf.render(false);
         }
@@ -40,7 +49,7 @@ class FateCharacterDefaults {
 
     get defaults(){
         // Return an array of strings of default_name values from defaults
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         let list = [];
         for (let d in defaults){
             list.push (defaults[d].default_name)
@@ -50,12 +59,15 @@ class FateCharacterDefaults {
 
     async removeDefault (name){
         // Remove a character default from the game's settings.
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         // Check to see if this default already exists, then delete it
         let key = fcoConstants.gkfn(defaults, name, "default_name")
         if (key){
-            delete defaults[key];
-            await game.settings.set("fate-core-official", "defaults", defaults);
+            await fcoConstants.wd().update({
+                "system.defaults":{
+                    [`-=${key}`]:null
+                }
+            });
             ui.sidebar.render(false);
             if (game.system.mdf) game.system.mdf.render(false);
         } 
@@ -113,7 +125,7 @@ class FateCharacterDefaults {
     }
 
     async renameDefault (old_name, new_name){
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         let de = foundry.utils.duplicate(fcoConstants.gbn(defaults, old_name, "default_name"));
         await this.removeDefault(old_name);
         de.default_name = new_name;
@@ -123,16 +135,20 @@ class FateCharacterDefaults {
     }
 
     async editDescription (name, new_desc){
-        let defaults = await foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         let de = fcoConstants.gbn(defaults, name, "default_name")
         de.default_description = new_desc;
-        await game.settings.set("fate-core-official","defaults",defaults);
+        await fcoConstants.wd().update({
+            "system.defaults":{
+                [`${fcoConstants.tob64(name)}`]:de
+            }
+        });
         if (game.system.mdf) game.system.mdf.render(false);
     }
 
     async getDefault(name){
         // Get a named character default from the game's settings.
-        let defaults = await foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         let def = fcoConstants.gbn(defaults, name, "default_name");
         if (def) return def;
     }
@@ -152,10 +168,11 @@ class FateCharacterDefaults {
     async exportDefaults(list_to_export){
         // Return a string of the chosen defaults to export. If no array of default_name values given, return all defaults.
         if (! list_to_export){
-            return JSON.stringify(game.settings.get("fate-core-official","defaults"),null,5);
+            let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
+            return JSON.stringify(defaults,null,5);
         } else {
             let to_export = {};
-            let existing_defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+            let existing_defaults = fcoConstants.wd().system.defaults;
             for (let d of list_to_export){
                 to_export[this.getSafeName(d)]=existing_defaults[this.getSafeName(d)];
             }
@@ -459,7 +476,7 @@ class ManageDefaults extends FormApplication {
     async getData(){
         let f = new FateCharacterDefaults();
         let defaults = [];
-        let def_objs = await foundry.utils.duplicate(game.settings.get("fate-core-official","defaults"));
+        let def_objs = await foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         for (let o in def_objs){
             defaults.push(def_objs[o]);
         }
@@ -505,7 +522,7 @@ class ManageDefaults extends FormApplication {
             let presentation = await f.presentDefault(def.default_name);
             let actorLink;
             if (presentation.actorLink){
-                actorLink = '<i class = "far fa-toggle-on-square fa-2x" title="On"/>';
+                actorLink = '<i class = "fas fa-check-square fa-2x" title="On"/>';
             } else {
                 actorLink = '<i class = "far fa-square fa-2x" title="Off"/>';
             }

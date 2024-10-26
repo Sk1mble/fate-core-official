@@ -260,6 +260,7 @@ class fcoExtraModel extends foundry.abstract.DataModel {
             "combineSkills":new fields.BooleanField({required:true, initial:false, nullable:false}),
             "contents":new fields.ObjectField({nullable:true, required:true, initial:{}}),
             "active":new fields.BooleanField({required:true, initial:true, nullable:false}),
+            "defaults":new fields.ObjectField({nullable:true, required:false, initial:{}}),
         }
     }
 }

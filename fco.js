@@ -198,7 +198,8 @@ async function prepareWorldItem(){
         let aspects = game.settings.get("fate-core-official","aspects");
         let stunts = game.settings.get("fate-core-official","stunts");
         let skills = game.settings.get("fate-core-official","skills");
-        let widItem = await Item.create({"name":name, "type":"Extra", "system.tracks":tracks, "system.stunts":stunts, "system.skills":skills, "system.aspects":aspects});
+        let defaults = game.settings.get("fate-core-official","defaults");
+        let widItem = await Item.create({"name":name, "type":"Extra", "system.tracks":tracks, "system.stunts":stunts, "system.skills":skills, "system.aspects":aspects, "system.defaults":defaults});
         
         // Set the world setting to have the correct uuid
         game.settings.set("fate-core-official","wid",widItem.uuid);
@@ -210,13 +211,13 @@ async function prepareWorldItem(){
             game.settings.set("fate-core-official","stunts",{});
             game.settings.set("fate-core-official","aspects",{});
             game.settings.set("fate-core-official","skills",{});
+            game.settings.set("fate-core-official","defaults",{});
         */
     }
 }
     
 Hooks.once('ready', async () => {
     game.system["fco-shifted"]=false;
-    prepareWorldItem();
     // Set up a reference to the Fate Core Official translations file or fallback file.
     if (game.i18n?.translations["fate-core-official"]) {
         game.system["lang"] = game.i18n.translations["fate-core-official"];
@@ -227,6 +228,7 @@ Hooks.once('ready', async () => {
     setupFont();
     if (game.user == game.users.activeGM){
         rationaliseKeys();
+        prepareWorldItem();
         game.actors.contents.forEach(async actor => await actor.rationaliseKeys());
         game.items.contents.forEach(async extra => await extra.rationaliseKeys());
     } 
@@ -336,7 +338,8 @@ Hooks.once('ready', async function () {
                 const cont = html.find('button[id="fco_continue_button"]');
                 cont.on('click', async event => {
                     await game.settings.set("fate-core-official","run_once",true);
-                    await game.settings.set("fate-core-official","defaults",game.system["lang"]["baseDefaults"])
+                    let wd = fcoConstants.wd();
+                    await wd.update({"system.defaults":game.system["lang"]["baseDefaults"]});
                     await ui.sidebar.render(false);
                     this.close();
                 })
@@ -1447,7 +1450,6 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:"#000000"
     })
-
 });
 
 Combatant.prototype._getInitiativeFormula = function () {
