@@ -9,7 +9,7 @@
             <tr style="background-color:transparent">
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.LinkedSkill'}}:</td>                
                 <td colspan ="2"><select style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border:1px solid var(--fco-foundry-interactable-color)" name="linked_skill"><option selected="selected" disabled="disabled">{{stunt.linked_skill}}</option><option>{{localize 'fate-core-official.None'}}</option><option>{{localize 'fate-core-official.Special'}}</option>{{#each skills}}<option>{{this.name}}</option>{{/each}}</select> 
-                <i style="font-family:var(--fco-font-family); font-style:normal;">{{localize 'fate-core-official.Bonus'}}: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); border:solid 1px var(--fco-foundry-interactable-color); width:50px"></input></td>
+                <i style="font-family:var(--fco-font-family); font-style:normal;">{{localize 'fate-core-official.Bonus'}}: </i><input name="bonus" type="number" defaultValue="0" min="0" max="10" value="{{stunt.bonus}}" style="margin-top:5px; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); border:solid 1px var(--fco-foundry-interactable-color); width:50px"></input></td>
             </tr>
             <tr style="background-color:transparent">
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.Description'}}:</td>

@@ -35,7 +35,7 @@ class SkillSetup extends FormApplication{
     }
     //The function that returns the data model for this window. In this case, we only need the game's skill list.
     getData(){
-        this.skills=fcoConstants.sortByName(game.settings.get("fate-core-official","skills"))
+        this.skills=fcoConstants.sortByName(fcoConstants.wd().system.skills)
         this.skills_label = game.settings.get("fate-core-official", "skillsLabel");
         const templateData = {
            skills: this.skills,
@@ -70,7 +70,7 @@ class SkillSetup extends FormApplication{
     
     //Here are the event listener functions.
     async _onExportSkill(event, html){
-        let skills = game.settings.get("fate-core-official","skills");
+        let skills = fcoConstants.wd().system.skills;
         let slb = html.find("select[id='skillListBox']")[0].value;
         let sk = fcoConstants.gbn(skills, slb);
         let key = fcoConstants.gkfn(skills, slb);
@@ -85,7 +85,7 @@ class SkillSetup extends FormApplication{
     }
 
     async _onExportSkills(event, html){
-        let skills = game.settings.get("fate-core-official","skills");
+        let skills = fcoConstants.wd().system.skills;
         let skills_text = JSON.stringify(skills, null, 5);
  
         new Dialog({
@@ -117,7 +117,7 @@ class SkillSetup extends FormApplication{
         let text = await this.getSkills();
         try {
             let imported_skills = JSON.parse(text);
-            let skills = foundry.utils.duplicate(game.settings.get("fate-core-official","skills"));
+            let skills = foundry.utils.duplicate(fcoConstants.wd().system.skills);
             if (skills == undefined){
                 skills = {};
             }
@@ -131,16 +131,21 @@ class SkillSetup extends FormApplication{
                         skills[fcoConstants.tob64(sk.name)] = sk;  
                     }
                 }
+                await fcoConstants.wd().update({"system.skills":imported_skills});
+                this.render(false);
             } else {
                 // This is a single skill
                 let sk = new fcoSkill(imported_skills).toJSON();
                 if (sk){
-                    skills[fcoConstants.tob64(sk.name)] = sk;
+                    let key = fcoConstants.tob64(sk.name);
+                    await fcoConstants.wd().update({
+                        "system.skills":{
+                            [`${key}`]:sk
+                        }
+                    });
+                    this.render(false);
                 }
             }
-           
-            await game.settings.set("fate-core-official","skills", skills);
-            this.render(false);
         } catch (e) {
             ui.notifications.error(e);
         }
@@ -167,7 +172,7 @@ class SkillSetup extends FormApplication{
 
     async _onEditButton(event,html){
         //Launch the EditSkill FormApplication.
-        let skills = game.settings.get("fate-core-official","skills");
+        let skills = fcoConstants.wd().system.skills;
         let slb = html.find("select[id='skillListBox']")[0].value;
         let sk = fcoConstants.gbn(skills, slb)
         let e = new EditSkill(sk);
@@ -181,11 +186,14 @@ class SkillSetup extends FormApplication{
             let slb = html.find("select[id='skillListBox'")[0].value;
             
             //Find that skill in the list of skills
-            let skills=game.settings.get("fate-core-official","skills");
+            let skills=fcoConstants.wd().system.skills;
             let key = fcoConstants.gkfn(skills, slb);
             if (skills[key] != undefined){
-                delete skills[key];
-                await game.settings.set("fate-core-official","skills",skills);
+                await fcoConstants.wd().update({
+                    "system.skills":{
+                        [`-=${key}`]:null
+                    }
+                });
                 this.render(true);
             }
         }
@@ -196,12 +204,17 @@ class SkillSetup extends FormApplication{
         if (name=="" || name == undefined){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectASkillToCopyFirst"));
         } else {
-            let skills=await game.settings.get("fate-core-official", "skills");
+            let skills=await fcoConstants.wd().system.skills;
             let skill = foundry.utils.duplicate(fcoConstants.gbn (skills, name));
             name = skill.name+" "+game.i18n.localize("fate-core-official.copy");
             skill.name=name;
-            skills[fcoConstants.tob64(name)]=skill;
-            await game.settings.set("fate-core-official","skills",skills);
+            let key = fcoConstants.tob64(name);
+            await fcoConstants.wd().update({
+                "system.skills":{
+                    [`${key}`]:skill
+                }
+            });
+            
             this.render(true);
             try {
                 this.bringToTop();
@@ -233,29 +246,34 @@ class EditSkill extends FormApplication{
         }
 
         async _updateObject(event, f) {
-            let skills=game.settings.get("fate-core-official","skills");
+            let skills=fcoConstants.wd().system.skills;
             let name = f.name;
             let newSkill = new fcoSkill({"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc}).toJSON();
-            var existing = false;
+            let existing = false;
+            let key = fcoConstants.gkfn(skills, name);
             //First check if we already have a skill by that name, or the skill is blank; if so, throw an error.
             if (name == undefined || name ==""){
                 ui.notifications.error(game.i18n.localize("fate-core-official.YouCannotHaveASkillWithABlankName"))
             } else {
-                let key = fcoConstants.gkfn(skills, name);
                 if (skills[key] != undefined){
-                    skills[key] = newSkill;
                     existing = true;
                 }
             }
             if (!existing){  
                 if (this.skill.name != ""){
-                    //That means the name has been changed. Delete the original aspect and replace it with this one.
-                    let key = fcoConstants.gkfn(skills, this.skill.name);
-                    delete skills[key];
+                    //That means the name has been changed. Delete the original skill and replace it with this one.
+                    await fcoConstants.wd().update({
+                        "system.skills":{
+                            [`-=${fcoConstants.tob64(this.skill.name)}`]:null
+                        }
+                    });
                 }                      
-                skills[fcoConstants.tob64(name)] = newSkill;
             }
-            await game.settings.set("fate-core-official","skills",skills);
+            await fcoConstants.wd().update({
+                "system.skills":{
+                    [`${fcoConstants.tob64(newSkill.name)}`]:newSkill
+                }
+            });
         }
 
     //Here are the action listeners
@@ -403,12 +421,7 @@ class EditSkill extends FormApplication{
         
         $('#edit_skill_defend').on('blur', async event => {
             if (!window.getSelection().toString()){
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));   
-                }
+                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
                 $('#edit_skill_defend').css('display', 'none');
                 $('#edit_skill_defend_rich')[0].innerHTML = desc;    
                 $('#edit_skill_defend_rich').css('display', 'block');

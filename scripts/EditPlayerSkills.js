@@ -229,7 +229,7 @@ class EditPlayerSkills extends FormApplication{
         }
 
         const templateData = {
-            skill_list:game.settings.get("fate-core-official","skills"),
+            skill_list:game.settings.get(fcoConstants.wd().system.skills),
             character_skills:presentation_skills,
             isGM:game.user.isGM,
             isExtra:this.object.type=="Extra"
@@ -456,7 +456,7 @@ class EditGMSkills extends FormApplication{
         } 
         
         //Now we need to add skills that have checks and which aren't already checked.
-        let world_skills=game.settings.get("fate-core-official","skills")
+        let world_skills=game.settings.get(fcoConstants.wd().system.skills)
         for (let w in world_skills){
             let name = world_skills[w].name;
             let cbox;
@@ -506,7 +506,7 @@ class EditGMSkills extends FormApplication{
     async getData(){
         this.player_skills=foundry.utils.duplicate(this.object.system.skills);
 
-        let world_skills=foundry.utils.duplicate(game.settings.get("fate-core-official","skills"));
+        let world_skills=foundry.utils.duplicate(fcoConstants.wd().system.skills);
         let present = [];
         let absent = [];
         let non_pc_world_skills=[];
@@ -543,7 +543,7 @@ class EditGMSkills extends FormApplication{
         if (orphaned.length > 0) fcoConstants.sort_name(orphaned);
 
         const templateData = {
-            skill_list:game.settings.get("fate-core-official","skills"),
+            skill_list:fcoConstants.wd().system.skills(),
             character_skills:this.player_skills,
             present_skills:present,
             absent_skills:absent,

@@ -372,10 +372,10 @@ class fcoConstants {
         let output = {};
         output.stunts = fcoConstants.wd().system.stunts;
         output.defaults = fcoConstants.wd().system.defaults;
-        output.skills = game.settings.get("fate-core-official","skills");
+        output.skills = fcoConstants.wd().system.skills;
+        output.aspects = fcoConstants.wd().system.aspects;
+        output.tracks = fcoConstants.wd().system.tracks;
         output.skillTotal = game.settings.get("fate-core-official", "skillTotal");
-        output.tracks = game.settings.get("fate-core-official","tracks");
-        output.aspects = game.settings.get("fate-core-official","aspects");
         output.freeStunts = game.settings.get("fate-core-official","freeStunts");
         output.refreshTotal = game.settings.get("fate-core-official","refreshTotal");
         output.track_categories = game.settings.get("fate-core-official","track_categories");
@@ -484,12 +484,12 @@ class fcoConstants {
         } else {
             await fcoConstants.wd().update({"system.defaults":defaults});
         }
-          
-        await game.settings.set("fate-core-official","tracks",input?.tracks);
-        await game.settings.set("fate-core-official","skills",input?.skills);
+
+        await fcoConstants.wd().update({"system.skills":input?.skills});      
+        await fcoConstants.wd().update({"system.tracks":input?.tracks});
+        await fcoConstants.wd().update({"system.aspects":input?.aspects});
         await game.settings.set("fate-core-official","track_categories",input?.track_categories);   
         await game.settings.set("fate-core-official","skillTotal",input?.skillTotal);
-        await game.settings.set("fate-core-official","aspects",input?.aspects);
         await game.settings.set("fate-core-official","freeStunts",input?.freeStunts);
         await game.settings.set("fate-core-official","refreshTotal",input?.refreshTotal);
         await game.settings.set("fate-core-official", "enforceSkillTotal", input?.enforceSkillTotal);
@@ -514,7 +514,7 @@ class fcoConstants {
         if (input?.["fuAspectLabelBorderAlpha"]) await game.settings.set("fate-core-official", "fuAspectLabelBorderAlpha", input["fuAspectLabelBorderAlpha"])
         if (input?.["fuAspectLabelFillAlpha"]) await game.settings.set("fate-core-official", "fuAspectLabelFillAlpha", input["fuAspectLabelFillAlpha"])
         if (input?.["fu-ignore-list"]) await game.settings.set("fate-core-official", "fu-ignore-list", input["fu-ignore-list"])
-        await ui.sidebar.render(false);
+        foundry.utils.debouncedReload();
     }
 
     static getKey(text){

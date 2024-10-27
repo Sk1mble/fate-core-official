@@ -28,7 +28,7 @@ class EditPlayerStunts extends FormApplication {
         const options = super.defaultOptions;
         options.template = "systems/fate-core-official/templates/EditPlayerStunts.html";
         options.width = "auto";
-        options.height = "auto";
+        options.height = "500";
         options.title = game.i18n.localize("fate-core-official.CharacterStuntEditor");
         options.closeOnSubmit = true;
         options.id = "PlayerStuntSetup";
@@ -253,10 +253,10 @@ class EditPlayerStunts extends FormApplication {
         data.stunt=foundry.utils.duplicate(this.stunt);
         data.stunt.richDesc = await fcoConstants.fcoEnrich(data.stunt.description, this.actor)
         if (this.actor == null){
-            data.skills=game.settings.get("fate-core-official","skills");
+            data.skills=fcoConstants.wd().system.skills;
         } else {
             if (this.actor.type=="Extra"){
-                data.skills=foundry.utils.mergeObject(this.actor.system.skills, game.settings.get("fate-core-official","skills"), {inplace:false});
+                data.skills=foundry.utils.mergeObject(this.actor.system.skills, fcoConstants.wd().system.skills, {inplace:false});
             } else {
                 data.skills=this.actor.system.skills;
             }
@@ -507,14 +507,18 @@ class StuntDB extends Application {
                         stuntDB[fcoConstants.tob64(st.name)] = st;  
                     }
                 }
+                await fcoConstants.wd().update({"system.stunts":imported_stunts});
             } else {
                 // This is a single stunt.
                 let st = new fcoStunt(imported_stunts).toJSON();
                 if (st){
-                    stuntDB[fcoConstants.tob64(st.name)] = st;
+                    await fcoConstants.wd().update({
+                        "system.stunts":{
+                            [`${fcoConstants.tob64(st.name)}`]:st
+                        }
+                    });
                 }
             }
-            await fcoConstants.wd().update({"system.stunts":stuntDB});
             this.render(false);
         } catch (e) {
             ui.notifications.error(e);

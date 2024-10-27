@@ -377,7 +377,7 @@ class EditLinkedSkills extends FormApplication {
     getData(){
         const templateData = {
             track:this.track,
-            skills:game.settings.get("fate-core-official","skills")
+            skills:fcoConstants.wd().system.skills
         }
         return templateData;
     }
@@ -410,7 +410,7 @@ class EditLinkedSkills extends FormApplication {
         if (del){
              let toDelete = document.getElementById("linked_skills").value;
             let track = this.track;
-            let tracks = game.settings.get("fate-core-official","tracks");
+            let tracks = fcoConstants.wd().system.tracks;
             let linked_skills = track.linked_skills;
     
             for (let i = 0; i< linked_skills.length; i++){
@@ -421,8 +421,11 @@ class EditLinkedSkills extends FormApplication {
             }
             let key = fcoConstants.gkfn(tracks, this.track.name);
             if (!key) key = fcoConstants.tob64(this.track.name);
-            tracks[key]=this.track;
-            await game.settings.set("fate-core-official","tracks",tracks);
+            await fcoConstants.wd().update({
+                "system.tracks":{
+                    [`${key}`]:this.track
+                }
+            });
             this.render(false);
         }
     }
@@ -444,11 +447,14 @@ class EditLinkedSkills extends FormApplication {
                     "enables":enables
                 }
             )
-            let tracks=game.settings.get("fate-core-official","tracks");
+            let tracks=fcoConstants.wd().system.tracks;
             let key = fcoConstants.gkfn(tracks, this.track.name);
             if (!key) key = fcoConstants.tob64(this.track.name);
-            tracks[key]=this.track;
-            await game.settings.set("fate-core-official","tracks",tracks);
+            await fcoConstants.wd().update({
+                "system.tracks":{
+                    [`${key}`]:this.track
+                }
+            });
             this.render(false);
     }
 }
@@ -458,7 +464,7 @@ class EditTracks extends FormApplication {
         super(category);
         this.category = category;
         this.categories =game.settings.get("fate-core-official","track_categories");
-        this.tracks = game.settings.get("fate-core-official","tracks");
+        this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
     }
 
     getData(){
@@ -477,7 +483,6 @@ class EditTracks extends FormApplication {
                 tracks_of_category.push(this.tracks[t]);
             }
         }
-        console.log(tracks_of_category);
         const templateData = {
             category:this.category,
             tracks:tracks_of_category, 
@@ -648,8 +653,13 @@ class EditTracks extends FormApplication {
         else {
             let track = foundry.utils.duplicate(fcoConstants.gbn(this.tracks, name));
             track.name = track.name+" copy"
-            this.tracks[fcoConstants.tob64(track.name)]=track;
-            await game.settings.set("fate-core-official","tracks",this.tracks);
+            let key = fcoConstants.tob64(track.name);
+            await fcoConstants.wd().update({
+                "system.tracks":{
+                    [`${key}`]:track
+                }
+            });
+            this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             this.render(false);
         }
     }
@@ -670,8 +680,12 @@ class EditTracks extends FormApplication {
              let name = document.getElementById("track_select").value;
             try {
                     let key = fcoConstants.gkfn(this.tracks, name);
-                    delete this.tracks[key];
-                    await game.settings.set("fate-core-official","tracks",this.tracks);
+                    await fcoConstants.wd().update({
+                        "system.tracks":{
+                            [`-=${key}`]:null
+                        }
+                    });
+                    this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
                     this.render(false);
             } catch {
                 ui.notifications.error(game.i18n.localize("fate-core-official.CannotDeleteThat"))
@@ -803,6 +817,11 @@ class EditTracks extends FormApplication {
                     track.paid = paid;
                     track.label = label;
                     track.rollable = rollable;
+                    await fcoConstants.wd().update({
+                        "system.tracks":{
+                            [`${t}`]:track
+                        }
+                    });
                 }
             }
             if (!existing){
@@ -810,7 +829,11 @@ class EditTracks extends FormApplication {
                     if (this.track.linked_skills != undefined){
                         linked_skills = foundry.utils.duplicate(this.track.linked_skills);
                     }
-                    delete this.tracks[fcoConstants.gkfn(this.tracks, this.track.name)];
+                    await fcoConstants.wd().update({
+                        "system.tracks":{
+                            [`-=${fcoConstants.gkfn(this.tracks, this.track.name)}`]:null
+                        }
+                    });
                 }
 
                 let newTrack = new fcoTrack({
@@ -830,9 +853,13 @@ class EditTracks extends FormApplication {
                     "label":label,
                     "rollable":rollable,
                 }).toJSON();
-                this.tracks[fcoConstants.tob64(name)]=newTrack;
+                await fcoConstants.wd().update({
+                    "system.tracks":{
+                        [`${fcoConstants.tob64(name)}`]:newTrack
+                    }
+                });
             }
-            await game.settings.set("fate-core-official","tracks",this.tracks);
+            this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             this.render(false);
         }
     }
@@ -860,7 +887,7 @@ class TrackSetup extends FormApplication{
     //The function that returns the data model for this window. In this case, we need the list of stress tracks
     //conditions, and consequences.
     getData(){
-        this.tracks=game.settings.get("fate-core-official","tracks");
+        this.tracks=fcoConstants.wd().system.tracks;
         this.track_categories=game.settings.get("fate-core-official","track_categories")
 
         const templateData = {
@@ -887,7 +914,7 @@ class TrackSetup extends FormApplication{
 
         setCategoriesButton.on("click", event => {
             let content = `<div style="display:flex; flex-direction:column;">`;
-            let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
+            let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let categories = game.settings.get("fate-core-official","track_categories");
 
             for (let track in tracks){
@@ -927,7 +954,8 @@ class TrackSetup extends FormApplication{
                                         let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
                                     }
-                                    game.settings.set("fate-core-official","tracks",tracks);
+                                    await fcoConstants.wd().update({"system.tracks":null},{noHook:true, render:false});
+                                    await fcoConstants.wd().update({"system.tracks":tracks});
                                 }
                                 }
                             }
@@ -951,7 +979,7 @@ class TrackSetup extends FormApplication{
     }
 
     async _exportTracks(event, html){
-        let tracks = game.settings.get("fate-core-official","tracks");
+        let tracks = fcoConstants.wd().system.tracks;
         let tracks_text = JSON.stringify(tracks, null, 5);
      
         new Dialog({
@@ -983,14 +1011,14 @@ class TrackSetup extends FormApplication{
         let text = await this.getTracks();
         try {
             let imported_tracks = JSON.parse(text);
-            let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
+            let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let track_categories = foundry.utils.duplicate(game.settings.get("fate-core-official", "track_categories"));
             if (tracks == undefined){
                 tracks = {};
             }
 
             if (!imported_tracks.hasOwnProperty("name")){
-                // This is a tracks object.
+                // This object contains multiple tracks; overwrite the current list of tracks
                 for (let track in imported_tracks){
                     let tr = new fcoTrack(imported_tracks[track]).toJSON();
                     if (tr){
@@ -999,15 +1027,20 @@ class TrackSetup extends FormApplication{
                     let cat = imported_tracks[track].category;
                     track_categories[cat]=cat;
                 }
+                await fcoConstants.wd().update({"system.tracks":imported_tracks});
             } else {
                 // This is a track object
                 let tr = new fcoTrack(imported_tracks).toJSON();
                     if (tr){
-                        tracks[fcoConstants.tob64(tr.name)]=tr;
+                        let key = fcoConstants.tob64(tr.name);
+                        await fcoConstants.wd().update({
+                            "system.tracks":{
+                                [`${key}`]:tr
+                            }
+                        });
+                        track_categories[tr.category]=tr.category;
                     }
             }
-
-            await game.settings.set("fate-core-official","tracks", tracks);
             await game.settings.set("fate-core-official", "track_categories", track_categories);
             this.render(false);
         } catch (e) {
@@ -1044,7 +1077,7 @@ class TrackSetup extends FormApplication{
                             if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
                                 ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${game.i18n.localize("fate-core-official",category)} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`);
                             } else {
-                                        let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
+                                        let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
                                         let toDelete = [];
                                         for (let tr in tracks){
                                             if (tracks[tr].category == track_categories[cat]) toDelete.push(tracks[tr]);
@@ -1066,7 +1099,8 @@ class TrackSetup extends FormApplication{
                                                     delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
                                                 }
                                                 await game.settings.set("fate-core-official","track_categories",track_categories);
-                                                await game.settings.set("fate-core-official", "tracks", tracks);
+                                                await fcoConstants.wd().update({"system.tracks":null},{noHook:true, render:false});
+                                                await fcoConstants.wd().update({"system.tracks":tracks});
                                                 this.render(false);    
                                             }
                                         }
@@ -1106,7 +1140,7 @@ Hooks.on('closeEditTracks',async () => {
 class OrderTracks extends FormApplication {
     constructor(...args){
         super(...args);
-        let tracks = game.settings.get("fate-core-official", "tracks");
+        let tracks = fcoConstants.wd().system.tracks;
         this.data = [];
         for (let track in tracks){
             this.data.push(tracks[track]);
@@ -1156,12 +1190,13 @@ class OrderTracks extends FormApplication {
             }
         })
 
-        ot_save.on("click", event => {
+        ot_save.on("click", async event => {
             let tracks = {};
             for (let i = 0; i < this.data.length; i++){
                 tracks[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            game.settings.set("fate-core-official", "tracks", tracks);
+            await fcoConstants.wd().update({"system.tracks":null},{noHook:true, render:false});
+            await fcoConstants.wd().update({"system.tracks":tracks});
             this.close();
         })
     }

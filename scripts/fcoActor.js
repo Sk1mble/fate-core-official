@@ -232,7 +232,7 @@ export class fcoActor extends Actor {
         let p_skills=working_data.system.skills;
         
         //Check to see what skills the character has compared to the global skill list
-            var skill_list = game.settings.get("fate-core-official","skills");
+            var skill_list = fcoConstants.wd().system.skills;
             // This is the number of skills the character has currently.
             //We only need to add any skills if this is currently 0,
             
@@ -258,7 +258,7 @@ export class fcoActor extends Actor {
                 })
             }        
     
-            let aspects = game.settings.get("fate-core-official", "aspects");
+            let aspects = fcoConstants.wd().system.aspects;
             let player_aspects = foundry.utils.duplicate(aspects);
             for (let a in player_aspects) {
                 player_aspects[a].value = "";
@@ -267,7 +267,7 @@ export class fcoActor extends Actor {
             working_data.system.aspects = player_aspects;
         
             //Step one, get the list of universal tracks.
-            let world_tracks = foundry.utils.duplicate(game.settings.get("fate-core-official", "tracks"));
+            let world_tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let tracks_to_write = working_data.system.tracks;
             for (let t in world_tracks) {
                 let track = world_tracks[t];

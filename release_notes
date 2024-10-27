@@ -2,7 +2,7 @@
 * Major version release for v13 compatibility
 * Eradicated all code for earlier versions of Foundry - this is for v13+ only
 * Same bugfixes as the 4.7.12 releases.
-* Stunts are now kept in a special hidden item in the world instead of being saved in a system setting. Aspects, tracks, skills and stunts will also be stored on the same object.
+* Stunts, skills, tracks, aspects and character default framworks are now kept in a special hidden item in the world instead of being saved in a system setting. This increases the efficiency of making changes to these elements.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

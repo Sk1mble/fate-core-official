@@ -576,7 +576,7 @@ class EditPlayerTracks extends FormApplication {
     }
         
     async getData(){
-        let world_tracks = await foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"))
+        let world_tracks = await foundry.utils.duplicate(fcoConstants.wd().system.tracks);
         //We need the list of track categories
         //We will use a dropdown list of categories in the editor to select which tracks are displayed
 

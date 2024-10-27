@@ -23,7 +23,7 @@ class AspectSetup extends FormApplication{
     }
     //The function that returns the data model for this window. In this case, we only need the game's aspect list.
     getData(){
-        this.aspects=game.settings.get("fate-core-official","aspects");
+        this.aspects=fcoConstants.wd().system.aspects;
         const templateData = {
            aspects:this.aspects
         }
@@ -63,7 +63,7 @@ class AspectSetup extends FormApplication{
     }
 
     async _onExportAspect(event, html){
-        let aspects = game.settings.get("fate-core-official","aspects");
+        let aspects = fcoConstants.wd().system.aspects;
         let slb = html.find("select[id='aspectListBox']")[0].value;
         let key = fcoConstants.gkfn(aspects, slb)
         let aspect = aspects[key];
@@ -78,7 +78,7 @@ class AspectSetup extends FormApplication{
     }
 
     async _onExportAspects(event, html){
-        let aspects = game.settings.get("fate-core-official","aspects");
+        let aspects = fcoConstants.wd().system.aspects;
         let aspects_text = JSON.stringify(aspects, null, 5);
  
         new Dialog({
@@ -111,7 +111,7 @@ class AspectSetup extends FormApplication{
         try {
             let imported_aspects = JSON.parse(text);
 
-            let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official","aspects"));
+            let aspects = foundry.utils.duplicate(fcoConstants.wd().system.aspects);
             if (aspects == undefined){
                 aspects = {};
             }
@@ -125,16 +125,21 @@ class AspectSetup extends FormApplication{
                         aspects[aspect]=as;
                     }
                 }
+                await fcoConstants.wd().update({"system.aspects":imported_aspects});
+                this.render(false);
             } else {
                 // This is a single aspect
                 let as = new fcoAspect(imported_aspects).toJSON();
                 if (as){
-                    aspects[fcoConstants.tob64(as.name)] = as;
+                    let key = fcoConstants.tob64(as.name)
+                    await fcoConstants.wd().update({
+                        "system.aspects":{
+                            [`${key}`]:as
+                        }
+                    });
+                    this.render(false);
                 }
             }
-            
-            await game.settings.set("fate-core-official","aspects", aspects);
-            this.render(false);
         } catch (e) {
             ui.notifications.error(e);
         }
@@ -147,12 +152,16 @@ class AspectSetup extends FormApplication{
         if (name=="" || name == undefined){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectAnAspectFirst"));
         } else {
-            let aspects=await game.settings.get("fate-core-official", "aspects");
+            let aspects=await fcoConstants.wd().system.aspects;
             let aspect = foundry.utils.duplicate(fcoConstants.gbn(aspects, name));
             name = aspect.name+" "+game.i18n.localize("fate-core-official.copy");
             aspect.name=name;
-            aspects[fcoConstants.tob64(name)]=aspect;
-            await game.settings.set("fate-core-official","aspects",aspects);
+            let key = fcoConstants.tob64(aspect.name);
+            await fcoConstants.wd().update({
+                "system.aspects":{
+                    [`${key}`]:aspect
+                }
+            });
             this.render(true);
             try {
                 this.bringToTop();
@@ -164,7 +173,7 @@ class AspectSetup extends FormApplication{
     
     async _onEditButton(event,html){
         //Launch the EditAspect FormApplication.
-        let aspects = game.settings.get("fate-core-official","aspects");       
+        let aspects = fcoConstants.wd().system.aspects;
         let aspectName = html.find("select[id='aspectListBox']")[0].value;
         let aspect = fcoConstants.gbn(aspects, aspectName);
         let e = new EditAspect(aspect);
@@ -184,12 +193,15 @@ class AspectSetup extends FormApplication{
             let aspectName = html.find("select[id='aspectListBox'")[0].value;
             
             //Find that aspect in the list of aspects
-            let aspects=game.settings.get("fate-core-official","aspects");
+            let aspects=fcoConstants.wd().system.aspects;
             let aspect = fcoConstants.gbn(aspects, aspectName);
             if (aspect != undefined){
                 let key = fcoConstants.gkfn(aspects, aspect.name);
-                delete aspects[key];
-                await game.settings.set("fate-core-official","aspects",aspects);
+                await fcoConstants.wd().update({
+                    "system.aspects":{
+                        [`-=${key}`]:null
+                    }
+                });
                 this.render(true);
                 try {
                     e.bringToTop();
@@ -220,7 +232,7 @@ class EditAspect extends FormApplication{
             let name = f.name;
             let description = f.description;
             var existing = false;
-            let aspects=game.settings.get("fate-core-official","aspects");
+            let aspects=fcoConstants.wd().system.aspects;
             let newAspect = new fcoAspect ({"name":name, "description":description, "notes":""}).toJSON();
 
             //First check if we already have an aspect by that name, or the aspect is blank; if so, throw an error.
@@ -231,7 +243,12 @@ class EditAspect extends FormApplication{
                 let aspect = fcoConstants.gbn(aspects, name);
                 if (aspect != undefined){
                     let key = fcoConstants.gkfn(aspects, name);
-                    aspects[key] = newAspect;
+                    //update with this aspect under the 'key'
+                    await fcoConstants.wd().update({
+                        "system.aspects":{
+                            [`${key}`]:newAspect
+                        }
+                    });
                     existing = true;
                 }
             }
@@ -239,11 +256,18 @@ class EditAspect extends FormApplication{
                 let key = fcoConstants.gkfn(aspects, this.aspect.name);
                 if (this.aspect.name != ""){
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
-                    delete aspects[key];
-                }            
-                aspects[fcoConstants.tob64(name)]=newAspect;
+                    await fcoConstants.wd().update({
+                        "system.aspects":{
+                            [`-=${key}`]:null
+                        }
+                    });        
+                }  
+                await fcoConstants.wd().update({
+                    "system.aspects":{
+                        [`${fcoConstants.tob64(name)}`]:newAspect
+                    }
+                });
             }
-            await game.settings.set("fate-core-official","aspects",aspects);
             this.close();
         }
 
@@ -328,7 +352,7 @@ Hooks.on('closeOrderAspects', async () => {
 class OrderAspects extends FormApplication {
     constructor(...args){
         super(...args);
-        let aspects = game.settings.get("fate-core-official", "aspects");
+        let aspects = fcoConstants.wd().system.aspects;
         this.data = [];
         for (let aspect in aspects){
             this.data.push(aspects[aspect]);
@@ -383,7 +407,8 @@ class OrderAspects extends FormApplication {
             for (let i = 0; i < this.data.length; i++){
                 aspects[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            await game.settings.set("fate-core-official", "aspects", aspects);
+            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, render:false});
+            await fcoConstants.wd().update({"system.aspects":aspects});
             this.close();
         })
     }

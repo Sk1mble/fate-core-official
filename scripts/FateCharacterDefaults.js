@@ -49,12 +49,16 @@ class FateCharacterDefaults {
 
     get defaults(){
         // Return an array of strings of default_name values from defaults
-        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
-        let list = [];
-        for (let d in defaults){
-            list.push (defaults[d].default_name)
-        }
-        return list;
+        if (fcoConstants.wd()?.system?.defaults) {
+            let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
+            let list = [];
+            for (let d in defaults){
+                list.push (defaults[d].default_name)
+            }
+            return list;
+        } else {
+            return [];
+        } 
     }
 
     async removeDefault (name){

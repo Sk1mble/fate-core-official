@@ -2,7 +2,7 @@ export class fcoExtra extends Item {
     
     // Hide the object that has been set to store the settings for this World so it can't be accidentally tampered with
     get visible(){
-        if (this.type === "Extra" && fromUuidSync(game.settings.get("fate-core-official","wid")).id == this.id && game.system.showWD !== true){
+        if (this.type === "Extra" && fromUuidSync(game.settings.get("fate-core-official","wid"))?.id == this.id && game.system.showWD !== true){
             return false;
         } 
         else {
