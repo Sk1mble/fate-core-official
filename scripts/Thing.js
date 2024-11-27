@@ -1,12 +1,9 @@
 import { ExtraSheet } from "./ExtraSheet.js";
 
-export class Thing extends ActorSheet {
+export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2) {
     constructor (...args){
         super(...args);
         this.editing = false;
-    }
-    
-    async submit(options) {
     }
 
     async close(options){
@@ -14,14 +11,43 @@ export class Thing extends ActorSheet {
         await super.close(options);
     }
 
+    /* App v1
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.resizable=true;
         options.width = "800"
         options.height = "1000"
-        options.scrollY = ['#mthing-content']
-        options.classes = options.classes.concat(['fate']);
+        options.scrollY = ['#mthing-content'] // This moves to PARTS.scrollable
+        options.classes = options.classes.concat(['fate']); // Moves to PARTS.classes
         return options;
+    } */
+
+    static DEFAULT_OPTIONS = {
+        width: 800,
+        height: 1000,
+        resizable: true,
+        tag: "form",
+        form: {
+            submitOnChange:true,
+            closeOnSubmit: false
+        },
+        window: {
+            title: this.title,
+            icon: "fas fa-dagger",
+            resizable: true,
+        },
+        classes: ['fate']
+    }
+
+    get title() {
+        return `Thing: ${this.actor.name}`;
+    }
+
+    static PARTS = {
+        form: {
+            template:'systems/fate-core-official/templates/ThingSheet.html',
+            scrollable: ['#mthing-content'],
+        }
     }
 
     get actorType() {
@@ -34,8 +60,8 @@ export class Thing extends ActorSheet {
     }
 
     //Here are the action listeners
-    activateListeners(html) {
-        super.activateListeners(html);
+    _onRender(context, options) {
+        let html = $(this.element); // We should switch this to using queryselector etc. but let's get it working first. This is a more laborious process than originally thought, so we'll stick with jQuery for now.
         const extras_button = html.find("div[name='add_player_extra']");
         const extras_edit = html.find ("button[name='edit_extra']");
         const extras_delete = html.find("button[name='delete_extra']");
@@ -71,7 +97,12 @@ export class Thing extends ActorSheet {
 
             if ( foundry.utils.isEmpty(this.actor.system.container.extra) ) {
                 await this.actor.update({"system.container.extra": container.toObject()});
-              } else container = foundry.utils.duplicate(this.actor.system.container.extra);
+            } 
+            else container = foundry.utils.duplicate(this.actor.system.container.extra);
+
+            if (!container?.system?.contents && container?.data){
+                container.system = {contents:container.data.contents};
+            }
 
             // Populate the container contents
             container.system.contents = {
@@ -180,8 +211,24 @@ export class Thing extends ActorSheet {
         const item = html.find("div[name='item_header']");
         item.on("dragstart", async event => this._on_item_drag (event, html));
 
+        const things = html.find("div[class='thingSheet']");
+
+        things.on("drop", async event => {
+            let data = TextEditor.getDragEventData(event.originalEvent);
+            let item;
+            if (data.type == "Item") {
+                item = await fromUuid(data.uuid);
+            }
+            if (item) {
+                if (item.type == "Extra" && item?.actor?.id != this.actor?.id && this?.actor?.isOwner){
+                    await this.actor.createEmbeddedDocuments("Item", [item]);
+                    Hooks.call("dropActorSheetData", this.actor, this, data);
+                }
+            } 
+        })
+
         item.on("dblclick", async event => {
-            let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
+            let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.actor.name})}</strong><br/><hr>`
             let user = game.user;
             let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
             item = foundry.utils.duplicate(item);
@@ -250,7 +297,7 @@ export class Thing extends ActorSheet {
     }
 
     async _on_extras_edit_click(event, html){
-        let items = this.object.items;
+        let items = this.actor.items;
         let item = items.get(event.target.id.split("_")[0]);
         let e = new ExtraSheet(item);
         await e.render(true);
@@ -271,17 +318,17 @@ export class Thing extends ActorSheet {
         const created = await this.actor.createEmbeddedDocuments("Item", [data]);
     }
 
-    async getData() {
+    async _prepareContext() {
         if (game.user.expanded == undefined){
             game.user.expanded = {};
         }
+        this.displayTitle = `Thing Sheet for ${this.actor.name}`;
 
         if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
-
-        const superData = super.getData();
-        const sheetData = foundry.utils.duplicate(superData.data);
-        sheetData.document = superData.actor;
-        let items = this.object.items.contents;
+        const superData = await super._prepareContext();
+        const sheetData = foundry.utils.duplicate(superData.source);
+        sheetData.document = superData.document;
+        let items = this.actor.items.contents;
         items.sort((a, b) => (a.sort || 0) - (b.sort || 0)); // Sort according to each item's sort parameter.
         for (let item of items){
             item.richName = await fcoConstants.fcoEnrich(item.name);
@@ -302,7 +349,7 @@ export class Thing extends ActorSheet {
     }
 
     async _render(...args){
-        if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
+        if (!this.actor?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
                     this.renderPending = true;
                     setTimeout(async () => {
@@ -510,13 +557,12 @@ Hooks.on ('dropCanvasData', async (canvas, data) => {
     }
 })
 
-Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
-
+Hooks.on ('dropActorSheetData', async (target, sheet, data) => {
     if (data?.ident == "mf_draggable"){
         return;
     }
-
     let i = fromUuidSync(data.uuid);
+    console.log(i);
 
     if (i.type != "Extra"){
         return;
@@ -527,12 +573,12 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
     }
 
     if (data.uuid.startsWith("Compendium")){
-        target.createEmbeddedDocuments("Item",[i]);
+        //target.createEmbeddedDocuments("Item",[i]);
         return;
     }
 
     if (data.uuid.startsWith("Item")){
-        target.createEmbeddedDocuments("Item",[i]);
+        //target.createEmbeddedDocuments("Item",[i]);
         return;
     }
 
@@ -549,7 +595,7 @@ Hooks.on ('dropActorSheetData', async (target, unknown, data) => {
     }
 
     if (target.isOwner){
-        target.createEmbeddedDocuments("Item",[i]);
+        //target.createEmbeddedDocuments("Item",[i]);
         let shift_down = false; 
         shift_down = game.system["fco-shifted"];  
         if (game.settings.get("fate-core-official", "DeleteOnTransfer")){ 

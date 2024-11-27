@@ -722,11 +722,11 @@ export class fcoCharacter extends ActorSheet {
                 let item_id = event.target.id.split("_")[0];
                 let item = this.document.items.get(item_id);
                 if (item.system.active){
-                    await item.update({"system.active":false},{render:false, noHook:true});
+                    await item.update({"system.active":false},{renderSheet:false, noHook:true});
                     await this.document.deactivateExtra(item, false);
                     this.render(false);
                 } else {
-                    await item.update({"system.active":true},{render:false, noHook:true});
+                    await item.update({"system.active":true},{renderSheet:false, noHook:true});
                     this.document.updateFromExtra(item);
                     this.render(false);
                 }
@@ -1069,13 +1069,19 @@ export class fcoCharacter extends ActorSheet {
             }
             // If we await this next update it causes an issue with the data below not being populated if the track is being
             // dragged from an actor.
-            item.update({"system.tracks":trackUpdates, "system.stunts":stuntUpdates},{renderSheet:false});
+           await item.update({"type":"Extra", "system.tracks":trackUpdates, "system.stunts":stuntUpdates},{renderSheet:false});
+            let data = {
+                "type":"Item", 
+                "uuid":item.uuid
+            }
+            await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
+        } else {
+            let data = {
+                "type":"Item", 
+                "uuid":item.uuid
+            }
+            await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
         }
-        let data = {
-            "type":"Item", 
-            "uuid":item.uuid
-        }
-        await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
     }
 
     async _cat_select_change (event, html){
@@ -1554,7 +1560,7 @@ export class fcoCharacter extends ActorSheet {
 Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
     if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === data.userid){
         //First check it's not from the same sheet
-        if (data.ident !== "mf_draggable") return;
+        if (data?.ident !== "mf_draggable") return;
         if (actor.id == data.origin) return;
         delete data.dragged?.extra_id;
         delete data.dragged?.original_name;

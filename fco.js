@@ -215,6 +215,11 @@ async function prepareWorldItem(){
 }
     
 Hooks.once('ready', async () => {
+
+    Hooks.on("preMoveToken", (tokenDocument, data, options) => {
+        options.autoRotate = !game.settings.get("fate-core-official","disableAutoTokenRotation");
+    });
+
     game.system["fco-shifted"]=false;
 
     // Set up a reference to the Fate Core Official translations file or fallback file.
@@ -607,6 +612,16 @@ Hooks.once('init', async function () {
         onDown: (...args) => { game.system["fco-shifted"] = true;},
         onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
     })
+
+    game.settings.register("fate-core-official", "disableAutoTokenRotation" , {
+        name: game.i18n.localize("fate-core-official.disableAutoTokenRotation"),
+        scope: "world",
+        type: Boolean,
+        default: true,
+        config: true,
+        restricted: false,
+    });
+
     
     game.settings.register("fate-core-official","wid", {
         name:"world data extra uuid",
@@ -721,7 +736,7 @@ Hooks.once('init', async function () {
         onChange: async value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.skills":game.system["lang"]["FateCoreDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
@@ -729,14 +744,14 @@ Hooks.once('init', async function () {
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM) {
-                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.skills":{}}); 
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
-                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.skills":game.system["lang"]["FateCondensedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
@@ -744,7 +759,7 @@ Hooks.once('init', async function () {
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.skills":game.system["lang"]["FateAcceleratedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
@@ -752,7 +767,7 @@ Hooks.once('init', async function () {
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.skills":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.skills":game.system["lang"]["DresdenFilesAcceleratedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
@@ -782,35 +797,35 @@ Hooks.once('init', async function () {
             onChange: async value => { // A callback function which triggers when the setting is changed
                     if (value == "fateCore"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, render:false}); 
+                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, renderSheet:false}); 
                             await fcoConstants.wd().update({"system.aspects":game.system["lang"]["FateCoreDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value == "fateCondensed"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, render:false}); 
+                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, renderSheet:false}); 
                             await fcoConstants.wd().update({"system.aspects":game.system["lang"]["FateCondensedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="clearAll"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, render:false}); 
+                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, renderSheet:false}); 
                             await fcoConstants.wd().update({"system.aspects":{}});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="accelerated"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, render:false}); 
+                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, renderSheet:false}); 
                             await fcoConstants.wd().update({"system.aspects":game.system["lang"]["FateAcceleratedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="dfa"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, render:false}); 
+                            await fcoConstants.wd().update({"system.aspects":null}, {noHook:true, renderSheet:false}); 
                             await fcoConstants.wd().update({"system.aspects":game.system["lang"]["DresdenFilesAcceleratedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
@@ -839,7 +854,7 @@ Hooks.once('init', async function () {
         onChange: async value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.tracks":game.system["lang"]["FateCoreDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
@@ -847,7 +862,7 @@ Hooks.once('init', async function () {
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.tracks":{}});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
@@ -855,7 +870,7 @@ Hooks.once('init', async function () {
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.tracks":game.system["lang"]["FateCondensedDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
@@ -863,7 +878,7 @@ Hooks.once('init', async function () {
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.tracks":game.system["lang"]["FateAcceleratedDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
@@ -871,7 +886,7 @@ Hooks.once('init', async function () {
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, render:false}); 
+                        await fcoConstants.wd().update({"system.tracks":null}, {noHook:true, renderSheet:false}); 
                         await fcoConstants.wd().update({"system.tracks":game.system["lang"]["DresdenFilesAcceleratedDefaultTracks"]});
                         game.settings.set("fate-core-official","track_categories",game.system["lang"]["DresdenFilesAcceleratedDefaultTrackCategories"]);
                         game.settings.set("fate-core-official","defaultTracks","nothing");

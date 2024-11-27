@@ -323,7 +323,7 @@ class FateCharacterDefaults {
             for (let section of sections){
                 updates[`system.${section}`] = "blank";
             }
-            await actor.update(updates, {render:false, noHook:true});
+            await actor.update(updates, {renderSheet:false, noHook:true});
 
             for (let section of sections){
                 updates[`system.${section}`] = character_default[section];

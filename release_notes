@@ -3,6 +3,8 @@
 * Eradicated all code for earlier versions of Foundry - this is for v13+ only
 * Same bugfixes as the 4.7.12 releases.
 * Stunts, skills, tracks, aspects and character default framworks are now kept in a special hidden item in the world instead of being saved in a system setting. This increases the efficiency of making changes to these elements.
+* Thing now uses Application v2.
+* Fixed a bug which would have prevented successful picking up of a Thing on a scene that was created prior to the change from actor.data.data to actor.system
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

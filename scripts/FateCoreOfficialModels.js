@@ -48,6 +48,7 @@ class fcoSkill extends foundry.abstract.DataModel {
     static defineSchema(){
         return {
             "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "category":new foundry.data.fields.StringField({ nullable: true, required: false}),
             "description":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "overcome":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "caa":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),

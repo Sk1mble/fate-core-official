@@ -221,7 +221,7 @@ class EditPlayerAspects extends FormApplication{
     }
 
     async _updateObject(event, formData){
-        await this.object.update({"system.aspects":null}, {noHook:true, render:false})
+        await this.object.update({"system.aspects":null}, {noHook:true, renderSheet:false})
         await this.object.update({"system.aspects":this.aspects})
     }
 

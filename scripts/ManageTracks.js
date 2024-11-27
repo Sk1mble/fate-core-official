@@ -954,7 +954,7 @@ class TrackSetup extends FormApplication{
                                         let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
                                     }
-                                    await fcoConstants.wd().update({"system.tracks":null},{noHook:true, render:false});
+                                    await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
                                     await fcoConstants.wd().update({"system.tracks":tracks});
                                 }
                                 }
@@ -1099,7 +1099,7 @@ class TrackSetup extends FormApplication{
                                                     delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
                                                 }
                                                 await game.settings.set("fate-core-official","track_categories",track_categories);
-                                                await fcoConstants.wd().update({"system.tracks":null},{noHook:true, render:false});
+                                                await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
                                                 await fcoConstants.wd().update({"system.tracks":tracks});
                                                 this.render(false);    
                                             }
@@ -1195,7 +1195,7 @@ class OrderTracks extends FormApplication {
             for (let i = 0; i < this.data.length; i++){
                 tracks[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            await fcoConstants.wd().update({"system.tracks":null},{noHook:true, render:false});
+            await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
             await fcoConstants.wd().update({"system.tracks":tracks});
             this.close();
         })

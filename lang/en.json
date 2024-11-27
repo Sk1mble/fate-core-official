@@ -1,4 +1,5 @@
 {  
+   "fate-core-official.disableAutoTokenRotation":"Disable automatic token rotation with movement?",
    "fate-core-official.newCharacter":"New Character",
    "fate-core-official.CantDeleteWorldDataObject":"You cannot delete the Extra holding system data for this world. If you are sure you want to do this, chagne the object used for this purpose with game.settings.set('fate-core-official','wid',your_uuid_for_new_object) first and you will then be able to delete this item.",
    "fate-core-official.mergeStuntsTitle":"Merge Stunts?",
