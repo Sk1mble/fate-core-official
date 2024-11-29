@@ -57,9 +57,11 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let flags = foundry.utils.duplicate(adventure.flags);
     let settings = flags["fate-core-official"]?.settings;
     if (settings && !formData.overrideSettings){
-        const confirm = await Dialog.confirm({
-            title:  game.i18n.localize("fate-core-official.overrideSettingsTitle"),
-            content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`
+        const confirm = await foundry.applications.api.DialogV2.confirm({
+            window:{title:  game.i18n.localize("fate-core-official.overrideSettingsTitle")},
+            content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`,
+            modal: true,
+            rejectClose: false
           });
       if ( confirm ) replace = true;
     } else {
@@ -414,7 +416,7 @@ Hooks.once('ready', async function () {
                 await pack.getDocuments();
                 //Todo: Consider whether we want to restrict to installing just the first adventure in the pack, allowing others to be for characters, etc.
                 for (let p of pack.contents){
-                    await p.sheet._updateObject({}, {"overrideSettings":true})
+                    await p.import();
                 }
 
                 // Set installing and run_once to the appropriate post-install values
@@ -905,13 +907,7 @@ Hooks.once('init', async function () {
         onChange: value => {
             if (value == true && game.user.isGM){
                 let text = fcoConstants.exportSettings();
- 
-                new Dialog({
-                    title: game.i18n.localize("fate-core-official.ExportSettingsDialogTitle"), 
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="export_settings">${text}</textarea></div>`,
-                    buttons: {
-                    },
-                }).render(true);
+                fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.ExportSettingsDialogTitle"), text);
                 game.settings.set("fate-core-official","exportSettings",false);
             }
         }
@@ -1711,17 +1707,16 @@ class CustomiseSheet extends FormApplication {
         $('#load_custom').on('click', async event => {
             let text = JSON.stringify(await this.getData(),null,5);
             let value =  await new Promise(resolve => {
-                new Dialog({
-                    title: game.i18n.localize("fate-core-official.LoadCustomSheet"),
+                new foundry.applications.api.DialogV2({
+                    window:{title: game.i18n.localize("fate-core-official.LoadCustomSheet")},
                     content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="custom_sheet_value">${text}</textarea></div>`,
-                    buttons: {
-                        ok: {
+                    buttons: [{
+                            action: "Populate",
                             label: game.i18n.localize("fate-core-official.PopulateFromPasted"),
                             callback: () => {
                                 resolve (document.getElementById("custom_sheet_value").value);
                             }
-                        }
-                    },
+                        }]
                 }).render(true)
             });
             let data = JSON.parse(value);

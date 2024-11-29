@@ -368,72 +368,77 @@ class FateCharacterDefaults {
 // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
 // html is still jquery as of version 13 prototype 1, so in preparation we'll switch away from using jQuery by converting to an HTMLElement ourselves if it's still returning jQuery.
 
-Hooks.on("renderSidebarTab", (app, html) => {
-    if (!(app instanceof ActorDirectory) || !game.user?.isGM) {
+Hooks.on("renderActorDirectory", (app, html, user, opt) => {
+    if (!(app instanceof foundry.applications.sidebar.tabs.ActorDirectory) || !game.user?.isGM) {
         return;
     }
+
     if (html instanceof jQuery){
         html = $(html)[0];
     }
-    const targetElement = html.querySelector ('ol[class="directory-list"]');
+
+    const targetElement = html?.querySelector ('ol.directory-list');
     const f = new FateCharacterDefaults();
     let standard = `<option value = "fate-core-official" selected = 'selected'>${game.i18n.localize("fate-core-official.system_settings")}</option>\n`
     let blank = "<option>Blank</option>\n"
     let defaults = f.defaults.map(d => `<option>${d}</option>`).join("\n");
     let options = standard+blank+defaults;
-    targetElement.insertAdjacentHTML("beforebegin",
-        `<div style="max-height:45px; text-align:center; margin-bottom:5px">
-            <input type="text" value = "${game.i18n.localize("fate-core-official.newCharacter")}" style="background-color:#f0f0e0; width:35%; height:25px;" id="MF_actor_to_create">
-            <select style="width:35%; height:25px; background-color:#f0f0e0;" id="MF_default_to_use">${options}
-            </select>
-            <button type="button" style="width:10%; height:35px" id="create_from_default" title="${game.i18n.localize("fate-core-official.create_from_default")}">
-            <i class="fas fa-user-check"></i>
-            </button>
-            <button type="button" style="width:10%; height:35px" id="manage_defaults" title="${game.i18n.localize("fate-core-official.manage_defaults")}">
-            <i class="fas fa-users-cog"></i>
-            </button>
-        </div>
-    `);
-
-    let create = html.querySelector('#MF_actor_to_create');
-    create.onclick = (event) => {
-        event.stopPropagation();
-        create.select();
-    }
-
-    let manageDefaults = html.querySelector('#manage_defaults');
-    manageDefaults.onclick = (event) => {
-        event.stopPropagation()
-        let md = new ManageDefaults().render(true);
-    }
-
-    let createFromDefault = html.querySelector('#create_from_default');
-    createFromDefault.onclick = async (event) => {
-        event.stopPropagation();
-        let actor_name = html.querySelector('#MF_actor_to_create').value;
-        let default_name = html.querySelector('#MF_default_to_use').value;
-
-        if (! actor_name) actor_name = game.i18n.localize("fate-core-official.newCharacter");
-
-        let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
-
-        if (default_name === "Blank"){
-            let actorData = {
-                "name":actor_name,
-                "type":"fate-core-official",
-                "ownership": perm,
-                "system.details.fatePoints.refresh":"0",
-                "prototypeToken.actorLink":true
-             }
-             await Actor.create(actorData, {"renderSheet":true});
-             return;
-        }
-
-        if (default_name === "fate-core-official"){
-            await Actor.create({"name":actor_name, "type":"fate-core-official", ownership: perm, "prototypeToken.actorLink":true},{renderSheet:true});
-            return;
-        }
-        await f.createCharacterFromDefault(default_name, actor_name, true);
+    let fcoDefaultButtons = html.querySelector('div[name="fcoDefaultButtons"]');
+    if (!fcoDefaultButtons){
+        targetElement?.insertAdjacentHTML("beforebegin",
+            `<div name="fcoDefaultButtons" style="max-height:45px; text-align:center; margin-bottom:5px; display:flex; flex-direction:row">
+                <input type="text" value = "${game.i18n.localize("fate-core-official.newCharacter")}" style="width:40%; height:25px;" id="MF_actor_to_create">
+                <select style="width:40%; height:25px;" id="MF_default_to_use">${options}
+                </select>
+                <button type="button" style="width:10%; height:35px; margin-right:2px" id="create_from_default" title="${game.i18n.localize("fate-core-official.create_from_default")}">
+                <i class="fas fa-user-check"></i>
+                </button>
+                <button type="button" style="width:10%; height:35px" id="manage_defaults" title="${game.i18n.localize("fate-core-official.manage_defaults")}">
+                <i class="fas fa-users-cog"></i>
+                </button>
+            </div>
+        `);
+    
+        let create = html.querySelector('#MF_actor_to_create');
+        create?.addEventListener("click", event => {
+            event.stopPropagation();
+            create.select();
+        })
+    
+        let manageDefaults = html.querySelector('#manage_defaults');
+        manageDefaults?.addEventListener("click", event => {
+            event.stopPropagation()
+            let md = new ManageDefaults().render(true);
+        });
+    
+        let createFromDefault = html.querySelector('#create_from_default');
+        createFromDefault?.addEventListener("click", async (event) => {
+            event.stopPropagation();
+            let actor_name = html.querySelector('#MF_actor_to_create').value;
+            let default_name = html.querySelector('#MF_default_to_use').value;
+    
+            if (! actor_name) actor_name = game.i18n.localize("fate-core-official.newCharacter");
+    
+            let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
+    
+            if (default_name === "Blank"){
+                let actorData = {
+                    "name":actor_name,
+                    "type":"fate-core-official",
+                    "ownership": perm,
+                    "system.details.fatePoints.refresh":"0",
+                    "prototypeToken.actorLink":true
+                 }
+                 await Actor.create(actorData, {"renderSheet":true});
+                 return;
+            }
+    
+            if (default_name === "fate-core-official"){
+                await Actor.create({"name":actor_name, "type":"fate-core-official", ownership: perm, "prototypeToken.actorLink":true},{renderSheet:true});
+                return;
+            }
+            await f.createCharacterFromDefault(default_name, actor_name, true);
+        });
     }
 });
 

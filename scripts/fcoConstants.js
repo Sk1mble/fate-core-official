@@ -80,16 +80,18 @@ class fcoConstants {
             let playmats = await getFiles(`/modules/${module}/art/playmats/`)
             let scenes = `<div style="width:100%; height:50vh; background-color:white; overflow-y:auto">`
             for (let playmat of playmats){
-                scenes += `<img style="width: 100%;" class="playmat-image" src = "${playmat}" data-img = "${playmat}"></img>`
+                scenes += `<img style="width: 500px; padding:10px" class="playmat-image" src = "${playmat}" data-img = "${playmat}"></img>`
             }
             
             scenes += `</div>`
 
-        let dia = new Dialog({
-                        title: "Pick an image",
+        let dia = new foundry.applications.api.DialogV2({
+                        window:{title: "Pick an image"},
                         content: scenes,
-                        buttons: {
-                        }
+                        buttons: [{
+                            action:"close",
+                            label:"Close this window"
+                        }]
                     }).render(true);
 
 
@@ -132,66 +134,52 @@ class fcoConstants {
         }
 
         return new Promise(resolve => {
-            new Dialog({
-                title: prompt,
+            let d = new foundry.applications.api.DialogV2({
+                window:{title: prompt},
                 content: `<p>${content}<br/>`,
-                buttons: {
-                    ok: {
+                modal:true,
+                buttons: [
+                    {
+                        action: "ok",
                         label: game.i18n.localize("fate-core-official.OK"),
                         callback: () => {
                             resolve("OK");
                         }
                     }
-                },
+                ],
                 default:"ok",
                 close: ()=> {resolve("OK)")},
-            },
-            {
-                width:width,
-                height:height,
-            }).render(true);
+            });
+            d.position.height = height;
+            d.position.width = width;
+            d.render(true);
         })
     }
 
-    static awaitYesNoDialog(prompt, content){
-        return new Promise(resolve => {
-            new Dialog({
-                title: prompt,
-                content: `<p>${content}<br/>`,
-                buttons: {
-                    yes: {
-                        label: game.i18n.localize("fate-core-official.Yes"),
-                        callback: () => {
-                            resolve("yes");
-                        }
-                    },
-                    no: {
-                        label: game.i18n.localize("fate-core-official.No"),
-                        callback: () => {
-                            resolve("no");
-                        }
-                    }
-                },
-                default:"no",
-                close: ()=> {resolve("no")},
-            }).render(true);
+    static async awaitYesNoDialog(prompt, content){
+        let response = await foundry.applications.api.DialogV2.confirm({
+            window:{title:prompt},
+            modal: true,
+            content: content,
+            rejectClose: false,
         })
+        return response;
     }
 
     static awaitColourPicker(prompt){
         return new Promise(resolve => {
-            new Dialog({
-                title: prompt,
+            new foundry.applications.api.DialogV2({
+                window:{title: prompt},
+                modal:false,
                 content: '<input type="color" id="mf_cp" value="#000000"></input>',
-                buttons: {
-                    ok: {
-                        label: game.i18n.localize("fate-core-official.OK"),
-                        callback: () => {
-                            resolve(document.getElementById("mf_cp").value)
-                        }
-                    }
-                },
-                default:"ok",
+                buttons:[{
+                    action: "setColour",
+                    label: game.i18n.localize("fate-core-official.OK"),
+                    callback: () => {
+                        resolve(document.getElementById("mf_cp").value)
+                    },
+                    default: true
+                }],
             }).render(true);
         })
     }
@@ -210,92 +198,100 @@ class fcoConstants {
         }
     }
 
-    static getInput(prompt){        
-        return new Promise(resolve => {
-            new Dialog({
-                title: prompt,
-                content: '<div align="center"><input id="dialog_box" style="width:375px; margin:5px" autofocus></input></div>',
-                buttons: {
-                    ok: {
-                        label: game.i18n.localize("fate-core-official.OK"),
-                        callback: () => {
-                            resolve(document.getElementById("dialog_box").value)
-                        }
-                    }
+    static async getInput(prompt){
+        let response = await foundry.applications.api.DialogV2.prompt({
+            window:{ title: prompt},
+            modal: false,
+            content: '<div align="center"><input name = "response" style="width:375px; margin:5px" autofocus></input></div>',
+            ok: {
+                label: game.i18n.localize("fate-core-official.OK"),
+                callback: (event, button, dialog) => {
+                    return button.form.elements.response.value;
                 },
-                default:"ok"
-            }).render(true);
-        });
+            }
+        })
+        return response;
     }
 
     static getInputFromList(prompt, options){
         let optionsText = "";
         options.forEach(option =>{
             optionsText+=`<option>${option}</option>`
-        })        
+        })
+
         return new Promise(resolve => {
-            new Dialog({
-                title: prompt,
-                content: `<div align="center"><select id="dialog_box" style="width:375px">${optionsText}</select></div>`,
-                buttons: {
-                    ok: {
-                        label: game.i18n.localize("fate-core-official.OK"),
-                        callback: () => {
-                            resolve(document.getElementById("dialog_box").value)
-                        }
+            new foundry.applications.api.DialogV2 ({
+                window:{title:prompt},
+                content: `<div align="center"><select id="dialog_box" name="choice" style="width:375px">${optionsText}</select></div>`,
+                buttons: [{
+                    action: "choice",
+                    label: game.i18n.localize("fate-core-official.OK"),
+                    callback: (event, button, dialog) => {
+                        resolve(button.form.elements.choice.value);
                     }
-                },
-                default:"ok"
-            }).render(true);
+                }]
+            }).render(true)
         });
     }
 
-    static updateText(prompt, textToUpdate, apply){
+    static getCopiableDialog(title, toCopy){
+        new foundry.applications.api.DialogV2({
+            modal: false,
+            window:{title: title}, 
+            content: `<div style="background-color:white; color:black;"><textarea name="fcoCopiable" rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${toCopy}</textarea></div>`,
+            buttons: [{
+                label: game.i18n.localize("fate-core-official.CopyToClipboardAndClose"),
+                callback: (event, button, dialog) => {
+                    let text = button.form.elements.fcoCopiable.value;
+                    navigator.clipboard.writeText(text);
+                }
+            }],
+        }).render(true);
+    }
+
+    static async updateText(prompt, textToUpdate, apply){
         let label = game.i18n.localize("fate-core-official.Save");
         if (apply) label = game.i18n.localize("fate-core-official.Apply");
-        return new Promise(resolve => {
-            new Dialog({
-                title: prompt, 
-                content: `<div style="background-color:white; color:black;"><textarea style="min-height:600px; font-family:var(--fco-font-family); width:800px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: label,
-                        callback: () => {
-                            resolve(DOMPurify.sanitize(document.getElementById("get_text_box").value))
-                        }
-                    },
-                    discard: {
-                        label: game.i18n.localize("fate-core-official.Discard"),
-                        callback: () => {
-                            resolve("discarded")
-                        }
+
+        let response = await foundry.applications.api.DialogV2.prompt({
+            window:{title:prompt, resizable:true},
+            content:`<div style="background-color:white; color:black;"><textarea style="min-height:600px; font-family:var(--fco-font-family); width:800px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="response">${textToUpdate}</textarea></div>`,
+            modal: false,
+            position:{width:820},
+            buttons:[{
+                    action: "ok",
+                    label: label,
+                    callback: (event, button, dialog) => {
+                        return DOMPurify.sanitize(button.form.elements.response.value);
                     }
-                }
             },
             {
-                width:820,
-                resizable:true
-            }).render(true);
+                action: "discard",
+                label: game.i18n.localize("fate-core-official.Discard"),
+                callback: () => {
+                   return "discarded";
+                }
+            }]
         });
+        return response;
     }
 
-    static updateShortText(prompt, textToUpdate){
-        return new Promise(resolve => {
-            new Dialog({
-                title: prompt, 
-                content: `<div style="background-color:white; color:black;"><textarea rows="1" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="get_text_box">${textToUpdate}</textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: game.i18n.localize("fate-core-official.Save"),
-                        callback: () => {
-                            resolve(document.getElementById("get_text_box").value)
-                        }
+    static async updateShortText(prompt, textToUpdate){
+        let response = await foundry.applications.api.DialogV2.prompt({
+            window:{title:prompt, resizable:true},
+            content: `<div style="background-color:white; color:black;"><textarea rows="1" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="response">${textToUpdate}</textarea></div>`,
+            modal: false,
+            buttons:[{
+                    action: "ok",
+                    label: game.i18n.localize("fate-core-official.Save"),
+                    callback: (event, button, dialog) => {
+                        return DOMPurify.sanitize(button.form.elements.response.value);
                     },
-                },
-                default:"ok",
-            }).render(true);
+                    default: true
+            }]
         });
-        }
+        return response;
+    }
 
     static sortByKey(json_object){
         let ordered_object = {}
@@ -412,17 +408,16 @@ class fcoConstants {
 
     static async getSettings (){
         return new Promise(resolve => {
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.PasteDataToOverwrite"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_settings"></textarea></div>`,
-                buttons: {
-                    ok: {
+            new foundry.applications.api.DialogV2 ({
+                window:{title: game.i18n.localize("fate-core-official.PasteDataToOverwrite")},
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="import_settings"></textarea></div>`,
+                buttons: [{
+                        action: "import_settings",
                         label: game.i18n.localize("fate-core-official.Save"),
-                        callback: () => {
-                            resolve (document.getElementById("import_settings").value);
+                        callback: (event, button, dialog) => {
+                            resolve (button.form.elements.import_settings.value);
                         }
-                    }
-                },
+                }],
             }).render(true)
         });
     }
@@ -451,10 +446,7 @@ class fcoConstants {
 
         if (Object.keys(current_stunts).length > 0){
             if (Object.keys(stunts).length > 0){
-                let confirm = await Dialog.confirm({
-                    title:  game.i18n.localize("fate-core-official.mergeStuntsTitle"),
-                    content: `<p>${game.i18n.localize("fate-core-official.mergeStunts")}</p>`
-                });
+                let confirm = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.mergeStuntsTitle"),game.i18n.localize("fate-core-official.mergeStunts"));
                 if ( confirm ) {
                     let final_stunts = foundry.utils.mergeObject(current_stunts, stunts);
                     await fcoConstants.wd().update({"system.stunts":final_stunts});
@@ -470,10 +462,7 @@ class fcoConstants {
 
         if (Object.keys(current_defaults).length > 0){
             if (Object.keys(defaults).length > 0){
-                let confirm = await Dialog.confirm({
-                    title:  game.i18n.localize("fate-core-official.mergeDefaultsTitle"),
-                    content: `<p>${game.i18n.localize("fate-core-official.mergeDefaults")}</p>`
-                });
+                let confirm = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.mergeDefaultsTitle"), `<p>${game.i18n.localize("fate-core-official.mergeDefaults")}</p>`);
                 if ( confirm ) {
                     let final_defaults = foundry.utils.mergeObject(current_defaults, defaults);
                     await fcoConstants.wd().update({"system.defaults":final_defaults});

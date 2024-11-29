@@ -741,7 +741,7 @@
     flex-grow:1;
     flex-shrink:2;
     margin:10px;
-    max-height:90%;
+    max-height:25rem;
     overflow-y:auto;
 }
 
@@ -756,7 +756,7 @@
 }
 
 .mfate-extras-collapsed {
-    height:2.5rem;
+    height:8rem;
 }
 
 .mfate-extras__content {

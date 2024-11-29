@@ -61,21 +61,23 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
 
     //Here are the action listeners
     _onRender(context, options) {
-        let html = $(this.element); // We should switch this to using queryselector etc. but let's get it working first. This is a more laborious process than originally thought, so we'll stick with jQuery for now.
-        const extras_button = html.find("div[name='add_player_extra']");
-        const extras_edit = html.find ("button[name='edit_extra']");
-        const extras_delete = html.find("button[name='delete_extra']");
-        const extras_grab = html.find("button[name='grab_extra']")
-        const isContainer = html.find("input[name='system.container.isContainer']");
-        const takeAll = html.find("button[name='container_take_all']");
-        const takeContainer = html.find("button[name='container_take']");
+        let html = this.element;
 
-        extras_button.on("click", event => this._on_extras_click(event, html));
-        extras_edit.on("click", event => this._on_extras_edit_click(event, html));
-        extras_delete.on("click", event => this._on_extras_delete(event, html));
-        extras_grab.on("click", event => this._on_extras_grab(event, html));
+        // Singleton elements
+        const extras_button = html.querySelector("div[name='add_player_extra']");
+        const isContainer = html.querySelector("input[name='system.container.isContainer']");
+        const takeAll = html.querySelector("button[name='container_take_all']");
+        const takeContainer = html.querySelector("button[name='container_take']");
+        const expandAllExtras = html.querySelector("div[name='expandExtras']");
+        const compressAllExtras = html.querySelector("div[name='compressExtras']")
+        const input = html.querySelector('input[type="text"], input[type="number"], textarea');
+        const expandExtraPane = html.querySelector("div[name='expandExtrasPane']");
 
-        takeAll.on("click", async event => {
+        extras_button?.addEventListener("click", (event) => { 
+            this._on_extras_click(event, this.element);
+        });
+
+        takeAll?.addEventListener("click", async event => {
             let character = game.user.character;
 
             if (character != undefined && character != null){
@@ -88,7 +90,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
             }
         })
 
-        takeContainer.on("click", async event => {
+        takeContainer?.addEventListener("click", async event => {
             const character = game.user.character;
             if ( !character ) return ui.notifications.error ("You must be allocated a character to use these buttons. Drag items to the desired character instead.");
           
@@ -125,19 +127,38 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
             // Close the actor sheet
             this.actor.sheet.close({force: true});
         })
-		
 
-        const expandExtra = html.find("button[name='expandExtra']");
+        expandAllExtras?.addEventListener("click", event => {
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
 
-        const input = html.find('input[type="text"], input[type="number"], textarea');
+            this.actor.items.contents.forEach(item => {
+                let key = this.actor.id+item.id+"_extra";
+                game.user.expanded[key] = true;
+            })  
+            this.render(false);
+        }) 
 
-        input.on("focus", event => {
-                
+        compressAllExtras?.addEventListener("click", event => {
+            if (game.user.expanded == undefined){
+                game.user.expanded = {};
+            }
+
+            this.actor.items.contents.forEach(item => {
+                let key = this.actor.id+item.id+"_extra";
+                game.user.expanded[key] = false;
+            })
+            this.render(false);
+        })
+
+        input?.addEventListener("focus", event => {                
             if (this.editing == false) {
                 this.editing = true;
             }
         });
-        input.on("blur", event => {
+
+        input?.addEventListener("blur", event => {
             this.editing = false
             if (this.renderBanked){
                 this.renderBanked = false;
@@ -145,29 +166,13 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
             }
         });
 
-        input.on("keyup", event => {
+        input?.addEventListener("keyup", event => {
             if (event.keyCode === 13 && event.target.type == "input") {
                 input.blur();
             }
         })
 
-        expandExtra.on("click", event => {
-            let e_id = event.target.id.split("_")[0];
-            let key = this.actor.id+e_id+"_extra";
-            if (game.user.expanded == undefined){
-                game.user.expanded = {};
-            }
-
-            if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
-                game.user.expanded[key] = true;
-            } else {
-                game.user.expanded[key] = false;
-            }
-            this.render(false);
-        })
-
-        const expandExtraPane = html.find("div[name='expandExtrasPane']");
-        expandExtraPane.on("click", event=> {
+        expandExtraPane?.addEventListener("click", event=> {
             let key = this.actor.id + "_extras";
             if (game.user.expanded == undefined){
                 game.user.expanded = {};
@@ -181,40 +186,95 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
             this.render(false);
         })
 
-        const expandAllExtras = html.find("div[name='expandExtras']");
-        const compressAllExtras = html.find("div[name='compressExtras']")
+        // Elements that can be multiple
+        const extras_edit = html.querySelectorAll("button[name='edit_extra']");
+        const extras_delete = html.querySelectorAll("button[name='delete_extra']");
+        const extras_grab = html.querySelectorAll("button[name='grab_extra']")
+        const expandExtra = html.querySelectorAll("button[name='expandExtra']");
+        
+        for (let el of extras_edit){
+            el?.addEventListener("click", (event) => { 
+                this._on_extras_edit_click(event, this.element);
+            });
+        }
 
-        expandAllExtras.on("click", event => {
-            if (game.user.expanded == undefined){
-                game.user.expanded = {};
-            }
+        for (let el of extras_delete){
+            el?.addEventListener("click", (event) => { 
+                this._on_extras_delete(event, this.element);
+            });
+        }
 
-            this.actor.items.contents.forEach(item => {
-                let key = this.actor.id+item.id+"_extra";
-                game.user.expanded[key] = true;
-            })  
-            this.render(false);
-        }) 
+        for (let el of extras_grab){
+            el?.addEventListener("click", (event) => { 
+                this._on_extras_grab(event, this.element);
+            });
+        }
 
-        compressAllExtras.on("click", event => {
-            if (game.user.expanded == undefined){
-                game.user.expanded = {};
-            }
+        for (let el of expandExtra) {
+            el?.addEventListener("click", event => {
+                let e_id = event.target.id.split("_")[0];
+                let key = this.actor.id+e_id+"_extra";
+                if (game.user.expanded == undefined){
+                    game.user.expanded = {};
+                }
 
-            this.actor.items.contents.forEach(item => {
-                let key = this.actor.id+item.id+"_extra";
-                game.user.expanded[key] = false;
+                if (game.user.expanded[key] == undefined || game.user.expanded[key] == false){
+                    game.user.expanded[key] = true;
+                } else {
+                    game.user.expanded[key] = false;
+                }
+                this.render(false);
             })
-            this.render(false);
-        })
+        }
 
-        const item = html.find("div[name='item_header']");
-        item.on("dragstart", async event => this._on_item_drag (event, html));
+        // Implement drag/drop handling & double click item header to share
+        const item = html.querySelectorAll("div[name='item_header']");
+        for (let el of item){
+            el?.addEventListener("dragstart", async event => this._on_item_drag (event, html));
+            el?.addEventListener("dblclick", async event => {
+                let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.actor.name})}</strong><br/><hr>`
+                let user = game.user;
+                let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
+                item = foundry.utils.duplicate(item);
+                
+                content += `<strong>${item.name}</strong><br/>
+                            <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
+                            <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${item.system.description.value}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Permissions")}:</strong> ${item.system.permissions}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Costs")}:</strong> ${item.system.costs}<br/>
+                            <strong>${game.i18n.localize("fate-core-official.Refresh")}:</strong> ${item.system.refresh}<br/>`
+    
+                let items = [];
+                for (let aspect in item.system.aspects){
+                    items.push(`${item.system.aspects[aspect].value}`)
+                }
+                content += `<strong>${game.i18n.localize("fate-core-official.Aspects")}: </strong>${items.join(", ")}<br/>`;
+                
+                items = [];                            
+                for (let skill in item.system.skills){
+                    items.push (`${item.system.skills[skill].name} (${item.system.skills[skill].rank})`);
+                }
+                content += `<strong>${game.i18n.localize("fate-core-official.Skills")}: </strong>${items.join(", ")}<br/>`;
+    
+                items = [];                            
+                for (let stunt in item.system.stunts){
+                    items.push (item.system.stunts[stunt].name);
+                }
+                content += `<strong>${game.i18n.localize("fate-core-official.Stunts")}: </strong>${items.join(", ")}<br/>`;
+    
+                items = [];                            
+                for (let track in item.system.tracks){
+                    items.push (item.system.tracks[track].name);
+                }
+                content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
+    
+                ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
+            })
+        }
 
-        const things = html.find("div[class='thingSheet']");
-
-        things.on("drop", async event => {
-            let data = TextEditor.getDragEventData(event.originalEvent);
+        const things = html.querySelector("div[class='thingSheet']");
+        things?.addEventListener("drop", async event => {
+            let data = TextEditor.getDragEventData(event);
             let item;
             if (data.type == "Item") {
                 item = await fromUuid(data.uuid);
@@ -226,46 +286,6 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
                 }
             } 
         })
-
-        item.on("dblclick", async event => {
-            let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.actor.name})}</strong><br/><hr>`
-            let user = game.user;
-            let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
-            item = foundry.utils.duplicate(item);
-            
-            content += `<strong>${item.name}</strong><br/>
-                        <img style="display:block; padding:5px; margin-left:auto; margin-right:auto;" src="${item.img}"/><br/>
-                        <strong>${game.i18n.localize("fate-core-official.Description")}:</strong> ${item.system.description.value}<br/>
-                        <strong>${game.i18n.localize("fate-core-official.Permissions")}:</strong> ${item.system.permissions}<br/>
-                        <strong>${game.i18n.localize("fate-core-official.Costs")}:</strong> ${item.system.costs}<br/>
-                        <strong>${game.i18n.localize("fate-core-official.Refresh")}:</strong> ${item.system.refresh}<br/>`
-
-            let items = [];
-            for (let aspect in item.system.aspects){
-                items.push(`${item.system.aspects[aspect].value}`)
-            }
-            content += `<strong>${game.i18n.localize("fate-core-official.Aspects")}: </strong>${items.join(", ")}<br/>`;
-            
-            items = [];                            
-            for (let skill in item.system.skills){
-                items.push (`${item.system.skills[skill].name} (${item.system.skills[skill].rank})`);
-            }
-            content += `<strong>${game.i18n.localize("fate-core-official.Skills")}: </strong>${items.join(", ")}<br/>`;
-
-            items = [];                            
-            for (let stunt in item.system.stunts){
-                items.push (item.system.stunts[stunt].name);
-            }
-            content += `<strong>${game.i18n.localize("fate-core-official.Stunts")}: </strong>${items.join(", ")}<br/>`;
-
-            items = [];                            
-            for (let track in item.system.tracks){
-                items.push (item.system.tracks[track].name);
-            }
-            content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
-
-            ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
-        })        
     }
 
     async _on_extras_grab(event, html){
@@ -288,12 +308,12 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
     // Handler for dragging extras from a ThingSheet (not to be confused with the main character sheet drag handler).
     // We should standardsise this given that all extras are the same!
     async _on_item_drag (event, html){
-        let item = await fromUuid(event.currentTarget.getAttribute("data-item"));
+        let item = await fromUuid(event.target.getAttribute("data-item"));
         let data = {
             "type":"Item",
             "uuid":item.uuid
         }
-        await event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(data));
+        await event.dataTransfer.setData("text/plain", JSON.stringify(data));
     }
 
     async _on_extras_edit_click(event, html){
@@ -562,9 +582,12 @@ Hooks.on ('dropActorSheetData', async (target, sheet, data) => {
         return;
     }
     let i = fromUuidSync(data.uuid);
-    console.log(i);
 
     if (i.type != "Extra"){
+        return;
+    }
+
+    if (target.type == "Thing" && !target.system.container.isContainer){
         return;
     }
 

@@ -1724,6 +1724,7 @@
     "fate-core-official.ExportSettingsDialogTitle":"Copy & Paste this to save your world configuration",
     "fate-core-official.ImportSettingsName":"Import world config from text?",
     "fate-core-official.ImportSettingsHint":"This will overwrite all stunts, tracks, aspects, and skills with the import. To cancel if you change your mind, just close the window without clicking 'save'.",
+    "fate-core-official.CopyToClipboardAndClose":"Copy data to clipboard and close this window",
     "fate-core-official.Added":"Added",
     "fate-core-official.ToTheStuntDatabase":"to the stunt database",
     "fate-core-official.NewStunt":"New Stunt",

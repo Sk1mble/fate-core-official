@@ -68,25 +68,13 @@ class AspectSetup extends FormApplication{
         let key = fcoConstants.gkfn(aspects, slb)
         let aspect = aspects[key];
         let aspect_text = `{"${key}":${JSON.stringify(aspect, null, 5)}}`
- 
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyPasteToSaveAspect"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${aspect_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyPasteToSaveAspect"), aspect_text);
     }
 
     async _onExportAspects(event, html){
         let aspects = fcoConstants.wd().system.aspects;
         let aspects_text = JSON.stringify(aspects, null, 5);
- 
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyPasteToSaveAspects"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${aspects_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyPasteToSaveAspects"), aspects_text);
     }
 
     async getAspects(){

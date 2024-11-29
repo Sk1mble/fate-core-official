@@ -108,7 +108,7 @@ class EditPlayerTracks extends FormApplication {
     // Here are the action functions
 
     async _ad_hoc (event, html){
-        let catText = `<select id="category" style="color:black; background:white;">`
+        let catText = `<select name="category" style="color:black; background:white;">`
         for (let c in this.tracks_by_category){
             // Build the category list
             if (c !== "All"){
@@ -124,11 +124,12 @@ class EditPlayerTracks extends FormApplication {
         catText += '</select>'
 
         let content = 
-        `<h1>${game.i18n.localize("fate-core-official.AddAnAdHocTrack")}</h1>
-        <table border="1" cellpadding="4" cellspacing="4">
+        `<div>
+        <h1>${game.i18n.localize("fate-core-official.AddAnAdHocTrack")}</h1>
+        <table border="0" cellpadding="4" cellspacing="4">
             <tr>
                 <td width = "200px">
-                ${game.i18n.localize("fate-core-official.Category")}:
+                    ${game.i18n.localize("fate-core-official.Category")}:
                 </td>
                 <td>
                     ${catText}
@@ -136,10 +137,10 @@ class EditPlayerTracks extends FormApplication {
             </tr>
             <tr>
                 <td>
-                ${game.i18n.localize("fate-core-official.Name")}:
+                    ${game.i18n.localize("fate-core-official.Name")}:
                 </td>
                 <td>
-                    <input style="color:black; background:white;" id = "name" type="text" value="${game.i18n.localize("fate-core-official.NewTrack")}"></input>
+                    <input style="color:black; background:white;" name = "name" type="text" value="${game.i18n.localize("fate-core-official.NewTrack")}"></input>
                 </td>
             </tr>
             <tr>
@@ -147,7 +148,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.Description")}:
                 </td>
                 <td>
-                    <input style="color:black; background:white;" id = "description" type="text"></input>
+                    <input style="color:black; background:white;" name = "description" type="text"></input>
                 </td>
             </tr>
             <tr>
@@ -163,7 +164,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.Unique")}
                 </td>
                 <td>
-                    <input type="checkbox" id="unique" checked></input>
+                    <input type="checkbox" name="unique" checked></input>
                 </td>
             </tr>
             <tr>
@@ -171,7 +172,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.RecoveryType")}:
                 </td>
                 <td>
-                    <select style="color:black; background:white;" id = "recovery_type"><option value="Fleeting" selected="selected">${game.i18n.localize("fate-core-official.Fleeting")}</option><option value="Sticky">${game.i18n.localize("fate-core-official.Sticky")}</option><option value="Lasting">${game.i18n.localize("fate-core-official.Lasting")}</option></Select>
+                    <select style="color:black; background:white;" name = "recovery_type"><option value="Fleeting" selected="selected">${game.i18n.localize("fate-core-official.Fleeting")}</option><option value="Sticky">${game.i18n.localize("fate-core-official.Sticky")}</option><option value="Lasting">${game.i18n.localize("fate-core-official.Lasting")}</option></Select>
                 </td>
             </tr>
             <tr>
@@ -179,7 +180,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.AspectWhenMarked")}:
                 </td>
                 <td>
-                     <input id = "aspect_when_marked" type="checkbox">
+                     <input name = "aspect_when_marked" type="checkbox">
                 </td>
             </tr>
             <tr>
@@ -187,7 +188,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.AspectAsName?")}
                 </td>
                 <td>
-                    <input id = "aspect_as_name" type="checkbox"></input>
+                    <input name = "aspect_as_name" type="checkbox"></input>
                 </td>
             </tr>
             <tr>
@@ -195,7 +196,7 @@ class EditPlayerTracks extends FormApplication {
                 ${game.i18n.localize("fate-core-official.Boxes")}:
                 </td>
                 <td>
-                    <input style="color:black; background:white;" id = "boxes" type="number" min = "0" value="0">
+                    <input style="color:black; background:white;" name = "boxes" type="number" min = "0" value="0">
                 <td>
             </tr>
             <tr>
@@ -203,7 +204,7 @@ class EditPlayerTracks extends FormApplication {
                 ${game.i18n.localize("fate-core-official.BoxLabels")}:
             </td>
             <td>
-                <select id="player_track_label_select" style="color:black; background:white;" >
+                <select name="player_track_label_select" style="color:black; background:white;" >
                     <option value="escalating">
                         ${game.i18n.localize("fate-core-official.Escalating")}
                     </option>
@@ -214,7 +215,7 @@ class EditPlayerTracks extends FormApplication {
                         ${game.i18n.localize("fate-core-official.None")}
                     </option>
                 </select>
-                <input type="text" id="player_track_custom_label" maxlength="1" minlength="1" title="${game.i18n.localize("fate-core-official.EnterASingleCharacter")}" style="color:black; background:white; width:50px"/>
+                <input type="text" name="player_track_custom_label" maxlength="1" minlength="1" title="${game.i18n.localize("fate-core-official.EnterASingleCharacter")}" style="color:black; background:white; width:50px"/>
             </td>
         </tr>
             <tr>
@@ -222,7 +223,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.Harm")}:
                 </td>
                 <td>
-                    <input style="color:black; background:white;" id = "harm" type="number" min = "0" value="0">
+                    <input style="color:black; background:white;" name = "harm" type="number" min = "0" value="0">
                 </td>
             </tr>
             <tr>
@@ -230,7 +231,7 @@ class EditPlayerTracks extends FormApplication {
                 ${game.i18n.localize('fate-core-official.Rollable')}
             </td>
             <td>
-                <select id = "rollable" style="color:black; background:white;">
+                <select name = "rollable" style="color:black; background:white;">
                     <option value="false">${game.i18n.localize('fate-core-official.False')}</option>
                     <option value="full"> ${game.i18n.localize('fate-core-official.RollFullBoxes')} </option>
                     <option value="empty"> ${game.i18n.localize('fate-core-official.RollEmptyBoxes')} </option>
@@ -242,7 +243,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.WhenMarked")}
                 </td>
                 <td>
-                    <input style="color:black; background:white;" id="when_marked" type="text"></input>
+                    <input style="color:black; background:white;" name="when_marked" type="text"></input>
                 </td>
             </tr>
             <tr>
@@ -250,7 +251,7 @@ class EditPlayerTracks extends FormApplication {
                     ${game.i18n.localize("fate-core-official.HowRecover")}
                 </td>
                 <td>
-                    <input style="color:black; background:white;" id="recovery_conditions" type="text"></input>
+                    <input style="color:black; background:white;" name="recovery_conditions" type="text"></input>
                 </td>
             </tr>
             <tr>
@@ -260,54 +261,57 @@ class EditPlayerTracks extends FormApplication {
                 <td>
                     ${game.i18n.localize("fate-core-official.AdHocTracksDoNotUseLinkedSkills")}
             </tr>
-        </table>`
+        </table>
+        </div>`
 
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.AdHocTrackEditor"),
-            content: content,
-            buttons: {
-                ok: {
-                    label: game.i18n.localize("fate-core-official.Save"),
-                    callback: (html) => {
-                        let newTrack = {};
-                        newTrack.category=html.find("select[id='category']")[0].value;
-                        newTrack.name=html.find("input[id='name']")[0].value;
-                        newTrack.description= html.find("input[id='description']")[0].value;
-                        newTrack.universal= false; 
-                        newTrack.unique = html.find("input[id='unique']")[0].checked;
-                        newTrack.aspect = {};
-                        newTrack.aspect.name = "";
-                        newTrack.enabled=true;
-                        newTrack.when_marked = html.find("input[id='when_marked']")[0].value;
-                        newTrack.recovery_conditions = html.find("input[id='recovery_conditions']")[0].value;
-                        newTrack.recovery_type = html.find("select[id='recovery_type']")[0].value;
-                        newTrack.harm_can_absorb=parseInt(html.find("input[id='harm']")[0].value);
-                        newTrack.aspect.when_marked = html.find("input[id='aspect_when_marked']")[0].checked;
-                        newTrack.aspect.as_name = html.find("input[id='aspect_as_name']")[0].checked;
-                        newTrack.boxes = parseInt(html.find("input[id='boxes']")[0].value);
-                        newTrack.rollable = html.find("select[id='rollable']")[0].value
-                        let box_values = []
-                        for (let i = 0; i < newTrack.boxes; i++){
-                            box_values.push(false);
-                        }
-                        newTrack.box_values = box_values;
-                        let label = html.find("select[id='player_track_label_select']")[0].value;
-                        if (label == "custom"){
-                            let val = html.find("input[id='player_track_custom_label']")[0].value;
-                            if (val != "" && val != undefined){
-                                label = val;
-                            } else {
-                                label = "";
-                            }
-                        }
-                        newTrack.label = label;
-                        newTrack.toCopy=true;
-                        this.tracks_by_category[newTrack.category][fcoConstants.tob64(newTrack.name)]=newTrack;
-                        this.tracks_by_category["All"][fcoConstants.tob64(newTrack.name)]=newTrack;
-                        this.render(false);
-                    }
-                }
+        new foundry.applications.api.DialogV2({
+            window:{
+                title: game.i18n.localize("fate-core-official.AdHocTrackEditor"),
             },
+            content: content,
+            buttons: [{
+                action:"ok",
+                label: game.i18n.localize("fate-core-official.Save"),
+                callback: (event, button, html) => {
+                    let newTrack = {};
+                    console.log(button.form.elements.category)
+                    newTrack.category= button.form.elements.category.value; 
+                    newTrack.name=html = button.form.elements.name.value; 
+                    newTrack.description = button.form.elements.description.value 
+                    newTrack.universal= false; 
+                    newTrack.unique = button.form.elements.unique.checked;
+                    newTrack.aspect = {};
+                    newTrack.aspect.name = "";
+                    newTrack.enabled=true;
+                    newTrack.when_marked = button.form.elements.when_marked.value;
+                    newTrack.recovery_conditions = button.form.elements.recovery_conditions.value; 
+                    newTrack.recovery_type = button.form.elements.recovery_type.value; 
+                    newTrack.harm_can_absorb=parseInt(button.form.elements.harm.value);
+                    newTrack.aspect.when_marked = button.form.elements.aspect_when_marked.checked;
+                    newTrack.aspect.as_name = button.form.elements.aspect_as_name.checked;
+                    newTrack.boxes = parseInt(button.form.elements.boxes.value);
+                    newTrack.rollable = button.form.elements.rollable.value; 
+                    let box_values = []
+                    for (let i = 0; i < newTrack.boxes; i++){
+                        box_values.push(false);
+                    }
+                    newTrack.box_values = box_values;
+                    let label = button.form.elements.player_track_label_select.value;
+                    if (label == "custom"){
+                        let val = button.form.elements.player_track_custom_label.value;
+                        if (val != "" && val != undefined){
+                            label = val;
+                        } else {
+                            label = "";
+                        }
+                    }
+                    newTrack.label = label;
+                    newTrack.toCopy=true;
+                    this.tracks_by_category[newTrack.category][fcoConstants.tob64(newTrack.name)]=newTrack;
+                    this.tracks_by_category["All"][fcoConstants.tob64(newTrack.name)]=newTrack;
+                    this.render(false);
+                }
+            }],
             default:"ok",
         },
         {

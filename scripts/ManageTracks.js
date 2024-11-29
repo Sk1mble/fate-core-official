@@ -161,13 +161,7 @@ class EditEntityTrack extends FormApplication {
 
     async _onExportTrack (event, html){
         let output = JSON.stringify(this.track, null, 5);
-        
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${output}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), output);
     }
 
     async _onCopyTrackButton (event, html){
@@ -634,13 +628,7 @@ class EditTracks extends FormApplication {
         else {
             let t = fcoConstants.gkfn(this.tracks, name);
             let track = `{"${fcoConstants.tob64(name)}":${JSON.stringify(this.tracks[t], null, 5)}}`;
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${track}</textarea></div>`,
-                buttons: {
-                },
-            }).render(true);
-
+            fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), track)
         }
     }
 

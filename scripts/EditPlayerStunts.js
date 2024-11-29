@@ -438,13 +438,7 @@ class StuntDB extends Application {
     async _onExportStunts(event, html){
  
         let stunt_text = JSON.stringify(foundry.utils.duplicate(fcoConstants.wd().system.stunts),null,5);
- 
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunts"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunts"),stunt_text);
     }
 
     async _onExportStunt(event, html){
@@ -454,13 +448,7 @@ class StuntDB extends Application {
         let key = fcoConstants.gkfn(stunts, stuntName);
 
         let stunt_text = `{"${key}":${JSON.stringify(stunt,null,5)}}`;
- 
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunt"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${stunt_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveStunt"),stunt_text);
     }
 
     async _onEditStunt(event, html){
@@ -474,17 +462,16 @@ class StuntDB extends Application {
 
     async getStunts(){
         return new Promise(resolve => {
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.PasteOverStunts"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_stunt_db"></textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: game.i18n.localize("fate-core-official.Save"),
-                        callback: () => {
-                            resolve (document.getElementById("import_stunt_db").value);
-                        }
-                    }
-                },
+            new foundry.applications.api.DialogV2 ({
+                window:{title: game.i18n.localize("fate-core-official.PasteOverStunts")},
+                content: `<div style="background-color:white; color:black;"><textarea name="fcoImport" rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_stunt_db"></textarea></div>`,
+                buttons: [{
+                            action:"ok",
+                            label: game.i18n.localize("fate-core-official.Save"),
+                            callback: (event, button, dialog) => {
+                                resolve (button.form.elements.fcoImport.value);
+                            }
+                }]
             }).render(true)
         });
     }
@@ -493,6 +480,7 @@ class StuntDB extends Application {
         let text = await this.getStunts();
         try {
             let imported_stunts = JSON.parse(text);
+            console.log(imported_stunts);
             let stuntDB = foundry.utils.duplicate(fcoConstants.wd().system.stunts);
             if (stuntDB == undefined){
                 stuntDB = {};
