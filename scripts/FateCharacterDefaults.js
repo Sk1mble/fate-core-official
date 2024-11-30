@@ -15,7 +15,7 @@ class FateCharacterDefaults {
         let key = fcoConstants.gkfn(defaults, character_default.default_name, "default_name");
         if (key){
             let response  = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.checkDefaultOverwritePrompt"),character_default.default_name + game.i18n.localize("fate-core-official.checkDefaultOverwriteContent"));
-            if (response === "yes"){
+            if (response){
                 await fcoConstants.wd().update({
                     "system.defaults":{
                         [`${key}`]:character_default,
@@ -321,7 +321,7 @@ class FateCharacterDefaults {
             let updates = {};
             let sections = options.sections;
             for (let section of sections){
-                updates[`system.${section}`] = "blank";
+                updates[`system.${section}`] = null;
             }
             await actor.update(updates, {renderSheet:false, noHook:true});
 
@@ -334,6 +334,8 @@ class FateCharacterDefaults {
                 updates["prototypeToken.texture.src"] = character_default["token_img"];
             }
             //Now commit the updates.
+            console.log(JSON.stringify(actor.system.stunts));
+            console.log(JSON.stringify(updates));
             await actor.update(updates);
 
             // delete all extras and add all extras from default.
@@ -611,7 +613,7 @@ class ManageDefaults extends FormApplication {
                     </table>
                 </div>
                 `
-            await fcoConstants.awaitOKDialog(prompt, content, "100em", "50em");
+            await fcoConstants.awaitOKDialog(prompt, content, 500);
         })
 
         const imp = $('#md_import');
@@ -619,19 +621,7 @@ class ManageDefaults extends FormApplication {
         const exp_sel = $('#md_export_selected');
 
         imp.on('click', async (event, html)=>{
-            let str = await new Promise(resolve => {
-                new Dialog({
-                    title: game.i18n.localize("fate-core-official.PasteDefaults"),
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_defaults"></textarea></div>`,                    buttons: {
-                        ok: {
-                            label: "Save",
-                            callback: () => {
-                                resolve (document.getElementById("import_defaults").value);
-                            }
-                        }
-                    },
-                }).render(true)
-            });
+            let str = await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteDefaults"));
             let f = new FateCharacterDefaults();
             await f.importDefaults(str);
         })
@@ -639,12 +629,7 @@ class ManageDefaults extends FormApplication {
         exp_all.on('click', async (event, html)=>{
             let f = new FateCharacterDefaults();
             let str = await f.exportDefaults();
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), 
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${str}</textarea></div>`,
-                buttons: {
-                },
-            }).render(true);
+            fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), str);
         })
 
         exp_sel.on('click', async (event, html)=>{
@@ -656,12 +641,7 @@ class ManageDefaults extends FormApplication {
             }
             $("input[name='def_select']").prop('checked', false);
             let str = await f.exportDefaults(list);
-           new Dialog({
-                title: game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), 
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${str}</textarea></div>`,
-                buttons: {
-                },
-            }).render(true);
+            fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), str);
         })
     
         const d_name = html.find("input[name='def_name']");

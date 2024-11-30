@@ -103,8 +103,8 @@ class EditPlayerSkills extends FormApplication{
         game.system.apps["item"].splice(game.system.apps["item"].indexOf(this),1); 
 
         if (this.changed){
-            let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.abandonChangesQ"), game.i18n.localize("fate-core-official.abandonChanges"));
-            if (answer == "yes") await super.close(...args);
+            let confirm = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.abandonChangesQ"), game.i18n.localize("fate-core-official.abandonChanges"));
+            if (confirm) await super.close(...args);
         } else {
             await super.close(...args);
         }
@@ -229,7 +229,7 @@ class EditPlayerSkills extends FormApplication{
         }
 
         const templateData = {
-            skill_list:game.settings.get(fcoConstants.wd().system.skills),
+            skill_list:fcoConstants.wd().system.skills,
             character_skills:presentation_skills,
             isGM:game.user.isGM,
             isExtra:this.object.type=="Extra"
@@ -303,50 +303,7 @@ class EditPlayerSkills extends FormApplication{
     async _onSkillButton(event,html){
         let name = event.target.id;
         let skill = fcoConstants.gbn(this.player_skills, name);
-        fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
-                                            <table cellspacing ="4" cellpadding="4" border="1">
-                                                <h2>${skill.name}</h2>
-                                                <tr>
-                                                    <td style="width:400px;">
-                                                        <b>${game.i18n.localize("fate-core-official.Description")}:</b>
-                                                    </td>
-                                                    <td style="width:2000px;">
-                                                        ${skill.description}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.Overcome")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.overcome}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.CAA")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.caa}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.Attack")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.attack}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.Defend")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.defend}
-                                                    </td>
-                                                </tr>
-                                            </table>`,1000)
+        fcoConstants.presentSkill(skill);
     }
 
     async _onSaveButton(event, html){
@@ -456,7 +413,7 @@ class EditGMSkills extends FormApplication{
         } 
         
         //Now we need to add skills that have checks and which aren't already checked.
-        let world_skills=game.settings.get(fcoConstants.wd().system.skills)
+        let world_skills=fcoConstants.wd().system.skills
         for (let w in world_skills){
             let name = world_skills[w].name;
             let cbox;
@@ -543,7 +500,7 @@ class EditGMSkills extends FormApplication{
         if (orphaned.length > 0) fcoConstants.sort_name(orphaned);
 
         const templateData = {
-            skill_list:fcoConstants.wd().system.skills(),
+            skill_list:fcoConstants.wd().system.skills,
             character_skills:this.player_skills,
             present_skills:present,
             absent_skills:absent,

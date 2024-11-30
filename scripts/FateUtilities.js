@@ -889,7 +889,7 @@ class FateUtilities extends Application{
             // Render a dialog asking for the modifier and text description
             let content = 
             `<div>
-                <table border="none">
+                <table style="border:none">
                     <th style="text-align:left; padding-left:5px">
                         Modifier
                     </th>
@@ -898,11 +898,11 @@ class FateUtilities extends Application{
                     </th>
                     <tr>
                         <td style="text-align:left; padding-left:5px"> 
-                            <input type="number" style="background-color:white; max-width:5em" class="fco_manual_modifier" value="0">
+                            <input type="number" style="background-color:white; max-width:5em" name="fco_manual_modifier" value="0">
                             </input>
                         </td>
                         <td style="text-align:left; padding-left:5px">
-                            <input type="text" style="background-color:white;" class="fco_manual_description" value="">
+                            <input type="text" style="background-color:white;" name="fco_manual_description" value="">
                             </input>
                         </td>
                     </tr>
@@ -910,20 +910,19 @@ class FateUtilities extends Application{
             </div>`
 
             let modification = await new Promise(resolve => {
-                new Dialog({
-                    title: game.i18n.localize("fate-core-official.manualRollModifier"),
+                new foundry.applications.api.DialogV2({
+                    window:{title: game.i18n.localize("fate-core-official.manualRollModifier")},
                     content: content,
-                    buttons: {
-                        ok: {
-                            label: "OK",
-                            callback: () => {
+                    buttons: [{
+                        action: "ok",
+                        label: "OK",
+                            callback: (event, button, dialog) => {
                                 resolve({
-                                    modifier:$('.fco_manual_modifier')[0].value,
-                                    description:$('.fco_manual_description')[0].value
+                                    modifier:button.form.elements.fco_manual_modifier.value,
+                                    description:button.form.elements.fco_manual_description.value
                                 })
                             }
-                        }
-                    },
+                    }],
                     default:"ok"
                 }).render(true);
             });
@@ -1057,7 +1056,7 @@ class FateUtilities extends Application{
                 
                 let content =`<br/><div>`
                 for (let aspect of sit_aspects){
-                    content += `<div style="display:flex; flex-direction:row"><div style="min-width:75%; max-width:75%; padding:5px">${aspect.name}</div><div style="min-width:50px"><select class = "free_i_selector">${aspect.options}</select></div></div>`
+                    content += `<div style="display:flex; flex-direction:row; margin-bottom:5px"><div style="min-width:75%; max-width:75%; padding:5px">${aspect.name}</div><div style="min-width:50px"><select class = "free_i_selector">${aspect.options}</select></div></div>`
                 }
                 if (boosts > 0){
                     let options = "";
@@ -1069,17 +1068,15 @@ class FateUtilities extends Application{
                 content += `</div><br/>`
 
                let invokedAspects = await new Promise(resolve => {
-                    new Dialog({
-                        title: game.i18n.localize("fate-core-official.selectAspects"),
+                    new foundry.applications.api.DialogV2({
+                        window:{title: game.i18n.localize("fate-core-official.selectAspects")},
                         content: content,
-                        buttons: {
-                            ok: {
+                        buttons: [{
                                 label: "OK",
-                                callback: () => {
-                                    resolve($('.free_i_selector'))
-                                }
+                                callback: (event, button, dialog) => {
+                                    resolve (dialog.querySelectorAll(".free_i_selector"));
                             }
-                        },
+                        }],
                         default:"ok",
                         close: () => resolve()
                     }).render(true);
@@ -1200,17 +1197,15 @@ class FateUtilities extends Application{
                 let content =`<br/><div style="min-width:100%; max-width:100%"><select style="min-width:100%; max-width:100%" class="free_i_r_selector">${options}</select></div><br/>`
 
                invokedAspects = await new Promise(resolve => {
-                    new Dialog({
-                        title: game.i18n.localize("fate-core-official.selectAspect"),
+                    new foundry.applications.api.DialogV2({
+                        window:{title: game.i18n.localize("fate-core-official.selectAspects")},
                         content: content,
-                        buttons: {
-                            ok: {
+                        buttons: [{
                                 label: "OK",
-                                callback: () => {
-                                    resolve($('.free_i_r_selector'))
-                                }
+                                callback: (event, button, dialog) => {
+                                    resolve (dialog.querySelectorAll(".free_i_r_selector"));
                             }
-                        },
+                        }],
                         default:"ok",
                         close: () => resolve("aborted")
                     }).render(true);
@@ -1524,26 +1519,24 @@ class FateUtilities extends Application{
         <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-description")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-flavour"></input></td></tr>
         </tr></table>`;
         let width = 500;
-        let height = 300;
-        if (showFormulae) height = 330;
 
-        new Dialog({
-                    title: game.i18n.localize("fate-core-official.fu-adhoc-roll"),
+        let d = new foundry.applications.api.DialogV2({
+                    window:{title: game.i18n.localize("fate-core-official.fu-adhoc-roll")},
                     content: content,
-                    buttons: {
-                        ok: {
+                    buttons: [{
+                            action: "ok",
                             label: game.i18n.localize("fate-core-official.OK"),
-                            callback: async ()=> {
+                            callback: async (event, button, dialog)=> {
                                 // Do the stuff here
-                                let formula = $('#fco-gmadhr-formula')[0]?.value;
+                                let formula = dialog.querySelector('#fco-gmadhr-formula')?.value;
                                 if (!formula) formula = '4df';
-                                name = $('#fco-gmadhr-name')[0].value;
+                                name = dialog.querySelector('#fco-gmadhr-name').value;
                                 if (!name) name = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousEntity");
-                                skill = $('#fco-gmadhr-skill')[0].value;
+                                skill = dialog.querySelector('#fco-gmadhr-skill').value;
                                 if (!skill) skill = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousSkill");
-                                modifier = $('#fco-gmadhr-modifier')[0].value;
+                                modifier = dialog.querySelector('#fco-gmadhr-modifier').value;
                                 if (!modifier) modifier = 0;
-                                flavour = $('#fco-gmadhr-flavour')[0].value;
+                                flavour = dialog.querySelector('#fco-gmadhr-flavour').value;
                                 if (!flavour) flavour = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousReason");
 
                                 let r = new Roll(`${formula} + ${modifier}`);
@@ -1562,13 +1555,10 @@ class FateUtilities extends Application{
                                     speaker: msg
                                 });
                             }
-                            }
-                        }, default:"ok"
-                },
-                {
-                    width:width,
-                    height:height,
-                }).render(true);
+                        }], default:"ok"
+                });
+                d.position.width = width;
+                d.render(true);
     }
 
     async _on_avatar_click(event, html){
@@ -2581,16 +2571,13 @@ class TimedEvent extends Application {
             currentRound = game.combat.round;
         } catch {
             var dp = {
-                "title": game.i18n.localize("fate-core-official.Error"),
+                window:{"title": game.i18n.localize("fate-core-official.Error")},
                 "content": `${game.i18n.localize("fate-core-official.NoCurrentCombat")}<p>`,
-                default:"oops",
-                "buttons": {
-                    oops: {
+                "buttons": [{
                         label: game.i18n.localize("fate-core-official.OK"),
-                    }
-                }
+                }]
             }
-            let d = new Dialog(dp);
+            let d = new foundry.applications.api.DialogV2(dp);
             d.render(true);
         }
         if (currentRound != "NoCombat"){
@@ -2609,7 +2596,7 @@ class TimedEvent extends Application {
                 });
             }
             var dp = {
-                "title":game.i18n.localize("fate-core-official.TimedEvent"),
+                window:{"title":game.i18n.localize("fate-core-official.TimedEvent")},
                 "content":`<h1>${game.i18n.localize("fate-core-official.CreateATimedEvent")}</h1>
                             ${game.i18n.localize("fate-core-official.TheCurrentExchangeIs")} ${game.combat.round}.<p></p>
                             <table style="background:none; border:none">
@@ -2625,25 +2612,25 @@ class TimedEvent extends Application {
                                     <td><input type="number" value="${game.combat.round+1}" id="eventExchange" name="eventExchange"></input></td>
                                 </tr>
                             </table>`,
-                    default:"create",
-                    "buttons":{
-                        create:{label:game.i18n.localize("fate-core-official.Create"), callback:async (teDialog) => {
-
+                    "buttons":[{
+                        action:"create",
+                        label:game.i18n.localize("fate-core-official.Create"), 
+                        callback:async (event, button, dialog) => {
                             //if no flags currently set, initialise
                             var timedEvents = game.combat.getFlag("fate-core-official","timedEvents");
                             
                             if (timedEvents ==null || timedEvents == undefined){
                                 game.combat.setFlag("fate-core-official","timedEvents",[
-                                                                                    {   "round":`${teDialog.find("#eventExchange")[0].value}`,
-                                                                                        "event":`${teDialog.find("#eventToCreate")[0].value}`,
+                                                                                    {   "round":`${dialog.querySelector("#eventExchange").value}`,
+                                                                                        "event":`${dialog.querySelector("#eventToCreate").value}`,
                                                                                         "complete":false
                                                                                     }
                                                                                 ])
                                                                                 timedEvents=game.combat.getFlag("fate-core-official","timedEvents");
                             } else {
                                 timedEvents.push({   
-                                                    "round":`${teDialog.find("#eventExchange")[0].value}`,
-                                                    "event":`${teDialog.find("#eventToCreate")[0].value}`,
+                                                    "round":`${dialog.querySelector("#eventExchange").value}`,
+                                                    "event":`${dialog.querySelector("#eventToCreate").value}`,
                                                     "complete":false
                                 });
                                 game.combat.setFlag("fate-core-official","timedEvents",timedEvents);
@@ -2652,14 +2639,10 @@ class TimedEvent extends Application {
 
                             triggerRound=document.getElementById("eventExchange").value;
                             triggerText=document.getElementById("eventToCreate").value;
-                        }}
-                    }
+                        }
+                    }]
                 }
-            let dO = Dialog.defaultOptions;
-            dO.width="auto";
-            dO.height="auto";
-            dO.resizable="true"
-            let d = new Dialog(dp, dO);
+            let d = new foundry.applications.api.DialogV2(dp);
             d.render(true);
         }
     }
@@ -2724,26 +2707,15 @@ class FUAspectLabelClass extends FormApplication {
 Hooks.on("renderCombatTracker", () => {
     try {
         var r = game.combat.round;
-        let pendingEvents = game.combat.getFlag("fate-core-official","timedEvents");
+        let pendingEvents = foundry.utils.duplicate(game.combat.getFlag("fate-core-official","timedEvents"));
         for (let i = 0; i<pendingEvents.length;i++){
             var event = pendingEvents[i];
             if (r==event.round && event.complete != true){
-                var dp = {
-                    "title": game.i18n.localize("fate-core-official.TimedEvent"),
-                    "content":`<h2>${game.i18n.localize("fate-core-official.TimedEventForExchange")} ${event.round}:</h2><p></p>
-                                <h3>${event.event}</h3>`,
-                    default:"oops",
-                    "buttons": {
-                        oops: {
-                            label: game.i18n.localize("fate-core-official.OK"),
-                        }
-                    }
-                }
+                fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.TimedEvent"), `<h3 style="text-align:center; margin:0">${game.i18n.localize("fate-core-official.TimedEventForExchange")} ${event.round}</h3><p style="text-align:center; font-size:var(--font-size-18)">${event.event}</p>`)
                 event.complete = true;
-                let d = new Dialog(dp);
-                d.render(true);
             }
         }
+        game.combat.setFlag("fate-core-official","timedEvents", pendingEvents);
     }catch {
 
     }
@@ -2837,12 +2809,11 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
                     </table>
                 </div>
             `);
-            const el = html.querySelector("button[name='fco_chat_roll_button']");
-
+            const buttons = html.querySelectorAll("button[name='fco_chat_roll_button']");
             // This is how we add a click handler to an HTMLElement rather than a JQuery element.
-            el.onclick = async (event) => {
+            for (let button of buttons) button.addEventListener("click", async event => {
                 await FateUtilities._fu_roll_button(event, html);
-            }
+            })
         }
     }
 });

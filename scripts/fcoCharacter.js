@@ -303,19 +303,18 @@ export class fcoCharacter extends ActorSheet {
                 let width = 400;
                 let height = "auto";
 
-                new Dialog({
-                            title: game.i18n.localize("fate-core-official.quick_add_skill"),
+                new foundry.applications.api.DialogV2({
+                            window:{title: game.i18n.localize("fate-core-official.quick_add_skill")},
                             content: content,
-                            buttons: {
-                                ok: {
+                            buttons: [{
                                         label: game.i18n.localize("fate-core-official.OK"),
-                                        callback: async ()=> {
+                                        callback: async (event, button, dialog) => {
                                             // Do the stuff here
                                             // Construct a new skill
                                             let name = undefined// Get name from dialog
-                                            name = $("#fco-qaskillname")[0].value;
+                                            name = dialog.querySelector("#fco-qaskillname").value;
                                             let rank = 0; // get rank from dialog
-                                            rank = $("#fco-qaskillrank")[0].value;
+                                            rank = dialog.querySelector("#fco-qaskillrank").value;
                                             var newSkill=undefined;
                                             if (name!= undefined && name !=""){
                                                 newSkill= new fcoSkill({
@@ -335,8 +334,7 @@ export class fcoCharacter extends ActorSheet {
                                                 this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill}});
                                             }
                                         }
-                                    },
-                                }, 
+                                }], 
                                 default:"ok",
                         },
                         {
@@ -391,9 +389,9 @@ export class fcoCharacter extends ActorSheet {
                     }
             
                     let content = 
-                    `<div style="background-color:white">
+                    `<div>
                     <h1 style="padding: 10px">${track.name} (${track.recovery_type})</h1>
-                    <table border="1" cellpadding="4" cellspacing="4" style="background-color:white;">
+                    <table border="1" cellpadding="4" cellspacing="4" style="width:950px">
                         <tr>
                             <td width = "200px" style="padding:10px">
                                 ${game.i18n.localize("fate-core-official.Description")}:
@@ -733,7 +731,6 @@ export class fcoCharacter extends ActorSheet {
             });
 
             const saveDefault = html.find("button[name='saveDefault']");
-
             saveDefault.on("click", async event => {
                 let f = new FateCharacterDefaults();
                 let content = 
@@ -773,28 +770,28 @@ export class fcoCharacter extends ActorSheet {
                                         </div>
                                     </div>
                                 </form>`
-                    let d = new Dialog({
-                    title: game.i18n.localize("fate-core-official.pickADefaultName"),
+                    let d = new foundry.applications.api.DialogV2({
+                    window:{title: game.i18n.localize("fate-core-official.pickADefaultName")},
                     content: content,
-                    buttons: {
-                        ok: {
-                            label:"OK",
-                            callback: async () => {
-                                let name = $(`#${this.document.id}_choose_default_name`)[0].value;
-                                let desc = $(`#${this.document.id}_choose_default_description`)[0].value;
-                                if (!name) name = this.document.name;
-                                let f = new FateCharacterDefaults();
-                                let options = {
-                                                keep_skills:$(`#${this.document.id}_keep_skills`)[0].checked,
-                                                keep_aspects:$(`#${this.document.id}_keep_aspects`)[0].checked
-                                }
-                                let def = await f.extractDefault(this.document, name, desc, options);
-                                def.options = options;
-                                await f.storeDefault(def);
-                                ui.sidebar.render(false);
+                    buttons: [{
+                        action:"ok",
+                        label:"OK",
+                        callback: async (event, button, dialog) => {
+                            let name = dialog.querySelector(`#${this.document.id}_choose_default_name`).value;
+                            let desc = dialog.querySelector(`#${this.document.id}_choose_default_description`).value;
+                            if (!name) name = this.document.name;
+                            let f = new FateCharacterDefaults();
+                            let options = {
+                                            keep_skills:dialog.querySelector(`#${this.document.id}_keep_skills`).checked,
+                                            keep_aspects:dialog.querySelector(`#${this.document.id}_keep_aspects`).checked
                             }
+                            let def = await f.extractDefault(this.document, name, desc, options);
+                            def.options = options;
+                            await f.storeDefault(def);
+                            ui.sidebar.render(false);
                         }
-                    },
+                        
+                    }],
                     default: "ok"
                 }).render(true);
             })
@@ -826,7 +823,7 @@ export class fcoCharacter extends ActorSheet {
                 let f = new FateCharacterDefaults();
                 let options = f.defaults.map(d => `<option>${d}</option>`).join("\n");
                 let content = `
-                <h2>${game.i18n.localize("fate-core-official.applyDefault")}</h2>
+                <h3>${game.i18n.localize("fate-core-official.applyDefault")}</h3>
                 <select style="width:100%" id="${this.document.id}_select_default">
                                     ${options}
                 </select>
@@ -892,64 +889,68 @@ export class fcoCharacter extends ActorSheet {
                     </row>
                 </table>
                 `
-                let d = await new Dialog({
-                    title: game.i18n.localize("fate-core-official.applyDefaultOptions"),
+                let d = new foundry.applications.api.DialogV2({
+                    window:{title: game.i18n.localize("fate-core-official.applyDefaultOptions")},
                     content: content,
-                    buttons: {
-                        ok: {
-                            label:"OK",
-                            callback: async () => {                                
-                                let avatar = $(`#${this.document.id}_def_avatar`).hasClass('fa-toggle-on');
-                                let tracks = $(`#${this.document.id}_def_tracks`).hasClass('fa-toggle-on');
-                                let stunts = $(`#${this.document.id}_def_stunts`).hasClass('fa-toggle-on');
-                                let extras = $(`#${this.document.id}_def_extras`).hasClass('fa-toggle-on');
-                                let skills = $(`#${this.document.id}_def_skills`).hasClass('fa-toggle-on');
-                                let aspects = $(`#${this.document.id}_def_aspects`).hasClass('fa-toggle-on');
-                                let merge = $(`#${this.document.id}_def_overwrite`).hasClass('fa-toggle-on');
-                                let default_name = $(`#${this.document.id}_select_default`).val();
-                                if (!avatar && !tracks && !stunts && !extras && !skills && !aspects){
-                                    // Todo: Add a message here to explain why nothing happens?
-                                    return;
-                                }
+                    buttons: [{
+                        action:"ok",
+                        label:"OK",
+                        callback: async (event, button, dialog) => {                                
+                            let avatar = dialog.querySelector(`#${this.document.id}_def_avatar`).classList.contains('fa-toggle-on');
+                            let tracks = dialog.querySelector(`#${this.document.id}_def_tracks`).classList.contains('fa-toggle-on');
+                            let stunts = dialog.querySelector(`#${this.document.id}_def_stunts`).classList.contains('fa-toggle-on');
+                            let extras = dialog.querySelector(`#${this.document.id}_def_extras`).classList.contains('fa-toggle-on');
+                            let skills = dialog.querySelector(`#${this.document.id}_def_skills`).classList.contains('fa-toggle-on');
+                            let aspects = dialog.querySelector(`#${this.document.id}_def_aspects`).classList.contains('fa-toggle-on');
+                            let merge = dialog.querySelector(`#${this.document.id}_def_overwrite`).classList.contains('fa-toggle-on');
+                            let default_name = dialog.querySelector(`#${this.document.id}_select_default`).value;
+                            if (!avatar && !tracks && !stunts && !extras && !skills && !aspects){
+                                // Todo: Add a message here to explain why nothing happens?
+                                return;
+                            }
 
-                                let sections = [];
-                                if (tracks) sections.push("tracks");
-                                if (stunts) sections.push("stunts");
-                                if (aspects) sections.push("aspects");
-                                if (skills) sections.push("skills");
+                            let sections = [];
+                            if (tracks) sections.push("tracks");
+                            if (stunts) sections.push("stunts");
+                            if (aspects) sections.push("aspects");
+                            if (skills) sections.push("skills");
 
-                                let options = {
-                                    "overwrite":!merge,
-                                    "extras":extras,
-                                    "avatar":avatar,
-                                    "sections":sections
-                                }
-                                
-                                let prompt = "";
-                                let content = "";
-    
-                                if (merge){
-                                    prompt = `${game.i18n.localize("fate-core-official.merge")} from '${default_name}' default`;
-                                    content = game.i18n.localize("fate-core-official.proceedToMerge");
-                                } 
-                                if (!merge) {
-                                    prompt = `${game.i18n.localize("fate-core-official.overwrite")} with '${default_name}' default`
-                                    content = game.i18n.localize("fate-core-official.proceedToOverwrite");
-                                }
-                                let proceed = await fcoConstants.awaitYesNoDialog(prompt, content);
-                                if (proceed == "yes") {
-                                    await f.applyDefault(this.document, default_name, options);
-                                }
+                            let options = {
+                                "overwrite":!merge,
+                                "extras":extras,
+                                "avatar":avatar,
+                                "sections":sections
+                            }
+                            
+                            let prompt = "";
+                            let content = "";
+
+                            if (merge){
+                                prompt = `${game.i18n.localize("fate-core-official.merge")} from '${default_name}' default`;
+                                content = game.i18n.localize("fate-core-official.proceedToMerge");
+                            } 
+                            if (!merge) {
+                                prompt = `${game.i18n.localize("fate-core-official.overwrite")} with '${default_name}' default`
+                                content = game.i18n.localize("fate-core-official.proceedToOverwrite");
+                            }
+                            let proceed = await fcoConstants.awaitYesNoDialog(prompt, content);
+                            if (proceed) {
+                                await f.applyDefault(this.document, default_name, options);
                             }
                         }
-                    },
+                    }],
                     default: "ok"
-                })._render(true); // Using _render because it's async
-            
-                $(`.def_toggle`).on('click', function (event) {
-                    event.target.classList.toggle("fa-toggle-on");
-                    event.target.classList.toggle("fa-toggle-off");
                 })
+                await d.render(true);
+            
+                let toggles = document.querySelectorAll(`.def_toggle`);
+                for (let toggle of toggles){
+                    toggle.addEventListener("click", event => {
+                        event.target.classList.toggle("fa-toggle-on");
+                        event.target.classList.toggle("fa-toggle-off");
+                    })
+                }
+                
             })
 
             input.on("focus", event => {
@@ -978,52 +979,7 @@ export class fcoCharacter extends ActorSheet {
     async _onSkillR(event,html){
         let name = event.target.id;
         let skill = fcoConstants.gbn(this.actor.system.skills, name);
-        fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
-                                            <div style="background-color:white">
-                                            <table cellspacing ="4" cellpadding="4" border="1" style="background-color:white">
-                                                <h2 style="padding:10px;">${skill.name}</h2>
-                                                <tr>
-                                                    <td style="width:400px; padding:10px">
-                                                        <b>${game.i18n.localize("fate-core-official.Description")}:</b>
-                                                    </td>
-                                                    <td style="width:2000px; padding:10px">
-                                                        ${skill.description}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px;">
-                                                        <b>${game.i18n.localize("fate-core-official.Overcome")}:</b>
-                                                    </td>
-                                                    <td style="width:2000px;  padding:10px">
-                                                        ${skill.overcome}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                   <td style="padding:10px;">
-                                                        <b>${game.i18n.localize("fate-core-official.CAA")}:</b>
-                                                    </td>
-                                                    <td style="width:2000px;  padding:10px">
-                                                        ${skill.caa}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px;">
-                                                        <b>${game.i18n.localize("fate-core-official.Attack")}:</b>
-                                                    </td>
-                                                    <td style="width:2000px; padding-left:5px">
-                                                        ${skill.attack}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:10px;">
-                                                        <b>${game.i18n.localize("fate-core-official.Defend")}:</b>
-                                                    </td>
-                                                    <td style="width:2000px; padding-left:5px">
-                                                        ${skill.defend}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            </div>`,1000)
+        fcoConstants.presentSkill(skill);
     }
 
     async _on_item_drag (event, html){
@@ -1568,7 +1524,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
             let old = fcoConstants.gbn(actor.system.stunts, data.dragged.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                if (answer == "no") return
+                if (!answer) return
             } 
             await actor.update({"system.stunts":{[fcoConstants.tob64(data.dragged.name)]:data.dragged}});
         }
@@ -1576,7 +1532,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
             let old = fcoConstants.gbn(actor.system.aspects, data.dragged.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                if (answer == "no") return
+                if (!answer) return
             } 
             if (!data.shift_down){
                 data.dragged.value = "";
@@ -1588,7 +1544,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
             let old = fcoConstants.gbn(actor.system.skills, data.dragged.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                if (answer == "no") return
+                if (!answer) return
             } 
             if (!data.shift_down){
                 data.dragged.rank = 0;
@@ -1615,7 +1571,7 @@ Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
             let old = fcoConstants.gbn(actor.system.tracks, track.name);
             if (old) {
                 let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                if (answer == "no") return
+                if (!answer) return
             } 
             await actor.update({"system.tracks":{[fcoConstants.tob64(track.name)]:track}});
         }

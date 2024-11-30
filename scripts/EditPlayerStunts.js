@@ -461,26 +461,13 @@ class StuntDB extends Application {
     }
 
     async getStunts(){
-        return new Promise(resolve => {
-            new foundry.applications.api.DialogV2 ({
-                window:{title: game.i18n.localize("fate-core-official.PasteOverStunts")},
-                content: `<div style="background-color:white; color:black;"><textarea name="fcoImport" rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_stunt_db"></textarea></div>`,
-                buttons: [{
-                            action:"ok",
-                            label: game.i18n.localize("fate-core-official.Save"),
-                            callback: (event, button, dialog) => {
-                                resolve (button.form.elements.fcoImport.value);
-                            }
-                }]
-            }).render(true)
-        });
+        return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteOverStunts"));
     }
 
     async _onImportStunts(event, html){
         let text = await this.getStunts();
         try {
             let imported_stunts = JSON.parse(text);
-            console.log(imported_stunts);
             let stuntDB = foundry.utils.duplicate(fcoConstants.wd().system.stunts);
             if (stuntDB == undefined){
                 stuntDB = {};

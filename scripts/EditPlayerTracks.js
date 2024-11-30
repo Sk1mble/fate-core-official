@@ -465,7 +465,7 @@ class EditPlayerTracks extends FormApplication {
 
         let content = 
         `<h1>${game.i18n.localize("fate-core-official.DetailsFor")} ${track.name}</h1>
-        <table border="1" cellpadding="4" cellspacing="4">
+        <table border="1" cellpadding="4" cellspacing="4" style="width:950px">
             <tr>
                 <td width = "200px">
                     ${game.i18n.localize("fate-core-official.Description")}:

@@ -18,27 +18,27 @@ Hooks.on('getSceneControlButtons', controls => {
 
 class FateCharacterImporter {
     async getFCI_JSON(){
-        return new Promise(resolve => {
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.PasteCharacterData"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_fate_character"></textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: "Save",
-                        callback: () => {
-                            resolve (document.getElementById("import_fate_character").value);
-                        }
-                    }
-                },
-            }).render(true)
-        });
+        return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteCharacterData"));
     }
 
     async import (data){
+        console.log(data);
         try {
-            data = JSON.parse(data);    
-        } catch {
-            ui.notifications.error(game.i18n.localize("fate-core-official.couldnotparse"));
+            if (data.startsWith('`')){ //This is pasted data from a stringified actor.
+                // Remove backticks
+                data = data.replace(/`/g,'');
+
+                // Replace double escapes with single escapes.
+                data = data.replace(/\\\\/g, '\\');
+
+                // Then we can parse the data normally.
+                data = JSON.parse(data);
+            } else {
+                data = JSON.parse(data);
+            }
+        } catch (error) {
+            console.error(error);
+            ui.notifications.error(game.i18n.localize("fate-core-official.couldnotparse")+": "+(error));
             return;
         }
         

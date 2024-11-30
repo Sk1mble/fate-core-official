@@ -207,9 +207,9 @@ export class fcoActor extends Actor {
             extra_status.push({"_id":id, "system.active":active})
         }
 
-        let response = "no";
+        let response = false;
         if (existing) response  = await fcoConstants.awaitYesNoDialog(shapeName, game.i18n.localize("fate-core-official.checkShapeOverwrite"));
-        if (!existing || response == "yes"){
+        if (!existing || response){
             // Safe to store this shape
             let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg, actorName:token.actor.name, tokenName:token.name, tokenData:token_data, extra_status:extra_status, transition:transition};
             shapes[fcoConstants.tob64(shapeName)] = newShape;

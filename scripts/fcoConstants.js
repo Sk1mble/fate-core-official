@@ -137,7 +137,7 @@ class fcoConstants {
             let d = new foundry.applications.api.DialogV2({
                 window:{title: prompt},
                 content: `<p>${content}<br/>`,
-                modal:true,
+                modal:false,
                 buttons: [
                     {
                         action: "ok",
@@ -154,6 +154,60 @@ class fcoConstants {
             d.position.width = width;
             d.render(true);
         })
+    }
+
+    static presentSkill(skill){
+        fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
+                                            <div style="display:flex; flex-direction: column">
+                                                <div style="width: 950px">
+                                                    <h2>${skill.name}</h2>
+                                                </div>
+                                                
+                                                <div style="display:flex; flex-direction:row; padding:5px">
+                                                    <div style="width:200px">
+                                                            <b>${game.i18n.localize("fate-core-official.Description")}:</b>
+                                                    </div>
+                                                    <div style="width:850px; margin-bottom:10px">
+                                                        ${skill.description}
+                                                    </div>
+                                                </div>
+
+                                                 <div style="display:flex; flex-direction:row; padding:5px; background-color: rgb(107, 102, 97, 0.25)">
+                                                    <div style="width:200px; padding:0; margin:0px">
+                                                        <b>${game.i18n.localize("fate-core-official.Overcome")}:</b>
+                                                    </div>
+                                                    <div style="width:850px; padding:0px; margin-bottom:10px">
+                                                        ${skill.overcome}
+                                                    </div>
+                                                </div>
+
+                                                <div style="display:flex; flex-direction:row; padding:5px">
+                                                    <div style="width:200px">
+                                                        <b>${game.i18n.localize("fate-core-official.CAA")}:</b>
+                                                    </div>
+                                                    <div style="width:850px; margin-bottom:20px">
+                                                        ${skill.caa}
+                                                    </div>
+                                                </div>
+
+                                                <div style="display:flex; flex-direction:row; padding:5px; background-color:rgb(107, 102, 97, 0.25)">
+                                                    <div style="width:200px; padding:0; margin:0px">
+                                                        <b>${game.i18n.localize("fate-core-official.Attack")}:</b>
+                                                    </div>
+                                                    <div style="width:850px; padding:0px; margin-bottom:10px">
+                                                        ${skill.attack}
+                                                    </div>
+                                                </div>
+
+                                                <div style="display:flex; flex-direction:row; padding:5px">
+                                                    <div style="width:200px">
+                                                        <b>${game.i18n.localize("fate-core-official.Defend")}:</b>
+                                                    </div>
+                                                    <div style="width:850px">
+                                                        ${skill.defend}
+                                                    </div>
+                                                </div>
+                                            </div>`,1000)
     }
 
     static async awaitYesNoDialog(prompt, content){
@@ -189,12 +243,7 @@ class fcoConstants {
         if (!confirm){
             return true;
         } else {
-            let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.Delete"),game.i18n.localize("fate-core-official.ConfirmDeletion"));
-            if (del=="yes"){
-                return true;
-            } else {
-                return false;
-            }
+            return await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.Delete"),game.i18n.localize("fate-core-official.ConfirmDeletion"));
         }
     }
 
@@ -247,6 +296,23 @@ class fcoConstants {
                 }
             }],
         }).render(true);
+    }
+
+    static async getImportDialog (title){
+        let str = await new Promise(resolve => {
+            new foundry.applications.api.DialogV2({
+                window:{title: title},
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="toImport"></textarea></div>`,                    
+                buttons: [{
+                        action:"ok",
+                        label: "Save",
+                        callback: (event, button, dialog) => {
+                            resolve (button.form.elements.toImport.value);
+                        }
+                }],
+            }).render(true)
+        });
+        return str;
     }
 
     static async updateText(prompt, textToUpdate, apply){
@@ -407,19 +473,7 @@ class fcoConstants {
     }
 
     static async getSettings (){
-        return new Promise(resolve => {
-            new foundry.applications.api.DialogV2 ({
-                window:{title: game.i18n.localize("fate-core-official.PasteDataToOverwrite")},
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="import_settings"></textarea></div>`,
-                buttons: [{
-                        action: "import_settings",
-                        label: game.i18n.localize("fate-core-official.Save"),
-                        callback: (event, button, dialog) => {
-                            resolve (button.form.elements.import_settings.value);
-                        }
-                }],
-            }).render(true)
-        });
+        return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteDataToOverwrite"));
     }
     
     // I'll need this code to get file data
@@ -532,7 +586,7 @@ class fcoConstants {
             let existing = fcoConstants.gbn (db, stunts[st].name);
             if (existing){
                 let overwrite = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"),`${game.i18n.localize("fate-core-official.stunt")} "${existing.name}": `+game.i18n.localize("fate-core-official.exists"));
-                if (overwrite == "no") delete stunts[st];
+                if (!overwrite) delete stunts[st];
             }
         }
         await fcoConstants.wd().update({"system.stunts":stunts});

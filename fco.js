@@ -1675,7 +1675,7 @@ class CustomiseSheet extends FormApplication {
             if (!name) name = "Unnamed Colour Scheme";
             let p = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.makePublic"), game.i18n.localize("fate-core-official.saveAsPublic"));
             let publicB = false;
-            if (p == "yes") publicB = true;
+            if (p) publicB = true;
             let schemeData = {name:name, scheme:scheme, public:publicB};
             schemes.push(schemeData);
             await game.user.unsetFlag("fate-core-official", "colourSchemes");

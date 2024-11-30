@@ -429,7 +429,7 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.stunts, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 await extra.update({"system.stunts":{[key]:data.dragged}});
             }
@@ -439,7 +439,7 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.aspects, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 if (!data.shift_down){
                     data.dragged.value = "";
@@ -453,7 +453,7 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.skills, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 if (!data.shift_down){
                     data.dragged.rank = 0;
@@ -486,7 +486,7 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.tracks, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 await extra.update({"system.tracks":{[key]:track}});
             }

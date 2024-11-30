@@ -75,42 +75,17 @@ class SkillSetup extends FormApplication{
         let sk = fcoConstants.gbn(skills, slb);
         let key = fcoConstants.gkfn(skills, slb);
         let skill_text = `{"${key}":${JSON.stringify(sk, null, 5)}}`
- 
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkill"),
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${skill_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkill"), skill_text);
     }
 
     async _onExportSkills(event, html){
         let skills = fcoConstants.wd().system.skills;
         let skills_text = JSON.stringify(skills, null, 5);
- 
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkills"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${skills_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkills"), skills_text);
     }
 
     async getSkills(){
-        return new Promise(resolve => {
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.PasteSkills"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_skills"></textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: "Save",
-                        callback: () => {
-                            resolve (document.getElementById("import_skills").value);
-                        }
-                    }
-                },
-            }).render(true)
-        });
+        return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteSkills"))
     }
 
     async _onImportSkills(event, html){

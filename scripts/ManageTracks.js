@@ -971,19 +971,7 @@ class TrackSetup extends FormApplication{
     }
 
     async getTracks(){
-        return new Promise(resolve => {
-            new foundry.applications.api.DialogV2({
-                window:{title: game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks")},
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="itracks"></textarea></div>`,
-                buttons: [{
-                    action: "ok",
-                    label: game.i18n.localize("Save"),
-                    callback: (event, button, dialog) => {
-                        resolve (button.form.elements.itracks.value);
-                    }
-                }],
-            }).render(true)
-        });
+        return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks"));
     }
 
     async _importTracks(event, html){
@@ -1072,7 +1060,7 @@ class TrackSetup extends FormApplication{
                                                 content += ttd.name + '<br/>'
                                             }
                                             let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.deleteCategory"), content);
-                                            if (del == "yes") {
+                                            if (del) {
                                                 delete track_categories[cat];
                                                 for (let ttd of toDelete){
                                                     delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
