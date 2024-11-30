@@ -928,16 +928,15 @@ class TrackSetup extends FormApplication{
             }
             content += `</div>`
             let width = 800;
-            new Dialog({
-                        title: `Change Track Categories`,
+            new foundry.applications.api.DialogV2({
+                        window: {title: `Change Track Categories`},
                         content: content,
-                        buttons: {
-                            ok: {
+                        buttons: [{
+                                action: "ok",
                                 label: game.i18n.localize("fate-core-official.OK"),
-                                callback: async ()=> {
+                                callback: async (event, button,dialog) => {
                                 // Do the stuff here
-                                    let results = $('select[name="fco_track_cat_select"]');
-
+                                    let results = button.form.elements.fco_track_cat_select;
                                     for (let result of results){
                                         let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
@@ -945,8 +944,7 @@ class TrackSetup extends FormApplication{
                                     await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
                                     await fcoConstants.wd().update({"system.tracks":tracks});
                                 }
-                                }
-                            }
+                            }]
                     },
                     {
                         width:width,
@@ -969,28 +967,21 @@ class TrackSetup extends FormApplication{
     async _exportTracks(event, html){
         let tracks = fcoConstants.wd().system.tracks;
         let tracks_text = JSON.stringify(tracks, null, 5);
-     
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveWorldTracks"),
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${tracks_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);    
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveWorldTracks"), tracks_text);
     }
 
     async getTracks(){
         return new Promise(resolve => {
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="itracks"></textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: game.i18n.localize("Save"),
-                        callback: () => {
-                            resolve (document.getElementById("itracks").value);
-                        }
+            new foundry.applications.api.DialogV2({
+                window:{title: game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks")},
+                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="itracks"></textarea></div>`,
+                buttons: [{
+                    action: "ok",
+                    label: game.i18n.localize("Save"),
+                    callback: (event, button, dialog) => {
+                        resolve (button.form.elements.itracks.value);
                     }
-                },
+                }],
             }).render(true)
         });
     }
