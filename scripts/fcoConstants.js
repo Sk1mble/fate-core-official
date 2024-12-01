@@ -548,7 +548,7 @@ class fcoConstants {
             }
         }
         // Now prepare the merge
-        let toSet = await foundry.utils.foundry.utils.mergeObject(db, stunts);
+        let toSet = await foundry.utils.mergeObject(db, stunts);
         game.settings.set("fate-core-official", "stunts", toSet);
     }
 
