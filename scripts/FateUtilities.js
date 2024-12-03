@@ -2557,12 +2557,7 @@ class acd extends FormApplication {
     }
 }
 
-class TimedEvent extends Application {
-
-    constructor(){
-        super();
-    }
-
+class TimedEvent {
     createTimedEvent(){
         var triggerRound=0;
         var triggerText="";

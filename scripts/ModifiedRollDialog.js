@@ -1,14 +1,28 @@
-class ModifiedRollDialog extends Application {
-    static get defaultOptions(){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/ModifiedRollDialog.html";
-        options.width = "auto";
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.ModifiedRoll");
-        options.resizable = false;
-        options.classes = options.classes.concat(['fate']);
-        return options 
-    } // End getDefaultOptions
+class ModifiedRollDialog extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+    
+    static DEFAULT_OPTIONS = {
+        tag:"form",
+        classes:["fate"],
+        position:{
+            width:"auto",
+            height:"auto",
+        },
+        window: {
+            title:this.title,
+            icon: "fas fa-dice",
+            resizable: false
+        }
+    }
+
+    static PARTS = {
+        "ModifiedRollDialog":{
+            template: "systems/fate-core-official/templates/ModifiedRollDialog.html",
+        }
+    }
+    
+    get title() {
+        return game.i18n.format("fate-core-official.modifiedRollFor", {skill:this.skill_name, name:this.actor.name})
+    }
 
     constructor(actor, skill, track){
         super();
@@ -17,21 +31,18 @@ class ModifiedRollDialog extends Application {
         this.track = track;
     }
 
-    activateListeners(html){
-        super.activateListeners(html);
-        const roll=html.find("button[class='modifiedRoll']");
-        roll.on("click",event => this.on_roll_click(event, html));
+    _onRender(context, options){
+        const roll=this.element.querySelector("button[class='modifiedRoll']");
+        roll?.addEventListener("click", event => this.on_roll_click(event));
     }
 
-    async on_roll_click(event, html){
+    async on_roll_click(event){
         let total_modifier = 0;     
-        let modifier = html.find("input[id='modifier']")[0].value;
-
+        let modifier = this.element.querySelector("input[id='modifier']").value;
         total_modifier+=parseInt(modifier);
-
-        let description = html.find("input[id='description']")[0].value;
-        let second_skill = html.find("select[id='second_skill']")[0].value;
-        let stunts = html.find("input[class='stunt_box']"); //This is an array
+        let description = this.element.querySelector("input[id='description']").value;
+        let second_skill = this.element.querySelector("select[id='second_skill']").value;
+        let stunts = this.element.querySelectorAll("input[class='stunt_box']"); //This is an array
         let second_skill_rank = 0;
         let second_skill_text = ""
         let skill_rank = 0;
@@ -54,7 +65,7 @@ class ModifiedRollDialog extends Application {
             skill_rank = fcoConstants.gbn(this.actor.system.skills, this.skill_name)?.rank;
         }
 
-        let manual_roll = html.find("select[id='manualRoll']")[0]?.value;
+        let manual_roll = this.element.querySelector("select[id='manualRoll']")?.value;
 
         total_modifier += parseInt(skill_rank);
         let modifier_text = "";
@@ -76,7 +87,7 @@ class ModifiedRollDialog extends Application {
 
         let stunt_text = ""
 
-        for (let i = 0; i < stunts.length; i++){
+        for (let i = 0; i < stunts?.length; i++){
             if (stunts[i].checked){
                 let s_name = stunts[i].id.split("_")[1]
                 let s_modifier = fcoConstants.gbn(this.actor.system.stunts, s_name).bonus;
@@ -131,7 +142,7 @@ class ModifiedRollDialog extends Application {
             // Set up the custom formula field in the HTML with id 'customFormula'
             // Add custom formulae from setting to the custom formula field
             // Ensure custom formula field is shown if there's more than 4dF in the custom formula setting.
-            let customFormula = html.find("select[id='customFormula']")[0]?.value;
+            let customFormula = this.element.querySelector("select[id='customFormula']")?.value;
             if (customFormula) formula = customFormula;
 
             r = new Roll(`${formula} + ${total_modifier}`);
@@ -163,8 +174,7 @@ class ModifiedRollDialog extends Application {
         this.close();
     }
 
-    getData (){
-        this.options.title = game.i18n.format("fate-core-official.modifiedRollFor", {skill:this.skill_name, name:this.actor.name})
+    _prepareContext (){
         let data = {};
         data.actor = this.actor;
         data.activeSkill=this.skill_name;
