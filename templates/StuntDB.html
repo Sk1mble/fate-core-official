@@ -1,4 +1,4 @@
-<body>
+<div>
     <div style="width:1200px; max-height:40px; background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-size:10pt; padding:0px; display:block;">
         <div style="display:table-row;background:var(--fco-header-colour); color:var(--fco-label-colour);">
             <div name="sb_name" title="Sort by name" style="width:200px; border-right:1px solid var(--fco-foundry-interactable-color); font-weight:bold; float:left; padding:5px">
@@ -13,7 +13,7 @@
             <div style="width:700px; border-right:1px solid var(--fco-foundry-interactable-color); font-weight:bold; float:left; padding:5px">
                 {{localize 'fate-core-official.Description'}}  
                 <div style="float:right">
-                    {{localize 'fate-core-official.filter'}} <input type="text" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:2em; width:12em" id="stunt_db_filter_box" value="{{filter}}"></input><i style="padding-left:5px; {{#if ignoreCase}} opacity:0.4{{/if}}" title="{{localize 'fate-core-official.ignoreCase'}}" class="fu_button" id="stunt_db_ignore_case"> aA </i><i style="padding-left:5px" title="{{localize 'fate-core-official.clear_filter'}}" class="fas fa-toggle-off-circle fu_button" id="stunt_db_clear_filter"></i>
+                    {{localize 'fate-core-official.filter'}} <input type="text" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:2em; width:12em" id="stunt_db_filter_box" value="{{filter}}"></input><i style="padding-left:5px; {{#if ignoreCase}} opacity:0.4{{/if}}" title="{{localize 'fate-core-official.ignoreCase'}}" class="fu_button" id="stunt_db_ignore_case"> aA </i><i style="padding-left:5px" title="{{localize 'fate-core-official.clear_filter'}}" class="fas fa-remove fu_button" id="stunt_db_clear_filter"></i>
                 </div>
             </div>
             <div style="width:120px; font-weight:bold; float:left; padding:5px">
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-<div style="width:1200px; min-height:150px; max-height:850px; color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); overflow-y:auto; font-family:var(--fco-font-family); font-size:10pt; padding:0px;">
+<div class="stunts_db" style="width:1200px; min-height:150px; max-height:800px; color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); overflow-y:auto; font-family:var(--fco-font-family); font-size:10pt; padding:0px;">
     <div style="background:var(--fco-sheet-background-colour); display:table">
         {{#each stunts}}
         <div style="display:table-row">
@@ -48,8 +48,8 @@
         {{/each}}
     </div>    
 </div>
-<div style="color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); max-height:50px; padding:10px"><button type="button" id="export_stunts" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.ExportStunts'}}</button>
+<div style="display:flex; flex-direction:row; gap:5px; color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); max-height:150px; padding:10px"><button type="button" id="export_stunts" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.ExportStunts'}}</button>
     {{#if this.gm}}<button type="button" id="import_stunts" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.ImportStunts'}}</button>
     <button type="button" id="add_db_stunt" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:150px">{{localize 'fate-core-official.addStunt'}}</button>{{/if}}
 </div>
-</body>
+</div>

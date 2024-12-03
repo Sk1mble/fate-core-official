@@ -1053,6 +1053,7 @@ export class fcoCharacter extends ActorSheet {
         if (stunt) {
             await fcoConstants.wd().update({"system.stunts":{[`${key}`]:stunt}});
             ui.notifications.info(game.i18n.localize("fate-core-official.Added")+" "+name+" "+game.i18n.localize("fate-core-official.ToTheStuntDatabase"));
+            await foundry.applications.instances.get("StuntDB")?.render();
         }
     }
 

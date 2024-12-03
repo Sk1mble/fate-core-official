@@ -23,10 +23,8 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
     } */
 
     static DEFAULT_OPTIONS = {
-        width: 800,
-        height: 1000,
-        resizable: true,
         tag: "form",
+        position: {width:800, height:1000},
         form: {
             submitOnChange:true,
             closeOnSubmit: false
@@ -583,11 +581,11 @@ Hooks.on ('dropActorSheetData', async (target, sheet, data) => {
     }
     let i = fromUuidSync(data.uuid);
 
-    if (i.type != "Extra"){
+    if (i?.type != "Extra"){
         return;
     }
 
-    if (target.type == "Thing" && !target.system.container.isContainer){
+    if (target.type == "Thing" && !target?.system?.container?.isContainer){
         return;
     }
 
