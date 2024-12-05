@@ -334,8 +334,6 @@ class FateCharacterDefaults {
                 updates["prototypeToken.texture.src"] = character_default["token_img"];
             }
             //Now commit the updates.
-            console.log(JSON.stringify(actor.system.stunts));
-            console.log(JSON.stringify(updates));
             await actor.update(updates);
 
             // delete all extras and add all extras from default.

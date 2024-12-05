@@ -9,6 +9,7 @@
 * ShowCharacter tool upgraded to Application V2 (binoculars icon)
 * Modified Roll Dialog upgraded to Application V2.
 * TimedEvent no longer uses Application V1 (In fact it doesn't use any Application, it is now just a class that creates a DialogV2)
+* Fate_Splash now updated to use AppV2.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

@@ -56,7 +56,7 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let replace = false;
     let flags = foundry.utils.duplicate(adventure.flags);
     let settings = flags["fate-core-official"]?.settings;
-    if (settings && !formData.overrideSettings){
+    if (settings && !formData.sheet.overrideSettings){
         const confirm = await foundry.applications.api.DialogV2.confirm({
             window:{title:  game.i18n.localize("fate-core-official.overrideSettingsTitle")},
             content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`,
@@ -65,7 +65,7 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
           });
       if ( confirm ) replace = true;
     } else {
-        if (settings && formData.overrideSettings) replace = true;  
+        if (settings && adventure.sheet.overrideSettings) replace = true;  
     }
     if (replace){
         if (settings) fcoConstants.importSettings(settings); 
@@ -341,54 +341,61 @@ Hooks.once('ready', async function () {
             }
         })
 
-        class fate_splash extends FormApplication {
+        class fate_splash extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2){
             constructor(...args){
                 super(...args);
             }
 
-            static get defaultOptions (){
-                let h = window.innerHeight;
-                let w = window.innerWidth;
-                let options = super.defaultOptions;
-                options.template = "systems/fate-core-official/templates/fate-splash.html"
-                options.width = w/2+15;
-                options.height = h-50;
-                options.title = "New World Setup"
-                return options;
+            static DEFAULT_OPTIONS = {
+                position:{
+                    //height: window.innerHeight - 50, 
+                    //width: window.innerWidth/2+15
+                },
+                window: {title: this.title},
+                tag: "div",
+                classes:['fate']
             }
 
-            activateListeners(html){
-                super.activateListeners(html);
-                const cont = html.find('button[id="fco_continue_button"]');
-                cont.on('click', async event => {
+            static PARTS = {
+                FateSplash: {
+                    template: "systems/fate-core-official/templates/fate-splash.html"
+                }
+            }
+
+            get title(){ return "New World Setup"};
+
+            _onRender(context, options){
+                const cont = this.element.querySelector('button[id="fco_continue_button"]');
+                cont?.addEventListener('click', async event => {
                     await game.settings.set("fate-core-official","run_once",true);
                     let wd = fcoConstants.wd();
                     await wd.update({"system.defaults":game.system["lang"]["baseDefaults"]});
-                    await ui.sidebar.render(false);
+                    await ui.sidebar.render();
                     this.close();
                 })
 
-                const install = html.find('button[name="eh_install"]');
-                install.on('click', async event => {
-                    let module = event.target.id.split("_")[1];
-                    game.settings.set("fate-core-official", "installing", module);
-                    // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
-                    // As of v10 it does not trigger a refresh, so we need to do it manually; let's use the debounceReload() function.
-                    let mc = game.settings.get("core","moduleConfiguration");
-                    if (mc[module] == true) {
-                        this.installModule(module);
-                        this.close();
-                    }
-                    else {
-                        mc[module]=true;
-                        await game.settings.set("core", "moduleConfiguration", mc);
-                        foundry.utils.debouncedReload();
-                    }
+                const install = this.element.querySelectorAll('button[name="eh_install"]');
+                    install?.forEach(module => {module.addEventListener('click', async event => {
+                        let module = event.target.id.split("_")[1];
+                        game.settings.set("fate-core-official", "installing", module);
+                        // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
+                        // As of v10 it does not trigger a refresh, so we need to do it manually; let's use the debounceReload() function.
+                        let mc = game.settings.get("core","moduleConfiguration");
+                        if (mc[module] == true) {
+                            this.installModule(module);
+                            this.close();
+                        }
+                        else {
+                            mc[module]=true;
+                            await game.settings.set("core", "moduleConfiguration", mc);
+                            foundry.utils.debouncedReload();
+                        }
+                    })
                 })
             }
 
-           async getData(){
-                let data = super.getData();
+           async _prepareContext(options){
+                let data = {};
                 data.ehmodules = foundry.utils.duplicate(ehmodules);
                 for (let ehm of data.ehmodules){
                     ehm.richDesc = await fcoConstants.fcoEnrich(ehm.description);
@@ -414,8 +421,10 @@ Hooks.once('ready', async function () {
                 
                 let pack = await game.packs.get(`${module_name}.content`);
                 await pack.getDocuments();
+                
                 //Todo: Consider whether we want to restrict to installing just the first adventure in the pack, allowing others to be for characters, etc.
                 for (let p of pack.contents){
+                    p.sheet.overrideSettings = true;
                     await p.import();
                 }
 
@@ -433,8 +442,8 @@ Hooks.once('ready', async function () {
                     })
                 });
 
-                game.folders.forEach (folder => game.folders._expanded[folder.id] = true);
-                ui.sidebar.render(true);
+                game.folders.forEach (folder => game.folders._expanded[folder.uuid] = true);
+                ui.sidebar.render();
             }
         }
 

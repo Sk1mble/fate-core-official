@@ -22,7 +22,6 @@ class FateCharacterImporter {
     }
 
     async import (data){
-        console.log(data);
         try {
             if (data.startsWith('`')){ //This is pasted data from a stringified actor.
                 // Remove backticks

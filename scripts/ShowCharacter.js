@@ -39,7 +39,6 @@ class ShowCharacter extends foundry.applications.api.HandlebarsApplicationMixin(
                 players.push(game.users.players.find(player => player.id == player_ids[i].id))
             }
         }
-        console.log(players);
         // Get the actor-data for the actor to be shown
         let actor_data;
         let actorInfo = this.element.querySelector("select[id='character']").value;

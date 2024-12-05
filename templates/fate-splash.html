@@ -5,8 +5,8 @@
         {{#if (gt this.num_modules 0)}}
         <b style="font-size:14pt; color:white">
             {{{localize 'fate-core-official.WelcomeTextWithModules'}}}</b>
-        <div style="overflow-y:auto; max-height:{{this.mh}}px">
-            <table style="background:transparent; border:none;">
+        <div style="overflow-y:auto; max-height:{{this.mh}}px; max-width:1200px">
+            <table style="background:transparent; border:none; max-width:1150px">
             {{#each this.ehmodules}}
                 <tr>
                     <td style="width:200px; vertical-align:top; padding:25px">

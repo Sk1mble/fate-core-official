@@ -274,7 +274,6 @@ class EditPlayerTracks extends FormApplication {
                 label: game.i18n.localize("fate-core-official.Save"),
                 callback: (event, button, html) => {
                     let newTrack = {};
-                    console.log(button.form.elements.category)
                     newTrack.category= button.form.elements.category.value; 
                     newTrack.name=html = button.form.elements.name.value; 
                     newTrack.description = button.form.elements.description.value 
@@ -624,7 +623,7 @@ class EditPlayerTracks extends FormApplication {
                         }
                     }
                 } catch(error){
-                    console.log(error);
+                    console.error(error);
                 }
         }
             

@@ -382,7 +382,6 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
         edit_stunt.forEach (stunt => {stunt.addEventListener("click", event => this._onEditStunt(event))});
         const add_stunt = this.element.querySelector("button[id='add_db_stunt']");
         add_stunt.addEventListener("click", event => {
-            console.log("event fired");
             let stunt = new fcoStunt({
                 "name":game.i18n.localize("fate-core-official.NewStunt"),
                 "linked_skill":"None",
