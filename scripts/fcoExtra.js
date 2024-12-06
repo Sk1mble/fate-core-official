@@ -31,13 +31,17 @@ export class fcoExtra extends Item {
     }
 
     async rationaliseKeys(){
-        let types = ["aspects", "tracks", "stunts", "skills"];
+        let types = ["aspects", "tracks", "stunts", "skills", "defaults"];
         if (this.type == "Extra"){
             for (let type of types) {
                 let block = this.system[type];
                 let output= {};
                 for (let item in block){
-                    output[fcoConstants.tob64(block[item].name)] = block[item];
+                    if (type == "defaults"){
+                        output[fcoConstants.tob64(block[item].default_name)] = block[item];
+                    } else {
+                        output[fcoConstants.tob64(block[item].name)] = block[item];
+                    }
                 }
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));

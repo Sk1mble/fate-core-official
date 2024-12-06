@@ -56,7 +56,7 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let replace = false;
     let flags = foundry.utils.duplicate(adventure.flags);
     let settings = flags["fate-core-official"]?.settings;
-    if (settings && !formData.sheet.overrideSettings){
+    if (settings && !formData?.sheet?.overrideSettings){
         const confirm = await foundry.applications.api.DialogV2.confirm({
             window:{title:  game.i18n.localize("fate-core-official.overrideSettingsTitle")},
             content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`,
@@ -174,12 +174,16 @@ function setupFont(){
 }
 
 function rationaliseKeys(){
-    let types = ["stunts","aspects","tracks","skills"];
+    let types = ["stunts","aspects","tracks","skills", "defaults"];
     for (let type of types){
         let data = game.settings.get("fate-core-official", type);
         let export_data = {};
         for (let sub_item in data){
-            let key = fcoConstants.tob64(data[sub_item].name);
+            if (type == "defaults") {
+                let key = fcoConstants.tob64(data[sub_item].default_name);
+            } else {
+                let key = fcoConstants.tob64(data[sub_item].name);
+            }
             export_data[key] = data[sub_item];
         }
         
@@ -195,7 +199,7 @@ async function prepareWorldItem(){
     let wid = game.settings.get("fate-core-official","wid");
     if (!wid){
         // Create the world data extra
-        let name = `${game.world.name}_worldData_extra`;
+        let name = `${game.world.title}_worldData_extra`;
         let tracks = game.settings.get("fate-core-official","tracks");
         let aspects = game.settings.get("fate-core-official","aspects");
         let stunts = game.settings.get("fate-core-official","stunts");
@@ -233,8 +237,8 @@ Hooks.once('ready', async () => {
     setupSheet();
     setupFont();
     if (game.user == game.users.activeGM){
-        rationaliseKeys();
-        prepareWorldItem();
+        await rationaliseKeys();
+        await prepareWorldItem();
         game.actors.contents.forEach(async actor => await actor.rationaliseKeys());
         game.items.contents.forEach(async extra => await extra.rationaliseKeys());
     } 

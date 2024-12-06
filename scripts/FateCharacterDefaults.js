@@ -39,7 +39,7 @@ class FateCharacterDefaults {
         } else {
             await fcoConstants.wd().update({
                 "system.defaults":{
-                    [`${fcoConstants.tob64("character_default.default_name")}`]:character_default,
+                    [`${fcoConstants.tob64(character_default.default_name)}`]:character_default,
                 }
             });
             ui.sidebar.render(false);
@@ -178,7 +178,8 @@ class FateCharacterDefaults {
             let to_export = {};
             let existing_defaults = fcoConstants.wd().system.defaults;
             for (let d of list_to_export){
-                to_export[this.getSafeName(d)]=existing_defaults[this.getSafeName(d)];
+                let key = fcoConstants.gkfn(existing_defaults, d, "default_name");
+                to_export[key] = existing_defaults[key];
             }
             return JSON.stringify(to_export, null, 5);
         }
@@ -442,31 +443,34 @@ Hooks.on("renderActorDirectory", (app, html, user, opt) => {
     }
 });
 
-class ManageDefaults extends FormApplication {
+class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor(...args){
         super(...args);
         this.editing = false;
         game.system.mdf = this;
     }
 
-    async _render(html){
-        // Override render to give focus back to the field that had focus when the 
-        let type = $(':focus').attr('name');
-        let focused = $(':focus').data('default_name');
-        await super._render(html);
+    //Set up the default options for instances of this class
 
-        if (type == "def_name"){
-            const fo = html.find(`[name="def_name"][data-default_name="${focused}"]`);
-            fo.focus();
-        }
+    static DEFAULT_OPTIONS = {
+        window: {
+            title: this.title,
+            icon: "fas fa-id-card"
+        },
+        tag: "div",
 
-        if (type == "def_desc"){
-            const fo = $(`[name="def_desc"][data-default_name="${focused}"]`);
-            fo.focus();
+    }
+
+    static PARTS = {
+        "fcoDefaults": {
+            template:  "systems/fate-core-official/templates/ManageDefaults.html",
         }
     }
 
-    //Set up the default options for instances of this class
+    get title() {
+        return `${game.i18n.localize("fate-core-official.defaultSetup")} in ${game.world.title}`;
+    }
+
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
@@ -482,7 +486,7 @@ class ManageDefaults extends FormApplication {
     }
     //The function that returns the data model for this window. In this case, we need the list of stress tracks
     //conditions, and consequences.
-    async getData(){
+    async _prepareContext (){
         let f = new FateCharacterDefaults();
         let defaults = [];
         let def_objs = await foundry.utils.duplicate(fcoConstants.wd().system.defaults);
@@ -499,34 +503,36 @@ class ManageDefaults extends FormApplication {
     }
 
     //Here are the action listeners
-    activateListeners(html) {
-        super.activateListeners(html);
-
-        const toggle_edit = $('#md_toggle_edit');
-        if (toggle_edit.hasClass("fa-toggle-off")){
+    async _onRender(context, options) {
+        // Remove focus on re-rendering. We don't want to tab through the application if we just changed a value.
+        document.activeElement.blur();
+        
+        const toggle_edit = this.element.querySelector('#md_toggle_edit');
+        if (toggle_edit.classList.contains("fa-toggle-off")){
             this.editing = false;
-                $('button[name="delete_default"]').hide();
+                this.element.querySelectorAll('button[name="delete_default"]').forEach(item => item.hidden = true);
         }
 
-        toggle_edit.on('click', (event, html) => {
-            toggle_edit.toggleClass("fa-toggle-off");
-            toggle_edit.toggleClass("fa-toggle-on");
-            if (toggle_edit.hasClass("fa-toggle-off")){
+        toggle_edit.addEventListener('click', (event) => {
+            toggle_edit.classList.toggle("fa-toggle-off");
+            toggle_edit.classList.toggle("fa-toggle-on");
+            if (toggle_edit.classList.contains("fa-toggle-off")){
                 this.editing = false;
-                $('.md_edit').prop('disabled', true);
-                $('button[name="delete_default"]').hide();
+                this.element.querySelectorAll('.md_edit').forEach (item => item.disabled = true);
+                this.element.querySelectorAll('button[name="delete_default"]').forEach(item => item.hidden = true)
             }
-            if (toggle_edit.hasClass("fa-toggle-on")){
+            if (toggle_edit.classList.contains("fa-toggle-on")){
                 this.editing = true;
-                $('.md_edit').prop('disabled', false)
-                $('button[name="delete_default"]').show();
+                this.element.querySelectorAll('.md_edit').forEach(item => item.disabled = false);
+                this.element.querySelectorAll('button[name="delete_default"]').forEach(item => item.hidden = false);
             }
         })
+        
 
-        const displayButton = $("button[name='inspect_default']");
-        displayButton.on('click', async (event, html)=> {
+        const displayButton = this.element.querySelectorAll("button[name='inspect_default']");
+        displayButton.forEach(button => button.addEventListener('click', async (event, html)=> {
             let f = new FateCharacterDefaults();
-            let def = await f.getDefault(event.target.getAttribute("Data-default_name"));
+            let def = await f.getDefault(event.target.dataset.default_name);
             let prompt = game.i18n.localize("fate-core-official.defaultCharacterFramework")+ " " + def.default_name;
             let presentation = await f.presentDefault(def.default_name);
             let actorLink;
@@ -612,55 +618,55 @@ class ManageDefaults extends FormApplication {
                 </div>
                 `
             await fcoConstants.awaitOKDialog(prompt, content, 500);
-        })
+        }))
 
-        const imp = $('#md_import');
-        const exp_all = $('#md_export_all');
-        const exp_sel = $('#md_export_selected');
+        const imp = this.element.querySelector('#md_import');
+        const exp_all = this.element.querySelector('#md_export_all');
+        const exp_sel = this.element.querySelector('#md_export_selected');
 
-        imp.on('click', async (event, html)=>{
+        imp.addEventListener('click', async (event, html)=>{
             let str = await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteDefaults"));
             let f = new FateCharacterDefaults();
             await f.importDefaults(str);
         })
 
-        exp_all.on('click', async (event, html)=>{
+        exp_all.addEventListener('click', async (event, html)=>{
             let f = new FateCharacterDefaults();
             let str = await f.exportDefaults();
             fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), str);
         })
 
-        exp_sel.on('click', async (event, html)=>{
+        exp_sel.addEventListener('click', async (event, html)=>{
             let f = new FateCharacterDefaults();
-            let boxes = $("input[name='def_select']");
+            let boxes = this.element.querySelectorAll("input[name='def_select']");
             let list = [];
             for (let box of boxes){
                 if (box.checked) list.push(box.dataset.default_name);
+                box.checked = false;
             }
-            $("input[name='def_select']").prop('checked', false);
             let str = await f.exportDefaults(list);
             fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), str);
         })
     
-        const d_name = html.find("input[name='def_name']");
-        d_name.on('change', async (event, html) =>{
+        const d_name = this.element.querySelectorAll("input[name='def_name']");
+        d_name.forEach(name => name.addEventListener('change', async (event, html) =>{
             let f = new FateCharacterDefaults();
             let oldName = event.target.getAttribute("data-oldValue");
             let newName = event.target.value;
             await f.renameDefault(oldName, newName);
-        })     
+        }))     
 
-        const d_desc = html.find("input[name='def_desc']");
-        d_desc.on('change', async (event, html) =>{
+        const d_desc = this.element.querySelectorAll("input[name='def_desc']");
+        d_desc.forEach(desc => desc.addEventListener('change', async (event, html) =>{
             let f = new FateCharacterDefaults();
             await f.editDescription(event.target.getAttribute("data-default_name"), event.target.value);
-        })     
+        }))     
 
-        const d_def = html.find("button[name='delete_default']");
-        d_def.on("click", async (event, html) =>{
+        const d_def = this.element.querySelectorAll("button[name='delete_default']");
+        d_def.forEach(def => def.addEventListener("click", async (event, html) =>{
             let f = new FateCharacterDefaults();
             let del = await fcoConstants.confirmDeletion();
             if (del) await f.removeDefault(event.target.getAttribute("data-default_name"));
-        })
+        }))
     }
 }
