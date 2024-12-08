@@ -1,121 +1,130 @@
-class EditPlayerAspects extends FormApplication{
-    constructor(...args){
-            super(...args);
-    
-                if(this.object.isToken){
-                    this.options.title=`${game.i18n.localize("fate-core-official.EditTokenAspectsTitle")} ${this.object.name}`                    
-                } else {
-                    this.options.title=`${game.i18n.localize("fate-core-official.EditAspectsTitle")} ${this.object.name}`
-                }
-                this.player_aspects=foundry.utils.duplicate(this.object.system.aspects);
-                
-                game.system.apps["actor"].push(this);
-                game.system.apps["item"].push(this);
-                this.aspects=foundry.utils.duplicate(this.object.system.aspects);
+class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2){
+    constructor(actor, application){
+            super(actor, application);
+            game.system.apps["actor"].push(this);
+            game.system.apps["item"].push(this);
+            this.aspects = foundry.utils.duplicate(actor.system.aspects);
+            this.actor = actor;
     }
 
-    activateListeners(html){
-        super.activateListeners(html);
-        const saveButton = html.find("button[id='save_aspects']");
-        saveButton.on("click", event => this.submit())
-        const removeButton = html.find("button[name='remove_aspect']")
-        removeButton.on("click", event => this._onRemove(event, html));
+    get title(){
+        if(this.actor.isToken){
+            return`${game.i18n.localize("fate-core-official.EditTokenAspectsTitle")} ${this.actor.name}`                    
+        } else {
+            return`${game.i18n.localize("fate-core-official.EditAspectsTitle")} ${this.actor.name}`
+        }
+    }
 
-        const addButton = html.find("button[name='new_aspect']")
-        addButton.on("click", event => this._onAdd(event, html));
+    _onRender(context, options){
+        const removeButton = this.element.querySelectorAll("button[name='remove_aspect']")
+        removeButton.forEach(button => button.addEventListener("click", event => this._onRemove(event)));
 
-        const up = html.find("button[name='aspect_up']");
-        const down = html.find("button[name='aspect_down']");
-        up.on("click", event => this._on_move(event, html, -1));
-        down.on("click", event => this._on_move(event, html, 1));
+        const addButton = this.element.querySelector("button[name='new_aspect']")
+        addButton.addEventListener("click", event => this._onAdd(event));
 
-        const name = html.find("input[class='aspect_name']")
-        name.on("change", event => this._on_name_change(event, html));
+        const up = this.element.querySelectorAll("button[name='aspect_up']");
+        const down = this.element.querySelectorAll("button[name='aspect_down']");
+        up.forEach(button => button.addEventListener("click", event => this._on_move(event, -1)));
+        down.forEach(button => button.addEventListener("click", event => this._on_move(event, 1)));
 
-        const value = html.find("textarea[class='aspect_value']")
-        value.on("change", event => this._on_value_change(event, html));
+        const name = this.element.querySelectorAll("input[class='aspect_name']")
+        name.forEach(field => field.addEventListener("change", event => this._on_name_change(event)));
 
-        const notes = html.find("textarea[class='aspect_notes']");
-        notes.on("change", event => this._on_notes_change(event, html));
+        const value = this.element.querySelectorAll("textarea[class='aspect_value']")
+        value.forEach(field => field.addEventListener("change", event => this._on_value_change(event)));
+
+        const notes = this.element.querySelectorAll("textarea[class='aspect_notes']");
+        notes.forEach(field => field.addEventListener ("change", event => this._on_notes_change(event)));
 
         for (let aspect in this.aspects){
             let id = `aspect_description_${fcoConstants.getKey(this.aspects[aspect].name)}`;
+            let description = document.getElementById(id+"_rich");
+            let description_editable = document.getElementById(id)
             let id2 = `notes_${fcoConstants.getKey(this.aspects[aspect].name)}`;
+            let notes = document.getElementById(id2+"_rich");
+            let notes_editable = document.getElementById (id2);
             fcoConstants.getPen(id);
             fcoConstants.getPen(id2);
 
-            $(`#${id}_rich`).on('keyup', event => {
-                if (event.which == 9) $(`#${id}_rich`).trigger("click");
+            description.addEventListener("keyup", event => {
+                if (event.code == "Tab") {
+                    description.click();
+                }
             })
 
-            $(`#${id}_rich`).on('click', event => {
+            description.addEventListener('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
-                $(`#${id}_rich`).css('display', 'none');
-                $(`#${id}`).css('display', 'block');
-                $(`#${id}`).focus();
+                description.style.display = "none";
+                description_editable.style.display = "block"
+                description_editable.focus();
             })
 
-            if (this.object.isOwner){
-                $(`#${id}_rich`).on('contextmenu', async event => {
+            if (this.actor.isOwner){
+                description.addEventListener("contextmenu", async event => {
                     let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
                     if (text != "discarded") {
-                        $(`#${id}`)[0].innerHTML = text;   
-                        $(`#${id}_rich`)[0].innerHTML = text; 
+                        description.innerHTML = text;
+                        description_editable.innerHTML = text;
                         let key = event.currentTarget.getAttribute("data-key");
                         let aspect = this.aspects[key];
-                        aspect.description=text;
+                        aspect.description = text;
                     }
                 })
 
-                $(`#${id2}_rich`).on('contextmenu', async event => {
+                notes.addEventListener('contextmenu', async event => {
                     let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
                     if (text != "discarded") {
-                        $(`#${id2}`)[0].innerHTML = text;   
-                        $(`#${id2}_rich`)[0].innerHTML = text;  
+                        notes_editable.innerHTML = text;   
+                        notes.innerHTML = text;  
                         let key = event.currentTarget.getAttribute("data-key");
                         let aspect = this.aspects[key];
-                        aspect.notes=text;
+                        aspect.notes = text;
                     }
                 })
             }
     
-            $(`#${id}`).on('blur', async event => {
+            description_editable.addEventListener('blur', async event => {
                 if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
-                    $(`#${id}`).css('display', 'none');
-                    $(`#${id}_rich`)[0].innerHTML = desc;    
-                    $(`#${id}_rich`).css('display', 'block');
+                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.actor.isOwner, documents:true, async:true}));
+                    description.style.display = "block";
+                    description_editable.style.display = "none"
+                    description_editable.innerHTML = desc;
+                    description.innerHTML = desc;
                     let key = event.target.getAttribute("data-key");
                     let aspect = this.aspects[key];
-                    aspect.description=event.target.innerHTML;
+                    aspect.description = desc;
                 }
             })
-            $(`#${id2}_rich`).on('keyup', event => {
-                if (event.which == 9) $(`#${id2}_rich`).trigger("click");
+
+            notes?.addEventListener("keyup", event => {
+                if (event.code == "Tab") {
+                    notes.click();
+                }
             })
         
-            $(`#${id2}_rich`).on('click', event => {
+            notes.addEventListener('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
-                $(`#${id2}_rich`).css('display', 'none');
-                $(`#${id2}`).css('display', 'block');
-                $(`#${id2}`).focus();
+                notes.style.display = "none";
+                notes_editable.style.display = "block"
+                notes_editable.focus();
             })
-    
-            $(`#${id2}`).on('blur', async event => {
+
+            notes_editable.addEventListener('blur', async event => {
                 if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true})); 
-                    $(`#${id2}`).css('display', 'none');
-                    $(`#${id2}_rich`)[0].innerHTML = desc;    
-                    $(`#${id2}_rich`).css('display', 'block');
+                    let text = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.actor.isOwner, documents:true, async:true}));
+                    notes.style.display = "block";
+                    notes_editable.style.display = "none"
+                    notes_editable.innerHTML = text;
+                    notes.innerHTML = text;
                     let key = event.target.getAttribute("data-key");
                     let aspect = this.aspects[key];
-                    aspect.notes=event.target.innerHTML;
+                    aspect.notes = text;
                 }
-            })    
+            })   
         }
     }
 
-    async _on_name_change(event, html){
+    async _on_name_change(event){
         let key = event.target.name.split("_")[1]
         let newName = event.target.value;
 
@@ -140,26 +149,26 @@ class EditPlayerAspects extends FormApplication{
         }
     }
 
-    async _on_value_change(event, html){
+    async _on_value_change(event){
         let key = event.target.getAttribute("data-key");
         let aspect = this.aspects[key];
-        aspect.value=event.target.value;
+        aspect.value = event.target.value;
     }
 
-    async _on_notes_change(event, html){
+    async _on_notes_change(event){
         let key = event.target.getAttribute("data-key");
         let aspect = this.aspects[key];
-        aspect.notes=event.target.value;
+        aspect.notes = event.target.value;
     }
 
-    async _on_move(event,html, direction){
+    async _on_move(event, direction){
         let info = event.target.id.split("_");
         let aspect = info[1]
         this.aspects = fcoConstants.moveKey(this.aspects, aspect, direction)
         this.render(false);
     }
 
-    async _onRemove(event,html){
+    async _onRemove(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let info = event.target.id.split("_");
@@ -169,7 +178,7 @@ class EditPlayerAspects extends FormApplication{
         }
     }
 
-    async _onAdd(event, html){
+    async _onAdd(event){
         let count = 0;
         for (let a in this.aspects){
             if (this.aspects[a].name.startsWith(game.i18n.localize("fate-core-official.New_Aspect"))){
@@ -185,22 +194,30 @@ class EditPlayerAspects extends FormApplication{
     }
 
     //Set up the default options for instances of this class
-    static get defaultOptions() {
-        const options = super.defaultOptions; //begin with the super's default options
-        //The HTML file used to render this window
-        options.template = "systems/fate-core-official/templates/EditPlayerAspects.html"; 
-        options.width = "650";
-        options.height = "800";
-        options.title = game.i18n.localize("fate-core-official.CharacterAspectEditor");
-        options.closeOnSubmit = false;
-        options.id = "PlayerAspectSetup"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        options.classes = options.classes.concat(['fate']);
-        return options;
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        classes:['fate'],
+        window: {
+            title: this.title,
+            icon: "fas fa-scroll",
+            resizable: true
+        },
+        form: {
+            closeOnSubmit: false,
+            submitOnChange: false,
+            handler: EditPlayerAspects.#updateAspects
+        }
     }
 
-    async getData(){
-        let current = foundry.utils.duplicate(this.object.system.aspects);
+    static PARTS = {
+        "PlayerAspectSetup":{
+            template: "systems/fate-core-official/templates/EditPlayerAspects.html",
+            scrollable: ['#aspect_editor']
+        }
+    }
+
+    async _prepareContext(){
+        let current = foundry.utils.duplicate(this.actor.system.aspects);
         let updated = this.aspects;
         for (let aspect in current){
             if (current[aspect].notes == undefined){
@@ -212,24 +229,25 @@ class EditPlayerAspects extends FormApplication{
                 delete current[aspect];
             }
         }
-        let data = foundry.utils.mergeObject(foundry.utils.duplicate(this.aspects), current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
-        for (let as in data){
-            data[as].richDesc = await fcoConstants.fcoEnrich(data[as].description, this.object)
-            data[as].richNotes = await fcoConstants.fcoEnrich(data[as].notes, this.object)
+        let data = {};
+        data.aspects = foundry.utils.mergeObject(foundry.utils.duplicate(this.aspects), current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        for (let as in data.aspects){
+            data.aspects[as].richDesc = await fcoConstants.fcoEnrich(data.aspects[as].description, this.actor)
+            data.aspects[as].richNotes = await fcoConstants.fcoEnrich(data.aspects[as].notes, this.actor)
         }
         return data;
     }
 
-    async _updateObject(event, formData){
-        await this.object.update({"system.aspects":null}, {noHook:true, renderSheet:false})
-        await this.object.update({"system.aspects":this.aspects})
+    static async #updateAspects(event, form, formData){
+        await this.actor.update({"system.aspects":null}, {noHook:true, renderSheet:false})
+        await this.actor.update({"system.aspects":this.aspects})
     }
 
     //This function is called when an actor or item update is called.
 
     async renderMe(id){
         await setTimeout(async () => {
-                if (this?.object?.id == id || this?.object?.parent?.id == id){
+                if (this?.actor?.id == id || this?.actor?.parent?.id == id){
                     if (!this.renderPending) {
                         this.renderPending = true;
                         setTimeout(() => {

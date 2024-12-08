@@ -110,7 +110,7 @@ class fcoConstants {
     }
 
     static getPen (id){
-        let editor = $(`#${id}`)[0];
+        let editor = document.getElementById(id);
         if (editor){
             var options = {
                 editor: editor, // {DOM Element} [required]
@@ -251,6 +251,7 @@ class fcoConstants {
         let response = await foundry.applications.api.DialogV2.prompt({
             window:{ title: prompt},
             modal: false,
+            rejectClose: true,
             content: '<div align="center"><input name = "response" style="width:375px; margin:5px" autofocus></input></div>',
             ok: {
                 label: game.i18n.localize("fate-core-official.OK"),
@@ -324,6 +325,7 @@ class fcoConstants {
             content:`<div style="background-color:white; color:black;"><textarea style="min-height:600px; font-family:var(--fco-font-family); width:800px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="response">${textToUpdate}</textarea></div>`,
             modal: false,
             position:{width:820},
+            rejectClose: true,
             buttons:[{
                     action: "ok",
                     label: label,
@@ -347,6 +349,7 @@ class fcoConstants {
             window:{title:prompt, resizable:true},
             content: `<div style="background-color:white; color:black;"><textarea rows="1" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" name="response">${textToUpdate}</textarea></div>`,
             modal: false,
+            rejectClose: true,
             buttons:[{
                     action: "ok",
                     label: game.i18n.localize("fate-core-official.Save"),
@@ -561,7 +564,7 @@ class fcoConstants {
     }
 
     static getKey(text){
-        return text.hashCode();
+        return fcoConstants.tob64(text);
     }
 
     static tob64 (text){

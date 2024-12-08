@@ -1,51 +1,54 @@
-<form style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); padding:10px" onsubmit="event.preventDefault();">  
-    <div id="aspect_editor">
-    <table border="0" style="background-color:transparent; border:none">
-        <tr style="background-color: transparent;">
-            {{#each this}}
-            {{#if (eq this.extra_id undefined)}}
-            <td style="border-top:groove var(--fco-foundry-interactable-color)">
-                <label for="name" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.AspectName'}}:</label>    
-            </td>
-            <td style="border-top:groove var(--fco-foundry-interactable-color)">
-                <input type="text" class="aspect_name" name="name_{{@key}}" data-key="{{@key}}" style="padding:5px; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); border-top:none; border-left:none; border-right:none; border-bottom:1px solid var(--fco-foundry-interactable-color); width:300px; font-family:var(--fco-font-family)" value="{{this.name}}">
-                <button type="button" name = "aspect_up" id="up_{{@key}}" data-key="{{@key}}" style="width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" icon class="fas fa-sort-up"></button>
-                <button type="button" name = "aspect_down" id="down_{{@key}}" data-key="{{@key}}" style="width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" icon class = "fas fa-sort-down"></button>
-                <button type="button" name = "remove_aspect" id="remove_{{@key}}" data-key="{{@key}}" style="float:right; border:none; width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" icon class="fas fa-trash"></button></td>
-            </input>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                <label for"description" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.AspectDescription'}}:</label>
-            </td>
-            <td>
-                <div class="aspect_description_rich" name="description_{{this.name}}" tabindex = "0" id="aspect_description_{{fco_getKey this.name}}_rich" data-key="{{@key}}" tabindex = "0" style="padding:5px; min-height:1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.richDesc}}}</div>
-                <div class="aspect_description" id="aspect_description_{{fco_getKey this.name}}" data-key="{{@key}}" name="description_{{this.name}}" style="padding: 5px; display:none; background-color:var(--fco-sheet-input-colour); border:1px solid var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour); width:500px; font-family:var(--fco-font-family)">{{{this.description}}}</div>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                <label for"value" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.AspectText'}}:</label>
-            </td>
-            <td>
-                <textarea rows = "1" class="aspect_value" name="value_{{this.name}}" data-key="{{@key}}" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{this.value}}
-                </textarea>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                <label for"notes" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.Notes'}}:</label>
-            </td>
-            <td>
-                <div class="aspect_notes" data-name="{{this.name}}" data-key="{{@key}}" name="notes_{{this.name}}_rich" tabindex = "0" id="notes_{{fco_getKey this.name}}_rich" tabindex = "0" data-name ="{{@key}}" style="padding:5px; min-height:1.5em; background-color:var(--fco-sheet-input-colour);; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.richNotes}}}</div>
-                <div class="aspect_notes contenteditable" data-key="{{@key}}" id="notes_{{fco_getKey this.name}}" name="notes_{{this.name}}" data-name="{{@key}}"" style="padding:5px; display:none; min-height:1.5em; background-color:var(--fco-sheet-input-colour); border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.notes}}}</div>
-            </td>
-        </tr>
-        {{else}}{{/if}}
-        {{/each}}
-    </table>
-    <button type="button" id="save_aspects" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); margin-bottom:5px">{{localize 'fate-core-official.Save'}}</button>
+<div style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); padding:10px;" onsubmit="event.preventDefault();">  
+    <div id="aspect_editor" style="width:100%; height:1000px; overflow-y:scroll">
+        <table border="0" style="background-color:transparent; border:none; width:95%">
+            <tr style="background-color: transparent;">
+                {{#each this.aspects}}
+                {{#if (eq this.extra_id undefined)}}
+                <td style="border-top:groove var(--fco-foundry-interactable-color)">
+                    <label for="name" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.AspectName'}}:</label>    
+                </td>
+                <td style="border-top:groove var(--fco-foundry-interactable-color)">
+                    <div style="display:flex; flex-direction:row; gap:5px;">
+                            <input type="text" class="aspect_name" name="name_{{@key}}" data-key="{{@key}}" style="padding:5px; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); border-top:none; border-left:none; border-right:none; border-bottom:1px solid var(--fco-foundry-interactable-color); width:300px; font-family:var(--fco-font-family)" value="{{this.name}}"></input>
+                            <button type="button" name = "aspect_up" id="up_{{@key}}" data-key="{{@key}}" style="width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" icon class="fas fa-sort-up"></button>
+                            <button type="button" name = "aspect_down" id="down_{{@key}}" data-key="{{@key}}" style="width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" icon class = "fas fa-sort-down"></button>
+                            <button type="button" name = "remove_aspect" id="remove_{{@key}}" data-key="{{@key}}" style="float:right; border:none; width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" icon class="fas fa-trash"></button></td>
+                    </div>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    <label for"description" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.AspectDescription'}}:</label>
+                </td>
+                <td>
+                    <div class="aspect_description_rich" name="description_{{this.name}}" tabindex = "0" id="aspect_description_{{fco_getKey this.name}}_rich" data-key="{{@key}}" tabindex = "0" style="padding:5px; min-height:1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.richDesc}}}</div>
+                    <div class="aspect_description" id="aspect_description_{{fco_getKey this.name}}" data-key="{{@key}}" name="description_{{this.name}}" style="padding: 5px; display:none; background-color:var(--fco-sheet-input-colour); border:1px solid var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour); width:500px; font-family:var(--fco-font-family)">{{{this.description}}}</div>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    <label for"value" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.AspectText'}}:</label>
+                </td>
+                <td>
+                    <textarea rows = "1" class="aspect_value" name="value_{{this.name}}" data-key="{{@key}}" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{this.value}}
+                    </textarea>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    <label for"notes" style="font-family:var(--fco-font-family); font-weight:bold">{{localize 'fate-core-official.Notes'}}:</label>
+                </td>
+                <td>
+                    <div class="aspect_notes" data-name="{{this.name}}" data-key="{{@key}}" name="notes_{{this.name}}_rich" tabindex = "0" id="notes_{{fco_getKey this.name}}_rich" tabindex = "0" data-name ="{{@key}}" style="padding:5px; min-height:1.5em; background-color:var(--fco-sheet-input-colour);; border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.richNotes}}}</div>
+                    <div class="aspect_notes contenteditable" data-key="{{@key}}" id="notes_{{fco_getKey this.name}}" name="notes_{{this.name}}" data-name="{{@key}}"" style="padding:5px; display:none; min-height:1.5em; background-color:var(--fco-sheet-input-colour); border:1px solid var(--fco-foundry-interactable-color); width:500px; font-family:var(--fco-font-family)">{{{this.notes}}}</div>
+                </td>
+            </tr>
+            {{else}}{{/if}}
+            {{/each}}
+        </table>
+</div>
+<div style ="display:flex; flex-direction:row; gap:5px; width:100%">
+    <button id="save_aspects" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); margin-bottom:5px">{{localize 'fate-core-official.Save'}}</button>
     <button type="button" name="new_aspect" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);">{{localize 'fate-core-official.NewAspect'}}</button>
 </div>
-</form>
+</div>

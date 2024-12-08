@@ -64,9 +64,9 @@ class FateUtilities extends Application{
             countdowns_rich.on('click', async event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 let id = event.currentTarget.id.split("_rich").join("");
-                $(`#${id}_rich`).css('display', 'none');
-                $(`#${id}`).css('display', 'block');
-                $(`#${id}`).focus();
+                document.getElementById(id+"_rich").style.display = "none";
+                document.getElementById(id).style.display = "block";
+                document.getElementById(id).focus();
             })
 
             const pinConflict = $('.fco-pin-conflict');
@@ -2497,23 +2497,39 @@ Hooks.on('getSceneControlButtons', controls => {
     };
   });
 
-class acd extends FormApplication {
+class acd extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor(fu) {
         super();
         this.fu = fu;
     }
 
-    static get defaultOptions (){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/new_cd_dialog.html";
-        options.closeOnSubmit = true;
-        options.submitOnClose = false;
-        options.title = game.i18n.localize("fate-core-official.addCountdown");
-        options.classes=options.classes.concat("fate");
-        return options;
+    static DEFAULT_OPTIONS = {
+        id: "addCountDown",
+        tag: "form",
+        classes: ['fate'],
+        window: {
+            icon: "fas fa-clock",
+            title: this.title
+        },
+        form: {
+            closeOnSubmit: true,
+            submitOnClose: false,
+            handler: acd.#onSubmit
+        }
     }
 
-    async _updateObject (event, data){
+    static PARTS = {
+        acd: {
+            template: "systems/fate-core-official/templates/new_cd_dialog.html",
+        }
+    }
+
+    get title(){
+        return game.i18n.localize("fate-core-official.addCountdown");
+    }
+
+    static async #onSubmit (event, form, formDataExtended){
+        let data = formDataExtended.object;
         let box_values = [];
         if (data.boxes < 3) data.boxes = 3;
         if (data.boxes > 20) data.boxes = 20;
@@ -2540,18 +2556,15 @@ class acd extends FormApplication {
         this.fu.render(false);
     }
 
-    activateListeners(html){
-        super.activateListeners(html);
+    _onRender(context, options){
         fcoConstants.getPen("cd_description");
         fcoConstants.getPen("cd_name");
-        const save = $('#cd_dialog_save');
-        save.on('click', (event, html) => this.submit());
 
-        $('#cd_description').on('contextmenu', async event => {
-            $('#cd_description').trigger('blur');
+        this.element.querySelector('#cd_description').addEventListener('contextmenu', async event => {
+            this.element.querySelector('#cd_description').blur();;
             let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
-                $('#cd_description')[0].innerHTML = text;
+                this.element.querySelector('#cd_description').innerHTML = text;
             }
         })
     }

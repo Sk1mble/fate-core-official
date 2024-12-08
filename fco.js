@@ -174,6 +174,21 @@ function setupFont(){
 }
 
 function rationaliseKeys(){
+    // We need to use a different method for getting countdown safe names as querySelector can't be used on an id starting with - and then a number
+    let countdowns = game.settings.get("fate-core-official","countdowns");
+    let amendedCountdowns = {};
+    for (let countdown in countdowns){
+        let name = countdowns[countdown].name
+        if (countdown != fcoConstants.tob64(name)){
+            amendedCountdowns[fcoConstants.tob64(name)] = countdowns[countdown]; 
+        } else {
+            amendedCountdowns[countdown] = countdowns[countdown];
+        }
+        if (JSON.stringify (amendedCountdowns) != JSON.stringify (countdowns)) {
+            game.settings.set("fate-core-official","countdowns", amendedCountdowns)
+        }
+    }
+
     let types = ["stunts","aspects","tracks","skills", "defaults"];
     for (let type of types){
         let data = game.settings.get("fate-core-official", type);
