@@ -1,4 +1,4 @@
-<form onsubmit="event.preventDefault();">
+<div>
     <table style="width:auto" cellspacing ="4" cellpadding="4">
         <tr>
             <td>
@@ -14,20 +14,22 @@
                 </select>
             </td>
             <td>
-                <button type="button" id="editAspect">{{localize 'fate-core-official.Edit'}}</button><p></p>
-                <button type="button" id="deleteAspect">{{localize 'fate-core-official.Delete'}}</button><p></p>
-                <button type="button" id="copyAspect">{{localize 'fate-core-official.Copy'}}</button><p></p>
-                <button type="button" id="exportAspect">{{localize 'fate-core-official.Export'}}</button>
+                <button type="button" id="editAspect" style="min-width:8em">{{localize 'fate-core-official.Edit'}}</button><p></p>
+                <button type="button" id="deleteAspect" style="min-width:8em">{{localize 'fate-core-official.Delete'}}</button><p></p>
+                <button type="button" id="copyAspect" style="min-width:8em">{{localize 'fate-core-official.Copy'}}</button><p></p>
+                <button type="button" id="exportAspect" style="min-width:8em">{{localize 'fate-core-official.Export'}}</button>
             </td>
             </td>
         </tr>
         <tr>
             <td colspan="3">
-                <button style="margin-bottom:5px" type="button" id="addAspect">{{localize 'fate-core-official.AddNewAspect'}}</button>
-                <button style="margin-bottom:5px" type="button" id="importAspects">{{localize 'fate-core-official.ImportAspects'}}</button>
-                <button style="margin-bottom:5px" type="button" id="exportAspects">{{localize 'fate-core-official.ExportAspects'}}</button>
-                <button style="margin-bottom:5px" type="button" id="orderAspects">{{localize 'fate-core-official.OrderAspects'}}</button>
+                <div style="display:grid; gap:10px">
+                    <button style="margin-bottom:5px; min-width:20em" type="button" id="addAspect">{{localize 'fate-core-official.AddNewAspect'}}</button>
+                    <button style="margin-bottom:5px; min-width:20em" id="importAspects">{{localize 'fate-core-official.ImportAspects'}}</button>
+                    <button style="margin-bottom:5px; min-width:20em" type="button" id="exportAspects">{{localize 'fate-core-official.ExportAspects'}}</button>
+                    <button style="margin-bottom:5px; min-width:20em" type="button" id="orderAspects">{{localize 'fate-core-official.OrderAspects'}}</button>
+                </div>
             </td>
         </tr>
     </table>
-</form>
+</div>

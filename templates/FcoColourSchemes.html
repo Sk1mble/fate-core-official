@@ -1,92 +1,91 @@
-<form>
-
-    <h1> World Default Colour Scheme</h1>
-     <div style="display:table; border-spacing:5px; width:100%">
-            <div style="display:table-row;">
-                <div style="display:table-cell; width:30px; height:30px; background:{{worldScheme.sheet_header_colour}};">
+<div>
+    <h2> World Default Colour Scheme</h2>
+     <div style="display:table; border-spacing:10px; width:100%;">
+            <div style="display:table-row; height:30px;">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background:{{worldScheme.sheet_header_colour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{worldScheme.sheet_accent_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{worldScheme.sheet_accent_colour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{worldScheme.inputColour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{worldScheme.inputColour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{worldScheme.interactableColour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{worldScheme.interactableColour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{worldScheme.sheet_label_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{worldScheme.sheet_label_colour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background:{{worldScheme.backgroundColour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background:{{worldScheme.backgroundColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{worldScheme.textColour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{worldScheme.textColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle;">
                     Notches: {{worldScheme.use_notched}}
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle;">
                     Aspect Panel: {{worldScheme.fco_aspects_panel_height}}
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle;">
                     Skills Panel: {{worldScheme.fco_skills_panel_height}}
                 </div>
-                <div style="display:table-cell;">
-                    <img src = "{{worldScheme.fco_user_sheet_logo}}" style="width:50px; height:auto"></img>
+                <div style="display:table-cell; vertical-align:middle;">
+                    <img src = "{{worldScheme.fco_user_sheet_logo}}" style="height:30px; width:auto;"></img>
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:flex; flex-direction:row; gap:10px; vertical-align:middle;">
                     <button type="button" class="worldSchemeUpload fas fa-upload" style="width:30px; height:30px;" icon></button>
                     {{#if isGM}}<button type="button" class="revertToSystemScheme fas fa-trash" style="width:30px; height:30px;" icon></button>{{/if}}
                 </div>
             </div>
     </div>
 
-    <h1>Your Colour Schemes</h1>
-    <div style="display:table; border-spacing:5px; width:100%">
+    <h2>Your Colour Schemes</h2>
+    <div style="display:table; border-spacing:10px; width:100%">
         {{#each mySchemes}}
             <div style="display:table-row;">
                 <div style="display:table-cell; width:15em">
-                    <input type="text" class="scheme_name" data-index="{{@key}}" style="font-weight:bold" value="{{name}}"></input>
+                    <input type="text" class="scheme_name" data-index="{{@key}}" style="font-weight:bold;" value="{{name}}"></input>
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background:{{scheme.sheet_header_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background:{{scheme.sheet_header_colour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_accent_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{scheme.sheet_accent_colour}};">
                     &nbsp;
                 </div>
                 <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.inputColour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.interactableColour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{scheme.interactableColour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_label_colour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{scheme.sheet_label_colour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background:{{scheme.backgroundColour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background:{{scheme.backgroundColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.textColour}};">
+                <div style="display:table-cell; width:30px; height:30px; vertical-align:middle; background-color:{{scheme.textColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle; ">
                     Notches: {{scheme.use_notched}}
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle; ">
                     Aspect Panel: {{scheme.fco_aspects_panel_height}}
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle; ">
                     Skills Panel: {{scheme.fco_skills_panel_height}}
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle; ">
                     Public: <input type="checkbox" class="colourSchemePublicCheck" data-index="{{@key}}" {{#if public}}checked = "checked"{{/if}}></input>
                 </div>
-                <div style="display:table-cell;">
-                    <img src = "{{scheme.fco_user_sheet_logo}}" style="width:50px; height:auto"></img>
+                <div style="display:table-cell; vertical-align:middle; ">
+                    <img src = "{{scheme.fco_user_sheet_logo}}" style="height:30px; width:auto;"></img>
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:flex; flex-direction:row; gap:10px; vertical-align:middle; ">
                     <button type="button" class="colourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px;" icon></button>
                     <button type="button" class="colourSchemeDelete fas fa-trash" style="width:30px; height:30px;" data-index="{{@key}}" icon></button>
                 </div>
@@ -94,47 +93,47 @@
         {{/each}}
     </div>
     
-    <h1>Public Colour Schemes</h1>   
-    <div style="display:table; border-spacing:5px; width:100%">  
+    <h2>Public Colour Schemes</h2>   
+    <div style="display:table; border-spacing:10px; width:100%">  
         {{#each otherSchemes}}
-            <div style="display:table-row;">
-                <div style="display:table-cell; width:15em" title="by {{author.name}}">
+            <div style="display:table-row; margin-bottom:10px">
+                <div style="display:table-cell; width:15em; vertical-align:middle;" title="by {{author.name}}">
                     <strong>{{name}}</strong>
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background:{{scheme.sheet_header_colour}};">
+                <div style="display:table-cell; width:30px; vertical-align:middle; height:30px; background:{{scheme.sheet_header_colour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_accent_colour}};">
+                <div style="display:table-cell; width:30px; vertical-align:middle; height:30px; background-color:{{scheme.sheet_accent_colour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.inputColour}};">
+                <div style="display:table-cell; width:30px; vertical-align:middle; height:30px; background-color:{{scheme.inputColour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.interactableColour}};">
+                <div style="display:table-cell; width:30px; vertical-align:middle; height:30px; background-color:{{scheme.interactableColour}};">
                     &nbsp;
                 </div>
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.sheet_label_colour}};">
+                <div style="display:table-cell; width:30px; vertical-align:middle; height:30px; background-color:{{scheme.sheet_label_colour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background:{{scheme.backgroundColour}};">
+                <div style="display:table-cell; width:30px; vertical-align:middle; height:30px; background:{{scheme.backgroundColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell; width:30px; height:30px; background-color:{{scheme.textColour}};">
+                <div style="display:table-cell; width:30px; vertical-align:middle; height:30px; background-color:{{scheme.textColour}};">
                     &nbsp;
                 </div>                
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle; ">
                     Notches: {{scheme.use_notched}}
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle; ">
                     Aspect Panel: {{scheme.fco_aspects_panel_height}}
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:table-cell; vertical-align:middle; ">
                     Skills Panel: {{scheme.fco_skills_panel_height}}
                 </div>
-                <div style="display:table-cell;">
-                    <img src = "{{scheme.fco_user_sheet_logo}}" style="width:50px; height:auto"></img>
+                <div style="display:table-cell; vertical-align: middle;">
+                    <img src = "{{scheme.fco_user_sheet_logo}}" style="height:30px; width:auto;"></img>
                 </div>
-                <div style="display:table-cell;">
+                <div style="display:flex; flex-direction:row; gap:10px; vertical-align:middle; ">
                     {{#if ../isGM}}
                         <button type="button" class="publicColourSchemeUpload fas fa-upload" data-index="{{@key}}" style="width:30px; height:30px; margin-right:5px" icon></button>
                         <button type="button" class="publicColourSchemeDelete fas fa-trash" style="width:30px; height:30px;" data-index="{{@key}}" icon></button>
@@ -145,4 +144,4 @@
             </div>
         {{/each}}
     </div>
-</form>
+</div>

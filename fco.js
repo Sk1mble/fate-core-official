@@ -1600,18 +1600,35 @@ Handlebars.registerHelper("fco_item_name_from_id", function (actor, id){
     return item?.name;
 })
 
-class CustomiseSheet extends FormApplication {
-    static get defaultOptions (){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/CustomiseSheet.html";
-        options.closeOnSubmit = false;
-        options.submitOnClose = false;
-        options.title = game.i18n.localize("fate-core-official.customiseSheet");
-        options.id = "CustomiseSheet";
-        return options;
+class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        id: "CustomiseSheet",
+        window: {
+            icon: "fas fa-palette",
+            title: this.title
+        },
+        form:{
+            submitOnClose: false,
+            closeOnSubmit: false,
+            handler: CustomiseSheet.#updateObject
+        }
     }
 
-    async _updateObject(event, formData){
+    static PARTS = {
+        CustomiseSheetForm: {
+            template: "systems/fate-core-official/templates/CustomiseSheet.html"
+        }
+    }
+
+    get title() {
+        return game.i18n.localize("fate-core-official.customiseSheet");
+    }
+
+    static async #updateObject(event, form, formDataExtended){
+        let formData = formDataExtended.object;
+        let button = event.submitter.id;
         let scheme = {
             "sheet_header_colour": formData.sheet_header_colour,
             "sheet_accent_colour": formData.sheet_accent_colour,
@@ -1625,80 +1642,23 @@ class CustomiseSheet extends FormApplication {
             "fco_skills_panel_height": formData.fco_skills_panel_height,
             "fco_user_sheet_logo": formData.fco_user_sheet_logo
         }
-        await game.user.setFlag("fate-core-official","current-sheet-scheme", scheme);
-        setupSheet();
-    }
 
-    async getData(){
-        if (this.custom){
-            return this.custom;
-        } else {
-            let scheme = game.user.getFlag("fate-core-official","current-sheet-scheme");
-            if (!scheme) scheme = game.settings.get("fate-core-official","fco-world-sheet-scheme");
-            if (scheme.fco_user_sheet_logo == "world") scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
-            return scheme;
-        }
-    }
-
-    close(){
-        let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
-        if (cs){
-            cs.close();
-        }
-        super.close();
-    }
-
-    async activateListeners(html){
-        super.activateListeners(html);
-        $('#apply_sheet_settings').on('click', async event => {
-            await this.submit();
+        if (button == "apply_sheet_settings"){
+            await game.user.setFlag("fate-core-official","current-sheet-scheme", scheme);
             ui.notifications.info(game.i18n.localize("fate-core-official.colourSettingsApplied"));
-        })
+            setupSheet();
+        }
 
-        $('#save_sheet_settings').on('click', async event => {
-            await this.submit();
-            this.close();
-        })
-
-        $('#undo').on('click', async event => {
-            this.custom = game.user.getFlag("fate-core-official","current-sheet-scheme");
-            if (!this.custom) this.custom = game.settings.get("fate-core-official","fco-world-sheet-scheme");
-            this.render(false);
-        })
-
-        $('#del_fco_custom').on('click', async event => {
-            await game.user.unsetFlag("fate-core-official","current-sheet-scheme");
+        if (button == "save_sheet_settings"){
+            await game.user.setFlag("fate-core-official","current-sheet-scheme", scheme);
             setupSheet();
             this.close();
-        })
-
-        $('#fco_view_colourSchemes').on('click', async event => {
-            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
-            if (cs){
-                cs.render(true);
-                try {
-                    cs.bringToTop();
-                } catch {
-
-                }
-            } else {
-                cs = new FcoColourSchemes();
-                cs.customiseSheet = this;
-                cs.render(true);
-            }
-        })
-
-        $('#fco_user_sheet_logo').on('change', () => {
-            if ($('#fco_user_sheet_logo')[0].value == "world"){                
-                $('#fco_user_sheet_logo')[0].value = game.settings.get("fate-core-official", "fco-world-sheet-scheme").fco_user_sheet_logo;
-            } 
-            $('#fco_user_sheet_logo_img').attr("src", $('#fco_user_sheet_logo')[0].value);
-        })
-
-        $('#fco_store_colourScheme').on('click', async event => {
+        }
+        
+        if (button == "fco_store_colourScheme"){
             let schemes = game.user.getFlag("fate-core-official", "colourSchemes");
             if (!schemes) schemes = [];
-            let scheme = this._getSubmitData();
+            let scheme = formData;
             let name = await fcoConstants.getInput(game.i18n.localize("fate-core-official.nameToUse"));
             if (!name) name = "Unnamed Colour Scheme";
             let p = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.makePublic"), game.i18n.localize("fate-core-official.saveAsPublic"));
@@ -1708,11 +1668,11 @@ class CustomiseSheet extends FormApplication {
             schemes.push(schemeData);
             await game.user.unsetFlag("fate-core-official", "colourSchemes");
             await game.user.setFlag("fate-core-official", "colourSchemes", schemes);
-            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
+            let cs = await foundry.applications.instances.get("FcoColourSchemes");
             if (cs){
                 cs.render(true);
                 try {
-                    cs.bringToTop();
+                    cs.bringToFront();
                 } catch {
 
                 }
@@ -1721,19 +1681,38 @@ class CustomiseSheet extends FormApplication {
                 cs.customiseSheet = this;
                 cs.render(true);
             }
-        })
+        }
 
-        $('#fco_make_default').on('click', async event => {
-            let scheme = this._getSubmitData();
+        if (button == "fco_make_default" && game.user.isGM){
+            let scheme = formData;
             await game.settings.set("fate-core-official","fco-world-sheet-scheme", scheme);
-            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
+            let cs = await foundry.applications.instances.get("FcoColourSchemes")?.render();
+        }
+
+        if (button == "undo"){
+            this.custom = game.user.getFlag("fate-core-official","current-sheet-scheme");
+            if (!this.custom) this.custom = game.settings.get("fate-core-official","fco-world-sheet-scheme");
+            this.render(false);
+        }
+
+        if (button == "fco_view_colourSchemes"){
+            let cs = await foundry.applications.instances.get("FcoColourSchemes");
             if (cs){
                 cs.render(true);
-            }
-        })
+                try {
+                    cs.bringToFront();
+                } catch {
 
-        $('#load_custom').on('click', async event => {
-            let text = JSON.stringify(await this.getData(),null,5);
+                }
+            } else {
+                cs = new FcoColourSchemes();
+                cs.customiseSheet = this;
+                cs.render(true);
+            }
+        }
+
+        if (button == "fco_load_custom"){
+            let text = JSON.stringify(await this._prepareContext(),null,5);
             let value =  await new Promise(resolve => {
                 new foundry.applications.api.DialogV2({
                     window:{title: game.i18n.localize("fate-core-official.LoadCustomSheet")},
@@ -1750,23 +1729,70 @@ class CustomiseSheet extends FormApplication {
             let data = JSON.parse(value);
             this.custom = data;
             this.render(false);
+        }
+
+        if (button == "del_fco_custom"){
+            await game.user.unsetFlag("fate-core-official","current-sheet-scheme");
+            ui.notifications.info(game.i18n.localize("fate-core-official.colourSettingsApplied"));
+            setupSheet();
+            this.custom = false;
+            this.render();
+        }
+    }
+
+    async _prepareContext(){
+        if (this.custom){
+            return this.custom;
+        } else {
+            let scheme = game.user.getFlag("fate-core-official","current-sheet-scheme");
+            if (!scheme) scheme = game.settings.get("fate-core-official","fco-world-sheet-scheme");
+            if (scheme.fco_user_sheet_logo == "world") scheme.fco_user_sheet_logo = game.settings.get("fate-core-official","fco-world-sheet-scheme").fco_user_sheet_logo;
+            return scheme;
+        }
+    }
+
+    async close(){
+        let cs = await foundry.applications.instances.get("FcoColourSchemes")?.render();
+        if (cs){
+            cs.close();
+        }
+        super.close();
+    }
+
+    async _onRender(){
+        let logo = document.getElementById("fco_user_sheet_logo");
+        logo.addEventListener("change", () => {
+            if (logo.value == "world"){                
+                logo.value = game.settings.get("fate-core-official", "fco-world-sheet-scheme").fco_user_sheet_logo;
+            } 
+            document.getElementById("fco_user_sheet_logo_img").src = logo.value;
         })
     }
 }
 
-class FcoColourSchemes extends FormApplication {
-    static get defaultOptions (){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/FcoColourSchemes.html";
-        options.width = 1200;
-        options.resizable=true,
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.viewStoredColourSchemes");
-        options.id = "FcoColourSchemes";
-        return options;
+class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+
+    static DEFAULT_OPTIONS = {
+        id:"FcoColourSchemes",
+        tag: "form",
+        window:{
+            title:this.title,
+            icon:"fas fa-palette"
+        },
+        position:{width:1280}
     }
 
-    async getData(){
+    static PARTS = {
+        FcoColourSchemesForm: {
+            template: "systems/fate-core-official/templates/FcoColourSchemes.html"
+        }
+    }
+
+    get title(){
+        return game.i18n.localize("fate-core-official.viewStoredColourSchemes");
+    }
+
+    async _prepareContext(){
         let mySchemes = game.user.getFlag("fate-core-official", "colourSchemes");
         let otherSchemes = [];
         
@@ -1809,33 +1835,32 @@ class FcoColourSchemes extends FormApplication {
         } 
     }
 
-    async activateListeners(html){
-        super.activateListeners(html);
-
-        $('.colourSchemeUpload').on('click', async event => {
+    async _onRender(context, options){
+        
+        this.element.querySelectorAll('.colourSchemeUpload').forEach(button => button.addEventListener('click', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             let scheme = this.mySchemes[index].scheme;
             this.customiseSheet.custom = scheme; 
             this.customiseSheet.render(true);
             try {
-                this.customiseSheet.bringToTop();
+                this.customiseSheet.bringToFront();
             } catch {
                 
             }
-        })
+        }))
 
-        $('.worldSchemeUpload').on('click', async event => {
+        this.element.querySelector('.worldSchemeUpload').addEventListener('click', async event => {
             let scheme = game.settings.get("fate-core-official","fco-world-sheet-scheme");
             this.customiseSheet.custom = scheme;
             this.customiseSheet.render(true);
             try {
-                this.customiseSheet.bringToTop();
+                this.customiseSheet.bringToFront();
             } catch {
                 
             }
         })
 
-        $('.revertToSystemScheme').on('click', async event => {
+        this.element.querySelector('.revertToSystemScheme')?.addEventListener('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 await game.settings.set("fate-core-official","fco-world-sheet-scheme", 
@@ -1856,7 +1881,7 @@ class FcoColourSchemes extends FormApplication {
             }
         })
 
-        $('.colourSchemeDelete').on('click', async event => {
+        this.element.querySelectorAll('.colourSchemeDelete').forEach(button => button.addEventListener ('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 let index = event.currentTarget.getAttribute("data-index");
@@ -1865,9 +1890,9 @@ class FcoColourSchemes extends FormApplication {
                 await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
                 this.render(false);
             }
-        })
+        }))
 
-        $('.publicColourSchemeDelete').on('click', async event => {
+        this.element.querySelectorAll('.publicColourSchemeDelete').forEach(button => button.addEventListener ('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 let index = event.currentTarget.getAttribute("data-index");
@@ -1887,62 +1912,68 @@ class FcoColourSchemes extends FormApplication {
                 }
                 this.render(false);
             }
-        })
+        }))
 
-        $('.scheme_name').on('change', async event => {
+        this.element.querySelectorAll('.scheme_name').forEach (field => field.addEventListener('change', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             this.mySchemes[index].name = event.currentTarget.value;
             await game.user.unsetFlag("fate-core-official","colourSchemes");
             await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
             this.render(false);
-        })
+        }))
 
-        $('.colourSchemePublicCheck').on('change', async event => {
+        this.element.querySelectorAll('.colourSchemePublicCheck').forEach(box => box.addEventListener('change', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             this.mySchemes[index].public = event.currentTarget.checked;
             await game.user.unsetFlag("fate-core-official","colourSchemes");
             await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
             this.render(false);
-        })
+        }));
 
-        $('.publicColourSchemeUpload').on('click', async event => {
+        this.element.querySelectorAll('.publicColourSchemeUpload').forEach(button => button.addEventListener ('click', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             let scheme = this.otherSchemes[index].scheme;
             this.customiseSheet.custom = scheme; 
             this.customiseSheet.render(true);
             try {
-                this.customiseSheet.bringToTop();
+                this.customiseSheet.bringToFront();
             } catch {
 
             }
-        })
+        }))
     }
 }
 
-$(document).on('contextmenu', '.fco_popviewable', async event => {
-    // Construct the Application instance
-    let uuid = event.target.getAttribute("data-uuid");
-    let source = await fromUuid(uuid);
-    let title = "Unknown";
-    let src = "";
-    // Case token
-    if (source.constructor.name == "TokenDocument"){
-        title = source.actor.name;
-        src = source.actor.img;
-    } 
-    // Case not a token
-    if (source.constructor.name.startsWith("fco")){
-        title = source.name;
-        src = source.img;
-    }
+document.addEventListener("contextmenu", async event => {
+    if (event.target.classList.contains("fco_popviewable")){
+        // Construct the Application instance
+        let uuid = event.target.getAttribute("data-uuid");
+        let source = await fromUuid(uuid);
+        let title = "Unknown";
+        let src = "";
+        // Case token
+        if (source.constructor.name == "TokenDocument"){
+            title = source.actor.name;
+            src = source.actor.img;
+        } 
+        // Case not a token
+        if (source.constructor.name.startsWith("fco")){
+            title = source.name;
+            src = source.img;
+        }
 
-    const ip = new ImagePopout(src, {
-        "title": title,
-        "uuid":uuid
-     });
-    
-     // Display the image popout
-     ip.render(true);
+        const ip = new foundry.applications.apps.ImagePopout({
+                window: {
+                    "title": title
+                },
+                "uuid":uuid,
+                src: src
+            },
+        );
+
+        // Display the image popout
+        ip.render(true);
+    }
 })
 
 

@@ -1,4 +1,4 @@
-<form>
+<div>
     <table style="background-color:none; border:none; margin-left:10px; margin-right:10px; max-width:98%">
         <tr>
             <td style="width:30em">
@@ -29,7 +29,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectLabelTextColourHint'}}</div>
             </td>
             <td>
-                {{colorPicker name="fu_text_color" value = this.textColour}}
+                <color-picker name="fu_text_color" value = "{{this.textColour}}"></color-picker>
             </td>
         </tr>
         <tr>
@@ -38,7 +38,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectLabelFillColourHint'}}</div>
             </td>
             <td>
-                {{colorPicker name="fu_fill_color" value = this.fillColour}}
+                <color-picker name="fu_fill_color" value = "{{this.fillColour}}"></color-picker>
             </td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectFillAlphaLabel'}}</div>
             </td>
             <td>
-                {{rangePicker name="fu_fill_alpha" value = this.fillAlpha max = "1" min = "0" step = "0.1"}}
+                <range-picker name="fu_fill_alpha" value = "{{this.fillAlpha}}" max = "1" min = "0" step = "0.1"}}></range-picker>
             </td>
         </tr>
         <tr>
@@ -56,7 +56,7 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectLabelBorderColourHint'}}</div>
             </td>
             <td>
-                {{colorPicker name="fu_border_color" value = this.borderColour}}
+                <color-picker name="fu_border_color" value = "{{this.borderColour}}"></color-picker>
             </td>
         </tr>
         <tr>
@@ -65,13 +65,13 @@
                 <div style="font-size:0.8em">{{localize 'fate-core-official.fuAspectBorderAlphaLabel'}}</div>
             </td>
             <td>
-                {{rangePicker name="fu_border_alpha" value = this.borderAlpha max = "1" min = "0" step = "0.1"}}
+                <range-picker name="fu_border_alpha" value = "{{this.borderAlpha}}" max = "1" min = "0" step = "0.1"}}></range-picker>
             </td>
         </tr>
         <tr>
             <td colspan="2" style="text-align:center">
-                <button type="button" id="save_fu_label_settings" style="width:5em">{{localize 'fate-core-official.Save'}}</button>
+                <button id="save_fu_label_settings" style="width:5em">{{localize 'fate-core-official.Save'}}</button>
             </td>
         </tr>
     </table>
-</form>
+</div>

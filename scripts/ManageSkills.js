@@ -11,30 +11,29 @@ Hooks.once('ready', async function () {
       });
 })
 // SkillSetup: This is the class called from the options to view and edit the skills.
-class SkillSetup extends FormApplication{
+class SkillSetup extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2){
     constructor(...args){
             super(...args);
             game.system.skillSetup = this;
     }
 
-    async _updateObject(){
+    //Set up the default options for instances of this class
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        id: "SkillSetup",
+        window: {
+            title: this.title,
+            icon: "fas fa-gear"
+        }
     }
 
-    //Set up the default options for instances of this class
-    static get defaultOptions() {
-        const options = super.defaultOptions; //begin with the super's default options
-        //The HTML file used to render this window
-        options.template = "systems/fate-core-official/templates/SkillSetup.html"; 
-        options.width = "auto";
-        options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.SetupSkillsTitle")} ${game.world.title}`;
-        options.closeOnSubmit = false;
-        options.id = "SkillSetup"; // CSS id if you want to override default behaviors
-        options.resizable = false;
-        return options;
+    static PARTS = {
+        "SkillSetupForm":{
+            template: "systems/fate-core-official/templates/SkillSetup.html"
+        }
     }
     //The function that returns the data model for this window. In this case, we only need the game's skill list.
-    getData(){
+   _prepareContext(){
         this.skills=fcoConstants.sortByName(fcoConstants.wd().system.skills)
         this.skills_label = game.settings.get("fate-core-official", "skillsLabel");
         const templateData = {
@@ -43,42 +42,45 @@ class SkillSetup extends FormApplication{
         }
         return templateData;
     }
+
+    get title(){
+        return `${game.i18n.localize("fate-core-official.SetupSkillsTitle")} ${game.world.title}`;
+    }
     
       //Here are the action listeners
-      activateListeners(html) {
-        super.activateListeners(html);
-        const editButton = html.find("button[id='editSkill']");
-        const deleteButton = html.find("button[id='deleteSkill']");
-        const addButton = html.find("button[id='addSkill']");
-        const copyButton = html.find("button[id='copySkill']");
-        const selectBox = html.find("select[id='skillListBox']");
-        const exportSkill = html.find("button[id='exportSkill']");
-        const importSkills = html.find("button[id='importSkills']");
-        const exportSkills = html.find("button[id='exportSkills']");
-        const skillsLabelEdit = html.find('#skillsLabelEdit');
+      _onRender(context, options) {
+        const editButton = this.element.querySelector("button[id='editSkill']");
+        const deleteButton = this.element.querySelector("button[id='deleteSkill']");
+        const addButton = this.element.querySelector("button[id='addSkill']");
+        const copyButton = this.element.querySelector("button[id='copySkill']");
+        const selectBox = this.element.querySelector("select[id='skillListBox']");
+        const exportSkill = this.element.querySelector("button[id='exportSkill']");
+        const importSkills = this.element.querySelector("button[id='importSkills']");
+        const exportSkills = this.element.querySelector("button[id='exportSkills']");
+        const skillsLabelEdit = this.element.querySelector('#skillsLabelEdit');
 
-        editButton.on("click", event => this._onEditButton(event, html));
-        deleteButton.on("click", event => this._onDeleteButton(event, html));
-        addButton.on("click", event => this._onAddButton(event, html));
-        selectBox.on("dblclick", event => this._onEditButton(event, html));
-        copyButton.on("click", event => this._onCopyButton(event, html));
-        exportSkill.on("click", event => this._onExportSkill(event, html));
-        importSkills.on("click", event => this._onImportSkills(event, html));
-        exportSkills.on("click", event => this._onExportSkills(event, html));
-        skillsLabelEdit.on("click", event => this._onLabelEdit(event, html, skillsLabelEdit));
+        editButton.addEventListener("click", event => this._onEditButton(event));
+        deleteButton.addEventListener("click", event => this._onDeleteButton(event));
+        addButton.addEventListener("click", event => this._onAddButton(event));
+        selectBox.addEventListener("dblclick", event => this._onEditButton(event));
+        copyButton.addEventListener("click", event => this._onCopyButton(event));
+        exportSkill.addEventListener("click", event => this._onExportSkill(event));
+        importSkills.addEventListener("click", event => this._onImportSkills(event));
+        exportSkills.addEventListener("click", event => this._onExportSkills(event));
+        skillsLabelEdit.addEventListener("click", event => this._onLabelEdit(event, skillsLabelEdit));
     }
     
     //Here are the event listener functions.
-    async _onExportSkill(event, html){
+    async _onExportSkill(event){
         let skills = fcoConstants.wd().system.skills;
-        let slb = html.find("select[id='skillListBox']")[0].value;
+        let slb = this.element.querySelector("select[id='skillListBox']").value;
         let sk = fcoConstants.gbn(skills, slb);
         let key = fcoConstants.gkfn(skills, slb);
         let skill_text = `{"${key}":${JSON.stringify(sk, null, 5)}}`
         fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkill"), skill_text);
     }
 
-    async _onExportSkills(event, html){
+    async _onExportSkills(event){
         let skills = fcoConstants.wd().system.skills;
         let skills_text = JSON.stringify(skills, null, 5);
         fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveSkills"), skills_text);
@@ -88,7 +90,7 @@ class SkillSetup extends FormApplication{
         return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteSkills"))
     }
 
-    async _onImportSkills(event, html){
+    async _onImportSkills(event){
         let text = await this.getSkills();
         try {
             let imported_skills = JSON.parse(text);
@@ -126,39 +128,38 @@ class SkillSetup extends FormApplication{
         }
     }
     
-    _onLabelEdit(event, html, skillsLabelEdit) {
-        const input_id = `#${skillsLabelEdit.data('edit-element')}`;
-        const skillsLabelInput = html.find(input_id);
-        const is_editing = skillsLabelEdit.hasClass('inactive');
-        if (skillsLabelInput.length && ! is_editing) {
-            skillsLabelEdit.addClass('inactive');
-            skillsLabelInput
-                .removeAttr('disabled')
-                .focus()
-                .on('blur.edit_label', () => {
-                    skillsLabelEdit.removeClass('inactive');
-                    skillsLabelInput.attr('disabled', 'disabled');
-                    skillsLabelInput.off('blur.edit_label');
-                    const skills_label = skillsLabelInput.val();
+    _onLabelEdit(event, skillsLabelEdit) {
+        const input_id = document.getElementById("skillsLabelEdit").dataset.editElement;
+        const skillsLabelInput = document.getElementById(input_id);
+        const is_editing = skillsLabelEdit.classList.contains('inactive');
+        if (skillsLabelInput && ! is_editing) {
+            skillsLabelInput.classList.add('inactive');
+            skillsLabelInput.disabled = "";
+            skillsLabelInput.focus();
+            
+            skillsLabelInput.addEventListener('blur', event => {
+                    skillsLabelInput.classList.remove('inactive');
+                    skillsLabelInput.disabled = "disabled";
+                    const skills_label = skillsLabelInput.value;
                     game.settings.set("fate-core-official", "skillsLabel", skills_label);
                 });
         }
     }
 
-    async _onEditButton(event,html){
+    async _onEditButton(event){
         //Launch the EditSkill FormApplication.
         let skills = fcoConstants.wd().system.skills;
-        let slb = html.find("select[id='skillListBox']")[0].value;
+        let slb = this.element.querySelector("select[id='skillListBox']").value;
         let sk = fcoConstants.gbn(skills, slb)
         let e = new EditSkill(sk);
         e.render(true);
     }
-    async _onDeleteButton(event,html){
+    async _onDeleteButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
             //Code to delete the selected skill
             //First, get the name of the skill from the HTML element skillListBox
-            let slb = html.find("select[id='skillListBox'")[0].value;
+            let slb = this.element.querySelector("select[id='skillListBox'").value;
             
             //Find that skill in the list of skills
             let skills=fcoConstants.wd().system.skills;
@@ -173,9 +174,9 @@ class SkillSetup extends FormApplication{
             }
         }
     }
-    async _onCopyButton(event,html){
-        let selectBox = html.find("select[id='skillListBox']");
-        let name = selectBox[0].value;
+    async _onCopyButton(event){
+        let selectBox = this.element.querySelector("select[id='skillListBox']");
+        let name = selectBox.value;
         if (name=="" || name == undefined){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectASkillToCopyFirst"));
         } else {
@@ -192,18 +193,18 @@ class SkillSetup extends FormApplication{
             
             this.render(true);
             try {
-                this.bringToTop();
+                this.bringToFront();
             } catch  {
                 // Do nothing.
             }
         }
     }
-    async _onAddButton(event,html){
+    async _onAddButton(event){
         //Launch the EditSkill FormApplication.
         let e = new EditSkill(undefined);
         e.render(true);
         try {
-            e.bringToTop();
+            e.bringToFront();
         } catch  {
             // Do nothing.
         }
@@ -211,16 +212,61 @@ class SkillSetup extends FormApplication{
 }
 
 //EditSkill: This is the class to edit a specific skill
-class EditSkill extends FormApplication{
+class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2){
     constructor(skill){
-            super(skill);
+        super(skill);
             this.skill=skill;
             if (this.skill==undefined){
                 this.skill= new fcoSkill().toObject();
             }
         }
 
-        async _updateObject(event, f) {
+        static DEFAULT_OPTIONS = {
+            tag: "form",
+            id: "EditSkill",
+            form: {
+                handler: EditSkill.#updateObject,
+                closeOnSubmit: true,
+                submitOnClose: false,
+                submitOnChange: false
+            },
+            position:{
+                width: 1000,
+                height: "auto"
+            },
+            window:{
+                reiszable: true,
+                title: this.title,
+                icon: "fas fa-gear"
+            }
+        }
+
+        static PARTS = {
+            EditSkillForm: {
+                template: "systems/fate-core-official/templates/EditSkill.html"
+            }
+        }
+
+        get title(){
+            return  game.i18n.localize("fate-core-official.SkillEditor");
+        }
+
+        async _prepareContext(){
+            let rich = {};
+            let sk = foundry.utils.duplicate(this.skill);
+            for (let part in sk){
+                if (part != "name" && part != "pc") rich[part] = await fcoConstants.fcoEnrich(sk[part]);
+            }
+    
+            const templateData = {
+               skill:this.skill,
+               rich:rich
+            }
+            return templateData;
+            }
+
+        static async #updateObject(event, form, formDataExtended) {
+            let f = formDataExtended.object;
             let skills=fcoConstants.wd().system.skills;
             let name = f.name;
             let newSkill = new fcoSkill({"name":name, "description":f.description,"overcome":f.overcome,"caa":f.caa, "attack":f.attack,"defend":f.defend,"pc":f.pc}).toJSON();
@@ -252,194 +298,52 @@ class EditSkill extends FormApplication{
         }
 
     //Here are the action listeners
-    activateListeners(html) {
-        super.activateListeners(html);
-        const saveButton = html.find("button[id='edit_save_changes']");
-        saveButton.on("click", event => this._onSaveButton(event, html));
+    _onRender (context, options) {
         fcoConstants.getPen("edit_skill_description");
         fcoConstants.getPen("edit_skill_overcome");
         fcoConstants.getPen("edit_skill_caa");
         fcoConstants.getPen("edit_skill_attack");
         fcoConstants.getPen("edit_skill_defend");
 
-        const description_rich = html.find('#edit_skill_description_rich');
-        description_rich.on("keyup", event => {
-            if (event.which == 9) description_rich.trigger("click");
-        })
+        let rich_elements = this.element.querySelectorAll(".fco_skill_edit_field_rich");
+
+        for (let element of rich_elements){
+            let normal_element = document.getElementById(`edit_skill_${element.attributes.name.value}`);
+            element.addEventListener ("keyup", event => {
+                if (event.code == "Tab") element.trigger("click");
+            })
+
+            element.addEventListener("click", event => {
+                element.style.display = "none";
+                normal_element.style.display = 'block';
+                normal_element.focus();
+            })
+
+            element.addEventListener('contextmenu', async event => {
+                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
+                if (text != "discarded") {
+                    element.innerHTML = DOMPurify.sanitize(text);    
+                    normal_element.innerHTML = DOMPurify.sanitize(text);    
+                }
+            })
         
-        description_rich.on("click", event => {
-            $("#edit_skill_description_rich").css('display', 'none');
-            $("#edit_skill_description").css('display', 'block');
-            $("#edit_skill_description").focus();
-        })
-
-        description_rich.on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $('#edit_skill_description_rich')[0].innerHTML = text;    
-                $('#edit_skill_description')[0].innerHTML = text;    
-            }
-        })
-
-        const skill_description = html.find("div[id='edit_skill_description']");
-        skill_description.on ('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            ;
-                $('#edit_skill_description_rich')[0].innerHTML = desc;     
-                $('#edit_skill_description').css('display', 'none');
-                $('#edit_skill_description_rich')[0].innerHTML = desc;    
-                $('#edit_skill_description_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_skill_overcome_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_skill_overcome_rich').trigger("click");
-        })
-
-        $('#edit_skill_overcome_rich').on("click", event => {
-            $("#edit_skill_overcome_rich").css('display', 'none');
-            $("#edit_skill_overcome").css('display', 'block');
-            $("#edit_skill_overcome").focus();
-        })
-
-        $('#edit_skill_overcome_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $("#edit_skill_overcome_rich")[0].innerHTML = text;    
-                $("#edit_skill_overcome")[0].innerHTML = text;    
-            }
-        })
-        
-        $('#edit_skill_overcome').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                $('#edit_skill_overcome').css('display', 'none');
-                $('#edit_skill_overcome_rich')[0].innerHTML = desc;    
-                $('#edit_skill_overcome_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_skill_caa_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_skill_caa_rich').trigger("click");
-        })
-
-        $('#edit_skill_caa_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $("#edit_skill_caa_rich")[0].innerHTML = text;    
-                $("#edit_skill_caa")[0].innerHTML = text;    
-            }
-        })
-        
-        $('#edit_skill_caa_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_skill_caa_rich").css('display', 'none');
-            $("#edit_skill_caa").css('display', 'block');
-            $("#edit_skill_caa").focus();
-        })
-        
-        $('#edit_skill_caa').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
-                $('#edit_skill_caa').css('display', 'none');
-                $('#edit_skill_caa_rich')[0].innerHTML = desc;    
-                $('#edit_skill_caa_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_skill_attack_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_skill_attack_rich').trigger("click");
-        })
-
-        $('#edit_skill_attack_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $("#edit_skill_attack_rich")[0].innerHTML = text;    
-                $("#edit_skill_attack")[0].innerHTML = text;    
-            }
-        })
-
-        $('#edit_skill_attack_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $('#edit_skill_attack_rich').css('display', 'none');
-            $('#edit_skill_attack').css('display', 'block');
-            $('#edit_skill_attack').focus();
-        })
-        
-        $('#edit_skill_attack').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
-                $('#edit_skill_attack').css('display', 'none');
-                $('#edit_skill_attack_rich')[0].innerHTML = desc;    
-                $('#edit_skill_attack_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_skill_defend_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_skill_defend_rich').trigger("click");
-        })
-
-        $('#edit_skill_defend_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $("#edit_skill_defend_rich")[0].innerHTML = text;    
-                $("#edit_skill_defend")[0].innerHTML = text;    
-            }
-        })
-
-        $('#edit_skill_defend_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_skill_defend_rich").css('display', 'none');
-            $("#edit_skill_defend").css('display', 'block');
-            $("#edit_skill_defend").focus();
-        })
-        
-        $('#edit_skill_defend').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}));
-                $('#edit_skill_defend').css('display', 'none');
-                $('#edit_skill_defend_rich')[0].innerHTML = desc;    
-                $('#edit_skill_defend_rich').css('display', 'block');
-            }
-        })
+            normal_element.addEventListener ('blur', async event => {
+                if (!window.getSelection().toString()){
+                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}))                            ;
+                    element.innerHTML = desc;     
+                    normal_element.style.display = "none";
+                    normal_element.innerHTML = desc;    
+                    element.style.display = "block";
+                }
+            })
+        }
     }
-        
-    //Here are the event listener functions.
-    async _onSaveButton(event,html){
-        this.submit();
-    }    
-
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/EditSkill.html"; 
-        //Define the FormApplication's options
-        options.width = "1000";
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.SkillEditor");
-        options.closeOnSubmit = true;
-        options.id = "EditSkill"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        return options;
-    }
-    async getData(){
-        let rich = {};
-        let sk = foundry.utils.duplicate(this.skill);
-        for (let part in sk){
-            if (part != "name" && part != "pc") rich[part] = await fcoConstants.fcoEnrich(sk[part]);
-        }
-
-        const templateData = {
-           skill:this.skill,
-           rich:rich
-        }
-        return templateData;
-        }
 }
 
 Hooks.on('closeEditSkill',async () => {
     game.system.skillSetup.render(true);
     try {
-        game.system.skillSetup.bringToTop();
+        game.system.skillSetup.bringToFront();
     } catch  {
         // Do nothing.
     }

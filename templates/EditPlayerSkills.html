@@ -1,5 +1,5 @@
-<form class="editable" onsubmit="event.preventDefault();" style="background:var(--fco-sheet-background-colour); padding:10px">
-<div style="width:20vw; height:75vh; max-height:75vh" id="skills_editor">
+<div style="background:var(--fco-sheet-background-colour); padding:10px">
+<div style="width:20vw;" id="skills_editor">
     <div style = "max-height:70vh; overflow-y:auto">
     {{#each character_skills}}
     {{#if (eq this.extra_id undefined)}}
@@ -14,7 +14,7 @@
     {{else}}{{/if}}
     {{/each}}
     </div>
-    <div style="float:left; max-height: 5vh; margin:auto; padding: 3px"><button type="button" id="save_player_skills" i icon class="fas fa-save" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); float:left; width:50px; height:35px" title="{{localize 'fate-core-official.Save'}}" tabindex="-1"></button><button type="button" id="sort" i icon class="fas fa-sort" title="{{localize 'fate-core-official.Toggle'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1"></button>
+    <div style="margin-top: 20px; display:flex; flex-direction:row; gap:10px"><button id="save_player_skills" i icon class="fas fa-save" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); float:left; width:50px; height:35px" title="{{localize 'fate-core-official.Save'}}" tabindex="-1"></button><button type="button" id="sort" i icon class="fas fa-sort" title="{{localize 'fate-core-official.Toggle'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1"></button>
         {{#if isGM}}
         {{#if isExtra}}<button type="button" id="edit_p_skills" i icon class="fas fa-edit" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>
         {{else}}
@@ -25,4 +25,4 @@
         {{/if}}
     </div>
 </div>
-</form>
+</div>

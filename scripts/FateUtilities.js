@@ -2656,17 +2656,32 @@ class TimedEvent {
     }
 }
 
-class FUAspectLabelClass extends FormApplication {
-    static get defaultOptions (){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/FULabelSettings.html";
-        options.closeOnSubmit = true;
-        options.submitOnClose = false;
-        options.title = game.i18n.localize("fate-core-official.fuAspectLabelSettingsTitle");
-        return options;
+class FUAspectLabelClass extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        window:{
+            icon: "fas fa-cog",
+            title: this.title
+        },
+        form: {
+            handler: FUAspectLabelClass.#updateObject,
+            closeOnSubmit: true,
+            submitOnClose: false
+        }
     }
 
-    async _updateObject(event, formData){
+    get title() {
+        return game.i18n.localize("fate-core-official.fuAspectLabelSettingsTitle");
+    }
+
+    static PARTS = {
+        FUAspectLabelClassForm: {
+            template: "systems/fate-core-official/templates/FULabelSettings.html",
+        }
+    }
+
+    static async #updateObject(event, form, formDataExtended){
+        let formData = formDataExtended.object;
         let font = formData.fu_label_font;
         let size = formData.fu_font_size;
         if (size != 0 && size < 8) size = 8;
@@ -2688,7 +2703,7 @@ class FUAspectLabelClass extends FormApplication {
         this.close();
     }
 
-    async getData(){
+    async _prepareContext (){
         let font = game.settings.get("fate-core-official","fuAspectLabelFont");
         if (FontConfig.getAvailableFonts().indexOf(font) == -1) font = FontConfig.getAvailableFonts()[font];
         
@@ -2702,13 +2717,6 @@ class FUAspectLabelClass extends FormApplication {
                     borderAlpha:game.settings.get("fate-core-official","fuAspectLabelBorderAlpha"),
                     fillAlpha:game.settings.get("fate-core-official", "fuAspectLabelFillAlpha")
                 }
-    }
-
-    async activateListeners(html){
-        super.activateListeners(html);
-        $('#save_fu_label_settings').on('click', async event => {
-            this.submit();
-        })
     }
 }
 

@@ -1,4 +1,4 @@
-<form onsubmit="event.preventDefault();">
+<div>
     <table style="width:auto" cellspacing ="4" cellpadding="4">
         <tr>
             <td>
@@ -17,18 +17,22 @@
                 </select>
             </td>
             <td>
-                <button buttontype="button" id="editSkill">{{localize 'fate-core-official.Edit'}}</button><p></p>
-                <button buttontype="button" id="deleteSkill">{{localize 'fate-core-official.Delete'}}</button><p></p>
-                <button buttontype="button" id="copySkill">{{localize 'fate-core-official.Copy'}}</button><p></p>
-                <button buttontype="button" id="exportSkill">{{localize 'fate-core-official.Export'}}</button>
+                <div style="display:grid">
+                    <button buttontype="button" id="editSkill">{{localize 'fate-core-official.Edit'}}</button><p></p>
+                    <button buttontype="button" id="deleteSkill">{{localize 'fate-core-official.Delete'}}</button><p></p>
+                    <button buttontype="button" id="copySkill">{{localize 'fate-core-official.Copy'}}</button><p></p>
+                    <button buttontype="button" id="exportSkill">{{localize 'fate-core-official.Export'}}</button>
+                </div>
             </td>
         </tr>
         <tr>
             <td colspan="3">
-                <button type="button" id="addSkill">{{localize 'fate-core-official.AddNewSkill'}}</button>
-                <button type="button" id="importSkills">{{localize 'fate-core-official.ImportSkill'}}</button>
-                <button type="button" id="exportSkills">{{localize 'fate-core-official.ExportAllSkills'}}</button>
+                <div style="display:grid; border-left:auto; border-right:auto">
+                    <button type="button" id="addSkill">{{localize 'fate-core-official.AddNewSkill'}}</button>
+                    <button style="margin-top: 10px;" type="button" id="importSkills">{{localize 'fate-core-official.ImportSkill'}}</button>
+                    <button style="margin-top: 10px;" type="button" id="exportSkills">{{localize 'fate-core-official.ExportAllSkills'}}</button>
+                </div>
             </td>
         </tr>
     </table>
-</form>
+</div>

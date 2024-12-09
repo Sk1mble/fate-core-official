@@ -1,4 +1,4 @@
-<form onsubmit="event.preventDefault();">
+<div>
     <table style="width:800; height:50vh" cellspacing ="4" cellpadding="4">
         <tr>
             <td width="100">
@@ -19,8 +19,10 @@
         </tr>
         <tr>
             <td colspan="2">
-                <button  type="button" id="edit_aspect_save_changes">{{localize 'fate-core-official.SaveChanges'}}</button>
+                <div style = "display:grid">
+                    <button type="button" id="edit_aspect_save_changes">{{localize 'fate-core-official.SaveChanges'}}</button>
+                </div>
             </td>
         </tr>
     </table>
-</form>
+</div>
