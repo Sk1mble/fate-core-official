@@ -153,14 +153,20 @@ export class fcoActor extends Actor {
             await token.actor.update({"img":shape.avatarImg, name:aName, "prototypeToken.texture.src":shape.tokenImg});
         }
         if (shape.tokenData) {
-                shape.tokenData.texture.src = shape.tokenImg;
-                shape.tokenData.x = token.document.x;
-                shape.tokenData.y = token.document.y;
-                shape.tokenData.elevation = token.document.elevation;
-                shape.tokenData.flags = token.document.flags;
+            let width = shape.tokenData.width;
+            let height = shape.tokenData.height;
+            delete shape.tokenData.width;  // Delete because at the minute running a change in width & height with a transition breaks token movement; for example await _token.document.update({height:1.5, width:1.5}, {animation: {transition: foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES["FADE"], duration: 2000}});
+            delete shape.tokenData.height; // As above... we will perform a separate call to update the height and width without a transition.
+            shape.tokenData.texture.src = shape.tokenImg;
+            shape.tokenData.x = token.document.x;
+            shape.tokenData.y = token.document.y;
+            shape.tokenData.elevation = token.document.elevation;
+            shape.tokenData.flags = token.document.flags;
             if (shape.transition){
+                await token.document.update({width:width, height:height});
                 await token.document.update(shape.tokenData, {animation: {transition: foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
             }   else {
+                await token.document.update({width:width, height:height});
                 await token.document.update(shape.tokenData);
             }   
         }
@@ -959,11 +965,7 @@ export class fcoActor extends Actor {
     }
 }
 
-    /** HUD interface for changing shape */
-    // In v13, the change to app v2 may mean I'll need to change the functions below if the seocnd argument is changing to HTMLElement rather than jQuery.
-    // I will need to replace html.find with html.querySelector. I think .prepend() will still work but I may want to swap to insertAdjacentElement('afterbegin', innerEl) for consistency with other places.
-    // See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
-    
+    /** HUD interface for changing shape; launches fcoActorShapeManager applicationV2 */
     Hooks.on("renderTokenHUD", function (hudButtons, html, data) {
         // if html is jquery, convert to HTMLElement - this is future proofing for when this does return an HTMLElement.
         if (html instanceof jQuery){
@@ -973,79 +975,12 @@ export class fcoActor extends Actor {
         //hudButtons.object is the token itself.
         let token = hudButtons.object;
         if (token.actor.type != "fate-core-official") return;
-        let shapes = token.actor.getFlag("fate-core-official","shapes");
-        let transitions = "";
-
-        transitions = `<select id="fcotransition_${token.id}" style="min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); left:75px;">`
-        for (let transition in foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES){
-            let selected="";
-            if (transition == "FADE") selected = `selected = "selected"`;   
-            transitions += `<option value = "${transition}" ${selected}>
-                ${foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES[transition]}
-            </option>`
-        }
-        transitions += `</select>`
-
-        let shapeButtons = `<div style="font-size:0.8em; position:absolute; min-width:750px; max-width:750px; text-overflow: ellipsis; overflow-x:auto; max-height:1000px; overflow-y:auto; left:75px; top:-75px; display:flex-row"><table style="background:transparent;">
-        <tr style="background-color:var(--fco-accent-colour); height:75px; border:none">
-            <td width = "350px">
-                <input type="text" style="font-size:0.8em; margin-left:10px; margin-right:10px; max-width:225px; background:var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour)" id = fcoShapeAddName_${token.id}></input>
-            </td>
-            <td width ="350px">
-                ${transitions}
-            </td>
-            <td width = "50px">
-                <div style="width:50px" id="fcoShapeAdd_${token.id}"><i class="fas fa-plus fu_button"></i></div>
-            </td>
-        </tr>
-        </table>`;
-        let allowDeletion = true;
-        let deleteButton = "";
-        for (let shape in shapes){
-            if (allowDeletion) deleteButton=`<td width="50px"><div class= "fu_button" id="fcoShapeDelete_${token.id}_${shape}"><i icon class ="fas fa-trash"</i></div></td>`
-            shapeButtons += `<div class="fu_button" style="background:var(--fco-sheet-background-colour); display:flex; left:75px; padding:10px; min-width:700px; margin:5px; color:black; font-family:var(--fco-font-family)" id="fcoShape_${token.id}_${shape}">
-            <table style="background:transparent; border:none; color:black; font-family:var(--fco-font-family)">
-                <tr>
-                    <td style="color:var(--fco-sheet-text-colour); padding-left:5px; text-align:left; min-width:200px; max-width:200px; overflow:hidden; text-overflow:ellipsis;">${shapes[shape].name}</td>
-                    <td width="80px"><img src="${shapes[shape].tokenImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
-                    <td width="80px"><img src="${shapes[shape].avatarImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
-                    <td width="200px" style= "min-width:100px; height:75px; opacity:1 !important">${shapes[shape].transition}</td>
-                    ${deleteButton}
-                </tr>
-            </table>
-            </div>`
-        }
-        shapeButtons += `</div>`
-        let button = `<div  class="control-icon fco-changeShape" id="fco-changeShape"><i class="fa fa-arrows-rotate"></i></div>`;
+        let button = `<button type="button" data-tooltip="${game.i18n.format("fate-core-official.shapeManagerTitle",{name:token.actor.name})}" class="button control-icon" name="fco_changeShape"><i class="fa fa-arrows-rotate"></i></button>`;
         let col = html.querySelector('.col.right');
         col.insertAdjacentHTML("afterbegin", button);
-        button = html.querySelector('#fco-changeShape');
-        button.onclick = (async (ev) => {
-            if (ev.target.closest('div').id.split("_")[0] == "fcoShapeDelete"){
-                let shapes = token.actor.getFlag("fate-core-official","shapes");
-                let shape = shapes[ev.target.closest('div').id.split("_")[2]];
-                let del = await fcoConstants.confirmDeletion();
-                if (del){
-                    await token.actor.deleteShape(shape.name)
-                }
-            } else {
-                if (ev.target.closest('div').id.split("_")[0] == "fcoShapeAdd"){
-                    let name = html.querySelector(`#fcoShapeAddName_${token.id}`).value;
-                    let transition = null;
-                    transition = html.querySelector(`#fcotransition_${token.id}`).value;
-                    if (name) {
-                        await token.actor.storeShape(name, null, null, token, transition);
-                    } else {
-                        ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
-                    }
-                } else {
-                    let shapes = token.actor.getFlag("fate-core-official","shapes");
-                    if (ev.target.closest('div').id == "fco-changeShape") button.insertAdjacentHTML("afterbegin", shapeButtons);
-                    let shape = undefined;
-                    if (shapes) shape = shapes[ev.target.closest('div').id.split("_")[2]];
-                    if (shape) await token.actor.changeShape(shape.name, token);
-                }
-            }
+        let buttonEl = html.querySelector("button[name='fco_changeShape']");
+        buttonEl.addEventListener("click", async ev => {
+            new fcoActorShapeManager(token, buttonEl).render(true);
         });
     });
     

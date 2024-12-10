@@ -14,6 +14,8 @@
 * Fixed a bug that meant Defaults weren't being rationalised with base 64 keynames
 * Changed the name of the world data object to use title rather than name as this appears to have changed
 * EditPlayerAspects migrated to AppV2.
+* EditPlayerTracks migrated to AppV2.
+* Changed the shape change tool to use a standalone Application instead of a janky inserted HTML element on the play area.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

@@ -1,0 +1,28 @@
+<div style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); padding:10px">
+    <div style="display:flex; flex-direction:row; align-items:center">
+        <input type="text" style="margin-right:10px; width: 40rem; max-width:40rem; background:var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour)" name = "fcoShapeAddName"></input>
+        <select name = "fcotransition" style="min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); left:75px;">
+            {{#each transitions}}
+                <option value = "{{this}}" {{#if (eq this "FADE")}} selected = "selected"{{/if}}>{{lookup ../transitionsObject this}}</option>
+            {{/each}}
+        </select>
+        <i style = "margin-top: auto; margin-bottom: auto; margin-left: 10px; vertical-align:middle;" data-action = "fcoShapeAdd" name = "fcoShapeAdd" class="fa-solid fa-square-plus fa-2xl fu_button"></i>   
+    </div>
+    <div class = "fcoShapeList" style = "display:flex; flex-direction: column; overflow-y:auto; max-height: 1000px">
+        <span style="margin-top:10px;">{{localize 'fate-core-official.changeShapeToolTip'}}</span>
+        {{#each shapes}}
+        <div style="display:flex; flex-direction:row; align-items:center">
+            <div class = "fu_button" data-action = "changeShape" data-key ="{{@key}}" style="width: 90%; border:1px black solid; margin-top:10px; height: 80px; display:flex; flex-direction: row; align-items: center; gap: 10px">
+                <p style="font-size:1.25rem; font-weight:bolder; padding-left: 10px; width: 25rem; overflow:hidden">{{this.name}}</p>
+                <img style = "height:70px; margin: 5px; width: auto" src = "{{this.tokenImg}}"/>
+                <img style = "height: 70px; margin: 5px; width: auto;" src = "{{this.avatarImg}}"/>
+                <p style="margin-top:15px; margin-bottom:10px">{{lookup ../transitionsObject this.transition}}</p>
+            </div>
+            <div style = "vertical-align: middle; margin-top: 15px; margin-left:20px;" class = "fu_button" data-action = "delete" data-key = {{@key}}>
+                <i class = "fas fa-trash fa-xl"></i>
+            </div>
+        </div>            
+        {{/each}}
+    </div>
+    
+</div>

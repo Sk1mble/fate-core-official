@@ -193,11 +193,13 @@ function rationaliseKeys(){
     for (let type of types){
         let data = game.settings.get("fate-core-official", type);
         let export_data = {};
+
         for (let sub_item in data){
+            let key = "";
             if (type == "defaults") {
-                let key = fcoConstants.tob64(data[sub_item].default_name);
+                key = fcoConstants.tob64(data[sub_item].default_name);
             } else {
-                let key = fcoConstants.tob64(data[sub_item].name);
+                key = fcoConstants.tob64(data[sub_item].name);
             }
             export_data[key] = data[sub_item];
         }

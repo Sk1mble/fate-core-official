@@ -47,6 +47,8 @@
    "fate-core-official.fu-ignore-list-name":"Fate Utilities Ignore List",
    "fate-core-official.fu-ignore-list-hint":"A comma separated list of prefixes which denote a token is to be ignored when populating data for Fate Utilities",
    "fate-core-official.sharedFrom":"Shared from {name}",
+   "fate-core-official.shapeManagerTitle":"Shape Manager for {name}",
+   "fate-core-official.changeShapeToolTip":"Click a shape below to transform. Hold shift and click to keep this window open.",
    "fate-core-official.Value":"Value",
    "fate-core-official.Discard":"Discard",
    "fate-core-official.Apply":"Apply",

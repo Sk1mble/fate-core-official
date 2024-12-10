@@ -23,6 +23,7 @@
     "scripts/EditPlayerTracks.js",
     "scripts/EditPlayerStunts.js",
     "scripts/FateUtilities.js",
+    "scripts/fcoActorShapeManager.js",
     "scripts/EditPlayerAspects.js",
     "scripts/ModifiedRollDialog.js",
     "scripts/ShowCharacter.js",

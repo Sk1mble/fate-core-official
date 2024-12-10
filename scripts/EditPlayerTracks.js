@@ -1,44 +1,46 @@
-class EditPlayerTracks extends FormApplication {
-    constructor(...args){
-        super(...args);
-        //This is a good place to set up some variables at the top level so we can access them with this.
-        if (this.object.type=="Extra"){
-            this.options.title=`${game.i18n.localize("fate-core-official.ExtraTrackEditor")} ${this.object.name}`
-        } else {
-            if (this.object.isToken) {
-                this.options.title=`${game.i18n.localize("fate-core-official.TokenTrackEditor")} ${this.object.name}`
-            } else {
-                this.options.title=`${game.i18n.localize("fate-core-official.ActorTrackEditor")} ${this.object.name}`
-            }
-        }
+class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+    constructor(object){
+        super(object);
+        this.object = object;
         this.selected_category = "";
         this.tracks_by_category = undefined;
         game.system.apps["actor"].push(this);
         game.system.apps["item"].push(this);
     } //End constructor
 
-    static get defaultOptions(){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/EditPlayerTracks.html";
-        options.width = "auto";
-        options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.CharacterTrackEditor")}`;
-        options.closeOnSubmit = false;
-        options.id = "PlayerTrackSetup";
-        options.resizable = true;
-        options.classes = options.classes.concat(['fate']);
-        options.scrollY = ["#edit_tracks_body"]; 
-        return options 
-    } // End getDefaultOptions
-
-    async _updateObject(event, formData){
-        // This returns all the forms fields with names as a JSON object with their values. 
-        // It is required for a FormApplication.
-        // It is called when you call this.submit();
+    get title (){
+        //This is a good place to set up some variables at the top level so we can access them with this.
+        if (this.object.type=="Extra"){
+            return `${game.i18n.localize("fate-core-official.ExtraTrackEditor")} ${this.object.name}`
+        } else {
+            if (this.object.isToken) {
+                return `${game.i18n.localize("fate-core-official.TokenTrackEditor")} ${this.object.name}`
+            } else {
+                return `${game.i18n.localize("fate-core-official.ActorTrackEditor")} ${this.object.name}`
+            }
+        }
     }
 
-    setSheet (ActorSheet){
-        this.sheet = ActorSheet;
+    static DEFAULT_OPTIONS ={
+        tag: "form",
+        id: "PlayerTrackSetup",
+        classes: ['fate'],
+        window: {
+            title: this.title,
+            icon: "fas fa-scroll"
+        },
+        form: {
+            closeOnSubmit: false,
+        },
+        position:{
+        }
+    }
+
+    static PARTS = {
+        EditPlayerTracksForm: {
+            template: "systems/fate-core-official/templates/EditPlayerTracks.html",
+            scrollable: ["#edit_tracks_body"]
+        }
     }
 
     async renderMe(id, data){
@@ -79,35 +81,37 @@ class EditPlayerTracks extends FormApplication {
         await super.close(options);
     }
 
-    activateListeners(html) {
-        super.activateListeners(html);
-        const select_box = html.find("select[id='select_box");
-        select_box.on("change", event => this._on_sb_change(event, html));
-       
-        const nameField = html.find("td[name='nameField']");
-        nameField.on("contextmenu", event => this._onNameField (event,html));
-        const moveUp = html.find("button[id='move_up']");
-        moveUp.on("click", event => this._onMove (event, html, -1));
-        const moveDown = html.find("button[id='move_down']");
-        moveDown.on("click", event => this._onMove (event, html, 1));
-        const save = html.find("button[id='save']");
-        save.on("click", event => this._save(event, html))
-        const ad_hoc = html.find("button[id='ad_hoc']");
-        ad_hoc.on("click", event => this._ad_hoc(event, html));
-        const numberbox = html.find("input[type='number']");
-        numberbox.on("change", event => this._numChange(event, html));
-        const checkbox = html.find("input[type='checkbox']");
-        checkbox.on("click", event => this._check(event,html));
-        const edit = html.find("button[name='edit_entity_tracks']");
-        edit.on('click', async event => {
+    setSheet (ActorSheet){
+        this.sheet = ActorSheet;
+    }
+
+    _onRender(context, options) {
+        const select_box = this.element.querySelector("#fco_ept_select_box");
+        select_box.addEventListener("change", event => this._on_sb_change(event));       
+        const nameField = this.element.querySelectorAll("td[name='nameField']");
+        nameField.forEach(name => name.addEventListener("contextmenu", event => this._onNameField (event)));
+        const moveUp = this.element.querySelectorAll("button.move_up");
+        moveUp?.forEach(button => button.addEventListener("click", event => this._onMove (event, -1)));
+        const moveDown = this.element.querySelectorAll("button.move_down");
+        moveDown?.forEach(button => button.addEventListener("click", event => this._onMove (event, 1)));
+        const save = this.element.querySelector("button[name = 'save']");
+        save?.addEventListener("click", event => this._save(event))
+        const ad_hoc = this.element.querySelector("button[name='ad_hoc']");
+        ad_hoc?.addEventListener("click", event => this._ad_hoc(event));
+        const numberbox = this.element.querySelectorAll("input[type='number']");
+        numberbox?.forEach(num => num.addEventListener("change", event => this._numChange(event)));
+        const checkbox = this.element.querySelectorAll("input[type='checkbox']");
+        checkbox?.forEach(cb => cb.addEventListener("click", event => this._check(event)));
+        const edit = this.element.querySelectorAll("button[name='edit_entity_tracks']");
+        edit.forEach(button => button.addEventListener('click', async event => {
             let track = fcoConstants.gbn(this.object.system.tracks, event.target.id);
             let e = new EditEntityTrack(track, this.object).render(true);
             e.origin = this;
-        })
+        }));
     } //End activateListeners
     // Here are the action functions
 
-    async _ad_hoc (event, html){
+    async _ad_hoc (event){
         let catText = `<select name="category" style="color:black; background:white;">`
         for (let c in this.tracks_by_category){
             // Build the category list
@@ -274,8 +278,8 @@ class EditPlayerTracks extends FormApplication {
                 label: game.i18n.localize("fate-core-official.Save"),
                 callback: (event, button, html) => {
                     let newTrack = {};
-                    newTrack.category= button.form.elements.category.value; 
-                    newTrack.name=html = button.form.elements.name.value; 
+                    newTrack.category = button.form.elements.category.value; 
+                    newTrack.name = button.form.elements.name.value; 
                     newTrack.description = button.form.elements.description.value 
                     newTrack.universal= false; 
                     newTrack.unique = button.form.elements.unique.checked;
@@ -285,7 +289,7 @@ class EditPlayerTracks extends FormApplication {
                     newTrack.when_marked = button.form.elements.when_marked.value;
                     newTrack.recovery_conditions = button.form.elements.recovery_conditions.value; 
                     newTrack.recovery_type = button.form.elements.recovery_type.value; 
-                    newTrack.harm_can_absorb=parseInt(button.form.elements.harm.value);
+                    newTrack.harm_can_absorb = parseInt(button.form.elements.harm.value);
                     newTrack.aspect.when_marked = button.form.elements.aspect_when_marked.checked;
                     newTrack.aspect.as_name = button.form.elements.aspect_as_name.checked;
                     newTrack.boxes = parseInt(button.form.elements.boxes.value);
@@ -320,21 +324,21 @@ class EditPlayerTracks extends FormApplication {
 
     }
     
-    async _numChange (event, html){
+    async _numChange (event){
         let name = event.target.id.split("_")[0]
         let track = fcoConstants.gbn(this.tracks_by_category[this.selected_category], name);
         track.number = parseInt(event.target.value);
     }
 
-    async _check(event, html){
-        let name = event.target.id;
+    async _check(event){
+        let name = event.target.dataset.name;
         let track = fcoConstants.gbn(this.tracks_by_category[this.selected_category], name);
         track.toCopy=event.target.checked;
         //The copy/don't copy checkbox overrides this; we only needed the present checkbox when we initialised.
         delete track.present;
     }
 
-    async _save(event, html){
+    async _save(event){
         //Work out which tracks in tracks_by_category are being added, and which deleted
         //We'll do this by finding the existing tracks in current working object and copying them to a new working object ready for output.
         let input = {};
@@ -422,12 +426,12 @@ class EditPlayerTracks extends FormApplication {
         }
     }
 
-    async _on_sb_change(event, html){
+    async _on_sb_change(event){
         this.selected_category = event.target.value;
         this.render(false);
     }
     
-    async _onMove (event, html, direction){
+    async _onMove (event, direction){
         let info = event.target.name.split("_");
         let category = info[0]
         let tracks = this.tracks_by_category[category]
@@ -437,7 +441,7 @@ class EditPlayerTracks extends FormApplication {
         this.render(false);
     }
   
-    async _onNameField (event, html){
+    async _onNameField (event){
         let name = event.target.id.split("_")[0];
         let track;
         for (let c in this.tracks_by_category){
@@ -578,7 +582,7 @@ class EditPlayerTracks extends FormApplication {
         }
     }
         
-    async getData(){
+    async _prepareContext(){
         let world_tracks = await foundry.utils.duplicate(fcoConstants.wd().system.tracks);
         //We need the list of track categories
         //We will use a dropdown list of categories in the editor to select which tracks are displayed

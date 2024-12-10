@@ -11,17 +11,6 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
         await super.close(options);
     }
 
-    /* App v1
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.resizable=true;
-        options.width = "800"
-        options.height = "1000"
-        options.scrollY = ['#mthing-content'] // This moves to PARTS.scrollable
-        options.classes = options.classes.concat(['fate']); // Moves to PARTS.classes
-        return options;
-    } */
-
     static DEFAULT_OPTIONS = {
         tag: "form",
         position: {width:800, height:1000},
@@ -50,11 +39,6 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
 
     get actorType() {
         return this.actor.type;
-    }
-
-    get template() {
-        let template = 'systems/fate-core-official/templates/ThingSheet.html'
-        return template;
     }
 
     //Here are the action listeners
