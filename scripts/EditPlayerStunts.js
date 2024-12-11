@@ -163,7 +163,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
         const description_rich = this.element.querySelector("div[id='edit_stunt_desc_rich']");
 
         description_rich.addEventListener('keyup', async event => {
-            if (event.which == 9) description_rich.trigger("click");
+            if (event.which == 9) description_rich.click();
         })
 
         description_rich.addEventListener('contextmenu', async event => {

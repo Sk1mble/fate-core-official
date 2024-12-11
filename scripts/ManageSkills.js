@@ -310,7 +310,7 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
         for (let element of rich_elements){
             let normal_element = document.getElementById(`edit_skill_${element.attributes.name.value}`);
             element.addEventListener ("keyup", event => {
-                if (event.code == "Tab") element.trigger("click");
+                if (event.code == "Tab") element.click();
             })
 
             element.addEventListener("click", event => {

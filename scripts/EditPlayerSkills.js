@@ -34,7 +34,6 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
             submitOnChange:false,
             handler: EditPlayerSkills.#updateObject
         }
-
     }
 
     static PARTS = {

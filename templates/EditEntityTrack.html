@@ -1,152 +1,153 @@
-<form style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); padding:10px;">
-    <div align = "left"><h2>{{this.track.name}}</h2></div>
-    <button type="button" id="copy_entity" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:30px; height:30px" i icon class = "fas fa-copy"></button>
-             <button type="button" id="exportEntityTrack" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:30px; height:30px" i icon class = "fas fa-file-export"></button>   
-            </div>
-    <table style="width:1000px;border:none;" cellspacing ="4" cellpadding="4>
-        <tr style="background-color: transparent;">
-            <td width="100">
-                {{localize 'fate-core-official.Name'}}:
-            </td>
-            <td>
-                <input type="text" id ="edit_entity_track_name" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);" value="{{this.track.name}}"></input>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td width="100">
-                {{localize 'fate-core-official.Category'}}:
-            </td>
-            <td>
-                <select type="text" id ="edit_entity_track_category" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">
-                    {{#each categories}}
-                    {{#if (eq this "Combat")}}
-                        <option value="Combat" {{#if (eq this ../this.track.category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Combat'}}</option>
-                        {{else}}
-                            {{#if (eq this ../this.track.category)}}
-                                <option selected = "selected">{{this}}</option>
+<div style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); padding:10px;">
+    <div style="display:flex; flex-direction:row; gap: 10px; align-items:center">
+        <div style="font-size:1.25rem; font-weight:bolder;">{{this.track.name}}</div>
+    </div>
+    <div style="overflow-y:scroll; max-height:750px" class ="EditEntityTrackMainWindow">
+        <table style="width:60rem;border:none;">
+            <tr style="background-color: transparent;">
+                <td width="180">
+                    {{localize 'fate-core-official.Name'}}:
+                </td>
+                <td>
+                    <input type="text" id ="edit_entity_track_name" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);" value="{{this.track.name}}"></input>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td width="180">
+                    {{localize 'fate-core-official.Category'}}:
+                </td>
+                <td>
+                    <select type="text" id ="edit_entity_track_category" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">
+                        {{#each categories}}
+                        {{#if (eq this "Combat")}}
+                            <option value="Combat" {{#if (eq this ../this.track.category)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Combat'}}</option>
                             {{else}}
-                                <option>{{this}}</option>
-                            {{/if}}
-                        {{/if}}        
-                    {{/each}}
-                </select>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.Description'}}:
-            </td>
-            <td>
-                <div id ="edit_entity_track_description_rich" tabindex = "0" style="min-height:1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family);">{{{this.rich.description}}}</div>
-                <div id ="edit_entity_track_description" style="display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.track.description}}}</div>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.Paid'}}
-            </td>
-            <td>
-                <input type="checkbox" id="edit_entity_track_paid" {{#if this.track.paid}}checked = "checked"{{/if}}></input>{{localize 'fate-core-official.TrueIfCostsOneRefresh'}} 
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.RecoveryType'}}
-            </td>
-            <td>
-                <select id="edit_entity_track_recovery_type" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value="Fleeting" {{#if (eq this.track.recovery_type "Fleeting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Fleeting'}}</option>
-                    <option value="Sticky" {{#if (eq this.track.recovery_type "Sticky")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Sticky'}}</option>
-                    <option value="Lasting" {{#if (eq this.track.recovery_type "Lasting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Lasting'}}</option>
-                </select>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.Aspect'}}:
-            </td>
-            <td>
-                <select id="edit_entity_track_aspect" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value="no" 
-                    {{#if (eq this.track.aspect "No")}} selected = "selected"{{/if}}
-                    {{#if (eq this.track.aspect "no")}} selected = "selected"{{/if}}
-                    {{#if (eq this.track.aspect (localize 'fate-core-official.No'))}} selected = "selected"{{/if}}
-                    >{{localize 'fate-core-official.No'}}</option>
-                    <option value="as_name"{{#if (eq this.track.aspect.as_name true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.NameAsAspect'}}</option>
-                    <option value="when_marked" {{#if (eq this.track.aspect.when_marked true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
-                </select>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.WhenMarked'}}
-            </td>
-            <td>
-                <div id ="edit_entity_track_when_marked_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.rich.when_marked}}}</div>
-                <div id ="edit_entity_track_when_marked" style="display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.track.when_marked}}}</div>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.HowRecover'}}
-            </td>
-            <td>
-                <div id ="edit_entity_track_when_recovers_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.rich.recovery_conditions}}}</div>
-                <div id ="edit_entity_track_when_recovers" style="display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.track.recovery_conditions}}}</div>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.Boxes'}}
-            </td>
-            <td>
-                <input type="number" id="edit_entity_track_boxes" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px" value="{{this.track.boxes}}"> 
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.BoxLabels'}}:
-            </td>
-            <td>
-                <select id="entity_track_label_select" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" >
-                    <option selected = "selected" value="{{this.label}}">
-                        {{localize 'fate-core-official.Custom'}}
-                    </option>
-                    <option {{#if (eq this.track.label "none")}} selected = "selected" {{/if}} value="none">
-                        {{localize 'fate-core-official.None'}}
-                    </option>
-                    <option {{#if (eq this.track.label "escalating")}} selected = "selected" {{/if}} value="escalating">
-                        {{localize 'fate-core-official.Escalating'}}
-                    </option>
-                </select>
-                <input type="text" id="entity_track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" {{#if (eq this.track.label "none")}}hidden="true"{{/if}} {{#if (eq this.track.label "escalating")}}hidden="true"{{/if}} style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px" value="{{this.track.label}}"/> {{localize 'fate-core-official.LabelOverrides'}}
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td>
-                {{localize 'fate-core-official.Harm'}}:
-            </td>
-            <td>
-                <input type="number" id="edit_entity_track_harm" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px" value="{{this.track.harm_can_absorb}}"> {{localize 'fate-core-official.HowMuchHarm'}}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{localize 'fate-core-official.Rollable'}}
-            </td>
-            <td>
-                <select id = "entity_track_rollable" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value="false" {{#if (eq this.track.rollable "false")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.False'}}</option>
-                    <option value="full" {{#if (eq this.track.rollable "full")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollFullBoxes'}} </option>
-                    <option value="empty" {{#if (eq this.track.rollable "empty")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollEmptyBoxes'}} </option>
-                </select>
-            </td>
-        </tr>
-        <tr style="background-color: transparent;">
-            <td colspan="2">
-                <button type="button" id="save_entity_track" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button>
-                <button type="button" id="edit_entity_linked_skills" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:50px">{{localize 'fate-core-official.EditLinkedSkills'}}</button>
-            </td>
-        </tr>
-    </table>
-</form>
+                                {{#if (eq this ../this.track.category)}}
+                                    <option selected = "selected">{{this}}</option>
+                                {{else}}
+                                    <option>{{this}}</option>
+                                {{/if}}
+                            {{/if}}        
+                        {{/each}}
+                    </select>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.Description'}}:
+                </td>
+                <td>
+                    <div id ="edit_entity_track_description_rich" name="description" class = "fco_track_edit_field_rich" tabindex = "0" style="min-height:1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family);">{{{this.rich.description}}}</div>
+                    <div id ="edit_entity_track_description" style="display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.track.description}}}</div>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.Paid'}}
+                </td>
+                <td>
+                    <input type="checkbox" style="margin-right:20px" id="edit_entity_track_paid" {{#if this.track.paid}}checked = "checked"{{/if}}></input>{{localize 'fate-core-official.TrueIfCostsOneRefresh'}} 
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.RecoveryType'}}
+                </td>
+                <td>
+                    <select id="edit_entity_track_recovery_type" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
+                        <option value="Fleeting" {{#if (eq this.track.recovery_type "Fleeting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Fleeting'}}</option>
+                        <option value="Sticky" {{#if (eq this.track.recovery_type "Sticky")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Sticky'}}</option>
+                        <option value="Lasting" {{#if (eq this.track.recovery_type "Lasting")}} selected = "selected"{{/if}}>{{localize 'fate-core-official.Lasting'}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.Aspect'}}:
+                </td>
+                <td>
+                    <select id="edit_entity_track_aspect" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
+                        <option value="no" 
+                        {{#if (eq this.track.aspect "No")}} selected = "selected"{{/if}}
+                        {{#if (eq this.track.aspect "no")}} selected = "selected"{{/if}}
+                        {{#if (eq this.track.aspect (localize 'fate-core-official.No'))}} selected = "selected"{{/if}}
+                        >{{localize 'fate-core-official.No'}}</option>
+                        <option value="as_name"{{#if (eq this.track.aspect.as_name true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.NameAsAspect'}}</option>
+                        <option value="when_marked" {{#if (eq this.track.aspect.when_marked true)}} selected = "selected"{{/if}}>{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.WhenMarked'}}
+                </td>
+                <td>
+                    <div class = "fco_track_edit_field_rich" name="when_marked" id ="edit_entity_track_when_marked_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.rich.when_marked}}}</div>
+                    <div id ="edit_entity_track_when_marked" style="display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.track.when_marked}}}</div>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.HowRecover'}}
+                </td>
+                <td>
+                    <div class = "fco_track_edit_field_rich" name="when_recovers" id ="edit_entity_track_when_recovers_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.rich.recovery_conditions}}}</div>
+                    <div id ="edit_entity_track_when_recovers" style="display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family);">{{{this.track.recovery_conditions}}}</div>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.Boxes'}}
+                </td>
+                <td>
+                    <input type="number" id="edit_entity_track_boxes" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px" value="{{this.track.boxes}}"> 
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.BoxLabels'}}:
+                </td>
+                <td>
+                    <select id="entity_track_label_select" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" >
+                        <option selected = "selected" value="{{this.label}}">
+                            {{localize 'fate-core-official.Custom'}}
+                        </option>
+                        <option {{#if (eq this.track.label "none")}} selected = "selected" {{/if}} value="none">
+                            {{localize 'fate-core-official.None'}}
+                        </option>
+                        <option {{#if (eq this.track.label "escalating")}} selected = "selected" {{/if}} value="escalating">
+                            {{localize 'fate-core-official.Escalating'}}
+                        </option>
+                    </select>
+                    <div style= "margin-top: 5px"><input type="text" id="entity_track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" {{#if (eq this.track.label "none")}}hidden="true"{{/if}} {{#if (eq this.track.label "escalating")}}hidden="true"{{/if}} style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px" value="{{this.track.label}}"/> {{localize 'fate-core-official.LabelOverrides'}}</div>
+                </td>
+            </tr>
+            <tr style="background-color: transparent;">
+                <td>
+                    {{localize 'fate-core-official.Harm'}}:
+                </td>
+                <td>
+                    <input type="number" id="edit_entity_track_harm" style="margin-right: 5px; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px" value="{{this.track.harm_can_absorb}}"> {{localize 'fate-core-official.HowMuchHarm'}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{localize 'fate-core-official.Rollable'}}
+                </td>
+                <td>
+                    <select id = "entity_track_rollable" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); width: 300px; height: 25px">
+                        <option value="false" {{#if (eq this.track.rollable "false")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.False'}}</option>
+                        <option value="full" {{#if (eq this.track.rollable "full")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollFullBoxes'}} </option>
+                        <option value="empty" {{#if (eq this.track.rollable "empty")}} selected = "selected" {{/if}}> {{localize 'fate-core-official.RollEmptyBoxes'}} </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="display:flex; flex-direction:row; gap:10px;">
+        <button type="button" id="save_entity_track" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button>
+        <button type="button" id="edit_entity_linked_skills" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:50px">{{localize 'fate-core-official.EditLinkedSkills'}}</button>
+        <button type="button" id="copy_entity" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; height:50px"><i class = "fas fa-copy fa-xl"></i></button>
+        <button type="button" id="exportEntityTrack" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:50px; height:50px"><i class="fa-solid fa-file-export fa-xl"></i></button>
+    </div>
+</div>
