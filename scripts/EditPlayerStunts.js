@@ -133,7 +133,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
 
         // Edit the text field that shows the name of the macro when we edit the value of the macro UUid.
         const macro = this.element.querySelector("input[name='macro']")
-        macro.addEventListener("change", (event) => {
+        macro?.addEventListener("change", (event) => {
             let search = `${this.stunt.name}_macroName`;
             if (event.target.value == ''){
                 event.target.value = null;
@@ -162,11 +162,11 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
 
         const description_rich = this.element.querySelector("div[id='edit_stunt_desc_rich']");
 
-        description_rich.addEventListener('keyup', async event => {
+        description_rich?.addEventListener('keyup', async event => {
             if (event.which == 9) description_rich.click();
         })
 
-        description_rich.addEventListener('contextmenu', async event => {
+        description_rich?.addEventListener('contextmenu', async event => {
             let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 this.element.querySelector('#edit_stunt_desc_rich').innerHTML = text;
@@ -174,14 +174,14 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
             }
         })
 
-        description_rich.addEventListener('click', async event => {
+        description_rich?.addEventListener('click', async event => {
             this.element.querySelector("#edit_stunt_desc_rich").style.display = "none";
             this.element.querySelector("#edit_stunt_desc").style.display = 'block';
             this.element.querySelector("#edit_stunt_desc").focus();
         })
 
         const stunt_desc = this.element.querySelector("div[id='edit_stunt_desc']");
-        stunt_desc.addEventListener('blur', async event => {
+        stunt_desc?.addEventListener('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
                 this.element.querySelector('#edit_stunt_desc').style.display = "none";
@@ -348,7 +348,7 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
 
     // Add a drop handler that lets the GM drag stunts from anything into the database window.
     _onFirstRender(context, options){
-        this.element.addEventListener("drop", async event => {
+        this.element?.addEventListener("drop", async event => {
             let data = TextEditor.getDragEventData(event);
             if (data?.ident == "mf_draggable" && data?.type == "stunt" && game.user.isGM){
                 // Add the stunt to the database and re-render
@@ -359,29 +359,30 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
                 } 
             }
         })
+        super._onFirstRender(context, options);
     }
 
     _onRender(context, options) {
-        const addButton = this.element.querySelector("button[name='add_stunt']");
-        addButton?.addEventListener("click", event => {this._onAddButton(event)});
+        const addButton = this.element.querySelectorAll("button[name='add_stunt']");
+        addButton.forEach(stunt => stunt.addEventListener("click", event => {this._onAddButton(event)}));
         const deleteButton = this.element.querySelectorAll("button[name='del_stunt']");
-        deleteButton?.forEach(button => {button.addEventListener("click", event => {this._onDeleteButton(event)});}) 
+        deleteButton?.forEach(button => {button?.addEventListener("click", event => {this._onDeleteButton(event)});}) 
         const sb_name = this.element.querySelector("div[name='sb_name']");
         const sb_skill = this.element.querySelector("div[name='sb_skill']");
         const sb_refresh = this.element.querySelector("div[name='sb_refresh']");
-        sb_name.addEventListener("click", event => {this.sort = "name"; this.render(false)});
-        sb_skill.addEventListener("click", event => {this.sort = "linked_skill"; this.render(false)});
-        sb_refresh.addEventListener("click", event => {this.sort = "refresh_cost"; this.render(false)});
+        sb_name?.addEventListener("click", event => {this.sort = "name"; this.render(false)});
+        sb_skill?.addEventListener("click", event => {this.sort = "linked_skill"; this.render(false)});
+        sb_refresh?.addEventListener("click", event => {this.sort = "refresh_cost"; this.render(false)});
         const export_stunts = this.element.querySelector("button[id='export_stunts']");
         const import_stunts = this.element.querySelector("button[id='import_stunts']");
-        export_stunts.addEventListener("click", event => this._onExportStunts(event));
-        import_stunts.addEventListener("click", event => this._onImportStunts(event));
+        export_stunts?.addEventListener("click", event => this._onExportStunts(event));
+        import_stunts?.addEventListener("click", event => this._onImportStunts(event));
         const export_stunt = this.element.querySelectorAll("button[name='export_stunt']");
         export_stunt.forEach (stunt => {stunt. addEventListener("click", event => this._onExportStunt(event))});
         const edit_stunt = this.element.querySelectorAll ("button[name='edit_stunt']");
-        edit_stunt.forEach (stunt => {stunt.addEventListener("click", event => this._onEditStunt(event))});
+        edit_stunt.forEach (stunt => {stunt?.addEventListener("click", event => this._onEditStunt(event))});
         const add_stunt = this.element.querySelector("button[id='add_db_stunt']");
-        add_stunt.addEventListener("click", event => {
+        add_stunt?.addEventListener("click", event => {
             let stunt = new fcoStunt({
                 "name":game.i18n.localize("fate-core-official.NewStunt"),
                 "linked_skill":"None",
@@ -406,7 +407,7 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
 
         const mfdraggable = this.element.querySelectorAll('.mf_draggable');
         mfdraggable.forEach(draggable => {
-            draggable.addEventListener("dragstart", event => {
+            draggable?.addEventListener("dragstart", event => {
                 if (game.user.isGM){
                     let ident = "mf_draggable"
                     let type = event.target.getAttribute("data-mfdtype");
@@ -421,7 +422,7 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
                 }
             })
 
-            draggable.addEventListener("dblclick", event => {
+            draggable?.addEventListener("dblclick", event => {
                 let origin = event.target.getAttribute("data-mfactorid");
                 let content = `<strong>Shared from Stunt Database:</strong><br/><hr>`
                 let user = game.user;
@@ -447,13 +448,13 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
         })
 
         const filter_stunts = this.element.querySelector('#stunt_db_filter_box');
-        filter_stunts.addEventListener('change', async event => {
+        filter_stunts?.addEventListener('change', async event => {
             this.filter = event.target.value;
             await this.render(false);
         })
 
         const clear_filter = this.element.querySelector('#stunt_db_clear_filter');
-        clear_filter.addEventListener('click', async event => {
+        clear_filter?.addEventListener('click', async event => {
             this.filter = "";
             await this.render(false);
         })
@@ -465,7 +466,7 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
         }
 
         const ignoreCase = this.element.querySelector('#stunt_db_ignore_case');
-        ignoreCase.addEventListener('click', async event => {
+        ignoreCase?.addEventListener('click', async event => {
             this.ignoreCase = !this.ignoreCase;
             if (this.ignoreCase) ignoreCase.style.opacity = 0.4;
             if (!this.ignoreCase) ignoreCase.style.opacity = 1;

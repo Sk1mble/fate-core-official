@@ -343,7 +343,7 @@
       ctx._eventsCache[index][type] = ctx._eventsCache[index][type] || [];
       ctx._eventsCache[index][type].push(listener);
 
-      target.addEventListener(type, listener, false);
+      target?.addEventListener(type, listener, false);
     }
     return ctx;
   }
@@ -540,7 +540,7 @@
   Pen.prototype.addOnSubmitListener = function(inputElement) {
     var form = inputElement.form;
     var me = this;
-    form.addEventListener("submit", function() {
+    form?.addEventListener("submit", function() {
       inputElement.value = me.config.saveAsMarkdown ? me.toMd(me.config.editor.innerHTML) : me.config.editor.innerHTML;
     });
   };

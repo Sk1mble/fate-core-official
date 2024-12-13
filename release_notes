@@ -17,7 +17,8 @@
 * EditPlayerTracks migrated to AppV2.
 * Changed the shape change tool to use a standalone Application instead of a janky inserted HTML element on the play area.
 * All the TrackEditor apps have now been migrated to V2 along with the other remaining apps.
-* Only remaining V1 apps are fcoActor and fcoExtra - the actorsheet and itemsheet for this system.
+* 12/12/2024 Only remaining V1 apps are fcoActor and fcoExtra and FateUtilities - the actorsheet and itemsheet for this system.
+* 13/12/2024 fcoCharacter has now been refactored to AppV2
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

@@ -979,7 +979,7 @@ export class fcoActor extends Actor {
         let col = html.querySelector('.col.right');
         col.insertAdjacentHTML("afterbegin", button);
         let buttonEl = html.querySelector("button[name='fco_changeShape']");
-        buttonEl.addEventListener("click", async ev => {
+        buttonEl?.addEventListener("click", async ev => {
             new fcoActorShapeManager(token, buttonEl).render(true);
         });
     });

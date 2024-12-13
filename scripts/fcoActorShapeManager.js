@@ -89,6 +89,7 @@ class fcoActorShapeManager extends foundry.applications.api.HandlebarsApplicatio
         let left = this.hud.getBoundingClientRect().right+25;
         let top = this.hud.getBoundingClientRect().top;
         this.setPosition({left:left, top:top})
+        super._onFirstRender(context, options);
     }
 
     _onRender(context, options){

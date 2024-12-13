@@ -8,7 +8,7 @@ class ShowCharacter extends foundry.applications.api.HandlebarsApplicationMixin(
  
    _onRender(context, options) {
         const showButton = this.element.querySelector("button[id='show_button']");
-        showButton.addEventListener("click", event => this._onShowButtonClick(event));
+        showButton?.addEventListener("click", event => this._onShowButtonClick(event));
         const select_all_players = this.element.querySelector("button[id='all_players']");
         select_all_players?.addEventListener("click", event => this._onSelectAllPlayersClick(event))
         const select_all_elements = this.element.querySelector("button[id='all_elements']");

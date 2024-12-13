@@ -255,16 +255,16 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
     //Here are the action listeners
     _onRender (context, options) {
         const rankBoxes = this.element.querySelectorAll("input[class='rank_input']");
-        rankBoxes.forEach(box => box.addEventListener("change", event => {
+        rankBoxes.forEach(box => box?.addEventListener("change", event => {
             this.changed = true;
         }))
 
         const skillButtons = this.element.querySelectorAll("button[class='skill_button']");
-        skillButtons.forEach(button => button.addEventListener("click", event => this._onSkillButton(event)));
+        skillButtons.forEach(button => button?.addEventListener("click", event => this._onSkillButton(event)));
         const sortButton = this.element.querySelectorAll("button[id='sort']");
-        sortButton.forEach(button => button.addEventListener("click", event => this._onSortButton(event)));
+        sortButton.forEach(button => button?.addEventListener("click", event => this._onSortButton(event)));
         const editButton = this.element.querySelector("button[id='edit_p_skills']");
-        editButton.addEventListener("click", event => this._onEditButton(event));  
+        editButton?.addEventListener("click", event => this._onEditButton(event));  
     }
 
     async sort_name(array){
@@ -359,12 +359,12 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
      //Here are the action listeners
      _onRender (context, options) {
         const add_ad_hoc = this.element.querySelector("button[id='add_ah_button']");
-        add_ad_hoc.addEventListener("click", event => this._adHocButton(event));
+        add_ad_hoc?.addEventListener("click", event => this._adHocButton(event));
         const confirm = this.element.querySelector("button[id='add_remove_button']")
-        confirm.addEventListener("click", event => this._confirm(event));
+        confirm?.addEventListener("click", event => this._confirm(event));
 
         const selectAll = this.element.querySelector("button[id='select_all_skills_button']");
-        selectAll.addEventListener("click", event => {
+        selectAll?.addEventListener("click", event => {
             const boxes = this.element.querySelectorAll("input[class='skill_check_box']");
             for (let box of boxes){
                 box.checked = "checked";
@@ -372,7 +372,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
         })
 
         const deSelectAll = this.element.querySelector("button[id='deselect_all_skills_button']");
-        deSelectAll.addEventListener("click", event => {
+        deSelectAll?.addEventListener("click", event => {
             const boxes = this.element.querySelectorAll("input[class='skill_check_box']");
             for (let box of boxes){
                 box.checked = "";
@@ -380,7 +380,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
         })
 
         const asn = this.element.querySelectorAll('input[name="adhoc_skill_name"]');
-        asn.forEach(skill => skill.addEventListener('blur', async (event)=>{
+        asn.forEach(skill => skill?.addEventListener('blur', async (event)=>{
             let oldSkill = event.target.getAttribute("data-oldName");
             let newSkill = event.target.value;
             if (oldSkill != newSkill){

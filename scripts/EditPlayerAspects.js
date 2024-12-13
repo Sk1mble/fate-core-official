@@ -17,24 +17,24 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
 
     _onRender(context, options){
         const removeButton = this.element.querySelectorAll("button[name='remove_aspect']")
-        removeButton.forEach(button => button.addEventListener("click", event => this._onRemove(event)));
+        removeButton.forEach(button => button?.addEventListener("click", event => this._onRemove(event)));
 
         const addButton = this.element.querySelector("button[name='new_aspect']")
-        addButton.addEventListener("click", event => this._onAdd(event));
+        addButton?.addEventListener("click", event => this._onAdd(event));
 
         const up = this.element.querySelectorAll("button[name='aspect_up']");
         const down = this.element.querySelectorAll("button[name='aspect_down']");
-        up.forEach(button => button.addEventListener("click", event => this._on_move(event, -1)));
-        down.forEach(button => button.addEventListener("click", event => this._on_move(event, 1)));
+        up.forEach(button => button?.addEventListener("click", event => this._on_move(event, -1)));
+        down.forEach(button => button?.addEventListener("click", event => this._on_move(event, 1)));
 
         const name = this.element.querySelectorAll("input[class='aspect_name']")
-        name.forEach(field => field.addEventListener("change", event => this._on_name_change(event)));
+        name.forEach(field => field?.addEventListener("change", event => this._on_name_change(event)));
 
         const value = this.element.querySelectorAll("textarea[class='aspect_value']")
-        value.forEach(field => field.addEventListener("change", event => this._on_value_change(event)));
+        value.forEach(field => field?.addEventListener("change", event => this._on_value_change(event)));
 
         const notes = this.element.querySelectorAll("textarea[class='aspect_notes']");
-        notes.forEach(field => field.addEventListener ("change", event => this._on_notes_change(event)));
+        notes.forEach(field => field?.addEventListener ("change", event => this._on_notes_change(event)));
 
         for (let aspect in this.aspects){
             let id = `aspect_description_${fcoConstants.getKey(this.aspects[aspect].name)}`;
@@ -46,13 +46,13 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             fcoConstants.getPen(id);
             fcoConstants.getPen(id2);
 
-            description.addEventListener("keyup", event => {
+            description?.addEventListener("keyup", event => {
                 if (event.code == "Tab") {
                     description.click();
                 }
             })
 
-            description.addEventListener('click', event => {
+            description?.addEventListener('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 description.style.display = "none";
                 description_editable.style.display = "block"
@@ -60,32 +60,32 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             })
 
             if (this.actor.isOwner){
-                description.addEventListener("contextmenu", async event => {
+                description?.addEventListener("contextmenu", async event => {
                     let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
                     if (text != "discarded") {
                         description.innerHTML = text;
                         description_editable.innerHTML = text;
-                        let key = event.currentTarget.getAttribute("data-key");
+                        let key = event.currentTarget?.getAttribute("data-key");
                         let aspect = this.aspects[key];
-                        aspect.description = text;
+                        aspect["description"] = text;
                     }
                 })
 
-                notes.addEventListener('contextmenu', async event => {
+                notes?.addEventListener('contextmenu', async event => {
                     let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
                     if (text != "discarded") {
                         notes_editable.innerHTML = text;   
                         notes.innerHTML = text;  
-                        let key = event.currentTarget.getAttribute("data-key");
+                        let key = event.currentTarget?.getAttribute("data-key");
                         let aspect = this.aspects[key];
-                        aspect.notes = text;
+                        aspect["notes"] = text;
                     }
                 })
             }
     
-            description_editable.addEventListener('blur', async event => {
+            description_editable?.addEventListener('blur', async event => {
                 if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.actor.isOwner, documents:true, async:true}));
+                    let desc = await DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.actor.isOwner, documents:true, async:true}));
                     description.style.display = "block";
                     description_editable.style.display = "none"
                     description_editable.innerHTML = desc;
@@ -102,14 +102,14 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
                 }
             })
         
-            notes.addEventListener('click', event => {
+            notes?.addEventListener('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 notes.style.display = "none";
                 notes_editable.style.display = "block"
                 notes_editable.focus();
             })
 
-            notes_editable.addEventListener('blur', async event => {
+            notes_editable?.addEventListener('blur', async event => {
                 if (!window.getSelection().toString()){
                     let text = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.actor.isOwner, documents:true, async:true}));
                     notes.style.display = "block";
@@ -145,7 +145,6 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             // Find the aspect with the same name as the old name and delete it
             delete this.aspects[key]
             this.aspects[fcoConstants.tob64(newName)]=newAspect;
-            this.render(false);
         }
     }
 
@@ -186,7 +185,7 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             }
         }
         let name = game.i18n.localize("fate-core-official.New_Aspect") + " "+ count;
-        let newAspect = new fcoAspect({"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect")}).toJSON();
+        let newAspect = new fcoAspect({"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect"),"notes":"Notes"}).toJSON();
         if (newAspect){
             this.aspects[fcoConstants.tob64(newAspect.name)] = newAspect;
             this.render(false);
@@ -197,6 +196,9 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
     static DEFAULT_OPTIONS = {
         tag: "form",
         classes:['fate'],
+        position: {
+            width: 800
+        },
         window: {
             title: this.title,
             icon: "fas fa-scroll",

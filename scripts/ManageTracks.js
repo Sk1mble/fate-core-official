@@ -55,11 +55,11 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
         const export_track = this.element.querySelector("button[id='exportEntityTrack']");
 
         const track_label_select = this.element.querySelector("select[id='entity_track_label_select']");
-        track_label_select.addEventListener("change", event => this._on_track_label_select(event))
-        saveTrackButton.addEventListener("click", event => this._onSaveTrackButton(event));
-        edit_entity_linked_skillsButton.addEventListener("click", event => {this._edit_entity_linked_skillsButtonClick(event)});
-        copy_track.addEventListener("click", event => this._onCopyTrackButton(event));
-        export_track.addEventListener("click", event => this._onExportTrack(event));
+        track_label_select?.addEventListener("change", event => this._on_track_label_select(event))
+        saveTrackButton?.addEventListener("click", event => this._onSaveTrackButton(event));
+        edit_entity_linked_skillsButton?.addEventListener("click", event => {this._edit_entity_linked_skillsButtonClick(event)});
+        copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
+        export_track?.addEventListener("click", event => this._onExportTrack(event));
 
         fcoConstants.getPen("edit_entity_track_description");
         fcoConstants.getPen("edit_entity_track_when_marked");
@@ -69,17 +69,17 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
 
         for (let element of rich_elements){
             let normal_element = document.getElementById(`edit_entity_track_${element.attributes.name.value}`);
-            element.addEventListener ("keyup", event => {
+            element?.addEventListener ("keyup", event => {
                 if (event.code == "Tab") element.click();
             })
 
-            element.addEventListener("click", event => {
+            element?.addEventListener("click", event => {
                 element.style.display = "none";
                 normal_element.style.display = 'block';
                 normal_element.focus();
             })
 
-            element.addEventListener('contextmenu', async event => {
+            element?.addEventListener('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
                 if (text != "discarded") {
                     element.innerHTML = DOMPurify.sanitize(text);    
@@ -87,7 +87,7 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
                 }
             })
         
-            normal_element.addEventListener ('blur', async event => {
+            normal_element?.addEventListener ('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}))                            ;
                     element.innerHTML = desc;     
@@ -279,8 +279,8 @@ class EditEntityLinkedSkills extends foundry.applications.api.HandlebarsApplicat
         const deleteLinkedSkillButton = this.element.querySelector("#delete_linked_skill");
         const addLinkedSkillButton = this.element.querySelector("#add_linked_skill");
 
-        deleteLinkedSkillButton.addEventListener("click", event => this._onDeleteLinkedSkillButton(event));
-        addLinkedSkillButton.addEventListener("click", event => this._onAddLinkedSkillButton(event));
+        deleteLinkedSkillButton?.addEventListener("click", event => this._onDeleteLinkedSkillButton(event));
+        addLinkedSkillButton?.addEventListener("click", event => this._onAddLinkedSkillButton(event));
     }
     //Here are the event listener functions.
     async _onDeleteLinkedSkillButton(event){
@@ -358,8 +358,8 @@ class EditLinkedSkills extends foundry.applications.api.HandlebarsApplicationMix
     async _onRender (context, options) {
         const deleteLinkedSkillButton = this.element.querySelector("button[id='delete_linked_skill']");
         const addLinkedSkillButton = this.element.querySelector("button[id='add_linked_skill']");
-        deleteLinkedSkillButton.addEventListener("click", event => this._onDeleteLinkedSkillButton(event));
-        addLinkedSkillButton.addEventListener("click", event => this._onAddLinkedSkillButton(event));
+        deleteLinkedSkillButton?.addEventListener("click", event => this._onDeleteLinkedSkillButton(event));
+        addLinkedSkillButton?.addEventListener("click", event => this._onAddLinkedSkillButton(event));
     }
     //Here are the event listener functions.
 
@@ -479,15 +479,15 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         const export_track = this.element.querySelector("button[id='exportTrack']");
 
         const track_label_select = this.element.querySelector("select[id='track_label_select']");
-        track_label_select.addEventListener("change", event => this._on_track_label_select(event))
+        track_label_select?.addEventListener("change", event => this._on_track_label_select(event))
         
-        saveTrackButton.addEventListener("click", event => this._onSaveTrackButton(event));
-        track_select.addEventListener("change", event => this._track_selectChange(event));
-        edit_track_name.addEventListener("change", event => this._edit_track_name_change(event));
-        edit_linked_skillsButton.addEventListener("click", event => this._edit_linked_skillsButtonClick(event));
-        deleteTrackButton.addEventListener("click",event => this._onDeleteTrackButton(event));
-        copy_track.addEventListener("click", event => this._onCopyTrackButton(event));
-        export_track.addEventListener("click", event => this._onExportTrack(event));
+        saveTrackButton?.addEventListener("click", event => this._onSaveTrackButton(event));
+        track_select?.addEventListener("change", event => this._track_selectChange(event));
+        edit_track_name?.addEventListener("change", event => this._edit_track_name_change(event));
+        edit_linked_skillsButton?.addEventListener("click", event => this._edit_linked_skillsButtonClick(event));
+        deleteTrackButton?.addEventListener("click",event => this._onDeleteTrackButton(event));
+        copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
+        export_track?.addEventListener("click", event => this._onExportTrack(event));
 
         fcoConstants.getPen("edit_track_description");
         fcoConstants.getPen("edit_track_when_marked");
@@ -497,17 +497,17 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
 
         for (let element of rich_elements){
             let normal_element = document.getElementById(`edit_track_${element.attributes.name.value}`);
-            element.addEventListener ("keyup", event => {
+            element?.addEventListener ("keyup", event => {
                 if (event.code == "Tab") element.click();
             })
 
-            element.addEventListener("click", event => {
+            element?.addEventListener("click", event => {
                 element.style.display = "none";
                 normal_element.style.display = 'block';
                 normal_element.focus();
             })
 
-            element.addEventListener('contextmenu', async event => {
+            element?.addEventListener('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
                 if (text != "discarded") {
                     element.innerHTML = DOMPurify.sanitize(text);    
@@ -515,7 +515,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
                 }
             })
         
-            normal_element.addEventListener ('blur', async event => {
+            normal_element?.addEventListener ('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}))                            ;
                     element.innerHTML = desc;     
@@ -821,11 +821,11 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
         const exportTracks = this.element.querySelector('#export_tracks');
         const orderTracks = this.element.querySelector('#order_tracks');
 
-        deleteCategoryButton.addEventListener("click", event => this._onDeleteCategoryButton(event));
-        addCategoryButton.addEventListener("click", event => this._onAddCategoryButton(event));
-        editTracksButton.addEventListener("click", event => this._onEditTracksButton(event));
+        deleteCategoryButton?.addEventListener("click", event => this._onDeleteCategoryButton(event));
+        addCategoryButton?.addEventListener("click", event => this._onAddCategoryButton(event));
+        editTracksButton?.addEventListener("click", event => this._onEditTracksButton(event));
 
-        setCategoriesButton.addEventListener("click", event => {
+        setCategoriesButton?.addEventListener("click", event => {
             let content = `<div style="display:flex; flex-direction:column;">`;
             let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let categories = game.settings.get("fate-core-official","track_categories");
@@ -876,10 +876,10 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                         height:"auto",
                     }).render(true);
             })    
-            selectBox.addEventListener("dblclick", event => this._onEditTracksButton(event));
-            importTracks.addEventListener("click", event => this._importTracks(event));
-            exportTracks.addEventListener("click", event => this._exportTracks(event));
-            orderTracks.addEventListener("click", event => this._orderTracks (event));
+            selectBox?.addEventListener("dblclick", event => this._onEditTracksButton(event));
+            importTracks?.addEventListener("click", event => this._importTracks(event));
+            exportTracks?.addEventListener("click", event => this._exportTracks(event));
+            orderTracks?.addEventListener("click", event => this._orderTracks (event));
     }
     
     //Here are the event listener functions.
@@ -1067,7 +1067,7 @@ class OrderTracks extends foundry.applications.api.HandlebarsApplicationMixin(fo
         const ot_down = this.element.querySelectorAll("button[name='ot_down']");
         const ot_save = this.element.querySelector("#ot_save");
         
-        ot_up.forEach(button => button.addEventListener("click", event => {
+        ot_up.forEach(button => button?.addEventListener("click", event => {
             let index = parseInt(event.target.id.split("_")[2]);
             if (index > 0){
                 let track = this.data.splice(index,1)[0];
@@ -1076,7 +1076,7 @@ class OrderTracks extends foundry.applications.api.HandlebarsApplicationMixin(fo
             }
         }))
 
-        ot_down.forEach(button => button.addEventListener("click", event => {
+        ot_down.forEach(button => button?.addEventListener("click", event => {
             let index = parseInt(event.target.id.split("_")[2]);
             if (index < this.data.length){
                 let track = this.data.splice(index, 1)[0];
@@ -1085,7 +1085,7 @@ class OrderTracks extends foundry.applications.api.HandlebarsApplicationMixin(fo
             }
         }))
 
-        ot_save.addEventListener("click", async event => {
+        ot_save?.addEventListener("click", async event => {
             let tracks = {};
             for (let i = 0; i < this.data.length; i++){
                 tracks[fcoConstants.tob64(this.data[i].name)] = this.data[i];

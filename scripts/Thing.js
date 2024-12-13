@@ -350,12 +350,12 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
         return sheetData;
     }
 
-    async _render(...args){
+    async render(...args){
         if (!this.actor?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
                     this.renderPending = true;
                     setTimeout(async () => {
-                        await super._render(...args);
+                        await super.render(...args);
                         this.renderPending = false;
                     }, 50);
             }

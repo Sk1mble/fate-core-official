@@ -396,7 +396,7 @@ Hooks.once('ready', async function () {
                 })
 
                 const install = this.element.querySelectorAll('button[name="eh_install"]');
-                    install?.forEach(module => {module.addEventListener('click', async event => {
+                    install?.forEach(module => {module?.addEventListener('click', async event => {
                         let module = event.target.id.split("_")[1];
                         game.settings.set("fate-core-official", "installing", module);
                         // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
@@ -1763,7 +1763,7 @@ class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin
 
     async _onRender(){
         let logo = document.getElementById("fco_user_sheet_logo");
-        logo.addEventListener("change", () => {
+        logo?.addEventListener("change", () => {
             if (logo.value == "world"){                
                 logo.value = game.settings.get("fate-core-official", "fco-world-sheet-scheme").fco_user_sheet_logo;
             } 
@@ -1839,7 +1839,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
 
     async _onRender(context, options){
         
-        this.element.querySelectorAll('.colourSchemeUpload').forEach(button => button.addEventListener('click', async event => {
+        this.element.querySelectorAll('.colourSchemeUpload').forEach(button => button?.addEventListener('click', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             let scheme = this.mySchemes[index].scheme;
             this.customiseSheet.custom = scheme; 
@@ -1851,7 +1851,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
             }
         }))
 
-        this.element.querySelector('.worldSchemeUpload').addEventListener('click', async event => {
+        this.element.querySelector('.worldSchemeUpload')?.addEventListener('click', async event => {
             let scheme = game.settings.get("fate-core-official","fco-world-sheet-scheme");
             this.customiseSheet.custom = scheme;
             this.customiseSheet.render(true);
@@ -1883,7 +1883,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
             }
         })
 
-        this.element.querySelectorAll('.colourSchemeDelete').forEach(button => button.addEventListener ('click', async event => {
+        this.element.querySelectorAll('.colourSchemeDelete').forEach(button => button?.addEventListener ('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 let index = event.currentTarget.getAttribute("data-index");
@@ -1894,7 +1894,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
             }
         }))
 
-        this.element.querySelectorAll('.publicColourSchemeDelete').forEach(button => button.addEventListener ('click', async event => {
+        this.element.querySelectorAll('.publicColourSchemeDelete').forEach(button => button?.addEventListener ('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 let index = event.currentTarget.getAttribute("data-index");
@@ -1916,7 +1916,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
             }
         }))
 
-        this.element.querySelectorAll('.scheme_name').forEach (field => field.addEventListener('change', async event => {
+        this.element.querySelectorAll('.scheme_name').forEach (field => field?.addEventListener('change', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             this.mySchemes[index].name = event.currentTarget.value;
             await game.user.unsetFlag("fate-core-official","colourSchemes");
@@ -1924,7 +1924,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
             this.render(false);
         }))
 
-        this.element.querySelectorAll('.colourSchemePublicCheck').forEach(box => box.addEventListener('change', async event => {
+        this.element.querySelectorAll('.colourSchemePublicCheck').forEach(box => box?.addEventListener('change', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             this.mySchemes[index].public = event.currentTarget.checked;
             await game.user.unsetFlag("fate-core-official","colourSchemes");
@@ -1932,7 +1932,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
             this.render(false);
         }));
 
-        this.element.querySelectorAll('.publicColourSchemeUpload').forEach(button => button.addEventListener ('click', async event => {
+        this.element.querySelectorAll('.publicColourSchemeUpload').forEach(button => button?.addEventListener ('click', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             let scheme = this.otherSchemes[index].scheme;
             this.customiseSheet.custom = scheme; 
@@ -1946,7 +1946,7 @@ class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMix
     }
 }
 
-document.addEventListener("contextmenu", async event => {
+document?.addEventListener("contextmenu", async event => {
     if (event.target.classList.contains("fco_popviewable")){
         // Construct the Application instance
         let uuid = event.target.getAttribute("data-uuid");

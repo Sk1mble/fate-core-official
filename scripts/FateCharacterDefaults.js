@@ -513,7 +513,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                 this.element.querySelectorAll('button[name="delete_default"]').forEach(item => item.hidden = true);
         }
 
-        toggle_edit.addEventListener('click', (event) => {
+        toggle_edit?.addEventListener('click', (event) => {
             toggle_edit.classList.toggle("fa-toggle-off");
             toggle_edit.classList.toggle("fa-toggle-on");
             if (toggle_edit.classList.contains("fa-toggle-off")){
@@ -530,7 +530,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
         
 
         const displayButton = this.element.querySelectorAll("button[name='inspect_default']");
-        displayButton.forEach(button => button.addEventListener('click', async (event, html)=> {
+        displayButton.forEach(button => button?.addEventListener('click', async (event, html)=> {
             let f = new FateCharacterDefaults();
             let def = await f.getDefault(event.target.dataset.default_name);
             let prompt = game.i18n.localize("fate-core-official.defaultCharacterFramework")+ " " + def.default_name;
@@ -624,19 +624,19 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
         const exp_all = this.element.querySelector('#md_export_all');
         const exp_sel = this.element.querySelector('#md_export_selected');
 
-        imp.addEventListener('click', async (event, html)=>{
+        imp?.addEventListener('click', async (event, html)=>{
             let str = await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteDefaults"));
             let f = new FateCharacterDefaults();
             await f.importDefaults(str);
         })
 
-        exp_all.addEventListener('click', async (event, html)=>{
+        exp_all?.addEventListener('click', async (event, html)=>{
             let f = new FateCharacterDefaults();
             let str = await f.exportDefaults();
             fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), str);
         })
 
-        exp_sel.addEventListener('click', async (event, html)=>{
+        exp_sel?.addEventListener('click', async (event, html)=>{
             let f = new FateCharacterDefaults();
             let boxes = this.element.querySelectorAll("input[name='def_select']");
             let list = [];
@@ -649,7 +649,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
         })
     
         const d_name = this.element.querySelectorAll("input[name='def_name']");
-        d_name.forEach(name => name.addEventListener('change', async (event, html) =>{
+        d_name.forEach(name => name?.addEventListener('change', async (event, html) =>{
             let f = new FateCharacterDefaults();
             let oldName = event.target.getAttribute("data-oldValue");
             let newName = event.target.value;
@@ -657,13 +657,13 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
         }))     
 
         const d_desc = this.element.querySelectorAll("input[name='def_desc']");
-        d_desc.forEach(desc => desc.addEventListener('change', async (event, html) =>{
+        d_desc.forEach(desc => desc?.addEventListener('change', async (event, html) =>{
             let f = new FateCharacterDefaults();
             await f.editDescription(event.target.getAttribute("data-default_name"), event.target.value);
         }))     
 
         const d_def = this.element.querySelectorAll("button[name='delete_default']");
-        d_def.forEach(def => def.addEventListener("click", async (event, html) =>{
+        d_def.forEach(def => def?.addEventListener("click", async (event, html) =>{
             let f = new FateCharacterDefaults();
             let del = await fcoConstants.confirmDeletion();
             if (del) await f.removeDefault(event.target.getAttribute("data-default_name"));

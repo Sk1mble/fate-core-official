@@ -9,6 +9,7 @@
 .window-app.fcoSheet * {
     scrollbar-color:var(--fco-accent-colour) #FFFFFF00;
     scrollbar-width:thin;
+    padding:5px
 }
 
 .mfate-sheet {
@@ -132,9 +133,14 @@
     min-height: 50vh;
 }
 
-#biography_body.active {
+.biography_body.active {
     display: grid;
     /*display: flex;*/
+}
+
+div.tab.biography.mfate-sheet__tab.mfate-sheet__tab--secondary.biography_body.active {
+    display:flex; 
+    flex-direction: column;
 }
 
 .mfate-sheet .tab[data-tab].active {
@@ -194,17 +200,23 @@
     background: none;
 }
 
+
+div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-notes {
+    padding-left: 10px;
+}
+
 .mfate-sheet__meta {
     flex: 1;
     display: flex;
     width: 100%;
     margin-right:0px;
     align-items: center;
+    font-size:0.75rem;
 }
 
 .mfate-sheet__meta-column {
     display: table;
-    margin-right: 0px;
+    margin-right: 20pxpx;
     margin-left:auto;
     box-sizing: border-box;
 }
@@ -349,6 +361,7 @@
     border-radius: var(--fco-border-radius);
     clip-path: var(--fco-header-notch);
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .mfate-sheet-notes,
@@ -362,6 +375,8 @@
     font-family: var(--fco-font-family) !important;
     font-size:1em;
     cursor:text;
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+    scrollbar-width:thin;
 }
 
 .mfate-panel__header-select {
@@ -398,6 +413,8 @@
     flex: 1;
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+    scrollbar-width:thin;
 }
 
 .mfate-panel__header-label {
@@ -433,9 +450,8 @@
     overflow-y: auto;
     display: table;
     width: 100%;
-    /* border: .5em solid transparent; */
-    /* padding: 0; */
-    padding: .5em;
+    margin: 0px;
+    border:none;
 }
 
 .mfate-skills-list__item {
@@ -471,7 +487,9 @@
 .mfate-aspects-list {
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 0 .5em;
+    padding-left: 10px;
+    margin: 0px;
+    border:none;
 }
 
 .mfate-aspects-list__item {
@@ -492,9 +510,11 @@
 
 .mfate-aspects-list__input {
     font-size: 1em;
-    min-height:1.1em;
-    max-height:3em;
+    min-height:2em;
+    max-height:2em;
     margin-top:5px;
+    padding-top:5px;
+    width: 100%;
 }
 
 .mfate-aspects-notes__input {
@@ -505,6 +525,7 @@
     padding-left:2px;
     padding-top:2px;
     padding-right:2px;
+    margin-top:5px;
 }
 
 /* Tracks list */
@@ -535,6 +556,7 @@
 
 .mfate-tracks-notes__input {
     margin-left:25px;
+    margin-bottom:5px;
     font-size: 1em;
     min-height:3em;
     max-height:500px;
@@ -592,9 +614,7 @@
 /* Stunts */
 
 .stunts-block {
-    float: left;
     padding-left: 10px;
-    padding-top: 10px;
     overflow-y: auto;
 }
 
@@ -734,6 +754,8 @@
     flex-grow:1;
     flex-shrink:1;
     margin:10px;
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+    scrollbar-width:thin;
     
 }
 
@@ -761,6 +783,9 @@
 
 .mfate-extras__content {
     overflow-y: auto;
+    padding: 5px;
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+    scrollbar-width:thin;
 }
 
 .mfate-extras__content-body {

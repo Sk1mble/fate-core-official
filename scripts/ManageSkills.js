@@ -59,15 +59,15 @@ class SkillSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
         const exportSkills = this.element.querySelector("button[id='exportSkills']");
         const skillsLabelEdit = this.element.querySelector('#skillsLabelEdit');
 
-        editButton.addEventListener("click", event => this._onEditButton(event));
-        deleteButton.addEventListener("click", event => this._onDeleteButton(event));
-        addButton.addEventListener("click", event => this._onAddButton(event));
-        selectBox.addEventListener("dblclick", event => this._onEditButton(event));
-        copyButton.addEventListener("click", event => this._onCopyButton(event));
-        exportSkill.addEventListener("click", event => this._onExportSkill(event));
-        importSkills.addEventListener("click", event => this._onImportSkills(event));
-        exportSkills.addEventListener("click", event => this._onExportSkills(event));
-        skillsLabelEdit.addEventListener("click", event => this._onLabelEdit(event, skillsLabelEdit));
+        editButton?.addEventListener("click", event => this._onEditButton(event));
+        deleteButton?.addEventListener("click", event => this._onDeleteButton(event));
+        addButton?.addEventListener("click", event => this._onAddButton(event));
+        selectBox?.addEventListener("dblclick", event => this._onEditButton(event));
+        copyButton?.addEventListener("click", event => this._onCopyButton(event));
+        exportSkill?.addEventListener("click", event => this._onExportSkill(event));
+        importSkills?.addEventListener("click", event => this._onImportSkills(event));
+        exportSkills?.addEventListener("click", event => this._onExportSkills(event));
+        skillsLabelEdit?.addEventListener("click", event => this._onLabelEdit(event, skillsLabelEdit));
     }
     
     //Here are the event listener functions.
@@ -137,7 +137,7 @@ class SkillSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
             skillsLabelInput.disabled = "";
             skillsLabelInput.focus();
             
-            skillsLabelInput.addEventListener('blur', event => {
+            skillsLabelInput?.addEventListener('blur', event => {
                     skillsLabelInput.classList.remove('inactive');
                     skillsLabelInput.disabled = "disabled";
                     const skills_label = skillsLabelInput.value;
@@ -309,17 +309,17 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
 
         for (let element of rich_elements){
             let normal_element = document.getElementById(`edit_skill_${element.attributes.name.value}`);
-            element.addEventListener ("keyup", event => {
+            element?.addEventListener ("keyup", event => {
                 if (event.code == "Tab") element.click();
             })
 
-            element.addEventListener("click", event => {
+            element?.addEventListener("click", event => {
                 element.style.display = "none";
                 normal_element.style.display = 'block';
                 normal_element.focus();
             })
 
-            element.addEventListener('contextmenu', async event => {
+            element?.addEventListener('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
                 if (text != "discarded") {
                     element.innerHTML = DOMPurify.sanitize(text);    
@@ -327,7 +327,7 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
                 }
             })
         
-            normal_element.addEventListener ('blur', async event => {
+            normal_element?.addEventListener ('blur', async event => {
                 if (!window.getSelection().toString()){
                     let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}))                            ;
                     element.innerHTML = desc;     

@@ -467,7 +467,7 @@ textarea [name="command"] {
 }
 
 .long_text {
-  min-height:50px !important; 
+  min-height:2em !important; 
   background-color:var(--fco-sheet-input-colour) !important;
   color:var(--fco-sheet-text-colour) !important;
   font-family:var(--fco-font-family) !important;
@@ -475,10 +475,12 @@ textarea [name="command"] {
   overflow-y:auto;
   padding-left:5px;
   cursor:text;
+  scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+  scrollbar-width:thin;
 }
 
 .long_text_rich {
-  min-height:50px !important; 
+  min-height:2em !important; 
   background-color:var(--fco-sheet-input-colour) !important;
   color:var(--fco-sheet-text-colour) !important;
   font-family:var(--fco-font-family) !important;
@@ -486,6 +488,8 @@ textarea [name="command"] {
   overflow-y:auto;
   padding-left:5px;
   cursor:text;
+  scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+  scrollbar-width:thin;
 }
 
 .long_text_rich:hover {

@@ -4,7 +4,7 @@
         <table style="background-color: transparent; border:none; width:690px">    
             <tr style="background-color:transparent">
                 <td style="font-family:var(--fco-font-family)" width="120">{{localize 'fate-core-official.Name'}}:</td>
-                <td colspan="2"><input style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom: 1px solid var(--fco-foundry-interactable-color); width:300px" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
+                <td colspan="2"><input style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom: 1px solid var(--fco-foundry-interactable-color); padding-left: 5px; width:100%; min-height:2em; height:2em; max-height:2em" name="name" id="{{stunt.name}}" value="{{stunt.name}}"</input></td>
             </tr>
             <tr style="background-color:transparent">
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.LinkedSkill'}}:</td>                
@@ -14,14 +14,14 @@
             <tr style="background-color:transparent">
                 <td style="font-family:var(--fco-font-family)">{{localize 'fate-core-official.Description'}}:</td>
                 <td colspan="2">
-                    <div id="edit_stunt_desc" data-edit="description" contenteditable="true" name="description" style="padding:5px; min-height:1.5em; display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:100%;">{{{stunt.description}}}</div>
+                    <div id="edit_stunt_desc" data-edit="description" contenteditable="true" name="description" style="padding:5px; min-height:2em; display:none; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:100%;">{{{stunt.description}}}</div>
                     <div id="edit_stunt_desc_rich" tabindex = "0" style="padding:5px; min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); border: 1px solid var(--fco-foundry-interactable-color); width:100%;">{{{stunt.richDesc}}}</div>
                 </td>
             </tr>
             <tr style="background-color:transparent">
                 <td>{{localize 'fate-core-official.macro'}}:</td>
                 <td>
-                    <input type="string" name="macro" style="background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:300px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.macro}}"</input> <span style = "padding-left:10px" id="{{stunt.name}}_macroName">{{macroName}}</span>
+                    <input type="string" name="macro" style="padding:5px; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); height:30px; width:300px; border:solid 1px var(--fco-foundry-interactable-color)" value="{{stunt.macro}}"</input> <span style = "padding-left:10px" id="{{stunt.name}}_macroName">{{macroName}}</span>
                 </td>
             </tr>
             <tr style="background-color:transparent">

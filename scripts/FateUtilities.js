@@ -2560,7 +2560,7 @@ class acd extends foundry.applications.api.HandlebarsApplicationMixin(foundry.ap
         fcoConstants.getPen("cd_description");
         fcoConstants.getPen("cd_name");
 
-        this.element.querySelector('#cd_description').addEventListener('contextmenu', async event => {
+        this.element.querySelector('#cd_description')?.addEventListener('contextmenu', async event => {
             this.element.querySelector('#cd_description').blur();;
             let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
@@ -2827,7 +2827,7 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
             `);
             const buttons = html.querySelectorAll("button[name='fco_chat_roll_button']");
             // This is how we add a click handler to an HTMLElement rather than a JQuery element.
-            for (let button of buttons) button.addEventListener("click", async event => {
+            for (let button of buttons) button?.addEventListener("click", async event => {
                 await FateUtilities._fu_roll_button(event, html);
             })
         }

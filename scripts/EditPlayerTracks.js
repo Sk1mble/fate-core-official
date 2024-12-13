@@ -87,23 +87,23 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
 
     _onRender(context, options) {
         const select_box = this.element.querySelector("#fco_ept_select_box");
-        select_box.addEventListener("change", event => this._on_sb_change(event));       
+        select_box?.addEventListener("change", event => this._on_sb_change(event));       
         const nameField = this.element.querySelectorAll("td[name='nameField']");
-        nameField.forEach(name => name.addEventListener("contextmenu", event => this._onNameField (event)));
+        nameField.forEach(name => name?.addEventListener("contextmenu", event => this._onNameField (event)));
         const moveUp = this.element.querySelectorAll("button.move_up");
-        moveUp?.forEach(button => button.addEventListener("click", event => this._onMove (event, -1)));
+        moveUp?.forEach(button => button?.addEventListener("click", event => this._onMove (event, -1)));
         const moveDown = this.element.querySelectorAll("button.move_down");
-        moveDown?.forEach(button => button.addEventListener("click", event => this._onMove (event, 1)));
+        moveDown?.forEach(button => button?.addEventListener("click", event => this._onMove (event, 1)));
         const save = this.element.querySelector("button[name = 'save']");
         save?.addEventListener("click", event => this._save(event))
         const ad_hoc = this.element.querySelector("button[name='ad_hoc']");
         ad_hoc?.addEventListener("click", event => this._ad_hoc(event));
         const numberbox = this.element.querySelectorAll("input[type='number']");
-        numberbox?.forEach(num => num.addEventListener("change", event => this._numChange(event)));
+        numberbox?.forEach(num => num?.addEventListener("change", event => this._numChange(event)));
         const checkbox = this.element.querySelectorAll("input[type='checkbox']");
-        checkbox?.forEach(cb => cb.addEventListener("click", event => this._check(event)));
+        checkbox?.forEach(cb => cb?.addEventListener("click", event => this._check(event)));
         const edit = this.element.querySelectorAll("button[name='edit_entity_tracks']");
-        edit.forEach(button => button.addEventListener('click', async event => {
+        edit.forEach(button => button?.addEventListener('click', async event => {
             let track = fcoConstants.gbn(this.object.system.tracks, event.target.id);
             let e = new EditEntityTrack(track, this.object).render(true);
             e.origin = this;

@@ -46,15 +46,15 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
         const exportAspects = this.element.querySelector("button[id='exportAspects']");
         const orderAspects = this.element.querySelector("button[id='orderAspects']");
 
-        editButton.addEventListener("click", event => this._onEditButton(event));
-        deleteButton.addEventListener("click", event => this._onDeleteButton(event));
-        addButton.addEventListener("click", event => this._onAddButton(event));
-        selectBox.addEventListener("dblclick", event => this._onEditButton(event));
-        copyButton.addEventListener("click", event => this._onCopyButton(event));
-        exportAspect.addEventListener("click", event => this._onExportAspect(event));
-        importAspects.addEventListener("click", event => this._onImportAspects(event));
-        exportAspects.addEventListener("click", event => this._onExportAspects(event));
-        orderAspects.addEventListener("click", event => this._onOrderAspects(event));
+        editButton?.addEventListener("click", event => this._onEditButton(event));
+        deleteButton?.addEventListener("click", event => this._onDeleteButton(event));
+        addButton?.addEventListener("click", event => this._onAddButton(event));
+        selectBox?.addEventListener("dblclick", event => this._onEditButton(event));
+        copyButton?.addEventListener("click", event => this._onCopyButton(event));
+        exportAspect?.addEventListener("click", event => this._onExportAspect(event));
+        importAspects?.addEventListener("click", event => this._onImportAspects(event));
+        exportAspects?.addEventListener("click", event => this._onExportAspects(event));
+        orderAspects?.addEventListener("click", event => this._onOrderAspects(event));
     }
 
     //Here are the event listener functions.
@@ -251,23 +251,23 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
     //Here are the action listeners
     _onRender(context, options) {
         const saveButton = this.element.querySelector("button[id='edit_aspect_save_changes']");
-        saveButton.addEventListener("click", event => this._onSaveButton(event));
+        saveButton?.addEventListener("click", event => this._onSaveButton(event));
         fcoConstants.getPen("edit_aspect_description");
         const description_rich = document.getElementById("edit_aspect_description_rich");
         const description = document.getElementById("edit_aspect_description");
 
-        description_rich.addEventListener('click', async event => {
+        description_rich?.addEventListener('click', async event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
             description_rich.style.display = "none"; 
             description.style.display = "block";
             description.focus();
         })
 
-        description_rich.addEventListener('keyup', async event => {
+        description_rich?.addEventListener('keyup', async event => {
             if (event.code == "Tab") description_rich.click();
         })
 
-        description_rich.addEventListener('contextmenu', async event => {
+        description_rich?.addEventListener('contextmenu', async event => {
             let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
             if (text != "discarded") {
                 description_rich.innerHTML = text;    
@@ -275,7 +275,7 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
             }
         })
 
-        description.addEventListener ('blur', async event => {
+        description?.addEventListener ('blur', async event => {
             if (!window.getSelection().toString()){
                 let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:true, documents:true, async:true}));
                 description.style.display = "none";
@@ -373,7 +373,7 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
         const oa_down = this.element.querySelectorAll("button[name='oa_down']");
         const oa_save = this.element.querySelector("button[id='oa_save']");
         
-        oa_up.forEach(button => button.addEventListener("click", event => {
+        oa_up.forEach(button => button?.addEventListener("click", event => {
             let index = parseInt(event.target.id.split("_")[2]);
             if (index > 0){
                 let aspect = this.data.splice(index,1)[0];
@@ -382,7 +382,7 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
             }
         }))
 
-        oa_down.forEach(button => button.addEventListener("click", event => {
+        oa_down.forEach(button => button?.addEventListener("click", event => {
             let index = parseInt(event.target.id.split("_")[2]);
             if (index < this.data.length){
                 let aspect = this.data.splice(index, 1)[0];
@@ -391,7 +391,7 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
             }
         }))
 
-        oa_save.addEventListener("click", async event => {
+        oa_save?.addEventListener("click", async event => {
             let aspects = {};
             for (let i = 0; i < this.data.length; i++){
                 aspects[fcoConstants.tob64(this.data[i].name)] = this.data[i];
