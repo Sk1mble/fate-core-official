@@ -146,6 +146,7 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             delete this.aspects[key]
             this.aspects[fcoConstants.tob64(newName)]=newAspect;
         }
+        await this.render(false);
     }
 
     async _on_value_change(event){

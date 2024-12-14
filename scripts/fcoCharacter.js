@@ -342,6 +342,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                 let items = this.object.items;
                 let item = items.get(id);
                 await item.sheet.render(true);
+                await item.sheet.bringToFront();
             }))
 
         const skill_name = this.element.querySelectorAll("div[name='skill']");
@@ -374,9 +375,9 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                             // Do the stuff here
                                             // Construct a new skill
                                             let name = undefined// Get name from dialog
-                                            name = dialog.querySelector("#fco-qaskillname").value;
+                                            name = document.getElementById("fco-qaskillname").value;
                                             let rank = 0; // get rank from dialog
-                                            rank = dialog.querySelector("#fco-qaskillrank").value;
+                                            rank = document.getElementById("fco-qaskillrank").value;
                                             var newSkill=undefined;
                                             if (name!= undefined && name !=""){
                                                 newSkill= new fcoSkill({
@@ -701,7 +702,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                     content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
                     content += `<strong>${activeIndicator}</strong><br/>`;
 
-                    ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
+                    ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
                 })
             });
 
@@ -776,7 +777,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                         }
                     }
     
-                    ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
+                    ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
                 })
             })
 
@@ -844,8 +845,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                         action:"ok",
                         label:"OK",
                         callback: async (event, button, dialog) => {
-                            let name = dialog.querySelector(`#${this.document.id}_choose_default_name`).value;
-                            let desc = dialog.querySelector(`#${this.document.id}_choose_default_description`).value;
+                            let name = document.getElementById(`${this.document.id}_choose_default_name`).value;
+                            let desc = document.getElementById(`${this.document.id}_choose_default_description`).value;
                             if (!name) name = this.document.name;
                             let f = new FateCharacterDefaults();
                             let options = {
@@ -1156,8 +1157,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         if (!window.getSelection().toString()){
             let bio = DOMPurify.sanitize(event.target.innerHTML);
             await this.object.update({"system.details.biography.value":bio})
-            this.element.querySelector(`#${this.object.id}_biography`).style.display = "none";
-            this.element.querySelector(`#${this.object.id}_biography_rich`).style.display = "block"
+            document.getElementById(`${this.object.id}_biography`).style.display = "none";
+            document.getElementById(`${this.object.id}_biography_rich`).style.display = "block"
             this.editing = false;
             await this.render(false);
         }
@@ -1167,8 +1168,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         if (!window.getSelection().toString()){
             let notes = DOMPurify.sanitize(event.target.innerHTML);
             await this.object.update({"system.details.notes.value":notes})
-            this.element.querySelector(`#${this.object.id}_notes`).style.display = "none";
-            this.element.querySelector(`#${this.object.id}_notes_rich`).style.display = "block";
+           document.getElementById(`${this.object.id}_notes`).style.display = "none";
+           document.getElementById(`${this.object.id}_notes_rich`).style.display = "block";
             this.editing = false;
             await this.render(false);
         }
@@ -1201,8 +1202,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         if (!window.getSelection().toString()){
             let desc = DOMPurify.sanitize(event.target.innerHTML);
             await this.object.update({"system.details.description.value":desc});
-            this.element.querySelector(`#${this.object.id}_description`).style.display = "none"
-            this.element.querySelector(`#${this.object.id}_description_rich`).style.display = "block"
+           document.getElementById(`${this.object.id}_description`).style.display = "none"
+           document.getElementById(`${this.object.id}_description_rich`).style.display = "block"
             this.editing = false;
             await this.render(false);
         }

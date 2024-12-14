@@ -1462,6 +1462,7 @@
     "fate-core-official.Extras":"Extras",
     "fate-core-official.Aspect":"Aspect",
     "fate-core-official.SaveChanges":"Save Changes",
+    "fate-core-official.UpdateCharacter":"Update Actor with system data from this Extra",
     "fate-core-official.LinkedSkills":"Linked Skills",
     "fate-core-official.Skill":"Skill",
     "fate-core-official.Rank":"Rank",
