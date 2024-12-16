@@ -1,3 +1,8 @@
-2024/12/13-16:38:54.836 9198 Recovering log #1769
-2024/12/13-16:38:54.929 9198 Delete type=0 #1769
-2024/12/13-16:38:54.929 9198 Delete type=3 #1768
+2024/12/16-00:52:53.230 dfcc Recovering log #1785
+2024/12/16-00:52:53.311 dfcc Delete type=0 #1785
+2024/12/16-00:52:53.311 dfcc Delete type=3 #1784
+2024/12/16-02:01:25.160 fc60 Level-0 table #1789: started
+2024/12/16-02:01:25.160 fc60 Level-0 table #1789: 0 bytes OK
+2024/12/16-02:01:25.224 fc60 Delete type=0 #1787
+2024/12/16-02:01:25.447 fc60 Manual compaction at level-0 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)
+2024/12/16-02:01:25.447 fc60 Manual compaction at level-1 from '!journal!0nYbHOc3AErjhSUJ' @ 72057594037927935 : 1 .. '!journal.pages!0nYbHOc3AErjhSUJ.zoxPwtQC7BHn5GoE' @ 0 : 0; will stop at (end)

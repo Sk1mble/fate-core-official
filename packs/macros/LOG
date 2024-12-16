@@ -1,3 +1,7 @@
-2024/12/13-16:38:54.703 3d80 Recovering log #1657
-2024/12/13-16:38:54.822 3d80 Delete type=0 #1657
-2024/12/13-16:38:54.822 3d80 Delete type=3 #1656
+2024/12/16-00:52:53.089 3448 Recovering log #1673
+2024/12/16-00:52:53.227 3448 Delete type=0 #1673
+2024/12/16-00:52:53.227 3448 Delete type=3 #1672
+2024/12/16-02:01:21.587 fc60 Level-0 table #1677: started
+2024/12/16-02:01:21.588 fc60 Level-0 table #1677: 0 bytes OK
+2024/12/16-02:01:21.647 fc60 Delete type=0 #1675
+2024/12/16-02:01:21.705 fc60 Manual compaction at level-0 from '!macros!3rIISB1ysvBlB77Z' @ 72057594037927935 : 1 .. '!macros!UPf3gd6MXJEAUiJD' @ 0 : 0; will stop at (end)

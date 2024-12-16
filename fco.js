@@ -184,11 +184,11 @@ function rationaliseKeys(){
         } else {
             amendedCountdowns[countdown] = countdowns[countdown];
         }
-        if (JSON.stringify (amendedCountdowns) != JSON.stringify (countdowns)) {
-            game.settings.set("fate-core-official","countdowns", amendedCountdowns)
-        }
     }
-
+    if (JSON.stringify (amendedCountdowns) != JSON.stringify (countdowns)) {
+        game.settings.set("fate-core-official","countdowns", amendedCountdowns)
+    }
+    
     let types = ["stunts","aspects","tracks","skills", "defaults"];
     for (let type of types){
         let data = game.settings.get("fate-core-official", type);

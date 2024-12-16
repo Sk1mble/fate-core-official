@@ -11,6 +11,10 @@
   height:100%;
 }
 
+h1.window-title br {
+  display: none;
+}
+
 .rolls h1,
 .rolls h2,
 .rolls h3 {
@@ -121,6 +125,10 @@ textarea [name="command"] {
 
 .fu_controlled {
   background-color:var(--fco-foundry-interactable-color) !important;
+}
+
+#fu_conflict_tracker tr {
+  background-color:transparent
 }
 
 .fu_uncontrolled {
@@ -363,6 +371,18 @@ textarea [name="command"] {
 
 .cd_datum_rich:hover {
   background-color: var(--fco-foundry-interactable-color);
+}
+
+.cd_datum_rich {
+  padding:5px;
+}
+
+.cd_datum {
+  padding:5px;
+}
+
+#fu_conflict_name_input:hover {
+  text-shadow: 0 0 8px red;
 }
 
 /* Countdown Checkbox - The container */

@@ -38,7 +38,7 @@
                                 </tr>
                                 {{/each}}
                                 {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
-                                <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="{{this.id}}_fu" style="background-color:transparent; border-top:var(--fco-accent-colour) 4px solid"{{/if}}>
+                                <tr {{#if (eq this.object.controlled true)}} class = "fu_controlled fu_{{this.id}}" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="fu_{{this.id}}" style="background-color:transparent; border-top:var(--fco-accent-colour) 4px solid"{{/if}}>
                                     <td style="width:20px; vertical-align:top">
                                         <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     </td>
@@ -103,7 +103,7 @@
                                 {{/if}}
                                 {{/each}}
                                 {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                                <tr {{#if (eq this._controlled true)}} class = "fu_controlled {{this.id}}_fu" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="{{this.id}}_fu" style="background-color:transparent; border-top:var(--fco-accent-colour) 4px solid"{{/if}}>
+                                <tr {{#if (eq this.object.controlled true)}} class = "fu_controlled fu_{{this.id}}" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="fu_{{this.id}}" style="background-color:transparent; border-top:var(--fco-accent-colour) 4px solid"{{/if}}>
                                     <td style="vertical-align:top; width:20px">
                                         <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}}></button>
                                     </td>
@@ -119,7 +119,7 @@
                                         {{#if this.hidden}}<i class="fas fa-ghost"></i>{{/if}}</div>
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
                                         {{#if this.isOwner}}
-                                        <select title="{{localize 'fate-core-official.RollHelp'}} class="skill_select" id="{{this.id}}_selectSkill" style="width:10em; color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour)">
+                                        <select title="{{localize 'fate-core-official.RollHelp'}}" class="skill_select" id="{{this.id}}_selectSkill" style="width:10em; color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour)">
                                             <option disabled="disabled" selected="selected">{{localize 'fate-core-official.PickASkill'}}</option>
                                             {{#each this.actor.system.skills}}
                                             {{#unless this.hidden}}
@@ -204,7 +204,7 @@
 
                         {{#each all_tokens}}
                         {{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
-                        <table style="border-bottom:none; margin:0px" class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
+                        <table style="border-bottom:none; margin:0px" class="{{#if (eq this.object.controlled true)}}fu_controlled{{/if}} fu_{{this.id}}">
                             <tr style="border-top:4px var(--fco-accent-colour) solid; background-color:transparent;">
                                 <td id="{{this.id}}_tokenNameA" style="width:12em; vertical-align:top; font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                     <div style="display:flex; flex-direction:row; margin-bottom:10px; gap: 5px">
@@ -256,7 +256,7 @@
                         {{/each}}<!--ENd all_tokens each-->
                         {{#each all_tokens}}
                         {{#if this.actor.hasPlayerOwner}}{{else}}{{#if (eq this.actor.permission 0)}}{{else}}
-                        <table style="border-bottom:none; margin:0px"  class="{{#if (eq this._controlled true)}}fu_controlled{{/if}} {{this.id}}_fu">
+                        <table style="border-bottom:none; margin:0px"  class="{{#if (eq this.object.controlled true)}}fu_controlled{{/if}} fu_{{this.id}}">
                             <tr style="border-top:4px var(--fco-accent-colour) solid; background-color:transparent;">
                                 <td colspan="2" id="{{this.id}}_tokenNameT" style="font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); font-weight:bold">
                                     <div style="display:flex; flex-direction:row; margin-bottom:10px; gap: 5px">
@@ -306,10 +306,11 @@
                         {{/if}}
                         {{/if}}
                         {{/each}}<!--ENd all_tokens each-->
-                    </div><!--//End Tracks body-->
-                </div><!--End tracks tab-------------------------------->
+                        </div><!--//End Tracks body-->
+                    </div><!--End tracks tab-------------------------------->
                 <!----------------------------------------------------------------------BEGIN SCENE TAB-->
-                    <div name = "scene" id="fu_scene_tab" class="tab scene {{tabs.scene.cssClass}}" data-group = "fuApp" data-tab="scene" style="color:var(--fco-sheet-text-colour); padding:10px;">
+                <div name = "scene" id="fu_scene_tab" class="tab scene {{tabs.scene.cssClass}}" data-group = "fuApp" data-tab="scene" style="color:var(--fco-sheet-text-colour); padding:10px;">
+                    <div id = "fu_scene_sit_aspects_container">
                             <h2>{{localize 'fate-core-official.SituationAspects'}}</h2>
                             {{#if GM}}
                             <div style="display:flex; flex-direction:row; gap:5px">
@@ -340,162 +341,164 @@
                                     </div>
                                 {{/each}}
                             </div>
-                             <!--Countdowns go here-->
-                             <h2>{{localize 'fate-core-official.countdowns'}}</h2>
-                            <div id="cd_panel" style="overflow-y:auto; max-height:200px">
-                            {{#if (eq countdowns none)}}{{else}}
-                            <table style="background-color:transparent; border:none; padding-left:2px; padding-right:2px; font: 400 1em/1.45 var(--fco-font-family); margin:0px">
-                            {{#each countdowns}}
-                            
-                            
-                            
-                            {{#if (eq this.visible 'visible')}}
-                            <tr>
-                                <td style="width:25%; padding-right:10px; vertical-align:top;">
-                                    <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{this.richName}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
-                                </td>
-                                <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{this.richDesc}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
-                                </td>
-                                <td style="width:25%">
-                                    {{#each this.boxes}}
-                                    {{#if this}}                        
-                                        <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
-                                        {{else}}                          
-                                        <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
-                                    {{/if}}
-                                    {{/each}}
-                                </td>
-                                {{#if ../GM}}
-                                <td style="width:10%; text-align:center">
-                                    <div style="display:flex; flex-direction:row; gap:2px;">
-                                        <button type="button" name="toggle_cd_visibility" title="{{localize 'fate-core-official.switch_hidden'}}" id="{{fco_getKey this.name}}_visibility" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px" class="fas fa-eye fu_button"></button>
-                                        <button type="button" name="delete_cd" id="{{fco_getKey this.name}}_delete" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px"class="fas fa-trash fu_button"></button>
-                                         {{localize 'fate-core-official.visible'}}
-                                    </div>
-                                </td>
-                                {{/if}}
-                            </tr>
+                        </div>
+                    </div> 
+                    <!--Countdowns go here-->
+                    <div id = "fu_scene_countdowns_container">
+                    <h2>{{localize 'fate-core-official.countdowns'}}</h2>
+                    <div id="cd_panel" style="overflow-y:auto; max-height:200px">
+                    {{#if (eq countdowns none)}}{{else}}
+                    <table style="background-color:transparent; border:none; padding-left:2px; padding-right:2px; font: 400 1em/1.45 var(--fco-font-family); margin:0px">
+                    {{#each countdowns}}
+                    
+                    
+                    {{#if (eq this.visible 'visible')}}
+                    <tr>
+                        <td style="width:25%; padding-right:10px; vertical-align:top;">
+                            <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{this.richName}}}</div>
+                            <div tabindex = "0" class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                        </td>
+                        <td style="width: 40%; padding-right:10px; vertical-align:top">
+                            <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{this.richDesc}}}</div>
+                            <div tabindex = "0" class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                        </td>
+                        <td style="width:25%">
+                            {{#each this.boxes}}
+                            {{#if this}}                        
+                                <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
+                                {{else}}                          
+                                <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
                             {{/if}}
-
-                            
-
-
-                            {{#if (eq this.visible 'hidden')}}
-                            {{#unless ../GM}}
-                            <tr>
-                                <td style="width:25%; vertical-align:top">
-                                    Mysterious Countdown
-                                </td>
-                                <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                </td>
-                                <td style="width:25%">
-                                </td>
-                                <td style="width:10%">
-                                </td>
-                            </tr>
-                            {{/unless}}
-
-                            {{#if ../GM}}
-                            <tr>
-                                 <td style="width:25%; padding-right:10px; vertical-align:top;">
-                                    <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{this.richName}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
-                                </td>
-                                <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{this.richDesc}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
-                                </td>
-                                <td style="width:25%;">
-                                    {{#each this.boxes}}
-                                    {{#if this}}                        
-                                        <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color:var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
-                                        {{else}}                          
-                                        <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
-                                    {{/if}}
-                                    {{/each}}
-                                </td>
-                                <td style="width:10%; text-align:center">
-                                <div style="display:flex; flex-direction:row; gap:2px;">
-                                        <button type="button" name="toggle_cd_visibility" title="{{localize 'fate-core-official.switch_boxes'}}" id="{{fco_getKey this.name}}_visibility" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px" class="fas fa-eye"></button>
-                                        <button type="button" name="delete_cd" id="{{fco_getKey this.name}}_delete" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
-                                        {{localize 'fate-core-official.hidden'}}
-                                    </div>
-                                </td>
-                            </tr>
-                            {{/if}}
-                            {{/if}}
-                            
-
-
-
-                            {{#if (eq this.visible 'show_boxes')}}
-                            {{#unless ../GM}}
-                            <tr>
-                                <td style="width:25%"> Mysterious Countdown </td>
-                                 <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                </td>
-                                <td style="width:25%">
-                                    {{#each this.boxes}}
-                                    {{#if this}}                        
-                                        <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
-                                        {{else}}                          
-                                        <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
-                                    {{/if}}
-                                    {{/each}}
-                                </td>
-                                <td style="width:10%">
-                                </td>
-                            </tr>
-
-                            {{/unless}}
-
-                            {{#if ../GM}}
-                            <tr>
-                                 <td style="width:25%; padding-right:10px; vertical-align:top;">
-                                    <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{this.richName}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
-                                </td>
-                                <td style="width: 40%; padding-right:10px; vertical-align:top">
-                                    <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{this.richDesc}}}</div>
-                                    <div class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
-                                </td>
-                                <td style="width:25%">
-                                    {{#each this.boxes}}
-                                    {{#if this}}                        
-                                        <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
-                                        {{else}}                          
-                                        <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
-                                    {{/if}}
-                                    {{/each}}
-                                </td>
-                                <td style="width:10%; text-align:center">
-                                    <div style="display:flex; flex-direction:row; gap:2px;">
-                                        <button type="button" name="toggle_cd_visibility" id="{{fco_getKey this.name}}_visibility" title="{{localize 'fate-core-official.switch_visible'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px" class="fas fa-eye"></button>
-                                        <button type="button" name="delete_cd" id="{{fco_getKey this.name}}_delete" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); margin-left:10px; font-size:xx-small; width:25px; height:25px" class="fas fa-trash"></button>
-                                        {{localize 'fate-core-official.show_boxes'}}
-                                    </div>
-                                </td>
-                            </tr>
-                            {{/if}}
-                            {{/if}}
-
-
-
                             {{/each}}
-                            </table>
+                        </td>
+                        {{#if ../GM}}
+                        <td style="width:10%; text-align:center">
+                            <div style="display:flex; flex-direction:row; gap:2px;">
+                                <button type="button" name="toggle_cd_visibility" title="{{localize 'fate-core-official.switch_hidden'}}" id="{{fco_getKey this.name}}_visibility" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px" class="fas fa-eye fu_button"></button>
+                                <button type="button" name="delete_cd" id="{{fco_getKey this.name}}_delete" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px"class="fas fa-trash fu_button"></button>
+                                {{localize 'fate-core-official.visible'}}
+                            </div>
+                        </td>
+                        {{/if}}
+                    </tr>
+                    {{/if}}
 
+                    
+
+
+                    {{#if (eq this.visible 'hidden')}}
+                    {{#unless ../GM}}
+                    <tr>
+                        <td style="width:25%; vertical-align:top">
+                            Mysterious Countdown
+                        </td>
+                        <td style="width: 40%; padding-right:10px; vertical-align:top">
+                        </td>
+                        <td style="width:25%">
+                        </td>
+                        <td style="width:10%">
+                        </td>
+                    </tr>
+                    {{/unless}}
+
+                    {{#if ../GM}}
+                    <tr>
+                        <td style="width:25%; padding-right:10px; vertical-align:top;">
+                            <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{this.richName}}}</div>
+                            <div tabindex = "0" class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                        </td>
+                        <td style="width: 40%; padding-right:10px; vertical-align:top">
+                            <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{this.richDesc}}}</div>
+                            <div tabindex = "0" class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                        </td>
+                        <td style="width:25%;">
+                            {{#each this.boxes}}
+                            {{#if this}}                        
+                                <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color:var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
+                                {{else}}                          
+                                <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
                             {{/if}}
-                            </div> 
-                            <h2>{{localize 'fate-core-official.SceneNotesTitle'}}</h2>
-                            <div style="overflow-y:auto; font-family:var(--fco-font-family);" id="fu_scene_notes_pane;">
-                                <div id="scene_notes_rich" class="long_text_rich" style="min-height:2em; font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white">{{{this.richNotes}}}</div>
-                                <div id="scene_notes" class="long_text" style="display:none; min-height:2em; font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white">{{{this.notes}}}</div>
-                            </div>    
-                        </div>        
-                    </div><!--End Scene tab---------------------------------------------------->
+                            {{/each}}
+                        </td>
+                        <td style="width:10%; text-align:center">
+                        <div style="display:flex; flex-direction:row; gap:2px;">
+                                <button type="button" name="toggle_cd_visibility" title="{{localize 'fate-core-official.switch_hidden'}}" id="{{fco_getKey this.name}}_visibility" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px" class="fas fa-eye fu_button"></button>
+                                <button type="button" name="delete_cd" id="{{fco_getKey this.name}}_delete" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px"class="fas fa-trash fu_button"></button>
+                                {{localize 'fate-core-official.hidden'}}
+                            </div>
+                        </td>
+                    </tr>
+                {{/if}}
+            {{/if}}
+                    
+
+
+
+                    {{#if (eq this.visible 'show_boxes')}}
+                    {{#unless ../GM}}
+                    <tr>
+                        <td style="width:25%"> Mysterious Countdown </td>
+                        <td style="width: 40%; padding-right:10px; vertical-align:top">
+                        </td>
+                        <td style="width:25%">
+                            {{#each this.boxes}}
+                            {{#if this}}                        
+                                <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
+                                {{else}}                          
+                                <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
+                            {{/if}}
+                            {{/each}}
+                        </td>
+                        <td style="width:10%">
+                        </td>
+                    </tr>
+
+                    {{/unless}}
+
+                    {{#if ../GM}}
+                    <tr>
+                        <td style="width:25%; padding-right:10px; vertical-align:top;">
+                            <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name_rich" data-oldName="{{this.name}}">{{{this.richName}}}</div>
+                            <div tabindex = "0" class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id = "{{fco_getKey this.name}}_name" data-oldName="{{this.name}}">{{{this.name}}}</div>
+                        </td>
+                        <td style="width: 40%; padding-right:10px; vertical-align:top">
+                            <div class="cd_datum_rich" style="min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc_rich">{{{this.richDesc}}}</div>
+                            <div tabindex = "0" class="cd_datum" style="display:none; min-height:2em; cursor:text; min-width:100%; width:100%" id="{{fco_getKey this.name}}_desc">{{{this.description}}}</div>
+                        </td>
+                        <td style="width:25%">
+                            {{#each this.boxes}}
+                            {{#if this}}                        
+                                <label class="cdbox"><input type="checkbox" name = "cd_box" id="{{fco_getKey ../name}}_{{@index}}_false_box" style="opacity:0;width:25px; height:25px; float:left;" checked="checked" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></label>
+                                {{else}}                          
+                                <label class="cdbox"><input type="checkbox" name="cd_box" id="{{fco_getKey ../name}}_{{@index}}_true_box" style="opacity:0; width:25px; height:25px; float:left;" {{#if ../../GM}}{{else}}disabled="disabled"{{/if}}><span class = "cdcheckmark"></span><i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size:{{../../fontSize}}pt; color: var(--fco-sheet-text-colour);">{{add1 @index}}</i></input></label>
+                            {{/if}}
+                            {{/each}}
+                        </td>
+                        <td style="width:10%; text-align:center">
+                            <div style="display:flex; flex-direction:row; gap:2px;">
+                                <button type="button" name="toggle_cd_visibility" title="{{localize 'fate-core-official.switch_hidden'}}" id="{{fco_getKey this.name}}_visibility" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px" class="fas fa-eye fu_button"></button>
+                                <button type="button" name="delete_cd" id="{{fco_getKey this.name}}_delete" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-size:xx-small; width:25px; height:25px"class="fas fa-trash fu_button"></button>
+                                {{localize 'fate-core-official.show_boxes'}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{/if}}
+
+
+
+                    {{/each}}
+                    </table>
+
+                    {{/if}}
+                    </div> 
+                </div>
+                    <h2>{{localize 'fate-core-official.SceneNotesTitle'}}</h2>
+                    <div style="overflow-y:auto; font-family:var(--fco-font-family);" id="fu_scene_notes_pane;">
+                        <div id="scene_notes_rich" class="long_text_rich" style="min-height:2em; font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white">{{{this.richNotes}}}</div>
+                        <div id="scene_notes" class="long_text" style="display:none; min-height:2em; font-size:{{fontSize}}pt; padding:5px; border-left:none; overflow-y:auto; height:{{fuNotesHeight}}px; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white">{{{this.notes}}}</div>
+                    </div>           
+            </div><!--End Scene tab---------------------------------------------------->
                     <!----------------------------------------------------------------------END SCENE TAB-->
 
                     <!----------------------BEGIN Roll History Tab-->
@@ -519,7 +522,7 @@
                             <th style="border:2px solid var(--fco-accent-colour); font-weight:bold; text-align:center; font-size:{{fontSize}}pt">
                                 {{localize 'fate-core-official.Total'}}
                             </th>
-                            <th style="border:2px solid var(--fco-accent-colour); font-weight:bold; text-align:center; font-size:{{fontSize}}pt">
+                            <th style="border:2px solid var(--fco-accent-colour); font-weight:bold; width:15em; text-align:center; font-size:{{fontSize}}pt">
                                 {{localize 'fate-core-official.RollActions'}}
                             </th>
                         </tr>
@@ -554,23 +557,20 @@
                             <td style="border:2px solid var(--fco-accent-colour); text-align:center; font-size:{{../fontSize}}pt">
                                 {{#if ../GM}}
                                     <table style="background:transparent; border:none; margin:0px">
-                                        <tr><th>{{localize 'fate-core-official.FreeActions'}}</th>
-                                            </tr>
                                             <tr style="background:transparent;"">
                                                 <td>
                                                     <div style="display:flex; flex-direction:row; gap:2px">
+                                                        <div style="width:10em; text-align:left">{{localize 'fate-core-official.FreeActions'}}</div>
                                                         <button class="fu_button" type="button" name="fu_roll_button" data-roll="roll_{{@key}}_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PlusOneExplainer'}}">+1</button>
                                                         <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreePlusTwoExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-plus fu_button"></button>
                                                         <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreeRerollExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-dice fu_button"></button>
                                                         <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools fu_button"></button>
                                                     </div>
                                                 </td>
-                                                <tr>
-                                                    <th>{{localize 'fate-core-official.FatePointActions'}}</th>
-                                                </tr>
                                                 <tr style="background:none">
                                                     <td>
                                                         <div style="display:flex; flex-direction:row; gap:2px">
+                                                            <div style="width:10em; text-align:left">{{localize 'fate-core-official.FatePointActions'}}</div>
                                                             <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_plus2fp" style="margin-left:37px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus fu_button"></button>
                                                             <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidRerollExplainer'}}" i icon class="fas fa-dice fu_button"></button>
                                                             <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools fu_button"></button>
@@ -582,23 +582,22 @@
                                 {{/if}}
                                 {{#if (eq this.fullSpeaker.actor ../user.character.id)}}{{#if ../GM}}{{else}}
                                <table style="background:transparent; border:none; margin:0px">
-                                        <tr><th>{{localize 'fate-core-official.FreeActions'}}</th>
+                                        <tr>
                                             </tr>
-                                            <tr style="background:transparent;"">
+                                            <tr style="background:transparent;">
                                                 <td>
                                                     <div style="display:flex; flex-direction:row; gap:2px">
+                                                        <div style="width:10em; text-align:left">{{localize 'fate-core-official.FreeActions'}}</div>
                                                         <button class="fu_button" type="button" name="fu_roll_button" data-roll="roll_{{@key}}_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PlusOneExplainer'}}">+1</button>
                                                         <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreePlusTwoExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-plus fu_button"></button>
                                                         <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.FreeRerollExplainer'}}{{#if ../GM}} {{localize 'fate-core-official.gmHoldShiftToSelectAspects'}}{{/if}}" i icon class="fas fa-dice fu_button"></button>
                                                         <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools fu_button"></button>
                                                     </div>
                                                 </td>
-                                                <tr>
-                                                    <th>{{localize 'fate-core-official.FatePointActions'}}</th>
-                                                </tr>
                                                 <tr style="background:none">
                                                     <td>
                                                         <div style="display:flex; flex-direction:row; gap:2px">
+                                                            <div style="width:10em; text-align:left">{{localize 'fate-core-official.FatePointActions'}}</div>
                                                             <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_plus2fp" style="margin-left:37px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidPlusTwoExplainer'}}" i icon class="fas fa-plus fu_button"></button>
                                                             <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.PaidRerollExplainer'}}" i icon class="fas fa-dice fu_button"></button>
                                                             <button type="button" name="fu_roll_button" data-roll="roll_{{@key}}_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="{{localize 'fate-core-official.manualExplainer'}}" i icon class="fas fa-tools fu_button"></button>
@@ -618,42 +617,46 @@
                     <!-----------------------BEGIN game information tab-->
                     <div name="game_info" id="game_info" class="tab game_info {{tabs.game_info.cssClass}}" data-group = "fuApp" data-tab="game_info" style="padding:10px">
                             <div id="game_info_tab" style="color:var(--fco-sheet-text-colour); overflow-y:auto; max-height:calc({{height}}px - 100px); padding:10px">
-                                <h2 style="vertical-align:top">{{localize 'fate-core-official.DateAndTimeNotes'}}</h2>
-                                <div id="game_date_time_rich" class="long_text_rich" style="color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); padding-left:5px; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; max-height:3em; overflow-y:auto">{{{this.rich_game_time}}}</div>
-                                <div id="game_date_time" class="long_text" style="padding-left:5px; display:none; min-height:2em; background-color:white; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; max-height:3em; overflow-y:auto">{{{this.game_time}}}</div>
+                                <div id ="fu_date_and_time_container">
+                                    <h2 style="vertical-align:top">{{localize 'fate-core-official.DateAndTimeNotes'}}</h2>
+                                    <div id="game_date_time_rich" class="long_text_rich" style="color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); padding-left:5px; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; max-height:3em; overflow-y:auto">{{{this.rich_game_time}}}</div>
+                                    <div id="game_date_time" class="long_text" style="padding-left:5px; display:none; min-height:2em; background-color:white; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; max-width:100%; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; max-height:3em; overflow-y:auto">{{{this.game_time}}}</div>
+                                </div>
                                 <!--Game Aspects-->
-                                <h2>{{localize 'fate-core-official.gameAspects'}}</h2>
-                                
-                                {{#if GM}}<button class="fu_button" type="button" id="add_game_aspect" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:32px; font-size:{{fontSize}}pt">{{localize 'fate-core-official.AddNewAspect'}}</button>{{/if}}
+                                <div id = "fu_game_aspects_container">
+                                    <h2>{{localize 'fate-core-official.gameAspects'}}</h2>
+                                    
+                                    {{#if GM}}<button class="fu_button" type="button" id="add_game_aspect" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:200px; height:32px; font-size:{{fontSize}}pt">{{localize 'fate-core-official.AddNewAspect'}}</button>{{/if}}
 
-                                <div style="min-height:150px; max-height:{{gameAspectsHeight}}px; overflow-y:auto">
-                                    {{#each game_aspects}}
-                                    <div style="padding-top: 10px; font-family:var(--fco-font-family); font-size:{{../fontSize}}pt; display: flex; flex-direction: row; align-items:center">
-                                        <button type="button" name="FUexpandGameAspect" style="color:var(--fco-sheet-text-colour); vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button>
-                                        <span style="width:100%; padding-left:10px; vertical-align:middle">
-                                                <input name="game_aspect" class="fu_aspect_box" type="text" value="{{this.name}}" id="{{@key}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; vertical-align:middle;"></input>
-                                        </span>
-                                        <span style="padding-left:10px; vertical-align:middle">
-                                            <input type="number" name="game_a_free_i" id="{{@key}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid" value="{{this.free_invokes}}"></input>
-                                        </span>
-                                        {{#if ../GM}}
-                                            <span style="padding-left:5px; vertical-align:middle"><button type="button" name="del_game_aspect" id="delete_ga_{{this.name}}" title="{{localize 'fate-core-official.DeleteAspect'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); vertical-align:middle; width:30px; height:30px" i icon class="fas fa-trash fu_button"></button></span>
-                                        {{/if}}
-                                    </div>
-                                    {{#if (expanded "game" this.name)}}
-                                        <div style="width:100%; font-family:var(--fco-font-family); padding-left:25px; display:flex; flex-direction:row">
-                                            <span style="font-style:normal; color:var(--fco-sheet-text-colour); vertical-align:top; padding:5px; width:50px; font-size:{{../fontSize}}pt">{{localize 'fate-core-official.Notes'}}:</span>
-                                            <span style="vertical-align:top; padding:5px;"><textarea style="width:5oem; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; min-height:75px; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid;" type="text" {{#unless ../GM}}disabled="disabled"{{else}}{{/unless}} name="FUGameAspectNotesText" id="game_{{this.name}}_FUAspectNotes">{{this.notes}}</textarea></span>
+                                    <div class = "fco_scrollable" style="min-height:0px; max-height:{{gameAspectsHeight}}px; overflow-y:auto">
+                                        {{#each game_aspects}}
+                                        <div style="padding-top: 10px; font-family:var(--fco-font-family); font-size:{{../fontSize}}pt; display: flex; flex-direction: row; align-items:center">
+                                            <button type="button" name="FUexpandGameAspect" style="color:var(--fco-sheet-text-colour); vertical-align:top; width:20px; height:20px; float:left; background-color:Transparent; border:none" {{#if (expanded "game" this.name)}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="game_{{this.name}}_FUexpandAspect"></button>
+                                            <span style="width:100%; padding-left:10px; vertical-align:middle">
+                                                    <input name="game_aspect" class="fu_aspect_box" type="text" value="{{this.name}}" id="{{@key}}_game_aspect" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:100%; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid; vertical-align:middle;"></input>
+                                            </span>
+                                            <span style="padding-left:10px; vertical-align:middle">
+                                                <input type="number" name="game_a_free_i" id="{{@key}}_ga_free_invokes" {{#if ../GM}}{{else}}disabled="disabled"{{/if}} style="width:75px; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:1px var(--fco-foundry-interactable-color) solid" value="{{this.free_invokes}}"></input>
+                                            </span>
+                                            {{#if ../GM}}
+                                                <span style="padding-left:5px; vertical-align:middle"><button type="button" name="del_game_aspect" id="delete_ga_{{this.name}}" title="{{localize 'fate-core-official.DeleteAspect'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); vertical-align:middle; width:30px; height:30px" i icon class="fas fa-trash fu_button"></button></span>
+                                            {{/if}}
                                         </div>
-                                    {{/if}}
-                                    {{/each}}
+                                        {{#if (expanded "game" this.name)}}
+                                            <div style="width:100%; font-family:var(--fco-font-family); padding-left:25px; display:flex; flex-direction:row">
+                                                <span style="font-style:normal; color:var(--fco-sheet-text-colour); vertical-align:top; padding:5px; width:50px; font-size:{{../fontSize}}pt">{{localize 'fate-core-official.Notes'}}:</span>
+                                                <span style="vertical-align:top; padding:5px;"><textarea style="width:75em; height:2em; color:var(--fco-sheet-text-colour); background-color: var(--fco-sheet-input-colour); font-size:{{../fontSize}}pt; font-family:var(--fco-font-family); border-top:none; border-right:none; min-height:75px; border-left:none; border-bottom:1px var(--fco-foundry-interactable-color) solid;" type="text" {{#unless ../GM}}disabled="disabled"{{else}}{{/unless}} name="FUGameAspectNotesText" id="game_{{this.name}}_FUAspectNotes">{{this.notes}}</textarea></span>
+                                            </div>
+                                        {{/if}}
+                                        {{/each}}
+                                    </div>
                                 </div>
                                 <!--Game notes-->
-                                <div id="fu_game_notes_container" style = "min-height:5em">
+                                <div id="fu_game_notes_container" style = "min-height:5em; height:calc({{height}}px-{{dateTimeHeight}}px-{{actualGameAspectsHeight}}px + 200px)">
                                 <h2 style="vertical-align:top">{{localize 'fate-core-official.GameNotes'}}</h1>
                                     <div>
-                                        <div id="game_notes_rich" class="long_text_rich" style="min-height:2em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.rich_game_notes}}}</div>
-                                        <div id="game_notes" class="long_text" style="display:none; min-height:2em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white; overflow-y:auto; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
+                                        <div id="game_notes_rich" class="long_text_rich fco_scrollable" style="min-height:2em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white; height:{{gameNotesHeight}}px; padding:5px">{{{this.rich_game_notes}}}</div>
+                                        <div id="game_notes" class="long_text fco_scrollable" style="display:none; min-height:2em; overflow-y:auto; font-size:{{fontSize}}pt; font-family:var(--fco-font-family); border-left:none; border-right:none; border-top:none; border-bottom:solid 1px var(--fco-foundry-interactable-color); background:white; height:{{gameNotesHeight}}px; padding:5px">{{{this.game_notes}}}</div>
                                     </div>
                                 </div>    
                             </div><!--End of game info tab container pane-->
@@ -665,7 +668,7 @@
                 <table style="color:var(--fco-sheet-text-colour); border:none; background-color:transparent; margin:0px; margin-bottom:5px; margin-top:10px">
                     <tr style="height:2em">
                         <td style="width:90%;">
-                             <input style="color:var(--fco-sheet-text-colour); background:transparent; cursor:text; font-size:large; font-weight:bold; border:none; padding:0;" id="conflict_name_input" type="text" {{#unless GM}}disabled="disabled"{{/unless}} value="{{conflictName}}"></input>       
+                             <input style="color:var(--fco-sheet-text-colour); background:transparent; cursor:text; font-size:large; font-weight:bold; border:none; padding:0;" id="fu_conflict_name_input" type="text" {{#unless GM}}disabled="disabled"{{/unless}} value="{{conflictName}}"></input>       
                         </td>
                         <td style="width:10%">
                             {{#if conflict}}{{#unless combatants_only}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.notCombatantsOnly'}}" class="fu_toggle_off fas fa-fist-raised"></i>{{else}}<i id="toggle_fu_combatants" title="{{localize 'fate-core-official.combatantsOnly'}}" class="fu_toggle_on fas fa-fist-raised"></i>{{/unless}}
@@ -705,8 +708,9 @@
                     {{else}}</h2>{{localize 'fate-core-official.NoConflictDetected'}}
                     {{/if}}
                     <table style="border:none; background-color:transparent; margin:0px;">
+
                     {{#each combat_tokens}}
-                    <tr class="{{#if this._controlled}} fu_controlled {{/if}} {{this.id}}_fu" style="border-bottom:none; background-color:transparent; height:60px">    
+                    <tr class="{{#if this.object.controlled}} fu_controlled {{/if}} fu_{{this.id}}" style="border-bottom:none; height:60px">    
                         <td style="width:60px;">
                             <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_sheet" title="{{localize 'fate-core-official.pocornSheetHint'}}" style="border:none; height:60px; width:60px; background: url({{this.texture.src}}) scroll no-repeat center center; background-size:60px 60px"/>     
                         </td>
@@ -731,7 +735,8 @@
                     
                     <table style="border:none; margin:0px;">
                     {{#each has_acted_tokens}}
-                    <tr class="{{#if this._controlled}} fu_controlled {{/if}} {{this.id}}_fu" style="border-bottom:none; background-color:transparent; height:60px">    
+                    {{log this.object.controlled}}
+                    <tr class="{{#if this.object.controlled}} fu_controlled {{/if}} fu_{{this.id}}" style="border-bottom:none; height:60px">    
                         <td style="width:60px;">
                             <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_sheet" title="{{localize 'fate-core-official.pocornSheetHint'}}" style="border:none; height:60px; width:60px; background: url({{this.texture.src}}) scroll no-repeat center center; background-size:60px 60px; opacity:0.5"/>     
                         </td>

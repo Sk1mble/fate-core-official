@@ -19,6 +19,9 @@
 * All the TrackEditor apps have now been migrated to V2 along with the other remaining apps.
 * 12/12/2024 Only remaining V1 apps are fcoActor and fcoExtra and FateUtilities - the actorsheet and itemsheet for this system.
 * 13/12/2024 fcoCharacter has now been refactored to AppV2
+* 16/12/2024 FateUtilities has now been refactored to AppV2
+* 16/12/2024 fcoExtra has now been refactored to AppV2
+* All apps have now been converted to app V2 and all instances of jquery usage have been purged from the system.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

@@ -52,11 +52,11 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
 
     static DEFAULT_OPTIONS = {
         tag: "div",
-        classes: ['fate'],
+        classes: ['fate', 'fu'],
         window: {
             title: this.title,
             icon: "fas fa-book-open",
-            resizable: true
+            resizable: true,
         },
         position:{
             width: window.innerWidth*0.5,
@@ -67,7 +67,24 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     static PARTS = {
         fateUtilitiesSheet: {
             template: "systems/fate-core-official/templates/FateUtilities.html",
-            scrollable: ["#aspects", "#cd_panel", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane"],
+            scrollable: ["#aspects", "#cd_panel", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane",".fco_scrollable", ".long_text_rich.fco_scrollable"],
+        }
+    }
+
+    async _onPosition(position){
+        if (!this.currentWidth) this.currentWidth = position.width;
+        if (!this.currentHeight) this.currentHeight = position.height;
+        
+        let resized = false;
+        
+        if (this.currentHeight != position.height) resized = true;
+        if (this.currentWidth != position.width) resized = true;
+
+        super._onPosition(position);
+        if (resized){
+            this.currentWidth = position.width;
+            this.currentHeight = position.height; 
+            await this.render(false);
         }
     }
 
@@ -79,27 +96,44 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         await super.close(options);
     }
 
-    _onResize(event){
-        super._onResize(event);
-        this.render(false);
-    }
-
     async _onRender (context, options) {
-        let html = $(this.element);
         if (game.user.isGM){
             fcoConstants.getPen("game_notes");
             fcoConstants.getPen("scene_notes");
             fcoConstants.getPen("game_date_time");
-            const countdowns = $('.cd_datum');
-            countdowns.on('blur', event => this._on_cd_blur(event, html));
-            countdowns.on('focus', event => {this.editing = true;})
-            for (let c of countdowns){
-                fcoConstants.getPen(c.id);
-            }
 
-            const roll_track = html.find("i[name='roll_track']");
+            const countdowns = this.element.querySelectorAll('.cd_datum');
+            countdowns.forEach(countdown => {
+                countdown?.addEventListener("blur", event => this._on_cd_blur(event))
+                countdown?.addEventListener('focus', event => {this.editing = true;})
+                fcoConstants.getPen(countdown.id);
+            });
 
-            roll_track.on("click", async event => {
+            const countdowns_rich = this.element.querySelectorAll('.cd_datum_rich');
+            countdowns_rich.forEach(countdown => {
+                    countdown?.addEventListener('click', async event => {
+                        if (event.target.outerHTML.startsWith("<a data")) return;
+                        let id = event.currentTarget.id.split("_rich").join("");
+                        document.getElementById(id+"_rich").style.display = "none";
+                        document.getElementById(id).style.display = "block";
+                        document.getElementById(id).focus();
+                    });
+
+                    countdown?.addEventListener('contextmenu', async event => {
+                        let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML); //This dialog returns sanitised text.
+                        if (text != "discarded") {
+                            let rich = event.target.closest('div');
+                            let normal = document.getElementById(rich.id.split("_rich").join(""));
+                            rich.innerHTML = text;
+                            normal.innerHTML = text;
+                            this._on_cd_blur(event);
+                        }
+                    })
+            })
+
+            const roll_track = this.element.querySelectorAll("i[name='roll_track']");
+
+            roll_track.forEach(track => track?.addEventListener("click", async event => {
                 let name = event.target.id;
                 let uuid = event.currentTarget.getAttribute("data-uuid");
                 let actor = await fromUuid(uuid);
@@ -117,110 +151,97 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                     if (!umr) await actor.rollTrack(track.name);
                     if (umr) await actor.rollModifiedTrack(track.name);
                 }
-            })
+            }))
 
-            const countdowns_rich = $('.cd_datum_rich');
-            countdowns_rich.on('click', async event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                let id = event.currentTarget.id.split("_rich").join("");
-                document.getElementById(id+"_rich").style.display = "none";
-                document.getElementById(id).style.display = "block";
-                document.getElementById(id).focus();
-            })
-
-            const pinConflict = $('.fco-pin-conflict');
-            pinConflict.on('click', async event => {
+            const pinConflict = this.element.querySelector('.fco-pin-conflict');
+            pinConflict?.addEventListener('click', async event => {
                 let pinned = game.combat.scene;
                 if (!pinned) await game.combat.update({scene:game.scenes.viewed.id});
                 if (pinned) await game.combat.update({scene:null});
             })
 
-            const id_conflict = html.find('input[id="conflict_name_input"]');
-            id_conflict.on("change", async event => {
+            const id_conflict = this.element.querySelector('input[id="fu_conflict_name_input"]');
+            id_conflict?.addEventListener("change", async event => {
                 let new_name = event.currentTarget.value;
                 await game.combat.setFlag("fate-core-official","name",new_name);
+            });
+
+            const game_notes_rich = this.element.querySelector('#game_notes_rich');
+            const game_notes = this.element.querySelector('#game_notes');
+            game_notes_rich?.addEventListener('click', event => {
+                if (event.target.outerHTML.startsWith("<a data")) return;
+                game_notes_rich.style.display = "none" 
+                game_notes.style.display = "block"
+                game_notes.focus();
             })
 
-            countdowns_rich.on('contextmenu', async event => {
+            game_notes_rich?.addEventListener('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
                 if (text != "discarded") {
-                    for (let c of countdowns){
-                        if (event.currentTarget.id.startsWith(c.id)){
-                            c.innerHTML = text;
-                            event.currentTarget.innerHTML = text;
-                            $(`#${c.id}`).trigger('blur');
-                        }
-                    }
+                    game_notes.innerHTML = text;
+                    game_notes_rich.innerHTML = text;
+                    await game.settings.set("fate-core-official", "gameNotes", text);
+                    await game.socket.emit("system.fate-core-official",{"render":true});
+                    this.editing = false;
+                    await this.render(false);
                 }
             })
 
-            const game_notes_rich = $('#game_notes_rich');
-            game_notes_rich.on('click', event => {
+            const scene_notes_rich = document.getElementById('scene_notes_rich');
+            const scene_notes = document.getElementById('scene_notes');
+            scene_notes_rich?.addEventListener('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
-                $('#game_notes_rich').css('display', 'none');
-                $('#game_notes').css('display', 'block');
-                $('#game_notes').focus();
+                scene_notes_rich.style.display = "none"
+                scene_notes.style.display = "block"
+                scene_notes.focus();
             })
 
-            game_notes_rich.on('contextmenu', async event => {
+            scene_notes_rich?.addEventListener('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
                 if (text != "discarded") {
-                    $('#game_notes')[0].innerHTML = text;
-                    event.currentTarget.innerHTML = text;
-                    $('#game_notes').trigger('blur');
+                    scene_notes.innerHTML = text;
+                    scene_notes_rich.innerHTML = text;
+                    this._notesFocusOut(event);
                 }
             })
 
-            const scene_notes_rich = $('#scene_notes_rich');
-            scene_notes_rich.on('click', event => {
+            const game_date_time_rich = document.getElementById('game_date_time_rich');
+            const game_date_time = document.getElementById("game_date_time")
+            game_date_time_rich?.addEventListener('click', event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
-                $('#scene_notes_rich').css('display', 'none');
-                $('#scene_notes').css('display', 'block');
-                $('#scene_notes').focus();
+                game_date_time_rich.style.display = "none";
+                game_date_time.style.display = "block";
+                game_date_time.focus();
             })
 
-            scene_notes_rich.on('contextmenu', async event => {
+            game_date_time_rich?.addEventListener('contextmenu', async event => {
                 let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
                 if (text != "discarded") {
-                    $('#scene_notes')[0].innerHTML = text;
-                    event.currentTarget.innerHTML = text;
-                    $('#scene_notes').trigger('blur');
-                }
-            })
-
-            const game_date_time_rich = $('#game_date_time_rich');
-            game_date_time_rich.on('click', event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                $('#game_date_time_rich').css('display', 'none');
-                $('#game_date_time').css('display', 'block');
-                $('#game_date_time').focus();
-            })
-
-            game_date_time_rich.on('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    $('#game_date_time')[0].innerHTML = text;
-                    event.currentTarget.innerHTML = text;
-                    $('#game_date_time').trigger('blur');
+                    game_date_time.innerHTML = text;
+                    game_date_time_rich.innerHTML = text;
+                    await game.settings.set("fate-core-official", "gameTime", text);
+                    await game.socket.emit("system.fate-core-official",{"render":true});
+                    this.editing = false;
+                    await this.render(false);
                 }
             })
 
         }
-        const cd_del = html.find('button[name="delete_cd"]');
-        cd_del.on('click', event => this._on_delete_cd(event, html));
+        const cd_del = this.element.querySelectorAll('button[name="delete_cd"]');
+        cd_del.forEach(cdbutton => cdbutton?.addEventListener('click', event => this._on_delete_cd(event)));
 
-        const toggle_cd_visibility = html.find('button[name="toggle_cd_visibility"]');
-        toggle_cd_visibility.on('click', event => this._on_toggle_cd_visibility(event, html));
+        const toggle_cd_visibility = this.element.querySelectorAll('button[name="toggle_cd_visibility"]');
+        toggle_cd_visibility.forEach(cdbutton => cdbutton?.addEventListener('click', event => this._on_toggle_cd_visibility(event)));
 
-        const addConflict = html.find('button[id="add_conflict"]');
-        addConflict.on("click", async (event) => {
+        const addConflict = this.element.querySelector('button[id="add_conflict"]');
+        addConflict?.addEventListener("click", async (event) => {
             let cbt = await Combat.create({scene: game.scenes.viewed.id});
             await cbt.activate();
             ui.combat.initialize({cbt});
         })
 
-        const nextConflict = html.find('button[id="next_conflict"]');
-        nextConflict.on("click", async (event) => {
+        const nextConflict = this.element.querySelector('button[id="next_conflict"]');
+        nextConflict?.addEventListener("click", async (event) => {
             let combats = game.combats.contents.filter(c => c.scene?.id == game.scenes.viewed.id);
             let unpinnedCombats = game.combats.contents.filter (c => c.scene == null);
             combats = combats.concat(unpinnedCombats);
@@ -233,38 +254,38 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             ui.combat.initialize({nextCombat});
         })
 
-        const input = html.find('input[type="text"], input[type="number"], .contenteditable');
+        const input = this.element.querySelectorAll('input[type="text"], input[type="number"], .contenteditable');
         
         //Ensure that if a button is tabbed to or clicked, the window's selection is cleared to prevent any rendering issues.
-        const button = html.find('button[type="button"]');
-        button.on("focus", event => {
+        const button = this.element.querySelectorAll('button[type="button"]');
+        button.forEach(button => button. addEventListener("focus", event => {
             window.getSelection().removeAllRanges();
-        })
+        }))
 
-        input.on("keyup", event => {
-            if (event.keyCode === 13 && event.target.type == "input") {
+        input?.forEach(input => input.addEventListener("keyup", event => {
+            if (event.code === "Enter" && event.target.type == "input") {
                 input.blur();
             }
-        })
+        }))
 
-        input.on("focus", event => {
+        input?.forEach(element => element.addEventListener("focus", event => {
             if (this.editing == false) {
                 this.editing = true;
             }
-        });
+        }));
 
-       input.on("blur", event => {
+       input?.forEach(element => element.addEventListener("blur", async event => {
            if (this.renderBanked){
                 this.renderBanked = false;
-                this.render(false);
+                await this.render(false);
             }
             this.editing = false;
-        });
+        }));
 
-        const fontDown = html.find("button[id='fu_shrink_font']");
-        const fontUp = html.find("button[id='fu_grow_font']");
+        const fontDown = this.element.querySelector("button[id='fu_shrink_font']");
+        const fontUp = this.element.querySelector("button[id='fu_grow_font']");
 
-        fontUp.on("click", async event => {
+        fontUp?.addEventListener("click", async event => {
             let font = game.settings.get("fate-core-official","fuFontSize");
             font +=1;
             if (font > 20){
@@ -275,7 +296,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             await this.render(false);
         })
 
-        fontDown.on("click", async event => {
+        fontDown?.addEventListener("click", async event => {
             let font = game.settings.get("fate-core-official","fuFontSize");
             font -=1;
             if (font < 4){
@@ -285,40 +306,40 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             await this.render(false);
         })
 
-        const iseAspects = html.find("button[name='iseAspects']");
-        iseAspects.on("click", event => this.iseAspect(event, html));
+        const iseAspects = this.element.querySelectorAll("button[name='iseAspects']");
+        iseAspects?.forEach(element => element.addEventListener("click", event => this.iseAspect(event)));
 
-        const maximiseAspects = html.find("button[id='maximiseAllAspects']");
-        const minimiseAspects = html.find("button[id='minimiseAllAspects']");
+        const maximiseAspects = this.element.querySelector("button[id='maximiseAllAspects']");
+        const minimiseAspects = this.element.querySelector("button[id='minimiseAllAspects']");
 
-        maximiseAspects.on("click", event => {
+        maximiseAspects?.addEventListener("click", async event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.aspectsMaximised = true);
-            this.render(false);
+            await this.render(false);
         })
 
-        minimiseAspects.on("click", event => {
+        minimiseAspects?.addEventListener("click", async event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.aspectsMaximised = false);
-            this.render(false);
+            await this.render(false);
         })
 
-        const maximiseTracks = html.find("button[id='maximiseAllTracks']");
-        const minimiseTracks = html.find("button[id='minimiseAllTracks']");
+        const maximiseTracks = this.element.querySelector("button[id='maximiseAllTracks']");
+        const minimiseTracks = this.element.querySelector("button[id='minimiseAllTracks']");
 
-        maximiseTracks.on("click", event => {
+        maximiseTracks?.addEventListener("click", async event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.tracksMaximised = true);
-            this.render(false);
+            await this.render(false);
         })
 
-        minimiseTracks.on("click", event => {
+        minimiseTracks?.addEventListener("click", async event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.tracksMaximised = false);
-            this.render(false);
+            await this.render(false);
         })
 
-        const iseTracks = html.find("button[name='iseTracks']");
-        iseTracks.on("click", event => this.iseTrack(event, html));
+        const iseTracks = this.element.querySelectorAll("button[name='iseTracks']");
+        iseTracks?.forEach(element => element.addEventListener("click", event => this.iseTrack(event)));
 
-        const expandAspectNotes = html.find("div[name='FUexpandAspect']");
-        expandAspectNotes.on("click", event => {
+        const expandAspectNotes = this.element.querySelectorAll("div[name='FUexpandAspect']");
+        expandAspectNotes?.forEach(element => element.addEventListener("click", async event => {
             let details = event.target.id.split("_");
             let token_id = details[0];
             let aspect = details[1];
@@ -334,22 +355,22 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             } else {
                 game.user.expanded[key] = false;
             }
-            this.render(false);
-        })
+            await this.render(false);
+        }))
 
-        const fu_combatants_toggle = html.find("i[id='toggle_fu_combatants']");
-        fu_combatants_toggle.on("click", async (event) => {
+        const fu_combatants_toggle = document.querySelector("i[id='toggle_fu_combatants']");
+        fu_combatants_toggle?.addEventListener("click", async (event) => {
             let toggle = game.settings.get("fate-core-official","fu_combatants_only");
             if (toggle) {
                 await game.settings.set("fate-core-official","fu_combatants_only",false);
             } else {
                 await game.settings.set("fate-core-official","fu_combatants_only",true);
             }
-            this.render(false);
+            await this.render(false);
         })
 
-        const expandGameAspectNotes = html.find("button[name='FUexpandGameAspect']");
-        expandGameAspectNotes.on("click", event => {
+        const expandGameAspectNotes = this.element.querySelectorAll("button[name='FUexpandGameAspect']");
+        expandGameAspectNotes?.forEach(element => element.addEventListener("click", async event => {
             let details = event.target.id.split("_");
             let aspect = details[1];
             let key = "game"+aspect;
@@ -363,11 +384,11 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             } else {
                 game.user.expanded[key] = false;
             }
-            this.render(false);
-        })
+            await this.render(false);
+        }))
 
-        const FUGameAspectNotes = html.find("textarea[name='FUGameAspectNotesText']");
-        FUGameAspectNotes.on("change", event => {
+        const FUGameAspectNotes = this.element.querySelectorAll("textarea[name='FUGameAspectNotesText']");
+        FUGameAspectNotes?.forEach(element => element.addEventListener("change", event => {
             let details = event.target.id.split("_");
             let aspectName = details[1];
             let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official", "gameAspects"));
@@ -375,44 +396,54 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             aspect.notes = event.target.value;
             game.settings.set("fate-core-official","gameAspects",aspects);
             game.socket.emit("system.fate-core-official",{"render":true});
-        });
+        }));
 
-        const gameAspect = html.find("input[name='game_aspect']");
-        gameAspect.on("change", async (event) => {
+        const gameAspect = this.element.querySelectorAll("input[name='game_aspect']");
+        gameAspect?.forEach(element => element.addEventListener("change", async (event) => {
             let index = event.target.id.split("_")[0];
             let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official", "gameAspects")); // Should contain an aspect with the current name.
             let aspect = aspects[index];
             aspect.name = event.target.value;
             await game.settings.set("fate-core-official","gameAspects",aspects);
             await game.socket.emit("system.fate-core-official",{"render":true});
-            this.render(false);
-        })
+            await this.render(false);
+        }))
 
-        const trackNotesRich = html.find('div[name="FUTrackNotesText_rich"]');
-        trackNotesRich.on("click", event => {
+        const trackNotesRich = this.element.querySelectorAll('div[name="FUTrackNotesText_rich"]');
+        trackNotesRich?.forEach(element => element.addEventListener("click", event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
             let id = event.currentTarget.id.split("_rich").join("");
             let richid = event.currentTarget.id;
             if (!richid) richid = event.target.id;
             fcoConstants.getPen(id);
-            $(`#${richid}`).css('display', 'none');
-            $(`#${id}`).css('display', 'block');
-            $(`#${id}`).focus();
-        })
+            let trackNotes = document.getElementById(id);
+            element.style.display = "none";
+            trackNotes.style.display = "block"
+            trackNotes.focus();
+        }))
 
-        trackNotesRich.on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+        trackNotesRich?.forEach(element => element.addEventListener('contextmenu', async event => {
+            let target = event.target.closest('div');
+            let id = target.id.split("_rich").join("");
+            let text = await fcoConstants.updateText("Edit raw HTML", element.innerHTML);
             if (text != "discarded") {
-                let id = event.currentTarget.id.split("_rich").join("");
-                $(`#${id}`)[0].innerHTML = text;
-                event.currentTarget.innerHTML = text;
-                $(`#${id}`).trigger('blur');
+                let target = document.getElementById(id);
+                let token_id = target.dataset.tokenid;
+                let track = target.dataset.name;//This is a much better way of accessing data than splitting the id.
+                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
+                let actor = token.actor;
+                let key = fcoConstants.gkfn(actor.system.tracks, track);
+                target.innerHTML = text;
+                element.innerHTML = text;
+                await actor.update({[`system.tracks.${key}.notes`]:text});
+                this.editing = false;
+                await this.render(false)
             }
-        })
+        }))
 
-        const expandTrackNotes = html.find("div[name='FUexpandTrack']");
+        const expandTrackNotes = this.element.querySelectorAll("div[name='FUexpandTrack']");
         
-        expandTrackNotes.on("click", async event => {
+        expandTrackNotes?.forEach(element => element.addEventListener("click", async event => {
             let details = event.target.id.split("_");
             let token_id = details[0];
             let track = event.target.getAttribute("data-name");
@@ -428,108 +459,109 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 game.user.expanded[key] = false;
             }
             await this.render(false);
-        })
+        }))
 
-        const rollTab = html.find("a[data-tab='rolls']");
-        rollTab.on("click", event => {
+        const rollTab = this.element.querySelector("a[data-tab='rolls']");
+        rollTab?.addEventListener("click", async event => {
             if (this.delayedRender){
-                this.render(false);
+                await this.render(false);
             }
         })
 
-        const sceneTab = html.find("a[data-tab='scene']");
-        sceneTab.on("click", event => {
+        const sceneTab = this.element.querySelector("a[data-tab='scene']");
+        sceneTab?.addEventListener("click", async event => {
             if (this.delayedRender){
-                this.render(false);
+                await this.render(false);
             }
         })
 
-        const gameInfoTab = html.find("a[data-tab='game_info']");
-        gameInfoTab.on("click", event => {
+        const gameInfoTab = this.element.querySelector("a[data-tab='game_info']");
+        gameInfoTab?.addEventListener("click", async event => {
             if (this.delayedRender){
-                this.render(false);
+                await this.render(false);
             }
         })
 
         const tokenName = this.element.querySelectorAll("td[class='tName'], span[class='tName'], div[class='tName']");
-        tokenName.forEach(element => element.addEventListener ("dblclick", event => this.tokenNameChange(event, html)));
-        const popcornButtons = html.find("button[name='popcorn']");
-        popcornButtons.on("click", event => this._onPopcornButton(event, html));
-        popcornButtons.on("contextmenu", event => this._onPopcornRemove(event, html));
+        tokenName.forEach(element => element?.addEventListener ("dblclick", event => this.tokenNameChange(event)));
 
-        const nextButton = html.find("button[id='next_exchange']");
-        nextButton.on("click", event => this._nextButton(event, html));
-        const endButton = html.find("button[id='end_conflict']");
-        endButton.on("click", event => this._endButton(event, html));
-        const timed_event = html.find("button[id='timed_event']");
-        timed_event.on("click", event => this._timed_event(event, html));
-        const category_select = html.find("select[id='category_select']")
-        category_select.on("change", event => {
-                this.category = category_select[0].value;
-                this.render(false);
+        const popcornButtons = this.element.querySelectorAll("button[name='popcorn']");
+        popcornButtons.forEach(button => button.addEventListener("click", event => this._onPopcornButton(event)));
+        popcornButtons.forEach(button => button.addEventListener("contextmenu", event => this._onPopcornRemove(event)));
+
+        const nextButton = this.element.querySelector("button[id='next_exchange']");
+        nextButton?.addEventListener("click", event => this._nextButton(event));
+        const endButton = this.element.querySelector("button[id='end_conflict']");
+        endButton?.addEventListener("click", event => this._endButton(event));
+        const timed_event = this.element.querySelector("button[id='timed_event']");
+        timed_event?.addEventListener("click", event => this._timed_event(event));
+        const category_select = this.element.querySelector("select[id='category_select']")
+        category_select?.addEventListener("change", async event => {
+                this.category = category_select.value;
+                await this.render(false);
         })
-        const track_name = html.find("div[name='track_name']");
-        const box = html.find("input[class='fco-box']");
-        const cd_box = html.find("input[name='cd_box']");
-        cd_box.on('click', event => this._on_cd_box_click(event, html));
+        const track_name = this.element.querySelectorAll("div[name='track_name']");
+        const box = this.element.querySelectorAll("input[class='fco-box']");
+        const cd_box = this.element.querySelectorAll("input[name='cd_box']");
+        cd_box?.forEach(box => box.addEventListener('click', event => this._on_cd_box_click(event)));
+        box?.forEach(element => element.addEventListener("click", event => this._on_click_box(event)));
+        
+        const track_aspect = this.element.querySelectorAll("input[name='track_aspect']");
+        track_aspect.forEach(element => element.addEventListener("change", event => this._on_aspect_change(event)));
 
-        box.on("click", event => this._on_click_box(event, html));
-        const track_aspect = html.find("input[name='track_aspect']");
-        track_aspect.on("change", event => this._on_aspect_change(event, html));
+        const roll = this.element.querySelectorAll("button[name='roll']");
+        roll?.forEach(element => element.addEventListener("click", event => this._roll(event)));
 
-        const roll = html.find("button[name='roll']");
-        roll.on("click", event => this._roll(event,html));
+        const clear_fleeting = this.element.querySelector("button[id='clear_fleeting']");
+        clear_fleeting?.addEventListener("click", event => this._clear_fleeting(event));
 
-        const clear_fleeting = html.find("button[id='clear_fleeting']");
-        clear_fleeting.on("click", event => this._clear_fleeting(event,html));
+        const add_sit_aspect = this.element.querySelector("button[id='add_sit_aspect']")
+        add_sit_aspect?.addEventListener("click", event => this._add_sit_aspect(event));
 
-        const add_sit_aspect = html.find("button[id='add_sit_aspect']")
-        add_sit_aspect.on("click", event => this._add_sit_aspect(event, html));
-
-        const add_sit_aspect_from_track = html.find("button[name='track_aspect_button']")
-        add_sit_aspect_from_track.on("click", event => this._add_sit_aspect_from_track(event, html));
+        const add_sit_aspect_from_track = this.element.querySelectorAll("button[name='track_aspect_button']")
+        add_sit_aspect_from_track?.forEach(element => element.addEventListener("click", event => this._add_sit_aspect_from_track(event)));
 
         //Situation Aspect Buttons
-        const del_sit_aspect = html.find("button[name='del_sit_aspect']");
-        del_sit_aspect.on("click", event => this._del_sit_aspect(event, html));
+        const del_sit_aspect = this.element.querySelectorAll("button[name='del_sit_aspect']");
+        del_sit_aspect?.forEach(element => element.addEventListener("click", event => this._del_sit_aspect(event)));
 
-        const addToScene = html.find("button[name='addToScene']");
-        addToScene.on("click", event => this._addToScene(event, html));
+        const addToScene = this.element.querySelectorAll("button[name='addToScene']");
+        addToScene?.forEach(element => element.addEventListener("click", event => this._addToScene(event)));
 
-        addToScene.on("dragstart", event => {
+        addToScene?.forEach(element => element.addEventListener("dragstart", event => {
             let drag_data = {type:"situation_aspect", aspect:event.target.getAttribute("data-aspect"), value:event.target.getAttribute("data-value")};
-            event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
-        })
+            event.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
+        }))
 
-        const panToAspect = html.find("button[name='panToAspect']");
-        panToAspect.on("click", event => this._panToAspect(event, html));
+        const panToAspect = this.element.querySelectorAll("button[name='panToAspect']");
+        panToAspect?.forEach(element => element.addEventListener("click", event => this._panToAspect(event)));
 
-        const free_i = html.find("input[name='free_i']");
-        free_i.on("change", event => this._free_i_button(event, html));
+        const free_i = this.element.querySelectorAll("input[name='free_i']");
+        free_i?.forEach(element => element.addEventListener("change", event => this._free_i_button(event)));
 
-        const sit_aspect = html.find("input[name='sit_aspect']");
-        sit_aspect.on("change", event => this._sit_aspect_change(event, html));
+        const sit_aspect = this.element.querySelectorAll("input[name='sit_aspect']");
+        sit_aspect?.forEach(element => element.addEventListener("change", event => this._sit_aspect_change(event)));
 
-        const scene_notes = html.find("div[id='scene_notes']");
-        scene_notes.on("focus", event => this.scene_notes_edit(event, html));
-        scene_notes.on("blur", event => this._notesFocusOut(event,html));
+        const scene_notes = document.getElementById("scene_notes");
+        scene_notes?.addEventListener("focus", event => this.scene_notes_edit(event));
+        scene_notes?.addEventListener("blur", event => this._notesFocusOut(event));
 
-        const gmfp = html.find("input[name='gmfp']");
-        gmfp.on("change", event=> this._edit_gm_points(event, html));
+        const gmfp = this.element.querySelector("input[name='gmfp']");
+        gmfp?.addEventListener("change", event=> this._edit_gm_points(event));
 
-        const playerfp = html.find("input[name='player_fps']");
-        playerfp.on("change", event=> this._edit_player_points(event, html));
+        const playerfp = this.element.querySelectorAll("input[name='player_fps']");
+        playerfp?.forEach(element => element.addEventListener("change", event=> this._edit_player_points(event)));
 
-        const playerboosts = html.find("input[name='player_boosts']");
-        playerboosts.on("change", event=> this._edit_player_boosts(event, html))
+        const playerboosts = this.element.querySelectorAll("input[name='player_boosts']");
+        playerboosts?.forEach(element => element.addEventListener("change", event=> this._edit_player_boosts(event)));
 
-        const refresh_fate_points = html.find("button[id='refresh_fate_points']");
-        refresh_fate_points.on("click", event => this.refresh_fate_points(event, html));    
+        const refresh_fate_points = this.element.querySelector("button[id='refresh_fate_points']");
+        refresh_fate_points?.addEventListener("click", event => this.refresh_fate_points(event));    
 
-        const avatar = html.find("img[name='avatar']");
-        avatar.on("contextmenu", event=> this._on_avatar_click(event,html));
+        const avatar = this.element.querySelectorAll("img[name='avatar']");
+        avatar?.forEach(element => element.addEventListener("contextmenu", event=> this._on_avatar_click(event)));
         
-        avatar.on("click", async event => {
+        avatar?.forEach(element => element.addEventListener("click", async event => {
             let t_id = event.target.id.split("_")[0];
             let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
             if (token.actor.sheet.rendered){
@@ -538,55 +570,65 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             } else {
                 token.actor.sheet.render(true);
             }
-        })
+        }))
 
-        const fu_clear_rolls = html.find("button[id='fu_clear_rolls']");
-        fu_clear_rolls.on("click", event => this._fu_clear_rolls(event, html));
+        const fu_clear_rolls = this.element.querySelector("button[id='fu_clear_rolls']");
+        fu_clear_rolls?.addEventListener("click", event => this._fu_clear_rolls(event));
 
-        const fu_adhoc_roll = html.find("button[id='fu_ad_hoc_roll']");
-        fu_adhoc_roll.on("click", event => this._fu_adhoc_roll(event, html));
+        const fu_adhoc_roll = this.element.querySelector("button[id='fu_ad_hoc_roll']");
+        fu_adhoc_roll?.addEventListener("click", event => this._fu_adhoc_roll(event));
 
-        const fu_roll_button = html.find("button[name='fu_roll_button']");
-        fu_roll_button.on("click",event => {FateUtilities._fu_roll_button(event, html), event.target.blur()});
+        const fu_roll_button = this.element.querySelectorAll("button[name='fu_roll_button']");
+        fu_roll_button?.forEach(element => element.addEventListener("click",event => {FateUtilities._fu_roll_button(event), event.target.blur()}));
 
-        const select = html.find("select[class='skill_select']");
+        const select = this.element.querySelectorAll("select[class='skill_select']");
 
-        select.on("focus", event => {
+        select?.forEach(select => select.addEventListener("focus", event => {
             this.selectingSkill = true;
-        });
+        }));
 
-        select.on("click", event => {
+        select?.forEach(select => select.addEventListener("click", event => {
             this.shift = game.system["fco-shifted"];
-        })
-        select.on("change", event => this._selectRoll (event, html));
+        }))
 
-        select.on("blur", event => {
-            this.selectingSkill = false;
-            this.render(false);
-        })
+        select?.forEach(select => select.addEventListener("change", event => this._selectRoll (event)));
 
-        const FUAspectNotes_rich = html.find("div[name='FUAspectNotesText_rich']");
-        FUAspectNotes_rich.on('click', event => {
+        select?.forEach(select => select.addEventListener("blur", event => {
+            this.selectingSkill = false
+        }))
+
+        const FUAspectNotes_rich = this.element.querySelectorAll("div[name='FUAspectNotesText_rich']");
+        FUAspectNotes_rich?.forEach(aspect => aspect.addEventListener('click', event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
-            let id = event.currentTarget.id.split("_rich").join("");
+            let id = aspect.id.split("_rich").join("");
             fcoConstants.getPen(id);
-            $(`#${id}_rich`).css('display', 'none');
-            $(`#${id}`).css('display', 'block');
-            $(`#${id}`).focus();
-        })
+            let target = document.getElementById(id);
+            aspect.style.display = "none";
+            target.style.display = "block"
+            target.focus();
+        }));
 
-        FUAspectNotes_rich.on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
+        FUAspectNotes_rich?.forEach(element => element.addEventListener('contextmenu', async event => {
+            let target = event.target.closest('div');
+            let id = target.id.split("_rich").join("");
+            let text = await fcoConstants.updateText("Edit raw HTML", element.innerHTML);
             if (text != "discarded") {
-                let id = event.currentTarget.id.split("_rich").join("");
-                $(`#${id}`)[0].innerHTML = text;
-                event.currentTarget.innerHTML = text;
-                $(`#${id}`).trigger('blur');
+                let target = document.getElementById(id);
+                let token_id = target.dataset.tokenid;
+                let aspect = target.dataset.name;//This is a much better way of accessing data than splitting the id.
+                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
+                let actor = token.actor;
+                let key = fcoConstants.gkfn(actor.system.aspects, aspect);
+                target.innerHTML = text;
+                element.innerHTML = text;
+                await actor.update({[`system.aspects.${key}.notes`]:text});
+                this.editing = false;
+                await this.render(false)
             }
-        })
+        }))
 
-        const FUAspectNotes = html.find("div[name ='FUAspectNotesText']");
-        FUAspectNotes.on("blur", async event => {
+        const FUAspectNotes = this.element.querySelectorAll("div[name ='FUAspectNotesText']");
+        FUAspectNotes?.forEach(aspect => aspect.addEventListener("blur", async event => {
             if (!window.getSelection().toString()){
                 let desc = DOMPurify.sanitize(event.target.innerHTML);
                 let token_id = event.target.getAttribute("data-tokenid");
@@ -598,66 +640,57 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 this.editing = false;
                 await this.render(false);
             }
-        });
+        }));
 
-        const FUTrackNotesText = html.find("div[name ='FUTrackNotesText']");
+        const FUTrackNotesText = this.element.querySelectorAll("div[name ='FUTrackNotesText']");
         
-        FUTrackNotesText.on("blur", async event => {
-            if (!window.getSelection().toString()){
-                let text = DOMPurify.sanitize(event.target.innerHTML);
-                let token_id = event.target.getAttribute("data-tokenid")
-                let track = event.target.getAttribute("data-name");//This is a much better way of accessing data than splitting the id.
-                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
-                let actor = token.actor;
-                let key = fcoConstants.gkfn(actor.system.tracks, track);
-                await actor.update({[`system.tracks.${key}.notes`]:text});
-                this.editing = false;
-                await this.render(false)
-            }
-        });
+        FUTrackNotesText?.forEach(element => element.addEventListener("blur", async event => {
+            this.onTrackNotesBlur (event);
+        }));
 
-        const game_date_time = html.find(("div[id='game_date_time']"));
-        game_date_time.on("blur", async event => {
+        const game_date_time = document.getElementById('game_date_time');
+        game_date_time?.addEventListener("blur", async event => {
             await game.settings.set("fate-core-official", "gameTime", DOMPurify.sanitize(event.currentTarget.innerHTML));
             await game.socket.emit("system.fate-core-official",{"render":true});
             this.editing = false;
             await this.render(false);
         })
 
-        const game_notes = html.find(("div[id='game_notes']"));
+        const game_notes = document.getElementById("game_notes");
 
-        game_notes.on("focus", event => {
+        game_notes?.addEventListener("focus", event => {
             this.editing=true;
         })
 
-        game_notes.on("blur", async event => {
+        game_notes?.addEventListener("blur", async event => {
             await game.settings.set("fate-core-official", "gameNotes", DOMPurify.sanitize(event.currentTarget.innerHTML));
             await game.socket.emit("system.fate-core-official",{"render":true});
             this.editing = false;
             await this.render(false);
         })
 
-        const add_game_aspect = html.find("button[id='add_game_aspect']")
-        add_game_aspect.on("click", event => this._add_game_aspect(event, html));
+        const add_game_aspect = this.element.querySelector("button[id='add_game_aspect']")
+        add_game_aspect?.addEventListener("click", event => this._add_game_aspect(event));
 
         //Situation Aspect Buttons
-        const del_game_aspect = html.find("button[name='del_game_aspect']");
-        del_game_aspect.on("click", event => this._del_game_aspect(event, html));
-        const game_a_free_i = html.find("input[name='game_a_free_i']");
-        game_a_free_i.on("change", event => this._game_a_free_i_button(event, html));
+        const del_game_aspect = this.element.querySelectorAll("button[name='del_game_aspect']");
+        del_game_aspect?.forEach(element => element.addEventListener("click", event => this._del_game_aspect(event)));
+        
+        const game_a_free_i = this.element.querySelectorAll("input[name='game_a_free_i']");
+        game_a_free_i?.forEach(element => element.addEventListener("change", event => this._game_a_free_i_button(event)));
 
-        const fuLabelSettings = html.find('button[id="fuAspectLabelSettings"]');
-        fuLabelSettings.on('click', async event => {
+        const fuLabelSettings = this.element.querySelector('button[id="fuAspectLabelSettings"]');
+        fuLabelSettings?.addEventListener('click', async event => {
             new FUAspectLabelClass().render(true);
         })
 
-        const addCountdown = html.find('button[id="add_countdown"]');
-        addCountdown.on('click', async event => {
+        const addCountdown = this.element.querySelector('button[id="add_countdown"]');
+        addCountdown?.addEventListener('click', async event => {
             new acd(this).render(true);
         })
     }
 
-    async _sit_aspect_change(event, html){
+    async _sit_aspect_change(event){
         let index = event.target.id.split("_")[0];
         let aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"));
         let aspect = aspects[index];
@@ -672,9 +705,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
 
         if (aspect.name == "") {
             // As the aspect is blank, disable the free invokes field, pan to aspect button, and add note to canvas button.
-            $(`#${index}_free_invokes`).prop("disabled", true);
-            $(`#addToScene_${index}`).prop("disabled", true);
-            $(`#panToAspect_${index}`).prop("disabled", true);
+            document.getElementById(`${index}_free_invokes`).disabled = "disabled";
+            document.getElementById(`addToScene_${index}`).disabled = "disabled";
+            document.getElementById(`panToAspect_${index}`).disabled = "disabled";
             
             // If there's a drawing for this aspect, delete it now that the name is blank.
             if (drawing != undefined){
@@ -682,9 +715,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 return;
             }
         } else {
-            $(`#${index}_free_invokes`).prop("disabled", false);
-            $(`#addToScene_${index}`).prop("disabled", false);
-            $(`#panToAspect_${index}`).prop("disabled", false);
+            document.getElementById(`${index}_free_invokes`).disabled = "";
+            document.getElementById(`addToScene_${index}`).disabled = "";
+            document.getElementById(`panToAspect_${index}`).disabled = "";
         }
 
         if (drawing != undefined){
@@ -722,7 +755,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         game.socket.emit("system.fate-core-official",{"render":true});
     }
 
-    async _del_game_aspect(event, html){
+    async _del_game_aspect(event){
         let del =   fcoConstants.confirmDeletion();
         if (del){
             let id = event.target.id;
@@ -731,12 +764,12 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             game_aspects.splice(game_aspects.findIndex(sit => sit.name == name),1);
             await game.settings.set("fate-core-official","gameAspects",game_aspects);
             game.socket.emit("system.fate-core-official",{"render":true});
-            this.render(false);
+            await this.render(false);
         }
     }
 
-    async _add_game_aspect(event, html){
-        const game_aspect = html.find("input[id='game_aspect']");
+    async _add_game_aspect(event){
+        const game_aspect = this.element.querySelector("input[id='game_aspect']");
         let game_aspects = [];
         let aspect = {
                                     "name":"",
@@ -750,12 +783,12 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         game_aspects.push(aspect);
         await game.settings.set("fate-core-official","gameAspects",game_aspects);
         game.socket.emit("system.fate-core-official",{"render":true});
-        this.render(false);
+        await this.render(false);
     }
 
-    async _game_a_free_i_button(event,html){
+    async _game_a_free_i_button(event){
         let index=event.target.id.split("_")[0];
-        let value=html.find(`input[id="${index}_ga_free_invokes"]`)[0].value
+        let value=this.element.querySelector(`input[id="${index}_ga_free_invokes"]`).value
         let game_aspects = foundry.utils.duplicate(game.settings.get("fate-core-official","gameAspects"));
         let aspect = game_aspects[index];
         aspect.free_invokes = value;
@@ -763,7 +796,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         game.socket.emit("system.fate-core-official",{"render":true});
     }
 
-    async iseAspect(event, html){
+    async iseAspect(event){
         let token = game.scenes.viewed.getEmbeddedDocument("Token", event.target.id.split("_")[0]);
         if (token.aspectsMaximised == true || token.aspectsMaximised == undefined){
             token.aspectsMaximised = false;
@@ -775,7 +808,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         await this.render(false);
     }
 
-    async iseTrack(event, html){
+    async iseTrack(event){
         let token = game.scenes.viewed.getEmbeddedDocument("Token", event.target.id.split("_")[0]);
         if (token.tracksMaximised == true || token.tracksMaximised == undefined){
             token.tracksMaximised = false;
@@ -787,7 +820,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         await this.render(false);
     }
 
-    async tokenNameChange(event, html){
+    async tokenNameChange(event){
         let t_id = event.target.dataset.id;
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
         if (token != undefined && token.actor.isOwner){
@@ -796,15 +829,14 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _selectRoll (event, html){
-        let t_id = event.target.id.split("_")[0]
+    async _selectRoll (event){
+        let t_id = event.target.id.split("_")[0];
         let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
         
-        let sk = html.find(`select[id='${t_id}_selectSkill']`)[0];
+        let sk = this.element.querySelector(`select[id='${t_id}_selectSkill']`);
         let skill;
         let stunt = undefined;
         let bonus=0;
-
         if (sk.value.startsWith("macro")){
             let macroID = sk.value.split("_")[1];
             let macro = await fromUuid(macroID);
@@ -882,13 +914,14 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 });
         }
         this.selectingSkill = false;
-        this.render(false);
+        await this.render(false);
     }
 
-    async _notesFocusOut(event, html){
-        let notes = DOMPurify.sanitize(html.find("div[id='scene_notes']")[0].innerHTML);
+    async _notesFocusOut(event){
+        let notes = DOMPurify.sanitize(document.getElementById("scene_notes").innerHTML);
         await game.scenes.viewed.setFlag("fate-core-official","sceneNotes",notes);
-        this.editing=false;
+        await game.socket.emit("system.fate-core-official",{"render":true});
+        this.editing = false;
         await this.render(false);
     }
 
@@ -1544,11 +1577,11 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _fu_clear_rolls(event,html){
+    async _fu_clear_rolls(event){
         game.scenes.viewed.unsetFlag("fate-core-official","rolls");
     }
 
-    _fu_adhoc_roll(event, html){
+    _fu_adhoc_roll(event){
         let name = "";
         let skill = ""; 
         let modifier = 0;
@@ -1580,7 +1613,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         let width = 500;
 
         let d = new foundry.applications.api.DialogV2({
-                    window:{title: game.i18n.localize("fate-core-official.fu-adhoc-roll")},
+                    window:{
+                        title: game.i18n.localize("fate-core-official.fu-adhoc-roll"),
+                    },
                     content: content,
                     buttons: [{
                             action: "ok",
@@ -1620,7 +1655,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 d.render(true);
     }
 
-    async _on_avatar_click(event, html){
+    async _on_avatar_click(event){
         if (game.user.isGM){
             let fu_actor_avatars = game.settings.get("fate-core-official","fu_actor_avatars");
             let t_id = event.target.id.split("_")[0];
@@ -1634,12 +1669,12 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                     await game.settings.set("fate-core-official","fu_actor_avatars",false);
                 }
             }
-            this.render(false);
+            await this.render(false);
             game.socket.emit("system.fate-core-official",{"render":true});
         }
     }
 
-    async refresh_fate_points(event, html){
+    async refresh_fate_points(event){
         let tokens = game.scenes.viewed.tokens.contents;
         let updates = [];
         for (let i = 0; i < tokens.length; i++){
@@ -1659,7 +1694,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         Actor.updateDocuments(updates);
     }
 
-    async _edit_player_points(event, html){
+    async _edit_player_points(event){
         let id = event.target.id;
         let parts = id.split("_");
         let t_id = parts[0]
@@ -1673,7 +1708,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         await this.render(false);
     }
 
-    async _edit_player_boosts(event, html){
+    async _edit_player_boosts(event){
         let id = event.target.id;
         let parts = id.split("_");
         let t_id = parts[0]
@@ -1687,19 +1722,19 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         await this.render(false);
     }
 
-    async _edit_gm_points(event, html){
+    async _edit_gm_points(event){
         let user = game.users.contents.find(user => user.id == event.target.id);
         let fp = parseInt(event.target.value)
         user.setFlag("fate-core-official","gmfatepoints",fp);
     }
 
-    async scene_notes_edit(event,html){
+    async scene_notes_edit(event){
         this.editing = true;
     }
 
-    async _free_i_button(event,html){
+    async _free_i_button(event){
         let index=event.target.id.split("_")[0];
-        let value=html.find(`input[id="${index}_free_invokes"]`)[0].value
+        let value=this.element.querySelector(`input[id="${index}_free_invokes"]`).value
         let situation_aspects = foundry.utils.duplicate(game.scenes.viewed.getFlag("fate-core-official","situation_aspects"))
         let aspect = situation_aspects[index];
         let name = aspect.name;
@@ -1739,7 +1774,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _panToAspect(event, html){
+    async _panToAspect(event){
         let index=event.target.id.split("_")[1];
         let name = game.scenes.viewed.getFlag("fate-core-official","situation_aspects")[index].name;
         let drawing = canvas?.drawings?.objects?.children?.find(drawing => drawing?.document.text?.startsWith(name));
@@ -1807,15 +1842,15 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _addToScene(event, html){
+    async _addToScene(event){
         let index=event.target.id.split("_")[1];
-        let value=html.find(`input[id="${index}_free_invokes"]`)[0].value;
+        let value=this.element.querySelector(`input[id="${index}_free_invokes"]`).value;
         let name = game.scenes.viewed.getFlag("fate-core-official","situation_aspects")[index].name;
         
         this.addAspectDrawing(value, name, canvas.stage.pivot._x, canvas.stage.pivot._y);
     }
 
-    async _del_sit_aspect(event, html){
+    async _del_sit_aspect(event){
         let del =   fcoConstants.confirmDeletion();
         if (del){
             let id = event.target.id;
@@ -1837,7 +1872,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _add_sit_aspect(event, html){
+    async _add_sit_aspect(event){
         let situation_aspects = [];
         let situation_aspect = {
                                     "name":"",
@@ -1851,7 +1886,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         game.scenes.viewed.setFlag("fate-core-official","situation_aspects",situation_aspects);
     }
 
-    async _add_sit_aspect_from_track(event, html){
+    async _add_sit_aspect_from_track(event){
         let aspect = event.target.id.split("_")[1];
         let name = event.target.id.split("_")[0];
         let text = name + " ("+aspect+")";
@@ -1878,11 +1913,11 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
        }
     }
 
-    async _saveNotes(event, html){
+    async _saveNotes(event){
         this.editing=false;
     }
 
-    async _clear_fleeting(event, html){
+    async _clear_fleeting(event){
         let tokens = game.scenes.viewed.tokens.contents;
         let updates = [];
         let tokenUpdates = [];
@@ -1916,7 +1951,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         await game.scenes.viewed.updateEmbeddedDocuments("Token", tokenUpdates);
     }
 
-    async _on_aspect_change(event, html){
+    async _on_aspect_change(event){
         let id = event.target.id;
         let parts = id.split("_");
         let t_id = parts[0];
@@ -1991,7 +2026,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _on_click_box(event, html) {
+    async _on_click_box(event) {
         let id = event.target.id;
         let parts = id.split("_");
         let name = parts[0]
@@ -2016,7 +2051,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         })
     }
 
-    async _on_cd_box_click(event, html){
+    async _on_cd_box_click(event){
         let countdowns = game.settings.get("fate-core-official","countdowns");
         let data = event.target.id.split("_");
         let key = data[0];
@@ -2029,7 +2064,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         await this.render(false);
     }
 
-    async _on_delete_cd(event, html){
+    async _on_delete_cd(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let data = event.target.id.split("_");
@@ -2041,7 +2076,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _on_toggle_cd_visibility(event, html){
+    async _on_toggle_cd_visibility(event){
         this.editing = false;
         let data = event.target.id.split("_");
         let countdowns = game.settings.get("fate-core-official", "countdowns");
@@ -2067,7 +2102,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     // Change name/desc on losing focus to editable divs
-    async _on_cd_blur(event, html){
+    async _on_cd_blur(event){
         let data = event.target.id.split("_");
         let sel = window.getSelection().toString();
         if (sel == ""){
@@ -2104,12 +2139,26 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _timed_event (event, html){
+    async onTrackNotesBlur(event){
+        if (!window.getSelection().toString()){
+            let text = DOMPurify.sanitize(event.target.innerHTML);
+            let token_id = event.target.getAttribute("data-tokenid")
+            let track = event.target.getAttribute("data-name");//This is a much better way of accessing data than splitting the id.
+            let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
+            let actor = token.actor;
+            let key = fcoConstants.gkfn(actor.system.tracks, track);
+            await actor.update({[`system.tracks.${key}.notes`]:text});
+            this.editing = false;
+            await this.render(false)
+        }
+    }
+
+    async _timed_event (event){
         let te = new TimedEvent();
         te.createTimedEvent();
     }
 
-    async _onPopcornButton(event, html){
+    async _onPopcornButton(event){
         let type = event.target.id.split("_")[1];
         let id = event.target.id.split("_")[0];
 
@@ -2172,18 +2221,18 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
     }
 
-    async _onPopcornRemove(event, html){
+    async _onPopcornRemove(event){
         let id = event.target.id.split("_")[0];
         let combatants = game.combat.combatants;
         let combatant = combatants.find(comb => comb.token.id == id);
         combatant.delete();
     }
 
-    async _endButton(event, html){
+    async _endButton(event){
         let fin = await Promise.resolve(game.combat.endCombat());
     }
 
-    async _nextButton(event, html){
+    async _nextButton(event){
         let combatants = game.combat.combatants;
         let updates = [];
 
@@ -2378,6 +2427,10 @@ async _prepareContext(){
     data.rich_game_notes = await fcoConstants.fcoEnrich (game.settings.get("fate-core-official","gameNotes"))
     data.fontSize = game.settings.get("fate-core-official","fuFontSize");
     data.height = this.position.height;
+    data.actualGameAspectsHeight = document.getElementById("fu_game_aspects_container")?.offsetHeight;
+    data.dateTimeHeight = document.getElementById("fu_date_and_time_container")?.offsetHeight;
+    data.aspectsHeight = document.getElementById("fu_scene_sit_aspects_container")?.offsetHeight;
+    data.cdHeight = document.getElementById("fu_scene_countdowns_container")?.offsetHeight;
     data.combatants_only = game.settings.get("fate-core-official","fu_combatants_only");
 
     if (data.combatants_only && data.conflict){
@@ -2408,18 +2461,21 @@ async _prepareContext(){
 
     let modifier = data.fuPaneHeight - aspectsHeight;
     if (modifier < 0) modifier = 0;
-    data.fuNotesHeight = (this.position.height) - 350 - data.cdownheight - data.fuPaneHeight + modifier;
 
-    data.gameAspectsHeight = 230;
+    if (data.aspectsHeight > 0 && data.cdHeight > 0){
+        data.fuNotesHeight = (this.position.height) - data.cdHeight - data.aspectsHeight - 200;
+    } else {
+        data.fuNotesHeight = (this.position.height) - 400 - data.cdownheight - data.fuPaneHeight + modifier;
+    }
+
+    data.gameAspectsHeight = 190;
     let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 55;
     if (gaModifier <0) gaModifier = 0;
-    data.gameNotesHeight = (this.position.height - 625) + gaModifier;
+    data.gameNotesHeight = (this.position.height - 650) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
     return data;
 }
-
-
 
 static async createCountdown (data){
     /**
@@ -2483,14 +2539,10 @@ async renderMe(...args){
         //args[2] == control true/false 
 
         if (args[2] === true){
-            $(`.${args[1]}_fu`).addClass("fu_controlled");
-            $(`.${args[1]}_fu_acted`).addClass("fu_controlled");
-            $(`.${args[1]}_fu_acted`).removeClass("fu_uncontrolled");
+            this.element.querySelectorAll(`.fu_${args[1]}`)?.forEach(element => element.classList?.add("fu_controlled"));
         }
         if (args[2] === false){
-            $(`.${args[1]}_fu`).removeClass("fu_controlled");
-            $(`.${args[1]}_fu_acted`).removeClass("fu_controlled");
-            $(`.${args[1]}_fu_acted`).addClass("fu_uncontrolled");
+            this.element.querySelectorAll(`.fu_${args[1]}`).forEach(element => element.classList?.remove("fu_controlled"));
         }
         return;
     }
@@ -2499,8 +2551,8 @@ async renderMe(...args){
     //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
     if (!this.renderPending) {
         this.renderPending = true;
-        setTimeout(() => {
-          this.render(false);
+        setTimeout(async () => {
+          await this.render(false);
           this.delayedRender = false;
           this.renderPending = false;
         }, 50);
@@ -2790,7 +2842,7 @@ function checkFormula(formula){
 
 // In v13, renderChatMessage is switching to renderChatMessageHTML which passes an HTMLElement instead of JQuery as the second paramater.
 // This means we'll need to switch to using queryselector and other HTML element methods instead of jQuery.
-// I will need to replace html.find with html.querySelector and targetElement.before with targetElement.insertAdjacentHTML("beforebegin", `htmltoinsert`)
+// I will need to replace this.element.querySelector with html.querySelector and targetElement.before with targetElement.insertAdjacentHTML("beforebegin", `htmltoinsert`)
 // For this particular one I think I'll want afterend.
 // OOOORRR instead of changing everything, we can use the quick and dirty $html = $(html); to convert it back to jQuery.
 /* valid parameters are: 
@@ -2840,35 +2892,35 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
         if (targetElement){
             targetElement.insertAdjacentHTML("beforeend",` 
                 <div>
-                    <table style="background:transparent; width:100%; border:none">
-                        <tr>
-                            <th>${game.i18n.localize("fate-core-official.FreeActions")}</th>
-                        </tr>
-                        <tr style="background:transparent;"">
-                            <td>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PlusOneExplainer')}">+1</button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.FreePlusTwoExplainer')} ${gmText}" i icon class="fas fa-plus"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.FreeRerollExplainer')} ${gmText}" i icon class="fas fa-dice"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.manualExplainer')}" i icon class="fas fa-tools"></button>
+                    <table style="background:transparent; width:15em; border:none">
+                        <tr style="background:transparent;">
+                            <td style="padding:0">
+                                <div style="display:flex;flex-direction:row;gap:2px; align-items:left">
+                                    <div style="width:6em; text-align:left">${game.i18n.localize("fate-core-official.FreeActions")}</div>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus1" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PlusOneExplainer')}">+1</button>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2free" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.FreePlusTwoExplainer')} ${gmText}" i icon class="fas fa-plus"></button>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_reroll" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.FreeRerollExplainer')} ${gmText}" i icon class="fas fa-dice"></button>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manual" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.manualExplainer')}" i icon class="fas fa-tools"></button>
+                                </div>
                             </td>
                         </tr>
-                        <tr style="background:transparent;"">
-                            <th>${game.i18n.localize("fate-core-official.FatePointActions")}</th>        
-                        </tr>
-                        <tr style="background:transparent;"">
-                            <td>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2fp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidPlusTwoExplainer')}" i icon class="fas fa-plus"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidRerollExplainer')}" i icon class="fas fa-dice"></button>
-                                <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.manualExplainer')}" i icon class="fas fa-tools"></button>
+                        <tr style="background:transparent;">
+                            <td style="padding:0">
+                                <div style="display:flex;flex-direction:row;gap:2px; align-items:left">
+                                    <div style="width:6em; text-align:left">${game.i18n.localize("fate-core-official.FatePointActions")}</div>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2fp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidPlusTwoExplainer')}" i icon class="fas fa-plus"></button>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidRerollExplainer')}" i icon class="fas fa-dice"></button>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.manualExplainer')}" i icon class="fas fa-tools"></button>
+                                </div>
                             </td>
-                    </tr>
+                        </tr>
                     </table>
                 </div>
             `);
             const buttons = html.querySelectorAll("button[name='fco_chat_roll_button']");
             // This is how we add a click handler to an HTMLElement rather than a JQuery element.
             for (let button of buttons) button?.addEventListener("click", async event => {
-                await FateUtilities._fu_roll_button(event, html);
+                await FateUtilities._fu_roll_button(event);
             })
         }
     }

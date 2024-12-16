@@ -601,7 +601,6 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
             showyDesc?.addEventListener('click', async event => {
                 if (event.target.outerHTML.startsWith("<a data")) return;
                 this.editing = true;
-                console.log(document.getElementById(`${this.object.id}_description_rich`))
                 document.getElementById(`${this.object.id}_description_rich`).style.display = "none"
                 document.getElementById(`${this.object.id}_description`).style.display = "block";
                 document.getElementById(`${this.object.id}_description`).focus();
@@ -1583,7 +1582,6 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 }
 
 Hooks.on ('dropActorSheetData', async (actor, sheet, data) => {
-    console.log("Drop actorsheet hook fired!");
     if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === data.userid){
         //First check it's not from the same sheet
         if (data?.ident !== "mf_draggable") return;
