@@ -868,7 +868,8 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                                     }
                                     await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
                                     await fcoConstants.wd().update({"system.tracks":tracks});
-                                }
+                                }, 
+                                default:true,
                             }]
                     },
                     {

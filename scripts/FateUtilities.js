@@ -1013,9 +1013,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                                     modifier:button.form.elements.fco_manual_modifier.value,
                                     description:button.form.elements.fco_manual_description.value
                                 })
-                            }
+                            },
+                            default: true
                     }],
-                    default:"ok"
                 }).render(true);
             });
 
@@ -1167,9 +1167,8 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                                 label: "OK",
                                 callback: (event, button, dialog) => {
                                     resolve (dialog.querySelectorAll(".free_i_selector"));
-                            }
+                            }, default:true
                         }],
-                        default:"ok",
                         close: () => resolve()
                     }).render(true);
                 });
@@ -1296,9 +1295,8 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                                 label: "OK",
                                 callback: (event, button, dialog) => {
                                     resolve (dialog.querySelectorAll(".free_i_r_selector"));
-                            }
+                            }, default: true
                         }],
-                        default:"ok",
                         close: () => resolve("aborted")
                     }).render(true);
                 });
@@ -1648,8 +1646,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                                     Skill Rank & Modifiers: ${modifier} <br>Description: ${flavour}`,
                                     speaker: msg
                                 });
-                            }
-                        }], default:"ok"
+                            },
+                            default: true
+                        }],
                 });
                 d.position.width = width;
                 d.render(true);
@@ -2623,7 +2622,7 @@ class acd extends foundry.applications.api.HandlebarsApplicationMixin(foundry.ap
     static async #onSubmit (event, form, formDataExtended){
         let data = formDataExtended.object;
         let box_values = [];
-        if (data.boxes < 3) data.boxes = 3;
+        if (data.boxes < 1) data.boxes = 1;
         if (data.boxes > 20) data.boxes = 20;
 
         for (let i = 0; i < data.boxes; i++){
@@ -2645,7 +2644,8 @@ class acd extends foundry.applications.api.HandlebarsApplicationMixin(foundry.ap
         countdowns[safeName]=countdown;
         await game.settings.set("fate-core-official","countdowns",countdowns);
         await game.socket.emit("system.fate-core-official",{"render":true});
-        this.fu.render(false);
+        console.log(this.fu.editing);
+        await this.fu.render(false);
     }
 
     _onRender(context, options){
@@ -2675,6 +2675,7 @@ class TimedEvent {
                 "content": `${game.i18n.localize("fate-core-official.NoCurrentCombat")}<p>`,
                 "buttons": [{
                         label: game.i18n.localize("fate-core-official.OK"),
+                        default: true
                 }]
             }
             let d = new foundry.applications.api.DialogV2(dp);
@@ -2739,7 +2740,8 @@ class TimedEvent {
 
                             triggerRound=document.getElementById("eventExchange").value;
                             triggerText=document.getElementById("eventToCreate").value;
-                        }
+                        },
+                        default:true,
                     }]
                 }
             let d = new foundry.applications.api.DialogV2(dp);

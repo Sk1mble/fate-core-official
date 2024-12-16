@@ -1724,7 +1724,8 @@ class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin
                             label: game.i18n.localize("fate-core-official.PopulateFromPasted"),
                             callback: () => {
                                 resolve (document.getElementById("custom_sheet_value").value);
-                            }
+                            },
+                            default: true
                         }]
                 }).render(true)
             });

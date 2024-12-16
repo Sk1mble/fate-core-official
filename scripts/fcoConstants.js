@@ -144,10 +144,11 @@ class fcoConstants {
                         label: game.i18n.localize("fate-core-official.OK"),
                         callback: () => {
                             resolve("OK");
-                        }
-                    }
+                        },
+                        default:true,
+                    },
+
                 ],
-                default:"ok",
                 close: ()=> {resolve("OK)")},
             });
             d.position.height = height;
@@ -258,6 +259,7 @@ class fcoConstants {
                 callback: (event, button, dialog) => {
                     return button.form.elements.response.value;
                 },
+                default: true,
             }
         })
         return response;
@@ -278,7 +280,8 @@ class fcoConstants {
                     label: game.i18n.localize("fate-core-official.OK"),
                     callback: (event, button, dialog) => {
                         resolve(button.form.elements.choice.value);
-                    }
+                    },
+                    default:true,
                 }]
             }).render(true)
         });
@@ -309,7 +312,8 @@ class fcoConstants {
                         label: "Save",
                         callback: (event, button, dialog) => {
                             resolve (button.form.elements.toImport.value);
-                        }
+                        },
+                        default:true,
                 }],
             }).render(true)
         });
@@ -331,7 +335,8 @@ class fcoConstants {
                     label: label,
                     callback: (event, button, dialog) => {
                         return DOMPurify.sanitize(button.form.elements.response.value);
-                    }
+                    },
+                    default:true,
             },
             {
                 action: "discard",

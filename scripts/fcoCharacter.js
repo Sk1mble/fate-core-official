@@ -396,7 +396,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                                 newSkill.name=newSkill.name;
                                                 this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill}});
                                             }
-                                        }
+                                        },
+                                        default:true,
                                 }], 
                                 default:"ok",
                         },
@@ -856,10 +857,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                             def.options = options;
                             await f.storeDefault(def);
                             ui.sidebar.render(false);
-                        }
-                        
+                        }, default:true
                     }],
-                    default: "ok"
                 }).render(true);
             })
 
@@ -1005,7 +1004,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                             if (proceed) {
                                 await f.applyDefault(this.document, default_name, options);
                             }
-                        }
+                        },
+                        default: true,
                     }],
                     default: "ok"
                 })

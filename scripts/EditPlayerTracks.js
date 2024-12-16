@@ -313,9 +313,9 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     this.tracks_by_category[newTrack.category][fcoConstants.tob64(newTrack.name)]=newTrack;
                     this.tracks_by_category["All"][fcoConstants.tob64(newTrack.name)]=newTrack;
                     this.render(false);
-                }
+                }, 
+                default:true
             }],
-            default:"ok",
         },
         {
             width:500,
