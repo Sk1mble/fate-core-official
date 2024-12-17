@@ -22,6 +22,8 @@
 * 16/12/2024 FateUtilities has now been refactored to AppV2
 * 16/12/2024 fcoExtra has now been refactored to AppV2
 * All apps have now been converted to app V2 and all instances of jquery usage have been purged from the system.
+* Removed potential for IDs used by FCOCharacter to be duplicated on any other character sheets.
+* Removed potential for IDs used by FateUtilities to be duplicated within the application.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

@@ -131,7 +131,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         // The following functions need to be available to everyone, not just the owners
         const expandAspect = this.element.querySelectorAll("i[name='expandAspect']"); 
         expandAspect.forEach (exp => exp?.addEventListener ("click", event => {
-            let a = event.target.id.split("_")[0];
+            let a = event.target.dataset.aspectname;
             let aspect = fcoConstants.gbn(this.actor.system.aspects, a);
             let key = this.actor.id+aspect.name+"_aspect";
     
@@ -153,9 +153,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         })
 
         const expandTrack = this.element.querySelectorAll("i[name='expandTrack']");
-
         expandTrack.forEach(exp => exp?.addEventListener("click", event => {
-            let t = event.target.id.split("_")[0];
+            let t = event.target.dataset.trackname;
             let track =fcoConstants.gbn(this.object.system.tracks, t)
             let key = this.actor.id+track.name+"_track";
         
@@ -197,7 +196,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         const expandStunt = this.element.querySelectorAll("i[name='expandStunt']");
 
         expandStunt.forEach(exp => exp?.addEventListener("click", event => {
-            let s = event.target.id.split("_")[0];
+            let s = event.target.dataset.stuntname;
             let stunt = fcoConstants.gbn(this.object.system.stunts, s);
             let key = this.actor.id+stunt.name+"_stunt";
             if (game.user.expanded == undefined){
@@ -429,7 +428,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
             const roll_track = this.element.querySelectorAll("i[name='roll_track']");
 
             roll_track.forEach(element => element.addEventListener("click", async event => {
-                let name = event.target.id;
+                let name = event.target.dataset.trackname;
                 let track = fcoConstants.gbn(this.object.system.tracks, name);
                 if (track.rollable == "full" || track.rollable == "empty") {
                     let umr = false;
@@ -525,7 +524,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 
             let tracks = this.object.system.tracks;
             for (let track in tracks){
-                let id = fcoConstants.getKey(tracks[track].name)+"_track_notes";
+                let id = fcoConstants.getKey(tracks[track].name)+this.document.id+"_track_notes";
                 fcoConstants.getPen(id);
                     document.getElementById(`${id}_rich`)?.addEventListener("click", event => {
                     document.getElementById(`${id}_rich`).style.display = "none";
@@ -548,7 +547,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                 if (aspects[aspect].notes == undefined){
                     aspects[aspect].notes = "";
                 }
-                let id = fcoConstants.getKey(aspects[aspect].name)+"_aspect_notes";
+                let id = fcoConstants.getKey(aspects[aspect].name)+this.document.id+"_aspect_notes";
                 if (!aspects[aspect].extra_id) fcoConstants.getPen(id);
 
                 document.getElementById(`${id}_rich`)?.addEventListener("click", event => {
@@ -656,7 +655,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
             const db_add = this.element.querySelectorAll("button[name='db_stunt']");
             db_add.forEach(element => element.addEventListener("click", event => this._db_add_click(event)));
 
-            const cat_select = this.element.querySelector("select[id='track_category']");
+            const cat_select = this.element.querySelector("select[name='track_category']");
             cat_select?.addEventListener("change", event => this._cat_select_change (event));
 
             const item = this.element.querySelectorAll("div[class='item_header']");
@@ -1043,7 +1042,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
     }
 
     async _onSkillR(event){
-        let name = event.target.id;
+        let name = event.target.dataset.skillname;
         let skill = fcoConstants.gbn(this.actor.system.skills, name);
         fcoConstants.presentSkill(skill);
     }
@@ -1112,7 +1111,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
     }
 
     async _db_add_click(event){
-        let name = event.target.id.split("_")[0];
+        let name = event.target.dataset.stuntname;
         let key = fcoConstants.gkfn(this.object.system.stunts, name);
         let stunt = this.object.system.stunts[key];
         if (stunt) {
@@ -1133,7 +1132,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
     }
     
     async _on_stunt_roll_click(event){
-        let items = event.target.id.split("_");
+        let items = event.target.dataset.linkedskill.split("_");
         let name = items[0];
         this.object.rollStunt(name);
     }
@@ -1190,7 +1189,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
         if (text != "discarded") {
             this.editing = false;
-            let item = event.currentTarget.getAttribute("data-edit");//This is a much better way of accessing data than splitting the id.
+            let item = event.target.closest('div').dataset.edit;//This is a much better way of accessing data than splitting the id.
             await this.actor.update({[item]:text});
             this.editing = false;
             await this.render(false)
@@ -1243,13 +1242,13 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
     async _onDelete(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            let key = fcoConstants.gkfn(this.object.system.stunts, event.target.id.split("_")[0]);
+            let key = fcoConstants.gkfn(this.object.system.stunts, event.target.dataset.stuntname);
             await this.object.update({"system.stunts":{[`-=${key}`]:null}});
         }
     }
 
     async _onEdit (event){
-        let name=event.target.id.split("_")[0];
+        let name=event.target.dataset.stuntname;
         let editor = new EditPlayerStunts(this.actor, fcoConstants.gbn(this.object.system.stunts, name), {new:false});
         editor.render(true);
         editor.setSheet(this);
@@ -1261,7 +1260,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
     }
 
     async _on_click_box(event) {
-        let id = event.target.id;
+        let id = event.target.dataset.boxinfo;
         let parts = id.split("_");
         let name = parts[0]
         let index = parts[1]
@@ -1380,10 +1379,10 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                     if (!game.system["fco-shifted"] && game.settings.get("fate-core-official","modifiedRollDefault")) umr = true;        
                 
                     if (umr){
-                        await target.rollModifiedSkill(event.target.id);
+                        await target.rollModifiedSkill(event.target.dataset.skillname);
                     }
                     else {
-                        await target.rollSkill(event.target.id);
+                        await target.rollSkill(event.target.dataset.skillname);
                     }
                 }
             }, 300);

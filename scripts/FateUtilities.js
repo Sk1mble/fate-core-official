@@ -134,7 +134,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             const roll_track = this.element.querySelectorAll("i[name='roll_track']");
 
             roll_track.forEach(track => track?.addEventListener("click", async event => {
-                let name = event.target.id;
+                let name = event.target.dataset.trackname;
                 let uuid = event.currentTarget.getAttribute("data-uuid");
                 let actor = await fromUuid(uuid);
 
@@ -1722,7 +1722,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     async _edit_gm_points(event){
-        let user = game.users.contents.find(user => user.id == event.target.id);
+        let user = game.users.contents.find(user => user.id == event.target.dataset.gmid);
         let fp = parseInt(event.target.value)
         user.setFlag("fate-core-official","gmfatepoints",fp);
     }
@@ -1886,7 +1886,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     async _add_sit_aspect_from_track(event){
-        let aspect = event.target.id.split("_")[1];
+        let aspect = event.target.dataset.trackaspectbutton.split("_")[1];
         let name = event.target.id.split("_")[0];
         let text = name + " ("+aspect+")";
         let situation_aspects = [];
@@ -1951,8 +1951,8 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     async _on_aspect_change(event){
-        let id = event.target.id;
-        let parts = id.split("_");
+        let data = event.target.dataset.tokenaspect;
+        let parts = data.split("_");
         let t_id = parts[0];
         let name = parts[1];
         let text = event.target.value;
@@ -2644,7 +2644,6 @@ class acd extends foundry.applications.api.HandlebarsApplicationMixin(foundry.ap
         countdowns[safeName]=countdown;
         await game.settings.set("fate-core-official","countdowns",countdowns);
         await game.socket.emit("system.fate-core-official",{"render":true});
-        console.log(this.fu.editing);
         await this.fu.render(false);
     }
 

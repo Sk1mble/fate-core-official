@@ -127,7 +127,7 @@
         <div class="tab {{tabs.sheet.cssClass}} sheet mfate-sheet__tab mfate-sheet__tab--secondary" name="character_sheet" data-group="fcoSheet" data-tab="sheet">
             <!-- PANELS START -->
             <div class="mfate-sheet__column">
-                <div id="{{document.name}}_sheet_div" class="mfate-panel mfate-panel--skills">
+                <div id="{{document.id}}_sheet_div" class="mfate-panel mfate-panel--skills">
                     <div class="mfate-panel__header">
                         <div class="mfate-panel__header-label">{{ skillsLabel }}</div>
                         <!-- <button class="mfate-panel__header-button">Settings</button>
@@ -147,10 +147,10 @@
                             <li class="mfate-skills-list__item">
                                 <div class="mfate-skills-list__number">{{this.rank}}</div>
                                 <div class="mfate-skills-list__adjective">({{lookup ../ladder this.rank}})</div>
-                                <div class="mfate-skills-list__skill-name mf_draggable" name="skill" id="{{this.name}}" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
+                                <div class="mfate-skills-list__skill-name mf_draggable" name="skill" data-skillname="{{this.name}}{{#if ../GM}}draggable="true"{{/if}} data-mfdtype="skill" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">
                                     {{this.name}} 
                                     {{#if ../this.document.isOwner}}
-                                    <i id="{{this.name}}" style="float:right" icon class="fas fa-dice fu_button"></i>
+                                    <i data-skillname="{{this.name}}" style="float:right" icon class="fas fa-dice fu_button"></i>
                                     {{/if}}
                                     {{#if this.extra_id}}<i data-extra_id="{{this.extra_id}}" class="fas fa-plug fu_button" style="float:right; padding-right:10px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}
                                 </div>
@@ -169,7 +169,7 @@
                             <div class="mfate-panel__header" name="tracks_header">
                                 <b class="mfate-panel__header-label">{{localize 'fate-core-official.tracks'}}</b>
                                 {{#if this.document.isOwner}}
-                                    <select class="mfate-panel__header-select" id="track_category">
+                                    <select class="mfate-panel__header-select" name="track_category">
                                         <option value="All" {{#if (eq category "All")}}selected="selected"{{/if}}>{{localize 'fate-core-official.All'}}</option>
                                         {{#each track_categories}}
 										{{#if (eq this "Combat")}}
@@ -192,18 +192,18 @@
                             </div>
                             <div name="tracks_body" class ="tracks_body mfate-panel__body" style="scrollbar-width:thin">
                                 {{#each system.tracks}}{{#if this.enabled}}{{#if (category ../category this.category)}} 
-                                <div class="mfate-tracks__list" id ="track_{{this.name}}" title="{{this.recovery_type}} - {{localize 'fate-core-official.RightClickForDetails'}}">
+                                <div class="mfate-tracks__list" name ="track_{{this.name}}" title="{{this.recovery_type}} - {{localize 'fate-core-official.RightClickForDetails'}}">
                                     <div class="mfate-tracks__item">
                                         <div class="mfate-tracks__item-label">
                                             <div name="track_name" style="font-family:var(--fco-font-family)">
-                                                <i name="expandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.name '_track'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandTrack"></i>
+                                                <i name="expandTrack" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.name '_track'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} data-trackname = "{{this.name}}"></i>
                                                 <i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="track" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; font-weight:bold; font-family: var(--fco-font-family);">{{this.name}}</i>
                                                 {{#if ../this.document.isOwner}}
                                                     {{#if (eq this.rollable "full")}}
-                                                        <i id="{{this.name}}" name="roll_track" icon class="fas fa-dice fu_button" style="cursor:pointer"></i>
+                                                        <i data-trackname ="{{this.name}}" name="roll_track" icon class="fas fa-dice fu_button" style="cursor:pointer"></i>
                                                     {{/if}}
                                                     {{#if (eq this.rollable "empty")}}
-                                                        <i id="{{this.name}}" name="roll_track" icon class="fas fa-dice fu_button" style=""cursor:pointer"></i>
+                                                        <i data-trackname ="{{this.name}}" name="roll_track" icon class="fas fa-dice fu_button" style=""cursor:pointer"></i>
                                                     {{/if}}
                                                 {{/if}}
                                             </div>
@@ -214,7 +214,7 @@
                                         <div class="mfate-tracks__boxes">
                                             {{#each this.box_values}} {{#if this}}
                                             <label class="box">
-                                                <input type="checkbox" class="fco-box" id="{{../name}}_{{@index}}_false" style="opacity:0;width:25px; height:25px; float:left;" checked="checked">
+                                                <input type="checkbox" class="fco-box" data-boxinfo="{{../name}}_{{@index}}_false" style="opacity:0;width:25px; height:25px; float:left;" checked="checked">
                                                     <span class="checkmark"></span>
                                                     <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 14px; color: var(--fco-sheet-text-color);">
                                                         {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
@@ -222,7 +222,7 @@
                                                 </input>
                                             </label> {{else}}
                                             <label class="box">
-                                                <input type="checkbox" class="fco-box" id="{{../name}}_{{@index}}_true" style="opacity:0; width:25px; height:25px; float:left;">
+                                                <input type="checkbox" class="fco-box" data-boxinfo="{{../name}}_{{@index}}_true" style="opacity:0; width:25px; height:25px; float:left;">
                                                     <span class="checkmark"></span>
                                                     <i style="font-style:normal; position: absolute; left: 0; top: 0; transform: translate(-55%, -35%); font-weight: 900; font-size: 14px; color: var(--fco-sheet-text-color)">
                                                         {{#if (eq ../label "escalating")}}{{add1 @index}}{{else}}{{#if (eq ../label "none")}}{{else}}{{../label}}{{/if}}{{#if (eq ../harm_can_absorb 0)}}{{else}}{{../harm_can_absorb}}{{/if}}{{/if}}
@@ -244,8 +244,8 @@
                                     </div>
                                 </div>
                                 {{#if (expanded ../this.document (fco_concat this.name '_track'))}}<div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}_track_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
-                                    <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none;" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}_track_notes" name="system.tracks.{{@key}}.notes">{{{this.notes}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_track_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
+                                    <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none;" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_track_notes" name="system.tracks.{{@key}}.notes">{{{this.notes}}}</div>
                                 {{/if}}
                                 {{/if}}{{/if}}                                
                                 {{/each}}
@@ -270,13 +270,13 @@
                         {{#each system.aspects}}
 
                         <li name="aspect" class="mfate-aspects-list__item">
-                            <div id="{{this.name}}" name="{{this.name}}" title='{{{fco_strip this.richDesc}}}' class="mfate-aspects-list__label "><i name="expandAspect" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandAspect"></i><i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; padding-left:5px">{{this.name}}</i>
+                            <div name="{{this.name}}" title='{{{fco_strip this.richDesc}}}' class="mfate-aspects-list__label "><i name="expandAspect" data-aspectname = "{{this.name}}" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.name '_aspect'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}}></i><i class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="aspect" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}" style="font-style:normal; padding-left:5px">{{this.name}}</i>
                             {{#if this.extra_id}}<i data-extra_id="{{this.extra_id}}" class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}</div>
-                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" id="{{this.name}}" {{#if (eq this.extra_id undefined)}}{{else}}disabled="disabled"{{/if}} name="system.aspects.{{@key}}.value">{{this.value}}</textarea><br>
+                            <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" {{#if (eq this.extra_id undefined)}}{{else}}disabled="disabled"{{/if}} name="system.aspects.{{@key}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (fco_concat this.name '_aspect'))}}
                                 <div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                <div class="cs_box mfate-aspects-notes__input" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}_aspect_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
-                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="display:none;" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}_aspect_notes" name="system.aspects.{{@key}}.notes" {{#if this.extra_id}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
+                                <div class="cs_box mfate-aspects-notes__input" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_aspect_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
+                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="display:none;" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_aspect_notes" name="system.aspects.{{@key}}.notes" {{#if this.extra_id}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
                                 {{/if}}
                         </li>
                         {{/each}}
@@ -304,19 +304,19 @@
                                 <div class="mfate-stunts__row">
                                     <div class="mfate-stunts__row-header">
                                         <div class="mfate-stunts__row-header-cell">
-                                            <i name="expandStunt" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.name '_stunt'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} id="{{this.name}}_expandStunt"></i>
+                                            <i name="expandStunt" style="width:20px; height:20px; float:left; background-color:transparent; border:none" {{#if (expanded ../this.document (fco_concat this.name '_stunt'))}}icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{else}}icon class = "fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}"{{/if}} data-stuntname="{{this.name}}"></i>
                                             <i style="font-style:normal; padding-left:5px" class="mf_draggable" {{#if ../GM}}draggable="true"{{/if}} data-mfdtype="stunt" data-mfname="{{this.name}}" data-mfactorid="{{../document.id}}">{{this.name}} ({{this.linked_skill}})</i>
                                             {{#if ../this.document.isOwner}}
                                                 {{#if (eq this.extra_id undefined)}}
-                                                <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon fu_button" name="delete_stunt" id="{{this.name}}_delete"></button> 
+                                                <button type="button" i icon class="fas fa-trash mfate-stunts__row-header-icon fu_button" name="delete_stunt" data-stuntname="{{this.name}}"></button> 
                                                 {{/if}}
                                                 {{#if this.extra_id}}<i data-extra_id="{{this.extra_id}}" class="fas fa-plug fu_button" style="float:right; padding-right:7px; padding-left:9px" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}
                                                 {{#if (eq this.extra_id undefined)}}
-                                                <button type="button" name="edit_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon fu_button" id="{{this.name}}_edit"></button> {{#if ../GM}}
-                                                    <button type="button" name="db_stunt" title="{{localize 'fate-core-official.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon fu_button" id="{{this.name}}_db"></button> {{/if}}
+                                                <button type="button" name="edit_stunt" i icon class="fas fa-edit mfate-stunts__row-header-icon fu_button" data-stuntname="{{this.name}}"></button> {{#if ../GM}}
+                                                    <button type="button" name="db_stunt" title="{{localize 'fate-core-official.AddStunt'}}" i icon class="fas fa-upload mfate-stunts__row-header-icon fu_button" data-stuntname = "{{this.name}}"></button> {{/if}}
                                                 {{else}}{{/if}}
                                                 {{#if (eq this.linked_skill (localize 'fate-core-official.None'))}}{{else}}                                            
-                                                    <button type="button" name="stunt_name" id="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon fu_button"></button>                                            
+                                                    <button type="button" name="stunt_name" data-linkedskill="{{this.name}}_{{this.linked_skill}}_{{this.bonus}}" i icon class="fas fa-dice mfate-stunts__row-header-icon fu_button"></button>                                            
                                                 {{/if}}
                                                 {{#if this.macro}}
                                                     <button type="button" data-stunt="{{@key}}" name="stunt_macro"  i icon class="fas fa-bolt-lightning mfate-stunts__row-header-icon fu_button" title="{{localize 'fate-core-official.activate_macro'}}"></button>
@@ -326,12 +326,12 @@
                                     </div>
                                     {{#unless (expanded ../this.document (fco_concat this.name '_stunt'))}}{{else}}
                                     <div class="mfate-stunts__row-body">
-                                        <div>
+                                        <div style="display:flex; flex-direction:row; gap:2px">
                                             {{#each this.box_values}}
                                                 {{#if this}}
-                                                        <input type="checkbox" class="stunt_box" data-index="{{@key}}" data-stunt="{{../this.name}}" style="width:25px; height:25px; float:left;" checked="checked"></input>
+                                                        <input type="checkbox" class="stunt_box" data-index="{{@key}}" data-stunt="{{../this.name}}" style="width:25px; height:25px; margin:0px" checked="checked"></input>
                                                 {{else}} 
-                                                        <input type="checkbox" class="stunt_box" data-index="{{@key}}" data-stunt="{{../this.name}}" style="width:25px; height:25px; float:left;"></input>
+                                                        <input type="checkbox" class="stunt_box" data-index="{{@key}}" data-stunt="{{../this.name}}" style="width:25px; height:25px; margin:0px"></input>
                                                 {{/if}}
                                             {{/each}}
                                         </div>
@@ -340,10 +340,10 @@
                                     <div class="mfate-stunts__row-footer">
                                         <div class="mfate-stunts__row-footer-cell">
                                             {{#if this.overcome}}
-                                            <b id=" Overcome" style="font-family:Fate Core">O</b> {{/if}} {{#if this.caa}}
-                                            <b id="Create An Advantage" style="font-family:Fate Core">C</b> {{/if}}{{#if this.attack}}
-                                            <b id="Attack" style="font-family:Fate Core">A</b>{{/if}} {{#if this.defend}}
-                                            <b id="Defend" style="font-family:Fate Core">D</b>{{/if}}
+                                            <b style="font-family:Fate Core">O</b> {{/if}} {{#if this.caa}}
+                                            <b style="font-family:Fate Core">C</b> {{/if}}{{#if this.attack}}
+                                            <b style="font-family:Fate Core">A</b>{{/if}} {{#if this.defend}}
+                                            <b style="font-family:Fate Core">D</b>{{/if}}
                                         </div>
                                     </div>
                                     {{/unless}}

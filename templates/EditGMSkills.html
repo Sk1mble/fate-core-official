@@ -10,7 +10,7 @@
     {{#if (eq this.extra_id undefined)}}
     <tr>
         <td style="width:20px; padding-top:0rem; padding-bottom:0.1rem">
-            <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" checked name="{{this.name}}"}>
         </td>
         <td>
             {{this.name}}
@@ -27,7 +27,7 @@
         {{#if (eq this.extra_id undefined)}}
         <tr>
             <td style="width: 20px; padding-top:0rem; padding-bottom:0.1rem">
-                <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
+                <input type="checkbox" class="skill_check_box" checked name="{{this.name}}"}>
             </td>
             <td>
                 {{this.name}}
@@ -44,10 +44,10 @@
     {{#if (eq this.extra_id undefined)}}
     <tr>
         <td style="width:20px; padding-top:0rem; padding-bottom:0.1rem">
-            <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" checked name="{{this.name}}"}>
         </td>
         <td>
-            <input type="text" style="width:95%;" name="adhoc_skill_name" value="{{this.name}}" data-oldName="{{this.name}}"></input>
+            <input checked type="text" style="width:95%;" name="adhoc_skill_name" value="{{this.name}}" data-oldName="{{this.name}}"></input>
         </td>
     </tr>
     {{else}}{{/if}}
@@ -60,7 +60,7 @@
     {{#each absent_skills}}
     <tr>
         <td style="width:20px; padding-top:0rem; padding-bottom:0.1rem">
-            <input type="checkbox" class="skill_check_box" id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" name="{{this.name}}"}>
         </td>
         <td>
             {{this.name}}
@@ -75,7 +75,7 @@
     {{#each non_pc}}
     <tr>
         <td style="width: 20px; padding-top:0rem; padding-bottom:0.1rem">
-            <input type="checkbox" class="skill_check_box" id="{{this.name}}" name="{{this.name}}_present"}>
+            <input type="checkbox" class="skill_check_box" name="{{this.name}}"}>
         </td>
         <td>
             {{this.name}}
@@ -87,18 +87,18 @@
 
 <div style="display:flex; flex-direction:row; gap:10px">
     <span style="width: 20em">{{localize 'fate-core-official.AdHocSkillToAdd'}}:</span>
-    <input name="ad_hoc_input" type="text" id="ad_hoc_input" style="width:80%">
-    <button style="width:30px; height:30px;"" type="button" id="add_ah_button" i icon class="fas fa-plus"></button>
+    <input name="ad_hoc_input" type="text" style="width:80%">
+    <button style="width:30px; height:30px;"" type="button" name="add_ah_button" i icon class="fas fa-plus"></button>
 </div>
 
 <div style="margin-top: 20px; display:flex; flex-direction:row; gap:10px">
-    <button type="button" id="select_all_skills_button">
+    <button type="button" name="select_all_skills_button">
         {{localize 'fate-core-official.CheckAllSkills'}}
     </button>
-    <button type="button" id="deselect_all_skills_button">
+    <button type="button" name="deselect_all_skills_button">
         {{localize 'fate-core-official.UnCheckAllSkills'}}
     </button>
-    <button type="button" id="add_remove_button">
+    <button type="button" name="add_remove_button">
         {{localize 'fate-core-official.AddRemoveSkills'}}
     </button>
 </div>

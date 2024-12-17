@@ -39,7 +39,7 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
     static PARTS = {
         EditPlayerSkillsTemplate:{
             template: "systems/fate-core-official/templates/EditPlayerSkills.html",
-            scrollable: ["#skills_editor"]
+            scrollable: [".fco_skills_editor"]
         }
     }
 
@@ -261,9 +261,9 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
 
         const skillButtons = this.element.querySelectorAll("button[class='skill_button']");
         skillButtons.forEach(button => button?.addEventListener("click", event => this._onSkillButton(event)));
-        const sortButton = this.element.querySelectorAll("button[id='sort']");
+        const sortButton = this.element.querySelectorAll("button[name='fatecoreofficial_sort_skills']");
         sortButton.forEach(button => button?.addEventListener("click", event => this._onSortButton(event)));
-        const editButton = this.element.querySelector("button[id='edit_p_skills']");
+        const editButton = this.element.querySelector("button[name='edit_p_skills']");
         editButton?.addEventListener("click", event => this._onEditButton(event));  
     }
 
@@ -281,7 +281,7 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
         let inputs = this.element.querySelectorAll("input[type='number']");
         
         for (let i = 0 ; i < inputs.length; i++){ 
-            let skill_name = inputs[i].id.split("_")[0];
+            let skill_name = inputs[i].name;;
             let rank = parseInt(inputs[i].value);
             tps.push({"name":skill_name,"rank":rank})
         }
@@ -358,12 +358,12 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
 
      //Here are the action listeners
      _onRender (context, options) {
-        const add_ad_hoc = this.element.querySelector("button[id='add_ah_button']");
+        const add_ad_hoc = this.element.querySelector("button[name='add_ah_button']");
         add_ad_hoc?.addEventListener("click", event => this._adHocButton(event));
-        const confirm = this.element.querySelector("button[id='add_remove_button']")
+        const confirm = this.element.querySelector("button[name='add_remove_button']")
         confirm?.addEventListener("click", event => this._confirm(event));
 
-        const selectAll = this.element.querySelector("button[id='select_all_skills_button']");
+        const selectAll = this.element.querySelector("button[name='select_all_skills_button']");
         selectAll?.addEventListener("click", event => {
             const boxes = this.element.querySelectorAll("input[class='skill_check_box']");
             for (let box of boxes){
@@ -371,7 +371,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
             }
         })
 
-        const deSelectAll = this.element.querySelector("button[id='deselect_all_skills_button']");
+        const deSelectAll = this.element.querySelector("button[name='deselect_all_skills_button']");
         deSelectAll?.addEventListener("click", event => {
             const boxes = this.element.querySelectorAll("input[class='skill_check_box']");
             for (let box of boxes){
@@ -412,7 +412,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
             let cbox;
             let name = this.player_skills[s].name;
             try{
-                cbox = this.element.querySelector(`input[id="${name}"]`);
+                cbox = this.element.querySelector(`input[name="${name}"]`);
             } catch {
 
             }
@@ -427,7 +427,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
             let name = world_skills[w].name;
             let cbox;
             try{
-                cbox = this.element.querySelector(`input[id="${name}"]`);
+                cbox = this.element.querySelector(`input[name="${name}"]`);
             } catch {
         
             }  
@@ -445,7 +445,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     async _adHocButton(event){
-        let name = this.element.querySelector("input[id='ad_hoc_input']").value
+        let name = this.element.querySelector("input[name='ad_hoc_input']").value
         var newSkill=undefined;
         if (name!= undefined && name !=""){
             newSkill= new fcoSkill({

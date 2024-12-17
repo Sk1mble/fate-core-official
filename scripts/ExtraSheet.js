@@ -403,7 +403,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
         }))
 
         const applyToCharacterButton = this.element.querySelector("button[name='applyExtraToCharacter']");
-        applyToCharacterButton.addEventListener("click", async event => {
+        applyToCharacterButton?.addEventListener("click", async event => {
             if (this.document.parent){
                 if (this.document.parent.type == "fate-core-official" && this.document.system.active){
                     await this.document.parent.updateFromExtra(this.document);
