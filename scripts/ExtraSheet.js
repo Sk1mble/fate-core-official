@@ -125,7 +125,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
         const skillsButton = this.element.querySelector("div[name='edit_item_skills']"); // Button for launching the skill editor. Singleton.
         skillsButton?.addEventListener("click", event => this._onSkillsButton(event));
 
-        const cat_select = this.element.querySelector("select[id='item_track_category']"); // The selection box for filtering track categories. Singleton.
+        const cat_select = this.element.querySelector("select[name='item_track_category']"); // The selection box for filtering track categories. Singleton.
         cat_select?.addEventListener("change", event => this._cat_select_change (event));
 
         const tracks_button = this.element.querySelector("div[name='edit_item_tracks']"); // Button for launching the track editor. Singleton.
@@ -537,7 +537,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     async _db_add_click(event){
-        let name = event.target.id.split("_")[0];
+        let name = event.target.dataset.stuntname;
         let stunt = foundry.utils.duplicate(fcoConstants.gbn(this.object.system.stunts, name));
         let key = fcoConstants.tob64(stunt.name);
         await fcoConstants.wd().update({"system.stunts":{[`${key}`]:stunt}});
@@ -578,7 +578,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     async _onEdit (event){
-        let name=event.target.id.split("_")[0];
+        let name=event.target.dataset.stuntname;
         let editor = new EditPlayerStunts(this.object, fcoConstants.gbn(this.object.system.stunts, name), {new:false});
         editor.render(true);
         editor.setSheet(this);
@@ -592,7 +592,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
     async _onDelete(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            let name = event.target.id.split("_")[0];
+            let name = event.target.dataset.stuntname;
             let key = fcoConstants.gkfn(this.object.system.stunts, name)
             await this.object.update({"system.stunts":{[`-=${key}`]:null}});
         }
