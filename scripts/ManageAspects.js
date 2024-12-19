@@ -36,15 +36,15 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
     
     //Here are the action listeners
     _onRender(context, options) {
-        const editButton = this.element.querySelector("button[id='editAspect']");
-        const deleteButton = this.element.querySelector("button[id='deleteAspect']");
-        const addButton = this.element.querySelector("button[id='addAspect']");
-        const selectBox = this.element.querySelector("select[id='aspectListBox']");
-        const copyButton = this.element.querySelector("button[id='copyAspect']");
-        const exportAspect = this.element.querySelector("button[id='exportAspect']");
-        const importAspects = this.element.querySelector("button[id='importAspects']");
-        const exportAspects = this.element.querySelector("button[id='exportAspects']");
-        const orderAspects = this.element.querySelector("button[id='orderAspects']");
+        const editButton = this.element.querySelector("button[name='editAspect']");
+        const deleteButton = this.element.querySelector("button[name='deleteAspect']");
+        const addButton = this.element.querySelector("button[name='addAspect']");
+        const selectBox = this.element.querySelector("select[name='aspectListBox']");
+        const copyButton = this.element.querySelector("button[name='copyAspect']");
+        const exportAspect = this.element.querySelector("button[name='exportAspect']");
+        const importAspects = this.element.querySelector("button[name='importAspects']");
+        const exportAspects = this.element.querySelector("button[name='exportAspects']");
+        const orderAspects = this.element.querySelector("button[name='orderAspects']");
 
         editButton?.addEventListener("click", event => this._onEditButton(event));
         deleteButton?.addEventListener("click", event => this._onDeleteButton(event));
@@ -66,7 +66,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
 
     async _onExportAspect(event){
         let aspects = fcoConstants.wd().system.aspects;
-        let slb = this.element.querySelector("select[id='aspectListBox']").value;
+        let slb = this.element.querySelector("select[name='aspectListBox']").value;
         let key = fcoConstants.gkfn(aspects, slb)
         let aspect = aspects[key];
         let aspect_text = `{"${key}":${JSON.stringify(aspect, null, 5)}}`
@@ -124,7 +124,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
 
 
     async _onCopyButton(event){
-        let selectBox = this.element.querySelector("select[id='aspectListBox']");
+        let selectBox = this.element.querySelector("select[name='aspectListBox']");
         let name = selectBox.value.trim();
         if (name=="" || name == undefined){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectAnAspectFirst"));
@@ -151,7 +151,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
     async _onEditButton(event){
         //Launch the EditAspect FormApplication.
         let aspects = fcoConstants.wd().system.aspects;
-        let aspectName = this.element.querySelector("select[id='aspectListBox']").value;
+        let aspectName = this.element.querySelector("select[name='aspectListBox']").value;
         let aspect = fcoConstants.gbn(aspects, aspectName);
         let e = new EditAspect(aspect);
         e.render(true);
@@ -167,7 +167,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
         if (del){
             //Code to delete the selected aspect
             //First, get the name of the aspect from the HTML element aspectListBox
-            let aspectName = this.element.querySelector("select[id='aspectListBox'").value;
+            let aspectName = this.element.querySelector("select[name='aspectListBox'").value;
             
             //Find that aspect in the list of aspects
             let aspects=fcoConstants.wd().system.aspects;
@@ -250,11 +250,11 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
 
     //Here are the action listeners
     _onRender(context, options) {
-        const saveButton = this.element.querySelector("button[id='edit_aspect_save_changes']");
+        const saveButton = this.element.querySelector("button[name='edit_aspect_save_changes']");
         saveButton?.addEventListener("click", event => this._onSaveButton(event));
-        fcoConstants.getPen("edit_aspect_description");
-        const description_rich = document.getElementById("edit_aspect_description_rich");
-        const description = document.getElementById("edit_aspect_description");
+        fcoConstants.getPen("fatecoreofficial_edit_aspect_description");
+        const description_rich = document.getElementById("fatecoreofficial_edit_aspect_description_rich");
+        const description = document.getElementById("fatecoreofficial_edit_aspect_description");
 
         description_rich?.addEventListener('click', async event => {
             if (event.target.outerHTML.startsWith("<a data")) return;
@@ -289,7 +289,7 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
     async _onSaveButton(event){
         //Get the name and description of the aspect
         let name = document.getElementById("edit_aspect_name").value;
-        let description = DOMPurify.sanitize(document.getElementById("edit_aspect_description").innerHTML);
+        let description = DOMPurify.sanitize(document.getElementById("fatecoreofficial_edit_aspect_description").innerHTML);
         this._updateObject(event, {"name":name, "description":description})
     }    
 
@@ -371,10 +371,10 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
     _onRender(context, options) {
         const oa_up = this.element.querySelectorAll("button[name='oa_up']");
         const oa_down = this.element.querySelectorAll("button[name='oa_down']");
-        const oa_save = this.element.querySelector("button[id='oa_save']");
+        const oa_save = this.element.querySelector("button[name='oa_save']");
         
         oa_up.forEach(button => button?.addEventListener("click", event => {
-            let index = parseInt(event.target.id.split("_")[2]);
+            let index = parseInt(event.target.dataset.index);
             if (index > 0){
                 let aspect = this.data.splice(index,1)[0];
                 this.data.splice(index - 1, 0, aspect);
@@ -383,7 +383,7 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
         }))
 
         oa_down.forEach(button => button?.addEventListener("click", event => {
-            let index = parseInt(event.target.id.split("_")[2]);
+            let index = parseInt(event.target.dataset.index);
             if (index < this.data.length){
                 let aspect = this.data.splice(index, 1)[0];
                 this.data.splice(index + 1, 0, aspect);

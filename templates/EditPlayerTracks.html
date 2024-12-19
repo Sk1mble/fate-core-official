@@ -37,7 +37,7 @@
                                 <div style="display:flex; flex-direction:row; gap:5px">
                                     <button type="button" name = "{{../../cat}}_{{this.name}}" i icon class="fas fa-sort-up move_up" style="width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);"></button>
                                     <button type="button" name = "{{../../cat}}_{{this.name}}" i icon class="fas fa-sort-down move_down" style="width:25px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);"></button>
-                                    {{#if this.present}}<button type="button" name = "edit_entity_tracks" id="{{this.name}}" i icon class="fas fa-cogs" style="width:30px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);"></button>{{/if}}
+                                    {{#if this.present}}<button type="button" name = "edit_entity_tracks" data-name="{{this.name}}" i icon class="fas fa-cogs" style="width:30px; height:25px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);"></button>{{/if}}
                                 </div>
                             </td>
                 {{/if}}
@@ -47,7 +47,7 @@
         {{/each}}
     </table>
     </div><!--End body-->
-    <div id="buttons" style="width:400px; display:grid; gap:5px">
+    <div style="width:400px; display:grid; gap:5px">
         <button type="button" style="margin-bottom:5px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" name="save">{{localize 'fate-core-official.AddRemoveTracks'}}</button>
         {{#if GM}}<button style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);" type="button" name="ad_hoc">{{localize 'fate-core-official.AddAdHocTrack'}}</button>{{/if}}
     </div><!--End buttons div-->

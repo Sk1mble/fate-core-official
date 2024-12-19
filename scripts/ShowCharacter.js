@@ -58,32 +58,32 @@ class ShowCharacter extends foundry.applications.api.HandlebarsApplicationMixin(
         for (let i = 0; i < element_boxes?.length; i++){
             let element = element_boxes[i];
             if (element.checked){
-                if (element.id == "avatar"){
+                if (element.name == "avatar"){
                     elements.avatar=actor_data.img;
                 }
-                if (element.id == "biography"){
+                if (element.name == "biography"){
                     elements.biography = await fcoConstants.fcoEnrich(actor_data.system.details.biography.value, actor_data);
                 }
-                if (element.id == "description"){
+                if (element.name == "description"){
                     elements.description = await fcoConstants.fcoEnrich(actor_data.system.details.description.value, actor_data);
                 }
-                if (element.id == "aspects"){
+                if (element.name == "aspects"){
                     elements.aspects = actor_data.system.aspects;
                 }
-                if (element.id == "skills"){
+                if (element.name == "skills"){
                     elements.skills = actor_data.system.skills;
                 }
-                if (element.id == "tracks"){
+                if (element.name == "tracks"){
                     elements.tracks = actor_data.system.tracks;
                 }
-                if (element.id == "stunts"){
+                if (element.name == "stunts"){
                     let stunts = foundry.utils.duplicate(actor_data.system.stunts);
                     for (let stunt in stunts){
                         stunts[stunt].richDesc = await fcoConstants.fcoEnrich (stunts[stunt].description, actor_data);
                     }
                     elements.stunts = stunts;
                 }
-                if (element.id == "extras"){
+                if (element.name == "extras"){
                     let extras = foundry.utils.duplicate(actor_data.items);
                     for (let extra of extras){
                         extra.richDesc = await fcoConstants.fcoEnrich (extra.system.description.value, actor_data);

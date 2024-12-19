@@ -51,7 +51,7 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
    _onRender(context, options) {
         const saveTrackButton = this.element.querySelector("button[id='save_entity_track']");
         const edit_entity_linked_skillsButton = this.element.querySelector("button[id='edit_entity_linked_skills']");
-        const copy_track = this.element.querySelector("button[id='copy_entity']");
+        const copy_track = this.element.querySelector("button[id='copy_entity_track']");
         const export_track = this.element.querySelector("button[id='exportEntityTrack']");
 
         const track_label_select = this.element.querySelector("select[id='entity_track_label_select']");

@@ -104,7 +104,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
         checkbox?.forEach(cb => cb?.addEventListener("click", event => this._check(event)));
         const edit = this.element.querySelectorAll("button[name='edit_entity_tracks']");
         edit.forEach(button => button?.addEventListener('click', async event => {
-            let track = fcoConstants.gbn(this.object.system.tracks, event.target.id);
+            let track = fcoConstants.gbn(this.object.system.tracks, event.target.dataset.name);
             let e = new EditEntityTrack(track, this.object).render(true);
             e.origin = this;
         }));

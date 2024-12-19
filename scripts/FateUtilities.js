@@ -51,6 +51,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     static DEFAULT_OPTIONS = {
+        id:"FateUtilities",
         tag: "div",
         classes: ['fate', 'fu'],
         window: {
@@ -233,14 +234,14 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         const toggle_cd_visibility = this.element.querySelectorAll('button[name="toggle_cd_visibility"]');
         toggle_cd_visibility.forEach(cdbutton => cdbutton?.addEventListener('click', event => this._on_toggle_cd_visibility(event)));
 
-        const addConflict = this.element.querySelector('button[id="add_conflict"]');
+        const addConflict = this.element.querySelector('button[id="fco_add_conflict"]');
         addConflict?.addEventListener("click", async (event) => {
             let cbt = await Combat.create({scene: game.scenes.viewed.id});
             await cbt.activate();
             ui.combat.initialize({cbt});
         })
 
-        const nextConflict = this.element.querySelector('button[id="next_conflict"]');
+        const nextConflict = this.element.querySelector('button[id="fco_next_conflict"]');
         nextConflict?.addEventListener("click", async (event) => {
             let combats = game.combats.contents.filter(c => c.scene?.id == game.scenes.viewed.id);
             let unpinnedCombats = game.combats.contents.filter (c => c.scene == null);
@@ -309,8 +310,8 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         const iseAspects = this.element.querySelectorAll("button[name='iseAspects']");
         iseAspects?.forEach(element => element.addEventListener("click", event => this.iseAspect(event)));
 
-        const maximiseAspects = this.element.querySelector("button[id='maximiseAllAspects']");
-        const minimiseAspects = this.element.querySelector("button[id='minimiseAllAspects']");
+        const maximiseAspects = this.element.querySelector("button[id='fco_fu_maximiseAllAspects']");
+        const minimiseAspects = this.element.querySelector("button[id='fco_fu_minimiseAllAspects']");
 
         maximiseAspects?.addEventListener("click", async event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.aspectsMaximised = true);
@@ -322,8 +323,8 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             await this.render(false);
         })
 
-        const maximiseTracks = this.element.querySelector("button[id='maximiseAllTracks']");
-        const minimiseTracks = this.element.querySelector("button[id='minimiseAllTracks']");
+        const maximiseTracks = this.element.querySelector("button[id='fco_fu_maximiseAllTracks']");
+        const minimiseTracks = this.element.querySelector("button[id='fco_fu_minimiseAllTracks']");
 
         maximiseTracks?.addEventListener("click", async event => {
             game.scenes.viewed.tokens.contents.forEach(token => token.tracksMaximised = true);
@@ -489,13 +490,13 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         popcornButtons.forEach(button => button.addEventListener("click", event => this._onPopcornButton(event)));
         popcornButtons.forEach(button => button.addEventListener("contextmenu", event => this._onPopcornRemove(event)));
 
-        const nextButton = this.element.querySelector("button[id='next_exchange']");
+        const nextButton = this.element.querySelector("button[id='fco_next_exchange']");
         nextButton?.addEventListener("click", event => this._nextButton(event));
-        const endButton = this.element.querySelector("button[id='end_conflict']");
+        const endButton = this.element.querySelector("button[id='fco_end_conflict']");
         endButton?.addEventListener("click", event => this._endButton(event));
-        const timed_event = this.element.querySelector("button[id='timed_event']");
+        const timed_event = this.element.querySelector("button[id='fco_timed_event']");
         timed_event?.addEventListener("click", event => this._timed_event(event));
-        const category_select = this.element.querySelector("select[id='category_select']")
+        const category_select = this.element.querySelector("select[id='fco_fu_category_select']")
         category_select?.addEventListener("change", async event => {
                 this.category = category_select.value;
                 await this.render(false);
@@ -566,7 +567,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             let token = game.scenes.viewed.getEmbeddedDocument("Token", t_id);
             if (token.actor.sheet.rendered){
                 token.actor.sheet.maximize();
-                token.actor.sheet.bringToTop();
+                token.actor.sheet.bringToFront();
             } else {
                 token.actor.sheet.render(true);
             }
@@ -2213,7 +2214,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
 
             if (sheet.rendered){
                 sheet.maximize();
-                sheet.bringToTop();
+                sheet.bringToFront();
             } else {
                 sheet.render(true);
             }
@@ -2574,14 +2575,9 @@ Hooks.on('getSceneControlButtons', controls => {
       icon: "fas fa-theater-masks",
       onChange: async (event, active) => {
         if ( active ) {
-            let fu = new FateUtilities();
-            for (let app in ui.windows){
-                if (ui.windows[app]?.options?.id == "FateUtilities"){
-                    fu = ui.windows[app]
-                    fu.maximize();
-                }
-            }
+            let fu = await foundry.applications.instances.get("FateUtilities") ?? new FateUtilities();
             await fu.render(true);
+            fu.maximize();
         }
       },
       button: true
@@ -2752,6 +2748,7 @@ class TimedEvent {
 class FUAspectLabelClass extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static DEFAULT_OPTIONS = {
         tag: "form",
+        id: "FateUtilities",
         window:{
             icon: "fas fa-cog",
             title: this.title
@@ -3004,9 +3001,9 @@ Hooks.once('ready', async function () {
 
     game.socket.on("system.fate-core-official", render => {
         if (render.render){
-            let FU = Object.values(ui.windows).find(window=>window.options.id=="FateUtilities");
+            let FU = foundry.applications.instances.get("FateUtilities");
             if (FU != undefined){
-                let tab = FU._tabs[0].active;
+                let tab = FU.tabGroups.fuApp;
 
                 if (tab !== "game_info" && tab !== "scene"){
                     FU.delayedRender = true; 

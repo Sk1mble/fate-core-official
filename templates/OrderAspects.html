@@ -6,11 +6,11 @@
                     {{this.name}}
                 </div>
                 <div style="display:flex; flex-direction:row; min-width:20%">
-                    <button type="button" name = "oa_up" id="oa_up_{{@key}}" style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-up"></button>
-                    <button type="button" name = "oa_down" id="oa_down_{{@key}}" style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-down"></button>
+                    <button type="button" name="oa_up" data-index = "{{@key}}" style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-up"></button>
+                    <button type="button" name="oa_down" data-index = "{{@key}}" style="width:25px; height:25px; background-color:white" icon class="fas fa-sort-down"></button>
                 </div>
             </div>
         {{/each}}
-        <button type="button" id="oa_save" icon class="fas fa-save"></button>
+        <button type="button" name="oa_save" icon class="fas fa-save"></button>
     </div>    
 </div>

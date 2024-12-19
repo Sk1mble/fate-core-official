@@ -25,6 +25,10 @@
 * Removed potential for IDs used by fcoCharacter to be duplicated on any other character sheets.
 * Removed potential for IDs used by FateUtilities to be duplicated within the application.
 * Removed potential for ID duplicates in fcoExtra.
+* Removed potential for ID duplicates in ShowCharacter
+* Removed potential for ID duplicates in Things
+* Bugfix on StuntDB - if you add a stunt with the same name as an existing stunt it will now create the stunt with a number appended as intended.
+* Removed potential for ID duplicates in the main aspect editor applications.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

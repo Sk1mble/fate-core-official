@@ -99,23 +99,23 @@
         <tr>
             <td colspan = "3">
                 <div style="display:flex; flex-direction:row; gap:10px">
-                    <file-picker style="width: 500px" name = "fco_user_sheet_logo" id = "fco_user_sheet_logo" value="{{fco_user_sheet_logo}}"></file-picker>
-                    <img src = "{{fco_user_sheet_logo}}" id = "fco_user_sheet_logo_img" style="width:100px; height:auto"></img>
+                    <file-picker style="width: 500px" name = "fco_user_sheet_logo" value="{{fco_user_sheet_logo}}"></file-picker>
+                    <img src = "{{fco_user_sheet_logo}}" name = "fco_user_sheet_logo_img" style="width:100px; height:auto"></img>
                 </div>
             </td>
         </tr>
         <tr>
             <td colspan="3" style="text-align:center">
                 <div style="display:flex; flex-direction:row; gap:10px;">
-                    <button id="save_sheet_settings" style="width:5em;">{{localize 'fate-core-official.Save'}}</button>
-                    <button id="apply_sheet_settings" style="width:5em">{{localize 'fate-core-official.Apply'}}</button>
-                    <button id="undo" style="width:5em" title="{{localize 'fate-core-official.RestoreSheet'}}"><i icon class="fas fa-undo"></i></button>
-                    <button id="fco_view_colourSchemes" style="width:5em" title="{{localize 'fate-core-official.viewStoredColourSchemes'}}"><i icon class="fas fa-palette"></i></button>
-                    <button id="fco_store_colourScheme" style="width:5em" title="{{localize 'fate-core-official.storeColourScheme'}}"><i icon class="fas fa-download"></i></button>
-                    <button id="fco_load_custom" style="width:5em" title="{{localize 'fate-core-official.LoadCustomSheet'}}"><i icon class="fas fa-upload"></i></button>
-                    <button id="del_fco_custom" style="width:5em" title="{{localize 'fate-core-official.deleteSheetCustomisations'}}"><i icon class="fas fa-trash"></i></button>
+                    <button name="save_sheet_settings" style="width:5em;">{{localize 'fate-core-official.Save'}}</button>
+                    <button name="apply_sheet_settings" style="width:5em">{{localize 'fate-core-official.Apply'}}</button>
+                    <button name="undo" style="width:5em" title="{{localize 'fate-core-official.RestoreSheet'}}"><i icon class="fas fa-undo"></i></button>
+                    <button name="fco_view_colourSchemes" style="width:5em" title="{{localize 'fate-core-official.viewStoredColourSchemes'}}"><i icon class="fas fa-palette"></i></button>
+                    <button name="fco_store_colourScheme" style="width:5em" title="{{localize 'fate-core-official.storeColourScheme'}}"><i icon class="fas fa-download"></i></button>
+                    <button name="fco_load_custom" style="width:5em" title="{{localize 'fate-core-official.LoadCustomSheet'}}"><i icon class="fas fa-upload"></i></button>
+                    <button name="del_fco_custom" style="width:5em" title="{{localize 'fate-core-official.deleteSheetCustomisations'}}"><i icon class="fas fa-trash"></i></button>
                     {{#if (fco_isGM)}}
-                        <button id="fco_make_default" style="width:5em" title="{{localize 'fate-core-official.makeDefault'}}"><i icon class="fas fa-hammer"></i></button>
+                        <button name="fco_make_default" style="width:5em" title="{{localize 'fate-core-official.makeDefault'}}"><i icon class="fas fa-hammer"></i></button>
                     {{/if}}
                 </div>
             </td>

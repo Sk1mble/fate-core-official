@@ -55,11 +55,12 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
            let stunts = foundry.utils.duplicate(wd.system.stunts);
            let update_object = {};
             if (this.new){
+                console.log(formData["name"]);
                 let count = 1;
                 for (let stunt in stunts){
                     if (stunts[stunt].name.startsWith(formData["name"])) count++;
                 }
-                if (count >1) formData["name"] = this.stunt.name + " " + count;
+                if (count >1) formData["name"] = formData["name"] + " " + count;
             }
             let stuntKey = fcoConstants.gkfn(stunts, this.stunt.name);
 
@@ -178,6 +179,12 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
             this.element.querySelector("#edit_stunt_desc_rich").style.display = "none";
             this.element.querySelector("#edit_stunt_desc").style.display = 'block';
             this.element.querySelector("#edit_stunt_desc").focus();
+        })
+
+        description_rich?.addEventListener('keyup', async event => {
+            if (event.code =="Tab"){
+                description_rich?.click();
+            }
         })
 
         const stunt_desc = this.element.querySelector("div[id='edit_stunt_desc']");

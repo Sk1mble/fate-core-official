@@ -1,4 +1,4 @@
-<form id="FateUtilities" style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); height:100%; padding-left:5px; padding-right:5px">
+<form style="background:var(--fco-sheet-background-colour); color:var(--fco-sheet-text-colour); height:100%; padding-left:5px; padding-right:5px">
 <div style="height:100%; display:flex; flex-direction:column"> <!--Container div for absolutely everything-->
     <div> <!-- Container div for the Nav bar-->
         <nav class="navigation foo tabs" style="gap:0; line-height:normal">
@@ -18,8 +18,8 @@
                  <!----------------------BEGIN Aspects Tab-->
                     <div id="fu_aspects_tab" class="tab aspects {{tabs.aspects.cssClass}}" data-group = "fuApp" data-tab="aspects" style="padding:10px;">
                         <div style="display:flex; flex-direction:row">
-                            <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; background-color:Transparent; border:none" name="maximiseAspects" id="maximiseAllAspects" title="{{localize 'fate-core-official.MaximiseAll'}}" i icon class="fas fa-expand fu_button"></button>
-                            <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; background-color:Transparent; border:none" name="minimiseAspects" id="minimiseAllAspects" title="{{localize 'fate-core-official.MinimiseAll'}}" i icon class="fas fa-compress fu_button"></button>
+                            <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; background-color:Transparent; border:none" name="maximiseAspects" id="fco_fu_maximiseAllAspects" title="{{localize 'fate-core-official.MaximiseAll'}}" i icon class="fas fa-expand fu_button"></button>
+                            <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; background-color:Transparent; border:none" name="minimiseAspects" id="fco_fu_minimiseAllAspects" title="{{localize 'fate-core-official.MinimiseAll'}}" i icon class="fas fa-compress fu_button"></button>
                         </div>
                         <div id="aspects" name = "aspects" style="background-color:var(fco-sheet-background-colour); max-height:calc({{height}}px - 175px); overflow-y:auto">                
                             <table style="color:var(--fco-sheet-text-colour); font-size:{{fontSize}}pt; border:none; width: 99%; margin:0px">
@@ -40,7 +40,7 @@
                                 {{#each all_tokens}}{{#if this.actor.hasPlayerOwner}}{{#if (eq this.actor.permission 0)}}{{else}}
                                 <tr {{#if (eq this.object.controlled true)}} class = "fu_controlled fu_{{this.id}}" style="border-top:var(--fco-accent-colour) 2px solid"{{else}}class="fu_{{this.id}}" style="background-color:transparent; border-top:var(--fco-accent-colour) 4px solid"{{/if}}>
                                     <td style="width:20px; vertical-align:top">
-                                        <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
+                                        <button type="button" style="color:var(--fco-sheet-text-colour); width:25px; height:25px; border:none; background-color:Transparent" name="iseAspects" id="{{this.id}}_fco_fu_iseAspects" {{#if (eq this.aspectsMaximised false)}}i icon class="fas fa-expand fu_button" title="{{localize 'fate-core-official.Maximise'}}" {{else}}i icon class="fas fa-compress fu_button" title="{{localize 'fate-core-official.Minimise'}}"{{/if}}></button>
                                     </td>
                                     <td style="width:60px; padding:5px; text-align:left; vertical-align:top">
                                         {{#if (eq this.aspectsMaximised false)}}{{else}}
@@ -174,7 +174,7 @@
                     <div name="tracks" class="tab tracks {{tabs.tracks.cssClass}}" data-group = "fuApp" data-tab="tracks" style="color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); font-family:var(--fco-font-family); padding-top:10px; font-size:{{fontSize}}pt">
                         <div style = "display:flex; flex-direction:row; gap:5px; margin-bottom:10px">
                             <div style="margin-bottom:5px; padding-top:0.5em; padding-bottom:0.5em;">{{localize 'fate-core-official.Category'}}:</div>
-                            <select style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); width:20em; padding-right:100px; height:2em" id = "category_select">
+                            <select style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); width:20em; padding-right:100px; height:2em" id = "fco_fu_category_select">
                                 <option value="All" {{#if (eq category "{{localize 'fate-core-official.All'}}")}}selected{{/if}}>{{localize 'fate-core-official.All'}}</option>
                                 {{#each categories}}
                                     {{#if (eq this "Combat")}}
@@ -197,8 +197,8 @@
                             {{/if}}
                         </div>
                         <div style="display:flex; flex-direction:row">
-                            <button type="button" style="width:25px; height:25px; color:var(--fco-sheet-text-colour); border:none; background-color:Transparent" name="maximiseTracks" id="maximiseAllTracks" title="{{localize 'fate-core-official.MaximiseAll'}}" i icon class="fas fa-expand fu_button"></button>
-                            <button type="button" style="width:25px; height:25px; color:var(--fco-sheet-text-colour); border:none; background-color:Transparent" name="minimiseTracks" id="minimiseAllTracks" title="{{localize 'fate-core-official.MinimiseAll'}}" i icon class="fas fa-compress fu_button"></button>
+                            <button type="button" style="width:25px; height:25px; color:var(--fco-sheet-text-colour); border:none; background-color:Transparent" name="maximiseTracks" id="fco_fu_maximiseAllTracks" title="{{localize 'fate-core-official.MaximiseAll'}}" i icon class="fas fa-expand fu_button"></button>
+                            <button type="button" style="width:25px; height:25px; color:var(--fco-sheet-text-colour); border:none; background-color:Transparent" name="minimiseTracks" id="fco_fu_minimiseAllTracks" title="{{localize 'fate-core-official.MinimiseAll'}}" i icon class="fas fa-compress fu_button"></button>
                         </div>
                         <div id="fu_tracks_tab" style="overflow-y:auto; max-height:calc({{height}}px - 210px)">
 
@@ -690,15 +690,15 @@
                     <tr style="margin-bottom:10px">
                         <td>
                             <div style="display:flex; flex-direction:row; gap:5px">
-                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="next_exchange" title="{{#if (eq conflictExchange 0)}}{{localize 'fate-core-official.BeginConflict'}}{{else}}{{localize 'fate-core-official.NextExchange'}}{{/if}}" i icon class="fas fa-forward fu_button"></button>
-                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="timed_event" title="{{localize 'fate-core-official.TimedEvent'}}" i icon class="fas fa-clock fu_button"></button>  
+                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="fco_next_exchange" title="{{#if (eq conflictExchange 0)}}{{localize 'fate-core-official.BeginConflict'}}{{else}}{{localize 'fate-core-official.NextExchange'}}{{/if}}" i icon class="fas fa-forward fu_button"></button>
+                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="fco_timed_event" title="{{localize 'fate-core-official.TimedEvent'}}" i icon class="fas fa-clock fu_button"></button>  
                             </div>
                         </td>
                         <td style="padding-right:5px">
                             <div style="display:flex; flex-direction:row; gap:5px">
-                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" {{#unless (gt numConflicts 1)}}disabled = "disabled"{{/unless}} id="next_conflict" title="{{localize 'fate-core-official.NextConflict'}}" i icon class="fas fa-arrow-right fu_button"></button>                                        
-                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="add_conflict" title="{{localize 'fate-core-official.AddConflict'}}" i icon class="fas fa-plus fu_button"></button>                                      
-                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:right;" id="end_conflict" title="{{localize 'fate-core-official.EndConflict'}}" i icon class="fas fa-trash fu_button"></button>
+                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" {{#unless (gt numConflicts 1)}}disabled = "disabled"{{/unless}} id="fco_next_conflict" title="{{localize 'fate-core-official.NextConflict'}}" i icon class="fas fa-arrow-right fu_button"></button>                                        
+                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:left" id="fco_add_conflict" title="{{localize 'fate-core-official.AddConflict'}}" i icon class="fas fa-plus fu_button"></button>                                      
+                                <button type="button" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px; float:right;" id="fco_end_conflict" title="{{localize 'fate-core-official.EndConflict'}}" i icon class="fas fa-trash fu_button"></button>
                             </div>
                         </td>
                     </tr>

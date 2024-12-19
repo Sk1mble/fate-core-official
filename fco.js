@@ -149,11 +149,9 @@ async function setupSheet(){
     document.documentElement.style.setProperty('--fco-foundry-interactable-color', `${val}`);
 
     // Re-render to make sure the logo is updated correctly.
-    for (let window in ui.windows){
-        if (ui.windows[window].constructor.name == "fcoCharacter"){
-            ui.windows[window].render(false);
-          }  
-    }
+    foundry.applications.instances.forEach(app => {
+        if (app.constructor.name == "fcoCharacter") app.render(false);
+    })
 }
 
 function setupFont(){
@@ -970,11 +968,9 @@ game.settings.register("fate-core-official", "refreshTotal", {
     type: Number,
     default:3,
     onChange: () =>{
-        for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                ui.windows[app]?.render(false);
-            }
-        }
+        foundry.applications.instances.forEach(app => {
+            if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+        })
     }
 });
 
@@ -997,11 +993,9 @@ game.settings.register("fate-core-official","freeStunts", {
     restricted:true,
     default:3,
     onChange: () =>{
-        for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                ui.windows[app]?.render(false);
-            }
-        }
+        foundry.applications.instances.forEach(app => {
+            if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+        })
     }
 })
 
@@ -1015,11 +1009,9 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:20,
         onChange: () =>{
-            for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+            foundry.applications.instances.forEach(app => {
+                if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+            })
         }
     });
 
@@ -1032,11 +1024,9 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:true,
         onChange: () =>{
-            for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+            foundry.applications.instances.forEach(app => {
+                if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+            })
         }
     })
 
@@ -1049,11 +1039,9 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:true,
         onChange: () =>{
-            for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+            foundry.applications.instances.forEach(app => {
+                if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+            })
         }
     })
 
@@ -1144,11 +1132,6 @@ game.settings.register("fate-core-official","freeStunts", {
         onChange: () =>{
             // Do the things we need to do - proably just setupSheet and re-render for the logo
             setupSheet();
-            for (let window in ui.windows){
-              if (ui.windows[window].constructor.name == "fcoCharacter"){
-                ui.windows[window].render(false);
-              }  
-            } 
         }
     })
 
@@ -1388,12 +1371,8 @@ game.settings.register("fate-core-official","freeStunts", {
             step: 1,
         },
         default:12,
-        onChange:() => {
-            for (let app in ui.windows){
-                if (ui.windows[app]?.options?.id == "FateUtilities"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+        onChange:async () => {
+            await foundry.applications.instances.get("FateUtilities")?.render(false);
         }
     });
 
@@ -1404,12 +1383,8 @@ game.settings.register("fate-core-official","freeStunts", {
         config: true,
         type: String,
         default:"",
-        onChange:() => {
-            for (let app in ui.windows){
-                if (ui.windows[app]?.options?.id == "FateUtilities"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+        onChange:async () => {
+            await foundry.applications.instances.get("FateUtilities")?.render(false);
         }
     });
 
@@ -1630,7 +1605,7 @@ class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin
 
     static async #updateObject(event, form, formDataExtended){
         let formData = formDataExtended.object;
-        let button = event.submitter.id;
+        let button = event.submitter.name;
         let scheme = {
             "sheet_header_colour": formData.sheet_header_colour,
             "sheet_accent_colour": formData.sheet_accent_colour,
@@ -1718,12 +1693,12 @@ class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin
             let value =  await new Promise(resolve => {
                 new foundry.applications.api.DialogV2({
                     window:{title: game.i18n.localize("fate-core-official.LoadCustomSheet")},
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="custom_sheet_value">${text}</textarea></div>`,
+                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="fatecoreofficial_custom_sheet_value">${text}</textarea></div>`,
                     buttons: [{
                             action: "Populate",
                             label: game.i18n.localize("fate-core-official.PopulateFromPasted"),
                             callback: () => {
-                                resolve (document.getElementById("custom_sheet_value").value);
+                                resolve (document.getElementById("fatecoreofficial_custom_sheet_value").value);
                             },
                             default: true
                         }]
@@ -1763,12 +1738,12 @@ class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin
     }
 
     async _onRender(){
-        let logo = document.getElementById("fco_user_sheet_logo");
+        let logo = this.element.querySelector(`file-picker[name="fco_user_sheet_logo"]`);
         logo?.addEventListener("change", () => {
             if (logo.value == "world"){                
                 logo.value = game.settings.get("fate-core-official", "fco-world-sheet-scheme").fco_user_sheet_logo;
             } 
-            document.getElementById("fco_user_sheet_logo_img").src = logo.value;
+            this.element.querySelector('img[name="fco_user_sheet_logo_img"]').src = logo.value;
         })
     }
 }

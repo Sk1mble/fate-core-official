@@ -33,7 +33,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
     static PARTS = {
         form: {
             template:'systems/fate-core-official/templates/ThingSheet.html',
-            scrollable: ['#mthing-content'],
+            scrollable: ['.mthing-extras__content'],
         }
     }
 
@@ -194,7 +194,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
 
         for (let el of expandExtra) {
             el?.addEventListener("click", event => {
-                let e_id = event.target.id.split("_")[0];
+                let e_id = event.target.dataset.id;
                 let key = this.actor.id+e_id+"_extra";
                 if (game.user.expanded == undefined){
                     game.user.expanded = {};
@@ -272,7 +272,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
 
     async _on_extras_grab(event, html){
         // This is a convenience method for people who are controlling a single character.
-        let id = event.target.id.split("_")[0];
+        let id = event.target.dataset.id.split("_")[0];
         
         let character = game.user.character;
 
@@ -300,7 +300,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
 
     async _on_extras_edit_click(event, html){
         let items = this.actor.items;
-        let item = items.get(event.target.id.split("_")[0]);
+        let item = items.get(event.target.dataset.id);
         let e = new ExtraSheet(item);
         await e.render(true);
     }
@@ -308,7 +308,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
     async _on_extras_delete(event, html){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            await this.actor.deleteEmbeddedDocuments("Item", [event.target.id.split("_")[0]]);
+            await this.actor.deleteEmbeddedDocuments("Item", [event.target.dataset.id]);
         }
     }
 
