@@ -110,15 +110,25 @@
                 <div class="mfate-panel__header">
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Notes'}}{{#if GM}}{{#if system.details.notes.GM}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-on mfate-panel__header-button"></i>{{else}}<i style="padding-left:10px" id="{{this.document.id}}_toggle_gm_notes" icon class="fas fa-toggle-off mfate-panel__header-button"></i>{{/if}}<span style="font-size:x-small">{{localize 'fate-core-official.gmonlyquestion'}}</span>{{/if}}</div>
                 </div>
-                <div name="notes_body" class="mfate-panel__body notes_body" style="padding-top:6px">
+                <div name="notes_body" class="mfate-panel__body notes_body">
                     {{#if system.details.notes.GM}}
-                        {{#if GM}}<div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="system.details.notes.value" style="display:none; max-width:100%;" data-edit="system.details.notes.value">{{{system.details.notes.value}}}</div>
-                                  <div class="mfate-sheet-notes mfate-notes__content " id="{{this.document.id}}_notes_rich" tabindex = "0"style="max-width:100%;" data-edit="system.details.notes.value">{{{system.details.notes.rich}}}</div>
-                            {{else}}<div>These notes are for the GM's eyes only...</div>
+                        {{#if GM}}
+                            <prose-mirror class="fco_prose_mirror" name="system.details.notes.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.notes.value}}" collaborate="true">
+                                {{{system.details.notes.rich}}}
+                            </prose-mirror>
+                        {{else}}
+                            <div>These notes are for the GM's eyes only...</div>
                         {{/if}}
                     {{else}}
-                        <div class="mfate-sheet-notes" id="{{this.document.id}}_notes" name="system.details.notes.value" style="min-height:100%; display:none; max-width:100%; data-edit="system.details.notes.value">{{{system.details.notes.value}}}</div>
-                        <div class="mfate-sheet-notes mfate-notes__content" id="{{this.document.id}}_notes_rich" tabindex = "0"style="min-height:100%; max-width:100%;">{{{system.details.notes.rich}}}</div>
+                        {{#if editable}}
+                            <prose-mirror class="fco_prose_mirror" name="system.details.notes.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.notes.value}}" collaborate="true">
+                                {{{system.details.notes.rich}}}
+                            </prose-mirror>
+                        {{else}}
+                            <div class="fco_ro_rich">
+                                {{{system.details.notes.rich}}}
+                            </div>
+                        {{/if}}                       
                     {{/if}}
                 </div>
             </div>
@@ -243,10 +253,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{#if (expanded ../this.document (fco_concat this.name '_track'))}}<div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                    <div class="cs_box mfate-tracks-notes__input" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_track_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
-                                    <div class="cs_box mfate-tracks-notes__input contenteditable" style="display:none;" data-edit= "system.tracks.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_track_notes" name="system.tracks.{{@key}}.notes">{{{this.notes}}}</div>
-                                {{/if}}
+                                {{#if (expanded ../this.document (fco_concat this.name '_track'))}}
+                                    {{#if ../editable}}
+                                    {{#if this.extra_id}}
+                                        <div class="fco_ro_rich track_notes_pm">{{{this.richNotes}}}</div>
+                                    {{else}}
+                                    <prose-mirror class="fco_prose_mirror track_notes_pm" name="system.tracks.{{@key}}.notes" data-document-u-u-i-d = "{{../this.actor.uuid}}" value="{{this.notes}}" collaborate="true";>
+                                        {{{this.richNotes}}}
+                                    </prose-mirror>
+                                    {{/if}}
+                                    {{else}}
+                                        <div class="fco_ro_rich track_notes_pm">{{{this.richNotes}}}</div>
+                                    {{/if}}
+                                {{/if}}<!--End of current block-->
                                 {{/if}}{{/if}}                                
                                 {{/each}}
                             <!--end of tracks body-->
@@ -274,10 +293,18 @@
                             {{#if this.extra_id}}<i data-extra_id="{{this.extra_id}}" class="fas fa-plug fu_button" style="float:right; padding-right:5px;" title="{{fco_item_name_from_id ../this.document this.extra_id}}"></i>{{/if}}</div>
                             <textarea style="resize: none;" class="cs_box mfate-aspects-list__input" type="text" {{#if (eq this.extra_id undefined)}}{{else}}disabled="disabled"{{/if}} name="system.aspects.{{@key}}.value">{{this.value}}</textarea><br>
                             {{#if (expanded ../this.document (fco_concat this.name '_aspect'))}}
-                                <div class="mfate_aspects-list__label" style="margin-left:25px">{{this.name}} {{localize 'fate-core-official.Notes'}}:</div>
-                                <div class="cs_box mfate-aspects-notes__input" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_aspect_notes_rich" tabindex = "0">{{{this.richNotes}}}</div>
-                                <div class="cs_box mfate-aspects-notes__input contenteditable" style="display:none;" data-edit="system.aspects.{{@key}}.notes" id="{{fco_getKey this.name}}{{../this.document.id}}_aspect_notes" name="system.aspects.{{@key}}.notes" {{#if this.extra_id}}disabled="disabled"{{/if}}>{{{this.notes}}}</div>                               
+                                {{#if ../editable}}
+                                {{#if this.extra_id}}
+                                    <div class="fco_ro_rich">{{{this.richNotes}}}</div>
+                                {{else}}
+                                <prose-mirror class="fco_prose_mirror" name="system.aspects.{{@key}}.notes" data-document-u-u-i-d = "{{../this.actor.uuid}}" value="{{this.notes}}" collaborate="true";>
+                                    {{{this.richNotes}}}
+                                </prose-mirror>
                                 {{/if}}
+                                {{else}}
+                                    <div class="fco_ro_rich">{{{this.richNotes}}}</div>
+                                {{/if}}
+                            {{/if}}
                         </li>
                         {{/each}}
                     </ul>
@@ -367,8 +394,13 @@
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Description'}}</div>
                 </div>
                 {{#if (expanded this.document '_description')}}
-                <div class="mfate-description__content long_text" style="display:none" id="{{this.document.id}}_description" name="system.details.description.value" data-edit="system.details.description.value">{{{system.details.description.value}}}</div>
-                <div class="mfate-description__content long_text_rich" style="min-height:2em;" id="{{this.document.id}}_description_rich" tabindex = "0">{{{system.details.description.rich}}}</div>
+                    {{#if editable}}
+                    <prose-mirror class="fco_prose_mirror" name="system.details.description.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.description.value}}" collaborate="true">
+                            {{{system.details.description.rich}}}
+                        </prose-mirror>
+                    {{else}}
+                        <div class="fco_ro_rich">{{{system.details.description.rich}}}</div>
+                    {{/if}}
                 {{/if}}
             </div>
             <div {{#if (expanded this.document '_biography')}}class="mfate-biography"{{else}}class="mfate-biography-collapsed"{{/if}}>
@@ -377,8 +409,13 @@
                     <div class="mfate-panel__header-label">{{localize 'fate-core-official.Biography'}}</div>
                 </div>
                 {{#if (expanded this.document '_biography')}}
-                    <div class="mfate-biography__content long_text_rich" style="min-height:2em;" id="{{this.document.id}}_biography_rich" tabindex = "0">{{{system.details.biography.rich}}}</div>
-                    <div class="mfate-biography__content long_text" style="display:none" id="{{this.document.id}}_biography" data-edit="system.details.biography.value" name="system.details.biography.value">{{{system.details.biography.value}}}</div>
+                    {{#if editable}}
+                    <prose-mirror class="fco_prose_mirror" name="system.details.biography.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.biography.value}}" collaborate="true";>
+                            {{{system.details.biography.rich}}}
+                    </prose-mirror>
+                    {{else}}
+                        <div class="fco_ro_rich">{{{system.details.biography.rich}}}</div>
+                    {{/if}}    
                 {{/if}}
             </div>
             {{#if (expanded this.document '_extras')}}<div class="mfate-extras">{{else}}<div class="mfate-extras-collapsed">{{/if}}

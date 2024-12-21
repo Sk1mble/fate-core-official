@@ -34,7 +34,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 
     static PARTS = {
         fcoCharacterForm: {
-            scrollable: [".skills_body", ".aspects_body",".tracks_body", ".stunts_body", '.long_text_rich', '.mfate-biography__content', '.mfate-notes__content', '.mfate-extras__content'],
+            scrollable: [".skills_body", ".aspects_body",".tracks_body", ".stunts_body", ".fco_prose_mirror", '.mfate-extras__content'],
         }
     }
 
@@ -522,51 +522,6 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                 }
             })
 
-            let tracks = this.object.system.tracks;
-            for (let track in tracks){
-                let id = fcoConstants.getKey(tracks[track].name)+this.document.id+"_track_notes";
-                fcoConstants.getPen(id);
-                    document.getElementById(`${id}_rich`)?.addEventListener("click", event => {
-                    document.getElementById(`${id}_rich`).style.display = "none";
-                    document.getElementById(`${id}`).style.display = "block";
-                    document.getElementById(`${id}`).focus();
-                })
-                
-                document.getElementById(`${id}`)?.addEventListener('blur', async event => {
-                    if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            ;
-                        document.getElementById(`${id}`).style.display = "none";
-                        document.getElementById(`${id}_rich`).innerHTML = desc;    
-                        document.getElementById(`${id}_rich`).style.display = "block";
-                    }
-                })
-            }
-
-            let aspects = this.object.system.aspects;
-            for (let aspect in aspects){
-                if (aspects[aspect].notes == undefined){
-                    aspects[aspect].notes = "";
-                }
-                let id = fcoConstants.getKey(aspects[aspect].name)+this.document.id+"_aspect_notes";
-                if (!aspects[aspect].extra_id) fcoConstants.getPen(id);
-
-                document.getElementById(`${id}_rich`)?.addEventListener("click", event => {
-                    if (event.target.outerHTML.startsWith("<a data")) return;
-                    document.getElementById(`${id}_rich`).style.display = "none";
-                    document.getElementById(`${id}`).style.display = "block";
-                    document.getElementById(`${id}`).focus();
-                })
-                
-                document.getElementById(`${id}`)?.addEventListener('blur', async event => {
-                    if (!window.getSelection().toString()){
-                        let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:this.object.isOwner, documents:true, async:true}))                            ;
-                        document.getElementById(`${id}`).style.display = "none";
-                        document.getElementById(`${id}_rich`).innerHTML = desc;    
-                        document.getElementById(`${id}_rich`).style.display = "block";
-                    }
-                })
-            }
-
             extras_button?.addEventListener("click", event => this._on_extras_click(event));
             extras_edit.forEach(element => element.addEventListener("click", event => this._on_extras_edit_click(event)));
             extras_delete.forEach(element => element.addEventListener("click", event => this._on_extras_delete(event)));
@@ -576,69 +531,6 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 
             stunts_button?.addEventListener("click", event => this._onStunts_click(event));
             tracks_button?.addEventListener("click", event => this._onTracks_click(event));
-
-            const bio = this.element.querySelector(`div[id='${this.object.id}_biography']`)
-            fcoConstants.getPen(`${this.object.id}_biography`);
-
-            const showyBio = this.element.querySelector(`div[id='${this.document.id}_biography_rich']`)
-            showyBio?.addEventListener('click', async event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                this.editing = true;
-                document.getElementById(`${this.object.id}_biography_rich`).style.display = "none";
-                document.getElementById(`${this.object.id}_biography`).style.display = "block"
-                document.getElementById(`${this.object.id}_biography`).focus();
-            })
-
-            showyBio?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    this.editing = false;
-                    await this.object.update({"system.details.biography.value":text});
-                }
-            })
-
-            const showyDesc = this.element.querySelector(`div[id='${this.document.id}_description_rich']`)
-            showyDesc?.addEventListener('click', async event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                this.editing = true;
-                document.getElementById(`${this.object.id}_description_rich`).style.display = "none"
-                document.getElementById(`${this.object.id}_description`).style.display = "block";
-                document.getElementById(`${this.object.id}_description`).focus();
-            })
-
-            showyDesc?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    this.editing = false;
-                    await this.object.update({"system.details.description.value":text});
-                }
-            })
-
-            const showyNotes = this.element.querySelector(`div[id='${this.document.id}_notes_rich']`)
-            showyNotes?.addEventListener('click', async event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                this.editing = true;
-                document.getElementById(`${this.object.id}_notes_rich`).style.display = "none";
-                document.getElementById(`${this.object.id}_notes`).style.display = "block";
-                document.getElementById(`${this.object.id}_notes`).focus();
-            })
-
-            showyNotes?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    this.editing = false;
-                    await this.object.update({"system.details.notes.value":text});
-                }
-            })
-
-            const notes = this.element.querySelector (`div[id='${this.object.id}_notes']`);
-            fcoConstants.getPen(`${this.object.id}_notes`);
-
-            const desc = this.element.querySelector(`div[id='${this.object.id}_description']`)
-            fcoConstants.getPen(`${this.object.id}_description`);
-            bio?.addEventListener("blur", event => this._onBioFocusOut(event));
-            desc?.addEventListener("blur", event => this._onDescFocusOut(event));
-            notes?.addEventListener("blur", event => this._onNotesFocusOut(event));
 
             const stunt_macro = this.element.querySelectorAll("button[name='stunt_macro']");
             stunt_macro.forEach(element => {
@@ -1151,62 +1043,6 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         await macro.sheet.render(true);
     }
 
-    async _onBioFocusOut (event){
-        if (!window.getSelection().toString()){
-            let bio = DOMPurify.sanitize(event.target.innerHTML);
-            await this.object.update({"system.details.biography.value":bio})
-            document.getElementById(`${this.object.id}_biography`).style.display = "none";
-            document.getElementById(`${this.object.id}_biography_rich`).style.display = "block"
-            this.editing = false;
-            await this.render(false);
-        }
-    }
-
-    async _onNotesFocusOut (event){
-        if (!window.getSelection().toString()){
-            let notes = DOMPurify.sanitize(event.target.innerHTML);
-            await this.object.update({"system.details.notes.value":notes})
-           document.getElementById(`${this.object.id}_notes`).style.display = "none";
-           document.getElementById(`${this.object.id}_notes_rich`).style.display = "block";
-            this.editing = false;
-            await this.render(false);
-        }
-    }
-
-    // This is required in order to ensure we update the data for track notes when changed.
-    async updateNotes (event){
-        if (!window.getSelection().toString()){
-            let text = DOMPurify.sanitize(event.target.innerHTML);            
-            let item = event.target.getAttribute("data-edit");
-            //This is a much better way of accessing data than splitting the id.
-            await this.actor.update({[item]:text});
-            this.editing = false;
-            await this.render(false)
-        }
-    }
-
-    async updateNotesHTML (event){ //This is the method that updates the notes for tracks/aspects when the raw HTML is edited.
-        let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
-        if (text != "discarded") {
-            this.editing = false;
-            let item = event.target.closest('div').dataset.edit;//This is a much better way of accessing data than splitting the id.
-            await this.actor.update({[item]:text});
-            this.editing = false;
-            await this.render(false)
-        }
-    }
-    
-    async _onDescFocusOut (event){
-        if (!window.getSelection().toString()){
-            let desc = DOMPurify.sanitize(event.target.innerHTML);
-            await this.object.update({"system.details.description.value":desc});
-           document.getElementById(`${this.object.id}_description`).style.display = "none"
-           document.getElementById(`${this.object.id}_description_rich`).style.display = "block"
-            this.editing = false;
-            await this.render(false);
-        }
-    }
-
     async render(...args){
         if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
@@ -1558,6 +1394,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         sheetData.system.details.notes.rich = await fcoConstants.fcoEnrich(sheetData.system.details.notes.value, this.actor);
         sheetData.system.details.biography.rich = await fcoConstants.fcoEnrich(sheetData.system.details.biography.value, this.actor);
         sheetData.system.details.description.rich = await fcoConstants.fcoEnrich(sheetData.system.details.description.value, this.actor);
+        sheetData.editable = this.isEditable;
         let trs = sheetData.system.tracks;
         for (let tr in trs){
             trs[tr].richNotes = await fcoConstants.fcoEnrich(trs[tr].notes);

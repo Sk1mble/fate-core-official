@@ -96,6 +96,8 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
         data.rich.attack = await fcoConstants.fcoEnrich (data.document.system.actions.attack, this.object);
         data.rich.defend = await fcoConstants.fcoEnrich (data.document.system.actions.defend, this.object);
         data.rich.stunts = foundry.utils.duplicate(data.document.system.stunts);
+        data.editable = this.isEditable;
+
         for (let st in data.rich.stunts){
             data.rich.stunts[st].richDesc = await fcoConstants.fcoEnrich (data.rich.stunts[st].description, this.object);
         }
@@ -133,6 +135,17 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
 
         const ul_all_stunts = this.element.querySelector('div[name="ul_all_extra_stunts"]'); // Button for uploading all stunts. Singleton.
         ul_all_stunts?.addEventListener('click', event => fcoConstants.ulStunts(this.object.system.stunts));
+
+        const prose_mirrors = this.element.querySelectorAll(".fco_prose_mirror.extra_pm");
+        prose_mirrors.forEach(mirror => {
+            mirror.addEventListener("change", async event => {
+                let field = event.target.name;
+                let value = event.target.value;
+                let updateObject = {};
+                updateObject[field] = value;
+                await this.document.update(updateObject);
+            })
+        })
 
         const input = this.element.querySelectorAll('input[type="text"], input[type="number"], div[name="textIn"], textarea'); // Find all the text areas for the purpose of dealing with blur, click, etc. events
 
@@ -208,26 +221,6 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
 
         this.element.querySelector('.fcoExtraSheetForm')?.addEventListener('drop', async event => await this.onDrop(event));
 
-        // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
-        //First, Create Pen editor
-        fcoConstants.getPen(`${this.document.id}_descValue`);
-        //Get reference to field so we can update extra on change
-        const desc = document.getElementById(`${this.document.id}_descValue`);
-        //Update the extra when the field loses focus.
-        desc?.addEventListener("blur", async event => {
-            await this.document.update({"system.description.value":DOMPurify.sanitize(event.target.innerHTML)})
-        })
-        //That's the description field; still to come permissions, costs, caa, attack,overcome, defend
-        // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
-        
-        //First, Create Pen editors
-        fcoConstants.getPen(`${this.document.id}_permValue`);
-        fcoConstants.getPen(`${this.document.id}_costsValue`);
-        fcoConstants.getPen(`${this.document.id}_overcomeValue`);
-        fcoConstants.getPen(`${this.document.id}_attackValue`);
-        fcoConstants.getPen(`${this.document.id}_createValue`);
-        fcoConstants.getPen(`${this.document.id}_defendValue`);
-    
         input?.forEach(field => field?.addEventListener("focus", event => {
             if (this.editing == false) {
                 this.editing = true;
@@ -254,90 +247,6 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
             let newName = event.target.value;
             await this.document.update({"name":newName});
         })
-
-        let fields = ["descValue", "overcomeValue", "permValue", "costsValue", "createValue", "attackValue", "defendValue"];
-        for (let field of fields){
-            document.getElementById(`${this.document.id}_${field}_rich`)?.addEventListener('click', event => {
-                if (event.target.outerHTML.startsWith ("<a data")) return;
-                document.getElementById(`${this.document.id}_${field}_rich`).style.display = "none";
-                document.getElementById(`${this.document.id}_${field}`).style.display = "block"; 
-                document.getElementById(`${this.document.id}_${field}`).focus();
-            })
-
-            document.getElementById(`${this.document.id}_${field}_rich`)?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    this.editing = false;
-                    if (field == "descValue"){
-                        await this.document.update({"system.description.value":text});
-                    }
-                    if (field == "overcomeValue"){
-                        await this.document.update({"system.actions.overcome":text});                        
-                    }
-                    if (field == "permValue"){
-                        await this.document.update({"system.permissions":text});
-                    }
-                    if (field == "costsValue"){
-                        await this.document.update({"system.costs":text});
-                    }
-                    if (field == "createValue"){
-                        await this.document.update({"system.actions.create":text});
-                    }
-                    if (field == "attackValue"){
-                        await this.document.update({"system.actions.attack":text});
-                    }
-                    if (field == "defendValue"){
-                        await this.document.update({"system.actions.defend":text});
-                    }
-                    await this.render(false);
-                }
-            })
-
-            document.getElementById(`${this.document.id}_${field}`)?.addEventListener('blur', async event => {
-                if (!window.getSelection().toString()){
-                    let data = DOMPurify.sanitize(event.target.innerHTML);
-                    if (field == "descValue"){
-                        await this.document.update({"system.description.value":data});
-                        this.editing = false;
-                        await this.render(false);
-                    }
-                    if (field == "overcomeValue"){
-                        await this.document.update({"system.actions.overcome":data});
-                        this.editing = false;
-                        await this.render(false);
-                    }
-                    if (field == "permValue"){
-                        await this.document.update({"system.permissions":data});
-                        this.editing = false;
-                        await this.render(false);
-                    }
-                    if (field == "costsValue"){
-                        await this.document.update({"system.costs":data});
-                        this.editing = false;
-                        await this.render(false);
-                    }
-                    if (field == "createValue"){
-                        await this.document.update({"system.actions.create":data});
-                        this.editing = false;
-                        await this.render(false);
-                    }
-                    if (field == "attackValue"){
-                        await this.document.update({"system.actions.attack":data});
-                        this.editing = false;
-                        await this.render(false);
-                    }
-                    if (field == "defendValue"){
-                        await this.document.update({"system.actions.defend":data});
-                        this.editing = false;
-                        await this.render(false)
-                    }
-                }
-            })
-
-            document.getElementById(`${this.document.id}_${field}_rich`)?.addEventListener('keyup', async event => {
-                    if (event.code == "Tab") document.getElementById(`${this.document.id}_${field}_rich`).click();            
-            })
-        }
 
         const refresh = this.element.querySelector("input[name='system.refresh']");
         refresh?.addEventListener("change", async event => {

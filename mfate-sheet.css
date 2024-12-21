@@ -64,6 +64,60 @@
     grid-area: header;
 }
 
+.fate .prosemirror menu, .editor-menu {
+    height:2em;
+    padding-top:0px;
+    padding-bottom:0px;
+}
+
+.fco_prose_mirror .editor-container {
+    margin-right:0px;
+    margin-left:5px;
+    margin-top:2px;
+    margin-bottom:5px;
+}
+
+.fco_prose_mirror {
+    height: 95%; 
+    background:var(--fco-sheet-input-colour);
+    margin:10px;
+    margin-top:5px;
+}
+
+.fco_prose_mirror.track_notes_pm {
+    min-height:8em; 
+    height:8em; 
+    max-height:8em; 
+    margin-left:35px; 
+    margin-top:0px;
+}
+
+.fco_ro_rich {
+    height: 95%;
+    margin-left: 10px;
+    margin-right:10px;
+    margin-top:5px;
+    border:1px solid var(--fco-accent-colour);
+    padding: 5px;
+}
+
+.fco_ro_rich.track_notes_pm {
+    min-height:4em; 
+    height:4em; 
+    max-height:4em; 
+    margin-left:35px; 
+    margin-top:0px;
+    margin-bottom:5px;
+    padding:5px;
+}
+
+.fco_prose_mirror.extra_pm, .fco_ro_rich.extra_ro {
+    min-height:7em;
+    max-height:12em;
+    width:100%;
+    margin:0px;
+}
+
 .mfate-sheet__tab--main {
     /* display: grid;
     grid-template-areas: "skills aspects" "skills stunts" "tracks stunts";
@@ -711,7 +765,7 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
     flex-grow:1;
     flex-shrink:1;
     min-height:20%;
-    max-height:95%;
+    max-height:100%;
 }
 
 .mfate-biography-collapsed {
