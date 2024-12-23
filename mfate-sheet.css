@@ -64,24 +64,29 @@
     grid-area: header;
 }
 
-.fate .prosemirror menu, .editor-menu {
-    height:2em;
-    padding-top:0px;
-    padding-bottom:0px;
-}
-
 .fco_prose_mirror .editor-container {
     margin-right:0px;
-    margin-left:5px;
+    margin-left:10px;
     margin-top:2px;
     margin-bottom:5px;
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+    scrollbar-width:thin;
 }
 
 .fco_prose_mirror {
-    height: 95%; 
     background:var(--fco-sheet-input-colour);
-    margin:10px;
     margin-top:5px;
+    border:1px solid var(--fco-accent-colour);
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+    scrollbar-width:thin;
+}
+
+.fco_prose_mirror.inactive {
+    background:var(--fco-sheet-input-colour);
+    margin-top:5px;
+    padding:5px;
+    border:1px solid var(--fco-accent-colour);
+    overflow:auto;
 }
 
 .fco_prose_mirror.track_notes_pm {
@@ -92,6 +97,30 @@
     margin-top:0px;
 }
 
+.fco_prose_mirror.fco_character_aspect_notes {
+    min-height:8em; 
+    height:8em; 
+    max-height:8em; 
+    margin-left:25px; 
+    margin-top:2px;
+}
+
+.fco_prose_mirror.fco_character_desc {
+    height:87%;
+}
+
+.fco_prose_mirror.fco_character_bio {
+    height:87%;
+}
+
+.fco_prose_mirror.fco_character_notes {
+    height: 95%;
+}
+
+.fco_prose_mirror.fco_edit_track_desc, .fco_prose_mirror.fco_edit_track_when_marked, .fco_prose_mirror.fco_edit_track_recovery_conditions {
+    background-color:white;
+}
+
 .fco_ro_rich {
     height: 95%;
     margin-left: 10px;
@@ -99,6 +128,8 @@
     margin-top:5px;
     border:1px solid var(--fco-accent-colour);
     padding: 5px;
+    background:var(--fco-sheet-input-colour);
+    overflow:auto;
 }
 
 .fco_ro_rich.track_notes_pm {
@@ -116,6 +147,95 @@
     max-height:12em;
     width:100%;
     margin:0px;
+}
+
+.fco_prose_mirror.editAspect {
+    margin:0px;
+    background-color:white;
+    height:95%
+}
+
+.fco_prose_mirror.editSkill {
+    margin:0px;
+    background-color:white;
+}
+
+.fco_prose_mirror.fu_aspect_notes, .fco_ro_rich.fu_aspect_notes {
+    min-height:6em;
+    margin-left:0px;
+}
+
+.fco_prose_mirror.fu_track_notes, .fco_ro_rich.fu_track_notes {
+    min-height:7em;
+    margin-left:0px;
+    margin-bottom:10px;
+}
+
+.fco_prose_mirror.fu_game_aspect_notes, .fco_ro_rich.fu_game_aspect_notes {
+    min-height:7em;
+    margin-left:2.1em;
+    margin-bottom:0.5em;
+    margin-top:0.2em;
+}
+
+.fco_prose_mirror.acd {
+    min-height:7em;
+    margin-left:0px;
+    margin-bottom:0.5em;
+    margin-top:0.2em;
+}
+
+.fco_prose_mirror.fu_cd, .fco_ro_rich.fu_cd {
+    background:none;
+    border:none;
+    padding:0px;
+    margin:0px;
+    min-height:10em;
+}
+
+.fco_prose_mirror.aspect_notes, .fco_prose_mirror.aspect_description {
+    margin: 0px;
+}
+
+.fco_prose_mirror.fu_cd.editor.prosemirror .editor-menu {
+    min-height:4em;
+}
+
+.fco_prose_mirror.editor .icon.toggle {
+    transition: opacity 1s; 
+    opacity:0;
+    min-height:30px;
+    min-width:30px;
+    max-height:30px;
+    max-width:30px;
+    position: relative;
+    bottom:0px;
+}
+
+.fco_prose_mirror.editor.inactive .icon.toggle:hover {
+    transition: opacity 1s; 
+    opacity:1;
+}
+
+.fco_prose_mirror.editor.inactive:hover > .icon.toggle {
+    transition: opacity 1s; 
+    opacity:1;
+    display:block;
+}
+
+.fco_prose_mirror.editor.inactive > .icon.toggle {
+    display:inline;
+}
+
+.fco_prose_mirror.editor.active > .icon.toggle {
+    display:none;
+}
+
+.fco_prose_mirror.editor.prosemirror .editor-menu {
+    height:1.8em;
+    padding-top:0px;
+    padding-bottom:0px;
+    border-radius:0;
 }
 
 .mfate-sheet__tab--main {
@@ -183,7 +303,7 @@
 .mfate-sheet .sheet-body {
     flex: 1;
     display: flex;
-    padding: 7px 0 14px;
+    padding: 7px 0 5px;
     min-height: 50vh;
 }
 
@@ -226,7 +346,7 @@ div.tab.biography.mfate-sheet__tab.mfate-sheet__tab--secondary.biography_body.ac
 .mfate-sheet__identity-avatar {
     max-height: 100px;
     width: auto;
-    border: 1px solid gray;
+    border: 1px solid var(--fco-accent-colour)
 }
 
 .mfate-sheet__identity-avatar[src="icons/svg/mystery-man.svg"] {
@@ -240,7 +360,7 @@ div.tab.biography.mfate-sheet__tab.mfate-sheet__tab--secondary.biography_body.ac
 .mfate-sheet__identity-name {
     min-width: 5em;
     max-width: 100em;
-    border: 1px solid gray;
+    border: 1px solid var(--fco-accent-colour);
     font-size: x-large;
     border: 0;
     resize: none;
@@ -326,16 +446,22 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
 .mfate-sheet__tabs-nav {
     display: flex;
     justify-content: flex-end;
+    align-items:end;
     margin-top: 3px;
     /* box-shadow: inset 0px -1px 0 0 #ccc; */
 }
 
 /*.mfate-sheet__tabs-nav-item {}*/
 
-.mfate-sheet__tabs-nav-link {
+.mfate-sheet__tabs-nav.tabs {
+    border:none;
+}
+
+.mfate-sheet__tabs-nav-link.item {
     border: 1px solid var(--fco-foundry-interactable-color);
     border-radius: 3px 3px 0 0;
     margin-left: 3px;
+    margin-bottom:0;
     background: var(--fco-sheet-background-colour)
 }
 
@@ -344,13 +470,13 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
     opacity:0.25;
 }
 
-.mfate-sheet__tabs-nav-link.active {
+.mfate-sheet__tabs-nav-link.mfate-sheet__tabs-nav-link.mfate-sheet__tabs-nav-link.active {
     border-bottom: none;
 }
 
 .mfate-sheet__tabs-nav-icon {
     font-size: 1.5em;
-    padding: 7px 1em 1px;
+    padding: 7px 1em 5px;
     display: block;
 }
 
@@ -414,8 +540,8 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
     min-height: 30px;
     border-radius: var(--fco-border-radius);
     clip-path: var(--fco-header-notch);
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .mfate-sheet-notes,
@@ -744,18 +870,14 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
 .mfate-description {
     display:flex;
     flex-direction:column;
-    flex-grow:1;
-    flex-shrink:1;
-    min-height:20%;
+    height:40%;
     margin-bottom: 10px;
 }
 
 .mfate-biography {
     display:flex;
     flex-direction:column;
-    flex-grow:1;
-    flex-shrink:1;
-    min-height:20%;
+    height:40%;
     margin-bottom: 10px;
 }
 
@@ -828,7 +950,6 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
     margin-bottom:10px;
     flex-grow:1;
     flex-shrink:1;
-    min-height:33%;
 }
 
 .mfate-extras-collapsed {

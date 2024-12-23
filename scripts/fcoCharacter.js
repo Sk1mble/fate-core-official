@@ -424,7 +424,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
             const box = this.element.querySelectorAll("input[class='fco-box']");
             box.forEach(b => b.addEventListener("click", event => this._on_click_box(event)));
             const skills_block = this.element.querySelector("div[name='skills_block']");
-            const track_name = this.element.querySelectorAll("div[class='mfate-tracks__list']");
+            const track_name = this.element.querySelectorAll("i[class='mf_draggable']");
             const roll_track = this.element.querySelectorAll("i[name='roll_track']");
 
             roll_track.forEach(element => element.addEventListener("click", async event => {
@@ -440,7 +440,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
             }))
 
             track_name.forEach(element => element.addEventListener("contextmenu", event => {
-                    let name = event.currentTarget.id.split("_")[1]
+                    let name = event.target.dataset.mfname;
                     let track = fcoConstants.gbn(this.object.system.tracks, name);
             
                     let linked_skills_text =""

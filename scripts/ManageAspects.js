@@ -252,44 +252,14 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
     _onRender(context, options) {
         const saveButton = this.element.querySelector("button[name='edit_aspect_save_changes']");
         saveButton?.addEventListener("click", event => this._onSaveButton(event));
-        fcoConstants.getPen("fatecoreofficial_edit_aspect_description");
-        const description_rich = document.getElementById("fatecoreofficial_edit_aspect_description_rich");
-        const description = document.getElementById("fatecoreofficial_edit_aspect_description");
-
-        description_rich?.addEventListener('click', async event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            description_rich.style.display = "none"; 
-            description.style.display = "block";
-            description.focus();
-        })
-
-        description_rich?.addEventListener('keyup', async event => {
-            if (event.code == "Tab") description_rich.click();
-        })
-
-        description_rich?.addEventListener('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                description_rich.innerHTML = text;    
-                description.innerHTML = text;    
-            }
-        })
-
-        description?.addEventListener ('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:true, documents:true, async:true}));
-                description.style.display = "none";
-                description_rich.style.display = "block";
-                description_rich.innerHTML = desc;
-            }
-        })
     }
         
     //Here are the event listener functions.
     async _onSaveButton(event){
         //Get the name and description of the aspect
         let name = document.getElementById("edit_aspect_name").value;
-        let description = DOMPurify.sanitize(document.getElementById("fatecoreofficial_edit_aspect_description").innerHTML);
+        console.log(this.element);
+        let description = this.element.querySelector('.fco_prose_mirror.editAspect').value;
         this._updateObject(event, {"name":name, "description":description})
     }    
 

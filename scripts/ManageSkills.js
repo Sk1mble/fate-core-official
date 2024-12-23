@@ -299,44 +299,6 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
 
     //Here are the action listeners
     _onRender (context, options) {
-        fcoConstants.getPen("edit_skill_description");
-        fcoConstants.getPen("edit_skill_overcome");
-        fcoConstants.getPen("edit_skill_caa");
-        fcoConstants.getPen("edit_skill_attack");
-        fcoConstants.getPen("edit_skill_defend");
-
-        let rich_elements = this.element.querySelectorAll(".fco_skill_edit_field_rich");
-
-        for (let element of rich_elements){
-            let normal_element = document.getElementById(`edit_skill_${element.attributes.name.value}`);
-            element?.addEventListener ("keyup", event => {
-                if (event.code == "Tab") element.click();
-            })
-
-            element?.addEventListener("click", event => {
-                element.style.display = "none";
-                normal_element.style.display = 'block';
-                normal_element.focus();
-            })
-
-            element?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-                if (text != "discarded") {
-                    element.innerHTML = DOMPurify.sanitize(text);    
-                    normal_element.innerHTML = DOMPurify.sanitize(text);    
-                }
-            })
-        
-            normal_element?.addEventListener ('blur', async event => {
-                if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}))                            ;
-                    element.innerHTML = desc;     
-                    normal_element.style.display = "none";
-                    normal_element.innerHTML = desc;    
-                    element.style.display = "block";
-                }
-            })
-        }
     }
 }
 

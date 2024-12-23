@@ -30,8 +30,6 @@
     "scripts/FateCharacterImporter.js",
     "scripts/FateCharacterDefaults.js",
     "scripts/FateCoreOfficialModels.js",
-    "scripts/Pen/pen.js",
-    "scripts/Pen/markdown.js",
     "scripts/purify.min.js"
   ],
   "esmodules": [
@@ -39,8 +37,7 @@
   ],
   "styles": [
     "fco.css",
-    "mfate-sheet.css",
-    "scripts/Pen/pen.css"
+    "mfate-sheet.css"
   ],
   "languages": [
     {

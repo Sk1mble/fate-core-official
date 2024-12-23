@@ -15,7 +15,7 @@
 			<td style="color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Permissions'}}:</td>
 			<td style="width:75%">
 				{{#if editable}}
-                            <prose-mirror class="fco_prose_mirror extra_pm" tab-index ="0" name="system.permissions" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.permissions}}" collaborate="true">
+                            <prose-mirror toggled="true" class="fco_prose_mirror extra_pm" tab-index ="0" name="system.permissions" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.permissions}}" collaborate="true">
                                 {{{this.rich.permissions}}}
                             </prose-mirror>
                         {{else}}
@@ -29,7 +29,7 @@
 			<td style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Costs'}}:</td>
 			<td style="width:75%">
 				{{#if editable}}
-					<prose-mirror class="fco_prose_mirror extra_pm" name="system.costs" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.costs}}" collaborate="true">
+					<prose-mirror toggled="true" class="fco_prose_mirror extra_pm" name="system.costs" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.costs}}" collaborate="true">
 						{{{this.rich.costs}}}
 					</prose-mirror>
 				{{else}}
@@ -52,7 +52,7 @@
 			<td style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.Description'}}:</td>
 			<td style="width:75%;">
 				{{#if editable}}					
-					<prose-mirror class="fco_prose_mirror extra_pm" name="system.description.value" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.description.value}}" collaborate="true">
+					<prose-mirror toggled="true" class="fco_prose_mirror extra_pm" name="system.description.value" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.description.value}}" collaborate="true">
 						{{{this.rich.description}}}
 					</prose-mirror>
 				{{else}}
@@ -66,7 +66,7 @@
 			<td style="color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">O</i> {{localize 'fate-core-official.Overcome'}}:</td>
 			<td style="width:75%">
 				{{#if editable}}					
-					<prose-mirror class="fco_prose_mirror extra_pm" name="system.actions.overcome" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.overcome}}" collaborate="true">
+					<prose-mirror toggled="true" class="fco_prose_mirror extra_pm" name="system.actions.overcome" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.overcome}}" collaborate="true">
 						{{{this.rich.overcome}}}
 					</prose-mirror>
 				{{else}}
@@ -79,7 +79,7 @@
 			<td style="color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">C</i> {{localize 'fate-core-official.CAA'}}:</td>
 			<td style="width:75%">
 				{{#if editable}}					
-					<prose-mirror class="fco_prose_mirror extra_pm" name="system.actions.create" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.create}}" collaborate="true">
+					<prose-mirror toggled="true" class="fco_prose_mirror extra_pm" name="system.actions.create" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.create}}" collaborate="true">
 						{{{this.rich.create}}}
 					</prose-mirror>
 				{{else}}
@@ -93,7 +93,7 @@
 			<td style="color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">A</i> {{localize 'fate-core-official.Attack'}}:</td>
 			<td style="width:75%">
 				{{#if editable}}					
-					<prose-mirror class="fco_prose_mirror extra_pm" name="system.actions.attack" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.attack}}" collaborate="true">
+					<prose-mirror toggled="true" class="fco_prose_mirror extra_pm" name="system.actions.attack" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.attack}}" collaborate="true">
 						{{{this.rich.attack}}}
 					</prose-mirror>
 				{{else}}
@@ -107,7 +107,7 @@
 			<td style="color:var(--fco-sheet-text-colour); font-family:var(--fco-font-family); font-weight:bold; font-size:medium; width:25%"><i style="font-style:normal; font-family:Fate Core; font-size:x-large;">D</i> {{localize 'fate-core-official.Defend'}}:</td>
 			<td style="width:75%">
 				{{#if editable}}					
-					<prose-mirror class="fco_prose_mirror extra_pm" name="system.actions.defend" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.defend}}" collaborate="true">
+					<prose-mirror toggled="true" class="fco_prose_mirror extra_pm" name="system.actions.defend" data-document-u-u-i-d = "{{this.document.uuid}}" value="{{this.document.system.actions.defend}}" collaborate="true">
 						{{{this.rich.defend}}}
 					</prose-mirror>
 				{{else}}

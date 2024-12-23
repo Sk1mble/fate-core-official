@@ -60,43 +60,6 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
         edit_entity_linked_skillsButton?.addEventListener("click", event => {this._edit_entity_linked_skillsButtonClick(event)});
         copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
         export_track?.addEventListener("click", event => this._onExportTrack(event));
-
-        fcoConstants.getPen("edit_entity_track_description");
-        fcoConstants.getPen("edit_entity_track_when_marked");
-        fcoConstants.getPen("edit_entity_track_when_recovers");
-
-        let rich_elements = this.element.querySelectorAll(".fco_track_edit_field_rich");
-
-        for (let element of rich_elements){
-            let normal_element = document.getElementById(`edit_entity_track_${element.attributes.name.value}`);
-            element?.addEventListener ("keyup", event => {
-                if (event.code == "Tab") element.click();
-            })
-
-            element?.addEventListener("click", event => {
-                element.style.display = "none";
-                normal_element.style.display = 'block';
-                normal_element.focus();
-            })
-
-            element?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-                if (text != "discarded") {
-                    element.innerHTML = DOMPurify.sanitize(text);    
-                    normal_element.innerHTML = DOMPurify.sanitize(text);    
-                }
-            })
-        
-            normal_element?.addEventListener ('blur', async event => {
-                if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}))                            ;
-                    element.innerHTML = desc;     
-                    normal_element.style.display = "none";
-                    normal_element.innerHTML = desc;    
-                    element.style.display = "block";
-                }
-            })
-        }
     }
 
     //Here are the event listener functions.
@@ -147,11 +110,11 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
 
     async _onSaveTrackButton(event){
         let name = document.getElementById("edit_entity_track_name").value;
-        let description = DOMPurify.sanitize(document.getElementById("edit_entity_track_description").innerHTML);
+        let description = DOMPurify.sanitize(document.getElementById("edit_entity_track_description").value);
         let recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
         let aspect = document.getElementById("edit_entity_track_aspect").value;
-        let when_marked = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_marked").innerHTML);
-        let when_recovers = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_recovers").innerHTML);
+        let when_marked = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_marked").value);
+        let when_recovers = DOMPurify.sanitize(document.getElementById("edit_entity_track__recovery_conditions").value);
         let boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_entity_track_harm").value);
         let paid = document.getElementById("edit_entity_track_paid").checked;
@@ -441,19 +404,34 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
                 tracks_of_category.push(this.tracks[t]);
             }
         }
+        if (!this.track) {
+            this.track = new fcoTrack();
+            this.track.name = "New Track";
+            this.track.category = this.category;
+        }
+        this.richDesc = await fcoConstants.fcoEnrich(this.track.description);
+        this.richWhenMarked = await fcoConstants.fcoEnrich(this.track.when_marked);
+        this.richRecovery = await fcoConstants.fcoEnrich(this.track.recovery_conditions);
+
         const templateData = {
             category:this.category,
             tracks:tracks_of_category, 
+            track:this.track,
+            richDesc: this.richDesc,
+            richWhenMarked: this.richWhenMarked,
+            richRecovery: this.richRecovery
+
         }
         return templateData;
     }
 
     static DEFAULT_OPTIONS = {
+        classes:['fate'],
+        tag: "form",
+        id: "EditTrack",
         window: {
-            tag: "form",
             title: this.title,
             icon: "fas fa-gear",
-            id: "EditTrack"
         }
     }
 
@@ -477,6 +455,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         const edit_track_name=this.element.querySelector("input[id='edit_track_name']");
         const copy_track = this.element.querySelector("button[id='copy']");
         const export_track = this.element.querySelector("button[id='exportTrack']");
+        const proseMirrors = this.element.querySelectorAll(".fco_prose_mirror");
 
         const track_label_select = this.element.querySelector("select[id='track_label_select']");
         track_label_select?.addEventListener("change", event => this._on_track_label_select(event))
@@ -488,43 +467,13 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         deleteTrackButton?.addEventListener("click",event => this._onDeleteTrackButton(event));
         copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
         export_track?.addEventListener("click", event => this._onExportTrack(event));
-
-        fcoConstants.getPen("edit_track_description");
-        fcoConstants.getPen("edit_track_when_marked");
-        fcoConstants.getPen("edit_track_when_recovers");;
-
-        let rich_elements = this.element.querySelectorAll(".edit_track_rich");
-
-        for (let element of rich_elements){
-            let normal_element = document.getElementById(`edit_track_${element.attributes.name.value}`);
-            element?.addEventListener ("keyup", event => {
-                if (event.code == "Tab") element.click();
+        proseMirrors.forEach(pm => {
+            pm.addEventListener("change", async event => {
+                let richDesc = await fcoConstants.fcoEnrich(this.track.description);
+                let richWhenMarked = await fcoConstants.fcoEnrich(this.track.when_marked);
+                let richRecovery = await fcoConstants.fcoEnrich(this.track.recovery_conditions);
             })
-
-            element?.addEventListener("click", event => {
-                element.style.display = "none";
-                normal_element.style.display = 'block';
-                normal_element.focus();
-            })
-
-            element?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-                if (text != "discarded") {
-                    element.innerHTML = DOMPurify.sanitize(text);    
-                    normal_element.innerHTML = DOMPurify.sanitize(text);    
-                }
-            })
-        
-            normal_element?.addEventListener ('blur', async event => {
-                if (!window.getSelection().toString()){
-                    let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}))                            ;
-                    element.innerHTML = desc;     
-                    normal_element.style.display = "none";
-                    normal_element.innerHTML = desc;    
-                    element.style.display = "block";
-                }
-            })
-        }
+        })
     }
     //Here are the event listener functions.
 
@@ -619,79 +568,19 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
     }
 
     async _track_selectChange(event){
-        let name = document.getElementById("track_select").value;
-        if (name==game.i18n.localize("fate-core-official.NewTrack")){
-            this.track=undefined;
-            document.getElementById("edit_track_name").value="";
-            document.getElementById("edit_track_description").innerHTML="";
-            document.getElementById("edit_track_description_rich").innerHTML="";
-            document.getElementById("edit_track_universal").checked=true;
-            document.getElementById("edit_track_unique").checked=true;
-            document.getElementById("edit_track_recovery_type").value="Fleeting";
-            document.getElementById("edit_track_aspect").value="No";
-            document.getElementById("edit_track_when_marked").innerHTML="";
-            document.getElementById("edit_track_when_marked_rich").innerHTML="";
-            document.getElementById("edit_track_when_recovers").innerHTML="";
-            document.getElementById("edit_track_when_recovers_rich").innerHTML="";
-            document.getElementById("edit_track_boxes").value=0;
-            document.getElementById("edit_track_harm").value=0;
-            document.getElementById("edit_linked_skills").disabled=true;
-            document.getElementById("edit_track_paid").checked=false;
-            document.getElementById("track_label_select").value = "none";
-            document.getElementById("edit_track_rollable").value = "false";
-        } else {
-            let track=fcoConstants.gbn(this.tracks, name);
-            this.track=track;
-            document.getElementById("edit_track_name").value=track.name;
-            document.getElementById("edit_track_description").innerHTML=DOMPurify.sanitize(track.description);
-            document.getElementById("edit_track_description_rich").innerHTML= await fcoConstants.fcoEnrich(track.description);
-            document.getElementById("edit_track_universal").checked=track.universal;
-            document.getElementById("edit_track_unique").checked=track.unique;
-            document.getElementById("edit_track_recovery_type").value=track.recovery_type;
-            document.getElementById("edit_track_aspect").value=track.aspect;
-            document.getElementById("edit_track_when_marked").innerHTML=DOMPurify.sanitize(track.when_marked);
-            document.getElementById("edit_track_when_marked_rich").innerHTML= await fcoConstants.fcoEnrich(track.when_marked);
-            document.getElementById("edit_track_when_recovers").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
-            document.getElementById("edit_track_when_recovers_rich").innerHTML= await fcoConstants.fcoEnrich(track.recovery_conditions);
-            document.getElementById("edit_track_boxes").value=track.boxes;
-            document.getElementById("edit_track_harm").value=track.harm_can_absorb;
-            document.getElementById("edit_linked_skills").disabled=false;
-            document.getElementById("edit_track_paid").checked=track.paid;
-            document.getElementById("edit_track_rollable").value = track.rollable ? track.rollable : "false";
-            
-            if (track.label=="none"){
-                document.getElementById("track_label_select").value = "none";
-                document.getElementById("track_custom_label").value = "";
-                document.getElementById("track_custom_label").hidden=true;     
-            } else {
-                if (track.label=="escalating"){
-                    document.getElementById("track_label_select").value = "escalating";       
-                    document.getElementById("track_custom_label").value = "";         
-                    document.getElementById("track_custom_label").hidden=true;                                   
-                } else {
-                    if (track.label==undefined){ 
-                        document.getElementById("track_label_select").value = "none";
-                        document.getElementById("track_custom_label").value = "";     
-                        document.getElementById("track_custom_label").hidden=true;                                   
-                    } else {
-                        document.getElementById("track_label_select").value = "custom";
-                        document.getElementById("track_custom_label").value = track.label;
-                        document.getElementById("track_custom_label").hidden=false;
-                    }
-                }
-            }
-        }
+        this.track = fcoConstants.gbn(this.tracks, event.target.value);
+        this.render(false);
     }
 
     async _onSaveTrackButton(event,html){
         let name = document.getElementById("edit_track_name").value;
-        let description = DOMPurify.sanitize(document.getElementById("edit_track_description").innerHTML);
+        let description = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_desc").value);
         let universal = document.getElementById("edit_track_universal").checked;
         let unique = document.getElementById("edit_track_unique").checked;
         let recovery_type = document.getElementById("edit_track_recovery_type").value;
         let aspect = document.getElementById("edit_track_aspect").value;
-        let when_marked = DOMPurify.sanitize(document.getElementById("edit_track_when_marked").innerHTML);
-        let when_recovers = DOMPurify.sanitize(document.getElementById("edit_track_when_recovers").innerHTML);
+        let when_marked = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_when_marked").value);
+        let when_recovers = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_recovery_conditions").value);
         let boxes = parseInt(document.getElementById("edit_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_track_harm").value);
         let paid = document.getElementById("edit_track_paid").checked;
@@ -783,6 +672,7 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
     static DEFAULT_OPTIONS = {
         tag: "form",
         id: "TrackSetup",
+        classes:['fate'],
         window: {
             icon:"fas fa-cog",
             title: this.title,

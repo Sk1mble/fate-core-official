@@ -1,10 +1,10 @@
-<div style="color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); font-family:var(--fco-font-family); padding:10px; text-align:left; width:70em; min-height:18em">
+<div style="color:var(--fco-sheet-text-colour); background:var(--fco-sheet-background-colour); font-family:var(--fco-font-family); padding:10px; text-align:left; width:70em; min-height:50em">
     <div style="display:flex; flex-direction:row; margin-top:10px">
         <div style="width:15em;">
             Countdown Name:
         </div>
-        <div style="width:50em; height:3em">
-            <div style="background-color:var(--fco-sheet-input-colour); border-bottom:1px solid var(--fco-foundry-interactable-color); width:100%; min-height:2em; max-height:2em; overflow-Y:auto; padding-left:2px;" data-edit="name" id="cd_name"></div>
+        <div style="width:50em; height:15em">
+            <prose-mirror toggled="true" class="fco_prose_mirror acd" name="name" data-edit="name"></prose-mirror>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">
@@ -19,8 +19,8 @@
         <div style="width:15em">
             Triggers and Outcome:
         </div>
-        <div style="width:50em; height:6em">
-            <div style="border-bottom:1px solid var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); padding-left:2px; width:100%; min-height:5em; max-height:5em; overflow-Y:auto;" data-edit="description" id="cd_description"></div>
+        <div style="width:50em; height:15em">
+            <prose-mirror toggled="true" class="fco_prose_mirror acd" name="description" data-edit="description"></prose-mirror>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">

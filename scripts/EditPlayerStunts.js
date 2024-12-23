@@ -160,44 +160,6 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
             }
             document.getElementById(search).textContent = fromUuidSync(event.target.value)?.name;
         })
-
-        const description_rich = this.element.querySelector("div[id='edit_stunt_desc_rich']");
-
-        description_rich?.addEventListener('keyup', async event => {
-            if (eventevent.code == "Tab") description_rich.click();
-        })
-
-        description_rich?.addEventListener('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                this.element.querySelector('#edit_stunt_desc_rich').innerHTML = text;
-                this.element.querySelector('#edit_stunt_desc').innerHTML = text;
-            }
-        })
-
-        description_rich?.addEventListener('click', async event => {
-            this.element.querySelector("#edit_stunt_desc_rich").style.display = "none";
-            this.element.querySelector("#edit_stunt_desc").style.display = 'block';
-            this.element.querySelector("#edit_stunt_desc").focus();
-        })
-
-        description_rich?.addEventListener('keyup', async event => {
-            if (event.code =="Tab"){
-                description_rich?.click();
-            }
-        })
-
-        const stunt_desc = this.element.querySelector("div[id='edit_stunt_desc']");
-        stunt_desc?.addEventListener('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                this.element.querySelector('#edit_stunt_desc').style.display = "none";
-                this.element.querySelector('#edit_stunt_desc_rich').innerHTML = desc;    
-                this.element.querySelector('#edit_stunt_desc_rich').style.display = "block";
-            }
-        })
-        
-        return new Pen(options);
     } //End _onRender
 
     //async _onSaveButton(event, html){

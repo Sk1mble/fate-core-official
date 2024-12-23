@@ -31,7 +31,7 @@
                         </div>
                 <img src = "{{logo}}" style = "pointer-events:none; width:160px; height:auto; margin-bottom:15px; margin-right:1px"></img>
             </div>       
-            <nav class="mfate-sheet__tabs-nav foo tabs" style="margin-top:8px; margin-right:0px; margin-left:auto">
+            <nav class="mfate-sheet__tabs-nav foo tabs" style="margin-top:8px; margin-right:0px; margin-left:auto;">
                 {{#if GM}}<button type="button" name="saveDefault" style="width:35px; height:35px; float:left; border:none; color:var(--fco-sheet-text-color); background-color:transparent" title="{{localize 'fate-core-official.saveAsDefault'}}"><i class="fas fa-user-plus"></i></button>
                 <button type="button" name="applyDefault" style="width:35px; height:35px; float:left; border:none; color:var(--fco-sheet-text-color); background-color:transparent" title="{{localize 'fate-core-official.applyDefault'}}"><i class="fas fa-user-edit"></i></button>
                 <button type="button" name="changeSheetMode" style="width:35px; height:35px; float:left; border:none; color:var(--fco-sheet-text-color); background-color:transparent" title="{{localize 'fate-core-official.changeSheetMode'}}"><i class="fas fa-eye"></i></button>{{/if}}
@@ -40,12 +40,12 @@
                     <span class="sr-only">{{localize 'fate-core-official.CharacterSheet'}}</span>
                     <b title="{{localize 'fate-core-official.CharacterSheet'}}" class="fas fa-clipboard mfate-sheet__tabs-nav-icon"></b>
                 </a>
-                <a class="{{tabs.biography.cssClass}} mfate-sheet__tabs-nav-link item {{#if (eq tabGroups.fcoSheet "biography")}}active{{/if}}" data-group="fcoSheet" data-action="tab" data-tab="biography">
+                <a class="{{tabs.biography.cssClass}} mfate-sheet__tabs-nav-link item" data-group="fcoSheet" data-action="tab" data-tab="biography">
                     <span class="sr-only">{{localize 'fate-core-official.BiographyAndExtras'}}</span>
                     <b title="{{localize 'fate-core-official.BiographyAndExtras'}}" class="fas fa-portrait mfate-sheet__tabs-nav-icon"></b>
                 </a>
                 {{/if}}
-                <a class="{{tabs.notes.cssClass}} mfate-sheet__tabs-nav-link item {{#if (eq tabGroups.fcoSheet "notes")}}active{{/if}}" data-group="fcoSheet" data-action="tab" data-tab="notes">
+                <a class="{{tabs.notes.cssClass}} mfate-sheet__tabs-nav-link item" data-group="fcoSheet" data-action="tab" data-tab="notes">
                     <span class="sr-only">{{localize 'fate-core-official.Notes'}}</span>
                     <b title="{{localize 'fate-core-official.Notes'}}" class="fas fa-file-alt mfate-sheet__tabs-nav-icon"></b>
                 </a>
@@ -113,7 +113,7 @@
                 <div name="notes_body" class="mfate-panel__body notes_body">
                     {{#if system.details.notes.GM}}
                         {{#if GM}}
-                            <prose-mirror class="fco_prose_mirror" name="system.details.notes.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.notes.value}}" collaborate="true">
+                            <prose-mirror toggled="true" class="fco_prose_mirror fco_character_notes" name="system.details.notes.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.notes.value}}" collaborate="true">
                                 {{{system.details.notes.rich}}}
                             </prose-mirror>
                         {{else}}
@@ -121,7 +121,7 @@
                         {{/if}}
                     {{else}}
                         {{#if editable}}
-                            <prose-mirror class="fco_prose_mirror" name="system.details.notes.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.notes.value}}" collaborate="true">
+                            <prose-mirror toggled="true" class="fco_prose_mirror fco_character_notes" name="system.details.notes.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.notes.value}}" collaborate="true">
                                 {{{system.details.notes.rich}}}
                             </prose-mirror>
                         {{else}}
@@ -258,7 +258,7 @@
                                     {{#if this.extra_id}}
                                         <div class="fco_ro_rich track_notes_pm">{{{this.richNotes}}}</div>
                                     {{else}}
-                                    <prose-mirror class="fco_prose_mirror track_notes_pm" name="system.tracks.{{@key}}.notes" data-document-u-u-i-d = "{{../this.actor.uuid}}" value="{{this.notes}}" collaborate="true";>
+                                    <prose-mirror toggled="true" class="fco_prose_mirror track_notes_pm" name="system.tracks.{{@key}}.notes" data-document-u-u-i-d = "{{../this.actor.uuid}}" value="{{this.notes}}" collaborate="true";>
                                         {{{this.richNotes}}}
                                     </prose-mirror>
                                     {{/if}}
@@ -297,7 +297,7 @@
                                 {{#if this.extra_id}}
                                     <div class="fco_ro_rich">{{{this.richNotes}}}</div>
                                 {{else}}
-                                <prose-mirror class="fco_prose_mirror" name="system.aspects.{{@key}}.notes" data-document-u-u-i-d = "{{../this.actor.uuid}}" value="{{this.notes}}" collaborate="true";>
+                                <prose-mirror toggled="true" class="fco_prose_mirror fco_character_aspect_notes" name="system.aspects.{{@key}}.notes" data-document-u-u-i-d = "{{../this.actor.uuid}}" value="{{this.notes}}" collaborate="true";>
                                     {{{this.richNotes}}}
                                 </prose-mirror>
                                 {{/if}}
@@ -395,7 +395,7 @@
                 </div>
                 {{#if (expanded this.document '_description')}}
                     {{#if editable}}
-                    <prose-mirror class="fco_prose_mirror" name="system.details.description.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.description.value}}" collaborate="true">
+                    <prose-mirror toggled="true" class="fco_prose_mirror fco_character_desc" name="system.details.description.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.description.value}}" collaborate="true">
                             {{{system.details.description.rich}}}
                         </prose-mirror>
                     {{else}}
@@ -410,7 +410,7 @@
                 </div>
                 {{#if (expanded this.document '_biography')}}
                     {{#if editable}}
-                    <prose-mirror class="fco_prose_mirror" name="system.details.biography.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.biography.value}}" collaborate="true";>
+                    <prose-mirror toggled="true" class="fco_prose_mirror fco_character_bio" name="system.details.biography.value" data-document-u-u-i-d = "{{this.actor.uuid}}" value="{{system.details.biography.value}}" collaborate="true";>
                             {{{system.details.biography.rich}}}
                     </prose-mirror>
                     {{else}}

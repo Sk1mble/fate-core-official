@@ -68,7 +68,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     static PARTS = {
         fateUtilitiesSheet: {
             template: "systems/fate-core-official/templates/FateUtilities.html",
-            scrollable: ["#aspects", "#cd_panel", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", "#fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane",".fco_scrollable", ".long_text_rich.fco_scrollable"],
+            scrollable: ["#aspects", "#cd_panel", "#fu_game_info_tab", "#fu_aspects_tab","#fu_tracks_tab", "#fu_scene_tab", "#fu_scene_pane", "#fu_rolls_tab", "#fu_conflict_tracker", "#fu_aspects_pane", ".fco_prose_mirror.fu_scene_notes", "fco_ro_rich.fu_scene_notes", "#fu_aspects_pane", "#fu_scene_notes_pane",".fco_scrollable", ".long_text_rich.fco_scrollable"],
         }
     }
 
@@ -99,37 +99,42 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
 
     async _onRender (context, options) {
         if (game.user.isGM){
-            fcoConstants.getPen("game_notes");
-            fcoConstants.getPen("scene_notes");
-            fcoConstants.getPen("game_date_time");
-
-            const countdowns = this.element.querySelectorAll('.cd_datum');
-            countdowns.forEach(countdown => {
-                countdown?.addEventListener("blur", event => this._on_cd_blur(event))
-                countdown?.addEventListener('focus', event => {this.editing = true;})
-                fcoConstants.getPen(countdown.id);
-            });
-
-            const countdowns_rich = this.element.querySelectorAll('.cd_datum_rich');
+            const countdowns_rich = this.element.querySelectorAll('.fco_prose_mirror.fu_cd');
             countdowns_rich.forEach(countdown => {
-                    countdown?.addEventListener('click', async event => {
-                        if (event.target.outerHTML.startsWith("<a data")) return;
-                        let id = event.currentTarget.id.split("_rich").join("");
-                        document.getElementById(id+"_rich").style.display = "none";
-                        document.getElementById(id).style.display = "block";
-                        document.getElementById(id).focus();
-                    });
-
-                    countdown?.addEventListener('contextmenu', async event => {
-                        let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML); //This dialog returns sanitised text.
-                        if (text != "discarded") {
-                            let rich = event.target.closest('div');
-                            let normal = document.getElementById(rich.id.split("_rich").join(""));
-                            rich.innerHTML = text;
-                            normal.innerHTML = text;
-                            this._on_cd_blur(event);
+                    countdown?.addEventListener('change', async event => {
+                        let name = event.target.dataset.name;
+                        let field = event.target.dataset.field;
+                        if (field == "name"){
+                            this.editing = false;
+                            let countdowns = game.settings.get("fate-core-official", "countdowns");
+                            let countdown = countdowns[fcoConstants.getKey(name)];
+                            if (countdown.name != event.target.value){
+                                let oldname = countdown.name;
+                                let newname = event.target.value;
+                                let testname = newname.replace(/<[^>]+>/g, '');
+                                if (testname == ""){
+                                    event.target.value = oldname;
+                                    await this.render(false);
+                                    return ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
+                                }
+                                let newCountdown = foundry.utils.duplicate(countdown);
+                                newCountdown.name = newname;
+                                delete countdowns[fcoConstants.getKey(countdown.name)];
+                                countdowns[fcoConstants.getKey(newname)]=newCountdown;
+                                await game.settings.set("fate-core-official","countdowns", countdowns);
+                                await game.socket.emit("system.fate-core-official",{"render":true});
+                            }
+                         }
+                         if (field == "description"){
+                            this.editing = false;
+                            let countdowns = game.settings.get("fate-core-official", "countdowns");
+                            let countdown = countdowns[fcoConstants.getKey(name)];
+                            countdown.description = event.target.value
+                            await game.settings.set("fate-core-official", "countdowns", countdowns);
+                            await game.socket.emit("system.fate-core-official",{"render":true});
                         }
-                    })
+                        await this.render(false);
+                    });
             })
 
             const roll_track = this.element.querySelectorAll("i[name='roll_track']");
@@ -167,66 +172,29 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 await game.combat.setFlag("fate-core-official","name",new_name);
             });
 
-            const game_notes_rich = this.element.querySelector('#game_notes_rich');
-            const game_notes = this.element.querySelector('#game_notes');
-            game_notes_rich?.addEventListener('click', event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                game_notes_rich.style.display = "none" 
-                game_notes.style.display = "block"
-                game_notes.focus();
+            const game_notes_rich = this.element.querySelector('.fco_prose_mirror.fu_game_notes');
+            game_notes_rich?.addEventListener('change', async event => {
+                await game.settings.set("fate-core-official", "gameNotes", event.target.value);
+                await game.socket.emit("system.fate-core-official", {"render":true});
+                this.editing = false;
+                await this.render(false)
             })
 
-            game_notes_rich?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    game_notes.innerHTML = text;
-                    game_notes_rich.innerHTML = text;
-                    await game.settings.set("fate-core-official", "gameNotes", text);
+            const scene_notes_rich = this.element.querySelector('.fco_prose_mirror.fu_scene_notes');
+            scene_notes_rich?.addEventListener('change', async event => {
+                await game.scenes.viewed.setFlag("fate-core-official","sceneNotes",event.target.value);
+                await game.socket.emit("system.fate-core-official",{"render":true});
+                this.editing = false;
+                await this.render(false);
+            })
+
+            const game_date_time_rich = this.element.querySelector(".fco_prose_mirror.fu_date_time_notes");
+            game_date_time_rich?.addEventListener('change', async event => {
+                    await game.settings.set("fate-core-official", "gameTime", event.target.value);
                     await game.socket.emit("system.fate-core-official",{"render":true});
                     this.editing = false;
                     await this.render(false);
-                }
             })
-
-            const scene_notes_rich = document.getElementById('scene_notes_rich');
-            const scene_notes = document.getElementById('scene_notes');
-            scene_notes_rich?.addEventListener('click', event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                scene_notes_rich.style.display = "none"
-                scene_notes.style.display = "block"
-                scene_notes.focus();
-            })
-
-            scene_notes_rich?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    scene_notes.innerHTML = text;
-                    scene_notes_rich.innerHTML = text;
-                    this._notesFocusOut(event);
-                }
-            })
-
-            const game_date_time_rich = document.getElementById('game_date_time_rich');
-            const game_date_time = document.getElementById("game_date_time")
-            game_date_time_rich?.addEventListener('click', event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                game_date_time_rich.style.display = "none";
-                game_date_time.style.display = "block";
-                game_date_time.focus();
-            })
-
-            game_date_time_rich?.addEventListener('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    game_date_time.innerHTML = text;
-                    game_date_time_rich.innerHTML = text;
-                    await game.settings.set("fate-core-official", "gameTime", text);
-                    await game.socket.emit("system.fate-core-official",{"render":true});
-                    this.editing = false;
-                    await this.render(false);
-                }
-            })
-
         }
         const cd_del = this.element.querySelectorAll('button[name="delete_cd"]');
         cd_del.forEach(cdbutton => cdbutton?.addEventListener('click', event => this._on_delete_cd(event)));
@@ -388,10 +356,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             await this.render(false);
         }))
 
-        const FUGameAspectNotes = this.element.querySelectorAll("textarea[name='FUGameAspectNotesText']");
+        const FUGameAspectNotes = this.element.querySelectorAll(".fco_prose_mirror.fu_game_aspect_notes");
         FUGameAspectNotes?.forEach(element => element.addEventListener("change", event => {
-            let details = event.target.id.split("_");
-            let aspectName = details[1];
+            let aspectName = event.target.name;
             let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official", "gameAspects"));
             let aspect = aspects.find(a => a.name == aspectName);
             aspect.notes = event.target.value;
@@ -408,38 +375,6 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             await game.settings.set("fate-core-official","gameAspects",aspects);
             await game.socket.emit("system.fate-core-official",{"render":true});
             await this.render(false);
-        }))
-
-        const trackNotesRich = this.element.querySelectorAll('div[name="FUTrackNotesText_rich"]');
-        trackNotesRich?.forEach(element => element.addEventListener("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            let id = event.currentTarget.id.split("_rich").join("");
-            let richid = event.currentTarget.id;
-            if (!richid) richid = event.target.id;
-            fcoConstants.getPen(id);
-            let trackNotes = document.getElementById(id);
-            element.style.display = "none";
-            trackNotes.style.display = "block"
-            trackNotes.focus();
-        }))
-
-        trackNotesRich?.forEach(element => element.addEventListener('contextmenu', async event => {
-            let target = event.target.closest('div');
-            let id = target.id.split("_rich").join("");
-            let text = await fcoConstants.updateText("Edit raw HTML", element.innerHTML);
-            if (text != "discarded") {
-                let target = document.getElementById(id);
-                let token_id = target.dataset.tokenid;
-                let track = target.dataset.name;//This is a much better way of accessing data than splitting the id.
-                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
-                let actor = token.actor;
-                let key = fcoConstants.gkfn(actor.system.tracks, track);
-                target.innerHTML = text;
-                element.innerHTML = text;
-                await actor.update({[`system.tracks.${key}.notes`]:text});
-                this.editing = false;
-                await this.render(false)
-            }
         }))
 
         const expandTrackNotes = this.element.querySelectorAll("div[name='FUexpandTrack']");
@@ -543,10 +478,6 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         const sit_aspect = this.element.querySelectorAll("input[name='sit_aspect']");
         sit_aspect?.forEach(element => element.addEventListener("change", event => this._sit_aspect_change(event)));
 
-        const scene_notes = document.getElementById("scene_notes");
-        scene_notes?.addEventListener("focus", event => this.scene_notes_edit(event));
-        scene_notes?.addEventListener("blur", event => this._notesFocusOut(event));
-
         const gmfp = this.element.querySelector("input[name='gmfp']");
         gmfp?.addEventListener("change", event=> this._edit_gm_points(event));
 
@@ -598,76 +529,32 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             this.selectingSkill = false
         }))
 
-        const FUAspectNotes_rich = this.element.querySelectorAll("div[name='FUAspectNotesText_rich']");
-        FUAspectNotes_rich?.forEach(aspect => aspect.addEventListener('click', event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            let id = aspect.id.split("_rich").join("");
-            fcoConstants.getPen(id);
-            let target = document.getElementById(id);
-            aspect.style.display = "none";
-            target.style.display = "block"
-            target.focus();
-        }));
-
-        FUAspectNotes_rich?.forEach(element => element.addEventListener('contextmenu', async event => {
-            let target = event.target.closest('div');
-            let id = target.id.split("_rich").join("");
-            let text = await fcoConstants.updateText("Edit raw HTML", element.innerHTML);
-            if (text != "discarded") {
-                let target = document.getElementById(id);
-                let token_id = target.dataset.tokenid;
-                let aspect = target.dataset.name;//This is a much better way of accessing data than splitting the id.
-                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
-                let actor = token.actor;
-                let key = fcoConstants.gkfn(actor.system.aspects, aspect);
-                target.innerHTML = text;
-                element.innerHTML = text;
-                await actor.update({[`system.aspects.${key}.notes`]:text});
-                this.editing = false;
-                await this.render(false)
-            }
-        }))
-
-        const FUAspectNotes = this.element.querySelectorAll("div[name ='FUAspectNotesText']");
-        FUAspectNotes?.forEach(aspect => aspect.addEventListener("blur", async event => {
-            if (!window.getSelection().toString()){
-                let desc = DOMPurify.sanitize(event.target.innerHTML);
+        const FUAspectNotes = this.element.querySelectorAll('.fco_prose_mirror.fu_aspect_notes');
+        FUAspectNotes.forEach(pm =>{
+            pm.addEventListener("change", async event => {
                 let token_id = event.target.getAttribute("data-tokenid");
                 let aspect = event.target.getAttribute("data-name");
                 let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
                 let actor = token.actor;
                 let key = fcoConstants.gkfn(actor.system.aspects, aspect);
-                await actor.update({[`system.aspects.${key}.notes`]:desc});
+                await actor.update({[`system.aspects.${key}.notes`]:event.target.value});
                 this.editing = false;
                 await this.render(false);
-            }
-        }));
-
-        const FUTrackNotesText = this.element.querySelectorAll("div[name ='FUTrackNotesText']");
-        
-        FUTrackNotesText?.forEach(element => element.addEventListener("blur", async event => {
-            this.onTrackNotesBlur (event);
-        }));
-
-        const game_date_time = document.getElementById('game_date_time');
-        game_date_time?.addEventListener("blur", async event => {
-            await game.settings.set("fate-core-official", "gameTime", DOMPurify.sanitize(event.currentTarget.innerHTML));
-            await game.socket.emit("system.fate-core-official",{"render":true});
-            this.editing = false;
-            await this.render(false);
+            })
         })
 
-        const game_notes = document.getElementById("game_notes");
-
-        game_notes?.addEventListener("focus", event => {
-            this.editing=true;
-        })
-
-        game_notes?.addEventListener("blur", async event => {
-            await game.settings.set("fate-core-official", "gameNotes", DOMPurify.sanitize(event.currentTarget.innerHTML));
-            await game.socket.emit("system.fate-core-official",{"render":true});
-            this.editing = false;
-            await this.render(false);
+        const FUTrackNotes = this.element.querySelectorAll('.fco_prose_mirror.fu_track_notes');
+        FUTrackNotes.forEach(pm => {
+            pm.addEventListener("change", async event => {
+                let token_id = event.target.getAttribute("data-tokenid")
+                let track = event.target.getAttribute("data-name");//This is a much better way of accessing data than splitting the id.
+                let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
+                let actor = token.actor;
+                let key = fcoConstants.gkfn(actor.system.tracks, track);
+                await actor.update({[`system.tracks.${key}.notes`]:event.target.value});
+                this.editing = false;
+                await this.render(false)
+            })
         })
 
         const add_game_aspect = this.element.querySelector("button[id='add_game_aspect']")
@@ -915,14 +802,6 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 });
         }
         this.selectingSkill = false;
-        await this.render(false);
-    }
-
-    async _notesFocusOut(event){
-        let notes = DOMPurify.sanitize(document.getElementById("scene_notes").innerHTML);
-        await game.scenes.viewed.setFlag("fate-core-official","sceneNotes",notes);
-        await game.socket.emit("system.fate-core-official",{"render":true});
-        this.editing = false;
         await this.render(false);
     }
 
@@ -2102,57 +1981,6 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     // Change name/desc on losing focus to editable divs
-    async _on_cd_blur(event){
-        let data = event.target.id.split("_");
-        let sel = window.getSelection().toString();
-        if (sel == ""){
-            // No selected text so go off and make the changes
-             if (data[1]== "name"){
-                this.editing = false;
-                let countdowns = game.settings.get("fate-core-official", "countdowns");
-                let countdown = countdowns[data[0]];
-                if (countdown.name != event.target.innerHTML){
-                    let oldname = countdown.name;
-                    let newname = DOMPurify.sanitize(event.target.innerHTML);
-                    let testname = newname.replace(/<[^>]+>/g, '');
-                    if (testname == ""){
-                        event.target.innerHTML=oldname;
-                        return ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
-                    }
-                    let newCountdown = foundry.utils.duplicate(countdown);
-                    newCountdown.name = newname;
-                    delete countdowns[fcoConstants.getKey(countdown.name)];
-                    countdowns[fcoConstants.getKey(newname)]=newCountdown;
-                    await game.settings.set("fate-core-official","countdowns", countdowns);
-                    await game.socket.emit("system.fate-core-official",{"render":true});
-                }
-             }
-             if (data[1] == "desc"){
-                this.editing = false;
-                let countdowns = game.settings.get("fate-core-official", "countdowns");
-                let countdown = countdowns[data[0]];
-                countdown.description = DOMPurify.sanitize(event.target.innerHTML);
-                await game.settings.set("fate-core-official", "countdowns", countdowns);
-                await game.socket.emit("system.fate-core-official",{"render":true});
-            }
-            await this.render(false);
-        }
-    }
-
-    async onTrackNotesBlur(event){
-        if (!window.getSelection().toString()){
-            let text = DOMPurify.sanitize(event.target.innerHTML);
-            let token_id = event.target.getAttribute("data-tokenid")
-            let track = event.target.getAttribute("data-name");//This is a much better way of accessing data than splitting the id.
-            let token = game.scenes.viewed.getEmbeddedDocument("Token", token_id);
-            let actor = token.actor;
-            let key = fcoConstants.gkfn(actor.system.tracks, track);
-            await actor.update({[`system.tracks.${key}.notes`]:text});
-            this.editing = false;
-            await this.render(false)
-        }
-    }
-
     async _timed_event (event){
         let te = new TimedEvent();
         te.createTimedEvent();
@@ -2411,7 +2239,7 @@ async _prepareContext(){
     }
 
     data.user = game.user;
-    let aspects = game.settings.get("fate-core-official","gameAspects");
+    let aspects = foundry.utils.duplicate(game.settings.get("fate-core-official","gameAspects"));
     if (game.combat?.scene){
         data.combatSceneName = game.combat.scene.name;
         data.pinned = true;
@@ -2419,6 +2247,10 @@ async _prepareContext(){
         data.combatSceneName = game.i18n.localize("fate-core-official.unpinned");
         data.pinned = false;
     }
+
+    aspects.forEach(async aspect => {
+        aspect.rich_notes = await fcoConstants.fcoEnrich(aspect.notes)
+    })
 
     data.game_aspects = aspects;
     data.game_time = game.settings.get("fate-core-official","gameTime");
@@ -2463,15 +2295,15 @@ async _prepareContext(){
     if (modifier < 0) modifier = 0;
 
     if (data.aspectsHeight > 0 && data.cdHeight > 0){
-        data.fuNotesHeight = (this.position.height) - data.cdHeight - data.aspectsHeight - 200;
+        data.fuNotesHeight = (this.position.height) - data.cdHeight - data.aspectsHeight - 225;
     } else {
-        data.fuNotesHeight = (this.position.height) - 400 - data.cdownheight - data.fuPaneHeight + modifier;
+        data.fuNotesHeight = (this.position.height) - 500 - data.cdownheight - data.fuPaneHeight + modifier;
     }
 
     data.gameAspectsHeight = 190;
     let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 55;
     if (gaModifier <0) gaModifier = 0;
-    data.gameNotesHeight = (this.position.height - 650) + gaModifier;
+    data.gameNotesHeight = (this.position.height - 675) + gaModifier;
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
     return data;
@@ -2644,16 +2476,7 @@ class acd extends foundry.applications.api.HandlebarsApplicationMixin(foundry.ap
     }
 
     _onRender(context, options){
-        fcoConstants.getPen("cd_description");
-        fcoConstants.getPen("cd_name");
-
-        this.element.querySelector('#cd_description')?.addEventListener('contextmenu', async event => {
-            this.element.querySelector('#cd_description').blur();;
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                this.element.querySelector('#cd_description').innerHTML = text;
-            }
-        })
+        super._onRender(context, options);
     }
 }
 
@@ -2748,7 +2571,7 @@ class TimedEvent {
 class FUAspectLabelClass extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static DEFAULT_OPTIONS = {
         tag: "form",
-        id: "FateUtilities",
+        id: "FUAspectLabelClass",
         window:{
             icon: "fas fa-cog",
             title: this.title

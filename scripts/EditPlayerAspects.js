@@ -36,92 +36,23 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
         const notes = this.element.querySelectorAll("textarea[class='aspect_notes']");
         notes.forEach(field => field?.addEventListener ("change", event => this._on_notes_change(event)));
 
-        for (let aspect in this.aspects){
-            let id = `aspect_description_${fcoConstants.getKey(this.aspects[aspect].name)}`;
-            let description = document.getElementById(id+"_rich");
-            let description_editable = document.getElementById(id)
-            let id2 = `notes_${fcoConstants.getKey(this.aspects[aspect].name)}`;
-            let notes = document.getElementById(id2+"_rich");
-            let notes_editable = document.getElementById (id2);
-            fcoConstants.getPen(id);
-            fcoConstants.getPen(id2);
+        const aspectDescriptions = this.element.querySelectorAll(".fco_prose_mirror.aspect_description");
+        const aspectNotes = this.element.querySelectorAll(".fco_prose_mirror.aspect_notes");
 
-            description?.addEventListener("keyup", event => {
-                if (event.code == "Tab") {
-                    description.click();
-                }
-            })
+        aspectDescriptions.forEach(aspect =>{ 
+            aspect.addEventListener("change", async event => {
+            let desc = event.target.value;
+            let key = event.target.getAttribute("data-key");
+            let aspect = this.aspects[key];
+            aspect.description = desc;
+        })});
 
-            description?.addEventListener('click', event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                description.style.display = "none";
-                description_editable.style.display = "block"
-                description_editable.focus();
-            })
-
-            if (this.actor.isOwner){
-                description?.addEventListener("contextmenu", async event => {
-                    let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
-                    if (text != "discarded") {
-                        description.innerHTML = text;
-                        description_editable.innerHTML = text;
-                        let key = event.currentTarget?.getAttribute("data-key");
-                        let aspect = this.aspects[key];
-                        aspect["description"] = text;
-                    }
-                })
-
-                notes?.addEventListener('contextmenu', async event => {
-                    let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML,true);
-                    if (text != "discarded") {
-                        notes_editable.innerHTML = text;   
-                        notes.innerHTML = text;  
-                        let key = event.currentTarget?.getAttribute("data-key");
-                        let aspect = this.aspects[key];
-                        aspect["notes"] = text;
-                    }
-                })
-            }
-    
-            description_editable?.addEventListener('blur', async event => {
-                if (!window.getSelection().toString()){
-                    let desc = await DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.actor.isOwner, documents:true, async:true}));
-                    description.style.display = "block";
-                    description_editable.style.display = "none"
-                    description_editable.innerHTML = desc;
-                    description.innerHTML = desc;
-                    let key = event.target.getAttribute("data-key");
-                    let aspect = this.aspects[key];
-                    aspect.description = desc;
-                }
-            })
-
-            notes?.addEventListener("keyup", event => {
-                if (event.code == "Tab") {
-                    notes.click();
-                }
-            })
-        
-            notes?.addEventListener('click', event => {
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                notes.style.display = "none";
-                notes_editable.style.display = "block"
-                notes_editable.focus();
-            })
-
-            notes_editable?.addEventListener('blur', async event => {
-                if (!window.getSelection().toString()){
-                    let text = DOMPurify.sanitize(await TextEditor.enrichHTML(event.currentTarget.innerHTML, {secrets:this.actor.isOwner, documents:true, async:true}));
-                    notes.style.display = "block";
-                    notes_editable.style.display = "none"
-                    notes_editable.innerHTML = text;
-                    notes.innerHTML = text;
-                    let key = event.target.getAttribute("data-key");
-                    let aspect = this.aspects[key];
-                    aspect.notes = text;
-                }
-            })   
-        }
+        aspectNotes.forEach(aspect => addEventListener("change", async event => {
+            let notes = event.target.value;
+            let key = event.target.getAttribute("data-key");
+            let aspect = this.aspects[key];
+            aspect.notes = notes;
+        }));  
     }
 
     async _on_name_change(event){
