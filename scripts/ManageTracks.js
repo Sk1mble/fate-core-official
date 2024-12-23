@@ -48,7 +48,7 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
     }
     
     //Here are the action listeners
-   _onRender(context, options) {
+   async _onRender(context, options) {
         const saveTrackButton = this.element.querySelector("button[id='save_entity_track']");
         const edit_entity_linked_skillsButton = this.element.querySelector("button[id='edit_entity_linked_skills']");
         const copy_track = this.element.querySelector("button[id='copy_entity_track']");
@@ -110,11 +110,11 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
 
     async _onSaveTrackButton(event){
         let name = document.getElementById("edit_entity_track_name").value;
-        let description = DOMPurify.sanitize(document.getElementById("edit_entity_track_description").value);
+        let description = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_desc').value);
         let recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
         let aspect = document.getElementById("edit_entity_track_aspect").value;
-        let when_marked = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_marked").value);
-        let when_recovers = DOMPurify.sanitize(document.getElementById("edit_entity_track__recovery_conditions").value);
+        let when_marked = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_when_marked').value);
+        let when_recovers = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_recovery_conditions').value);
         let boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_entity_track_harm").value);
         let paid = document.getElementById("edit_entity_track_paid").checked;

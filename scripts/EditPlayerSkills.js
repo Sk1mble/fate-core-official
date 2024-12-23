@@ -312,7 +312,7 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
     }
 
     async _onSkillButton(event){
-        let name = event.target.id;
+        let name = event.target.name;
         let skill = fcoConstants.gbn(this.player_skills, name);
         fcoConstants.presentSkill(skill);
     }

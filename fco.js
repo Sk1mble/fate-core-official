@@ -1505,6 +1505,10 @@ Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, key, en
     return enriched_tokens[token_id][type][key].richNotes;
 })
 
+Handlebars.registerHelper("fco_enr", async function (html) {
+    return await fcoConstants.fcoEnrich(html);
+})
+
 Handlebars.registerHelper("fco_strip", function (value) {
     return value.replace(/(<([^>]+)>)/gi, "")
 })

@@ -16,7 +16,8 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
         classes: ['fate'],
         form: {
             handler: EditPlayerStunts.#onSubmit,
-            closeOnSubmit: true,
+            submitOnChange: true,
+            closeOnSubmit: false,
         },
         window: {
             title: this.title,
@@ -121,17 +122,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
         }
     }
 
-    _onRender(context, options) {
-        let editor = this.element.querySelector("div[id='edit_stunt_desc']");
-        var options = {
-            editor: editor, // {DOM Element} [required]
-            stay: false,
-            class: 'pen', // {String} class of the editor,
-            debug: false, // {Boolean} false by default
-            textarea: '<textarea name="content"></textarea>', // fallback for old browsers
-            linksInNewWindow: false // open hyperlinks in a new windows/tab
-        }
-
+    async _onRender(context, options) {
         // Edit the text field that shows the name of the macro when we edit the value of the macro UUid.
         const macro = this.element.querySelector("input[name='macro']")
         macro?.addEventListener("change", (event) => {
@@ -226,7 +217,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
     async _prepareContext (){
         let data={}
         data.stunt=foundry.utils.duplicate(this.stunt);
-        data.stunt.richDesc = await fcoConstants.fcoEnrich(data.stunt.description, this.actor)
+        data.stunt.richDesc = await fcoConstants.fcoEnrich(data.stunt.description, this.actor);
         if (this.actor == null){
             data.skills=fcoConstants.wd().system.skills;
         } else {
