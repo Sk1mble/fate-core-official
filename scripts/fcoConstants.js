@@ -157,7 +157,7 @@ class fcoConstants {
         })
     }
 
-    static presentSkill(skill){
+    static async presentSkill(skill){
         fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
                                             <div style="display:flex; flex-direction: column">
                                                 <div style="width: 950px">
@@ -169,7 +169,7 @@ class fcoConstants {
                                                             <b>${game.i18n.localize("fate-core-official.Description")}:</b>
                                                     </div>
                                                     <div style="width:850px; margin-bottom:10px">
-                                                        ${skill.description}
+                                                        ${await fcoConstants.fcoEnrich(skill.description)}
                                                     </div>
                                                 </div>
 
@@ -178,7 +178,7 @@ class fcoConstants {
                                                         <b>${game.i18n.localize("fate-core-official.Overcome")}:</b>
                                                     </div>
                                                     <div style="width:850px; padding:0px; margin-bottom:10px">
-                                                        ${skill.overcome}
+                                                        ${await fcoConstants.fcoEnrich(skill.overcome)}
                                                     </div>
                                                 </div>
 
@@ -187,7 +187,7 @@ class fcoConstants {
                                                         <b>${game.i18n.localize("fate-core-official.CAA")}:</b>
                                                     </div>
                                                     <div style="width:850px; margin-bottom:20px">
-                                                        ${skill.caa}
+                                                    ${await fcoConstants.fcoEnrich(skill.caa)}
                                                     </div>
                                                 </div>
 
@@ -196,7 +196,7 @@ class fcoConstants {
                                                         <b>${game.i18n.localize("fate-core-official.Attack")}:</b>
                                                     </div>
                                                     <div style="width:850px; padding:0px; margin-bottom:10px">
-                                                        ${skill.attack}
+                                                    ${await fcoConstants.fcoEnrich(skill.attack)}
                                                     </div>
                                                 </div>
 
@@ -205,7 +205,7 @@ class fcoConstants {
                                                         <b>${game.i18n.localize("fate-core-official.Defend")}:</b>
                                                     </div>
                                                     <div style="width:850px">
-                                                        ${skill.defend}
+                                                    ${await fcoConstants.fcoEnrich(skill.defend)}
                                                     </div>
                                                 </div>
                                             </div>`,1000)

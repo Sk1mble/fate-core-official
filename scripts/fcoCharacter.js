@@ -418,8 +418,6 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
             const t_notes2 = this.element.querySelectorAll('.mfate-tracks-notes__input:not(.contenteditable');
             const a_notes2 = this.element.querySelectorAll('.mfate-aspects-notes__input:not(.contenteditable)');
 
-            t_notes2.forEach(field => field.addEventListener("contextmenu", event => {this.updateNotesHTML(event)}));
-            a_notes2.forEach(field => field.addEventListener("contextmenu", event => {this.updateNotesHTML(event)}));
 
             const box = this.element.querySelectorAll("input[class='fco-box']");
             box.forEach(b => b.addEventListener("click", event => this._on_click_box(event)));
@@ -439,7 +437,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                 }
             }))
 
-            track_name.forEach(element => element.addEventListener("contextmenu", event => {
+            track_name.forEach(element => element.addEventListener("contextmenu", async event => {
                     let name = event.target.dataset.mfname;
                     let track = fcoConstants.gbn(this.object.system.tracks, name);
             
@@ -461,7 +459,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                 ${game.i18n.localize("fate-core-official.Description")}:
                             </td>
                             <td style="padding:10px">
-                                ${track.description}
+                            ${await fcoConstants.fcoEnrich(track.description)}
                             </td>
                         </tr>
                         <tr>
@@ -480,7 +478,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                 ${game.i18n.localize("fate-core-official.WhenMarked")}:
                             </td>
                             <td style="padding:10px">
-                                ${track.when_marked}
+                                ${await fcoConstants.fcoEnrich(track.when_marked)}
                             </td>
             
                         </tr>
@@ -489,7 +487,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                 ${game.i18n.localize("fate-core-official.HowRecover")}:
                             </td>
                             <td style="padding:10px">
-                                ${track.recovery_conditions}
+                                ${await fcoConstants.fcoEnrich(track.recovery_conditions)}
                             </td>
                         </tr>
                     </table>

@@ -37,7 +37,7 @@
                     {{localize 'fate-core-official.Description'}}:
                 </td>
                 <td>
-                    <prose-mirror name="description" class="fco_prose_mirror edit_track_desc" value="{{this.track.description}}">
+                    <prose-mirror name="description" toggled="true" class="fco_prose_mirror edit_track_desc" value="{{this.track.description}}">
                         {{{this.rich.description}}}
                     </prose-mirror>
                 </td>
@@ -83,7 +83,7 @@
                     {{localize 'fate-core-official.WhenMarked'}}
                 </td>
                 <td>
-                    <prose-mirror name="when_marked" class="fco_prose_mirror edit_track_when_marked" value="{{this.track.when_marked}}">
+                    <prose-mirror name="when_marked" toggled="true" class="fco_prose_mirror edit_track_when_marked" value="{{this.track.when_marked}}">
                         {{{this.rich.when_marked}}}
                     </prose-mirror>
                 </td>
@@ -93,7 +93,7 @@
                     {{localize 'fate-core-official.HowRecover'}}
                 </td>
                 <td>
-                    <prose-mirror name="recovery_conditions" class="fco_prose_mirror edit_track_recovery_conditions" value="{{this.track.recovery_conditions}}">
+                    <prose-mirror toggled = "true" name="recovery_conditions" class="fco_prose_mirror edit_track_recovery_conditions" value="{{this.track.recovery_conditions}}">
                         {{{this.rich.recovery_conditions}}}
                     </prose-mirror>
                 </td>

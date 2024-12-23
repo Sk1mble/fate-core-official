@@ -32,6 +32,8 @@
 * Converted the main character sheet to use ProseMirror instead of the Pen editor (step one in converting all rich text editors to ProseMirror)
 * Converted the Extra character sheet to use ProseMirror instead of the Pen editor.
 * Completely switched to using ProseMirror editors and deleted the Pen editor scripts as no longer necessary.
+* Stunt editor now submits on change and removed the save button.
+* Track editor now populating fully enriched text correctly.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

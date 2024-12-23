@@ -32,19 +32,19 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
     }
 
     async _prepareContext(options){
-        let rich = {};
-        for (let part in this.track){
-            if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.track[part]);
+        if (!this.data) {
+            this.data = {};
+            this.data.track= this.track;
+            this.data.categories=game.settings.get("fate-core-official","track_categories");
+            this.data.skills = foundry.utils.duplicate(this.entity.system.skills);
+            this.data.entity = this.entity;
+            let rich = {};
+            for (let part in this.data.track){
+                if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.track[part]);
+            }
+            this.data.rich = rich;
         }
-
-        const templateData = {
-            track:this.track,
-            categories:game.settings.get("fate-core-official","track_categories"),
-            skills:foundry.utils.duplicate(this.entity.system.skills),
-            entity:this.entity,
-            rich:rich
-        }
-        return templateData;
+        return this.data;
     }
     
     //Here are the action listeners
@@ -60,6 +60,14 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
         edit_entity_linked_skillsButton?.addEventListener("click", event => {this._edit_entity_linked_skillsButtonClick(event)});
         copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
         export_track?.addEventListener("click", event => this._onExportTrack(event));
+
+        const proseMirrors = this.element.querySelectorAll('.fco_prose_mirror');
+        proseMirrors.forEach(pm => {
+            pm.addEventListener("change", async event => {
+                await this.updateData();
+                this.render(false);
+            })
+        })
     }
 
     //Here are the event listener functions.
@@ -106,6 +114,28 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
         } catch  {
             // Do nothing.
         }
+    }
+
+    async updateData () {
+        this.data.track.name = document.getElementById("edit_entity_track_name").value;
+        this.data.track.description = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_desc').value);
+        this.data.track.recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
+        this.data.track.aspect = document.getElementById("edit_entity_track_aspect").value;
+        this.data.track.when_marked = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_when_marked').value);
+        this.data.track.when_recovers = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_recovery_conditions').value);
+        this.data.track.boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
+        this.data.track.harm = parseInt(document.getElementById("edit_entity_track_harm").value);
+        this.data.track.paid = document.getElementById("edit_entity_track_paid").checked;
+        this.data.track.label = document.getElementById("entity_track_label_select").value;
+        this.data.track.custom_label = document.getElementById("entity_track_custom_label").value;
+        this.data.track.rollable = document.getElementById("entity_track_rollable").value;
+        this.data.track.category = document.getElementById("edit_entity_track_category").value;
+
+        let rich = {};
+        for (let part in this.data.track){
+            if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.data.track[part]);
+        }
+        this.data.rich = rich;
     }
 
     async _onSaveTrackButton(event){
