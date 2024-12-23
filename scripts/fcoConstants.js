@@ -291,7 +291,7 @@ class fcoConstants {
         new foundry.applications.api.DialogV2({
             modal: false,
             window:{title: title}, 
-            content: `<div style="background-color:white; color:black;"><textarea name="fcoCopiable" rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${toCopy}</textarea></div>`,
+            content: `<div style="background-color:white; color:black;"><textarea name="fcoCopiable" rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black; scrollbar-color:var(--fco-accent-colour) #FFFFFF00;">${toCopy}</textarea></div>`,
             buttons: [{
                 label: game.i18n.localize("fate-core-official.CopyToClipboardAndClose"),
                 callback: (event, button, dialog) => {

@@ -23,7 +23,7 @@
     <button type="button" id="exportTrack" style="width:50px; height:50px"><i class = "fas fa-file-export fa-xl"></i></button>   
     </div>
 
-    <div style = "overflow-y:auto; max-height:800px" class = "fco_scrollable">
+    <div style = "overflow-y:auto; max-height:60vh" class = "fco_scrollable">
 
     
     <table style="width:95%" cellspacing ="4" cellpadding="4">
@@ -164,6 +164,6 @@
     </table>
 </div>
 <div style = "display:flex; flex-direction:row; gap:20px; margin-top:20px">
-    <button type="button" id="save_track" style="width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" disabled>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:50px; height:50px" id="delete_track"><i class="fas fa-trash fa-xl"></i></button>
+    <button type="button" id="save_track" style="width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" {{#if (eq track.name "New Track")}} disabled="disabled"{{/if}}>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:50px; height:50px" id="delete_track"><i class="fas fa-trash fa-xl"></i></button>
 </div>
 </div>

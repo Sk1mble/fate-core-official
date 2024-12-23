@@ -543,6 +543,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
                         }
                     });
                     this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
+                    this.track = undefined;
                     this.render(false);
             } catch {
                 ui.notifications.error(game.i18n.localize("fate-core-official.CannotDeleteThat"))
@@ -716,7 +717,7 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
         editTracksButton?.addEventListener("click", event => this._onEditTracksButton(event));
 
         setCategoriesButton?.addEventListener("click", event => {
-            let content = `<div style="display:flex; flex-direction:column;">`;
+            let content = `<div class="fco_track_change_categories" style="display:flex; flex-direction:column; overflow-y:auto; max-height:70vh; scrollbar-color:var(--fco-accent-colour) #FFFFFF00;">`;
             let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let categories = game.settings.get("fate-core-official","track_categories");
 
@@ -744,7 +745,10 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
             content += `</div>`
             let width = 800;
             new foundry.applications.api.DialogV2({
-                        window: {title: `Change Track Categories`},
+                        window: {
+                            title: `Change Track Categories`,
+                            scrollable:['.fco_change_track_categories'],
+                        },
                         content: content,
                         buttons: [{
                                 action: "ok",
@@ -771,6 +775,10 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
             importTracks?.addEventListener("click", event => this._importTracks(event));
             exportTracks?.addEventListener("click", event => this._exportTracks(event));
             orderTracks?.addEventListener("click", event => this._orderTracks (event));
+            
+            selectBox?.addEventListener("change", event => {
+                this.category = event.target.value;
+            })
     }
     
     //Here are the event listener functions.
@@ -893,7 +901,7 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
     }
     
     async _onEditTracksButton(event){
-        let category = this.element.querySelector('#track_categories_select').value;
+        let category = this.category;
         if (category !="" && category != undefined){
             let track_editor = new EditTracks(category);
             track_editor.render(true);
