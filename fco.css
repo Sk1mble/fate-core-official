@@ -23,6 +23,10 @@ h1.window-title br {
   padding-bottom:5px;
 }
 
+option {
+  background-color: inherit;
+}
+
 #FateUtilities .window-content{
   padding: 0;
 }

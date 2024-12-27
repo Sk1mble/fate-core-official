@@ -56,7 +56,7 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let replace = false;
     let flags = foundry.utils.duplicate(adventure.flags);
     let settings = flags["fate-core-official"]?.settings;
-    if (settings && !formData?.sheet?.overrideSettings){
+    if (settings && !adventure?.sheet?.overrideSettings){
         const confirm = await foundry.applications.api.DialogV2.confirm({
             window:{title:  game.i18n.localize("fate-core-official.overrideSettingsTitle")},
             content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`,
@@ -969,7 +969,7 @@ game.settings.register("fate-core-official", "refreshTotal", {
     default:3,
     onChange: () =>{
         foundry.applications.instances.forEach(app => {
-            if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+            if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
         })
     }
 });
@@ -994,7 +994,7 @@ game.settings.register("fate-core-official","freeStunts", {
     default:3,
     onChange: () =>{
         foundry.applications.instances.forEach(app => {
-            if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+            if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
         })
     }
 })
@@ -1010,7 +1010,7 @@ game.settings.register("fate-core-official","freeStunts", {
         default:20,
         onChange: () =>{
             foundry.applications.instances.forEach(app => {
-                if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+                if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
             })
         }
     });
@@ -1025,7 +1025,7 @@ game.settings.register("fate-core-official","freeStunts", {
         default:true,
         onChange: () =>{
             foundry.applications.instances.forEach(app => {
-                if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+                if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
             })
         }
     })
@@ -1040,7 +1040,7 @@ game.settings.register("fate-core-official","freeStunts", {
         default:true,
         onChange: () =>{
             foundry.applications.instances.forEach(app => {
-                if (app.object.type == "Thing" || app.object.type == "fate-core-official") app.render(false);
+                if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
             })
         }
     })

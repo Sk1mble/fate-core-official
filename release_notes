@@ -34,6 +34,7 @@
 * Completely switched to using ProseMirror editors and deleted the Pen editor scripts as no longer necessary.
 * Stunt editor now submits on change and removed the save button.
 * Track editor now populating fully enriched text correctly.
+* 27/12/2024 - Fixed a bug in the fate_splash importer.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.
