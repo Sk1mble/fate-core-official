@@ -106,6 +106,13 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 
     //Here are the action listeners
     _onRender(context, options) {
+        // Disable form if not editable
+        if (!this.isEditable) {
+            for (const el of this.element.querySelectorAll(".window-content :is(input, button, select, textarea)")) {
+                el.disabled = true;
+            }
+        }
+
         const actor = this.element.querySelector(".mfate-sheet");
         
         //Add a drop handler to cope with Extras and mf_draggable items being dropped on the sheet

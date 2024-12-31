@@ -11,6 +11,9 @@
   height:100%;
 }
 
+.fate button:disabled {
+  opacity:0.5;
+}
 h1.window-title br {
   display: none;
 }

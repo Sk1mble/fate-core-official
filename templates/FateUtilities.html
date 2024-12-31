@@ -679,7 +679,7 @@
                                 <div id ="fu_date_and_time_container">
                                     <h2 style="vertical-align:top">{{localize 'fate-core-official.DateAndTimeNotes'}}</h2>
                                     {{#if GM}}
-                                        <prose-mirror toggled="true" style="margin:0px; min-height:7em; font-size:{{fontSize}}pt" class="fco_prose_mirror fu_date_time_notes" value = "{{this.game_time}}">
+                                        <prose-mirror toggled="true" style="margin:0px; min-height:7em; max-height:7em; font-size:{{fontSize}}pt" class="fco_prose_mirror fu_date_time_notes" value = "{{this.game_time}}">
                                             {{{this.rich_game_time}}}
                                         </prose-mirror>
                                     {{else}}

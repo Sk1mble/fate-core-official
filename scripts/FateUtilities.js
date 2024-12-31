@@ -771,7 +771,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 mrd.render(true);
                 this.shift=false;
                 try {
-                    mrd.bringToTop();
+                    mrd.bringToFront();
                 } catch  {
                     // Do nothing.
                 }
@@ -2300,10 +2300,21 @@ async _prepareContext(){
         data.fuNotesHeight = (this.position.height) - 500 - data.cdownheight - data.fuPaneHeight + modifier;
     }
 
-    data.gameAspectsHeight = 190;
-    let gaModifier = data.gameAspectsHeight - data.game_aspects.length * 55;
-    if (gaModifier <0) gaModifier = 0;
-    data.gameNotesHeight = (this.position.height - 675) + gaModifier;
+    if (data.actualGameAspectsHeight == 0 || data.actualGameAspectsHeight == undefined){
+        data.gameAspectsHeight = data.game_aspects.length * 52 + 64 - 10; //Number of aspects * 52 pixels + H2 header - no padding on bottom aspect.
+        if (game.user.isGM) data.gameAspectsHeight += 32; // Allow for the height of the 'add new aspect' button.
+    } else {
+        data.gameAspectsHeight = data.actualGameAspectsHeight
+    }
+
+    if (data.dateTimeHeight == 0 || data.dateTimeHeight == undefined) {
+        if (game.user.isGM) {
+            data.dateTimeHeight = 160;
+        } else {
+            data.dateTimeHeight = 111; // The date time notes field is smaller for non-GMs.
+        }
+    }
+    data.gameNotesHeight = (this.position.height - data.dateTimeHeight - data.gameAspectsHeight - 65 - 150)
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
     return data;

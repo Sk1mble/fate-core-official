@@ -105,7 +105,13 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     _onRender (context, options){
-        if (!this.isEditable) return;
+        // Disable form if not editable
+        if (!this.isEditable) {
+            for (const el of this.element.querySelectorAll(".window-content :is(input, button, select, textarea)")) {
+                el.disabled = true;
+            }
+            return;
+        }
         const delete_stunt = this.element.querySelectorAll("button[name='delete_item_stunt']"); //The button for deleting each stunt from the Extra. Multiple.
         delete_stunt?.forEach(button => button?.addEventListener("click", event => this._onDelete(event)));
 

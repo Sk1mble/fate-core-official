@@ -3,7 +3,7 @@
 		<table style="border:none; background-color:transparent; width:95%;">
 		<tr style="background-color:transparent">
 				<td style="font-family:var(--fco-font-family); font-weight:bold; color:var(--fco-sheet-text-colour); font-size:medium; width:25%">{{localize 'fate-core-official.Artwork'}}</td>
-				<td style="width:100px"><img data-uuid="{{this.document.uuid}}" class="fco_popviewable mfate-sheet_extra-avatar profile-img" id="{{this.document.id}}_avatar" width="150" height="auto" style="border:0; cursor: pointer; padding-right:5px" data-edit="img" data-action="editImage" src="{{document.img}}"></img></td>
+				<td style="width:100px"><img data-uuid="{{this.document.uuid}}" class="fco_popviewable mfate-sheet_extra-avatar {{#if this.document.isOwner}}profile-img"{{/if}} id="{{this.document.id}}_avatar" width="150" height="auto" style="border:0; cursor: pointer; padding-right:5px" {{#if this.document.isOwner}}data-edit="img" data-action="editImage"{{/if}} src="{{document.img}}"></img></td>
 			 </tr>		
 		<tr style="background-color:transparent">
 			<td style="font-family:var(--fco-font-family); font-weight:bold; color:var(--fco-sheet-text-colour); font-size:medium; width:25%">{{localize 'fate-core-official.Name'}}:</td>
@@ -122,7 +122,7 @@
 		<!-- Here are the aspects attached to the extra.-->
 			<div class="mfate-panel__header">
 				<div class="mfate-panel__header-label">{{localize 'fate-core-official.Aspects'}}</div>
-				<div title="{{localize 'fate-core-official.OpenTheAspectEditor'}}" name="edit_item_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
+				{{#if this.document.isOwner}}<div title="{{localize 'fate-core-official.OpenTheAspectEditor'}}" name="edit_item_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>{{/if}}
 			</div>
 
 			<ul class="mfate-aspects-list">
@@ -142,8 +142,8 @@
 				<!-- <button class="mfate-panel__header-button">Settings</button>
 					<button class="mfate-panel__header-button">Sort</button> -->
 					{{localize 'fate-core-official.CountSkills'}} <input name="system.countSkills" type="checkbox" {{#if this.document.system.countSkills}}checked="checked"{{/if}}></input>
-					&nbsp&nbsp{{localize 'fate-core-official.combineSkills'}} <input name="system.combineSkills" type="checkbox" {{#if this.document.system.combineSkills}}checked="checked"{{/if}}></input>
-				<div title="{{localize 'fate-core-official.OpenTheSkillEditor'}}" name="edit_item_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>
+					&nbsp&nbsp{{localize 'fate-core-official.combineSkills'}} <input name="system.combineSkills" type="checkbox" {{#if this.document.system.combineSkills}}checked="checked"{{/if}} style="margin-right:10px"></input>
+				{{#if this.document.isOwner}}<div title="{{localize 'fate-core-official.OpenTheSkillEditor'}}" name="edit_item_skills" i icon class="fas fa-cog mfate-panel__header-button"></div>{{/if}}
 			</div>
 			<div name="skills_body" class="mfate-panel__body">
 				<ul class="mfate-skills-list">
@@ -174,9 +174,9 @@
 
 			<div class="mfate-panel__header" name="stunts_header">
 				<b class="mfate-panel__header-label">{{localize 'fate-core-official.Stunts'}}</b>
-				<div title="{{localize 'fate-core-official.ViewTheStuntDatabase'}}" name="item_stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
+				{{#if this.document.isOwner}}<div title="{{localize 'fate-core-official.ViewTheStuntDatabase'}}" name="item_stunt_db" i icon class="fas fa-book mfate-panel__header-button"></div>
 				{{#if GM}}<div title="{{localize 'fate-core-official.uploadAllStunts'}}" name="ul_all_extra_stunts" i icon class="fas fa-angle-double-up mfate-panel__header-button"></div>{{/if}}
-				<div class="fas fa-plus mfate-panel__header-button" title="{{localize 'fate-core-official.AddANewStunt'}}" name="edit_item_stunts" i icon></div>
+				<div class="fas fa-plus mfate-panel__header-button" title="{{localize 'fate-core-official.AddANewStunt'}}" name="edit_item_stunts" i icon></div>{{/if}}
 			</div>
 				<div name="stunts_body" class = "mfate-stunts__body">
 					<div class="mfate-stunts__table">
@@ -230,7 +230,7 @@
 										{{/if}}      
                                     {{/each}}
                                 </select>
-                                <div title="{{localize 'fate-core-official.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_item_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>
+                                {{#if this.document.isOwner}}<div title="{{localize 'fate-core-official.OpenTheTrackEditor'}}" style="font-size:medium;" name="edit_item_tracks" i icon class="fas fa-cog mfate-panel__header-button"></div>{{/if}}
                             </div>
                             <div name="tracks_body" style="scrollbar-width:thin; {{#if (eq this.contents false)}} margin-bottom:20px{{/if}}">
                                 <div class="mfate-tracks__list">

@@ -123,6 +123,13 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
     }
 
     async _onRender(context, options) {
+        //If the data in the rich description has changed, re-render to ensure the prose mirror field is up to date
+        const pm = this.element.querySelector(".fco_prose_mirror.fco_stunt_desc");
+        pm.addEventListener("change", async event => {
+            this.stunt.description = event.target.value;
+            await this.render(false);
+        });
+
         // Edit the text field that shows the name of the macro when we edit the value of the macro UUid.
         const macro = this.element.querySelector("input[name='macro']")
         macro?.addEventListener("change", (event) => {
@@ -216,7 +223,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
 
     async _prepareContext (){
         let data={}
-        data.stunt=foundry.utils.duplicate(this.stunt);
+        data.stunt = foundry.utils.duplicate(this.stunt);
         data.stunt.richDesc = await fcoConstants.fcoEnrich(data.stunt.description, this.actor);
         if (this.actor == null){
             data.skills=fcoConstants.wd().system.skills;

@@ -808,7 +808,7 @@ export class fcoActor extends Actor {
                 let mrd = new ModifiedRollDialog(this, trackName, true);
                 mrd.render(true);
                 try {
-                    mrd.bringToTop();
+                    mrd.bringToFront();
                 } catch  {
                     // Do nothing.
                 }
@@ -866,7 +866,7 @@ export class fcoActor extends Actor {
             let mrd = new ModifiedRollDialog(this, skillName);
             mrd.render(true);
             try {
-                mrd.bringToTop();
+                mrd.bringToFront();
             } catch  {
                 // Do nothing.
             }

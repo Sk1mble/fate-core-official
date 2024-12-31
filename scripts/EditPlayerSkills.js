@@ -301,7 +301,7 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
             await e.render(true);
             e.skillsWindow = this;
             try {
-                e.bringToTop();
+                e.bringToFront();
             } catch  {
                 // Do nothing.
             }

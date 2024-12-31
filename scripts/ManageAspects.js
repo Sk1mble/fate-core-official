@@ -141,7 +141,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
             });
             this.render(true);
             try {
-                this.bringToTop();
+                this.bringToFront();
             } catch  {
                 // Do nothing.
             }
@@ -156,7 +156,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
         let e = new EditAspect(aspect);
         e.render(true);
         try {
-            e.bringToTop();
+            e.bringToFront();
         } catch  {
             // Do nothing.
         }
@@ -181,7 +181,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
                 });
                 this.render(true);
                 try {
-                    e.bringToTop();
+                    e.bringToFront();
                 } catch  {
                     // Do nothing.
                 }
