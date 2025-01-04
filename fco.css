@@ -315,10 +315,13 @@ textarea [name="command"] {
   opacity:1;
 }
 
-.fate input[type="checkbox"]:checked::before {
+.fate input[type="checkbox"]:checked::before, .mfate-sheet input[type="checkbox"]:checked::before {
   background-color:var(--fco-accent-colour);
   width:100%;
   content:"✔";
+  text-align:center;
+  font-size:1em;
+  font-weight:bold;
 }
 
 /* The container */

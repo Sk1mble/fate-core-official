@@ -150,6 +150,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
                 let updateObject = {};
                 updateObject[field] = value;
                 await this.document.update(updateObject);
+                await this.render(false);
             })
         })
 
