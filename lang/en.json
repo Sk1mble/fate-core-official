@@ -1735,6 +1735,7 @@
     "fate-core-official.RolledBy":"Rolled by",
     "fate-core-official.SkillRank":"Skill rank",
     "fate-core-official.PlusOne":"Added Bonus: +1",
+    "fate-core-official.GMRequired":"You can't do that without a logged in GM.",
     "fate-core-official.FreeInvoke":"Free Invoke: +2",
     "fate-core-official.FreeInvokes":"Free Invokes: ",
     "fate-core-official.FreeInvokeReroll":"Free Invoke: Reroll",

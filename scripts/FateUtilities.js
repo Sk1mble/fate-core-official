@@ -806,6 +806,10 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     static async _fu_roll_button(event){
+        if (!game.users.activeGM) {
+            ui.notifications.error(game.i18n.localize("fate-core-official.GMRequired"));
+            return;
+        }
         let detail = event.target.getAttribute("data-roll").split("_");
         let msg_id = event.target.getAttribute("data-msg_id");
         let index = detail[1];

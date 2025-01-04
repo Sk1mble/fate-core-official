@@ -38,6 +38,7 @@
 * 31/12/2024 - Bugfixes to display of skill info on contextmenu, added code to disable fields on character sheets not editable by the current player. Improved the dynamic resizing performed by FateUtilities when it is re-sized and on initial load.
 * 04/01/2025 - Bugfixes. Cracked a method to change contents of prosemirrors without having to re-render. All prosemirror instances are now toggled.
 * 04/01/2025 - Additional bugfixes and styling tweaks.
+* 04/01/2025 - Added a conditional check to all Fate Utilities roll buttons to warn users that the buttons cannot be used without a logged in GM and then return, rather than partially working or silently failing.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.
