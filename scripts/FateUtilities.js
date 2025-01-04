@@ -2314,7 +2314,7 @@ async _prepareContext(){
             data.dateTimeHeight = 111; // The date time notes field is smaller for non-GMs.
         }
     }
-    data.gameNotesHeight = (this.position.height - data.dateTimeHeight - data.gameAspectsHeight - 65 - 150)
+    data.gameNotesHeight = (this.position.height - data.dateTimeHeight - data.gameAspectsHeight - 65 - 200)
     if (data.gameNotesHeight < 0) data.gameNotesHeight = 75;
     data.aspectLabelWidth = game.settings.get("fate-core-official","aspectwidth");
     return data;

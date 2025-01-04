@@ -299,6 +299,12 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
 
     //Here are the action listeners
     _onRender (context, options) {
+        const proseMirrors = this.element.querySelectorAll(".fco_prose_mirror");
+        proseMirrors.forEach(pm => {
+            pm.addEventListener("change", async event => {
+                pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(event.target.value);
+            })
+        })
     }
 }
 

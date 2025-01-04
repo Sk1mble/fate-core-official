@@ -56,7 +56,6 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
            let stunts = foundry.utils.duplicate(wd.system.stunts);
            let update_object = {};
             if (this.new){
-                console.log(formData["name"]);
                 let count = 1;
                 for (let stunt in stunts){
                     if (stunts[stunt].name.startsWith(formData["name"])) count++;
@@ -120,6 +119,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
                 Hooks.call("updateItem", {"id":this.actor.id})
             }
         }
+        this.new = false;
     }
 
     async _onRender(context, options) {

@@ -40,7 +40,7 @@
                 </td>
                 <td>
                     <prose-mirror toggled="true" class="fco_prose_mirror aspect_notes" value="{{this.notes}}" data-key="{{@key}}" name="notes_{{this.name}}">
-                        {{{this.richDesc}}}
+                        {{{this.richNotes}}}
                     </prose-mirror>
                 </td>
             </tr>
@@ -48,7 +48,7 @@
             {{/each}}
         </table>
 </div>
-<div style ="display:flex; flex-direction:row; gap:5px; width:100%">
+<div style ="display:flex; flex-direction:row; gap:5px; width:100%; margin-top:5px;">
     <button id="save_aspects" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); margin-bottom:5px">{{localize 'fate-core-official.Save'}}</button>
     <button type="button" name="new_aspect" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour);">{{localize 'fate-core-official.NewAspect'}}</button>
 </div>

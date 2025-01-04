@@ -252,6 +252,12 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
     _onRender(context, options) {
         const saveButton = this.element.querySelector("button[name='edit_aspect_save_changes']");
         saveButton?.addEventListener("click", event => this._onSaveButton(event));
+        const proseMirrors = this.element.querySelectorAll(".fco_prose_mirror");
+        proseMirrors.forEach(pm => {
+            pm.addEventListener("change", async event => {
+                pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(event.target.value);
+            })
+        })
     }
         
     //Here are the event listener functions.

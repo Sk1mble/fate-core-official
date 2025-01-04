@@ -499,9 +499,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         export_track?.addEventListener("click", event => this._onExportTrack(event));
         proseMirrors.forEach(pm => {
             pm.addEventListener("change", async event => {
-                let richDesc = await fcoConstants.fcoEnrich(this.track.description);
-                let richWhenMarked = await fcoConstants.fcoEnrich(this.track.when_marked);
-                let richRecovery = await fcoConstants.fcoEnrich(this.track.recovery_conditions);
+                pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(event.target.value);
             })
         })
     }
@@ -547,7 +545,8 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
                 }
             });
             this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
-            this.render(false);
+            this.track = foundry.utils.duplicate(fcoConstants.wd().system.tracks[key]);
+            await this.render(false);
         }
     }
 
@@ -688,7 +687,8 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
                 });
             }
             this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
-            this.render(false);
+            this.track = foundry.utils.duplicate(fcoConstants.wd().system.tracks[`${fcoConstants.tob64(name)}`]);
+            await this.render(false);
         }
     }
 }

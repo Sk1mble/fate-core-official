@@ -13,7 +13,7 @@
         {{localize 'fate-core-official.category'}}
     </p> 
     </div>
-    <div style = "display:flex; flex-direction:row; gap: 10px; margin-top:25px">
+    <div style = "display:flex; flex-direction:row; gap: 10px; margin-top:25px; margin-bottom:15px;">
         <select id="track_select" style="font-size: 1rem; background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 50px">
         <option>{{localize 'fate-core-official.NewTrack'}}</option>
         {{#each tracks}}
@@ -40,7 +40,7 @@
                 {{localize 'fate-core-official.Description'}}:
             </td>
             <td>
-                <prose-mirror class="fco_prose_mirror fco_edit_track_desc"  name="description" value="{{track.description}}">
+                <prose-mirror toggled="true" class="fco_prose_mirror fco_edit_track_desc"  name="description" value="{{track.description}}">
                     {{{richDesc}}}
                 </prose-mirror>
             </td>
@@ -97,7 +97,7 @@
                 {{localize 'fate-core-official.WhenMarked'}}
             </td>
             <td>
-                <prose-mirror class="fco_prose_mirror fco_edit_track_when_marked"  name="when_marked" value="{{track.when_marked}}">
+                <prose-mirror toggled = "true" class="fco_prose_mirror fco_edit_track_when_marked"  name="when_marked" value="{{track.when_marked}}">
                     {{{richWhenMarked}}}
                 </prose-mirror>
             </td>
@@ -107,7 +107,7 @@
                 {{localize 'fate-core-official.HowRecover'}}
             </td>
             <td>
-                <prose-mirror class="fco_prose_mirror fco_edit_track_recovery_conditions"  name="recovery_conditions" value="{{track.recovery_conditions}}">
+                <prose-mirror toggled = "true" class="fco_prose_mirror fco_edit_track_recovery_conditions"  name="recovery_conditions" value="{{track.recovery_conditions}}">
                     {{{richRecovery}}}
                 </prose-mirror>
             </td>
@@ -125,7 +125,7 @@
                 {{localize 'fate-core-official.BoxLabels'}}:
             </td>
             <td>
-                <select id="track_label_select" style="color:black; background:white;" >
+                <select id="track_label_select" style="color:black; background:white; margin-bottom:5px;" >
                     <option {{#if (eq track.label "escalating")}} selected="selected" {{/if}} value="escalating">
                         {{localize 'fate-core-official.Escalating'}}
                     </option>

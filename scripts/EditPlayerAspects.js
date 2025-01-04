@@ -33,26 +33,24 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
         const value = this.element.querySelectorAll("textarea[class='aspect_value']")
         value.forEach(field => field?.addEventListener("change", event => this._on_value_change(event)));
 
-        const notes = this.element.querySelectorAll("textarea[class='aspect_notes']");
-        notes.forEach(field => field?.addEventListener ("change", event => this._on_notes_change(event)));
-
         const aspectDescriptions = this.element.querySelectorAll(".fco_prose_mirror.aspect_description");
         const aspectNotes = this.element.querySelectorAll(".fco_prose_mirror.aspect_notes");
 
         aspectDescriptions.forEach(aspect =>{ 
             aspect.addEventListener("change", async event => {
-            let desc = event.target.value;
-            let key = event.target.getAttribute("data-key");
-            let aspect = this.aspects[key];
-            aspect.description = desc;
+                let desc = event.target.value;
+                let key = event.target.getAttribute("data-key");
+                this.aspects[key].description = desc;
+                aspect.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(desc, this.actor);
         })});
 
-        aspectNotes.forEach(aspect => addEventListener("change", async event => {
-            let notes = event.target.value;
-            let key = event.target.getAttribute("data-key");
-            let aspect = this.aspects[key];
-            aspect.notes = notes;
-        }));  
+        aspectNotes.forEach(aspect => {
+            aspect.addEventListener("change", async event => {
+                let notes = event.target.value;
+                let key = event.target.getAttribute("data-key");
+                this.aspects[key].notes = notes;
+                aspect.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(notes, this.actor);
+        })});  
     }
 
     async _on_name_change(event){
@@ -82,14 +80,7 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
 
     async _on_value_change(event){
         let key = event.target.getAttribute("data-key");
-        let aspect = this.aspects[key];
-        aspect.value = event.target.value;
-    }
-
-    async _on_notes_change(event){
-        let key = event.target.getAttribute("data-key");
-        let aspect = this.aspects[key];
-        aspect.notes = event.target.value;
+        this.aspects[key].value = event.target.value;
     }
 
     async _on_move(event, direction){
@@ -152,7 +143,7 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
 
     async _prepareContext(){
         let current = foundry.utils.duplicate(this.actor.system.aspects);
-        let updated = this.aspects;
+        let updated = foundry.utils.duplicate(this.aspects);
         for (let aspect in current){
             if (current[aspect].notes == undefined){
                 current[aspect].notes = "";
@@ -164,7 +155,9 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             }
         }
         let data = {};
-        data.aspects = foundry.utils.mergeObject(foundry.utils.duplicate(this.aspects), current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        let aspects = foundry.utils.mergeObject(updated, current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
+        this.aspects = foundry.utils.duplicate(aspects);
+        data.aspects = aspects;
         for (let as in data.aspects){
             data.aspects[as].richDesc = await fcoConstants.fcoEnrich(data.aspects[as].description, this.actor)
             data.aspects[as].richNotes = await fcoConstants.fcoEnrich(data.aspects[as].notes, this.actor)

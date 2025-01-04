@@ -36,6 +36,7 @@ option {
 
 #FateUtilities.h1, h2, h3 {
   margin:0;
+  margin-bottom:0.5em;
 }
 
 #FateUtilities td, th {
@@ -314,6 +315,12 @@ textarea [name="command"] {
   opacity:1;
 }
 
+.fate input[type="checkbox"]:checked::before {
+  background-color:var(--fco-accent-colour);
+  width:100%;
+  content:"✔";
+}
+
 /* The container */
 .box {
   font-family:"Montserrat";
@@ -464,6 +471,8 @@ textarea [name="command"] {
   font-size:small; 
   min-width:100px !important;
   margin-top:5px !important; 
+  margin-right:5px;
+  margin-left:2px;
   margin-bottom:5px !important; 
   border-style:solid !important; 
   height:32px !important; 
@@ -481,6 +490,7 @@ textarea [name="command"] {
   min-width:100px !important;
   max-width:75% !important; 
   margin-top:5px !important; 
+  margin-right:5px;
   margin-bottom:5px !important; 
   border-style:solid !important; 
   height:25px !important; 
