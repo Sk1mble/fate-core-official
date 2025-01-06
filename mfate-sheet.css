@@ -2,6 +2,14 @@
     padding: 0;
 }
 
+.fcoSheet h1:not(.window-title), 
+.fcoSheet h2:not(.window-title), 
+.fcoSheet h3:not(.window-title), 
+.fcoSheet h4:not(.window-title), 
+.fcoSheet h5:not(.window-title) {
+    color:var(--fco-sheet-text-colour);
+}
+
 *{
     scrollbar-width:thin;
 }

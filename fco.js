@@ -1476,6 +1476,10 @@ Combatant.prototype._getInitiativeFormula = function () {
     }
 }
 
+foundry.applications.elements.HTMLProseMirrorElement.prototype._onFocusOut = function(event) {
+    // Do nothing - TODO: Review when v13 is released
+}
+
 Handlebars.registerHelper("fco_ladder", function(result){
     let fc = new fcoConstants();
     let lookup = fc.getFateLadder()[result];
