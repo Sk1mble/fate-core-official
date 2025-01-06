@@ -418,11 +418,9 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
         //Get an updated version of the tracks according to the character's skills if it's not an extra.
         if (this.object.type != "Extra") {
             let tracks = this.object.setupTracks(foundry.utils.duplicate(this.object.system.skills), output);
-            await this.object.update({"system.tracks":null}, {renderSheet:false, noHook:true}) //This is needed to make the game see a change in order of keys as a difference.
-            await this.object.update({"system.tracks":tracks});             
+            await this.object.update({"system.tracks":tracks},{diff:false, recursive:false});             
         } else {
-            await this.object.update({"system.tracks":null}, {renderSheet:false, noHook:true}) //This is needed to make the game see a change in order of keys as a difference.
-            await this.object.update({"system.tracks":output});             
+            await this.object.update({"system.tracks":output},{diff:false, recursive:false});             
         }
     }
 

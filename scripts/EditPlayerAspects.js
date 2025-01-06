@@ -166,8 +166,7 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     static async #updateAspects(event, form, formData){
-        await this.actor.update({"system.aspects":null}, {noHook:true, renderSheet:false})
-        await this.actor.update({"system.aspects":this.aspects})
+        await this.actor.update({"system.aspects":this.aspects},{diff:false, recursive:false})
     }
 
     //This function is called when an actor or item update is called.

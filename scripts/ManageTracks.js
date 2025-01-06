@@ -790,8 +790,7 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                                         let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
                                     }
-                                    await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
-                                    await fcoConstants.wd().update({"system.tracks":tracks});
+                                    await fcoConstants.wd().update({"system.tracks":tracks},{diff:false, recursive:false});
                                 }, 
                                 default:true,
                             }]
@@ -919,8 +918,7 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                                                     delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
                                                 }
                                                 await game.settings.set("fate-core-official","track_categories",track_categories);
-                                                await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
-                                                await fcoConstants.wd().update({"system.tracks":tracks});
+                                                await fcoConstants.wd().update({"system.tracks":tracks},{diff:false, recursive:false});
                                                 this.render(false);    
                                             }
                                         }

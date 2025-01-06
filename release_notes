@@ -39,6 +39,7 @@
 * 04/01/2025 - Bugfixes. Cracked a method to change contents of prosemirrors without having to re-render. All prosemirror instances are now toggled.
 * 04/01/2025 - Additional bugfixes and styling tweaks.
 * 04/01/2025 - Added a conditional check to all Fate Utilities roll buttons to warn users that the buttons cannot be used without a logged in GM and then return, rather than partially working or silently failing.
+* 06/01/2025 - Made a change to use {diff:false, recursive:false} instead of nulling data types before updating with refreshed data sorted or otherwise changed but not registered as a diff by Foundry.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.
