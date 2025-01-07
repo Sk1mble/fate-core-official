@@ -31,17 +31,19 @@ option {
   background-color: inherit;
 }
 
-#FateUtilities .window-content{
+#FateUtilities {
   padding: 0;
 }
 
-#FateUtilities h1, #FateUtilities h2, #FateUtilities h3 {
+#FateUtilities h1:not(.window-title), 
+#FateUtilities h2:not(.window-title), 
+#FateUtilities h3:not(.window-title) {
   margin:0;
   margin-bottom:0.5em;
   color:var(--fco-sheet-text-colour);
 }
 
-#FateUtilities td, #FateUtilities, th {
+#FateUtilities td, #FateUtilities th {
   padding: 5px;
 }
 

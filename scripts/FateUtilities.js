@@ -251,6 +251,23 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             this.editing = false;
         }));
 
+        const pms = this.element.querySelectorAll(".fco_prose_mirror");
+        pms.forEach(pm => {
+            pm.querySelector(".editor-content").addEventListener("focus", () => {
+                this.editing = true;
+            });
+
+            pm.addEventListener("focusout", async (event) => {
+                if (!pm.querySelector(".editor-container")) {
+                    this.editing = false;
+                    if (this.renderBanked) {
+                        this.renderBanked = false;
+                        this.render(false);
+                    }
+                }
+            });
+        })
+
         const fontDown = this.element.querySelector("button[id='fu_shrink_font']");
         const fontUp = this.element.querySelector("button[id='fu_grow_font']");
 

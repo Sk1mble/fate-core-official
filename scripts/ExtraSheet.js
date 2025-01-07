@@ -154,6 +154,20 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
             })
         })
 
+        const pms = this.element.querySelectorAll(".fco_prose_mirror");
+        pms.forEach(pm => {
+            pm.querySelector(".editor-content").addEventListener("focus", () => {
+                this.editing = true;
+            });
+
+            pm.addEventListener("focusout", async (event) => {
+                if (!pm.querySelector(".editor-container")) {
+                    this.editing = false;
+                    if (this.renderPending) this.render(false);
+                }
+            });
+        })
+
         const input = this.element.querySelectorAll('input[type="text"], input[type="number"], div[name="textIn"], textarea'); // Find all the text areas for the purpose of dealing with blur, click, etc. events
 
         const mfdraggable = this.element.querySelectorAll('.mf_draggable'); // The draggable elements for Fate Core Official. Used to handle drag & drop and double click events.
