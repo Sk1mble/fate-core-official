@@ -368,7 +368,14 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
 
     async onDrop(event){
         if (this.document.isOwner){
-            let data = JSON.parse(event.dataTransfer.getData("text/plain"));
+            let data = undefined;
+            try {
+                data = JSON.parse(event.dataTransfer.getData("text/plain"));
+            } catch {
+                //This was not an object, so do nothing
+                return;
+            }
+            if (!data) return;
             let extra = this.document;
             //First check it's not from the same sheet
             if (data.ident !== "mf_draggable") return;
@@ -546,7 +553,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
         },
         form: {
             submitOnChange: false,
-            submitOnClose: false,
+            submitOnClose: true,
             closeOnSubmit: false,
         }
     }
@@ -559,7 +566,9 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     async close(...args){
+        if (this.options.form.submitOnClose) await this.submit();
         await super.close(...args);
+        this.editing = false;
         if (this.document.parent){
             if (this.document.parent.type == "fate-core-official" && this.document.system.active){
                 await this.document.parent.updateFromExtra(this.document);
@@ -567,9 +576,8 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
                 if (this.document.parent.type == "fate-core-official" && !this.document.system.active){
                     await this.document.parent.deactivateExtra(this.object)
                 }
-                
             }
         }
-        this.editing = false;
+
     }
 }

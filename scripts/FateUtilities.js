@@ -94,6 +94,10 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         game.system.apps["combat"].splice(game.system.apps["combat"].indexOf(this),1); 
         game.system.apps["scene"].splice(game.system.apps["scene"].indexOf(this),1); 
         game.system.apps["user"].splice(game.system.apps["user"].indexOf(this),1); 
+        const pms = this.element.querySelectorAll(".fco_prose_mirror");
+        pms.forEach(pm => {
+            pm.dispatchEvent(new Event("change"));
+        })
         await super.close(options);
     }
 
@@ -109,11 +113,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                             let countdowns = game.settings.get("fate-core-official", "countdowns");
                             let countdown = countdowns[fcoConstants.getKey(name)];
                             if (countdown.name != event.target.value){
-                                let oldname = countdown.name;
                                 let newname = event.target.value;
                                 let testname = newname.replace(/<[^>]+>/g, '');
                                 if (testname == ""){
-                                    event.target.value = oldname;
                                     await this.render(false);
                                     return ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
                                 }
@@ -2761,7 +2763,7 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
                             <td style="padding:0">
                                 <div style="display:flex;flex-direction:row;gap:2px; align-items:left">
                                     <div style="width:6em; text-align:left">${game.i18n.localize("fate-core-official.FatePointActions")}</div>
-                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2fp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidPlusTwoExplainer')}" i icon class="fas fa-plus"></button>
+                                    <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_plus2fp" style="margin-left:37px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidPlusTwoExplainer')}" i icon class="fas fa-plus"></button>
                                     <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_rerollfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.PaidRerollExplainer')}" i icon class="fas fa-dice"></button>
                                     <button type="button" name="fco_chat_roll_button" data-msg_id="${message.id}" data-roll="roll_-1_manualfp" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" title="${game.i18n.localize('fate-core-official.manualExplainer')}" i icon class="fas fa-tools"></button>
                                 </div>

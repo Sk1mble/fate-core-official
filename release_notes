@@ -42,6 +42,7 @@
 * 06/01/2025 - Made a change to use {diff:false, recursive:false} instead of nulling data types before updating with refreshed data sorted or otherwise changed but not registered as a diff by Foundry.
 * 06/01/2025 - CSS edits. Made a change to ProseMirrors so they won't automatically toggle off when they lose focus, enabling them to have things dragged into them and allowing the menu buttons to work properly.
 07/01/2025 - Added back code to ensure a re-render from, editing data won't cause a character sheet, extra sheet, or FateUtilities to re-render whilst a prosemirror text field is in the process of being edited.
+07/01/2025 - Prosemirrors on extrasheets, Fate Utilities, and character sheets now save if the window is closed while the editors are open.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

@@ -11,6 +11,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
     
     async close(options){
         this.editing = false;
+        if (this.options.form.submitOnClose) await this.submit();
         await super.close(options);
     }
 
@@ -23,7 +24,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         },
         form: {
             submitOnChange:true,
-            closeOnSubmit: false
+            closeOnSubmit: false,
+            submitOnClose:true
         },
         window: {
             title: this.title,
@@ -123,15 +125,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 
         const pms = this.element.querySelectorAll(".fco_prose_mirror");
         pms.forEach(pm => {
-            pm.querySelector(".editor-content").addEventListener("focus", () => {
-                this.editing = true;
-            });
-
             pm.addEventListener("focusout", async (event) => {
-                if (!pm.querySelector(".editor-container")) {
-                    this.editing = false;
-                    if (this.renderPending) this.render(false);
-                }
+                this.submit();
             });
         })
 
