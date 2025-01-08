@@ -125,8 +125,16 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 
         const pms = this.element.querySelectorAll(".fco_prose_mirror");
         pms.forEach(pm => {
+            pm.querySelector(".editor-content").addEventListener("focus", () => {
+                this.editing = true;
+            });
+
             pm.addEventListener("focusout", async (event) => {
                 this.submit();
+                if (!pm.querySelector(".editor-container")) {
+                    this.editing = false;
+                    this.render(false);
+                }
             });
         })
 

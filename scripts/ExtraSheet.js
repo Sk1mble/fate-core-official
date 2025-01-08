@@ -142,18 +142,6 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
         const ul_all_stunts = this.element.querySelector('div[name="ul_all_extra_stunts"]'); // Button for uploading all stunts. Singleton.
         ul_all_stunts?.addEventListener('click', event => fcoConstants.ulStunts(this.object.system.stunts));
 
-        const prose_mirrors = this.element.querySelectorAll(".fco_prose_mirror.extra_pm");
-        prose_mirrors.forEach(mirror => {
-            mirror.addEventListener("change", async event => {
-                let field = event.target.name;
-                let value = event.target.value;
-                let updateObject = {};
-                updateObject[field] = value;
-                await this.document.update(updateObject);
-                await this.render(false);
-            })
-        })
-
         const pms = this.element.querySelectorAll(".fco_prose_mirror");
         pms.forEach(pm => {
             pm.querySelector(".editor-content").addEventListener("focus", () => {
@@ -161,9 +149,10 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
             });
 
             pm.addEventListener("focusout", async (event) => {
+                this.submit();
                 if (!pm.querySelector(".editor-container")) {
                     this.editing = false;
-                    if (this.renderPending) this.render(false);
+                    this.render(false);
                 }
             });
         })
