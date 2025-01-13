@@ -535,6 +535,11 @@ textarea [name="command"] {
   scrollbar-width:thin;
 }
 
+.application.fcoExtra {
+  color:var(--fco-sheet-text-colour);
+  font-family:var(--fco-font-family) ;
+}
+
 .long_text_rich {
   min-height:2em !important; 
   background-color:var(--fco-sheet-input-colour) !important;

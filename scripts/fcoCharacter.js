@@ -116,21 +116,25 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         }
         
         //Set the sheet to editing when a prose mirror is activated. Set to not editing when a prose mirror change event is triggered.
-        const editors = this.element.querySelectorAll(".editor-content");
+        /*const editors = this.element.querySelectorAll(".editor-content");
         editors.forEach(ed => {
             ed.addEventListener("focus", () => {
                 this.editing = true;
             });
-        })
+        })*/
 
-        const pms = this.element.querySelectorAll(".fco_prose_mirror");
+       const pms = this.element.querySelectorAll(".fco_prose_mirror");
         pms.forEach(pm => {
             pm.querySelector(".editor-content").addEventListener("focus", () => {
                 this.editing = true;
             });
 
-            pm.addEventListener("focusout", async (event) => {
-                this.submit();
+            pm.querySelector(".editor-content").addEventListener("focusout", async (event) => {
+                await this.submit();
+            });
+
+            pm.addEventListener("change", async (event) => {
+                await this.submit();
                 if (!pm.querySelector(".editor-container")) {
                     this.editing = false;
                     this.render(false);

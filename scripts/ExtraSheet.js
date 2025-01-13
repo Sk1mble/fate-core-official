@@ -148,8 +148,12 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
                 this.editing = true;
             });
 
-            pm.addEventListener("focusout", async (event) => {
-                this.submit();
+            pm.querySelector(".editor-content").addEventListener("focusout", async (event) => {
+                await this.submit();
+            });
+
+            pm.addEventListener("change", async (event) => {
+                await this.submit();
                 if (!pm.querySelector(".editor-container")) {
                     this.editing = false;
                     this.render(false);

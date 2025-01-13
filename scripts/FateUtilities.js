@@ -259,7 +259,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 this.editing = true;
             });
 
-            pm.addEventListener("focusout", async (event) => {
+            pm.addEventListener("change", async (event) => {
                 if (!pm.querySelector(".editor-container")) {
                     this.editing = false;
                     if (this.renderBanked) {
@@ -2511,6 +2511,12 @@ class acd extends foundry.applications.api.HandlebarsApplicationMixin(foundry.ap
 
     _onRender(context, options){
         super._onRender(context, options);
+        let pms = this.element.querySelectorAll(".fco_prose_mirror");
+        pms.forEach(async pm => {
+            pm.addEventListener("change", async event => {
+                pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(pm.value);
+            })
+        })
     }
 }
 
