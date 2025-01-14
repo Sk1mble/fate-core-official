@@ -7,7 +7,7 @@
 			 </tr>		
 		<tr style="background-color:transparent">
 			<td style="font-family:var(--fco-font-family); font-weight:bold; color:var(--fco-sheet-text-colour); font-size:medium; width:25%">{{localize 'fate-core-official.Name'}}:</td>
-			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); width:100%; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family);">{{this.document.name}}</textarea>
+			<td style="width:75%"><textarea rows="2" id="{{this.document.id}}_name" name="name" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); width:100%; border:solid var(--fco-accent-colour) 1px; font-family:var(--fco-font-family);">{{this.document.name}}</textarea>
 				<div class="fco-extra-r"></div>
 			</td>
 		 </tr>	
@@ -42,7 +42,7 @@
 		<tr style="background-color:transparent">
 			<td style="font-family:var(--fco-font-family); color:var(--fco-sheet-text-colour); font-weight:bold; font-size:medium; width:25%">{{localize 'fate-core-official.RefreshCost'}}:</td>
 			<td style="width:75%; color:var(--fco-sheet-text-colour);">
-				<input type="number" name="system.refresh" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour);; border: solid var(--fco-foundry-interactable-color) 1px; font-family:var(--fco-font-family); width:50px" value="{{this.document.system.refresh}}">
+				<input type="number" name="system.refresh" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); border: solid var(--fco-accent-colour) 1px; font-family:var(--fco-font-family); width:50px" value="{{this.document.system.refresh}}">
 				</input>
 				{{localize 'fate-core-official.active'}}
 				<input style="width:20px; height:20px" name="system.active" type="checkbox" {{#if this.document.system.active}}checked="checked"{{/if}}></input>
