@@ -81,6 +81,10 @@
     scrollbar-width:thin;
 }
 
+.fco_prose_mirror.inactive .editor-content * {
+    user-select:text;
+}
+
 .fco_prose_mirror {
     background:var(--fco-sheet-input-colour);
     margin-top:5px;
