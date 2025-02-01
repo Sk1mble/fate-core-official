@@ -151,20 +151,14 @@ export class fcoActor extends Actor {
             await token.actor.update({"img":shape.avatarImg, name:aName, "prototypeToken.texture.src":shape.tokenImg});
         }
         if (shape.tokenData) {
-            let width = shape.tokenData.width;
-            let height = shape.tokenData.height;
-            delete shape.tokenData.width;  // Delete because at the minute running a change in width & height with a transition breaks token movement; for example await _token.document.update({height:1.5, width:1.5}, {animation: {transition: foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES["FADE"], duration: 2000}});
-            delete shape.tokenData.height; // As above... we will perform a separate call to update the height and width without a transition.
             shape.tokenData.texture.src = shape.tokenImg;
             shape.tokenData.x = token.document.x;
             shape.tokenData.y = token.document.y;
             shape.tokenData.elevation = token.document.elevation;
             shape.tokenData.flags = token.document.flags;
             if (shape.transition){
-                await token.document.update({width:width, height:height});
                 await token.document.update(shape.tokenData, {animation: {transition: foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
             }   else {
-                await token.document.update({width:width, height:height});
                 await token.document.update(shape.tokenData);
             }   
         }

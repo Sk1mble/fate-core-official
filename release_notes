@@ -45,6 +45,12 @@
 * 07/01/2025 - Prosemirrors on extrasheets, Fate Utilities, and character sheets now save if the window is closed while the editors are open.
 * 27/01/2025 - Added some CSS to make the text in inactive prose-mirror editors selectable (so it can be copied to the clipboard etc.).
 
+31/01/2025
+- Updated the option to disable token rotation for compatibility with Foundry 13.335.
+- Added option to not show ruler on token movement.
+- Restored simultaneous size etc. updates on token shape change as the bug that affected this has now been fixed.
+- Amended the boxes and buttons inserted for managing defaults to use classes rather than IDs.
+
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.
 

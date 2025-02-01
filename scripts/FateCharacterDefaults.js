@@ -388,35 +388,35 @@ Hooks.on("renderActorDirectory", (app, html, user, opt) => {
     if (!fcoDefaultButtons){
         targetElement?.insertAdjacentHTML("beforebegin",
             `<div name="fcoDefaultButtons" style="max-height:45px; text-align:center; margin-bottom:5px; display:flex; flex-direction:row">
-                <input type="text" value = "${game.i18n.localize("fate-core-official.newCharacter")}" style="width:40%; height:25px;" id="MF_actor_to_create">
-                <select style="width:40%; height:25px;" id="MF_default_to_use">${options}
+                <input type="text" value = "${game.i18n.localize("fate-core-official.newCharacter")}" style="width:35%; margin:5px; height:25px;" class="MF_actor_to_create">
+                <select style="width:35%; height:25px; margin:5px" class="MF_default_to_use">${options}
                 </select>
-                <button type="button" style="width:10%; height:35px; margin-right:2px" id="create_from_default" title="${game.i18n.localize("fate-core-official.create_from_default")}">
+                <button type="button" style="width:10%; height:35px; margin-right:2px" class="create_from_default" title="${game.i18n.localize("fate-core-official.create_from_default")}">
                 <i class="fas fa-user-check"></i>
                 </button>
-                <button type="button" style="width:10%; height:35px" id="manage_defaults" title="${game.i18n.localize("fate-core-official.manage_defaults")}">
+                <button type="button" style="width:10%; height:35px" class="manage_defaults" title="${game.i18n.localize("fate-core-official.manage_defaults")}">
                 <i class="fas fa-users-cog"></i>
                 </button>
             </div>
         `);
     
-        let create = html.querySelector('#MF_actor_to_create');
+        let create = html.querySelector('.MF_actor_to_create');
         create?.addEventListener("click", event => {
             event.stopPropagation();
             create.select();
         })
     
-        let manageDefaults = html.querySelector('#manage_defaults');
+        let manageDefaults = html.querySelector('.manage_defaults');
         manageDefaults?.addEventListener("click", event => {
             event.stopPropagation()
             let md = new ManageDefaults().render(true);
         });
     
-        let createFromDefault = html.querySelector('#create_from_default');
+        let createFromDefault = html.querySelector('.create_from_default');
         createFromDefault?.addEventListener("click", async (event) => {
             event.stopPropagation();
-            let actor_name = html.querySelector('#MF_actor_to_create').value;
-            let default_name = html.querySelector('#MF_default_to_use').value;
+            let actor_name = html.querySelector('.MF_actor_to_create').value;
+            let default_name = html.querySelector('.MF_default_to_use').value;
     
             if (! actor_name) actor_name = game.i18n.localize("fate-core-official.newCharacter");
     

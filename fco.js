@@ -236,9 +236,15 @@ async function prepareWorldItem(){
 }
     
 Hooks.once('ready', async () => {
+    Hooks.on("preMoveToken", (document, movement, operation) => {
+        if (game.settings.get("fate-core-official","disableAutoTokenRotation")){
+            movement.autoRotate = false;
+        }
 
-    Hooks.on("preMoveToken", (tokenDocument, data, options) => {
-        options.autoRotate = !game.settings.get("fate-core-official","disableAutoTokenRotation");
+        if (game.settings.get("fate-core-official","disableAutoShowRuler")){
+            movement.showRuler = false;
+        }
+        console.log(movement);
     });
 
     game.system["fco-shifted"]=false;
@@ -649,7 +655,16 @@ Hooks.once('init', async function () {
         type: Boolean,
         default: true,
         config: true,
-        restricted: false,
+        restricted: true,
+    });
+
+    game.settings.register("fate-core-official", "disableAutoShowRuler" , {
+        name: game.i18n.localize("fate-core-official.disableAutoShowRuler"),
+        scope: "world",
+        type: Boolean,
+        default: true,
+        config: true,
+        restricted: true,
     });
 
     

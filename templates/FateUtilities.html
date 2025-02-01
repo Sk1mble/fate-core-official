@@ -814,7 +814,6 @@
                     
                     <table style="border:none; margin:0px;">
                     {{#each has_acted_tokens}}
-                    {{log this.object.controlled}}
                     <tr class="{{#if this.object.controlled}} fu_controlled {{/if}} fu_{{this.id}}" style="border-bottom:none; height:60px">    
                         <td style="width:60px;">
                             <button type="button" class="fu_button" name="popcorn" id="{{this.id}}_sheet" title="{{localize 'fate-core-official.pocornSheetHint'}}" style="border:none; height:60px; width:60px; background: url({{this.texture.src}}) scroll no-repeat center center; background-size:60px 60px; opacity:0.5"/>     
