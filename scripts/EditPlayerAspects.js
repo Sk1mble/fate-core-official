@@ -157,7 +157,7 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
         let data = {};
         let aspects = foundry.utils.mergeObject(updated, current);//This allows us to update if any aspects change while we're editing this, but won't respawn deleted aspects.
         this.aspects = foundry.utils.duplicate(aspects);
-        data.aspects = aspects;
+        data.aspects = this.aspects;
         for (let as in data.aspects){
             data.aspects[as].richDesc = await fcoConstants.fcoEnrich(data.aspects[as].description, this.actor)
             data.aspects[as].richNotes = await fcoConstants.fcoEnrich(data.aspects[as].notes, this.actor)
@@ -166,7 +166,8 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     static async #updateAspects(event, form, formData){
-        await this.actor.update({"system.aspects":this.aspects},{diff:false, recursive:false})
+        await this.actor.update({"system.==aspects":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
+        await this.actor.update({"system.==aspects":this.aspects},{diff:false, recursive:false})
     }
 
     //This function is called when an actor or item update is called.

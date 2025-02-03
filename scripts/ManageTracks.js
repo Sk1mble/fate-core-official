@@ -412,9 +412,9 @@ class EditLinkedSkills extends foundry.applications.api.HandlebarsApplicationMix
 
 class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor (category){
-        super(category);
+        super();
         this.category = category;
-        this.categories =game.settings.get("fate-core-official","track_categories");
+        this.categories = game.settings.get("fate-core-official","track_categories");
         this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
     }
 
@@ -472,7 +472,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
     static PARTS = {
         EditTracksForm: {
             template: "systems/fate-core-official/templates/EditTrack.html",
-            scrollable: ['fco_scrollable']
+            scrollable: ['.fco_scrollable']
         }
     }
 
@@ -486,9 +486,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         const copy_track = this.element.querySelector("button[id='copy']");
         const export_track = this.element.querySelector("button[id='exportTrack']");
         const proseMirrors = this.element.querySelectorAll(".fco_prose_mirror");
-
-        const track_label_select = this.element.querySelector("select[id='track_label_select']");
-        track_label_select?.addEventListener("change", event => this._on_track_label_select(event))
+        const inputs = this.element.querySelectorAll("input, select");
         
         saveTrackButton?.addEventListener("click", event => this._onSaveTrackButton(event));
         track_select?.addEventListener("change", event => this._track_selectChange(event));
@@ -497,24 +495,29 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         deleteTrackButton?.addEventListener("click",event => this._onDeleteTrackButton(event));
         copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
         export_track?.addEventListener("click", event => this._onExportTrack(event));
+
         proseMirrors.forEach(pm => {
             pm.addEventListener("change", async event => {
                 pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(event.target.value);
+                await this._onSaveTrackButton();
+                await this.render(false);
+            })
+        })
+        inputs.forEach(input => {
+            input.addEventListener("change", async event => {
+                if (event.target.id != "track_select"){
+                    if (event.target.id == "track_label_select") {
+                        if (event.target.value == "custom"){
+                            document.getElementById("track_custom_label").value = "";
+                        }
+                    }
+                    await this._onSaveTrackButton();
+                    await this.render(false);
+                }
             })
         })
     }
     //Here are the event listener functions.
-
-    async _on_track_label_select(event){
-        if (event.target.value == "custom"){
-            document.getElementById("track_custom_label").hidden = false
-            document.getElementById("track_custom_label").value = "";
-        }
-        else {
-            document.getElementById("track_custom_label").hidden = true
-            document.getElementById("track_custom_label").value = "";
-        }
-    }
 
     async _onExportTrack (event){
         let edit_track_name = this.element.querySelector("input[id='edit_track_name']");
@@ -790,7 +793,8 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                                         let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
                                     }
-                                    await fcoConstants.wd().update({"system.tracks":tracks},{diff:false, recursive:false});
+                                    await fcoConstants.wd().update({"system.==tracks":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
+                                    await fcoConstants.wd().update({"system.==tracks":tracks},{diff:false, recursive:false});
                                 }, 
                                 default:true,
                             }]
@@ -918,7 +922,8 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                                                     delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
                                                 }
                                                 await game.settings.set("fate-core-official","track_categories",track_categories);
-                                                await fcoConstants.wd().update({"system.tracks":tracks},{diff:false, recursive:false});
+                                                await fcoConstants.wd().update({"system.==tracks":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
+                                                await fcoConstants.wd().update({"system.==tracks":tracks},{diff:false, recursive:false});
                                                 this.render(false);    
                                             }
                                         }
@@ -1017,8 +1022,8 @@ class OrderTracks extends foundry.applications.api.HandlebarsApplicationMixin(fo
             for (let i = 0; i < this.data.length; i++){
                 tracks[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            await fcoConstants.wd().update({"system.tracks":null},{noHook:true, renderSheet:false});
-            await fcoConstants.wd().update({"system.tracks":tracks});
+            await fcoConstants.wd().update({"system.==tracks":{}},{recursive: false, diff: false, noHook: true});
+            await fcoConstants.wd().update({"system.==tracks":tracks});
             this.close();
         })
     }

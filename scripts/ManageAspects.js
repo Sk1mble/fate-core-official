@@ -205,7 +205,7 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
             }
         }
 
-        async _updateObject(event, f){
+        async _updateObject(f){
             let name = f.name;
             let description = f.description;
             var existing = false;
@@ -245,28 +245,36 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
                     }
                 });
             }
-            this.close();
+            this.aspect = fcoConstants.wd().system.aspects[`${fcoConstants.tob64(name)}`];
+            await this.render(false);
+            await game.system.manageAspects.render(true);
         }
 
     //Here are the action listeners
     _onRender(context, options) {
         const saveButton = this.element.querySelector("button[name='edit_aspect_save_changes']");
-        saveButton?.addEventListener("click", event => this._onSaveButton(event));
+        saveButton?.addEventListener("click", event => this._onSaveButton());
         const proseMirrors = this.element.querySelectorAll(".fco_prose_mirror");
         proseMirrors.forEach(pm => {
             pm.addEventListener("change", async event => {
-                pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(event.target.value);
+                this._onSaveButton();
+            })
+        })
+        const inputs = this.element.querySelectorAll("input");
+        inputs.forEach(input => {
+            input.addEventListener("change", async event => {
+                await this._onSaveButton();
             })
         })
     }
         
     //Here are the event listener functions.
-    async _onSaveButton(event){
+    async _onSaveButton(){
         //Get the name and description of the aspect
         let name = document.getElementById("edit_aspect_name").value;
-        console.log(this.element);
         let description = this.element.querySelector('.fco_prose_mirror.editAspect').value;
-        this._updateObject(event, {"name":name, "description":description})
+        this._updateObject({"name":name, "description":description});
+        game.system.manageAspects.render(true);
     }    
 
     static DEFAULT_OPTIONS ={
@@ -372,7 +380,8 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
             for (let i = 0; i < this.data.length; i++){
                 aspects[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            await fcoConstants.wd().update({"system.aspects":aspects},{diff:false, recursive:false});
+            await fcoConstants.wd().update({"system.==aspects":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
+            await fcoConstants.wd().update({"system.==aspects":aspects},{diff:false, recursive:false});
             this.close();
         })
     }

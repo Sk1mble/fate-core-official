@@ -226,9 +226,9 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
             id: "EditSkill",
             form: {
                 handler: EditSkill.#updateObject,
-                closeOnSubmit: true,
+                closeOnSubmit: false,
                 submitOnClose: false,
-                submitOnChange: false
+                submitOnChange: true
             },
             position:{
                 width: 1000,
@@ -253,7 +253,7 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
 
         async _prepareContext(){
             let rich = {};
-            let sk = foundry.utils.duplicate(this.skill);
+            let sk = this.skill;
             for (let part in sk){
                 if (part != "name" && part != "pc") rich[part] = await fcoConstants.fcoEnrich(sk[part]);
             }
@@ -295,6 +295,9 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
                     [`${fcoConstants.tob64(newSkill.name)}`]:newSkill
                 }
             });
+            this.skill = fcoConstants.wd().system.skills[`${fcoConstants.tob64(newSkill.name)}`];
+            this.render(false);
+            game.system.skillSetup.render(false);
         }
 
     //Here are the action listeners
@@ -302,7 +305,7 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
         const proseMirrors = this.element.querySelectorAll(".fco_prose_mirror");
         proseMirrors.forEach(pm => {
             pm.addEventListener("change", async event => {
-                pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(event.target.value);
+                await this.render(false);
             })
         })
     }

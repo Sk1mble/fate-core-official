@@ -129,14 +129,14 @@
                     <option {{#if (eq track.label "escalating")}} selected="selected" {{/if}} value="escalating">
                         {{localize 'fate-core-official.Escalating'}}
                     </option>
-                    <option {{#if (eq track.label "custom")}} selected="selected" {{/if}} value="custom">
+                    <option {{#if (eq track.label "none")}}{{else}}{{#if (eq track.label "escalating")}}{{else}} selected = "selected"{{/if}}{{/if}} value="custom">
                         {{localize 'fate-core-official.Custom'}}
                     </option>
                     <option {{#if (eq track.label "none")}} selected="selected" {{/if}} value="none">
                         {{localize 'fate-core-official.None'}}
                     </option>
                 </select>
-                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" {{#unless (eq track.label "custom")}} hidden="hidden"{{/unless}} style="margin-top:5px; color:black; background:white; width:50px" value="{{this.label}}"/> <span style="margin-top:5px">{{localize 'fate-core-official.LabelOverrides'}}</span>
+                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" {{#if (eq track.label "none")}} hidden="hidden"{{/if}} {{#if (eq track.label "escalating")}} hidden="hidden"{{/if}} style="margin-top:5px; color:black; background:white; width:50px" value="{{this.track.label}}"/> <span style="margin-top:5px">{{localize 'fate-core-official.LabelOverrides'}}</span>
             </td>
         </tr>
         <tr>
@@ -164,6 +164,6 @@
     </table>
 </div>
 <div style = "display:flex; flex-direction:row; gap:20px; margin-top:20px">
-    <button type="button" id="save_track" style="width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" {{#if (eq track.name "New Track")}} disabled="disabled"{{/if}}>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:50px; height:50px" id="delete_track"><i class="fas fa-trash fa-xl"></i></button>
+    <button type="button" id="edit_linked_skills" style="width:200px; height:50px" {{#if (eq track.name "New Track")}} disabled="disabled"{{/if}}>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:50px; height:50px" id="delete_track"><i class="fas fa-trash fa-xl"></i></button>
 </div>
 </div>

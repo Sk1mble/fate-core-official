@@ -31,7 +31,7 @@ export class fcoActor extends Actor {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    await this.update({"system":{[type]:output}},{diff:false, recursive:false})
+                    await this.update({"system":{[`==${type}`]:output}},{diff:false, recursive:false})
                 }    
             }
             for (let extra of this.items) {
@@ -64,7 +64,7 @@ export class fcoActor extends Actor {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    this.updateSource({"system":{[type]:output}},{diff:false, recursive:false})
+                    this.updateSource({"system":{[`==${type}`]:output}},{diff:false, recursive:false})
                 }
             }
         }
