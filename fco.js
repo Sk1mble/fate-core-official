@@ -244,7 +244,6 @@ Hooks.once('ready', async () => {
         if (game.settings.get("fate-core-official","disableAutoShowRuler")){
             movement.showRuler = false;
         }
-        console.log(movement);
     });
 
     game.system["fco-shifted"]=false;

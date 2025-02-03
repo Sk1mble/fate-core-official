@@ -15,6 +15,11 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
         }
     }
 
+    async updateAspects(){
+        await this.actor.update({"system.==aspects":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
+        await this.actor.update({"system.==aspects":this.aspects},{diff:false, recursive:false})
+    }
+
     _onRender(context, options){
         const removeButton = this.element.querySelectorAll("button[name='remove_aspect']")
         removeButton.forEach(button => button?.addEventListener("click", event => this._onRemove(event)));
@@ -41,7 +46,8 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
                 let desc = event.target.value;
                 let key = event.target.getAttribute("data-key");
                 this.aspects[key].description = desc;
-                aspect.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(desc, this.actor);
+                await this.updateAspects();
+                await this.render(false);
         })});
 
         aspectNotes.forEach(aspect => {
@@ -49,7 +55,8 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
                 let notes = event.target.value;
                 let key = event.target.getAttribute("data-key");
                 this.aspects[key].notes = notes;
-                aspect.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(notes, this.actor);
+                await this.updateAspects();
+                await this.render(false);
         })});  
     }
 
@@ -75,19 +82,23 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             delete this.aspects[key]
             this.aspects[fcoConstants.tob64(newName)]=newAspect;
         }
+        await this.updateAspects();
         await this.render(false);
     }
 
     async _on_value_change(event){
         let key = event.target.getAttribute("data-key");
         this.aspects[key].value = event.target.value;
+        await this.updateAspects();
+        await this.render(false);
     }
 
     async _on_move(event, direction){
         let info = event.target.id.split("_");
         let aspect = info[1]
-        this.aspects = fcoConstants.moveKey(this.aspects, aspect, direction)
-        this.render(false);
+        this.aspects = fcoConstants.moveKey(this.aspects, aspect, direction);
+        await this.updateAspects();
+        await this.render(false);
     }
 
     async _onRemove(event){
@@ -96,7 +107,8 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             let info = event.target.id.split("_");
             let aspectKey = info[1];
             delete this.aspects[aspectKey];
-            this.render(false);
+            await this.updateAspects();
+            await this.render(false);
         }
     }
 
@@ -111,7 +123,8 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
         let newAspect = new fcoAspect({"name":name, "description":game.i18n.localize("fate-core-official.New_Aspect"),"value":game.i18n.localize("fate-core-official.New_Aspect"),"notes":"Notes"}).toJSON();
         if (newAspect){
             this.aspects[fcoConstants.tob64(newAspect.name)] = newAspect;
-            this.render(false);
+            await this.updateAspects();
+            await this.render(false);
         }
     }
 
@@ -130,7 +143,6 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
         form: {
             closeOnSubmit: false,
             submitOnChange: false,
-            handler: EditPlayerAspects.#updateAspects
         }
     }
 
@@ -163,11 +175,6 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
             data.aspects[as].richNotes = await fcoConstants.fcoEnrich(data.aspects[as].notes, this.actor)
         }
         return data;
-    }
-
-    static async #updateAspects(event, form, formData){
-        await this.actor.update({"system.==aspects":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
-        await this.actor.update({"system.==aspects":this.aspects},{diff:false, recursive:false})
     }
 
     //This function is called when an actor or item update is called.

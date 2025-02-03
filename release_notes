@@ -51,10 +51,13 @@
 - Restored simultaneous size etc. updates on token shape change as the bug that affected this has now been fixed.
 - Amended the boxes and buttons inserted for managing defaults to use classes rather than IDs.
 
-003/02/2025
-* In Foundry 13.335 updating objects with diff:false, recursive:false was not replacing the object when only order of keys had changed. Switched to using the new blah.update({"system.==tracks":newTracks}) to completely overwrite the relevant sub-objects each time.
+03/02/2025
+* In Foundry 13.335 updating objects with diff:false, recursive:false was not replacing the object when only order of keys had changed. Switched to using the new blah.update({"system.==tracks":newTracks}) to completely overwrite the relevant sub-objects each time. I found that this didn't immediately show changes in key order without a refresh, so I reverted to replacing the object with a blank one before pushing the final change.
 * Fixed a bug in some of the editing applications that meant the value in a prose mirror updated fine, but if you saved, re-opened, and saved without making any changes, the enriched display reverted to that in place when the application was first rendered.
-* TODO: This bug is still in effect on the EditPlayerAspects application. Will need to do some more work on this; consider switching to automatic saving of the edited values as I did with other editors.
+* This bug is still in effect on the EditPlayerAspects application. Will need to do some more work on this; consider switching to automatic saving of the edited values as I did with other editors.
+
+3/02/2025 (day)
+* Fixed above bug re EditPlayerAspects - aspects now save on any changes, as with other editable data.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

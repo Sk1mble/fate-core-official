@@ -29,7 +29,8 @@ class SkillSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
 
     static PARTS = {
         "SkillSetupForm":{
-            template: "systems/fate-core-official/templates/SkillSetup.html"
+            template: "systems/fate-core-official/templates/SkillSetup.html",
+            scrollable:["#skillListBox"]
         }
     }
     //The function that returns the data model for this window. In this case, we only need the game's skill list.
