@@ -290,7 +290,10 @@ Hooks.once('ready', async function () {
     //Convert any straggling ModularFate actors to fate-core-official actors.
     let updates = [];
     game.actors.contents.forEach(actor => {
-        if (actor.type == "ModularFate" || actor.type == "FateCoreOfficial") updates.push({_id:actor.id, type:"fate-core-official"})
+        if (actor.type == "ModularFate" || actor.type == "FateCoreOfficial") {
+            let newSystem = foundry.utils.duplicate(actor.system);
+            updates.push({_id:actor.id, type:"fate-core-official", "==system":newSystem});
+        }
     });
     if (game.user == game.users.activeGM) await Actor.updateDocuments(updates)
 
