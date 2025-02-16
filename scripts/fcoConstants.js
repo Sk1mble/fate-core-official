@@ -6,21 +6,26 @@ class fcoConstants {
     }
 
     getFateLadder(){
-        return  {
-                    "10":"",
-                    "9":"",
-                    "8":game.i18n.localize("fate-core-official.Legendary"),
-                    "7":game.i18n.localize("fate-core-official.Epic"),
-                    "6":game.i18n.localize("fate-core-official.Fantastic"),
-                    "5":game.i18n.localize("fate-core-official.Superb"),
-                    "4":game.i18n.localize("fate-core-official.Great"),
-                    "3":game.i18n.localize("fate-core-official.Good"),
-                    "2":game.i18n.localize("fate-core-official.Fair"),
-                    "1":game.i18n.localize("fate-core-official.Average"),
-                    "0":game.i18n.localize("fate-core-official.Mediocre"),
-                    "-1":game.i18n.localize("fate-core-official.Poor"),
-                    "-2":game.i18n.localize("fate-core-official.Terrible"),
-                }
+        let ladder = game.settings.get("fate-core-official","ladder");
+        if (ladder) {
+            return ladder;
+        } else {
+            return  {
+                "10":"",
+                "9":"",
+                "8":game.i18n.localize("fate-core-official.Legendary"),
+                "7":game.i18n.localize("fate-core-official.Epic"),
+                "6":game.i18n.localize("fate-core-official.Fantastic"),
+                "5":game.i18n.localize("fate-core-official.Superb"),
+                "4":game.i18n.localize("fate-core-official.Great"),
+                "3":game.i18n.localize("fate-core-official.Good"),
+                "2":game.i18n.localize("fate-core-official.Fair"),
+                "1":game.i18n.localize("fate-core-official.Average"),
+                "0":game.i18n.localize("fate-core-official.Mediocre"),
+                "-1":game.i18n.localize("fate-core-official.Poor"),
+                "-2":game.i18n.localize("fate-core-official.Terrible"),
+            }
+        }
     }
 
     static async fcoEnrich (value, object){
@@ -465,6 +470,7 @@ class fcoConstants {
         output.fuAspectLabelFillColour = game.settings.get("fate-core-official", "fuAspectLabelFillColour")
         output.fuAspectLabelBorderColour = game.settings.get("fate-core-official", "fuAspectLabelBorderColour")
         output.skillsLabel = game.settings.get("fate-core-official", "skillsLabel")
+        output.ladder = game.settings.get("fate-core-official","ladder");
         let scheme = game.settings.get("fate-core-official", "fco-world-sheet-scheme");
         if (scheme) output.fco_world_sheet_scheme = scheme;
         let formulae = game.settings.get("fate-core-official","fu-roll-formulae");
@@ -558,7 +564,8 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "fuAspectLabelTextColour", input.fuAspectLabelTextColor)
         await game.settings.set("fate-core-official", "fuAspectLabelFillColour", input.fuAspectLabelFillColour)
         await game.settings.set("fate-core-official", "fuAspectLabelBorderColour", input.fuAspectLabelBorderColour)
-        await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel)
+        await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel);
+        if (input.ladder) await game.settings.set("fate-core-official", "ladder", input.ladder);
         if (input?.fco_world_sheet_scheme) await game.settings.set("fate-core-official", "fco-world-sheet-scheme", input.fco_world_sheet_scheme);
         if (input?.["fu-roll-formulae"]) await game.settings.set("fate-core-official","fu-roll-formulae", input["fu_roll-formulae"]);
         if (input?.["default_actor_permission"]) await game.settings.set("fate-core-official", "default_actor_permission", input["default_actor_permission"])
