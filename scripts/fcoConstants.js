@@ -13,17 +13,17 @@ class fcoConstants {
             return  {
                 "10":"",
                 "9":"",
-                "8":game.i18n.localize("fate-core-official.Legendary"),
-                "7":game.i18n.localize("fate-core-official.Epic"),
-                "6":game.i18n.localize("fate-core-official.Fantastic"),
-                "5":game.i18n.localize("fate-core-official.Superb"),
-                "4":game.i18n.localize("fate-core-official.Great"),
-                "3":game.i18n.localize("fate-core-official.Good"),
-                "2":game.i18n.localize("fate-core-official.Fair"),
-                "1":game.i18n.localize("fate-core-official.Average"),
-                "0":game.i18n.localize("fate-core-official.Mediocre"),
-                "-1":game.i18n.localize("fate-core-official.Poor"),
-                "-2":game.i18n.localize("fate-core-official.Terrible"),
+                "8":`${game.i18n.localize("fate-core-official.Legendary")}`,
+                "7":`${game.i18n.localize("fate-core-official.Epic")}`,
+                "6":`${game.i18n.localize("fate-core-official.Fantastic")}`,
+                "5":`${game.i18n.localize("fate-core-official.Superb")}`,
+                "4":`${game.i18n.localize("fate-core-official.Great")}`,
+                "3":`${game.i18n.localize("fate-core-official.Good")}`,
+                "2":`${game.i18n.localize("fate-core-official.Fair")}`,
+                "1":`${game.i18n.localize("fate-core-official.Average")}`,
+                "0":`${game.i18n.localize("fate-core-official.Mediocre")}`,
+                "-1":`${game.i18n.localize("fate-core-official.Poor")}`,
+                "-2":`${game.i18n.localize("fate-core-official.Terrible")}`,
             }
         }
     }
@@ -503,12 +503,15 @@ class fcoConstants {
     static async importSettings (input){
         if (input.constructor === String) input = await JSON.parse(input);
         //This function parses a text string in JSON notation containing all of the game's settings and writes those settings to System.settings.
-         
         let current_stunts = fcoConstants.wd().system.stunts;
         let stunts = input?.stunts;
 
         let current_defaults = fcoConstants.wd().system.defaults;
         let defaults = input?.defaults;
+
+        await fcoConstants.wd().update({"system.==skills":input?.skills});      
+        await fcoConstants.wd().update({"system.==tracks":input?.tracks});
+        await fcoConstants.wd().update({"system.==aspects":input?.aspects});
 
         // Give option to merge stunts, if there are stunts in the new settings AND stunts in the existing settings.
 
@@ -519,32 +522,29 @@ class fcoConstants {
                     let final_stunts = foundry.utils.mergeObject(current_stunts, stunts);
                     await fcoConstants.wd().update({"system.stunts":final_stunts});
                 } else {
-                    await fcoConstants.wd().update({"system.stunts":stunts});
+                    await fcoConstants.wd().update({"system.==stunts":stunts});
                 }
             }   
         } else {
             await fcoConstants.wd().update({"system.stunts":stunts});
         }
 
-        // Give option to merge character default frameworks, if there are stunts in the new settings AND stunts in the existing settings.
+        // Give option to merge character default frameworks, if there are defaults in the new settings AND defaults in the existing settings.
 
         if (Object.keys(current_defaults).length > 0){
             if (Object.keys(defaults).length > 0){
                 let confirm = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.mergeDefaultsTitle"), `<p>${game.i18n.localize("fate-core-official.mergeDefaults")}</p>`);
                 if ( confirm ) {
                     let final_defaults = foundry.utils.mergeObject(current_defaults, defaults);
-                    await fcoConstants.wd().update({"system.defaults":final_defaults});
+                    await fcoConstants.wd().update({"system.==defaults":final_defaults});
                 } else {
-                    await fcoConstants.wd().update({"system.defaults":defaults});
+                    await fcoConstants.wd().update({"system.==defaults":defaults});
                 }
             }   
         } else {
-            await fcoConstants.wd().update({"system.defaults":defaults});
+            await fcoConstants.wd().update({"system.==defaults":defaults});
         }
 
-        await fcoConstants.wd().update({"system.skills":input?.skills});      
-        await fcoConstants.wd().update({"system.tracks":input?.tracks});
-        await fcoConstants.wd().update({"system.aspects":input?.aspects});
         await game.settings.set("fate-core-official","track_categories",input?.track_categories);   
         await game.settings.set("fate-core-official","skillTotal",input?.skillTotal);
         await game.settings.set("fate-core-official","freeStunts",input?.freeStunts);
@@ -565,7 +565,7 @@ class fcoConstants {
         await game.settings.set("fate-core-official", "fuAspectLabelFillColour", input.fuAspectLabelFillColour)
         await game.settings.set("fate-core-official", "fuAspectLabelBorderColour", input.fuAspectLabelBorderColour)
         await game.settings.set("fate-core-official", "skillsLabel", input.skillsLabel);
-        if (input.ladder) await game.settings.set("fate-core-official", "ladder", input.ladder);
+        if (input?.ladder) await game.settings.set("fate-core-official", "ladder", input.ladder);
         if (input?.fco_world_sheet_scheme) await game.settings.set("fate-core-official", "fco-world-sheet-scheme", input.fco_world_sheet_scheme);
         if (input?.["fu-roll-formulae"]) await game.settings.set("fate-core-official","fu-roll-formulae", input["fu_roll-formulae"]);
         if (input?.["default_actor_permission"]) await game.settings.set("fate-core-official", "default_actor_permission", input["default_actor_permission"])

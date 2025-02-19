@@ -45,6 +45,7 @@
 * 07/01/2025 - Prosemirrors on extrasheets, Fate Utilities, and character sheets now save if the window is closed while the editors are open.
 * 27/01/2025 - Added some CSS to make the text in inactive prose-mirror editors selectable (so it can be copied to the clipboard etc.).
 * 16/02/2025 - Added a hidden 'ladder' setting that allows the ladder for the world to be set explicitly. Will fall back to the standard Fate ladder if there is no ladder set.
+* 19/02/2025 - Bugfixes; settings import wasn't working if the defaults being imported needed to have their keys rationalised. Creating a character from a default wasn't properly adding all of the relevant data due to an error with updateSource. Set a width for the track manager window to 1/2 the available window width: TODO - check the other apps to ensure auto-width of 100% not causing issues. Fixed bug in ladder setting that was causing failure to localise.
 
 31/01/2025
 - Updated the option to disable token rotation for compatibility with Foundry 13.335.

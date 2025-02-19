@@ -68,7 +68,7 @@ Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
         if (settings && adventure.sheet.overrideSettings) replace = true;  
     }
     if (replace){
-        if (settings) fcoConstants.importSettings(settings); 
+        if (settings) await fcoConstants.importSettings(settings); 
     }
 })
 
@@ -280,6 +280,28 @@ Hooks.once('ready', async () => {
         choices:skill_choices,
         requiresReload:true
     })
+
+    game.settings.register("fate-core-official","ladder",{
+        name:"ladder",
+        scope:"world",
+        config:false,
+        type: Object,
+        default: {
+            "10":"",
+            "9":"",
+            "8":`${game.i18n.localize("fate-core-official.Legendary")}`,
+            "7":`${game.i18n.localize("fate-core-official.Epic")}`,
+            "6":`${game.i18n.localize("fate-core-official.Fantastic")}`,
+            "5":`${game.i18n.localize("fate-core-official.Superb")}`,
+            "4":`${game.i18n.localize("fate-core-official.Great")}`,
+            "3":`${game.i18n.localize("fate-core-official.Good")}`,
+            "2":`${game.i18n.localize("fate-core-official.Fair")}`,
+            "1":`${game.i18n.localize("fate-core-official.Average")}`,
+            "0":`${game.i18n.localize("fate-core-official.Mediocre")}`,
+            "-1":`${game.i18n.localize("fate-core-official.Poor")}`,
+            "-2":`${game.i18n.localize("fate-core-official.Terrible")}`,
+        }
+    });
 });
 
 Hooks.on('diceSoNiceReady', function() {
@@ -685,28 +707,6 @@ Hooks.once('init', async function () {
         config:false,
         type: Object,
         default: {}
-    });
-
-    game.settings.register("fate-core-official","ladder",{
-        name:"ladder",
-        scope:"world",
-        config:false,
-        type: Object,
-        default: {
-            "10":"",
-            "9":"",
-            "8":game.i18n.localize("fate-core-official.Legendary"),
-            "7":game.i18n.localize("fate-core-official.Epic"),
-            "6":game.i18n.localize("fate-core-official.Fantastic"),
-            "5":game.i18n.localize("fate-core-official.Superb"),
-            "4":game.i18n.localize("fate-core-official.Great"),
-            "3":game.i18n.localize("fate-core-official.Good"),
-            "2":game.i18n.localize("fate-core-official.Fair"),
-            "1":game.i18n.localize("fate-core-official.Average"),
-            "0":game.i18n.localize("fate-core-official.Mediocre"),
-            "-1":game.i18n.localize("fate-core-official.Poor"),
-            "-2":game.i18n.localize("fate-core-official.Terrible"),
-        }
     });
 
     game.settings.register("fate-core-official","track_categories",{

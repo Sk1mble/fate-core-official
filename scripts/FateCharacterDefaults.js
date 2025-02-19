@@ -300,7 +300,6 @@ class FateCharacterDefaults {
                 stunts:character_default.stunts,
                 aspects:character_default.aspects,
                 tracks:character_default.tracks,
-
             }
         }
         return await Actor.create(actor_data, {renderSheet:render});

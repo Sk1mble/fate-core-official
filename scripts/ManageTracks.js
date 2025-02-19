@@ -462,6 +462,9 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         window: {
             title: this.title,
             icon: "fas fa-gear",
+        },
+        position:{
+            width:window.innerWidth/2
         }
     }
 
