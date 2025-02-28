@@ -796,8 +796,8 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                                         let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
                                     }
-                                    await fcoConstants.wd().update({"system.==tracks":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
-                                    await fcoConstants.wd().update({"system.==tracks":tracks},{diff:false, recursive:false});
+                                    await fcoConstants.wd().update({"system.==tracks":{}},{noHook:true, renderSheet:false});
+                                    await fcoConstants.wd().update({"system.==tracks":tracks});
                                 }, 
                                 default:true,
                             }]
@@ -925,8 +925,8 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
                                                     delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
                                                 }
                                                 await game.settings.set("fate-core-official","track_categories",track_categories);
-                                                await fcoConstants.wd().update({"system.==tracks":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
-                                                await fcoConstants.wd().update({"system.==tracks":tracks},{diff:false, recursive:false});
+                                                await fcoConstants.wd().update({"system.==tracks":{}},{noHook:true, renderSheet:false});
+                                                await fcoConstants.wd().update({"system.==tracks":tracks});
                                                 this.render(false);    
                                             }
                                         }
@@ -1025,7 +1025,7 @@ class OrderTracks extends foundry.applications.api.HandlebarsApplicationMixin(fo
             for (let i = 0; i < this.data.length; i++){
                 tracks[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            await fcoConstants.wd().update({"system.==tracks":{}},{recursive: false, diff: false, noHook: true});
+            await fcoConstants.wd().update({"system.==tracks":{}},{noHook: true});
             await fcoConstants.wd().update({"system.==tracks":tracks});
             this.close();
         })

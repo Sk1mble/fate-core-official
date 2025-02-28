@@ -380,8 +380,8 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
             for (let i = 0; i < this.data.length; i++){
                 aspects[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            await fcoConstants.wd().update({"system.==aspects":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
-            await fcoConstants.wd().update({"system.==aspects":aspects},{diff:false, recursive:false});
+            await fcoConstants.wd().update({"system.==aspects":{}},{noHook:true, renderSheet:false});
+            await fcoConstants.wd().update({"system.==aspects":aspects});
             this.close();
         })
     }

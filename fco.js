@@ -90,7 +90,7 @@ Hooks.on("preDeleteItem", (item, data, options, userId) => {
 });
 
 Hooks.on("renderSettingsConfig", (app, html) => {
-    const input = html[0].querySelector("[name='fate-core-official.fco-font-family']");
+    const input = html.querySelector("[name='fate-core-official.fco-font-family']");
     input.remove(0);
 
     FontConfig.getAvailableFonts().forEach(font => {
@@ -235,12 +235,32 @@ async function prepareWorldItem(){
     }
 }
     
+Hooks.once("i18nInit", async () => {
+    game.settings.register("fate-core-official","ladder",{
+        name:"ladder",
+        scope:"world",
+        config:false,
+        type: Object,
+        default: {
+            "10":"",
+            "9":"",
+            "8":`${game.i18n.localize("fate-core-official.Legendary")}`,
+            "7":`${game.i18n.localize("fate-core-official.Epic")}`,
+            "6":`${game.i18n.localize("fate-core-official.Fantastic")}`,
+            "5":`${game.i18n.localize("fate-core-official.Superb")}`,
+            "4":`${game.i18n.localize("fate-core-official.Great")}`,
+            "3":`${game.i18n.localize("fate-core-official.Good")}`,
+            "2":`${game.i18n.localize("fate-core-official.Fair")}`,
+            "1":`${game.i18n.localize("fate-core-official.Average")}`,
+            "0":`${game.i18n.localize("fate-core-official.Mediocre")}`,
+            "-1":`${game.i18n.localize("fate-core-official.Poor")}`,
+            "-2":`${game.i18n.localize("fate-core-official.Terrible")}`,
+        }
+    });
+})
+
 Hooks.once('ready', async () => {
     Hooks.on("preMoveToken", (document, movement, operation) => {
-        if (game.settings.get("fate-core-official","disableAutoTokenRotation")){
-            movement.autoRotate = false;
-        }
-
         if (game.settings.get("fate-core-official","disableAutoShowRuler")){
             movement.showRuler = false;
         }
@@ -280,28 +300,6 @@ Hooks.once('ready', async () => {
         choices:skill_choices,
         requiresReload:true
     })
-
-    game.settings.register("fate-core-official","ladder",{
-        name:"ladder",
-        scope:"world",
-        config:false,
-        type: Object,
-        default: {
-            "10":"",
-            "9":"",
-            "8":`${game.i18n.localize("fate-core-official.Legendary")}`,
-            "7":`${game.i18n.localize("fate-core-official.Epic")}`,
-            "6":`${game.i18n.localize("fate-core-official.Fantastic")}`,
-            "5":`${game.i18n.localize("fate-core-official.Superb")}`,
-            "4":`${game.i18n.localize("fate-core-official.Great")}`,
-            "3":`${game.i18n.localize("fate-core-official.Good")}`,
-            "2":`${game.i18n.localize("fate-core-official.Fair")}`,
-            "1":`${game.i18n.localize("fate-core-official.Average")}`,
-            "0":`${game.i18n.localize("fate-core-official.Mediocre")}`,
-            "-1":`${game.i18n.localize("fate-core-official.Poor")}`,
-            "-2":`${game.i18n.localize("fate-core-official.Terrible")}`,
-        }
-    });
 });
 
 Hooks.on('diceSoNiceReady', function() {
@@ -673,15 +671,6 @@ Hooks.once('init', async function () {
         onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
     })
 
-    game.settings.register("fate-core-official", "disableAutoTokenRotation" , {
-        name: game.i18n.localize("fate-core-official.disableAutoTokenRotation"),
-        scope: "world",
-        type: Boolean,
-        default: true,
-        config: true,
-        restricted: true,
-    });
-
     game.settings.register("fate-core-official", "disableAutoShowRuler" , {
         name: game.i18n.localize("fate-core-official.disableAutoShowRuler"),
         scope: "world",
@@ -805,34 +794,34 @@ Hooks.once('init', async function () {
         onChange: async value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateCoreDefaultSkills"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateCoreDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM) {
-                        await fcoConstants.wd().update({"system.==skills":{}},{diff:false, recursive:false}); 
+                        await fcoConstants.wd().update({"system.==skills":{}}); 
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
-                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateCondensedDefaultSkills"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateCondensedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateAcceleratedDefaultSkills"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateAcceleratedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["DresdenFilesAcceleratedDefaultSkills"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["DresdenFilesAcceleratedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
@@ -861,31 +850,31 @@ Hooks.once('init', async function () {
             onChange: async value => { // A callback function which triggers when the setting is changed
                     if (value == "fateCore"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateCoreDefaultAspects"]},{diff:false, recursive:false});
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateCoreDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value == "fateCondensed"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateCondensedDefaultAspects"]},{diff:false, recursive:false});
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateCondensedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="clearAll"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.==aspects":{}},{diff:false, recursive:false});
+                            await fcoConstants.wd().update({"system.==aspects":{}});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="accelerated"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateAcceleratedDefaultAspects"]},{diff:false, recursive:false});
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateAcceleratedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="dfa"){
                         if (game.user.isGM){
-                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["DresdenFilesAcceleratedDefaultAspects"]},{diff:false, recursive:false});
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["DresdenFilesAcceleratedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
@@ -913,35 +902,35 @@ Hooks.once('init', async function () {
         onChange: async value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateCoreDefaultTracks"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateCoreDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==tracks":{}},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==tracks":{}});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateCondensedDefaultTracks"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateCondensedDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateAcceleratedDefaultTracks"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateAcceleratedDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
-                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["DresdenFilesAcceleratedDefaultTracks"]},{diff:false, recursive:false});
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["DresdenFilesAcceleratedDefaultTracks"]});
                         game.settings.set("fate-core-official","track_categories",game.system["lang"]["DresdenFilesAcceleratedDefaultTrackCategories"]);
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
@@ -1119,7 +1108,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:"true",
         type:String,
         default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
-        filePicker:true
+        //filePicker:"any"
     })
     
 
@@ -1130,7 +1119,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:"true",
         type:String,
         default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
-        filePicker:true
+        //filePicker:"any"
     })
 
     game.settings.register("fate-core-official", "fco-world-sheet-scheme", {
@@ -1515,9 +1504,9 @@ Combatant.prototype._getInitiativeFormula = function () {
     }
 }
 
-foundry.applications.elements.HTMLProseMirrorElement.prototype._onFocusOut = function(event) {
+/*foundry.applications.elements.HTMLProseMirrorElement.prototype._onFocusOut = function(event) {
     // Do nothing - TODO: Review when v13 is released
-}
+}*/
 
 Handlebars.registerHelper("fco_ladder", function(result){
     let fc = new fcoConstants();

@@ -301,7 +301,7 @@ class fcoConstants {
                 label: game.i18n.localize("fate-core-official.CopyToClipboardAndClose"),
                 callback: (event, button, dialog) => {
                     let text = button.form.elements.fcoCopiable.value;
-                    navigator.clipboard.writeText(text);
+                    game.clipboard.copyPlainText(text)
                 }
             }],
         }).render(true);

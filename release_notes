@@ -44,8 +44,6 @@
 * 07/01/2025 - Added back code to ensure a re-render from, editing data won't cause a character sheet, extra sheet, or FateUtilities to re-render whilst a prosemirror text field is in the process of being edited.
 * 07/01/2025 - Prosemirrors on extrasheets, Fate Utilities, and character sheets now save if the window is closed while the editors are open.
 * 27/01/2025 - Added some CSS to make the text in inactive prose-mirror editors selectable (so it can be copied to the clipboard etc.).
-* 16/02/2025 - Added a hidden 'ladder' setting that allows the ladder for the world to be set explicitly. Will fall back to the standard Fate ladder if there is no ladder set.
-* 19/02/2025 - Bugfixes; settings import wasn't working if the defaults being imported needed to have their keys rationalised. Creating a character from a default wasn't properly adding all of the relevant data due to an error with updateSource. Set a width for the track manager window to 1/2 the available window width: TODO - check the other apps to ensure auto-width of 100% not causing issues. Fixed bug in ladder setting that was causing failure to localise.
 
 31/01/2025
 - Updated the option to disable token rotation for compatibility with Foundry 13.335.
@@ -60,6 +58,17 @@
 
 3/02/2025 (day)
 * Fixed above bug re EditPlayerAspects - aspects now save on any changes, as with other editable data.
+
+* 16/02/2025 - Added a hidden 'ladder' setting that allows the ladder for the world to be set explicitly. Will fall back to the standard Fate ladder if there is no ladder set.
+* 19/02/2025 - Bugfixes; settings import wasn't working if the defaults being imported needed to have their keys rationalised. Creating a character from a default wasn't properly adding all of the relevant data due to an error with updateSource. Set a width for the track manager window to 1/2 the available window width: TODO - check the other apps to ensure auto-width of 100% not causing issues. Fixed bug in ladder setting that was causing failure to localise.
+
+* 28/02/2025 - Bugfixes for 13.337. 
+** Had to remove the filepicker from the options for default character sheet template as this no longer accepts html files as a file type; will revert back to the 'any' file type once this is working. 
+** Using diff:false, recursive:false options now breaks all updates on tracks etc. so have removed these from all updates. 
+** Fixed the font options as these weren't working now that the Settings app is in appV2.
+** Removed option to disable tokenm autorotation as this has now been baked into Foundry
+** Fixed a bug in the timing of the Fate Ladder setting being registered that was preventing existing chat messages from rendering with the correct ladder name (fantastic etc.)
+** Changed to using game.clipboard.copyPlainText(text) to copy contents of exports to clipboard as this should work across browsers.
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

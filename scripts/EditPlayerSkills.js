@@ -104,7 +104,7 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
                 ui.notifications.error(game.i18n.localize("fate-core-official.UnableToSave"));
             } else {
                 let tracks = this.object.setupTracks (foundry.utils.duplicate(this.player_skills), foundry.utils.duplicate(this.object.system.tracks));
-                await this.object.update({"system.==tracks":tracks,"system.==skills":this.player_skills},{diff:false, recursive:false}); 
+                await this.object.update({"system.==tracks":tracks,"system.==skills":this.player_skills}); 
                 ui.notifications.info(game.i18n.localize("fate-core-official.SkillsSaved"));
                 this.changed = false;
                 this.close();

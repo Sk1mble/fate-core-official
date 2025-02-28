@@ -16,8 +16,8 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
     }
 
     async updateAspects(){
-        await this.actor.update({"system.==aspects":{}},{diff:false, recursive:false, noHook:true, renderSheet:false});
-        await this.actor.update({"system.==aspects":this.aspects},{diff:false, recursive:false})
+        await this.actor.update({"system.==aspects":{}},{noHook:true, renderSheet:false});
+        await this.actor.update({"system.==aspects":this.aspects});
     }
 
     _onRender(context, options){
