@@ -1231,7 +1231,7 @@ game.settings.register("fate-core-official","freeStunts", {
     }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
-    //foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
+    foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
     foundry.documents.collections.Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
     foundry.documents.collections.Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
 
