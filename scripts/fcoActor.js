@@ -43,10 +43,6 @@ export class fcoActor extends Actor {
     async _preCreate(...args){
         await super._preCreate(...args);
 
-        if (this.type == "ModularFate" || this.type == "FateCoreOfficial"){
-            this.updateSource({type:"fate-core-official"})
-        }
-
         if (this?.system?.details?.fatePoints?.refresh === null||
             this?.system?.details?.fatePoints?.refresh === undefined &&
             this.type == "fate-core-official"){
@@ -85,13 +81,6 @@ export class fcoActor extends Actor {
             }
         }
         return super.migrateData(data);
-    }
-
-    async _preUpdate(data, options, user){
-        await super._preUpdate(data, options, user);
-        if (data.type == "ModularFate" || data.type == "FateCoreOfficial"){
-            data.type = "fate-core-official"; 
-        }
     }
 
     /** Methods for dealing with multiple shapes (sets of token and avatar artwork that can be easily switched between) 

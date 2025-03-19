@@ -93,7 +93,8 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     const input = html.querySelector("[name='fate-core-official.fco-font-family']");
     input.remove(0);
 
-    FontConfig.getAvailableFonts().forEach(font => {
+    // FontCOnfig will be switching to foundry.applications.apps.FontConfig once the V2 app has been completed.
+    foundry.appv1.apps.FontConfig.getAvailableFonts().forEach(font => {
         const option = document.createElement("option");
         option.value = font;
         option.text = font;
@@ -157,9 +158,9 @@ async function setupSheet(){
 function setupFont(){
     // Setup the system font according to the user's settings
     let val = game.settings.get("fate-core-official","fco-font-family");
-    if (FontConfig.getAvailableFonts().indexOf(val) == -1){
+    if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(val) == -1){
         // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-        val = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
+        val = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
     }
     let override = game.settings.get("fate-core-official", "override-foundry-font");
     if (override) {
@@ -307,77 +308,6 @@ Hooks.on('diceSoNiceReady', function() {
 })
 
 Hooks.once('ready', async function () {
-    //Convert any straggling ModularFate actors to fate-core-official actors.
-    let updates = [];
-    game.actors.contents.forEach(actor => {
-        if (actor.type == "ModularFate" || actor.type == "FateCoreOfficial") {
-            let newSystem = foundry.utils.duplicate(actor.system);
-            updates.push({_id:actor.id, type:"fate-core-official", "==system":newSystem});
-        }
-    });
-    if (game.user == game.users.activeGM) await Actor.updateDocuments(updates)
-
-    // We need to port any and all settings over from ModularFate/Fate Core Official and any or all flags.
-
-    //First, settings.
-    const systemSettings = [];
-    try {
-        for ( let s of game.data.settings ) {
-            if ( s.key.startsWith("ModularFate.") ) {
-                systemSettings.push({_id: s._id, key: s.key.replace("ModularFate.", "fate-core-official.")});
-            }
-            if ( s.key.startsWith("FateCoreOfficial.") ) {
-                systemSettings.push({_id: s._id, key: s.key.replace("FateCoreOfficial.", "fate-core-official.")});
-            }
-        }
-        if (game.user == game.users.activeGM) await Setting.updateDocuments(systemSettings);
-    }
-    catch (error){
-        //Do nothing, just don't stop what you're doing!
-    }
-
-    // Now flags, let us write a convenience function
-
-    async function changeFlags(doc){
-        let flags1 = doc.flags["ModularFate"];
-        let flags2 = doc.flags["FateCoreOfficial"];
-        if ( flags1 ) {
-            await doc.update({"flags.fate-core-official": flags1}, {recursive: false});
-            await doc.update({"flags.-=ModularFate": null});
-        }
-        if ( flags2 ) {
-            await doc.update({"flags.fate-core-official": flags2}, {recursive: false});
-            await doc.update({"flags.-=FateCoreOfficial": null});
-        }
-    }
-
-    // Users
-    for (let doc of game.users){
-        if (game.user == game.users.activeGM) await changeFlags(doc);
-    }
-
-    // Actors
-    for (let doc of game.actors){
-        if (game.user == game.users.activeGM) await changeFlags(doc);
-    }
-
-    // Scenes & Token actors
-    for (let doc of game.scenes){
-        if (game.user == game.users.activeGM) await changeFlags(doc);
-        for (let tok of doc.tokens){
-            if (game.user == game.users.activeGM) await changeFlags(tok);
-        }
-    }
-
-    // Combats & combatants
-    for (let doc of game.combats) {
-        if (game.user == game.users.activeGM) await changeFlags (doc);
-        for (let com of doc.combatants){
-            if (game.user == game.users.activeGM) await changeFlags (com);
-        }
-    }
-
-
     // The code for initialising a new world with the content of a module pack goes here.
     // The fallback position is to display a similar message to the existing one.            
     if (game.settings.get("fate-core-official","run_once") == false && game.user.isGM){
@@ -1290,7 +1220,7 @@ game.settings.register("fate-core-official","freeStunts", {
     })
 
     game.system.documentTypes.Item = ["Extra"];
-    game.system.documentTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
+    game.system.documentTypes.Actor = ["fate-core-official","Thing"];
     
     game.system.apps= {
         actor:[],
@@ -1301,13 +1231,13 @@ game.settings.register("fate-core-official","freeStunts", {
     }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
-    Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official", "FateCoreOfficial", "ModularFate"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
-    Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
+    //foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
+    foundry.documents.collections.Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
+    foundry.documents.collections.Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
 
     // Register Item sheets
-    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
-    Items.unregisterSheet('core', ItemSheet);
+    foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
+    foundry.documents.collections.Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
 
     game.settings.register("fate-core-official", "sortSkills", {
         name: game.i18n.localize("fate-core-official.Sort_skills_on_sheets_by_rank"),

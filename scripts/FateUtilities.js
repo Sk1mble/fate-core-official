@@ -638,9 +638,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
 
             // Setup the aspect label font according to the user's settings
             let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-            if (FontConfig.getAvailableFonts().indexOf(font) == -1){
+            if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(font) == -1){
                  // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                font = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
             }
 
             if (size === 0){
@@ -1098,9 +1098,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                                 
                                 // Setup the aspect label font according to the user's settings
                                 let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-                                if (FontConfig.getAvailableFonts().indexOf(font) == -1){
+                                if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(font) == -1){
                                     // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                                    font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                                    font = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
                                 }
                                 
                                 if (size === 0){
@@ -1225,9 +1225,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                                 
                                 // Setup the aspect label font according to the user's settings
                                 let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-                                if (FontConfig.getAvailableFonts().indexOf(font) == -1){
+                                if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(font) == -1){
                                     // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                                    font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                                    font = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
                                 }
     
                                 if (size === 0){
@@ -1655,9 +1655,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             
             // Setup the aspect label font according to the user's settings
             let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-            if (FontConfig.getAvailableFonts().indexOf(font) == -1){
+            if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(font) == -1){
                 // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                font = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
             }
 
             if (size === 0){
@@ -1701,9 +1701,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             
                 // Setup the aspect label font according to the user's settings
                 let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-                if (FontConfig.getAvailableFonts().indexOf(font) == -1){
+                if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(font) == -1){
                     // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                    font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                    font = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
                 }
 
                 if (size === 0){
@@ -1907,9 +1907,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             
             // Setup the aspect label font according to the user's settings
             let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-            if (FontConfig.getAvailableFonts().indexOf(font) == -1){
+            if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(font) == -1){
                  // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-                font = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
+                font = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fuAspectLabelFont")]
             }
 
             if (size === 0){
@@ -2658,10 +2658,10 @@ class FUAspectLabelClass extends foundry.applications.api.HandlebarsApplicationM
 
     async _prepareContext (){
         let font = game.settings.get("fate-core-official","fuAspectLabelFont");
-        if (FontConfig.getAvailableFonts().indexOf(font) == -1) font = FontConfig.getAvailableFonts()[font];
+        if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(font) == -1) font = foundry.appv1.apps.FontConfig.getAvailableFonts()[font];
         
         return {
-                    fonts:FontConfig.getAvailableFonts(),
+                    fonts:foundry.appv1.apps.FontConfig.getAvailableFonts(),
                     currentFont:font,
                     fontSize:game.settings.get("fate-core-official", "fuAspectLabelSize"),
                     textColour:game.settings.get("fate-core-official","fuAspectLabelTextColour"),
