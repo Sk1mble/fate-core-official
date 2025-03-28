@@ -44,7 +44,6 @@
 * 07/01/2025 - Added back code to ensure a re-render from, editing data won't cause a character sheet, extra sheet, or FateUtilities to re-render whilst a prosemirror text field is in the process of being edited.
 * 07/01/2025 - Prosemirrors on extrasheets, Fate Utilities, and character sheets now save if the window is closed while the editors are open.
 * 27/01/2025 - Added some CSS to make the text in inactive prose-mirror editors selectable (so it can be copied to the clipboard etc.).
-* 19/03/2025 - Removed the code that migrated old ModularFate / FateCoreOfficial data to fate-core-official. ModularFate was deprecated a long while ago and a manual transition is possible if anyone needs to get bery old date into Foundry.
 
 31/01/2025
 - Updated the option to disable token rotation for compatibility with Foundry 13.335.
@@ -70,6 +69,12 @@
 ** Removed option to disable tokenm autorotation as this has now been baked into Foundry
 ** Fixed a bug in the timing of the Fate Ladder setting being registered that was preventing existing chat messages from rendering with the correct ladder name (fantastic etc.)
 ** Changed to using game.clipboard.copyPlainText(text) to copy contents of exports to clipboard as this should work across browsers.
+
+* 19/03/2025 - Removed the code that migrated old ModularFate / FateCoreOfficial data to fate-core-official. ModularFate was deprecated a long while ago and a manual transition is possible if anyone needs to get bery old date into Foundry.
+
+28/03/2025
+* Switched to using the <range-picker> custom html tag as the rangePicke handlebars helper has been deprecated.
+* Tested that system works in Foundry 13.339
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

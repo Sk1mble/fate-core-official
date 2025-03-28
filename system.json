@@ -10,8 +10,8 @@
   ],
   "url": "https://github.com/Sk1mble/fate-core-official",
   "compatibility": {
-    "minimum": "13.335",
-    "verified": "13.337"
+    "minimum": "13.339",
+    "verified": "13.339"
   },
   "version": "4.7.13",
   "scripts": [
