@@ -27,7 +27,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
 
                             let src = MutationRecord[0].target.src;
                             if (src.startsWith(window.location.origin)){
-                                newsrc = (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
+                                newsrc = "/" + (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
                             } else {
                                 newsrc = src;
                             }

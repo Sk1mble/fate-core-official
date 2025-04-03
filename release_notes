@@ -76,6 +76,9 @@
 * Switched to using the <range-picker> custom html tag as the rangePicke handlebars helper has been deprecated.
 * Tested that system works in Foundry 13.339
 
+03/04/202
+* Added a leading "/" to the local filename when changing the image for an Extra's avatar, preventing it from breaking where a route_prefix has been defined.
+
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.
 
