@@ -146,7 +146,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         
         //Add a drop handler to cope with Extras and mf_draggable items being dropped on the sheet
         actor?.addEventListener("drop", async event => {
-            let data = TextEditor.getDragEventData(event);
+            let data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
             // If this is an Extra, let's copy it to this actor.
             let item;
             if (data.type == "Item") {

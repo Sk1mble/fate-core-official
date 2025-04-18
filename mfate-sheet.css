@@ -72,22 +72,20 @@
     grid-area: header;
 }
 
-.fco_prose_mirror .editor-container {
-    margin-right:0px;
-    margin-left:10px;
-    margin-top:2px;
-    margin-bottom:5px;
-    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
-    scrollbar-width:thin;
+.fco_prose_mirror .editor-content * {
+    user-select:text;
 }
 
-.fco_prose_mirror.inactive .editor-content * {
+.fco_prose_mirror .editor-content {
     user-select:text;
+    margin-top:5px;
+    margin-left:10px;
+    margin-right:10px;
+    margin-bottom:5px;
 }
 
 .fco_prose_mirror {
     background:var(--fco-sheet-input-colour);
-    margin-top:5px;
     border:1px solid var(--fco-accent-colour);
     scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
     scrollbar-width:thin;
@@ -218,23 +216,20 @@
 .fco_prose_mirror.editor .icon.toggle {
     transition: opacity 1s; 
     opacity:0;
-    min-height:30px;
-    min-width:30px;
-    max-height:30px;
-    max-width:30px;
-    position: relative;
-    bottom:0px;
+    margin:5px;
 }
 
 .fco_prose_mirror.editor.inactive .icon.toggle:hover {
     transition: opacity 1s; 
     opacity:1;
+    margin:5px;
 }
 
 .fco_prose_mirror.editor.inactive:hover > .icon.toggle {
     transition: opacity 1s; 
     opacity:1;
     display:block;
+    margin:5px;
 }
 
 .fco_prose_mirror.editor.inactive > .icon.toggle {
@@ -246,7 +241,7 @@
 }
 
 .fco_prose_mirror.editor.prosemirror .editor-menu {
-    height:1.8em;
+    height:2em;
     padding-top:0px;
     padding-bottom:0px;
     border-radius:0;

@@ -256,7 +256,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
 
         const things = html.querySelector("div[class='thingSheet']");
         things?.addEventListener("drop", async event => {
-            let data = TextEditor.getDragEventData(event);
+            let data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
             let item;
             if (data.type == "Item") {
                 item = await fromUuid(data.uuid);

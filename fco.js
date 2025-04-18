@@ -93,8 +93,7 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     const input = html.querySelector("[name='fate-core-official.fco-font-family']");
     input.remove(0);
 
-    // FontCOnfig will be switching to foundry.applications.apps.FontConfig once the V2 app has been completed.
-    foundry.appv1.apps.FontConfig.getAvailableFonts().forEach(font => {
+    foundry.applications.settings.menus.FontConfig.getAvailableFonts().forEach(font => {
         const option = document.createElement("option");
         option.value = font;
         option.text = font;
@@ -105,6 +104,19 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     let current = game.settings.get("fate-core-official","fco-font-family");
     for (let option of options) if (option.value == current) option.selected = 'selected'
 });
+
+
+// This hook allows us to correct the rendering of the Secrets of Cats & Knights of Invasion scale calculators without having to upload a new version of the adventures just to edit the macros. 
+// This is quick and dirty and we should modify the macros in the adventures next time we update them.
+Hooks.on("renderDialog", (app, html) => {
+    if (app.title=="Scale Calculator" && app.data.content.startsWith("\n\n\n<style>\n.tsoc-paw")){
+        html[0].querySelector(".window-content").style.background = "white";
+    }
+    if (app.title == "Scale Calculator" && app.data.content.startsWith("\n\n\n<style>\n.koi-shield")){
+        html[0].querySelector(".window-content").style.background = "white";
+        html[0].style.height = "510px";
+    }
+})
 
 async function setupSheet(){
 
@@ -158,9 +170,9 @@ async function setupSheet(){
 function setupFont(){
     // Setup the system font according to the user's settings
     let val = game.settings.get("fate-core-official","fco-font-family");
-    if (foundry.appv1.apps.FontConfig.getAvailableFonts().indexOf(val) == -1){
+    if (foundry.applications.settings.menus.FontConfig.getAvailableFonts().indexOf(val) == -1){
         // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-        val = foundry.appv1.apps.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
+        val = foundry.applications.settings.menus.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
     }
     let override = game.settings.get("fate-core-official", "override-foundry-font");
     if (override) {
@@ -1904,5 +1916,3 @@ document?.addEventListener("contextmenu", async event => {
         ip.render(true);
     }
 })
-
-

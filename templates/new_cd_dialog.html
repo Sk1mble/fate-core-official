@@ -4,7 +4,7 @@
             Countdown Name:
         </div>
         <div style="width:50em; height:8em">
-            <prose-mirror toggled="true" class="fco_prose_mirror acd" name="name" data-edit="name"></prose-mirror>
+            <prose-mirror toggled="true" class="fco_prose_mirror acd" name="name" value="{{this.name}}" data-edit="name">{{{this.name_rich}}}</prose-mirror>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">
@@ -12,7 +12,7 @@
             Number of Boxes (1-20):
         </div>
         <div>
-            <input type="number" name="boxes" style="border-bottom:1px solid var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); padding-left:2px; width:15em"></input>
+            <input min="1" max="20" steps = "1" type="number" name="boxes" style="border-bottom:1px solid var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); padding-left:5px; width:15em" value="{{this.boxes}}"></input>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">
@@ -20,7 +20,7 @@
             Triggers and Outcome:
         </div>
         <div style="width:50em; height:8em">
-            <prose-mirror toggled="true" class="fco_prose_mirror acd" name="description" data-edit="description"></prose-mirror>
+            <prose-mirror toggled="true" class="fco_prose_mirror acd" name="description" value="{{this.description}}" data-edit="description">{{{this.description_rich}}}</prose-mirror>
         </div>
     </div>
     <div style="display:flex; flex-direction:row; margin-top:10px">
@@ -29,9 +29,9 @@
         </div>
         <div>
             <select name="visible" style="color:var(--fco-sheet-text-colour); background-color:var(--fco-sheet-input-colour); width:15em">
-                <option value="visible">Visible</option>
-                <option value="hidden">Hidden</option>
-                <option value="show_boxes">Hidden Except Boxes</option>
+                <option value="visible" {{#if (eq this.visible "visible")}} selected="selected"{{/if}}>Visible</option>
+                <option value="hidden" {{#if (eq this.visible "hidden")}} selected="selected"{{/if}}>Hidden</option>
+                <option value="show_boxes" {{#if (eq this.visible "show_boxes")}} selected="selected"{{/if}}>Hidden Except Boxes</option>
             </select>
             <button id="cd_dialog_save" type="submit" style="margin-top: 10px; border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:6em; height:2em; line-height:10px">{{localize 'fate-core-official.Save'}}</button>
         </div>

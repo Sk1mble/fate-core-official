@@ -32,7 +32,7 @@ class fcoConstants {
         let secrets = false;
         if (object) secrets = object.isOwner;
         if (game.user.isGM) secrets = true;
-        return DOMPurify.sanitize(await TextEditor.enrichHTML(value, {secrets:secrets, documents:true, async:true}));
+        return DOMPurify.sanitize(await foundry.applications.ux.TextEditor.implementation.enrichHTML(value, {secrets:secrets, documents:true, async:true}));
     }
 
     // The methods used by the Evil Hat Worlds of Adventure to set a playmat background from the module's art folder

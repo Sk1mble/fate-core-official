@@ -76,8 +76,15 @@
 * Switched to using the <range-picker> custom html tag as the rangePicke handlebars helper has been deprecated.
 * Tested that system works in Foundry 13.339
 
-03/04/202
+03/04/2025
 * Added a leading "/" to the local filename when changing the image for an Extra's avatar, preventing it from breaking where a route_prefix has been defined.
+
+18/04/2025
+* Tested in 13.340
+* Changed reference to FontConfig to foundry.applications.settings.menus.FontConfig
+* Added a renderDialog hook to fix the Scale Calculator dialogs for The Secrets of Cats and Knights of Invasion - this is a stopgap, we will update the macros in the adventure next time we update the adventures with any more substantial updates.
+* Fixed the Add Countdown dialog so that the fields won't go blank if you edit, save, toggle to edit again but don't change anything and save.
+* Changed references to TextEditor to foundry.applications.ux.TextEditor
 
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.

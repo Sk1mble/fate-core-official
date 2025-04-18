@@ -316,7 +316,7 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
     // Add a drop handler that lets the GM drag stunts from anything into the database window.
     _onFirstRender(context, options){
         this.element?.addEventListener("drop", async event => {
-            let data = TextEditor.getDragEventData(event);
+            let data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
             if (data?.ident == "mf_draggable" && data?.type == "stunt" && game.user.isGM){
                 // Add the stunt to the database and re-render
                 let stunt = new fcoStunt(data.dragged);
