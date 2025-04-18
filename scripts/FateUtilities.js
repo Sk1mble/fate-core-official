@@ -1069,7 +1069,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         buttons: [{
                                 label: "OK",
                                 callback: (event, button, dialog) => {
-                                    resolve (dialog.querySelectorAll(".free_i_selector"));
+                                    resolve (dialog.element.querySelectorAll(".free_i_selector"));
                             }, default:true
                         }],
                         close: () => resolve()
@@ -1197,7 +1197,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         buttons: [{
                                 label: "OK",
                                 callback: (event, button, dialog) => {
-                                    resolve (dialog.querySelectorAll(".free_i_r_selector"));
+                                    resolve (dialog.element.querySelectorAll(".free_i_r_selector"));
                             }, default: true
                         }],
                         close: () => resolve("aborted")
@@ -1523,15 +1523,15 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                             label: game.i18n.localize("fate-core-official.OK"),
                             callback: async (event, button, dialog)=> {
                                 // Do the stuff here
-                                let formula = dialog.querySelector('#fco-gmadhr-formula')?.value;
+                                let formula = dialog.element.querySelector('#fco-gmadhr-formula')?.value;
                                 if (!formula) formula = '4df';
-                                name = dialog.querySelector('#fco-gmadhr-name').value;
+                                name = dialog.element.querySelector('#fco-gmadhr-name').value;
                                 if (!name) name = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousEntity");
-                                skill = dialog.querySelector('#fco-gmadhr-skill').value;
+                                skill = dialog.element.querySelector('#fco-gmadhr-skill').value;
                                 if (!skill) skill = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousSkill");
-                                modifier = dialog.querySelector('#fco-gmadhr-modifier').value;
+                                modifier = dialog.element.querySelector('#fco-gmadhr-modifier').value;
                                 if (!modifier) modifier = 0;
-                                flavour = dialog.querySelector('#fco-gmadhr-flavour').value;
+                                flavour = dialog.element.querySelector('#fco-gmadhr-flavour').value;
                                 if (!flavour) flavour = game.i18n.localize("fate-core-official.fu-adhoc-roll-mysteriousReason");
 
                                 let r = new Roll(`${formula} + ${modifier}`);
@@ -2600,16 +2600,16 @@ class TimedEvent {
                             
                             if (timedEvents ==null || timedEvents == undefined){
                                 game.combat.setFlag("fate-core-official","timedEvents",[
-                                                                                    {   "round":`${dialog.querySelector("#eventExchange").value}`,
-                                                                                        "event":`${dialog.querySelector("#eventToCreate").value}`,
+                                                                                    {   "round":`${dialog.element.querySelector("#eventExchange").value}`,
+                                                                                        "event":`${dialog.element.querySelector("#eventToCreate").value}`,
                                                                                         "complete":false
                                                                                     }
                                                                                 ])
                                                                                 timedEvents=game.combat.getFlag("fate-core-official","timedEvents");
                             } else {
                                 timedEvents.push({   
-                                                    "round":`${dialog.querySelector("#eventExchange").value}`,
-                                                    "event":`${dialog.querySelector("#eventToCreate").value}`,
+                                                    "round":`${dialog.element.querySelector("#eventExchange").value}`,
+                                                    "event":`${dialog.element.querySelector("#eventToCreate").value}`,
                                                     "complete":false
                                 });
                                 game.combat.setFlag("fate-core-official","timedEvents",timedEvents);

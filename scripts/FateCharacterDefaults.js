@@ -372,7 +372,6 @@ Hooks.on("renderActorDirectory", (app, html, user, opt) => {
     if (!(app instanceof foundry.applications.sidebar.tabs.ActorDirectory) || !game.user?.isGM) {
         return;
     }
-
     if (html instanceof jQuery){
         html = $(html)[0];
     }
@@ -439,6 +438,8 @@ Hooks.on("renderActorDirectory", (app, html, user, opt) => {
             }
             await f.createCharacterFromDefault(default_name, actor_name, true);
         });
+    } else {
+        html.querySelector('select[class="MF_default_to_use"]').innerHTML=`${options}`
     }
 });
 

@@ -775,8 +775,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                             if (!name) name = this.document.name;
                             let f = new FateCharacterDefaults();
                             let options = {
-                                            keep_skills:dialog.querySelector(`#${this.document.id}_keep_skills`).checked,
-                                            keep_aspects:dialog.querySelector(`#${this.document.id}_keep_aspects`).checked
+                                            keep_skills:dialog.element.querySelector(`#${this.document.id}_keep_skills`).checked,
+                                            keep_aspects:dialog.element.querySelector(`#${this.document.id}_keep_aspects`).checked
                             }
                             let def = await f.extractDefault(this.document, name, desc, options);
                             def.options = options;
@@ -888,14 +888,14 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                         action:"ok",
                         label:"OK",
                         callback: async (event, button, dialog) => {                                
-                            let avatar = dialog.querySelector(`#${this.document.id}_def_avatar`).classList.contains('fa-toggle-on');
-                            let tracks = dialog.querySelector(`#${this.document.id}_def_tracks`).classList.contains('fa-toggle-on');
-                            let stunts = dialog.querySelector(`#${this.document.id}_def_stunts`).classList.contains('fa-toggle-on');
-                            let extras = dialog.querySelector(`#${this.document.id}_def_extras`).classList.contains('fa-toggle-on');
-                            let skills = dialog.querySelector(`#${this.document.id}_def_skills`).classList.contains('fa-toggle-on');
-                            let aspects = dialog.querySelector(`#${this.document.id}_def_aspects`).classList.contains('fa-toggle-on');
-                            let merge = dialog.querySelector(`#${this.document.id}_def_overwrite`).classList.contains('fa-toggle-on');
-                            let default_name = dialog.querySelector(`#${this.document.id}_select_default`).value;
+                            let avatar = dialog.element.querySelector(`#${this.document.id}_def_avatar`).classList.contains('fa-toggle-on');
+                            let tracks = dialog.element.querySelector(`#${this.document.id}_def_tracks`).classList.contains('fa-toggle-on');
+                            let stunts = dialog.element.querySelector(`#${this.document.id}_def_stunts`).classList.contains('fa-toggle-on');
+                            let extras = dialog.element.querySelector(`#${this.document.id}_def_extras`).classList.contains('fa-toggle-on');
+                            let skills = dialog.element.querySelector(`#${this.document.id}_def_skills`).classList.contains('fa-toggle-on');
+                            let aspects = dialog.element.querySelector(`#${this.document.id}_def_aspects`).classList.contains('fa-toggle-on');
+                            let merge = dialog.element.querySelector(`#${this.document.id}_def_overwrite`).classList.contains('fa-toggle-on');
+                            let default_name = dialog.element.querySelector(`#${this.document.id}_select_default`).value;
                             if (!avatar && !tracks && !stunts && !extras && !skills && !aspects){
                                 // Todo: Add a message here to explain why nothing happens?
                                 return;

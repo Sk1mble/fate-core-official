@@ -86,6 +86,11 @@
 * Fixed the Add Countdown dialog so that the fields won't go blank if you edit, save, toggle to edit again but don't change anything and save.
 * Changed references to TextEditor to foundry.applications.ux.TextEditor
 
+18/04/2025 (upload 2)
+* Fixed some dialogs that were broken because of https://github.com/foundryvtt/foundryvtt/issues/12525
+* Slightly changed the way the Scale Calculator macro works in TSOC and KOI. Will need to change these macros in the module releases before v16 of Foundry is released - embed the macros in the core system like we did with the other macros, most likely, to avoid this in future.
+* Fixed the way that the injection of fate character defaults works so that the sidebar will correctly update immediately when defaults are modified.
+
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.
 

@@ -107,14 +107,14 @@ Hooks.on("renderSettingsConfig", (app, html) => {
 
 
 // This hook allows us to correct the rendering of the Secrets of Cats & Knights of Invasion scale calculators without having to upload a new version of the adventures just to edit the macros. 
-// This is quick and dirty and we should modify the macros in the adventures next time we update them.
-Hooks.on("renderDialog", (app, html) => {
-    if (app.title=="Scale Calculator" && app.data.content.startsWith("\n\n\n<style>\n.tsoc-paw")){
-        html[0].querySelector(".window-content").style.background = "white";
+// This is quick and dirty and we should modify the macros in the adventures next time we update them. This is calling for Dialog v1, so the argument it returns is JQuery.
+Hooks.on("renderDialog", (dialog) => {
+    if (dialog.title=="Scale Calculator" && dialog.data.content.startsWith("\n\n\n<style>\n.tsoc-paw")){
+        dialog.element[0].querySelector(".window-content").style.background = "white";
     }
-    if (app.title == "Scale Calculator" && app.data.content.startsWith("\n\n\n<style>\n.koi-shield")){
-        html[0].querySelector(".window-content").style.background = "white";
-        html[0].style.height = "510px";
+    if (dialog.title == "Scale Calculator" && dialog.data.content.startsWith("\n\n\n<style>\n.koi-shield")){
+        dialog.element[0].querySelector(".window-content").style.background = "white";
+        dialog.element[0].style.height = "510px";
     }
 })
 
