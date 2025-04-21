@@ -91,6 +91,9 @@
 * Slightly changed the way the Scale Calculator macro works in TSOC and KOI. Will need to change these macros in the module releases before v16 of Foundry is released - embed the macros in the core system like we did with the other macros, most likely, to avoid this in future.
 * Fixed the way that the injection of fate character defaults works so that the sidebar will correctly update immediately when defaults are modified.
 
+21/04/2025
+* Fixed a bug that prevented a character default from being saved if the track had an aspect set to "no" or "NO" rather than "No".
+
 # 4.7.12, 12a, 12b
 * Bugfix releases for final v12 Foundry version of Fate-Core-Official.
 

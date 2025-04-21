@@ -206,7 +206,7 @@ class FateCharacterDefaults {
         let tracks = data.system.tracks;
         for (let t in tracks){
             let track = tracks[t];
-            if (track?.aspect && track?.aspect !== "No"){
+            if (track?.aspect && typeof track.aspect == "string" && track.aspect.toUpperCase() !== "NO"){
                 track.aspect.name = "";
             }
 
