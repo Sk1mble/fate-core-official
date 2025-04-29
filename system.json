@@ -11,7 +11,7 @@
   "url": "https://github.com/Sk1mble/fate-core-official",
   "compatibility": {
     "minimum": "13.340",
-    "verified": "13.340"
+    "verified": "13.341"
   },
   "version": "4.7.13",
   "scripts": [
@@ -87,7 +87,7 @@
   ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/v4.7.13.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.13.zip",
   "grid":{
     "distance":1
   },
