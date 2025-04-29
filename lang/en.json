@@ -1,7 +1,7 @@
 {  
    "TYPES.Actor.fate-core-official":"Fate Character",
    "TYPES.Actor.Thing":"Thing",
-   "fate.ExtraSheet":"Fate Extra",
+   "fate.ExtraSheet":"Fate Extra Sheet",
    "TYPES.Item.Extra":"Fate Extra",
    "fate-core-official.disableAutoShowRuler":"Disable automatic ruler display with token movement?",
    "fate-core-official.newCharacter":"New Character",

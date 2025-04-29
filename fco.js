@@ -1249,7 +1249,7 @@ game.settings.register("fate-core-official","freeStunts", {
 
     // Register Item sheets
     foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
-    foundry.documents.collections.Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
+    foundry.documents.collections.Items.registerSheet('fate', ExtraSheet, { types: ['Extra'],label:game.i18n.localize("fate.ExtraSheet"), makeDefault: true });
 
     game.settings.register("fate-core-official", "sortSkills", {
         name: game.i18n.localize("fate-core-official.Sort_skills_on_sheets_by_rank"),
