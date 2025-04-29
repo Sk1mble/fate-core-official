@@ -1,5 +1,5 @@
 //EditEntityTrack is for editing the specifics of a track already on a character or extra.
-class EditEntityTrack extends FormApplication {
+class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor (track, entity){
         // track is the entity's track being edited, entity is a reference to the actor or extra
         super(track, entity);
@@ -8,184 +8,87 @@ class EditEntityTrack extends FormApplication {
         this.originalName = track.name;
     }
 
-    async getData(){
+    static DEFAULT_OPTIONS = {
+        id: "EditEntityTrack",
+        tag: "form",
+        window: {
+            title: this.title, 
+            icon: "fas fa-scroll", 
+        },
+        position: {
 
-        let rich = {};
-        for (let part in this.track){
-            if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.track[part]);
         }
-
-        const templateData = {
-            track:this.track,
-            categories:game.settings.get("fate-core-official","track_categories"),
-            skills:foundry.utils.duplicate(this.entity.system.skills),
-            entity:this.entity,
-            rich:rich
-        }
-        return templateData;
     }
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/EditEntityTrack.html"; 
+
+    get title() {
+        return game.i18n.localize("fate-core-official.EntityTrackEditor");
+    }
+
+    static PARTS = {
+        "EditEntityTrackForm": {
+            template: "systems/fate-core-official/templates/EditEntityTrack.html",
+            scrollable: ['.EditEntityTrackMainWindow'],
+        }
+    }
+
+    async _prepareContext(options){
+        if (!this.data) {
+            this.data = {};
+            this.data.track= this.track;
+            this.data.categories=game.settings.get("fate-core-official","track_categories");
+            this.data.skills = foundry.utils.duplicate(this.entity.system.skills);
+            this.data.entity = this.entity;
+            let rich = {};
+            for (let part in this.data.track){
+                if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.track[part]);
+            }
+            this.data.rich = rich;
+        }
+        return this.data;
+    }
     
-        //Define the FormApplication's options
-        options.width = "1024";
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.EntityTrackEditor");
-        options.closeOnSubmit = true;
-        options.submitOnClose = true;
-        options.id = "EditEntityTrack"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        return options;
-    }
-    async _updateObject(){
-        // Method for saving out the track once finished goes here. Called on submit();
-
-    }
-
     //Here are the action listeners
-    activateListeners(html) {
-        super.activateListeners(html);
-        const saveTrackButton = html.find("button[id='save_entity_track']");
-        const edit_entity_linked_skillsButton = html.find("button[id='edit_entity_linked_skills']");
-        const copy_track = html.find("button[id='copy_entity']");
-        const export_track = html.find("button[id='exportEntityTrack']");
+   async _onRender(context, options) {
+        const saveTrackButton = this.element.querySelector("button[id='save_entity_track']");
+        const edit_entity_linked_skillsButton = this.element.querySelector("button[id='edit_entity_linked_skills']");
+        const copy_track = this.element.querySelector("button[id='copy_entity_track']");
+        const export_track = this.element.querySelector("button[id='exportEntityTrack']");
 
-        const track_label_select = html.find("select[id='entity_track_label_select']");
-        track_label_select.on("change", event => this._on_track_label_select(event, html))
-        saveTrackButton.on("click", event => this._onSaveTrackButton(event, html));
-        edit_entity_linked_skillsButton.on("click", event => {this._edit_entity_linked_skillsButtonClick(event, html)});
-        copy_track.on("click", event => this._onCopyTrackButton(event, html));
-        export_track.on("click", event => this._onExportTrack(event, html));
-        fcoConstants.getPen("edit_entity_track_description");
-        fcoConstants.getPen("edit_entity_track_when_marked");
-        fcoConstants.getPen("edit_entity_track_when_recovers");
+        const track_label_select = this.element.querySelector("select[id='entity_track_label_select']");
+        track_label_select?.addEventListener("change", event => this._on_track_label_select(event))
+        saveTrackButton?.addEventListener("click", event => this._onSaveTrackButton(event));
+        edit_entity_linked_skillsButton?.addEventListener("click", event => {this._edit_entity_linked_skillsButtonClick(event)});
+        copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
+        export_track?.addEventListener("click", event => this._onExportTrack(event));
 
-        $('#edit_entity_track_when_recovers_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_entity_track_when_recovers_rich').trigger("click");
-        })
-
-        $('#edit_entity_track_when_recovers_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_entity_track_when_recovers_rich").css('display', 'none');
-            $("#edit_entity_track_when_recovers").css('display', 'block');
-            $("#edit_entity_track_when_recovers").focus();
-        })
-
-        $('#edit_entity_track_when_recovers_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $('#edit_entity_track_when_recovers_rich')[0].innerHTML = text;    
-                $('#edit_entity_track_when_recovers')[0].innerHTML = text;    
-            }
-        })
-        
-        $('#edit_entity_track_when_recovers').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                }
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                $('#edit_entity_track_when_recovers').css('display', 'none');
-                $('#edit_entity_track_when_recovers_rich')[0].innerHTML = desc;    
-                $('#edit_entity_track_when_recovers_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_entity_track_when_marked_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_entity_track_when_marked_rich').trigger("click");
-        })
-
-        $('#edit_entity_track_when_marked_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $('#edit_entity_track_when_marked_rich')[0].innerHTML = text;    
-                $('#edit_entity_track_when_marked')[0].innerHTML = text;    
-            }
-        })
-
-        $('#edit_entity_track_when_marked_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_entity_track_when_marked_rich").css('display', 'none');
-            $("#edit_entity_track_when_marked").css('display', 'block');
-            $("#edit_entity_track_when_marked").focus();
-        })
-        
-        $('#edit_entity_track_when_marked').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                }
-                $('#edit_entity_track_when_marked').css('display', 'none');
-                $('#edit_entity_track_when_marked_rich')[0].innerHTML = desc;    
-                $('#edit_entity_track_when_marked_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_entity_track_description_rich').on("keyup", event => {
-                if (event.which == 9) $('#edit_entity_track_description_rich').trigger("click");
-        })
-        $('#edit_entity_track_description_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_entity_track_description_rich").css('display', 'none');
-            $("#edit_entity_track_description").css('display', 'block');
-            $("#edit_entity_track_description").focus();
-        })
-
-        $('#edit_entity_track_description_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $('#edit_entity_track_description_rich')[0].innerHTML = text;    
-                $('#edit_entity_track_description')[0].innerHTML = text;    
-            }
-        })
-        
-        $('#edit_entity_track_description').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc;
-                if (foundry.utils.isNewerVersion(game.version, '9.224')){
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, documents:true, async:true}));
-                } else {
-                    desc = DOMPurify.sanitize(await TextEditor.enrichHTML(event.target.innerHTML, {secrets:game.user.isGM, entities:true, async:true}));
-                }
-                $('#edit_entity_track_description').css('display', 'none');
-                $('#edit_entity_track_description_rich')[0].innerHTML = desc;    
-                $('#edit_entity_track_description_rich').css('display', 'block');
-            }
+        const proseMirrors = this.element.querySelectorAll('.fco_prose_mirror');
+        proseMirrors.forEach(pm => {
+            pm.addEventListener("change", async event => {
+                await this.updateData();
+                this.render(false);
+            })
         })
     }
 
     //Here are the event listener functions.
 
-    async _on_track_label_select(event, html){
+    async _on_track_label_select(event){
         if (event.target.value != "escalating" && event.target.value != "none"){
             document.getElementById("entity_track_custom_label").hidden = false
-            $("#entity_track_custom_label").val("");
+            document.getElementById("entity_track_custom_label").value = "";
         }
         else {
             document.getElementById("entity_track_custom_label").hidden = true
-            $("#entity_track_custom_label").val("");
+            document.getElementById("entity_track_custom_label").value = "";
         }
     }
 
-    async _onExportTrack (event, html){
+    async _onExportTrack (event){
         let output = JSON.stringify(this.track, null, 5);
-        
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${output}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), output);
     }
 
-    async _onCopyTrackButton (event, html){
+    async _onCopyTrackButton (event){
         // Copy this track to the existing actor with the name provided. If it already exists, create with 'copy' appended.
         let name = this.track.name;
         let num = 1;
@@ -203,23 +106,45 @@ class EditEntityTrack extends FormApplication {
         this.close();
     }
 
-    async _edit_entity_linked_skillsButtonClick(event, html){    
+    async _edit_entity_linked_skillsButtonClick(event){    
         let linked_skill_editor = new EditEntityLinkedSkills(this.track, this.entity);
         linked_skill_editor.render(true);
         try {
-            linked_skill_editor.bringToTop();
+            linked_skill_editor.bringToFront();
         } catch  {
             // Do nothing.
         }
     }
 
-    async _onSaveTrackButton(event,html){
+    async updateData () {
+        this.data.track.name = document.getElementById("edit_entity_track_name").value;
+        this.data.track.description = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_desc').value);
+        this.data.track.recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
+        this.data.track.aspect = document.getElementById("edit_entity_track_aspect").value;
+        this.data.track.when_marked = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_when_marked').value);
+        this.data.track.when_recovers = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_recovery_conditions').value);
+        this.data.track.boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
+        this.data.track.harm = parseInt(document.getElementById("edit_entity_track_harm").value);
+        this.data.track.paid = document.getElementById("edit_entity_track_paid").checked;
+        this.data.track.label = document.getElementById("entity_track_label_select").value;
+        this.data.track.custom_label = document.getElementById("entity_track_custom_label").value;
+        this.data.track.rollable = document.getElementById("entity_track_rollable").value;
+        this.data.track.category = document.getElementById("edit_entity_track_category").value;
+
+        let rich = {};
+        for (let part in this.data.track){
+            if (part == "description" || part == "when_marked" || part == "recovery_conditions") rich[part] = await fcoConstants.fcoEnrich(this.data.track[part]);
+        }
+        this.data.rich = rich;
+    }
+
+    async _onSaveTrackButton(event){
         let name = document.getElementById("edit_entity_track_name").value;
-        let description = DOMPurify.sanitize(document.getElementById("edit_entity_track_description").innerHTML);
+        let description = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_desc').value);
         let recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
         let aspect = document.getElementById("edit_entity_track_aspect").value;
-        let when_marked = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_marked").innerHTML);
-        let when_recovers = DOMPurify.sanitize(document.getElementById("edit_entity_track_when_recovers").innerHTML);
+        let when_marked = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_when_marked').value);
+        let when_recovers = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_recovery_conditions').value);
         let boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_entity_track_harm").value);
         let paid = document.getElementById("edit_entity_track_paid").checked;
@@ -304,17 +229,18 @@ class EditEntityTrack extends FormApplication {
         await this.entity.update({   
                 "system.tracks":final_tracks
         })
-        this.origin.render(false);
+        this.entity.sheet.render(false);
         this.close();
     }
 }
-class EditEntityLinkedSkills extends FormApplication {
+
+class EditEntityLinkedSkills extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor (track, entity){
         super(track, entity);
         this.track = track;
         this.entity = entity;
     }
-    getData(){
+    async _prepareContext(){
         const templateData = {
             track:this.track,
             skills:foundry.utils.duplicate(this.entity.system.skills),
@@ -322,34 +248,38 @@ class EditEntityLinkedSkills extends FormApplication {
         }
         return templateData;
     }
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/EditLinkedSkills.html"; 
-    
-        //Define the FormApplication's options
-        options.width = "1000";
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.LinkedSkillEditor");
-        options.closeOnSubmit = false;
-        options.id = "EditLinkedSkills"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        return options;
+    get title() {
+        return game.i18n.localize("fate-core-official.LinkedSkillEditor");
     }
-     //Here are the action listeners
-     activateListeners(html) {
-        super.activateListeners(html);
-        const deleteLinkedSkillButton = html.find("button[id='delete_linked_skill']");
-        const addLinkedSkillButton = html.find("button[id='add_linked_skill']");
 
-        deleteLinkedSkillButton.on("click", event => this._onDeleteLinkedSkillButton(event, html));
-        addLinkedSkillButton.on("click", event => this._onAddLinkedSkillButton(event,html));
+    static DEFAULT_OPTIONS = {
+        id: "EditEntityLinkedSkills",
+        tag: "form",
+        window: {
+            title: this.title,
+            icon: "fas fa-scroll"
+        }
+    }
+
+    static PARTS = {
+        EditEntityLinkedSkillsForm: {
+            template: "systems/fate-core-official/templates/EditLinkedSkills.html"
+        }
+    }
+
+     //Here are the action listeners
+     async _onRender (context, options) {
+        const deleteLinkedSkillButton = this.element.querySelector("#delete_linked_skill");
+        const addLinkedSkillButton = this.element.querySelector("#add_linked_skill");
+
+        deleteLinkedSkillButton?.addEventListener("click", event => this._onDeleteLinkedSkillButton(event));
+        addLinkedSkillButton?.addEventListener("click", event => this._onAddLinkedSkillButton(event));
     }
     //Here are the event listener functions.
-
-    async _onDeleteLinkedSkillButton(event, html){
+    async _onDeleteLinkedSkillButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-             let toDelete = document.getElementById("linked_skills").value;
+            let toDelete = document.getElementById("linked_skills").value;
             let track = this.track;
             let linked_skills = track.linked_skills;
     
@@ -384,48 +314,54 @@ class EditEntityLinkedSkills extends FormApplication {
     }
 }
 
-class EditLinkedSkills extends FormApplication {
+class EditLinkedSkills extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor (track){
         super(track);
         this.track=track;
     }
-    getData(){
+
+    async _prepareContext(options){
         const templateData = {
             track:this.track,
-            skills:game.settings.get("fate-core-official","skills")
+            skills:fcoConstants.wd().system.skills
         }
         return templateData;
     }
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/EditLinkedSkills.html"; 
-    
-        //Define the FormApplication's options
-        options.width = "1000";
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.LinkedSkillEditor");
-        options.closeOnSubmit = false;
-        options.id = "EditLinkedSkills"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        return options;
-    }
-     //Here are the action listeners
-     activateListeners(html) {
-        super.activateListeners(html);
-        const deleteLinkedSkillButton = html.find("button[id='delete_linked_skill']");
-        const addLinkedSkillButton = html.find("button[id='add_linked_skill']");
 
-        deleteLinkedSkillButton.on("click", event => this._onDeleteLinkedSkillButton(event, html));
-        addLinkedSkillButton.on("click", event => this._onAddLinkedSkillButton(event,html));
+    get title() {
+        return game.i18n.localize("fate-core-official.LinkedSkillEditor");
+    }
+
+    static DEFAULT_OPTIONS = {
+        id: "EditLinkedSkills",
+        tag: "form",
+        window: {
+            title: this.title,
+            icon: "fas fa-cog"
+        }
+    }
+
+    static PARTS = {
+        EditLinkedSkillsForm: {
+            template: "systems/fate-core-official/templates/EditLinkedSkills.html"
+        }
+    }
+    
+     //Here are the action listeners
+    async _onRender (context, options) {
+        const deleteLinkedSkillButton = this.element.querySelector("button[id='delete_linked_skill']");
+        const addLinkedSkillButton = this.element.querySelector("button[id='add_linked_skill']");
+        deleteLinkedSkillButton?.addEventListener("click", event => this._onDeleteLinkedSkillButton(event));
+        addLinkedSkillButton?.addEventListener("click", event => this._onAddLinkedSkillButton(event));
     }
     //Here are the event listener functions.
 
-    async _onDeleteLinkedSkillButton(event, html){
+    async _onDeleteLinkedSkillButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
              let toDelete = document.getElementById("linked_skills").value;
             let track = this.track;
-            let tracks = game.settings.get("fate-core-official","tracks");
+            let tracks = fcoConstants.wd().system.tracks;
             let linked_skills = track.linked_skills;
     
             for (let i = 0; i< linked_skills.length; i++){
@@ -436,8 +372,11 @@ class EditLinkedSkills extends FormApplication {
             }
             let key = fcoConstants.gkfn(tracks, this.track.name);
             if (!key) key = fcoConstants.tob64(this.track.name);
-            tracks[key]=this.track;
-            await game.settings.set("fate-core-official","tracks",tracks);
+            await fcoConstants.wd().update({
+                "system.tracks":{
+                    [`${key}`]:this.track
+                }
+            });
             this.render(false);
         }
     }
@@ -459,24 +398,27 @@ class EditLinkedSkills extends FormApplication {
                     "enables":enables
                 }
             )
-            let tracks=game.settings.get("fate-core-official","tracks");
+            let tracks=fcoConstants.wd().system.tracks;
             let key = fcoConstants.gkfn(tracks, this.track.name);
             if (!key) key = fcoConstants.tob64(this.track.name);
-            tracks[key]=this.track;
-            await game.settings.set("fate-core-official","tracks",tracks);
+            await fcoConstants.wd().update({
+                "system.tracks":{
+                    [`${key}`]:this.track
+                }
+            });
             this.render(false);
     }
 }
 
-class EditTracks extends FormApplication {
+class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor (category){
-        super(category);
+        super();
         this.category = category;
-        this.categories =game.settings.get("fate-core-official","track_categories");
-        this.tracks = game.settings.get("fate-core-official","tracks");
+        this.categories = game.settings.get("fate-core-official","track_categories");
+        this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
     }
 
-    getData(){
+    async _prepareContext(){
         let tracks_of_category = [];
         for (let t in this.tracks){
             if (this.tracks[t].category == this.category){
@@ -492,201 +434,151 @@ class EditTracks extends FormApplication {
                 tracks_of_category.push(this.tracks[t]);
             }
         }
-        console.log(tracks_of_category);
+        if (!this.track) {
+            this.track = new fcoTrack();
+            this.track.name = "New Track";
+            this.track.category = this.category;
+        }
+        this.richDesc = await fcoConstants.fcoEnrich(this.track.description);
+        this.richWhenMarked = await fcoConstants.fcoEnrich(this.track.when_marked);
+        this.richRecovery = await fcoConstants.fcoEnrich(this.track.recovery_conditions);
+
         const templateData = {
             category:this.category,
             tracks:tracks_of_category, 
+            track:this.track,
+            richDesc: this.richDesc,
+            richWhenMarked: this.richWhenMarked,
+            richRecovery: this.richRecovery
+
         }
         return templateData;
     }
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/EditTrack.html"; 
-    
-        //Define the FormApplication's options
-        options.width = "auto";
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.TrackEditor");
-        options.closeOnSubmit = false;
-        options.id = "EditTrack"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        return options;
+
+    static DEFAULT_OPTIONS = {
+        classes:['fate'],
+        tag: "form",
+        id: "EditTrack",
+        window: {
+            title: this.title,
+            icon: "fas fa-gear",
+        },
+        position:{
+            width:window.innerWidth/2
+        }
     }
+
+    get title() {
+        return game.i18n.localize("fate-core-official.TrackEditor");
+    }
+
+    static PARTS = {
+        EditTracksForm: {
+            template: "systems/fate-core-official/templates/EditTrack.html",
+            scrollable: ['.fco_scrollable']
+        }
+    }
+
      //Here are the action listeners
-     activateListeners(html) {
-        super.activateListeners(html);
-        const saveTrackButton = html.find("button[id='save_track']");
-        const track_select = html.find("select[id='track_select']");
-        const edit_linked_skillsButton = html.find("button[id='edit_linked_skills']");
-        const deleteTrackButton = html.find("button[id='delete_track']");
-        const edit_track_name=html.find("input[id='edit_track_name']");
-        const copy_track = html.find("button[id='copy']");
-        const export_track = html.find("button[id='exportTrack']");
-
-        const track_label_select = html.find("select[id='track_label_select']");
-        track_label_select.on("change", event => this._on_track_label_select(event, html))
+     async _onRender(context, options) {
+        const saveTrackButton = this.element.querySelector("button[id='save_track']");
+        const track_select = this.element.querySelector("select[id='track_select']");
+        const edit_linked_skillsButton = this.element.querySelector("button[id='edit_linked_skills']");
+        const deleteTrackButton = this.element.querySelector("button[id='delete_track']");
+        const edit_track_name=this.element.querySelector("input[id='edit_track_name']");
+        const copy_track = this.element.querySelector("button[id='copy']");
+        const export_track = this.element.querySelector("button[id='exportTrack']");
+        const proseMirrors = this.element.querySelectorAll(".fco_prose_mirror");
+        const inputs = this.element.querySelectorAll("input, select");
         
-        saveTrackButton.on("click", event => this._onSaveTrackButton(event, html));
-        track_select.on("change", event => this._track_selectChange(event, html));
-        edit_track_name.on("change", event => this._edit_track_name_change(event, html));
-        edit_linked_skillsButton.on("click", event => this._edit_linked_skillsButtonClick(event,html));
-        deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));
-        copy_track.on("click", event => this._onCopyTrackButton(event, html));
-        export_track.on("click", event => this._onExportTrack(event, html));
-        fcoConstants.getPen("edit_track_description");
-        fcoConstants.getPen("edit_track_when_marked");
-        fcoConstants.getPen("edit_track_when_recovers");
+        saveTrackButton?.addEventListener("click", event => this._onSaveTrackButton(event));
+        track_select?.addEventListener("change", event => this._track_selectChange(event));
+        edit_track_name?.addEventListener("change", event => this._edit_track_name_change(event));
+        edit_linked_skillsButton?.addEventListener("click", event => this._edit_linked_skillsButtonClick(event));
+        deleteTrackButton?.addEventListener("click",event => this._onDeleteTrackButton(event));
+        copy_track?.addEventListener("click", event => this._onCopyTrackButton(event));
+        export_track?.addEventListener("click", event => this._onExportTrack(event));
 
-        $('#edit_track_when_recovers_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_track_when_recovers_rich').trigger("click");
+        proseMirrors.forEach(pm => {
+            pm.addEventListener("change", async event => {
+                pm.querySelector(".editor-content").innerHTML = await fcoConstants.fcoEnrich(event.target.value);
+                await this._onSaveTrackButton();
+                await this.render(false);
+            })
         })
-
-        $('#edit_track_when_recovers_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_track_when_recovers_rich").css('display', 'none');
-            $("#edit_track_when_recovers").css('display', 'block');
-            $("#edit_track_when_recovers").focus();
+        inputs.forEach(input => {
+            input.addEventListener("change", async event => {
+                if (event.target.id != "track_select"){
+                    if (event.target.id == "track_label_select") {
+                        if (event.target.value == "custom"){
+                            document.getElementById("track_custom_label").value = "";
+                        }
+                    }
+                    await this._onSaveTrackButton();
+                    await this.render(false);
+                }
+            })
         })
-
-        $('#edit_track_when_recovers_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $('#edit_track_when_recovers_rich')[0].innerHTML = text;    
-                $('#edit_track_when_recovers')[0].innerHTML = text;    
-            }
-        })
-        
-        $('#edit_track_when_recovers').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc= await fcoConstants.fcoEnrich(event.target.innerHTML);
-                if (event.target.outerHTML.startsWith("<a data")) return;
-                $('#edit_track_when_recovers').css('display', 'none');
-                $('#edit_track_when_recovers_rich')[0].innerHTML = desc;    
-                $('#edit_track_when_recovers_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_track_when_marked_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_track_when_marked_rich').trigger("click");
-        })
-
-        $('#edit_track_when_marked_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_track_when_marked_rich").css('display', 'none');
-            $("#edit_track_when_marked").css('display', 'block');
-            $("#edit_track_when_marked").focus();
-        })
-
-        $('#edit_track_when_marked_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $('#edit_track_when_marked_rich')[0].innerHTML = text;    
-                $('#edit_track_when_marked')[0].innerHTML = text;    
-            }
-        })
-        
-        $('#edit_track_when_marked').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = await fcoConstants.fcoEnrich(event.target.innerHTML);
-                $('#edit_track_when_marked').css('display', 'none');
-                $('#edit_track_when_marked_rich')[0].innerHTML = desc;    
-                $('#edit_track_when_marked_rich').css('display', 'block');
-            }
-        })
-
-        $('#edit_track_description_rich').on("keyup", event => {
-            if (event.which == 9) $('#edit_track_description_rich').trigger("click");
-        })
-        $('#edit_track_description_rich').on("click", event => {
-            if (event.target.outerHTML.startsWith("<a data")) return;
-            $("#edit_track_description_rich").css('display', 'none');
-            $("#edit_track_description").css('display', 'block');
-            $("#edit_track_description").focus();
-        })
-
-        $('#edit_track_description_rich').on('contextmenu', async event => {
-            let text = await fcoConstants.updateText("Edit raw HTML", event.currentTarget.innerHTML, true);
-            if (text != "discarded") {
-                $('#edit_track_description_rich')[0].innerHTML = text;    
-                $('#edit_track_description')[0].innerHTML = text;    
-            }
-        })
-        
-        $('#edit_track_description').on('blur', async event => {
-            if (!window.getSelection().toString()){
-                let desc = await fcoConstants.fcoEnrich(event.target.innerHTML);
-                $('#edit_track_description').css('display', 'none');
-                $('#edit_track_description_rich')[0].innerHTML = desc;    
-                $('#edit_track_description_rich').css('display', 'block');
-            }
-        })
-
     }
     //Here are the event listener functions.
 
-    async _on_track_label_select(event, html){
-        if (event.target.value == "custom"){
-            document.getElementById("track_custom_label").hidden = false
-            $("#track_custom_label").val("");
-        }
-        else {
-            document.getElementById("track_custom_label").hidden = true
-            $("#track_custom_label").val("");
-        }
-    }
-
-    async _onExportTrack (event, html){
-        let edit_track_name=html.find("input[id='edit_track_name']");
-        let name = edit_track_name[0].value;
+    async _onExportTrack (event){
+        let edit_track_name = this.element.querySelector("input[id='edit_track_name']");
+        let name = edit_track_name.value;
         if (name == "" || name == game.i18n.localize("fate-core-official.NewTrack")){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectATrackToCopyFirst"));
         }
         else {
             let t = fcoConstants.gkfn(this.tracks, name);
             let track = `{"${fcoConstants.tob64(name)}":${JSON.stringify(this.tracks[t], null, 5)}}`;
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), 
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${track}</textarea></div>`,
-                buttons: {
-                },
-            }).render(true);
-
+            fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveThisTrack"), track)
         }
     }
 
-    async _onCopyTrackButton (event, html){
-        let edit_track_name=html.find("input[id='edit_track_name']");
-        let name = edit_track_name[0].value;
+    async _onCopyTrackButton (event){
+        let edit_track_name=this.element.querySelector("input[id='edit_track_name']");
+        let name = edit_track_name.value;
         if (name == "" || name == game.i18n.localize("fate-core-official.NewTrack")){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectATrackToCopyFirst"));
         }
         else {
             let track = foundry.utils.duplicate(fcoConstants.gbn(this.tracks, name));
             track.name = track.name+" copy"
-            this.tracks[fcoConstants.tob64(track.name)]=track;
-            await game.settings.set("fate-core-official","tracks",this.tracks);
-            this.render(false);
+            let key = fcoConstants.tob64(track.name);
+            await fcoConstants.wd().update({
+                "system.tracks":{
+                    [`${key}`]:track
+                }
+            });
+            this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
+            this.track = foundry.utils.duplicate(fcoConstants.wd().system.tracks[key]);
+            await this.render(false);
         }
     }
 
-    async _edit_track_name_change(event, html){
+    async _edit_track_name_change(event){
         let name = event.target.value;
         let track = fcoConstants.gbn(this.tracks, name);
         if (track == undefined){
-            document.getElementById("edit_linked_skills").disabled=true;
+            document.getElementById("edit_linked_skills").disabled="disabled";
         } else {
-            document.getElementById("edit_linked_skills").disabled=false;
+            document.getElementById("edit_linked_skills").disabled="";
         }
     }
 
-    async _onDeleteTrackButton(event,html){
+    async _onDeleteTrackButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
              let name = document.getElementById("track_select").value;
             try {
                     let key = fcoConstants.gkfn(this.tracks, name);
-                    delete this.tracks[key];
-                    await game.settings.set("fate-core-official","tracks",this.tracks);
+                    await fcoConstants.wd().update({
+                        "system.tracks":{
+                            [`-=${key}`]:null
+                        }
+                    });
+                    this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
+                    this.track = undefined;
                     this.render(false);
             } catch {
                 ui.notifications.error(game.i18n.localize("fate-core-official.CannotDeleteThat"))
@@ -694,7 +586,7 @@ class EditTracks extends FormApplication {
             }
         }
     }
-    async _edit_linked_skillsButtonClick(event, html){
+    async _edit_linked_skillsButtonClick(event){
         let name = document.getElementById("track_select").value;
         if (name=="New Track"){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectTrackBeforeAddingLinkedSkill"));
@@ -704,87 +596,27 @@ class EditTracks extends FormApplication {
             let linked_skill_editor = new EditLinkedSkills(track);
             linked_skill_editor.render(true);
             try {
-                linked_skill_editor.bringToTop();
+                linked_skill_editor.bringToFront();
             } catch  {
                 // Do nothing.
             }
         }
     }
 
-    async _track_selectChange(event, html){
-        let name = document.getElementById("track_select").value;
-        if (name==game.i18n.localize("fate-core-official.NewTrack")){
-            this.track=undefined;
-            document.getElementById("edit_track_name").value="";
-            document.getElementById("edit_track_description").innerHTML="";
-            document.getElementById("edit_track_description_rich").innerHTML="";
-            document.getElementById("edit_track_universal").checked=true;
-            document.getElementById("edit_track_unique").checked=true;
-            document.getElementById("edit_track_recovery_type").value="Fleeting";
-            document.getElementById("edit_track_aspect").value="No";
-            document.getElementById("edit_track_when_marked").innerHTML="";
-            document.getElementById("edit_track_when_marked_rich").innerHTML="";
-            document.getElementById("edit_track_when_recovers").innerHTML="";
-            document.getElementById("edit_track_when_recovers_rich").innerHTML="";
-            document.getElementById("edit_track_boxes").value=0;
-            document.getElementById("edit_track_harm").value=0;
-            document.getElementById("edit_linked_skills").disabled=false;
-            document.getElementById("edit_track_paid").checked=false;
-            document.getElementById("track_label_select").value = "none";
-            document.getElementById("edit_track_rollable").value = "false";
-        } else {
-            let track=fcoConstants.gbn(this.tracks, name);
-            this.track=track;
-            document.getElementById("edit_track_name").value=track.name;
-            document.getElementById("edit_track_description").innerHTML=DOMPurify.sanitize(track.description);
-            document.getElementById("edit_track_description_rich").innerHTML= await fcoConstants.fcoEnrich(track.description);
-            document.getElementById("edit_track_universal").checked=track.universal;
-            document.getElementById("edit_track_unique").checked=track.unique;
-            document.getElementById("edit_track_recovery_type").value=track.recovery_type;
-            document.getElementById("edit_track_aspect").value=track.aspect;
-            document.getElementById("edit_track_when_marked").innerHTML=DOMPurify.sanitize(track.when_marked);
-            document.getElementById("edit_track_when_marked_rich").innerHTML= await fcoConstants.fcoEnrich(track.when_marked);
-            document.getElementById("edit_track_when_recovers").innerHTML=DOMPurify.sanitize(track.recovery_conditions);
-            document.getElementById("edit_track_when_recovers_rich").innerHTML= await fcoConstants.fcoEnrich(track.recovery_conditions);
-            document.getElementById("edit_track_boxes").value=track.boxes;
-            document.getElementById("edit_track_harm").value=track.harm_can_absorb;
-            document.getElementById("edit_linked_skills").disabled=false;
-            document.getElementById("edit_track_paid").checked=track.paid;
-            document.getElementById("edit_track_rollable").value = track.rollable ? track.rollable : "false";
-            
-            if (track.label=="none"){
-                document.getElementById("track_label_select").value = "none";
-                document.getElementById("track_custom_label").value = "";
-                document.getElementById("track_custom_label").hidden=true;     
-            } else {
-                if (track.label=="escalating"){
-                    document.getElementById("track_label_select").value = "escalating";       
-                    document.getElementById("track_custom_label").value = "";         
-                    document.getElementById("track_custom_label").hidden=true;                                   
-                } else {
-                    if (track.label==undefined){ 
-                        document.getElementById("track_label_select").value = "none";
-                        document.getElementById("track_custom_label").value = "";     
-                        document.getElementById("track_custom_label").hidden=true;                                   
-                    } else {
-                        document.getElementById("track_label_select").value = "custom";
-                        document.getElementById("track_custom_label").value = track.label;
-                        document.getElementById("track_custom_label").hidden=false;
-                    }
-                }
-            }
-        }
+    async _track_selectChange(event){
+        this.track = fcoConstants.gbn(this.tracks, event.target.value);
+        this.render(false);
     }
 
     async _onSaveTrackButton(event,html){
         let name = document.getElementById("edit_track_name").value;
-        let description = DOMPurify.sanitize(document.getElementById("edit_track_description").innerHTML);
+        let description = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_desc").value);
         let universal = document.getElementById("edit_track_universal").checked;
         let unique = document.getElementById("edit_track_unique").checked;
         let recovery_type = document.getElementById("edit_track_recovery_type").value;
         let aspect = document.getElementById("edit_track_aspect").value;
-        let when_marked = DOMPurify.sanitize(document.getElementById("edit_track_when_marked").innerHTML);
-        let when_recovers = DOMPurify.sanitize(document.getElementById("edit_track_when_recovers").innerHTML);
+        let when_marked = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_when_marked").value);
+        let when_recovers = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_recovery_conditions").value);
         let boxes = parseInt(document.getElementById("edit_track_boxes").value);
         let harm = parseInt(document.getElementById("edit_track_harm").value);
         let paid = document.getElementById("edit_track_paid").checked;
@@ -818,6 +650,11 @@ class EditTracks extends FormApplication {
                     track.paid = paid;
                     track.label = label;
                     track.rollable = rollable;
+                    await fcoConstants.wd().update({
+                        "system.tracks":{
+                            [`${t}`]:track
+                        }
+                    });
                 }
             }
             if (!existing){
@@ -825,7 +662,11 @@ class EditTracks extends FormApplication {
                     if (this.track.linked_skills != undefined){
                         linked_skills = foundry.utils.duplicate(this.track.linked_skills);
                     }
-                    delete this.tracks[fcoConstants.gkfn(this.tracks, this.track.name)];
+                    await fcoConstants.wd().update({
+                        "system.tracks":{
+                            [`-=${fcoConstants.gkfn(this.tracks, this.track.name)}`]:null
+                        }
+                    });
                 }
 
                 let newTrack = new fcoTrack({
@@ -845,64 +686,75 @@ class EditTracks extends FormApplication {
                     "label":label,
                     "rollable":rollable,
                 }).toJSON();
-                this.tracks[fcoConstants.tob64(name)]=newTrack;
+                await fcoConstants.wd().update({
+                    "system.tracks":{
+                        [`${fcoConstants.tob64(name)}`]:newTrack
+                    }
+                });
             }
-            await game.settings.set("fate-core-official","tracks",this.tracks);
-            this.render(false);
+            this.tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
+            this.track = foundry.utils.duplicate(fcoConstants.wd().system.tracks[`${fcoConstants.tob64(name)}`]);
+            await this.render(false);
         }
     }
 }
 
 //TrackSetup: The class called from the options to view and edit conditions etc.
-class TrackSetup extends FormApplication{
+class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor(...args){
         super(...args);
         game.system.manageTracks = this;
     }
- //Set up the default options for instances of this class
-    static get defaultOptions() {
-        const options = super.defaultOptions; //begin with the super's default options
-        //The HTML file used to render this window
-        options.template = "systems/fate-core-official/templates/TrackSetup.html"; 
-        options.width = "auto";
-        options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.TrackCategorySetup")} ${game.world.title}`;
-        options.closeOnSubmit = false;
-        options.id = "TrackSetup"; // CSS id if you want to override default behaviors
-        options.resizable = false;
-        return options;
+    //Set up the default options for instances of this class
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        id: "TrackSetup",
+        classes:['fate'],
+        window: {
+            icon:"fas fa-cog",
+            title: this.title,
+        }
     }
+
+    static PARTS = {
+        EditTracksForm: {
+            template: "systems/fate-core-official/templates/TrackSetup.html",
+        }
+    }
+
+    get title() {
+        return `${game.i18n.localize("fate-core-official.TrackCategorySetup")} ${game.world.title}`;
+    }
+
     //The function that returns the data model for this window. In this case, we need the list of stress tracks
     //conditions, and consequences.
-    getData(){
-        this.tracks=game.settings.get("fate-core-official","tracks");
+    async _prepareContext(options){
+        this.tracks=fcoConstants.wd().system.tracks;
         this.track_categories=game.settings.get("fate-core-official","track_categories")
-
         const templateData = {
            track_categories:this.track_categories,
         }
         return templateData;
     }
 
-        //Here are the action listeners
-        activateListeners(html) {
-        super.activateListeners(html);
-        const deleteCategoryButton = html.find("button[id='delete_category']");
-        const addCategoryButton = html.find("button[id='add_category']");
-        const editTracksButton = html.find("button[id='edit_tracks']");
-        const setCategoriesButton = html.find("button[id='set_track_categories']");
-        const selectBox = html.find("select[id='track_categories_select']");
-        const importTracks = html.find("button[id='import_tracks']");
-        const exportTracks = html.find("button[id='export_tracks']");
-        const orderTracks = html.find("button[id='order_tracks']");
+    //Here are the action listeners
+    _onRender (context, options) {
+        const deleteCategoryButton = this.element.querySelector("#delete_category");
+        const addCategoryButton = this.element.querySelector("#add_category");
+        const editTracksButton = this.element.querySelector("#edit_tracks");
+        const setCategoriesButton = this.element.querySelector('#set_track_categories');
+        const selectBox = this.element.querySelector("#track_categories_select");
+        const importTracks = this.element.querySelector("#import_tracks");
+        const exportTracks = this.element.querySelector('#export_tracks');
+        const orderTracks = this.element.querySelector('#order_tracks');
 
-        deleteCategoryButton.on("click", event => this._onDeleteCategoryButton(event, html));
-        addCategoryButton.on("click", event => this._onAddCategoryButton(event, html));
-        editTracksButton.on("click", event => this._onEditTracksButton(event, html));
+        deleteCategoryButton?.addEventListener("click", event => this._onDeleteCategoryButton(event));
+        addCategoryButton?.addEventListener("click", event => this._onAddCategoryButton(event));
+        editTracksButton?.addEventListener("click", event => this._onEditTracksButton(event));
 
-        setCategoriesButton.on("click", event => {
-            let content = `<div style="display:flex; flex-direction:column;">`;
-            let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
+        setCategoriesButton?.addEventListener("click", event => {
+            let content = `<div class="fco_track_change_categories" style="display:flex; flex-direction:column; overflow-y:auto; max-height:70vh; scrollbar-color:var(--fco-accent-colour) #FFFFFF00;">`;
+            let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let categories = game.settings.get("fate-core-official","track_categories");
 
             for (let track in tracks){
@@ -928,84 +780,71 @@ class TrackSetup extends FormApplication{
             }
             content += `</div>`
             let width = 800;
-            new Dialog({
-                        title: `Change Track Categories`,
+            new foundry.applications.api.DialogV2({
+                        window: {
+                            title: `Change Track Categories`,
+                            scrollable:['.fco_change_track_categories'],
+                        },
                         content: content,
-                        buttons: {
-                            ok: {
+                        buttons: [{
+                                action: "ok",
                                 label: game.i18n.localize("fate-core-official.OK"),
-                                callback: async ()=> {
+                                callback: async (event, button,dialog) => {
                                 // Do the stuff here
-                                    let results = $('select[name="fco_track_cat_select"]');
-
+                                    let results = button.form.elements.fco_track_cat_select;
                                     for (let result of results){
                                         let track = tracks[result.getAttribute("data-track")];
                                         track.category = result.value;
                                     }
-                                    game.settings.set("fate-core-official","tracks",tracks);
-                                }
-                                }
-                            }
+                                    await fcoConstants.wd().update({"system.==tracks":{}},{noHook:true, renderSheet:false});
+                                    await fcoConstants.wd().update({"system.==tracks":tracks});
+                                }, 
+                                default:true,
+                            }]
                     },
                     {
                         width:width,
                         height:"auto",
                     }).render(true);
-        })
-        selectBox.on("dblclick", event => this._onEditTracksButton(event,html));
-        importTracks.on("click", event => this._importTracks(event,html));
-        exportTracks.on("click", event => this._exportTracks(event,html));
-        orderTracks.on("click", event => this._orderTracks (event, html));
+            })    
+            selectBox?.addEventListener("dblclick", event => this._onEditTracksButton(event));
+            importTracks?.addEventListener("click", event => this._importTracks(event));
+            exportTracks?.addEventListener("click", event => this._exportTracks(event));
+            orderTracks?.addEventListener("click", event => this._orderTracks (event));
+            
+            selectBox?.addEventListener("change", event => {
+                this.category = event.target.value;
+            })
     }
     
     //Here are the event listener functions.
-
-    async _orderTracks (event, html){
+    async _orderTracks (event){
         let ot = new OrderTracks();
         ot.render(true);
     }
 
-    async _exportTracks(event, html){
-        let tracks = game.settings.get("fate-core-official","tracks");
+    async _exportTracks(event){
+        let tracks = fcoConstants.wd().system.tracks;
         let tracks_text = JSON.stringify(tracks, null, 5);
-     
-        new Dialog({
-            title: game.i18n.localize("fate-core-official.CopyAndPasteToSaveWorldTracks"),
-            content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;">${tracks_text}</textarea></div>`,
-            buttons: {
-            },
-        }).render(true);    
+        fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.CopyAndPasteToSaveWorldTracks"), tracks_text);
     }
 
     async getTracks(){
-        return new Promise(resolve => {
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="itracks"></textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: game.i18n.localize("Save"),
-                        callback: () => {
-                            resolve (document.getElementById("itracks").value);
-                        }
-                    }
-                },
-            }).render(true)
-        });
+        return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteToReplaceWorldTracks"));
     }
 
-    async _importTracks(event, html){
+    async _importTracks(event){
         let text = await this.getTracks();
         try {
             let imported_tracks = JSON.parse(text);
-            let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
+            let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let track_categories = foundry.utils.duplicate(game.settings.get("fate-core-official", "track_categories"));
             if (tracks == undefined){
                 tracks = {};
             }
 
             if (!imported_tracks.hasOwnProperty("name")){
-                // This is a tracks object.
+                // This object contains multiple tracks; overwrite the current list of tracks
                 for (let track in imported_tracks){
                     let tr = new fcoTrack(imported_tracks[track]).toJSON();
                     if (tr){
@@ -1014,15 +853,20 @@ class TrackSetup extends FormApplication{
                     let cat = imported_tracks[track].category;
                     track_categories[cat]=cat;
                 }
+                await fcoConstants.wd().update({"system.tracks":imported_tracks});
             } else {
                 // This is a track object
                 let tr = new fcoTrack(imported_tracks).toJSON();
                     if (tr){
-                        tracks[fcoConstants.tob64(tr.name)]=tr;
+                        let key = fcoConstants.tob64(tr.name);
+                        await fcoConstants.wd().update({
+                            "system.tracks":{
+                                [`${key}`]:tr
+                            }
+                        });
+                        track_categories[tr.category]=tr.category;
                     }
             }
-
-            await game.settings.set("fate-core-official","tracks", tracks);
             await game.settings.set("fate-core-official", "track_categories", track_categories);
             this.render(false);
         } catch (e) {
@@ -1030,7 +874,7 @@ class TrackSetup extends FormApplication{
         }
     }
 
-    async _onAddCategoryButton(event,html){
+    async _onAddCategoryButton(event){
         let category = await fcoConstants.getInput(game.i18n.localize("fate-core-official.ChooseCategoryName"));
         let track_categories = game.settings.get("fate-core-official","track_categories");
         var duplicate = false;
@@ -1048,7 +892,7 @@ class TrackSetup extends FormApplication{
         }
     }
 
-    async _onDeleteCategoryButton(event,html){
+    async _onDeleteCategoryButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
                     let track_categories = game.settings.get("fate-core-official","track_categories");
@@ -1059,7 +903,7 @@ class TrackSetup extends FormApplication{
                             if (track_categories[cat]=="Combat" || track_categories[cat]=="Other"){
                                 ui.notifications.error(`${game.i18n.localize("fate-core-official.CannotDeleteThe")} ${game.i18n.localize("fate-core-official",category)} ${game.i18n.localize("fate-core-official.CategoryThatCannotDelete")}`);
                             } else {
-                                        let tracks = foundry.utils.duplicate(game.settings.get("fate-core-official","tracks"));
+                                        let tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
                                         let toDelete = [];
                                         for (let tr in tracks){
                                             if (tracks[tr].category == track_categories[cat]) toDelete.push(tracks[tr]);
@@ -1075,13 +919,14 @@ class TrackSetup extends FormApplication{
                                                 content += ttd.name + '<br/>'
                                             }
                                             let del = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.deleteCategory"), content);
-                                            if (del == "yes") {
+                                            if (del) {
                                                 delete track_categories[cat];
                                                 for (let ttd of toDelete){
                                                     delete tracks[fcoConstants.gkfn(tracks, ttd.name)];
                                                 }
                                                 await game.settings.set("fate-core-official","track_categories",track_categories);
-                                                await game.settings.set("fate-core-official", "tracks", tracks);
+                                                await fcoConstants.wd().update({"system.==tracks":{}},{noHook:true, renderSheet:false});
+                                                await fcoConstants.wd().update({"system.==tracks":tracks});
                                                 this.render(false);    
                                             }
                                         }
@@ -1091,15 +936,13 @@ class TrackSetup extends FormApplication{
         }
     }
     
-    async _onEditTracksButton(event,html){
-
-        let category = html.find("select[id='track_categories_select']")[0].value;
-
+    async _onEditTracksButton(event){
+        let category = this.category;
         if (category !="" && category != undefined){
             let track_editor = new EditTracks(category);
             track_editor.render(true);
             try {
-                track_editor.bringToTop();
+                track_editor.bringToFront();
             } catch  {
                 // Do nothing.
             }
@@ -1112,71 +955,78 @@ class TrackSetup extends FormApplication{
 Hooks.on('closeEditTracks',async () => {
     game.system.manageTracks.render(true);
     try {
-        game.system.manageTracks.bringToTop();
+        game.system.manageTracks.bringToFront();
     } catch  {
         // Do nothing.
     }
 })
 
-class OrderTracks extends FormApplication {
+class OrderTracks extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor(...args){
         super(...args);
-        let tracks = game.settings.get("fate-core-official", "tracks");
+        let tracks = fcoConstants.wd().system.tracks;
         this.data = [];
         for (let track in tracks){
             this.data.push(tracks[track]);
         }
     }
     //Set up the default options for instances of this class
-    static get defaultOptions() {
-        const options = super.defaultOptions; //begin with the super's default options
-        //The HTML file used to render this window
-        options.template = "systems/fate-core-official/templates/OrderTracks.html"; 
-        options.width = "auto";
-        options.height = "auto";
-        options.title = `${game.i18n.localize("fate-core-official.OrderTracksTitle")} ${game.world.title}`;
-        options.closeOnSubmit = true;
-        options.id = "OrderTracks"; // CSS id if you want to override default behaviors
-        options.resizable = false;
-        return options;
-    }
-    //The function that returns the data model for this window. In this case, we need the list of stress tracks
-    //conditions, and consequences.
-    getData(){
-        return this.data;
+
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        id: "OrderTracks",
+        window : {
+            title: this.title,
+            icon: "fas-fa.cog"
+        }
     }
 
-        //Here are the action listeners
-        activateListeners(html) {
-        super.activateListeners(html);
-        const ot_up = html.find("button[name='ot_up']");
-        const ot_down = html.find("button[name='ot_down']");
-        const ot_save = html.find("button[id='ot_save']");
+    static PARTS = {
+        OrderTracksForm: {
+            template: "systems/fate-core-official/templates/OrderTracks.html"
+        }
+    }
+
+    get title(){
+        return  `${game.i18n.localize("fate-core-official.OrderTracksTitle")} ${game.world.title}`
+    }
+
+    //The function that returns the data model for this window. In this case, we need the list of stress tracks
+    //conditions, and consequences.
+    async _prepareContext(){
+        return this.data;
+    }
+    //Here are the action listeners
+    async _onRender (context, options) {
+        const ot_up = this.element.querySelectorAll("button[name='ot_up']");
+        const ot_down = this.element.querySelectorAll("button[name='ot_down']");
+        const ot_save = this.element.querySelector("#ot_save");
         
-        ot_up.on("click", event => {
+        ot_up.forEach(button => button?.addEventListener("click", event => {
             let index = parseInt(event.target.id.split("_")[2]);
             if (index > 0){
                 let track = this.data.splice(index,1)[0];
                 this.data.splice(index - 1, 0, track);
                 this.render(false);
             }
-        })
+        }))
 
-        ot_down.on("click", event => {
+        ot_down.forEach(button => button?.addEventListener("click", event => {
             let index = parseInt(event.target.id.split("_")[2]);
             if (index < this.data.length){
                 let track = this.data.splice(index, 1)[0];
                 this.data.splice(index + 1, 0, track);
                 this.render(false);
             }
-        })
+        }))
 
-        ot_save.on("click", event => {
+        ot_save?.addEventListener("click", async event => {
             let tracks = {};
             for (let i = 0; i < this.data.length; i++){
                 tracks[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            game.settings.set("fate-core-official", "tracks", tracks);
+            await fcoConstants.wd().update({"system.==tracks":{}},{noHook: true});
+            await fcoConstants.wd().update({"system.==tracks":tracks});
             this.close();
         })
     }

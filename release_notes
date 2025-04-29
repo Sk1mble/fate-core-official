@@ -1,6 +1,105 @@
+# 4.7.13
+* Major version release for v13 compatibility
+* Eradicated all code for earlier versions of Foundry - this is for v13+ only
+* Same bugfixes as the 4.7.12 releases.
+* Stunts, skills, tracks, aspects and character default framworks are now kept in a special hidden item in the world instead of being saved in a system setting. This increases the efficiency of making changes to these elements.
+* Thing now uses Application v2.
+* Fixed a bug which would have prevented successful picking up of a Thing on a scene that was created prior to the change from actor.data.data to actor.system
+* Player stunt editor and stunt database have been upgraded to Application V2.
+* ShowCharacter tool upgraded to Application V2 (binoculars icon)
+* Modified Roll Dialog upgraded to Application V2.
+* TimedEvent no longer uses Application V1 (In fact it doesn't use any Application, it is now just a class that creates a DialogV2)
+* Fate_Splash now updated to use AppV2.
+* The FormApplication in the default character framework manager has been migrated to AppV2.
+* Fixed a bug that meant Defaults weren't being rationalised with base 64 keynames
+* Changed the name of the world data object to use title rather than name as this appears to have changed
+* EditPlayerAspects migrated to AppV2.
+* EditPlayerTracks migrated to AppV2.
+* Changed the shape change tool to use a standalone Application instead of a janky inserted HTML element on the play area.
+* All the TrackEditor apps have now been migrated to V2 along with the other remaining apps.
+* 12/12/2024 Only remaining V1 apps are fcoActor and fcoExtra and FateUtilities - the actorsheet and itemsheet for this system.
+* 13/12/2024 fcoCharacter has now been refactored to AppV2
+* 16/12/2024 FateUtilities has now been refactored to AppV2
+* 16/12/2024 fcoExtra has now been refactored to AppV2
+* All apps have now been converted to app V2 and all instances of jquery usage have been purged from the system.
+* Removed potential for IDs used by fcoCharacter to be duplicated on any other character sheets.
+* Removed potential for IDs used by FateUtilities to be duplicated within the application.
+* Removed potential for ID duplicates in fcoExtra.
+* Removed potential for ID duplicates in ShowCharacter
+* Removed potential for ID duplicates in Things
+* Bugfix on StuntDB - if you add a stunt with the same name as an existing stunt it will now create the stunt with a number appended as intended.
+* Removed potential for ID duplicates in the main aspect editor applications.
+* Converted the main character sheet to use ProseMirror instead of the Pen editor (step one in converting all rich text editors to ProseMirror)
+* Converted the Extra character sheet to use ProseMirror instead of the Pen editor.
+* Completely switched to using ProseMirror editors and deleted the Pen editor scripts as no longer necessary.
+* Stunt editor now submits on change and removed the save button.
+* Track editor now populating fully enriched text correctly.
+* 27/12/2024 - Fixed a bug in the fate_splash importer.
+* 31/12/2024 - Bugfixes to display of skill info on contextmenu, added code to disable fields on character sheets not editable by the current player. Improved the dynamic resizing performed by FateUtilities when it is re-sized and on initial load.
+* 04/01/2025 - Bugfixes. Cracked a method to change contents of prosemirrors without having to re-render. All prosemirror instances are now toggled.
+* 04/01/2025 - Additional bugfixes and styling tweaks.
+* 04/01/2025 - Added a conditional check to all Fate Utilities roll buttons to warn users that the buttons cannot be used without a logged in GM and then return, rather than partially working or silently failing.
+* 06/01/2025 - Made a change to use {diff:false, recursive:false} instead of nulling data types before updating with refreshed data sorted or otherwise changed but not registered as a diff by Foundry.
+* 06/01/2025 - CSS edits. Made a change to ProseMirrors so they won't automatically toggle off when they lose focus, enabling them to have things dragged into them and allowing the menu buttons to work properly.
+* 07/01/2025 - Added back code to ensure a re-render from, editing data won't cause a character sheet, extra sheet, or FateUtilities to re-render whilst a prosemirror text field is in the process of being edited.
+* 07/01/2025 - Prosemirrors on extrasheets, Fate Utilities, and character sheets now save if the window is closed while the editors are open.
+* 27/01/2025 - Added some CSS to make the text in inactive prose-mirror editors selectable (so it can be copied to the clipboard etc.).
+
+31/01/2025
+- Updated the option to disable token rotation for compatibility with Foundry 13.335.
+- Added option to not show ruler on token movement.
+- Restored simultaneous size etc. updates on token shape change as the bug that affected this has now been fixed.
+- Amended the boxes and buttons inserted for managing defaults to use classes rather than IDs.
+
+03/02/2025
+* In Foundry 13.335 updating objects with diff:false, recursive:false was not replacing the object when only order of keys had changed. Switched to using the new blah.update({"system.==tracks":newTracks}) to completely overwrite the relevant sub-objects each time. I found that this didn't immediately show changes in key order without a refresh, so I reverted to replacing the object with a blank one before pushing the final change.
+* Fixed a bug in some of the editing applications that meant the value in a prose mirror updated fine, but if you saved, re-opened, and saved without making any changes, the enriched display reverted to that in place when the application was first rendered.
+* This bug is still in effect on the EditPlayerAspects application. Will need to do some more work on this; consider switching to automatic saving of the edited values as I did with other editors.
+
+3/02/2025 (day)
+* Fixed above bug re EditPlayerAspects - aspects now save on any changes, as with other editable data.
+
+* 16/02/2025 - Added a hidden 'ladder' setting that allows the ladder for the world to be set explicitly. Will fall back to the standard Fate ladder if there is no ladder set.
+* 19/02/2025 - Bugfixes; settings import wasn't working if the defaults being imported needed to have their keys rationalised. Creating a character from a default wasn't properly adding all of the relevant data due to an error with updateSource. Set a width for the track manager window to 1/2 the available window width: TODO - check the other apps to ensure auto-width of 100% not causing issues. Fixed bug in ladder setting that was causing failure to localise.
+
+* 28/02/2025 - Bugfixes for 13.337. 
+** Had to remove the filepicker from the options for default character sheet template as this no longer accepts html files as a file type; will revert back to the 'any' file type once this is working. 
+** Using diff:false, recursive:false options now breaks all updates on tracks etc. so have removed these from all updates. 
+** Fixed the font options as these weren't working now that the Settings app is in appV2.
+** Removed option to disable tokenm autorotation as this has now been baked into Foundry
+** Fixed a bug in the timing of the Fate Ladder setting being registered that was preventing existing chat messages from rendering with the correct ladder name (fantastic etc.)
+** Changed to using game.clipboard.copyPlainText(text) to copy contents of exports to clipboard as this should work across browsers.
+
+* 19/03/2025 - Removed the code that migrated old ModularFate / FateCoreOfficial data to fate-core-official. ModularFate was deprecated a long while ago and a manual transition is possible if anyone needs to get bery old date into Foundry.
+
+28/03/2025
+* Switched to using the <range-picker> custom html tag as the rangePicke handlebars helper has been deprecated.
+* Tested that system works in Foundry 13.339
+
+03/04/2025
+* Added a leading "/" to the local filename when changing the image for an Extra's avatar, preventing it from breaking where a route_prefix has been defined.
+
+18/04/2025
+* Tested in 13.340
+* Changed reference to FontConfig to foundry.applications.settings.menus.FontConfig
+* Added a renderDialog hook to fix the Scale Calculator dialogs for The Secrets of Cats and Knights of Invasion - this is a stopgap, we will update the macros in the adventure next time we update the adventures with any more substantial updates.
+* Fixed the Add Countdown dialog so that the fields won't go blank if you edit, save, toggle to edit again but don't change anything and save.
+* Changed references to TextEditor to foundry.applications.ux.TextEditor
+
+18/04/2025 (upload 2)
+* Fixed some dialogs that were broken because of https://github.com/foundryvtt/foundryvtt/issues/12525
+* Slightly changed the way the Scale Calculator macro works in TSOC and KOI. Will need to change these macros in the module releases before v16 of Foundry is released - embed the macros in the core system like we did with the other macros, most likely, to avoid this in future.
+* Fixed the way that the injection of fate character defaults works so that the sidebar will correctly update immediately when defaults are modified.
+
+21/04/2025
+* Fixed a bug that prevented a character default from being saved if the track had an aspect set to "no" or "NO" rather than "No".
+
+# 4.7.12, 12a, 12b
+* Bugfix releases for final v12 Foundry version of Fate-Core-Official.
+
 # 4.7.11
 * Improvements to core files in respect of localisation
-* Added Spanish language translation courtesy of user Tyberial.
+* Added Spanish language translation courtesy of users Tyberial and DocBlackstone_GM.
 
 # 4.7.10
 * Moved away from using a handlebars if/else to choose whether skills sorted by name or sorted by rank are presented on the character sheet, instead calculating this in the getData method and only presenting the skills as required by the user.

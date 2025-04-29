@@ -48,6 +48,7 @@ class fcoSkill extends foundry.abstract.DataModel {
     static defineSchema(){
         return {
             "name":new foundry.data.fields.StringField({ nullable: false, required: true, initial:""}),
+            "category":new foundry.data.fields.StringField({ nullable: true, required: false}),
             "description":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "overcome":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
             "caa":new foundry.data.fields.HTMLField({ nullable: false, required: true, initial:""}),
@@ -260,6 +261,7 @@ class fcoExtraModel extends foundry.abstract.DataModel {
             "combineSkills":new fields.BooleanField({required:true, initial:false, nullable:false}),
             "contents":new fields.ObjectField({nullable:true, required:true, initial:{}}),
             "active":new fields.BooleanField({required:true, initial:true, nullable:false}),
+            "defaults":new fields.ObjectField({nullable:true, required:false, initial:{}}),
         }
     }
 }
@@ -272,7 +274,7 @@ Hooks.on("init", () => {
 });
 
 Hooks.on("renderTokenConfig", (tokenConfig) => {
-    let tracks = tokenConfig.token.actor.system.tracks;
+    let tracks = tokenConfig.actor.system.tracks;
     let possibles = ["details.fatePoints"];
     for (let track in tracks){
         if (tracks[track]?.boxes > 0){

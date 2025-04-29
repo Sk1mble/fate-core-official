@@ -52,42 +52,23 @@ Hooks.on("preUpdateAdventure", (adventure, changes, options, userId) =>{
     changes.flags = flags;
 })
 
-// We can mess around with the data in the preImportAdventure hook to do what we need to it, if it's not quite in the right condition.
-// This next piece of code is unnecessary if the user is running Foundry 10.286 or higher. In previous versions of Foundry, this was needed
-// to change the order of import from scenes then journals to journals then scenes, required to prevent bookmarks on the canvas from being 'unknown'.
-
-if (!foundry.utils.isNewerVersion(game.version, "10.285")){
-    Hooks.on("preImportAdventure", (adventure, formData, toCreate, toUpdate) => {
-        // const allowed = Hooks.call("preImportAdventure", this.adventure, formData, toCreate, toUpdate);
-        let cScene = toCreate?.Scene;
-        let uScene = toUpdate?.Scene;
-        if (uScene){
-            delete toUpdate.Scene;
-            toUpdate.Scene = uScene;
-        }
-        if (cScene){ 
-            delete toCreate.Scene;
-            toCreate.Scene = cScene;
-        }
-        adventure.updateSource({toCreate:toCreate, toUpdate:toUpdate});
-    })
-}
-
 Hooks.on("importAdventure", async (adventure, formData, created, updated) =>{
     let replace = false;
     let flags = foundry.utils.duplicate(adventure.flags);
     let settings = flags["fate-core-official"]?.settings;
-    if (settings && !formData.overrideSettings){
-        const confirm = await Dialog.confirm({
-            title:  game.i18n.localize("fate-core-official.overrideSettingsTitle"),
-            content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`
+    if (settings && !adventure?.sheet?.overrideSettings){
+        const confirm = await foundry.applications.api.DialogV2.confirm({
+            window:{title:  game.i18n.localize("fate-core-official.overrideSettingsTitle")},
+            content: `<p>${game.i18n.localize("fate-core-official.overrideSettings")} <strong>${adventure.name}</strong></p>`,
+            modal: true,
+            rejectClose: false
           });
       if ( confirm ) replace = true;
     } else {
-        if (settings && formData.overrideSettings) replace = true;  
+        if (settings && adventure.sheet.overrideSettings) replace = true;  
     }
     if (replace){
-        if (settings) fcoConstants.importSettings(settings); 
+        if (settings) await fcoConstants.importSettings(settings); 
     }
 })
 
@@ -100,11 +81,19 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
+Hooks.on("preDeleteItem", (item, data, options, userId) => {
+    // Prevent deletion of the world data item.
+    if (item.uuid == game.settings.get("fate-core-official", "wid")){
+        ui.notifications.error(game.i18n.localize("fate-core-official.CantDeleteWorldDataObject"));
+        return false;
+    }
+});
+
 Hooks.on("renderSettingsConfig", (app, html) => {
-    const input = html[0].querySelector("[name='fate-core-official.fco-font-family']");
+    const input = html.querySelector("[name='fate-core-official.fco-font-family']");
     input.remove(0);
 
-    FontConfig.getAvailableFonts().forEach(font => {
+    foundry.applications.settings.menus.FontConfig.getAvailableFonts().forEach(font => {
         const option = document.createElement("option");
         option.value = font;
         option.text = font;
@@ -115,6 +104,19 @@ Hooks.on("renderSettingsConfig", (app, html) => {
     let current = game.settings.get("fate-core-official","fco-font-family");
     for (let option of options) if (option.value == current) option.selected = 'selected'
 });
+
+
+// This hook allows us to correct the rendering of the Secrets of Cats & Knights of Invasion scale calculators without having to upload a new version of the adventures just to edit the macros. 
+// This is quick and dirty and we should modify the macros in the adventures next time we update them. This is calling for Dialog v1, so the argument it returns is JQuery.
+Hooks.on("renderDialog", (dialog) => {
+    if (dialog.title=="Scale Calculator" && dialog.data.content.startsWith("\n\n\n<style>\n.tsoc-paw")){
+        dialog.element[0].querySelector(".window-content").style.background = "white";
+    }
+    if (dialog.title == "Scale Calculator" && dialog.data.content.startsWith("\n\n\n<style>\n.koi-shield")){
+        dialog.element[0].querySelector(".window-content").style.background = "white";
+        dialog.element[0].style.height = "510px";
+    }
+})
 
 async function setupSheet(){
 
@@ -160,19 +162,17 @@ async function setupSheet(){
     document.documentElement.style.setProperty('--fco-foundry-interactable-color', `${val}`);
 
     // Re-render to make sure the logo is updated correctly.
-    for (let window in ui.windows){
-        if (ui.windows[window].constructor.name == "fcoCharacter"){
-            ui.windows[window].render(false);
-          }  
-    }
+    foundry.applications.instances.forEach(app => {
+        if (app.constructor.name == "fcoCharacter") app.render(false);
+    })
 }
 
 function setupFont(){
     // Setup the system font according to the user's settings
     let val = game.settings.get("fate-core-official","fco-font-family");
-    if (FontConfig.getAvailableFonts().indexOf(val) == -1){
+    if (foundry.applications.settings.menus.FontConfig.getAvailableFonts().indexOf(val) == -1){
         // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
-        val = FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
+        val = foundry.applications.settings.menus.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
     }
     let override = game.settings.get("fate-core-official", "override-foundry-font");
     if (override) {
@@ -185,12 +185,33 @@ function setupFont(){
 }
 
 function rationaliseKeys(){
-    let types = ["stunts","aspects","tracks","skills"];
+    // We need to use a different method for getting countdown safe names as querySelector can't be used on an id starting with - and then a number
+    let countdowns = game.settings.get("fate-core-official","countdowns");
+    let amendedCountdowns = {};
+    for (let countdown in countdowns){
+        let name = countdowns[countdown].name
+        if (countdown != fcoConstants.tob64(name)){
+            amendedCountdowns[fcoConstants.tob64(name)] = countdowns[countdown]; 
+        } else {
+            amendedCountdowns[countdown] = countdowns[countdown];
+        }
+    }
+    if (JSON.stringify (amendedCountdowns) != JSON.stringify (countdowns)) {
+        game.settings.set("fate-core-official","countdowns", amendedCountdowns)
+    }
+    
+    let types = ["stunts","aspects","tracks","skills", "defaults"];
     for (let type of types){
         let data = game.settings.get("fate-core-official", type);
         let export_data = {};
+
         for (let sub_item in data){
-            let key = fcoConstants.tob64(data[sub_item].name);
+            let key = "";
+            if (type == "defaults") {
+                key = fcoConstants.tob64(data[sub_item].default_name);
+            } else {
+                key = fcoConstants.tob64(data[sub_item].name);
+            }
             export_data[key] = data[sub_item];
         }
         
@@ -201,9 +222,65 @@ function rationaliseKeys(){
         }
     }
 }
+
+async function prepareWorldItem(){
+    let wid = game.settings.get("fate-core-official","wid");
+    if (!wid){
+        // Create the world data extra
+        let name = `${game.world.title}_worldData_extra`;
+        let tracks = game.settings.get("fate-core-official","tracks");
+        let aspects = game.settings.get("fate-core-official","aspects");
+        let stunts = game.settings.get("fate-core-official","stunts");
+        let skills = game.settings.get("fate-core-official","skills");
+        let defaults = game.settings.get("fate-core-official","defaults");
+        let widItem = await Item.create({"name":name, "type":"Extra", "system.tracks":tracks, "system.stunts":stunts, "system.skills":skills, "system.aspects":aspects, "system.defaults":defaults});
+        
+        // Set the world setting to have the correct uuid
+        await game.settings.set("fate-core-official","wid",widItem.uuid);
+
+        if (JSON.stringify(fcoConstants.wd().system.tracks) == JSON.stringify(game.settings.get("fate-core-official", "tracks"))) game.settings.set("fate-core-official","tracks",{});
+        if (JSON.stringify(fcoConstants.wd().system.stunts) == JSON.stringify(game.settings.get("fate-core-official", "stunts"))) game.settings.set("fate-core-official","stunts",{});
+        if (JSON.stringify(fcoConstants.wd().system.aspects) == JSON.stringify(game.settings.get("fate-core-official", "aspects"))) game.settings.set("fate-core-official","aspects",{});
+        if (JSON.stringify(fcoConstants.wd().system.skills) == JSON.stringify(game.settings.get("fate-core-official", "skills"))) game.settings.set("fate-core-official","skills",{});
+        if (JSON.stringify(fcoConstants.wd().system.defaults) == JSON.stringify(game.settings.get("fate-core-official", "defaults"))) game.settings.set("fate-core-official","defaults",{});
+        
+        foundry.utils.debouncedReload();
+    }
+}
     
-Hooks.once('ready', () => {
+Hooks.once("i18nInit", async () => {
+    game.settings.register("fate-core-official","ladder",{
+        name:"ladder",
+        scope:"world",
+        config:false,
+        type: Object,
+        default: {
+            "10":"",
+            "9":"",
+            "8":`${game.i18n.localize("fate-core-official.Legendary")}`,
+            "7":`${game.i18n.localize("fate-core-official.Epic")}`,
+            "6":`${game.i18n.localize("fate-core-official.Fantastic")}`,
+            "5":`${game.i18n.localize("fate-core-official.Superb")}`,
+            "4":`${game.i18n.localize("fate-core-official.Great")}`,
+            "3":`${game.i18n.localize("fate-core-official.Good")}`,
+            "2":`${game.i18n.localize("fate-core-official.Fair")}`,
+            "1":`${game.i18n.localize("fate-core-official.Average")}`,
+            "0":`${game.i18n.localize("fate-core-official.Mediocre")}`,
+            "-1":`${game.i18n.localize("fate-core-official.Poor")}`,
+            "-2":`${game.i18n.localize("fate-core-official.Terrible")}`,
+        }
+    });
+})
+
+Hooks.once('ready', async () => {
+    Hooks.on("preMoveToken", (document, movement, operation) => {
+        if (game.settings.get("fate-core-official","disableAutoShowRuler")){
+            movement.showRuler = false;
+        }
+    });
+
     game.system["fco-shifted"]=false;
+
     // Set up a reference to the Fate Core Official translations file or fallback file.
     if (game.i18n?.translations["fate-core-official"]) {
         game.system["lang"] = game.i18n.translations["fate-core-official"];
@@ -213,116 +290,36 @@ Hooks.once('ready', () => {
     setupSheet();
     setupFont();
     if (game.user == game.users.activeGM){
-        rationaliseKeys();
+        await rationaliseKeys();
+        await prepareWorldItem();
         game.actors.contents.forEach(async actor => await actor.rationaliseKeys());
         game.items.contents.forEach(async extra => await extra.rationaliseKeys());
     } 
-});
 
-if (!foundry.utils.isNewerVersion(game.version, "12.316")){
-    Hooks.on('createDrawing', (drawing) => {
-        if (game.settings.get("fate-core-official","drawingsOnTop")){  
-            if (drawing.isOwner){
-                if (foundry.utils.isNewerVersion(game.version, 12)){
-                } else {
-                    const siblings = canvas.drawings.placeables;
-                    // Determine target sort index
-                    let z = 0;
-                    let up = true;
-                    let controlled = [drawing];
-                    if ( up ) {
-                        controlled.sort((a, b) => a.document.z - b.document.z);
-                        z = siblings.length ? Math.max(...siblings.map(o => o.document.z)) + 1 : 1;
-                    } else {
-                        controlled.sort((a, b) => b.document.z - a.document.z);
-                        z = siblings.length ? Math.min(...siblings.map(o => o.document.z)) - 1 : -1;
-                    }
-                    // Update all controlled objects
-                    const updates = controlled.map((o, i) => {
-                    let d = up ? i : i * -1;
-                        return {_id: o.id, z: z + d};
-                    });
-                        return canvas.scene.updateEmbeddedDocuments("Drawing", updates);
-                }
-            }   
-        }
+    let skill_choices = {};
+    let skills = fcoConstants.wd()?.system?.skills;
+    skill_choices["None"]="None";
+    skill_choices["Disable"]="Disable";
+    for (let skill in skills){skill_choices[skill]=skills[skill].name};
+
+    game.settings.register("fate-core-official","init_skill", {
+        name:game.i18n.localize("fate-core-official.initiativeSkill"),
+        hint:game.i18n.localize("fate-core-official.initiativeSetting"),
+        "scope":"world",
+        "config":true,
+        "restricted":true,
+        type:String,
+        default:"None",
+        choices:skill_choices,
+        requiresReload:true
     })
-}
-
+});
 
 Hooks.on('diceSoNiceReady', function() {
     game.dice3d.addSFXTrigger("fate4df", "Fate Roll", ["-4","-3","-2","-1","0","1","2","3","4"]);
 })
 
 Hooks.once('ready', async function () {
-    //Convert any straggling ModularFate actors to fate-core-official actors.
-    let updates = [];
-    game.actors.contents.forEach(actor => {
-        if (actor.type == "ModularFate" || actor.type == "FateCoreOfficial") updates.push({_id:actor.id, type:"fate-core-official"})
-    });
-    if (game.user == game.users.activeGM) await Actor.updateDocuments(updates)
-
-    // We need to port any and all settings over from ModularFate/Fate Core Official and any or all flags.
-
-    //First, settings.
-    const systemSettings = [];
-    try {
-        for ( let s of game.data.settings ) {
-            if ( s.key.startsWith("ModularFate.") ) {
-                systemSettings.push({_id: s._id, key: s.key.replace("ModularFate.", "fate-core-official.")});
-            }
-            if ( s.key.startsWith("FateCoreOfficial.") ) {
-                systemSettings.push({_id: s._id, key: s.key.replace("FateCoreOfficial.", "fate-core-official.")});
-            }
-        }
-        if (game.user == game.users.activeGM) await Setting.updateDocuments(systemSettings);
-    }
-    catch (error){
-        //Do nothing, just don't stop what you're doing!
-    }
-
-    // Now flags, let us write a convenience function
-
-    async function changeFlags(doc){
-        let flags1 = doc.flags["ModularFate"];
-        let flags2 = doc.flags["FateCoreOfficial"];
-        if ( flags1 ) {
-            await doc.update({"flags.fate-core-official": flags1}, {recursive: false});
-            await doc.update({"flags.-=ModularFate": null});
-        }
-        if ( flags2 ) {
-            await doc.update({"flags.fate-core-official": flags2}, {recursive: false});
-            await doc.update({"flags.-=FateCoreOfficial": null});
-        }
-    }
-
-    // Users
-    for (let doc of game.users){
-        if (game.user == game.users.activeGM) await changeFlags(doc);
-    }
-
-    // Actors
-    for (let doc of game.actors){
-        if (game.user == game.users.activeGM) await changeFlags(doc);
-    }
-
-    // Scenes & Token actors
-    for (let doc of game.scenes){
-        if (game.user == game.users.activeGM) await changeFlags(doc);
-        for (let tok of doc.tokens){
-            if (game.user == game.users.activeGM) await changeFlags(tok);
-        }
-    }
-
-    // Combats & combatants
-    for (let doc of game.combats) {
-        if (game.user == game.users.activeGM) await changeFlags (doc);
-        for (let com of doc.combatants){
-            if (game.user == game.users.activeGM) await changeFlags (com);
-        }
-    }
-
-
     // The code for initialising a new world with the content of a module pack goes here.
     // The fallback position is to display a similar message to the existing one.            
     if (game.settings.get("fate-core-official","run_once") == false && game.user.isGM){
@@ -333,53 +330,61 @@ Hooks.once('ready', async function () {
             }
         })
 
-        class fate_splash extends FormApplication {
+        class fate_splash extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2){
             constructor(...args){
                 super(...args);
             }
 
-            static get defaultOptions (){
-                let h = window.innerHeight;
-                let w = window.innerWidth;
-                let options = super.defaultOptions;
-                options.template = "systems/fate-core-official/templates/fate-splash.html"
-                options.width = w/2+15;
-                options.height = h-50;
-                options.title = "New World Setup"
-                return options;
+            static DEFAULT_OPTIONS = {
+                position:{
+                    //height: window.innerHeight - 50, 
+                    //width: window.innerWidth/2+15
+                },
+                window: {title: this.title},
+                tag: "div",
+                classes:['fate']
             }
 
-            activateListeners(html){
-                super.activateListeners(html);
-                const cont = html.find('button[id="fco_continue_button"]');
-                cont.on('click', async event => {
+            static PARTS = {
+                FateSplash: {
+                    template: "systems/fate-core-official/templates/fate-splash.html"
+                }
+            }
+
+            get title(){ return "New World Setup"};
+
+            _onRender(context, options){
+                const cont = this.element.querySelector('button[id="fco_continue_button"]');
+                cont?.addEventListener('click', async event => {
                     await game.settings.set("fate-core-official","run_once",true);
-                    await game.settings.set("fate-core-official","defaults",game.system["lang"]["baseDefaults"])
-                    await ui.sidebar.render(false);
+                    let wd = fcoConstants.wd();
+                    await wd.update({"system.defaults":game.system["lang"]["baseDefaults"]});
+                    await ui.sidebar.render();
                     this.close();
                 })
 
-                const install = html.find('button[name="eh_install"]');
-                install.on('click', async event => {
-                    let module = event.target.id.split("_")[1];
-                    game.settings.set("fate-core-official", "installing", module);
-                    // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
-                    // As of v10 it does not trigger a refresh, so we need to do it manually; let's use the debounceReload() function.
-                    let mc = game.settings.get("core","moduleConfiguration");
-                    if (mc[module] == true) {
-                        this.installModule(module);
-                        this.close();
-                    }
-                    else {
-                        mc[module]=true;
-                        await game.settings.set("core", "moduleConfiguration", mc);
-                        foundry.utils.debouncedReload();
-                    }
+                const install = this.element.querySelectorAll('button[name="eh_install"]');
+                    install?.forEach(module => {module?.addEventListener('click', async event => {
+                        let module = event.target.id.split("_")[1];
+                        game.settings.set("fate-core-official", "installing", module);
+                        // Now to activate the module, which should kick off a refresh, allowing the installation to begin.
+                        // As of v10 it does not trigger a refresh, so we need to do it manually; let's use the debounceReload() function.
+                        let mc = game.settings.get("core","moduleConfiguration");
+                        if (mc[module] == true) {
+                            this.installModule(module);
+                            this.close();
+                        }
+                        else {
+                            mc[module]=true;
+                            await game.settings.set("core", "moduleConfiguration", mc);
+                            foundry.utils.debouncedReload();
+                        }
+                    })
                 })
             }
 
-           async getData(){
-                let data = super.getData();
+           async _prepareContext(options){
+                let data = {};
                 data.ehmodules = foundry.utils.duplicate(ehmodules);
                 for (let ehm of data.ehmodules){
                     ehm.richDesc = await fcoConstants.fcoEnrich(ehm.description);
@@ -405,9 +410,11 @@ Hooks.once('ready', async function () {
                 
                 let pack = await game.packs.get(`${module_name}.content`);
                 await pack.getDocuments();
+                
                 //Todo: Consider whether we want to restrict to installing just the first adventure in the pack, allowing others to be for characters, etc.
                 for (let p of pack.contents){
-                    await p.sheet._updateObject({}, {"overrideSettings":true})
+                    p.sheet.overrideSettings = true;
+                    await p.import();
                 }
 
                 // Set installing and run_once to the appropriate post-install values
@@ -424,8 +431,8 @@ Hooks.once('ready', async function () {
                     })
                 });
 
-                game.folders.forEach (folder => game.folders._expanded[folder.id] = true);
-                ui.sidebar.render(true);
+                game.folders.forEach (folder => game.folders._expanded[folder.uuid] = true);
+                ui.sidebar.render();
             }
         }
 
@@ -443,12 +450,7 @@ Hooks.once('ready', async function () {
 // Needed to update with token name changes in FU.
 Hooks.on('updateToken', (token, data, userId) => {
     let check = false;
-    if (foundry.utils.isNewerVersion(game.version, "11.293")){
-        if (data.hidden != undefined || data.delta != undefined || data.flags != undefined || data.name!=undefined) check = true;
-    }
-    else {
-        if (data.hidden != undefined || data.actorData != undefined || data.flags != undefined || data.name!=undefined) check = true;
-    }
+    if (data.hidden != undefined || data.delta != undefined || data.flags != undefined || data.name!=undefined) check = true;
     if (check){
         game.system.apps["actor"].forEach(a=> {
             a.renderMe(token.id, data, token);
@@ -468,7 +470,7 @@ Hooks.on('updateUser',(...args) =>{
         })
 })
 
-Hooks.on('renderPlayerList',(...args) =>{
+Hooks.on("renderPlayerList",(...args) =>{
     game.system.apps["user"].forEach (a=> {
         a.renderMe("updateUser");
     })
@@ -486,7 +488,7 @@ Hooks.on('updateItem', (item, data) => {
     })
 })
 
-Hooks.on('renderCombatTracker', () => {
+Hooks.on("renderCombatTracker", () => {
     game.system.apps["combat"].forEach(a=> {
         a.renderMe("renderCombatTracker");
     })
@@ -522,26 +524,32 @@ Hooks.on('updateScene', (...args) => {
     })
 })
 
-Hooks.on('getSceneControlButtons', function(hudButtons)
-{
-    let hud = hudButtons.find(val => {return val.name == "token";})
-            if (hud && game.user.isGM){
-                hud.tools.push({
-                    name:"StuntDB",
-                    title:game.i18n.localize("fate-core-official.ViewTheStuntDatabase"),
-                    icon:"fas fa-book",
-                    onClick: ()=> {let sd = new StuntDB("none"); sd.render(true)},
-                    button:true
-                });
-            }
-})
+//v13This is now for v13 only!
+Hooks.on('getSceneControlButtons', controls => {
+    if ( !game.user.isGM ) return;
+    controls.tokens.tools.stuntDB = {
+      name: "stuntDB",
+      title: game.i18n.localize("fate-core-official.ViewTheStuntDatabase"),
+      icon: "fas fa-book",
+      onChange: (event, active) => {
+        if ( active ) {
+            let sd = new StuntDB("none"); 
+            sd.render(true);
+        }
+      },
+      button: true
+    };
+  });
 
 // This next hook is required to prevent Things from showing up in the player configuration menu. 
-Hooks.on('renderUserConfig', (user, html, data) => {
-    let actors = html.find("li");
+// In v13, the change to app v2 means I may need to change the functions below as the seocnd argument is changing to HTMLElement rather than jQuery.
+// I will need to replace html.find with html.querySelector
+// See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
+Hooks.on("renderUserConfig", (user, html, data) => {
+    let actors = html.querySelectorAll("option");
     for (let actor of actors){
-        let id = actor.getAttribute("data-actor-id");
-        if (game.actors.get(id).type == "Thing"){
+        let id = actor.value;
+        if (game.actors.get(id)?.type == "Thing"){
             actor.remove();
         }
     }
@@ -583,38 +591,46 @@ Hooks.once('init', async function () {
           ]
       }
 
-    const includeRgx = new RegExp("/systems/fate-core-official/");
-    CONFIG.compatibility.includePatterns.push(includeRgx);
+    //const includeRgx = new RegExp("/systems/fate-core-official/");
+    //CONFIG.compatibility.includePatterns.push(includeRgx);
 
     //Let's initialise the settings at the system level.
     // ALL settings that might be relied upon later are now included here in order to prevent them from being unavailable later in the init hook.
 
-    if (foundry.utils.isNewerVersion(game.version, "9.230")){
-        let bindings = [
-            {
-                key: "SHIFT"
-            }
-        ];
-
-        if (foundry.utils.isNewerVersion(game.version, "9.235")){
-            bindings = [
-                {
-                  key: "ShiftLeft"
-                },
-                {
-                  key: "ShiftRight"
-                }
-            ];
+    let bindings = [
+        {
+          key: "ShiftLeft"
+        },
+        {
+          key: "ShiftRight"
         }
-        
-        game.keybindings.register("fate-core-official", "fcoInteractionModifier", {
-            name: "Fate Core Official modifier key for dragging and clicking",
-            editable: bindings,
-            onDown: (...args) => { game.system["fco-shifted"] = true;},
-            onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
-          })
-    }
+    ];
     
+    game.keybindings.register("fate-core-official", "fcoInteractionModifier", {
+        name: "Fate Core Official modifier key for dragging and clicking",
+        editable: bindings,
+        onDown: (...args) => { game.system["fco-shifted"] = true;},
+        onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
+    })
+
+    game.settings.register("fate-core-official", "disableAutoShowRuler" , {
+        name: game.i18n.localize("fate-core-official.disableAutoShowRuler"),
+        scope: "world",
+        type: Boolean,
+        default: true,
+        config: true,
+        restricted: true,
+    });
+
+    
+    game.settings.register("fate-core-official","wid", {
+        name:"world data extra uuid",
+        scope:"world",
+        config:false,
+        type: String,
+        default: undefined
+    });
+
     game.settings.register("fate-core-official","tracks",{
         name:"tracks",
         hint:game.i18n.localize("fate-core-official.TrackManagerHint"),
@@ -717,37 +733,37 @@ Hooks.once('init', async function () {
             "clearAll":game.i18n.localize("fate-core-official.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
-        onChange: value => { // A callback function which triggers when the setting is changed
+        onChange: async value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","skills",game.system["lang"]["FateCoreDefaultSkills"]);
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateCoreDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM) {
-                        game.settings.set("fate-core-official","skills",{});
+                        await fcoConstants.wd().update({"system.==skills":{}}); 
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){ 
-                        game.settings.set("fate-core-official","skills",game.system["lang"]["FateCondensedDefaultSkills"]);
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateCondensedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.defaultSkillsLabel"));
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","skills",game.system["lang"]["FateAcceleratedDefaultSkills"]);
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["FateAcceleratedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","skills",game.system["lang"]["DresdenFilesAcceleratedDefaultSkills"]);
+                        await fcoConstants.wd().update({"system.==skills":game.system["lang"]["DresdenFilesAcceleratedDefaultSkills"]});
                         game.settings.set("fate-core-official","defaultSkills","nothing");
                         game.settings.set("fate-core-official","skillsLabel",game.i18n.localize("fate-core-official.FateAcceleratedSkillsLabel"));
                     }
@@ -773,34 +789,34 @@ Hooks.once('init', async function () {
                 "clearAll":game.i18n.localize("fate-core-official.YesClearAll")
             },
             default: "nothing",        // The default value for the setting
-            onChange: value => { // A callback function which triggers when the setting is changed
+            onChange: async value => { // A callback function which triggers when the setting is changed
                     if (value == "fateCore"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.system["lang"]["FateCoreDefaultAspects"]);
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateCoreDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value == "fateCondensed"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.system["lang"]["FateCondensedDefaultAspects"]);
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateCondensedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="clearAll"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",{});
+                            await fcoConstants.wd().update({"system.==aspects":{}});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="accelerated"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.system["lang"]["FateAcceleratedDefaultAspects"]);
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["FateAcceleratedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
                     if (value=="dfa"){
                         if (game.user.isGM){
-                            game.settings.set("fate-core-official","aspects",game.system["lang"]["DresdenFilesAcceleratedDefaultAspects"]);
+                            await fcoConstants.wd().update({"system.==aspects":game.system["lang"]["DresdenFilesAcceleratedDefaultAspects"]});
                             game.settings.set("fate-core-official","defaultAspects","nothing");
                         }
                     }
@@ -825,38 +841,38 @@ Hooks.once('init', async function () {
             "clearAll":game.i18n.localize("fate-core-official.YesClearAll")
         },
         default: "nothing",        // The default value for the setting
-        onChange: value => { // A callback function which triggers when the setting is changed
+        onChange: async value => { // A callback function which triggers when the setting is changed
                 if (value == "fateCore"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.system["lang"]["FateCoreDefaultTracks"]);
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateCoreDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",{});
+                        await fcoConstants.wd().update({"system.==tracks":{}});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="fateCondensed"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.system["lang"]["FateCondensedDefaultTracks"]);
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateCondensedDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.system["lang"]["FateAcceleratedDefaultTracks"]);
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["FateAcceleratedDefaultTracks"]});
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                         game.settings.set("fate-core-official","track_categories",{"Combat":"Combat","Other":"Other"});
                     }
                 }
                 if (value == "dfa"){
                     if (game.user.isGM){
-                        game.settings.set("fate-core-official","tracks",game.system["lang"]["DresdenFilesAcceleratedDefaultTracks"]);
+                        await fcoConstants.wd().update({"system.==tracks":game.system["lang"]["DresdenFilesAcceleratedDefaultTracks"]});
                         game.settings.set("fate-core-official","track_categories",game.system["lang"]["DresdenFilesAcceleratedDefaultTrackCategories"]);
                         game.settings.set("fate-core-official","defaultTracks","nothing");
                     }
@@ -874,13 +890,7 @@ Hooks.once('init', async function () {
         onChange: value => {
             if (value == true && game.user.isGM){
                 let text = fcoConstants.exportSettings();
- 
-                new Dialog({
-                    title: game.i18n.localize("fate-core-official.ExportSettingsDialogTitle"), 
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="export_settings">${text}</textarea></div>`,
-                    buttons: {
-                    },
-                }).render(true);
+                fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.ExportSettingsDialogTitle"), text);
                 game.settings.set("fate-core-official","exportSettings",false);
             }
         }
@@ -913,11 +923,9 @@ game.settings.register("fate-core-official", "refreshTotal", {
     type: Number,
     default:3,
     onChange: () =>{
-        for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                ui.windows[app]?.render(false);
-            }
-        }
+        foundry.applications.instances.forEach(app => {
+            if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
+        })
     }
 });
 
@@ -940,11 +948,9 @@ game.settings.register("fate-core-official","freeStunts", {
     restricted:true,
     default:3,
     onChange: () =>{
-        for (let app in ui.windows){
-            if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                ui.windows[app]?.render(false);
-            }
-        }
+        foundry.applications.instances.forEach(app => {
+            if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
+        })
     }
 })
 
@@ -958,11 +964,9 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:20,
         onChange: () =>{
-            for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+            foundry.applications.instances.forEach(app => {
+                if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
+            })
         }
     });
 
@@ -975,11 +979,9 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:true,
         onChange: () =>{
-            for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+            foundry.applications.instances.forEach(app => {
+                if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
+            })
         }
     })
 
@@ -992,11 +994,9 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:true,
         onChange: () =>{
-            for (let app in ui.windows){
-                if (ui.windows[app]?.object?.type == "Thing" || ui.windows[app]?.object?.type == "fate-core-official"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+            foundry.applications.instances.forEach(app => {
+                if (app?.object?.type == "Thing" || app?.object?.type == "fate-core-official") app.render(false);
+            })
         }
     })
 
@@ -1008,24 +1008,6 @@ game.settings.register("fate-core-official","freeStunts", {
         type: Boolean,
         restricted:false,
         default:true,
-    })
-
-    let skill_choices = {};
-    let skills = game.settings.get("fate-core-official", "skills")
-    skill_choices["None"]="None";
-    skill_choices["Disable"]="Disable";
-    for (let skill in skills){skill_choices[skill]=skills[skill].name};
-
-    game.settings.register("fate-core-official","init_skill", {
-        name:game.i18n.localize("fate-core-official.initiativeSkill"),
-        hint:game.i18n.localize("fate-core-official.initiativeSetting"),
-        "scope":"world",
-        "config":true,
-        "restricted":true,
-        type:String,
-        default:"None",
-        choices:skill_choices,
-        requiresReload:true
     })
 
     game.settings.register("fate-core-official","modifiedRollDefault", {
@@ -1068,7 +1050,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:"true",
         type:String,
         default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
-        filePicker:true
+        //filePicker:"any"
     })
     
 
@@ -1079,7 +1061,7 @@ game.settings.register("fate-core-official","freeStunts", {
         config:"true",
         type:String,
         default:'systems/fate-core-official/templates/fate-core-officialSheet.html',
-        filePicker:true
+        //filePicker:"any"
     })
 
     game.settings.register("fate-core-official", "fco-world-sheet-scheme", {
@@ -1105,11 +1087,6 @@ game.settings.register("fate-core-official","freeStunts", {
         onChange: () =>{
             // Do the things we need to do - proably just setupSheet and re-render for the logo
             setupSheet();
-            for (let window in ui.windows){
-              if (ui.windows[window].constructor.name == "fcoCharacter"){
-                ui.windows[window].render(false);
-              }  
-            } 
         }
     })
 
@@ -1144,17 +1121,6 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:false,
         default:false
     });
-
-    if (!foundry.utils.isNewerVersion(game.version, "12.316")){
-        game.settings.register("fate-core-official","drawingsOnTop", {
-            name:game.i18n.localize("fate-core-official.DrawingsOnTop"),
-            hint:game.i18n.localize("fate-core-official.DrawingsOnTopHint"),
-            scope:"world",
-            config:"true",
-            type:Boolean,
-            default:false
-        })
-    }
 
     game.settings.register("fate-core-official","fco-aspects-pane-mheight", {
         name:game.i18n.localize("fate-core-official.fcoAspectPaneHeight"),
@@ -1210,7 +1176,7 @@ game.settings.register("fate-core-official","freeStunts", {
        restricted:false,
        scope:"client",
        config:true,
-       choices:"delete",
+       choices:{0:"delete"},
        onChange:() => {
            setupFont();
        }
@@ -1265,15 +1231,9 @@ game.settings.register("fate-core-official","freeStunts", {
         default:"none"
     })
 
-    if (foundry.utils.isNewerVersion(game.version, '9.220')){
-        game.system.documentTypes.Item = ["Extra"];
-        game.system.documentTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
-    } else {
-        game.system.entityTypes.Item = ["Extra"];
-        game.system.entityTypes.Actor = ["fate-core-official","Thing","FateCoreOfficial", "ModularFate"];
-    }
+    game.system.documentTypes.Item = ["Extra"];
+    game.system.documentTypes.Actor = ["fate-core-official","Thing"];
     
-
     game.system.apps= {
         actor:[],
         combat:[],
@@ -1283,13 +1243,13 @@ game.settings.register("fate-core-official","freeStunts", {
     }
 
     //On init, we initialise any settings and settings menus and HUD overrides as required.
-    Actors.unregisterSheet('core', ActorSheet);
-    Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official", "FateCoreOfficial", "ModularFate"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
-    Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
+    foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
+    foundry.documents.collections.Actors.registerSheet("fate-core-official", fcoCharacter, { types: ["fate-core-official"], makeDefault: true, label:game.i18n.localize("fate-core-official.fcoCharacter") });
+    foundry.documents.collections.Actors.registerSheet("Thing" , Thing, {types: ["Thing"], label:game.i18n.localize("fate-core-official.Thing")});
 
     // Register Item sheets
-    Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
-    Items.unregisterSheet('core', ItemSheet);
+    foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
+    foundry.documents.collections.Items.registerSheet('fate', ExtraSheet, { types: ['Extra'], makeDefault: true });
 
     game.settings.register("fate-core-official", "sortSkills", {
         name: game.i18n.localize("fate-core-official.Sort_skills_on_sheets_by_rank"),
@@ -1366,12 +1326,8 @@ game.settings.register("fate-core-official","freeStunts", {
             step: 1,
         },
         default:12,
-        onChange:() => {
-            for (let app in ui.windows){
-                if (ui.windows[app]?.options?.id == "FateUtilities"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+        onChange:async () => {
+            await foundry.applications.instances.get("FateUtilities")?.render(false);
         }
     });
 
@@ -1382,12 +1338,8 @@ game.settings.register("fate-core-official","freeStunts", {
         config: true,
         type: String,
         default:"",
-        onChange:() => {
-            for (let app in ui.windows){
-                if (ui.windows[app]?.options?.id == "FateUtilities"){
-                    ui.windows[app]?.render(false);
-                }
-            }
+        onChange:async () => {
+            await foundry.applications.instances.get("FateUtilities")?.render(false);
         }
     });
 
@@ -1483,7 +1435,6 @@ game.settings.register("fate-core-official","freeStunts", {
         restricted:true,
         default:"#000000"
     })
-
 });
 
 Combatant.prototype._getInitiativeFormula = function () {
@@ -1494,6 +1445,10 @@ Combatant.prototype._getInitiativeFormula = function () {
         return `1d0+${this.actor.system.skills[init_skill].rank}`;
     }
 }
+
+/*foundry.applications.elements.HTMLProseMirrorElement.prototype._onFocusOut = function(event) {
+    // Do nothing - TODO: Review when v13 is released
+}*/
 
 Handlebars.registerHelper("fco_ladder", function(result){
     let fc = new fcoConstants();
@@ -1507,6 +1462,10 @@ Handlebars.registerHelper("fco_ladder", function(result){
 
 Handlebars.registerHelper("fco_get_enr_notes", function (token_id, type, key, enriched_tokens) {
     return enriched_tokens[token_id][type][key].richNotes;
+})
+
+Handlebars.registerHelper("fco_enr", async function (html) {
+    return await fcoConstants.fcoEnrich(html);
 })
 
 Handlebars.registerHelper("fco_strip", function (value) {
@@ -1581,18 +1540,35 @@ Handlebars.registerHelper("fco_item_name_from_id", function (actor, id){
     return item?.name;
 })
 
-class CustomiseSheet extends FormApplication {
-    static get defaultOptions (){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/CustomiseSheet.html";
-        options.closeOnSubmit = false;
-        options.submitOnClose = false;
-        options.title = game.i18n.localize("fate-core-official.customiseSheet");
-        options.id = "CustomiseSheet";
-        return options;
+class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        id: "CustomiseSheet",
+        window: {
+            icon: "fas fa-palette",
+            title: this.title
+        },
+        form:{
+            submitOnClose: false,
+            closeOnSubmit: false,
+            handler: CustomiseSheet.#updateObject
+        }
     }
 
-    async _updateObject(event, formData){
+    static PARTS = {
+        CustomiseSheetForm: {
+            template: "systems/fate-core-official/templates/CustomiseSheet.html"
+        }
+    }
+
+    get title() {
+        return game.i18n.localize("fate-core-official.customiseSheet");
+    }
+
+    static async #updateObject(event, form, formDataExtended){
+        let formData = formDataExtended.object;
+        let button = event.submitter.name;
         let scheme = {
             "sheet_header_colour": formData.sheet_header_colour,
             "sheet_accent_colour": formData.sheet_accent_colour,
@@ -1606,11 +1582,106 @@ class CustomiseSheet extends FormApplication {
             "fco_skills_panel_height": formData.fco_skills_panel_height,
             "fco_user_sheet_logo": formData.fco_user_sheet_logo
         }
-        await game.user.setFlag("fate-core-official","current-sheet-scheme", scheme);
-        setupSheet();
+
+        if (button == "apply_sheet_settings"){
+            await game.user.setFlag("fate-core-official","current-sheet-scheme", scheme);
+            ui.notifications.info(game.i18n.localize("fate-core-official.colourSettingsApplied"));
+            setupSheet();
+        }
+
+        if (button == "save_sheet_settings"){
+            await game.user.setFlag("fate-core-official","current-sheet-scheme", scheme);
+            setupSheet();
+            this.close();
+        }
+        
+        if (button == "fco_store_colourScheme"){
+            let schemes = game.user.getFlag("fate-core-official", "colourSchemes");
+            if (!schemes) schemes = [];
+            let scheme = formData;
+            let name = await fcoConstants.getInput(game.i18n.localize("fate-core-official.nameToUse"));
+            if (!name) name = "Unnamed Colour Scheme";
+            let p = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.makePublic"), game.i18n.localize("fate-core-official.saveAsPublic"));
+            let publicB = false;
+            if (p) publicB = true;
+            let schemeData = {name:name, scheme:scheme, public:publicB};
+            schemes.push(schemeData);
+            await game.user.unsetFlag("fate-core-official", "colourSchemes");
+            await game.user.setFlag("fate-core-official", "colourSchemes", schemes);
+            let cs = await foundry.applications.instances.get("FcoColourSchemes");
+            if (cs){
+                cs.render(true);
+                try {
+                    cs.bringToFront();
+                } catch {
+
+                }
+            } else {
+                cs = new FcoColourSchemes();
+                cs.customiseSheet = this;
+                cs.render(true);
+            }
+        }
+
+        if (button == "fco_make_default" && game.user.isGM){
+            let scheme = formData;
+            await game.settings.set("fate-core-official","fco-world-sheet-scheme", scheme);
+            let cs = await foundry.applications.instances.get("FcoColourSchemes")?.render();
+        }
+
+        if (button == "undo"){
+            this.custom = game.user.getFlag("fate-core-official","current-sheet-scheme");
+            if (!this.custom) this.custom = game.settings.get("fate-core-official","fco-world-sheet-scheme");
+            this.render(false);
+        }
+
+        if (button == "fco_view_colourSchemes"){
+            let cs = await foundry.applications.instances.get("FcoColourSchemes");
+            if (cs){
+                cs.render(true);
+                try {
+                    cs.bringToFront();
+                } catch {
+
+                }
+            } else {
+                cs = new FcoColourSchemes();
+                cs.customiseSheet = this;
+                cs.render(true);
+            }
+        }
+
+        if (button == "fco_load_custom"){
+            let text = JSON.stringify(await this._prepareContext(),null,5);
+            let value =  await new Promise(resolve => {
+                new foundry.applications.api.DialogV2({
+                    window:{title: game.i18n.localize("fate-core-official.LoadCustomSheet")},
+                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="fatecoreofficial_custom_sheet_value">${text}</textarea></div>`,
+                    buttons: [{
+                            action: "Populate",
+                            label: game.i18n.localize("fate-core-official.PopulateFromPasted"),
+                            callback: () => {
+                                resolve (document.getElementById("fatecoreofficial_custom_sheet_value").value);
+                            },
+                            default: true
+                        }]
+                }).render(true)
+            });
+            let data = JSON.parse(value);
+            this.custom = data;
+            this.render(false);
+        }
+
+        if (button == "del_fco_custom"){
+            await game.user.unsetFlag("fate-core-official","current-sheet-scheme");
+            ui.notifications.info(game.i18n.localize("fate-core-official.colourSettingsApplied"));
+            setupSheet();
+            this.custom = false;
+            this.render();
+        }
     }
 
-    async getData(){
+    async _prepareContext(){
         if (this.custom){
             return this.custom;
         } else {
@@ -1621,134 +1692,48 @@ class CustomiseSheet extends FormApplication {
         }
     }
 
-    close(){
-        let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
+    async close(){
+        let cs = await foundry.applications.instances.get("FcoColourSchemes")?.render();
         if (cs){
             cs.close();
         }
         super.close();
     }
 
-    async activateListeners(html){
-        super.activateListeners(html);
-        $('#apply_sheet_settings').on('click', async event => {
-            await this.submit();
-            ui.notifications.info(game.i18n.localize("fate-core-official.colourSettingsApplied"));
-        })
-
-        $('#save_sheet_settings').on('click', async event => {
-            await this.submit();
-            this.close();
-        })
-
-        $('#undo').on('click', async event => {
-            this.custom = game.user.getFlag("fate-core-official","current-sheet-scheme");
-            if (!this.custom) this.custom = game.settings.get("fate-core-official","fco-world-sheet-scheme");
-            this.render(false);
-        })
-
-        $('#del_fco_custom').on('click', async event => {
-            await game.user.unsetFlag("fate-core-official","current-sheet-scheme");
-            setupSheet();
-            this.close();
-        })
-
-        $('#fco_view_colourSchemes').on('click', async event => {
-            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
-            if (cs){
-                cs.render(true);
-                try {
-                    cs.bringToTop();
-                } catch {
-
-                }
-            } else {
-                cs = new FcoColourSchemes();
-                cs.customiseSheet = this;
-                cs.render(true);
-            }
-        })
-
-        $('#fco_user_sheet_logo').on('change', () => {
-            if ($('#fco_user_sheet_logo')[0].value == "world"){                
-                $('#fco_user_sheet_logo')[0].value = game.settings.get("fate-core-official", "fco-world-sheet-scheme").fco_user_sheet_logo;
+    async _onRender(){
+        let logo = this.element.querySelector(`file-picker[name="fco_user_sheet_logo"]`);
+        logo?.addEventListener("change", () => {
+            if (logo.value == "world"){                
+                logo.value = game.settings.get("fate-core-official", "fco-world-sheet-scheme").fco_user_sheet_logo;
             } 
-            $('#fco_user_sheet_logo_img').attr("src", $('#fco_user_sheet_logo')[0].value);
-        })
-
-        $('#fco_store_colourScheme').on('click', async event => {
-            let schemes = game.user.getFlag("fate-core-official", "colourSchemes");
-            if (!schemes) schemes = [];
-            let scheme = this._getSubmitData();
-            let name = await fcoConstants.getInput(game.i18n.localize("fate-core-official.nameToUse"));
-            if (!name) name = "Unnamed Colour Scheme";
-            let p = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.makePublic"), game.i18n.localize("fate-core-official.saveAsPublic"));
-            let publicB = false;
-            if (p == "yes") publicB = true;
-            let schemeData = {name:name, scheme:scheme, public:publicB};
-            schemes.push(schemeData);
-            await game.user.unsetFlag("fate-core-official", "colourSchemes");
-            await game.user.setFlag("fate-core-official", "colourSchemes", schemes);
-            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
-            if (cs){
-                cs.render(true);
-                try {
-                    cs.bringToTop();
-                } catch {
-
-                }
-            } else {
-                cs = new FcoColourSchemes();
-                cs.customiseSheet = this;
-                cs.render(true);
-            }
-        })
-
-        $('#fco_make_default').on('click', async event => {
-            let scheme = this._getSubmitData();
-            await game.settings.set("fate-core-official","fco-world-sheet-scheme", scheme);
-            let cs = Object.values(ui.windows).find(window=>window.options.id=="FcoColourSchemes");
-            if (cs){
-                cs.render(true);
-            }
-        })
-
-        $('#load_custom').on('click', async event => {
-            let text = JSON.stringify(await this.getData(),null,5);
-            let value =  await new Promise(resolve => {
-                new Dialog({
-                    title: game.i18n.localize("fate-core-official.LoadCustomSheet"),
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="custom_sheet_value">${text}</textarea></div>`,
-                    buttons: {
-                        ok: {
-                            label: game.i18n.localize("fate-core-official.PopulateFromPasted"),
-                            callback: () => {
-                                resolve (document.getElementById("custom_sheet_value").value);
-                            }
-                        }
-                    },
-                }).render(true)
-            });
-            let data = JSON.parse(value);
-            this.custom = data;
-            this.render(false);
+            this.element.querySelector('img[name="fco_user_sheet_logo_img"]').src = logo.value;
         })
     }
 }
 
-class FcoColourSchemes extends FormApplication {
-    static get defaultOptions (){
-        const options = super.defaultOptions;
-        options.template = "systems/fate-core-official/templates/FcoColourSchemes.html";
-        options.width = 1080;
-        options.resizable=true,
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.viewStoredColourSchemes");
-        options.id = "FcoColourSchemes";
-        return options;
+class FcoColourSchemes extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+
+    static DEFAULT_OPTIONS = {
+        id:"FcoColourSchemes",
+        tag: "form",
+        window:{
+            title:this.title,
+            icon:"fas fa-palette"
+        },
+        position:{width:1280}
     }
 
-    async getData(){
+    static PARTS = {
+        FcoColourSchemesForm: {
+            template: "systems/fate-core-official/templates/FcoColourSchemes.html"
+        }
+    }
+
+    get title(){
+        return game.i18n.localize("fate-core-official.viewStoredColourSchemes");
+    }
+
+    async _prepareContext(){
         let mySchemes = game.user.getFlag("fate-core-official", "colourSchemes");
         let otherSchemes = [];
         
@@ -1791,33 +1776,32 @@ class FcoColourSchemes extends FormApplication {
         } 
     }
 
-    async activateListeners(html){
-        super.activateListeners(html);
-
-        $('.colourSchemeUpload').on('click', async event => {
+    async _onRender(context, options){
+        
+        this.element.querySelectorAll('.colourSchemeUpload').forEach(button => button?.addEventListener('click', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             let scheme = this.mySchemes[index].scheme;
             this.customiseSheet.custom = scheme; 
             this.customiseSheet.render(true);
             try {
-                this.customiseSheet.bringToTop();
+                this.customiseSheet.bringToFront();
             } catch {
                 
             }
-        })
+        }))
 
-        $('.worldSchemeUpload').on('click', async event => {
+        this.element.querySelector('.worldSchemeUpload')?.addEventListener('click', async event => {
             let scheme = game.settings.get("fate-core-official","fco-world-sheet-scheme");
             this.customiseSheet.custom = scheme;
             this.customiseSheet.render(true);
             try {
-                this.customiseSheet.bringToTop();
+                this.customiseSheet.bringToFront();
             } catch {
                 
             }
         })
 
-        $('.revertToSystemScheme').on('click', async event => {
+        this.element.querySelector('.revertToSystemScheme')?.addEventListener('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 await game.settings.set("fate-core-official","fco-world-sheet-scheme", 
@@ -1838,7 +1822,7 @@ class FcoColourSchemes extends FormApplication {
             }
         })
 
-        $('.colourSchemeDelete').on('click', async event => {
+        this.element.querySelectorAll('.colourSchemeDelete').forEach(button => button?.addEventListener ('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 let index = event.currentTarget.getAttribute("data-index");
@@ -1847,9 +1831,9 @@ class FcoColourSchemes extends FormApplication {
                 await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
                 this.render(false);
             }
-        })
+        }))
 
-        $('.publicColourSchemeDelete').on('click', async event => {
+        this.element.querySelectorAll('.publicColourSchemeDelete').forEach(button => button?.addEventListener ('click', async event => {
             let del = await fcoConstants.confirmDeletion();
             if (del){
                 let index = event.currentTarget.getAttribute("data-index");
@@ -1869,62 +1853,66 @@ class FcoColourSchemes extends FormApplication {
                 }
                 this.render(false);
             }
-        })
+        }))
 
-        $('.scheme_name').on('change', async event => {
+        this.element.querySelectorAll('.scheme_name').forEach (field => field?.addEventListener('change', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             this.mySchemes[index].name = event.currentTarget.value;
             await game.user.unsetFlag("fate-core-official","colourSchemes");
             await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
             this.render(false);
-        })
+        }))
 
-        $('.colourSchemePublicCheck').on('change', async event => {
+        this.element.querySelectorAll('.colourSchemePublicCheck').forEach(box => box?.addEventListener('change', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             this.mySchemes[index].public = event.currentTarget.checked;
             await game.user.unsetFlag("fate-core-official","colourSchemes");
             await game.user.setFlag("fate-core-official","colourSchemes",this.mySchemes);
             this.render(false);
-        })
+        }));
 
-        $('.publicColourSchemeUpload').on('click', async event => {
+        this.element.querySelectorAll('.publicColourSchemeUpload').forEach(button => button?.addEventListener ('click', async event => {
             let index = event.currentTarget.getAttribute("data-index");
             let scheme = this.otherSchemes[index].scheme;
             this.customiseSheet.custom = scheme; 
             this.customiseSheet.render(true);
             try {
-                this.customiseSheet.bringToTop();
+                this.customiseSheet.bringToFront();
             } catch {
 
             }
-        })
+        }))
     }
 }
 
-$(document).on('contextmenu', '.fco_popviewable', async event => {
-    // Construct the Application instance
-    let uuid = event.target.getAttribute("data-uuid");
-    let source = await fromUuid(uuid);
-    let title = "Unknown";
-    let src = "";
-    // Case token
-    if (source.constructor.name == "TokenDocument"){
-        title = source.actor.name;
-        src = source.actor.img;
-    } 
-    // Case not a token
-    if (source.constructor.name.startsWith("fco")){
-        title = source.name;
-        src = source.img;
+document?.addEventListener("contextmenu", async event => {
+    if (event.target.classList.contains("fco_popviewable")){
+        // Construct the Application instance
+        let uuid = event.target.getAttribute("data-uuid");
+        let source = await fromUuid(uuid);
+        let title = "Unknown";
+        let src = "";
+        // Case token
+        if (source.constructor.name == "TokenDocument"){
+            title = source.actor.name;
+            src = source.actor.img;
+        } 
+        // Case not a token
+        if (source.constructor.name.startsWith("fco")){
+            title = source.name;
+            src = source.img;
+        }
+
+        const ip = new foundry.applications.apps.ImagePopout({
+                window: {
+                    "title": title
+                },
+                "uuid":uuid,
+                src: src
+            },
+        );
+
+        // Display the image popout
+        ip.render(true);
     }
-
-    const ip = new ImagePopout(src, {
-        "title": title,
-        "uuid":uuid
-     });
-    
-     // Display the image popout
-     ip.render(true);
 })
-
-

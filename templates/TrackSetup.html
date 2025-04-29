@@ -1,11 +1,11 @@
-<form onsubmit="event.preventDefault();">
+<div>
     <table style="width:auto" cellspacing ="4" cellpadding="4">
         <tr>
             <td>
                 {{localize 'fate-core-official.Category'}}:
             </td>
             <td>
-                <select id="track_categories_select" size="25" style="background: white; color: black; font-family: var(--fco-font-family); width: 350px; height: 100px">
+                <select id="track_categories_select" size="25" style="background: white; color: black; padding: 5px; font-family: var(--fco-font-family); width: 350px; height: 100px">
                     {{#each track_categories}}
                         {{#if (eq this "Combat")}}
                             <option value = "Combat" style="background:white; color:black; font-family: var(--fco-font-family);">{{localize 'fate-core-official.Combat'}}</option>                    
@@ -20,18 +20,22 @@
                 </select>
             </td>
             <td>
-                <button type = "button" id="add_category" i class="fas fa-plus" style="width:50px; height:50px"></button>
-                <button type = "button" id="delete_category" i class="fas fa-trash" style="width:50px; height:50px"></button>
+                <div style = "display:flex; flex-direction:row; gap: 5px">
+                    <button type = "button" id="add_category" i class="fas fa-plus" style="width:50px; height:50px"></button>
+                    <button type = "button" id="delete_category" i class="fas fa-trash" style="width:50px; height:50px"></button>
+                </div>
             </td>
         </tr>
         <tr>
             <td colspan ="3" align = "center">
-                <button type="button" id="edit_tracks">{{localize 'fate-core-official.EditTracksInCategory'}}</button>
-                <button type="button" id="set_track_categories">{{localize 'fate-core-official.SetTrackCategories'}}</button>
-                <button type="button" id="import_tracks">{{localize 'fate-core-official.ImportTracks'}}</button>
-                <button type="button" id="export_tracks">{{localize 'fate-core-official.ExportTracks'}}</button>
-                <button type="button" id="order_tracks">{{localize 'fate-core-official.OrderTracks'}}</button>
+                <div style = "display:grid; gap:10px">
+                    <button type="button" id="edit_tracks">{{localize 'fate-core-official.EditTracksInCategory'}}</button>
+                    <button type="button" id="set_track_categories">{{localize 'fate-core-official.SetTrackCategories'}}</button>
+                    <button type="button" id="import_tracks">{{localize 'fate-core-official.ImportTracks'}}</button>
+                    <button type="button" id="export_tracks">{{localize 'fate-core-official.ExportTracks'}}</button>
+                    <button type="button" id="order_tracks">{{localize 'fate-core-official.OrderTracks'}}</button>
+                </div>
             </td>
         </tr>
     </table>
-</form>
+</div>

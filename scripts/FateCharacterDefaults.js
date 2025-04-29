@@ -7,7 +7,7 @@ class FateCharacterDefaults {
 
     async storeDefault (character_default){
         // Store a character default (usually derived from extractDefault) in the game's settings.
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         if (!character_default?.default_name){
             return;
         }
@@ -15,9 +15,12 @@ class FateCharacterDefaults {
         let key = fcoConstants.gkfn(defaults, character_default.default_name, "default_name");
         if (key){
             let response  = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.checkDefaultOverwritePrompt"),character_default.default_name + game.i18n.localize("fate-core-official.checkDefaultOverwriteContent"));
-            if (response === "yes"){
-                defaults[key] = character_default;
-                await game.settings.set("fate-core-official", "defaults", defaults)
+            if (response){
+                await fcoConstants.wd().update({
+                    "system.defaults":{
+                        [`${key}`]:character_default,
+                    }
+                });
             } else {
                 let count = 0;
                 for (let d in defaults){
@@ -25,14 +28,20 @@ class FateCharacterDefaults {
                 }
                 let newName = `${character_default.default_name} ${count + 1}`;
                 character_default.default_name = newName;
-                defaults[this.getSafeName(newName)] = character_default;
-                await game.settings.set("fate-core-official", "defaults", defaults)
+                await fcoConstants.wd().update({
+                    "system.defaults":{
+                        [`${fcoConstants.tob64("newName")}`]:character_default,
+                    }
+                });
                 ui.sidebar.render(false);
                 if (game.system.mdf) game.system.mdf.render(false);
             }
         } else {
-            defaults[this.getSafeName(character_default.default_name)] = character_default;
-            await game.settings.set("fate-core-official", "defaults", defaults)
+            await fcoConstants.wd().update({
+                "system.defaults":{
+                    [`${fcoConstants.tob64(character_default.default_name)}`]:character_default,
+                }
+            });
             ui.sidebar.render(false);
             if (game.system.mdf) game.system.mdf.render(false);
         }
@@ -40,22 +49,29 @@ class FateCharacterDefaults {
 
     get defaults(){
         // Return an array of strings of default_name values from defaults
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
-        let list = [];
-        for (let d in defaults){
-            list.push (defaults[d].default_name)
-        }
-        return list;
+        if (fcoConstants.wd()?.system?.defaults) {
+            let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
+            let list = [];
+            for (let d in defaults){
+                list.push (defaults[d].default_name)
+            }
+            return list;
+        } else {
+            return [];
+        } 
     }
 
     async removeDefault (name){
         // Remove a character default from the game's settings.
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         // Check to see if this default already exists, then delete it
         let key = fcoConstants.gkfn(defaults, name, "default_name")
         if (key){
-            delete defaults[key];
-            await game.settings.set("fate-core-official", "defaults", defaults);
+            await fcoConstants.wd().update({
+                "system.defaults":{
+                    [`-=${key}`]:null
+                }
+            });
             ui.sidebar.render(false);
             if (game.system.mdf) game.system.mdf.render(false);
         } 
@@ -113,7 +129,7 @@ class FateCharacterDefaults {
     }
 
     async renameDefault (old_name, new_name){
-        let defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         let de = foundry.utils.duplicate(fcoConstants.gbn(defaults, old_name, "default_name"));
         await this.removeDefault(old_name);
         de.default_name = new_name;
@@ -123,16 +139,20 @@ class FateCharacterDefaults {
     }
 
     async editDescription (name, new_desc){
-        let defaults = await foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         let de = fcoConstants.gbn(defaults, name, "default_name")
         de.default_description = new_desc;
-        await game.settings.set("fate-core-official","defaults",defaults);
+        await fcoConstants.wd().update({
+            "system.defaults":{
+                [`${fcoConstants.tob64(name)}`]:de
+            }
+        });
         if (game.system.mdf) game.system.mdf.render(false);
     }
 
     async getDefault(name){
         // Get a named character default from the game's settings.
-        let defaults = await foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+        let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         let def = fcoConstants.gbn(defaults, name, "default_name");
         if (def) return def;
     }
@@ -152,12 +172,14 @@ class FateCharacterDefaults {
     async exportDefaults(list_to_export){
         // Return a string of the chosen defaults to export. If no array of default_name values given, return all defaults.
         if (! list_to_export){
-            return JSON.stringify(game.settings.get("fate-core-official","defaults"),null,5);
+            let defaults = foundry.utils.duplicate(fcoConstants.wd().system.defaults);
+            return JSON.stringify(defaults,null,5);
         } else {
             let to_export = {};
-            let existing_defaults = foundry.utils.duplicate(game.settings.get("fate-core-official", "defaults"));
+            let existing_defaults = fcoConstants.wd().system.defaults;
             for (let d of list_to_export){
-                to_export[this.getSafeName(d)]=existing_defaults[this.getSafeName(d)];
+                let key = fcoConstants.gkfn(existing_defaults, d, "default_name");
+                to_export[key] = existing_defaults[key];
             }
             return JSON.stringify(to_export, null, 5);
         }
@@ -184,7 +206,7 @@ class FateCharacterDefaults {
         let tracks = data.system.tracks;
         for (let t in tracks){
             let track = tracks[t];
-            if (track?.aspect && track?.aspect !== "No"){
+            if (track?.aspect && typeof track.aspect == "string" && track.aspect.toUpperCase() !== "NO"){
                 track.aspect.name = "";
             }
 
@@ -278,7 +300,6 @@ class FateCharacterDefaults {
                 stunts:character_default.stunts,
                 aspects:character_default.aspects,
                 tracks:character_default.tracks,
-
             }
         }
         return await Actor.create(actor_data, {renderSheet:render});
@@ -300,9 +321,9 @@ class FateCharacterDefaults {
             let updates = {};
             let sections = options.sections;
             for (let section of sections){
-                updates[`system.${section}`] = "blank";
+                updates[`system.${section}`] = null;
             }
-            await actor.update(updates, {render:false, noHook:true});
+            await actor.update(updates, {renderSheet:false, noHook:true});
 
             for (let section of sections){
                 updates[`system.${section}`] = character_default[section];
@@ -342,96 +363,114 @@ class FateCharacterDefaults {
 }
 
 // Add extra button to foundry's settings menu
-Hooks.on("renderSidebarTab", (app, html) => {
-    if (!(app instanceof ActorDirectory) || !game.user?.isGM) {
+// In v13, the change to app v2 means I'll need to change the functions below as the seocnd argument is changing to HTMLElement rather than jQuery.
+// I will need to replace html.find with html.querySelector and targetElement.before with targetElement.insertAdjacentHTML("beforebegin", `htmltoinsert`)
+// See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
+// html is still jquery as of version 13 prototype 1, so in preparation we'll switch away from using jQuery by converting to an HTMLElement ourselves if it's still returning jQuery.
+
+Hooks.on("renderActorDirectory", (app, html, user, opt) => {
+    if (!(app instanceof foundry.applications.sidebar.tabs.ActorDirectory) || !game.user?.isGM) {
         return;
     }
-    
-    const targetElement = html.find('ol[class="directory-list"]');
+    if (html instanceof jQuery){
+        html = $(html)[0];
+    }
+
+    const targetElement = html?.querySelector ('ol.directory-list');
     const f = new FateCharacterDefaults();
     let standard = `<option value = "fate-core-official" selected = 'selected'>${game.i18n.localize("fate-core-official.system_settings")}</option>\n`
     let blank = "<option>Blank</option>\n"
     let defaults = f.defaults.map(d => `<option>${d}</option>`).join("\n");
     let options = standard+blank+defaults;
-    targetElement.before(`
-        <div style="max-height:45px; text-align:center">
-            <input type="text" value = "${game.i18n.localize("fate-core-official.newCharacter")}" style="background-color:#f0f0e0; width:35%; height:25px;" id="MF_actor_to_create">
-            <select style="width:35%; height:25px; background-color:#f0f0e0;" id="MF_default_to_use">${options}
-            </select>
-            <button type="button" style="width:10%; height:35px" id="create_from_default" title="${game.i18n.localize("fate-core-official.create_from_default")}">
-            <i class="fas fa-user-check"></i>
-            </button>
-            <button type="button" style="width:10%; height:35px" id="manage_defaults" title="${game.i18n.localize("fate-core-official.manage_defaults")}">
-            <i class="fas fa-users-cog"></i>
-            </button>
-        </div>
-    `);
-
-    html.on("click", 'input[id="MF_actor_to_create"]', (event) => {
-        event.stopPropagation();
-        html.find('input[id="MF_actor_to_create"]')[0].select();
-    })
-
-    html.on("click", 'button[id="manage_defaults"]', (event) => {
-        //Code to handle the defaults management (view list, delete)
-        event.stopPropagation()
-        let md = new ManageDefaults().render(true);
-    })
-
-    html.on("click", 'button[id="create_from_default"]', async (event) => {
-        event.stopPropagation();
-        let actor_name = html.find('input[id="MF_actor_to_create"]')[0].value;
-        const default_name = html.find('select[id="MF_default_to_use"]')[0].value;
-
-        if (! actor_name) actor_name = game.i18n.localize("fate-core-official.newCharacter");
-
-        let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
-
-        if (default_name === "Blank"){
-            let actorData = {
-                "name":actor_name,
-                "type":"fate-core-official",
-                "ownership": perm,
-                "system.details.fatePoints.refresh":"0",
-                "prototypeToken.actorLink":true
-             }
-             await Actor.create(actorData, {"renderSheet":true});
-             return;
-        }
-
-        if (default_name === "fate-core-official"){
-            await Actor.create({"name":actor_name, "type":"fate-core-official", ownership: perm, "prototypeToken.actorLink":true},{renderSheet:true});
-            return;
-        }
-        await f.createCharacterFromDefault(default_name, actor_name, true);
-    });
+    let fcoDefaultButtons = html.querySelector('div[name="fcoDefaultButtons"]');
+    if (!fcoDefaultButtons){
+        targetElement?.insertAdjacentHTML("beforebegin",
+            `<div name="fcoDefaultButtons" style="max-height:45px; text-align:center; margin-bottom:5px; display:flex; flex-direction:row">
+                <input type="text" value = "${game.i18n.localize("fate-core-official.newCharacter")}" style="width:35%; margin:5px; height:25px;" class="MF_actor_to_create">
+                <select style="width:35%; height:25px; margin:5px" class="MF_default_to_use">${options}
+                </select>
+                <button type="button" style="width:10%; height:35px; margin-right:2px" class="create_from_default" title="${game.i18n.localize("fate-core-official.create_from_default")}">
+                <i class="fas fa-user-check"></i>
+                </button>
+                <button type="button" style="width:10%; height:35px" class="manage_defaults" title="${game.i18n.localize("fate-core-official.manage_defaults")}">
+                <i class="fas fa-users-cog"></i>
+                </button>
+            </div>
+        `);
+    
+        let create = html.querySelector('.MF_actor_to_create');
+        create?.addEventListener("click", event => {
+            event.stopPropagation();
+            create.select();
+        })
+    
+        let manageDefaults = html.querySelector('.manage_defaults');
+        manageDefaults?.addEventListener("click", event => {
+            event.stopPropagation()
+            let md = new ManageDefaults().render(true);
+        });
+    
+        let createFromDefault = html.querySelector('.create_from_default');
+        createFromDefault?.addEventListener("click", async (event) => {
+            event.stopPropagation();
+            let actor_name = html.querySelector('.MF_actor_to_create').value;
+            let default_name = html.querySelector('.MF_default_to_use').value;
+    
+            if (! actor_name) actor_name = game.i18n.localize("fate-core-official.newCharacter");
+    
+            let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
+    
+            if (default_name === "Blank"){
+                let actorData = {
+                    "name":actor_name,
+                    "type":"fate-core-official",
+                    "ownership": perm,
+                    "system.details.fatePoints.refresh":"0",
+                    "prototypeToken.actorLink":true
+                 }
+                 await Actor.create(actorData, {"renderSheet":true});
+                 return;
+            }
+    
+            if (default_name === "fate-core-official"){
+                await Actor.create({"name":actor_name, "type":"fate-core-official", ownership: perm, "prototypeToken.actorLink":true},{renderSheet:true});
+                return;
+            }
+            await f.createCharacterFromDefault(default_name, actor_name, true);
+        });
+    } else {
+        html.querySelector('select[class="MF_default_to_use"]').innerHTML=`${options}`
+    }
 });
 
-class ManageDefaults extends FormApplication {
+class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     constructor(...args){
         super(...args);
         this.editing = false;
         game.system.mdf = this;
     }
 
-    async _render(html){
-        // Override render to give focus back to the field that had focus when the 
-        let type = $(':focus').attr('name');
-        let focused = $(':focus').data('default_name');
-        await super._render(html);
+    //Set up the default options for instances of this class
 
-        if (type == "def_name"){
-            const fo = html.find(`[name="def_name"][data-default_name="${focused}"]`);
-            fo.focus();
-        }
+    static DEFAULT_OPTIONS = {
+        window: {
+            title: this.title,
+            icon: "fas fa-id-card"
+        },
+        tag: "div",
 
-        if (type == "def_desc"){
-            const fo = $(`[name="def_desc"][data-default_name="${focused}"]`);
-            fo.focus();
+    }
+
+    static PARTS = {
+        "fcoDefaults": {
+            template:  "systems/fate-core-official/templates/ManageDefaults.html",
         }
     }
 
-    //Set up the default options for instances of this class
+    get title() {
+        return `${game.i18n.localize("fate-core-official.defaultSetup")} in ${game.world.title}`;
+    }
+
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
@@ -447,10 +486,10 @@ class ManageDefaults extends FormApplication {
     }
     //The function that returns the data model for this window. In this case, we need the list of stress tracks
     //conditions, and consequences.
-    async getData(){
+    async _prepareContext (){
         let f = new FateCharacterDefaults();
         let defaults = [];
-        let def_objs = await foundry.utils.duplicate(game.settings.get("fate-core-official","defaults"));
+        let def_objs = await foundry.utils.duplicate(fcoConstants.wd().system.defaults);
         for (let o in def_objs){
             defaults.push(def_objs[o]);
         }
@@ -464,39 +503,41 @@ class ManageDefaults extends FormApplication {
     }
 
     //Here are the action listeners
-    activateListeners(html) {
-        super.activateListeners(html);
-
-        const toggle_edit = $('#md_toggle_edit');
-        if (toggle_edit.hasClass("fa-toggle-off")){
+    async _onRender(context, options) {
+        // Remove focus on re-rendering. We don't want to tab through the application if we just changed a value.
+        document.activeElement.blur();
+        
+        const toggle_edit = this.element.querySelector('#md_toggle_edit');
+        if (toggle_edit.classList.contains("fa-toggle-off")){
             this.editing = false;
-                $('button[name="delete_default"]').hide();
+                this.element.querySelectorAll('button[name="delete_default"]').forEach(item => item.hidden = true);
         }
 
-        toggle_edit.on('click', (event, html) => {
-            toggle_edit.toggleClass("fa-toggle-off");
-            toggle_edit.toggleClass("fa-toggle-on");
-            if (toggle_edit.hasClass("fa-toggle-off")){
+        toggle_edit?.addEventListener('click', (event) => {
+            toggle_edit.classList.toggle("fa-toggle-off");
+            toggle_edit.classList.toggle("fa-toggle-on");
+            if (toggle_edit.classList.contains("fa-toggle-off")){
                 this.editing = false;
-                $('.md_edit').prop('disabled', true);
-                $('button[name="delete_default"]').hide();
+                this.element.querySelectorAll('.md_edit').forEach (item => item.disabled = true);
+                this.element.querySelectorAll('button[name="delete_default"]').forEach(item => item.hidden = true)
             }
-            if (toggle_edit.hasClass("fa-toggle-on")){
+            if (toggle_edit.classList.contains("fa-toggle-on")){
                 this.editing = true;
-                $('.md_edit').prop('disabled', false)
-                $('button[name="delete_default"]').show();
+                this.element.querySelectorAll('.md_edit').forEach(item => item.disabled = false);
+                this.element.querySelectorAll('button[name="delete_default"]').forEach(item => item.hidden = false);
             }
         })
+        
 
-        const displayButton = $("button[name='inspect_default']");
-        displayButton.on('click', async (event, html)=> {
+        const displayButton = this.element.querySelectorAll("button[name='inspect_default']");
+        displayButton.forEach(button => button?.addEventListener('click', async (event, html)=> {
             let f = new FateCharacterDefaults();
-            let def = await f.getDefault(event.target.getAttribute("Data-default_name"));
+            let def = await f.getDefault(event.target.dataset.default_name);
             let prompt = game.i18n.localize("fate-core-official.defaultCharacterFramework")+ " " + def.default_name;
             let presentation = await f.presentDefault(def.default_name);
             let actorLink;
             if (presentation.actorLink){
-                actorLink = '<i class = "far fa-toggle-on-square fa-2x" title="On"/>';
+                actorLink = '<i class = "fas fa-check-square fa-2x" title="On"/>';
             } else {
                 actorLink = '<i class = "far fa-square fa-2x" title="Off"/>';
             }
@@ -576,78 +617,56 @@ class ManageDefaults extends FormApplication {
                     </table>
                 </div>
                 `
-            await fcoConstants.awaitOKDialog(prompt, content, "100em", "50em");
-        })
+            await fcoConstants.awaitOKDialog(prompt, content, 500);
+        }))
 
-        const imp = $('#md_import');
-        const exp_all = $('#md_export_all');
-        const exp_sel = $('#md_export_selected');
+        const imp = this.element.querySelector('#md_import');
+        const exp_all = this.element.querySelector('#md_export_all');
+        const exp_sel = this.element.querySelector('#md_export_selected');
 
-        imp.on('click', async (event, html)=>{
-            let str = await new Promise(resolve => {
-                new Dialog({
-                    title: game.i18n.localize("fate-core-official.PasteDefaults"),
-                    content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_defaults"></textarea></div>`,                    buttons: {
-                        ok: {
-                            label: "Save",
-                            callback: () => {
-                                resolve (document.getElementById("import_defaults").value);
-                            }
-                        }
-                    },
-                }).render(true)
-            });
+        imp?.addEventListener('click', async (event, html)=>{
+            let str = await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteDefaults"));
             let f = new FateCharacterDefaults();
             await f.importDefaults(str);
         })
 
-        exp_all.on('click', async (event, html)=>{
+        exp_all?.addEventListener('click', async (event, html)=>{
             let f = new FateCharacterDefaults();
             let str = await f.exportDefaults();
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), 
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${str}</textarea></div>`,
-                buttons: {
-                },
-            }).render(true);
+            fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), str);
         })
 
-        exp_sel.on('click', async (event, html)=>{
+        exp_sel?.addEventListener('click', async (event, html)=>{
             let f = new FateCharacterDefaults();
-            let boxes = $("input[name='def_select']");
+            let boxes = this.element.querySelectorAll("input[name='def_select']");
             let list = [];
             for (let box of boxes){
                 if (box.checked) list.push(box.dataset.default_name);
+                box.checked = false;
             }
-            $("input[name='def_select']").prop('checked', false);
             let str = await f.exportDefaults(list);
-           new Dialog({
-                title: game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), 
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="stunt_db">${str}</textarea></div>`,
-                buttons: {
-                },
-            }).render(true);
+            fcoConstants.getCopiableDialog(game.i18n.localize("fate-core-official.copyAndPasteToSaveDefaults"), str);
         })
     
-        const d_name = html.find("input[name='def_name']");
-        d_name.on('change', async (event, html) =>{
+        const d_name = this.element.querySelectorAll("input[name='def_name']");
+        d_name.forEach(name => name?.addEventListener('change', async (event, html) =>{
             let f = new FateCharacterDefaults();
             let oldName = event.target.getAttribute("data-oldValue");
             let newName = event.target.value;
             await f.renameDefault(oldName, newName);
-        })     
+        }))     
 
-        const d_desc = html.find("input[name='def_desc']");
-        d_desc.on('change', async (event, html) =>{
+        const d_desc = this.element.querySelectorAll("input[name='def_desc']");
+        d_desc.forEach(desc => desc?.addEventListener('change', async (event, html) =>{
             let f = new FateCharacterDefaults();
             await f.editDescription(event.target.getAttribute("data-default_name"), event.target.value);
-        })     
+        }))     
 
-        const d_def = html.find("button[name='delete_default']");
-        d_def.on("click", async (event, html) =>{
+        const d_def = this.element.querySelectorAll("button[name='delete_default']");
+        d_def.forEach(def => def?.addEventListener("click", async (event, html) =>{
             let f = new FateCharacterDefaults();
             let del = await fcoConstants.confirmDeletion();
             if (del) await f.removeDefault(event.target.getAttribute("data-default_name"));
-        })
+        }))
     }
 }

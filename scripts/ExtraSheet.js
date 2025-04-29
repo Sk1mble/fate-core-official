@@ -1,27 +1,21 @@
-export class ExtraSheet extends ItemSheet {
+export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ItemSheetV2) {
     constructor (...args){
         super(...args);
-        this.options.title = `${game.i18n.localize("fate-core-official.Extra")}: ${this.object.name}`
         this.track_category = "All";
+        this.object = this.document;
     }
 
-    async _render(...args){
+    async render(...args){
         if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
                     this.renderPending = true;
                     setTimeout(async () => {
-                        await super._render(...args);
-                        var avatar = $('.mfate-sheet_extra-avatar')
+                        await super.render(...args);
+                        let avatar = this.element.querySelector('.mfate-sheet_extra-avatar');
                         let doc = this.document;
                         let newsrc;
                         let target_id;
                         let this_id = this.document.id;
-
-                        for (let av of avatar){
-                            if (av.id.split("_")[0] == this_id){
-                                avatar = av;
-                            }
-                        }
 
                         new MutationObserver(async function onSrcChange(MutationRecord){
                             // Code to update avatar goes here
@@ -33,7 +27,7 @@ export class ExtraSheet extends ItemSheet {
 
                             let src = MutationRecord[0].target.src;
                             if (src.startsWith(window.location.origin)){
-                                newsrc = (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
+                                newsrc = "/" + (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
                             } else {
                                 newsrc = src;
                             }
@@ -58,14 +52,19 @@ export class ExtraSheet extends ItemSheet {
     }
     
     get title(){
+        let title = this.object.name;
         let mode = "";
         if (!this.isEditable) mode = " ("+game.i18n.localize ("fate-core-official.viewOnly")+")";
-        return this.object.name + mode;
+        if (this.document.actor){
+            title += ` - ${this.document.actor.name}`
+        }
+        return title;
     }
 
-    async getData() {        
+    async _prepareContext() {        
         const data = {};
         data.document = this.document;
+        data.actorExists = !!this.document?.actor
         let fcoc = new fcoConstants();
         data.ladder = fcoc.getFateLadder();
         let track_categories = this.object.system.tracks;
@@ -79,9 +78,8 @@ export class ExtraSheet extends ItemSheet {
         data.track_categories = track_categories;
         let skills_label = game.settings.get("fate-core-official", "skillsLabel");
         data.skillsLabel = skills_label || game.i18n.localize("fate-core-official.defaultSkillsLabel");
-        data.dataTemplate = () => `systems/fate-core-official/templates/ExtraSheet.html`;
         data.GM=game.user.isGM;
-        if (this.object?.system?.contents != undefined && !jQuery.isEmptyObject(this.object?.system?.contents))
+        if (this.object?.system?.contents != undefined && Object.keys(this?.object?.system?.contents).length > 0)
         {
             data.contents = this.object.system.contents;
         }
@@ -98,54 +96,82 @@ export class ExtraSheet extends ItemSheet {
         data.rich.attack = await fcoConstants.fcoEnrich (data.document.system.actions.attack, this.object);
         data.rich.defend = await fcoConstants.fcoEnrich (data.document.system.actions.defend, this.object);
         data.rich.stunts = foundry.utils.duplicate(data.document.system.stunts);
+        data.editable = this.isEditable;
+
         for (let st in data.rich.stunts){
             data.rich.stunts[st].richDesc = await fcoConstants.fcoEnrich (data.rich.stunts[st].description, this.object);
         }
         return data;
     }
 
-    activateListeners(html){
-        if (!this.isEditable) return;
-        super.activateListeners(html);
-        const delete_stunt = html.find("button[name='delete_item_stunt']");
-        delete_stunt.on("click", event => this._onDelete(event,html));
-        const edit_stunt = html.find("button[name='edit_item_stunt']")
-        edit_stunt.on("click", event => this._onEdit (event,html));
-        const db_add = html.find("button[name='item_db_stunt']");
-        const stunts_button = html.find("div[name='edit_item_stunts']");
-        db_add.on("click", event => this._db_add_click(event, html));
-        stunts_button.on("click", event => this._onStunts_click(event, html));
-        const stunt_db = html.find("div[name='item_stunt_db']");
-        stunt_db.on("click", event => this._stunt_db_click(event, html));
-        const aspectButton = html.find("div[name='edit_item_aspects']");
-        aspectButton.on("click", event => this._onAspectClick(event, html));
-        const skillsButton = html.find("div[name='edit_item_skills']");;
-        skillsButton.on("click", event => this._onSkillsButton(event, html));
-        const cat_select = html.find("select[id='item_track_category']");
-        cat_select.on("change", event => this._cat_select_change (event, html));
-        const tracks_button = html.find("div[name='edit_item_tracks']"); // Tracks, tracks, check
-        tracks_button.on("click", event => this._onTracks_click(event, html));
+    _onRender (context, options){
+        // Disable form if not editable
+        if (!this.isEditable) {
+            for (const el of this.element.querySelectorAll(".window-content :is(input, button, select, textarea)")) {
+                el.disabled = true;
+            }
+            return;
+        }
+        const delete_stunt = this.element.querySelectorAll("button[name='delete_item_stunt']"); //The button for deleting each stunt from the Extra. Multiple.
+        delete_stunt?.forEach(button => button?.addEventListener("click", event => this._onDelete(event)));
 
-        const ul_all_stunts = html.find('div[name="ul_all_extra_stunts"]');
-        ul_all_stunts.on('click', event => fcoConstants.ulStunts(this.object.system.stunts));
+        const edit_stunt = this.element.querySelectorAll("button[name='edit_item_stunt']") // The button for editing a stunt. Multiple.
+        edit_stunt?.forEach(stunt => stunt?.addEventListener("click", event => this._onEdit (event)));
+        
+        const db_add = this.element.querySelectorAll("button[name='item_db_stunt']"); // The button for adding a stunt to the database. Multiple.
+        db_add?.forEach(button => button?.addEventListener("click", event => this._db_add_click(event)));
+        
+        const stunts_button = this.element.querySelector("div[name='edit_item_stunts']"); // Button for adding a stunt. Singleton.
+        stunts_button?.addEventListener("click", event => this._onStunts_click(event));
 
-        const input = html.find('input[type="text"], input[type="number"], div[name="textIn"], textarea');
+        const stunt_db = this.element.querySelector("div[name='item_stunt_db']"); // Button to launch the stunt database. Singleton.
+        stunt_db?.addEventListener("click", event => this._stunt_db_click(event));
 
-        const mfdraggable = html.find('.mf_draggable');
-            mfdraggable.on("dragstart", event => {
+        const aspectButton = this.element.querySelector("div[name='edit_item_aspects']"); // Button for launching the aspect editor. Singleton.
+        aspectButton?.addEventListener("click", event => this._onAspectClick(event));
+
+        const skillsButton = this.element.querySelector("div[name='edit_item_skills']"); // Button for launching the skill editor. Singleton.
+        skillsButton?.addEventListener("click", event => this._onSkillsButton(event));
+
+        const cat_select = this.element.querySelector("select[name='item_track_category']"); // The selection box for filtering track categories. Singleton.
+        cat_select?.addEventListener("change", event => this._cat_select_change (event));
+
+        const tracks_button = this.element.querySelector("div[name='edit_item_tracks']"); // Button for launching the track editor. Singleton.
+        tracks_button?.addEventListener("click", event => this._onTracks_click(event));
+
+        const ul_all_stunts = this.element.querySelector('div[name="ul_all_extra_stunts"]'); // Button for uploading all stunts. Singleton.
+        ul_all_stunts?.addEventListener('click', event => fcoConstants.ulStunts(this.object.system.stunts));
+
+        const pms = this.element.querySelectorAll(".fco_prose_mirror");
+        pms.forEach(pm => {
+            pm.querySelector(".editor-content").addEventListener("focus", () => {
+                this.editing = true;
+            });
+
+            pm.querySelector(".editor-content").addEventListener("focusout", async (event) => {
+                await this.submit();
+            });
+
+            pm.addEventListener("change", async (event) => {
+                await this.submit();
+                if (!pm.querySelector(".editor-container")) {
+                    this.editing = false;
+                    this.render(false);
+                }
+            });
+        })
+
+        const input = this.element.querySelectorAll('input[type="text"], input[type="number"], div[name="textIn"], textarea'); // Find all the text areas for the purpose of dealing with blur, click, etc. events
+
+        const mfdraggable = this.element.querySelectorAll('.mf_draggable'); // The draggable elements for Fate Core Official. Used to handle drag & drop and double click events.
+            mfdraggable?.forEach(draggable => draggable?.addEventListener("dragstart", event => {
                 if (game.user.isGM){
                     let ident = "mf_draggable"
                     let type = event.target.getAttribute("data-mfdtype");
                     let origin = event.target.getAttribute("data-mfactorid");
                     let dragged_name = event.target.getAttribute("data-mfname");
 
-                    let shift_down = false; 
-                    if (foundry.utils.isNewerVersion(game.version, "9.230")){
-                        shift_down = game.system["fco-shifted"];    
-                    } else {
-                        shift_down = keyboard.isDown("Shift");
-                    }
-
+                    let shift_down = game.system["fco-shifted"];  
                     let dragged;
                     if (type == "skill") dragged = fcoConstants.gbn(this.document.system.skills, dragged_name);
                     if (type == "stunt") dragged = fcoConstants.gbn(this.document.system.stunts, dragged_name);
@@ -153,11 +179,11 @@ export class ExtraSheet extends ItemSheet {
                     if (type == "track") dragged = fcoConstants.gbn(this.document.system.tracks, dragged_name);
                     let user = game.user.id;
                     let drag_data = {ident:ident, userid:user, type:type, origin:origin, dragged:dragged, shift_down:shift_down};
-                    event.originalEvent.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
+                    event.dataTransfer.setData("text/plain", JSON.stringify(drag_data));
                 }
-            })
+            }))
 
-            mfdraggable.on("dblclick", event => {
+            mfdraggable?.forEach(draggable => draggable?.addEventListener("dblclick", event => {
                 let content = `<strong>${game.i18n.format("fate-core-official.sharedFrom",{name:this.object.name})}</strong><br/><hr>`
                 let user = game.user;
                 let type = event.currentTarget.getAttribute("data-mfdtype");
@@ -204,226 +230,145 @@ export class ExtraSheet extends ItemSheet {
                         content += `<\em>`
                     }
                 }
+                ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
+            }))
 
-                ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_TYPES.OOC })
-            })
+        this.element.querySelector('.fcoExtraSheetForm')?.addEventListener('drop', async event => await this.onDrop(event));
 
-        $('.fcoExtra').on('drop', async event => await this.onDrop(event, html))
-
-        // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
-        //First, Create Pen editor
-        fcoConstants.getPen(`${this.document.id}_descValue`);
-        //Get reference to field so we can update extra on change
-        const desc = $(`#${this.document.id}_descValue`);
-        //Update the extra when the field loses focus.
-        desc.on("blur", async event => {
-            await this.document.update({"system.description.value":DOMPurify.sanitize(event.target.innerHTML)})
-        })
-        //That's the description field; still to come permissions, costs, caa, attack,overcome, defend
-        // We need one of these for each field that we're setting up as a contenteditable DIV rather than a simple textarea.
-        
-        //First, Create Pen editors
-        fcoConstants.getPen(`${this.document.id}_permValue`);
-        fcoConstants.getPen(`${this.document.id}_costsValue`);
-        fcoConstants.getPen(`${this.document.id}_overcomeValue`);
-        fcoConstants.getPen(`${this.document.id}_attackValue`);
-        fcoConstants.getPen(`${this.document.id}_createValue`);
-        fcoConstants.getPen(`${this.document.id}_defendValue`);
-    
-        input.on("focus", event => {
+        input?.forEach(field => field?.addEventListener("focus", event => {
             if (this.editing == false) {
                 this.editing = true;
             }
-        });
-        input.on("blur", async event => {
+        }));
+
+        input?.forEach(field => field?.addEventListener("blur", async event => {
             if (this.renderBanked){
                 this.renderBanked = false;
-                await this._render(false);
+                await this.render(false);
             }
-        });
+        }));
         
-        input.on("keyup", event => {
-            if (event.keyCode === 13 && event.target.type == "input") {
+        input?.forEach(field => field?.addEventListener("keyup", event => {
+            if (event.code === "Enter" && event.target.type == "input") {
                 input.blur();
             }
-        })
+        }))
 
         // Let's do this update ourselves. I know how to make my own code work without fricking stack overflow errors and recursions!
-
-        const name = html.find("textarea[name='name']");
+        const name = this.element.querySelector("textarea[name='name']");
     
-        name.on("change", async event => {
+        name?.addEventListener("change", async event => {
             let newName = event.target.value;
             await this.document.update({"name":newName});
         })
 
-        let fields = ["descValue", "overcomeValue", "permValue", "costsValue", "createValue", "attackValue", "defendValue"];
-        for (let field of fields){
-            $(`#${this.document.id}_${field}_rich`).on('click', event => {
-                if (event.target.outerHTML.startsWith ("<a data")) return;
-                $(`#${this.document.id}_${field}_rich`).css('display', 'none');
-                $(`#${this.document.id}_${field}`).css('display', 'block');
-                $(`#${this.document.id}_${field}`).focus();
-            })
-
-            $(`#${this.document.id}_${field}_rich`).on('contextmenu', async event => {
-                let text = await fcoConstants.updateText("Edit raw HTML",event.currentTarget.innerHTML);
-                if (text != "discarded") {
-                    this.editing = false;
-                    if (field == "descValue"){
-                        await this.document.update({"system.description.value":text});
-                    }
-                    if (field == "overcomeValue"){
-                        await this.document.update({"system.actions.overcome":text});                        
-                    }
-                    if (field == "permValue"){
-                        await this.document.update({"system.permissions":text});
-                    }
-                    if (field == "costsValue"){
-                        await this.document.update({"system.costs":text});
-                    }
-                    if (field == "createValue"){
-                        await this.document.update({"system.actions.create":text});
-                    }
-                    if (field == "attackValue"){
-                        await this.document.update({"system.actions.attack":text});
-                    }
-                    if (field == "defendValue"){
-                        await this.document.update({"system.actions.defend":text});
-                    }
-                    await this._render(false);
-                }
-            })
-
-            $(`#${this.document.id}_${field}`).on('blur', async event => {
-                if (!window.getSelection().toString()){
-                    let data = DOMPurify.sanitize(event.target.innerHTML);
-                    if (field == "descValue"){
-                        await this.document.update({"system.description.value":data});
-                        this.editing = false;
-                        await this._render(false);
-                    }
-                    if (field == "overcomeValue"){
-                        await this.document.update({"system.actions.overcome":data});
-                        this.editing = false;
-                        await this._render(false);
-                    }
-                    if (field == "permValue"){
-                        await this.document.update({"system.permissions":data});
-                        this.editing = false;
-                        await this._render(false);
-                    }
-                    if (field == "costsValue"){
-                        await this.document.update({"system.costs":data});
-                        this.editing = false;
-                        await this._render(false);
-                    }
-                    if (field == "createValue"){
-                        await this.document.update({"system.actions.create":data});
-                        this.editing = false;
-                        await this._render(false);
-                    }
-                    if (field == "attackValue"){
-                        await this.document.update({"system.actions.attack":data});
-                        this.editing = false;
-                        await this._render(false);
-                    }
-                    if (field == "defendValue"){
-                        await this.document.update({"system.actions.defend":data});
-                        this.editing = false;
-                        await this._render(false)
-                    }
-                }
-            })
-        }
-
-        const refresh = html.find("input[name='system.refresh']");
-        refresh.on("change", async event => {
+        const refresh = this.element.querySelector("input[name='system.refresh']");
+        refresh?.addEventListener("change", async event => {
             let r = parseInt(event.target.value);
             await this.document.update({"system.refresh":r});
         })
 
-        const countSkills = html.find("input[name='system.countSkills']");
-        countSkills.on("change", async event => {
+        const countSkills = this.element.querySelector("input[name='system.countSkills']");
+        countSkills?.addEventListener("change", async event => {
             let value = event.target.checked;
             await this.document.update({"system.countSkills":value});
         })
 
-        const combineSkills = html.find("input[name='system.combineSkills']");
-        combineSkills.on("change", async event => {
+        const combineSkills = this.element.querySelector("input[name='system.combineSkills']");
+        combineSkills?.addEventListener("change", async event => {
             let value = event.target.checked;
             await this.document.update({"system.combineSkills":value})
         })
 
-        const countThisSkill = html.find("input[class='count_this_skill']");
-        countThisSkill.on('click', async event => {
+        const countThisSkill = this.element.querySelectorAll("input[class='count_this_skill']");
+        countThisSkill?.forEach(skill => skill?.addEventListener('click', async event => {
             let skill = foundry.utils.duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.countMe = event.target.checked;
             let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
             await this.document.update({"system.skills":{[`${key}`]:skill}});
-        })
+        }))
 
-        const combineThisSkill = html.find("input[class='combine_this_skill']");
-        combineThisSkill.on('click', async event => {
+        const combineThisSkill = this.element.querySelectorAll("input[class='combine_this_skill']");
+        combineThisSkill?.forEach(skill => skill?.addEventListener('click', async event => {
             let skill = foundry.utils.duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.combineMe = event.target.checked;
             let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
             await this.document.update({"system.skills":{[`${key}`]:skill}})
-        })
+        }))
 
-        const hideThisSkill = html.find("input[class='hide_this_skill']");
-        hideThisSkill.on('click', async event => {
+        const hideThisSkill = this.element.querySelectorAll("input[class='hide_this_skill']");
+        hideThisSkill?.forEach(skill => skill?.addEventListener('click', async event => {
             let skill = foundry.utils.duplicate(fcoConstants.gbn(this.document.system.skills, event.target.getAttribute("data-skill")));
             skill.hidden = event.target.checked;
             let key = fcoConstants.gkfn(this.document.system.skills, skill.name);
             await this.document.update({"system.skills":{[`${key}`]:skill}})
-        })
+        }))
 
-        const active = html.find("input[name='system.active']");
-        active.on("change", async event => {
-            let value = event.target.checked;
+        const active = this.element.querySelector("input[name='system.active']");
+        active?.addEventListener("change", async event => {
+            await this.document.update({"system.active":event.target.checked})
             if (this.document.parent){
-                if (value){
-                    this.document.parent.updateFromExtra(this.document);
+                if (event.target.checked){
+                    await this.document.parent.updateFromExtra(this.document);
                 } else {
-                    this.document.parent.deactivateExtra(this.document);
+                    await this.document.parent.deactivateExtra(this.document);
                 }
-            }
-            await this.document.update({"system.active":value})
+            }    
         })
 
-        const aspect = html.find("textarea[class='cs_box mfate-aspects-list__input']");
-        aspect.on("change", async event => {
+        const aspect = this.element.querySelectorAll("textarea[class='cs_box mfate-aspects-list__input']");
+        aspect?.forEach(aspect => aspect.addEventListener("change", async event => {
             let name = event.target.name;
             let key = fcoConstants.gkfn(this.document.system.aspects, name);
             let value = event.target.value;
             let field = `system.aspects.${key}.value`
             await this.document.update({[field]:value});
-        })
+        }))
+
+        const applyToCharacterButton = this.element.querySelector("button[name='applyExtraToCharacter']");
+        applyToCharacterButton?.addEventListener("click", async event => {
+            if (this.document.parent){
+                if (this.document.parent.type == "fate-core-official" && this.document.system.active){
+                    await this.document.parent.updateFromExtra(this.document);
+                } else {
+                    if (this.document.parent.type == "fate-core-official" && !this.document.system.active){
+                        await this.document.parent.deactivateExtra(this.object)
+                    }
+                }
+                this.editing = false;
+            }
+        });
     }
     
 
-    async _onTracks_click(event, html) {
+    async _onTracks_click(event) {
         //Launch the EditPlayerTracks FormApplication.
         let editor = new EditPlayerTracks(this.object); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
         await editor.render(true);
         try {
-            editor.bringToTop();
+            editor.bringToFront();
         } catch  {
             // Do nothing.
         }
     }
 
-    async _cat_select_change (event, html){
+    async _cat_select_change (event){
         this.track_category = event.target.value;
         this.render(false);
     }
 
-    async onDrop(event, html){
+    async onDrop(event){
         if (this.document.isOwner){
-            let data = JSON.parse(event.originalEvent.dataTransfer.getData("text/plain"));
+            let data = undefined;
+            try {
+                data = JSON.parse(event.dataTransfer.getData("text/plain"));
+            } catch {
+                //This was not an object, so do nothing
+                return;
+            }
+            if (!data) return;
             let extra = this.document;
             //First check it's not from the same sheet
             if (data.ident !== "mf_draggable") return;
@@ -435,7 +380,7 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.stunts, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 await extra.update({"system.stunts":{[key]:data.dragged}});
             }
@@ -445,7 +390,7 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.aspects, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 if (!data.shift_down){
                     data.dragged.value = "";
@@ -459,7 +404,7 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.skills, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 if (!data.shift_down){
                     data.dragged.rank = 0;
@@ -492,55 +437,54 @@ export class ExtraSheet extends ItemSheet {
                 if (old) {
                     key = fcoConstants.gkfn(extra.system.tracks, data.dragged.name);
                     let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.overwrite_element"), game.i18n.localize("fate-core-official.exists"));
-                    if (answer == "no") return
+                    if (!answer) return
                 } 
                 await extra.update({"system.tracks":{[key]:track}});
             }
         }
     }
     
-
-    async _onSkillsButton(event, html) {
+    async _onSkillsButton(event) {
         //Launch the EditPlayerSkills FormApplication.
         let editor = new EditPlayerSkills(this.object); //Passing the actor works SOO much easier.
         editor.render(true);
         editor.setSheet(this);
         try {
-            editor.bringToTop();
+            editor.bringToFront();
         } catch  {
             // Do nothing.
         }
     }
 
-    async _onAspectClick(event, html) {
+    async _onAspectClick(event) {
             let av = new EditPlayerAspects(this.object);
             av.render(true);
             try {
-                av.bringToTop();
+                av.bringToFront();
             } catch  {
                 // Do nothing.
             }
     }
 
-    async _db_add_click(event, html){
-        let name = event.target.id.split("_")[0];
-        let db = foundry.utils.duplicate(game.settings.get("fate-core-official","stunts"));
-        db[fcoConstants.tob64(name)]=fcoConstants.gbn(this.object.system.stunts, name);
-        await game.settings.set("fate-core-official","stunts",db);
+    async _db_add_click(event){
+        let name = event.target.dataset.stuntname;
+        let stunt = foundry.utils.duplicate(fcoConstants.gbn(this.object.system.stunts, name));
+        let key = fcoConstants.tob64(stunt.name);
+        await fcoConstants.wd().update({"system.stunts":{[`${key}`]:stunt}});
         ui.notifications.info(`${game.i18n.localize("fate-core-official.Added")} ${name} ${game.i18n.localize("fate-core-official.ToTheStuntDatabase")}`);
     }
 
-    async _stunt_db_click(event, html){
+    async _stunt_db_click(event){
         let sd = new StuntDB(this.object);
         sd.render(true);
         try {
-            sd.bringToTop();
+            sd.bringToFront();
         } catch  {
             // Do nothing.
         }
     }
 
-    async _onStunts_click(event, html) {
+    async _onStunts_click(event) {
         //Launch the EditPlayerStunts FormApplication.
         let stunt = {
             "name":game.i18n.localize("fate-core-official.NewStunt"),
@@ -557,53 +501,67 @@ export class ExtraSheet extends ItemSheet {
         editor.render(true);
         editor.setSheet(this);
         try {
-            editor.bringToTop();
+            editor.bringToFront();
         } catch  {
             // Do nothing.
         }
     }
 
-    async _onEdit (event, html){
-        let name=event.target.id.split("_")[0];
+    async _onEdit (event){
+        let name=event.target.dataset.stuntname;
         let editor = new EditPlayerStunts(this.object, fcoConstants.gbn(this.object.system.stunts, name), {new:false});
         editor.render(true);
         editor.setSheet(this);
         try {
-            editor.bringToTop();
+            editor.bringToFront();
         } catch  {
             // Do nothing.
         }
     }
 
-    async _onDelete(event, html){
+    async _onDelete(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            let name = event.target.id.split("_")[0];
+            let name = event.target.dataset.stuntname;
             let key = fcoConstants.gkfn(this.object.system.stunts, name)
             await this.object.update({"system.stunts":{[`-=${key}`]:null}});
         }
     }
 
-    get template (){
-        return 'systems/fate-core-official/templates/ExtraSheet.html';
-    }
-
-    async _on_boxes_change(html, event){
+    async _on_boxes_change(event){
         let num = parseInt(DOMPurify.sanitize(event.target.innerHTML));
     }
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.classes = options.classes.concat(['fate', 'item', 'fcoExtra']);
-        options.width = 850;
-        options.height = 850;
-        options.resizable = true;
-        options.submitOnChange = false;  
-        options.submitOnClose = false;
-        return options;
+
+    static DEFAULT_OPTIONS = {
+        classes: ['fate', 'item', 'fcoExtra'],
+        tag: "form",
+        position: {
+            width: 850,
+        },
+        window: {
+            title: this.title,
+            resizable: false,
+            icon: "fas fa-scroll",
+            resizable:true
+        },
+        form: {
+            submitOnChange: false,
+            submitOnClose: true,
+            closeOnSubmit: false,
+        }
+    }
+
+    static PARTS = {
+        ExtraSheetForm: {
+            template: 'systems/fate-core-official/templates/ExtraSheet.html',
+            scrollable: ['.fcoExtraSheetForm']
+        }
     }
 
     async close(...args){
+        if (this.options.form.submitOnClose) await this.submit();
         await super.close(...args);
+        this.editing = false;
         if (this.document.parent){
             if (this.document.parent.type == "fate-core-official" && this.document.system.active){
                 await this.document.parent.updateFromExtra(this.document);
@@ -611,9 +569,8 @@ export class ExtraSheet extends ItemSheet {
                 if (this.document.parent.type == "fate-core-official" && !this.document.system.active){
                     await this.document.parent.deactivateExtra(this.object)
                 }
-                
             }
         }
-        this.editing = false;
+
     }
 }

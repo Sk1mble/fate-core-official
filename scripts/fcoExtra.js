@@ -1,4 +1,14 @@
 export class fcoExtra extends Item {
+    
+    // Hide the object that has been set to store the settings for this World so it can't be accidentally tampered with
+    get visible(){
+        if (this.type === "Extra" && fromUuidSync(game.settings.get("fate-core-official","wid"))?.id == this.id && game.system.showWD !== true){
+            return false;
+        } 
+        else {
+            return super.visible;
+        }
+    }
 
     async _preCreate(...args){
         await super._preCreate(...args);
@@ -13,27 +23,29 @@ export class fcoExtra extends Item {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    this.updateSource({"system":{[type]:null}})
-                    this.updateSource({"system":{[type]:output}})
+                    this.updateSource({"system":{[`==${type}`]:output}})
                 }
             }
         }
     }
 
     async rationaliseKeys(){
-        let types = ["aspects", "tracks", "stunts", "skills"];
+        let types = ["aspects", "tracks", "stunts", "skills", "defaults"];
         if (this.type == "Extra"){
             for (let type of types) {
                 let block = this.system[type];
                 let output= {};
                 for (let item in block){
-                    output[fcoConstants.tob64(block[item].name)] = block[item];
+                    if (type == "defaults"){
+                        output[fcoConstants.tob64(block[item].default_name)] = block[item];
+                    } else {
+                        output[fcoConstants.tob64(block[item].name)] = block[item];
+                    }
                 }
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    await this.update({"system":{[type]:null}})
-                    await this.update({"system":{[type]:output}})
+                    await this.update({"system":{[`==${type}`]:output}})
                 }
             }
         }

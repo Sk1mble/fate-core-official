@@ -1,5 +1,6 @@
-<form onsubmit="event.preventDefault();">
-    <div align = "left"><h2>{{localize 'fate-core-official.EditingTracks'}} 
+<div style="margin:10px">
+    <div align = "left">
+        <p style="font-size:1.25rem; font-weight:bolder">{{localize 'fate-core-official.EditingTracks'}}
         {{#if (eq this.category "Combat")}}
             {{localize 'fate-core-official.Combat'}}
         {{else}}
@@ -10,22 +11,28 @@
             {{/if}}
         {{/if}}
         {{localize 'fate-core-official.category'}}
-    </h2></div>
-    <div><select id="track_select" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
+    </p> 
+    </div>
+    <div style = "display:flex; flex-direction:row; gap: 10px; margin-top:25px; margin-bottom:15px;">
+        <select id="track_select" style="font-size: 1rem; background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 50px">
         <option>{{localize 'fate-core-official.NewTrack'}}</option>
         {{#each tracks}}
-            <option>{{this.name}}</option>
+            <option {{#if (eq ../track.name this.name)}} selected="selected"{{/if}}>{{this.name}}</option>
         {{/each}}
-    </select><button type="button" id="copy" style="width:25px; height:25px" i icon class = "fas fa-copy"></button>
-             <button type="button" id="exportTrack" style="width:25px; height:25px" i icon class = "fas fa-file-export"></button>   
-            </div>
-    <table style="width:1000px" cellspacing ="4" cellpadding="4">
+    </select><button type="button" id="copy" style="width:50px; height:50px"><i class = "fas fa-copy fa-xl"></i></button>
+    <button type="button" id="exportTrack" style="width:50px; height:50px"><i class = "fas fa-file-export fa-xl"></i></button>   
+    </div>
+
+    <div style = "overflow-y:auto; max-height:60vh" class = "fco_scrollable">
+
+    
+    <table style="width:95%" cellspacing ="4" cellpadding="4">
         <tr>
-            <td width="100">
+            <td width="200">
                 {{localize 'fate-core-official.Name'}}:
             </td>
             <td>
-                <input type="text" id ="edit_track_name" style="background: white; color: black; font-family: var(--fco-font-family);"></input>
+                <input type="text" id ="edit_track_name" style="background: white; color: black; font-family: var(--fco-font-family);" value="{{track.name}}"></input>
             </td>
         </tr>
         <tr>
@@ -33,15 +40,16 @@
                 {{localize 'fate-core-official.Description'}}:
             </td>
             <td>
-                <div id ="edit_track_description_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family: var(--fco-font-family);"></div>
-                <div id ="edit_track_description" style="display:none; background: white; color: black; font-family: var(--fco-font-family);"></div>
+                <prose-mirror toggled="true" class="fco_prose_mirror fco_edit_track_desc"  name="description" value="{{track.description}}">
+                    {{{richDesc}}}
+                </prose-mirror>
             </td>
         </tr>
         <tr>
             <td>
                 {{localize 'fate-core-official.Universal'}}<p/><p/>
             <td>
-                <input type="checkbox" id="edit_track_universal" checked></input>{{localize 'fate-core-official.TrueIfFromSkillRating'}}<br/>
+                <input type="checkbox" id="edit_track_universal" {{#if track.universal}} checked="checked" {{/if}} ></input>{{localize 'fate-core-official.TrueIfFromSkillRating'}}<br/>
             </td>
         </tr>
         <tr>
@@ -49,7 +57,7 @@
                 {{localize 'fate-core-official.Unique'}}
             </td>
             <td>
-                <input type="checkbox" id="edit_track_unique" checked></input>{{localize 'fate-core-official.TrueIfOnlyOneCopy'}} 
+                <input type="checkbox" id="edit_track_unique" {{#if track.unique}} checked = "checked"{{/if}}></input>{{localize 'fate-core-official.TrueIfOnlyOneCopy'}} 
             </td>
         </tr>
         <tr>
@@ -57,7 +65,7 @@
                 {{localize 'fate-core-official.Paid'}}
             </td>
             <td>
-                <input type="checkbox" id="edit_track_paid"></input>{{localize 'fate-core-official.TrueIfCostsOneRefresh'}} 
+                <input type="checkbox" id="edit_track_paid" {{#if track.paid}}checked = "checked"{{/if}}></input>{{localize 'fate-core-official.TrueIfCostsOneRefresh'}} 
             </td>
         </tr>
         <tr>
@@ -66,9 +74,9 @@
             </td>
             <td>
                 <select id="edit_track_recovery_type" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value ="Fleeting">{{localize 'fate-core-official.Fleeting'}}</option>
-                    <option value ="Sticky">{{localize 'fate-core-official.Sticky'}}</option>
-                    <option value ="Lasting">{{localize 'fate-core-official.Lasting'}}</option>
+                    <option {{#if (eq track.recovery_type "Fleeting")}} selected="selected" {{/if}} value ="Fleeting">{{localize 'fate-core-official.Fleeting'}}</option>
+                    <option {{#if (eq track.recovery_type "Sticky")}} selected="selected" {{/if}} value ="Sticky">{{localize 'fate-core-official.Sticky'}}</option>
+                    <option {{#if (eq track.recovery_type "Lasting")}} selected="selected" {{/if}} value ="Lasting">{{localize 'fate-core-official.Lasting'}}</option>
                 </select>
             </td>
         </tr>
@@ -78,9 +86,9 @@
             </td>
             <td>
                 <select id="edit_track_aspect" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value="no">{{localize 'fate-core-official.No'}}</option>
-                    <option value="as_name">{{localize 'fate-core-official.NameAsAspect'}}</option>
-                    <option value = "when_marked">{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
+                    <option {{#if (eq track.aspect "no")}} selected="selected"{{/if}} value="no">{{localize 'fate-core-official.No'}}</option>
+                    <option {{#if (eq track.aspect "as_name")}} selected="selected"{{/if}} value="as_name">{{localize 'fate-core-official.NameAsAspect'}}</option>
+                    <option {{#if (eq track.aspect "when_marked")}} selected="selected"{{/if}} value = "when_marked">{{localize 'fate-core-official.DefinedWhenMarked'}}</option>
                 </select>
             </td>
         </tr>
@@ -89,8 +97,9 @@
                 {{localize 'fate-core-official.WhenMarked'}}
             </td>
             <td>
-                <div id ="edit_track_when_marked_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background: white; color: black; font-family: var(--fco-font-family);"></div>
-                <div id ="edit_track_when_marked" style="display:none; background: white; color: black; font-family: var(--fco-font-family);"></div>
+                <prose-mirror toggled = "true" class="fco_prose_mirror fco_edit_track_when_marked"  name="when_marked" value="{{track.when_marked}}">
+                    {{{richWhenMarked}}}
+                </prose-mirror>
             </td>
         </tr>
         <tr>
@@ -98,8 +107,9 @@
                 {{localize 'fate-core-official.HowRecover'}}
             </td>
             <td>
-                <div id ="edit_track_when_recovers_rich" tabindex = "0" style="min-height:1.5em; min-width:100%; background: white; color: black; font-family: var(--fco-font-family);"></div>
-                <div id ="edit_track_when_recovers" style="display:none; background: white; color: black; font-family: var(--fco-font-family);"></div>
+                <prose-mirror toggled = "true" class="fco_prose_mirror fco_edit_track_recovery_conditions"  name="recovery_conditions" value="{{track.recovery_conditions}}">
+                    {{{richRecovery}}}
+                </prose-mirror>
             </td>
         </tr>
         <tr>
@@ -107,7 +117,7 @@
                 {{localize 'fate-core-official.Boxes'}}
             </td>
             <td>
-                <input type="number" id="edit_track_boxes" value="0" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> 
+                <input type="number" id="edit_track_boxes" value="{{track.boxes}}" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> 
             </td>
         </tr>
         <tr>
@@ -115,18 +125,18 @@
                 {{localize 'fate-core-official.BoxLabels'}}:
             </td>
             <td>
-                <select id="track_label_select" style="color:black; background:white;" >
-                    <option value="escalating">
+                <select id="track_label_select" style="color:black; background:white; margin-bottom:5px;" >
+                    <option {{#if (eq track.label "escalating")}} selected="selected" {{/if}} value="escalating">
                         {{localize 'fate-core-official.Escalating'}}
                     </option>
-                    <option value="custom">
+                    <option {{#if (eq track.label "none")}}{{else}}{{#if (eq track.label "escalating")}}{{else}} selected = "selected"{{/if}}{{/if}} value="custom">
                         {{localize 'fate-core-official.Custom'}}
                     </option>
-                    <option selected="selected" value="none">
+                    <option {{#if (eq track.label "none")}} selected="selected" {{/if}} value="none">
                         {{localize 'fate-core-official.None'}}
                     </option>
                 </select>
-                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" hidden="true" style="color:black; background:white; width:50px" value="{{this.label}}"/> {{localize 'fate-core-official.LabelOverrides'}}
+                <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" {{#if (eq track.label "none")}} hidden="hidden"{{/if}} {{#if (eq track.label "escalating")}} hidden="hidden"{{/if}} style="margin-top:5px; color:black; background:white; width:50px" value="{{this.track.label}}"/> <span style="margin-top:5px">{{localize 'fate-core-official.LabelOverrides'}}</span>
             </td>
         </tr>
         <tr>
@@ -134,7 +144,9 @@
                 {{localize 'fate-core-official.Harm'}}:
             </td>
             <td>
-                <input type="number" id="edit_track_harm" value="0" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> {{localize 'fate-core-official.HowMuchHarm'}}
+                <div style="display:flex; flex-direction:row">
+                    <input type="number" id="edit_track_harm" value="{{track.harm_can_absorb}}" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> <p style="margin-left: 10px; margin-top:0px; vertical-align: text-top">{{localize 'fate-core-official.HowMuchHarm'}}</p>
+                </div>
             </td>
         </tr>
         <tr>
@@ -143,16 +155,15 @@
             </td>
             <td>
                 <select id = "edit_track_rollable" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px">
-                    <option value="false" selected="selected">False</option>
-                    <option value="full">{{localize 'fate-core-official.RollFullBoxes'}}</option>
-                    <option value="empty">{{localize 'fate-core-official.RollEmptyBoxes'}}</option>
+                    <option value="false" {{#if (eq track.rollable "false")}} selected="selected" {{/if}}>False</option>
+                    <option value="full" {{#if (eq track.rollable "full")}} selected="selected" {{/if}}>{{localize 'fate-core-official.RollFullBoxes'}}</option>
+                    <option value="empty" {{#if (eq track.rollable "empty")}} selected="selected" {{/if}}>{{localize 'fate-core-official.RollEmptyBoxes'}}</option>
                 </select>
             </td>
         </tr>
-        <tr>
-            <td colspan="2">
-                <button type="button" id="save_track" style="width:200px; height:50px">{{localize 'fate-core-official.Save'}}</button><button type="button" id="edit_linked_skills" style="width:200px; height:50px" disabled>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:30px; height:30px" id="delete_track" i icon class="fas fa-trash"></button>
-            </td>
-        </tr>
     </table>
-</form>
+</div>
+<div style = "display:flex; flex-direction:row; gap:20px; margin-top:20px">
+    <button type="button" id="edit_linked_skills" style="width:200px; height:50px" {{#if (eq track.name "New Track")}} disabled="disabled"{{/if}}>{{localize 'fate-core-official.EditLinkedSkills'}}</button><button type="button" style ="width:50px; height:50px" id="delete_track"><i class="fas fa-trash fa-xl"></i></button>
+</div>
+</div>

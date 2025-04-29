@@ -1,33 +1,33 @@
-<form class="editable" onsubmit="event.preventDefault();">
-<div style="max-height:75vh; overflow-y:auto">
-    <table style="border:none; background:none">
+<div>
+<div style="margin-bottom: 20px; max-height:65vh; overflow-y:auto;">
+    <table style="border:none; background:none; width:800px; max-width: 800px; padding:0; margin:0px">
     <tr>
-        <td colspan="2">
-            <hr><h3>{{localize 'fate-core-official.WorldSkillsPresent'}}</h3><hr>
+        <td colspan="2" style="padding:1rem 0rem 0rem 0rem">
+            <h3 style="margin: 0px 0px 0.5rem 0px">{{localize 'fate-core-official.WorldSkillsPresent'}}</h3>
         </td>
     </tr>
     {{#each present_skills}}
     {{#if (eq this.extra_id undefined)}}
     <tr>
-        <td style="width:100px">
-            <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
+        <td style="width:20px; padding-top:0rem; padding-bottom:0.1rem">
+            <input type="checkbox" class="skill_check_box" checked name="{{this.name}}"}>
         </td>
-        <td style="width:100%">
+        <td>
             {{this.name}}
         </td>
     </tr>
     {{else}}{{/if}}
     {{/each}}
     <tr>
-            <td colspan="2">
-                <hr><h3>{{localize 'fate-core-official.OrphanedSkills'}}</h3><hr>
+        <td colspan="2" style="padding:1rem 0rem 0rem 0rem">
+            <h3 style="margin: 0px 0px 0.5rem 0px">{{localize 'fate-core-official.OrphanedSkills'}}</h3>
             </td>
         </tr>
         {{#each orphaned}}
         {{#if (eq this.extra_id undefined)}}
         <tr>
-            <td style="width:100px">
-                <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
+            <td style="width: 20px; padding-top:0rem; padding-bottom:0.1rem">
+                <input type="checkbox" class="skill_check_box" checked name="{{this.name}}"}>
             </td>
             <td>
                 {{this.name}}
@@ -36,31 +36,31 @@
         {{else}}{{/if}}
         {{/each}}
         <tr>
-            <td colspan="2">
-                <hr><h3>{{localize 'fate-core-official.AdHocSkills'}}</h3><hr>
+            <td colspan="2" style="padding:1rem 0rem 0rem 0rem">
+                <h3 style="margin: 0px 0px 0.5rem 0px">{{localize 'fate-core-official.AdHocSkills'}}</h3>
             </td>
         </tr>
     {{#each ad_hoc}}
     {{#if (eq this.extra_id undefined)}}
     <tr>
-        <td style="width:100px">
-            <input type="checkbox" class="skill_check_box" checked id="{{this.name}}" name="{{this.name}}_present"}>
+        <td style="width:20px; padding-top:0rem; padding-bottom:0.1rem">
+            <input type="checkbox" class="skill_check_box" checked name="{{this.name}}"}>
         </td>
         <td>
-            <input type="text" style="width:95%;" name="adhoc_skill_name" value="{{this.name}}" data-oldName="{{this.name}}"></input>
+            <input checked type="text" style="width:95%;" name="adhoc_skill_name" value="{{this.name}}" data-oldName="{{this.name}}"></input>
         </td>
     </tr>
     {{else}}{{/if}}
     {{/each}}
     <tr>
-        <td colspan="2">
-            <hr><h3>{{localize 'fate-core-official.WorldSkillsAbsent'}}</h3><hr>
+        <td colspan="2" style="padding:1rem 0rem 0rem 0rem">
+            <h3 style="margin: 0px 0px 0.5rem 0px">{{localize 'fate-core-official.WorldSkillsAbsent'}}</h3>
         </td>
     </tr>
     {{#each absent_skills}}
     <tr>
-        <td>
-            <input type="checkbox" class="skill_check_box" id="{{this.name}}" name="{{this.name}}_present"}>
+        <td style="width:20px; padding-top:0rem; padding-bottom:0.1rem">
+            <input type="checkbox" class="skill_check_box" name="{{this.name}}"}>
         </td>
         <td>
             {{this.name}}
@@ -68,14 +68,14 @@
     </tr>
     {{/each}}
     <tr>
-        <td colspan="2">
-            <hr><h3>{{localize 'fate-core-official.NonPCSkills'}}<h3></h3><hr>
+        <td colspan="2" style="padding:1rem 0rem 0rem 0rem">
+            <h3 style="margin: 0px 0px 0.5rem 0px">{{localize 'fate-core-official.NonPCSkills'}}</h3>
         </td>
     </tr>
     {{#each non_pc}}
     <tr>
-        <td>
-            <input type="checkbox" class="skill_check_box" id="{{this.name}}" name="{{this.name}}_present"}>
+        <td style="width: 20px; padding-top:0rem; padding-bottom:0.1rem">
+            <input type="checkbox" class="skill_check_box" name="{{this.name}}"}>
         </td>
         <td>
             {{this.name}}
@@ -84,35 +84,22 @@
     {{/each}}
     </table>
 </div>
-<table style="background:none; border:none">
-    <tr>
-        <td>
-            {{localize 'fate-core-official.AdHocSkillToAdd'}}:
-        </td>
-        <td>
-            <input name="ad_hoc_input" type="text" id="ad_hoc_input" style="width:80%">&nbsp&nbsp<button style="width:30px; height:30px;"" type="button" id="add_ah_button" i icon class="fas fa-plus"></button>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <button type="button" id="select_all_skills_button">
-                {{localize 'fate-core-official.CheckAllSkills'}}
-            </button>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <button type="button" id="deselect_all_skills_button">
-                {{localize 'fate-core-official.UnCheckAllSkills'}}
-            </button>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <button type="button" id="add_remove_button">
-                {{localize 'fate-core-official.AddRemoveSkills'}}
-            </button>
-        </td>
-    </tr>
-</table>
-</form>
+
+<div style="display:flex; flex-direction:row; gap:10px">
+    <span style="width: 20em">{{localize 'fate-core-official.AdHocSkillToAdd'}}:</span>
+    <input name="ad_hoc_input" type="text" style="width:80%">
+    <button style="width:30px; height:30px;"" type="button" name="add_ah_button" i icon class="fas fa-plus"></button>
+</div>
+
+<div style="margin-top: 20px; display:flex; flex-direction:row; gap:10px">
+    <button type="button" name="select_all_skills_button">
+        {{localize 'fate-core-official.CheckAllSkills'}}
+    </button>
+    <button type="button" name="deselect_all_skills_button">
+        {{localize 'fate-core-official.UnCheckAllSkills'}}
+    </button>
+    <button type="button" name="add_remove_button">
+        {{localize 'fate-core-official.AddRemoveSkills'}}
+    </button>
+</div>
+</div>

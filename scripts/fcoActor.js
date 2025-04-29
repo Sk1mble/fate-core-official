@@ -12,7 +12,6 @@ export class fcoActor extends Actor {
     // Override the standard createDialog to just spawn a character called 'New Actor'.
     static async createDialog (...args){
         let perm  = {"default":CONST.DOCUMENT_OWNERSHIP_LEVELS[game.settings.get("fate-core-official", "default_actor_permission")]};
-
         if (args[0].folder) {
             Actor.create({"name":game.i18n.localize("fate-core-official.newCharacter"), "folder":args[0].folder, "type":"fate-core-official", ownership: perm});
         } else {
@@ -32,8 +31,7 @@ export class fcoActor extends Actor {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    await this.update({"system":{[type]:null}})
-                    await this.update({"system":{[type]:output}})
+                    await this.update({"system":{[`==${type}`]:output}})
                 }    
             }
             for (let extra of this.items) {
@@ -44,10 +42,6 @@ export class fcoActor extends Actor {
 
     async _preCreate(...args){
         await super._preCreate(...args);
-
-        if (this.type == "ModularFate" || this.type == "FateCoreOfficial"){
-            this.updateSource({type:"fate-core-official"})
-        }
 
         if (this?.system?.details?.fatePoints?.refresh === null||
             this?.system?.details?.fatePoints?.refresh === undefined &&
@@ -66,8 +60,7 @@ export class fcoActor extends Actor {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    this.updateSource({"system":{[type]:null}})
-                    this.updateSource({"system":{[type]:output}})
+                    this.updateSource({"system":{[`==${type}`]:output}})
                 }
             }
         }
@@ -88,13 +81,6 @@ export class fcoActor extends Actor {
             }
         }
         return super.migrateData(data);
-    }
-
-    async _preUpdate(data, options, user){
-        await super._preUpdate(data, options, user);
-        if (data.type == "ModularFate" || data.type == "FateCoreOfficial"){
-            data.type = "fate-core-official"; 
-        }
     }
 
     /** Methods for dealing with multiple shapes (sets of token and avatar artwork that can be easily switched between) 
@@ -154,13 +140,13 @@ export class fcoActor extends Actor {
             await token.actor.update({"img":shape.avatarImg, name:aName, "prototypeToken.texture.src":shape.tokenImg});
         }
         if (shape.tokenData) {
-                shape.tokenData.texture.src = shape.tokenImg;
-                shape.tokenData.x = token.document.x;
-                shape.tokenData.y = token.document.y;
-                shape.tokenData.elevation = token.document.elevation;
-                shape.tokenData.flags = token.document.flags;
-            if (foundry.utils.isNewerVersion(game.version,"12.317") && shape.transition){
-                await token.document.update(shape.tokenData, {animation: {transition: TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
+            shape.tokenData.texture.src = shape.tokenImg;
+            shape.tokenData.x = token.document.x;
+            shape.tokenData.y = token.document.y;
+            shape.tokenData.elevation = token.document.elevation;
+            shape.tokenData.flags = token.document.flags;
+            if (shape.transition){
+                await token.document.update(shape.tokenData, {animation: {transition: foundry.canvas.rendering.filters.TextureTransitionFilter.TYPES[shape.transition], duration: 2000}});
             }   else {
                 await token.document.update(shape.tokenData);
             }   
@@ -208,9 +194,9 @@ export class fcoActor extends Actor {
             extra_status.push({"_id":id, "system.active":active})
         }
 
-        let response = "no";
+        let response = false;
         if (existing) response  = await fcoConstants.awaitYesNoDialog(shapeName, game.i18n.localize("fate-core-official.checkShapeOverwrite"));
-        if (!existing || response == "yes"){
+        if (!existing || response){
             // Safe to store this shape
             let newShape = {"name":shapeName, "tokenImg":tokenImg, "avatarImg":avatarImg, actorName:token.actor.name, tokenName:token.name, tokenData:token_data, extra_status:extra_status, transition:transition};
             shapes[fcoConstants.tob64(shapeName)] = newShape;
@@ -233,7 +219,7 @@ export class fcoActor extends Actor {
         let p_skills=working_data.system.skills;
         
         //Check to see what skills the character has compared to the global skill list
-            var skill_list = game.settings.get("fate-core-official","skills");
+            var skill_list = fcoConstants.wd().system.skills;
             // This is the number of skills the character has currently.
             //We only need to add any skills if this is currently 0,
             
@@ -259,7 +245,7 @@ export class fcoActor extends Actor {
                 })
             }        
     
-            let aspects = game.settings.get("fate-core-official", "aspects");
+            let aspects = fcoConstants.wd().system.aspects;
             let player_aspects = foundry.utils.duplicate(aspects);
             for (let a in player_aspects) {
                 player_aspects[a].value = "";
@@ -268,7 +254,7 @@ export class fcoActor extends Actor {
             working_data.system.aspects = player_aspects;
         
             //Step one, get the list of universal tracks.
-            let world_tracks = foundry.utils.duplicate(game.settings.get("fate-core-official", "tracks"));
+            let world_tracks = foundry.utils.duplicate(fcoConstants.wd().system.tracks);
             let tracks_to_write = working_data.system.tracks;
             for (let t in world_tracks) {
                 let track = world_tracks[t];
@@ -803,7 +789,7 @@ export class fcoActor extends Actor {
                 let mrd = new ModifiedRollDialog(this, trackName, true);
                 mrd.render(true);
                 try {
-                    mrd.bringToTop();
+                    mrd.bringToFront();
                 } catch  {
                     // Do nothing.
                 }
@@ -861,7 +847,7 @@ export class fcoActor extends Actor {
             let mrd = new ModifiedRollDialog(this, skillName);
             mrd.render(true);
             try {
-                mrd.bringToTop();
+                mrd.bringToFront();
             } catch  {
                 // Do nothing.
             }
@@ -960,87 +946,22 @@ export class fcoActor extends Actor {
     }
 }
 
-    /** HUD interface for changing shape */
+    /** HUD interface for changing shape; launches fcoActorShapeManager applicationV2 */
+    Hooks.on("renderTokenHUD", function (hudButtons, html, data) {
+        // if html is jquery, convert to HTMLElement - this is future proofing for when this does return an HTMLElement.
+        if (html instanceof jQuery){
+            html = $(html)[0];
+        }
 
-    Hooks.on('renderTokenHUD', function (hudButtons, html, data) {
         //hudButtons.object is the token itself.
         let token = hudButtons.object;
         if (token.actor.type != "fate-core-official") return;
-        let shapes = token.actor.getFlag("fate-core-official","shapes");
-        let transitions = "";
-
-        if (foundry.utils.isNewerVersion(game.version, "12.317")){
-            transitions = `<select id="fcotransition_${token.id}" style="min-height: 1.5em; background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); font-family: var(--fco-font-family); left:75px;">`
-            for (let transition in TextureTransitionFilter.TYPES){
-                let selected="";
-                if (transition == "FADE") selected = `selected = "selected"`;   
-                transitions += `<option value = "${transition}" ${selected}>
-                    ${TextureTransitionFilter.TYPES[transition]}
-                </option>`
-            }
-            transitions += `</select>`
-        }
-
-        let shapeButtons = `<div style="font-size:0.8em; position:absolute; min-width:450px; max-width:450px; text-overflow: ellipsis; overflow-x:auto; max-height:1000px; overflow-y:auto; left:75px; top:-75px; display:flex-row"><table style="background:transparent;">
-        <tr style="background-color:var(--fco-accent-colour); height:75px; border:none">
-            <td width = "300px">
-                <input type="text" style="font-size:0.8em; margin-left:10px; margin-right:10px; max-width:225px; background:var(--fco-foundry-interactable-color); color:var(--fco-sheet-text-colour)" id = fcoShapeAddName_${token.id}></input>
-            </td>
-            <td width ="100px">
-                ${transitions}
-            </td>
-            <td width = "50px">
-                <div style="width:50px" id="fcoShapeAdd_${token.id}"><i class="fas fa-plus fu_button"></i></div>
-            </td>
-        </tr>
-        </table>`;
-        let allowDeletion = true;
-        let deleteButton = "";
-        
-        for (let shape in shapes){
-            if (allowDeletion) deleteButton=`<td width="50px"><div class= "fu_button" id="fcoShapeDelete_${token.id}_${shape}"><i icon class ="fas fa-trash"</i></div></td>`
-            shapeButtons += `<div class="fu_button" style="background:var(--fco-sheet-background-colour); display:flex; left:75px; padding:10px; min-width:400px; margin:5px; color:black; font-family:var(--fco-font-family)" id="fcoShape_${token.id}_${shape}">
-            <table style="background:transparent; border:none; color:black; font-family:var(--fco-font-family)">
-                <tr>
-                    <td style="color:var(--fco-sheet-text-colour); padding-left:5px; text-align:left; min-width:100px; max-width:100px; overflow:hidden; text-overflow:ellipsis;">${shapes[shape].name}</td>
-                    <td width="80px"><img src="${shapes[shape].tokenImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
-                    <td width "80px"><img src="${shapes[shape].avatarImg}" style= "min-width:75px; height:75px; opacity:1 !important"></img></td>
-                    ${deleteButton}
-                </tr>
-            </table>
-            </div>`
-        }
-        shapeButtons += `</div>`
-        let button = $(`<div class="control-icon fco-changeShape" id="fco-changeShape"><i class="fa fa-arrows-rotate"></i></div>`);
-        let col = html.find('.col.right');
-        col.prepend(button);
-
-        button.click(async (ev) => {
-            if (ev.target.closest('div').id.split("_")[0] == "fcoShapeDelete"){
-                let shapes = token.actor.getFlag("fate-core-official","shapes");
-                let shape = shapes[ev.target.closest('div').id.split("_")[2]];
-                let del = await fcoConstants.confirmDeletion();
-                if (del){
-                    await token.actor.deleteShape(shape.name)
-                }
-            } else {
-                if (ev.target.closest('div').id.split("_")[0] == "fcoShapeAdd"){
-                    let name = $(`#fcoShapeAddName_${token.id}`)[0].value;
-                    let transition = null;
-                    if (foundry.utils.isNewerVersion(game.version, "12.317")) transition = $(`#fcotransition_${token.id}`)[0].value;
-                    if (name) {
-                        await token.actor.storeShape(name, null, null, token, transition);
-                    } else {
-                        ui.notifications.error(game.i18n.localize("fate-core-official.empty"));
-                    }
-                } else {
-                    let shapes = token.actor.getFlag("fate-core-official","shapes");
-                    if (ev.target.closest('div').id == "fco-changeShape") button.append(shapeButtons);
-                    let shape = undefined;
-                    if (shapes) shape = shapes[ev.target.closest('div').id.split("_")[2]];
-                    if (shape) await token.actor.changeShape(shape.name, token);
-                }
-            }
+        let button = `<button type="button" data-tooltip="${game.i18n.format("fate-core-official.shapeManagerTitle",{name:token.actor.name})}" class="button control-icon" name="fco_changeShape"><i class="fa fa-arrows-rotate"></i></button>`;
+        let col = html.querySelector('.col.right');
+        col.insertAdjacentHTML("afterbegin", button);
+        let buttonEl = html.querySelector("button[name='fco_changeShape']");
+        buttonEl?.addEventListener("click", async ev => {
+            new fcoActorShapeManager(token, buttonEl).render(true);
         });
     });
     

@@ -24,7 +24,7 @@ When I started using Foundry VTT, I found an existing system for Fate Core and F
 
 ### Who should use this system?
 
-Anybody who wants to use custom 'tracks' (that is, stress, consequences, and conditions) or set up a skill list in the game without having to create an item to represent each skill. This system also features an app I call 'FateUtilities' which gives access to a lot of information that's useful to the GM and plaeyrs at a glance. This system also incorporates mechanisms for working with popcorn initiative and scene notes that every Fate GM will find useful.
+Anybody who wants to use custom 'tracks' (that is, stress, consequences, and conditions) or set up a skill list in the game without having to create an item to represent each skill. This system also features an app I call 'FateUtilities' which gives access to a lot of information that's useful to the GM and players at a glance. This system also incorporates mechanisms for working with popcorn initiative and scene notes that every Fate GM will find useful.
 
 ## Which versions of Fate are supported?
 

@@ -10,10 +10,10 @@
   ],
   "url": "https://github.com/Sk1mble/fate-core-official",
   "compatibility": {
-    "minimum": "12",
-    "verified": "12.331"
+    "minimum": "13.340",
+    "verified": "13.341"
   },
-  "version": "4.7.12c",
+  "version": "4.7.13",
   "scripts": [
     "scripts/fcoConstants.js",
     "scripts/ManageSkills.js",
@@ -23,14 +23,13 @@
     "scripts/EditPlayerTracks.js",
     "scripts/EditPlayerStunts.js",
     "scripts/FateUtilities.js",
+    "scripts/fcoActorShapeManager.js",
     "scripts/EditPlayerAspects.js",
     "scripts/ModifiedRollDialog.js",
     "scripts/ShowCharacter.js",
     "scripts/FateCharacterImporter.js",
     "scripts/FateCharacterDefaults.js",
     "scripts/FateCoreOfficialModels.js",
-    "scripts/Pen/pen.js",
-    "scripts/Pen/markdown.js",
     "scripts/purify.min.js"
   ],
   "esmodules": [
@@ -38,8 +37,7 @@
   ],
   "styles": [
     "fco.css",
-    "mfate-sheet.css",
-    "scripts/Pen/pen.css"
+    "mfate-sheet.css"
   ],
   "languages": [
     {
@@ -89,7 +87,7 @@
   ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/v4.7.12c.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.13.zip",
   "grid":{
     "distance":1
   },
@@ -108,7 +106,6 @@
                 "details.notes.value"
               ]
             },
-            "ModularFate": {},
             "Thing": {}
         },
         "Item": {

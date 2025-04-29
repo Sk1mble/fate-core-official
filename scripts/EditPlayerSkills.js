@@ -1,30 +1,59 @@
 // This is the main class called to launch the skills editor.
 // Form applications always receive the object being worked on as a variable, so can use this.object to access it.
-class EditPlayerSkills extends FormApplication{
-    constructor(...args){
-            super(...args);
-
-                if (this.object.type == "Extra"){
-                    let title = game.i18n.localize("fate-core-official.SkillEditorForItem");
-                    this.options.title=`${title} ${this.object.name}`
-                    game.system.apps["item"].push(this);
-                } else {
-                    if (this.object.isToken) {
-                        this.options.title=`${game.i18n.localize("fate-core-official.SkillEditorForToken")} ${this.object.name}`
-                    } else {
-                        this.options.title=`${game.i18n.localize("fate-core-official.SkillEditorFor")} ${this.object.name}`
-                    }
-                }
-                if (this.object.type != "Extra"){
-                    this.firstRun=true;
-                }
-                this.player_skills=foundry.utils.duplicate(this.object.system.skills);
-                this.sortByRank = true;
-                this.temp_presentation_skills=[];
-                this.sorted = false;
-                this.changed = false;
-                game.system.apps["actor"].push(this);
+class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2){
+    constructor(object){
+            super(object);
+            this.object = object;
+            if (this.object.type == "Extra"){
                 game.system.apps["item"].push(this);
+            }
+            if (this.object.type != "Extra"){
+                this.firstRun=true;
+            }
+            this.player_skills=foundry.utils.duplicate(this.object.system.skills);
+            this.sortByRank = true;
+            this.temp_presentation_skills=[];
+            this.sorted = false;
+            this.changed = false;
+            game.system.apps["actor"].push(this);
+            game.system.apps["item"].push(this);
+    }
+
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        id: "PlayerSkillsSetup",
+        classes: ['fate'],
+        window: {
+            title: this.title,
+            icon: "fas fa-scroll",
+            resizable: true
+        },
+        form: {
+            closeOnSubmit: true,
+            submitOnClose:false,
+            submitOnChange:false,
+            handler: EditPlayerSkills.#updateObject
+        }
+    }
+
+    static PARTS = {
+        EditPlayerSkillsTemplate:{
+            template: "systems/fate-core-official/templates/EditPlayerSkills.html",
+            scrollable: [".fco_skills_editor"]
+        }
+    }
+
+    get title(){
+        if (this.object.type == "Extra"){
+            let title = game.i18n.localize("fate-core-official.SkillEditorForItem");
+            return `${title} ${this.object.name}`
+        } else {
+            if (this.object.isToken) {
+               return `${game.i18n.localize("fate-core-official.SkillEditorForToken")} ${this.object.name}`
+            } else {
+                return `${game.i18n.localize("fate-core-official.SkillEditorFor")} ${this.object.name}`
+            }
+        }
     }
 
     setSheet (ActorSheet){
@@ -45,30 +74,16 @@ class EditPlayerSkills extends FormApplication{
         }
     }
 
-    //Set up the default options for instances of this class
-    static get defaultOptions() {
-        const options = super.defaultOptions; //begin with the super's default options
-        //The HTML file used to render this window
-        options.template = "systems/fate-core-official/templates/EditPlayerSkills.html"; 
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.CharacterSkillEditor");
-        options.closeOnSubmit = true;
-        options.id = "PlayerSkillSetup"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        options.scrollY=["#skills_editor"];
-        options.width = "auto";  
-        options.classes = options.classes.concat(['fate']);
-        return options;
-    }
-
     // This returns all the forms fields with names as a JSON object with their values. 
     // It is required for a FormApplication.
     // It is called when you call this.submit();
 
-    async _updateObject(event, formData){
+    static async #updateObject(event, form, formDataExtended){
         //Check if this is a player
         //Check if the player is currently allowed to save
         //OVerride these settings if the skill is being saved on an extra.
+
+        let formData = formDataExtended.object;
     
         for (let skill in formData){ //This goes through every field in the JSON object.
             let skill_name = skill.split("_")[0];
@@ -89,8 +104,7 @@ class EditPlayerSkills extends FormApplication{
                 ui.notifications.error(game.i18n.localize("fate-core-official.UnableToSave"));
             } else {
                 let tracks = this.object.setupTracks (foundry.utils.duplicate(this.player_skills), foundry.utils.duplicate(this.object.system.tracks));
-                await this.object.update({"system.tracks":null,"system.skills":null}, {noHook:true, render:false}); 
-                await this.object.update({"system.tracks":tracks,"system.skills":this.player_skills}); 
+                await this.object.update({"system.==tracks":tracks,"system.==skills":this.player_skills}); 
                 ui.notifications.info(game.i18n.localize("fate-core-official.SkillsSaved"));
                 this.changed = false;
                 this.close();
@@ -103,8 +117,8 @@ class EditPlayerSkills extends FormApplication{
         game.system.apps["item"].splice(game.system.apps["item"].indexOf(this),1); 
 
         if (this.changed){
-            let answer = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.abandonChangesQ"), game.i18n.localize("fate-core-official.abandonChanges"));
-            if (answer == "yes") await super.close(...args);
+            let confirm = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.abandonChangesQ"), game.i18n.localize("fate-core-official.abandonChanges"));
+            if (confirm) await super.close(...args);
         } else {
             await super.close(...args);
         }
@@ -204,7 +218,7 @@ class EditPlayerSkills extends FormApplication{
             return (playerCanSave);
     }
 //The function that returns the data model for this window. In this case, we need the character's sheet data/and the skill list.
-    async getData(){
+    async _prepareContext(){
         this.player_skills=foundry.utils.duplicate(this.object.system.skills);
         this.player_skills=fcoConstants.sortByName(this.player_skills);
 
@@ -229,7 +243,7 @@ class EditPlayerSkills extends FormApplication{
         }
 
         const templateData = {
-            skill_list:game.settings.get("fate-core-official","skills"),
+            skill_list:fcoConstants.wd().system.skills,
             character_skills:presentation_skills,
             isGM:game.user.isGM,
             isExtra:this.object.type=="Extra"
@@ -237,23 +251,19 @@ class EditPlayerSkills extends FormApplication{
         return templateData;
     }
     
-       //Here are the action listeners
-        activateListeners(html) {
-        super.activateListeners(html);
-
-        const rankBoxes = html.find("input[class='rank_input']");
-        rankBoxes.on("change", event => {
+    //Here are the action listeners
+    _onRender (context, options) {
+        const rankBoxes = this.element.querySelectorAll("input[class='rank_input']");
+        rankBoxes.forEach(box => box?.addEventListener("change", event => {
             this.changed = true;
-        })
+        }))
 
-        const skillButtons = html.find("button[class='skill_button']");
-        skillButtons.on("click", event => this._onSkillButton(event, html));
-        const saveButton = html.find("button[id='save_player_skills']")
-        saveButton.on("click", event => this._onSaveButton(event,html));
-        const sortButton = html.find("button[id='sort']");
-        sortButton.on("click", event => this._onSortButton(event, html));
-        const editButton = html.find("button[id='edit_p_skills']");
-        editButton.on("click", event => this._onEditButton(event, html));  
+        const skillButtons = this.element.querySelectorAll("button[class='skill_button']");
+        skillButtons.forEach(button => button?.addEventListener("click", event => this._onSkillButton(event)));
+        const sortButton = this.element.querySelectorAll("button[name='fatecoreofficial_sort_skills']");
+        sortButton.forEach(button => button?.addEventListener("click", event => this._onSortButton(event)));
+        const editButton = this.element.querySelector("button[name='edit_p_skills']");
+        editButton?.addEventListener("click", event => this._onEditButton(event));  
     }
 
     async sort_name(array){
@@ -264,13 +274,13 @@ class EditPlayerSkills extends FormApplication{
         array.sort((a, b) => parseInt(b.rank) - parseInt(a.rank));
     }
 
-    async _onSortButton(event, html){
+    async _onSortButton(event){
         this.temp_presentation_skills=[];
         let tps = [];
-        let inputs = html.find("input[type='number']");
+        let inputs = this.element.querySelectorAll("input[type='number']");
         
         for (let i = 0 ; i < inputs.length; i++){ 
-            let skill_name = inputs[i].id.split("_")[0];
+            let skill_name = inputs[i].name;;
             let rank = parseInt(inputs[i].value);
             tps.push({"name":skill_name,"rank":rank})
         }
@@ -284,13 +294,13 @@ class EditPlayerSkills extends FormApplication{
         this.sortByRank=!this.sortByRank;
     }
 
-    async _onEditButton (event, html){
+    async _onEditButton (event){
         if (game.user.isGM || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
             await e.render(true);
             e.skillsWindow = this;
             try {
-                e.bringToTop();
+                e.bringToFront();
             } catch  {
                 // Do nothing.
             }
@@ -300,119 +310,76 @@ class EditPlayerSkills extends FormApplication{
         }
     }
 
-    async _onSkillButton(event,html){
-        let name = event.target.id;
+    async _onSkillButton(event){
+        let name = event.target.name;
         let skill = fcoConstants.gbn(this.player_skills, name);
-        fcoConstants.awaitOKDialog(game.i18n.localize("fate-core-official.SkillDetails"),`
-                                            <table cellspacing ="4" cellpadding="4" border="1">
-                                                <h2>${skill.name}</h2>
-                                                <tr>
-                                                    <td style="width:400px;">
-                                                        <b>${game.i18n.localize("fate-core-official.Description")}:</b>
-                                                    </td>
-                                                    <td style="width:2000px;">
-                                                        ${skill.description}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.Overcome")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.overcome}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.CAA")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.caa}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.Attack")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.attack}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <b>${game.i18n.localize("fate-core-official.Defend")}:</b>
-                                                    </td>
-                                                    <td>
-                                                        ${skill.defend}
-                                                    </td>
-                                                </tr>
-                                            </table>`,1000)
-    }
-
-    async _onSaveButton(event, html){
-       this.submit();
+        fcoConstants.presentSkill(skill);
     }
 }
 
-class EditGMSkills extends FormApplication{
+class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2){
     // This class is for the editor that pops out to allow the GM to add GM skills and adhoc skills to any character.
     //Also allows the GM to add or delete any given skill from the worldlist to any character.
-    constructor(actor){
-        super(actor);
-            if (this.object.type=="Extra"){ 
-                this.options.title=`${game.i18n.localize("fate-core-official.ExtraSkillEditor")} ${this.object.name}`                    
+    constructor(object){
+        super(object);
+        this.object = object
+        this.player_skills=foundry.utils.duplicate(this.object.system.skills);
+    }
+
+    get title(){
+        if (this.object.type=="Extra"){ 
+            return `${game.i18n.localize("fate-core-official.ExtraSkillEditor")} ${this.object.name}`                    
+        } else {
+            if(this.object.isToken){
+                return `${game.i18n.localize("fate-core-official.TokenSkillEditor")} ${this.object.name}`                    
             } else {
-                if(this.object.isToken){
-                    this.options.title=`${game.i18n.localize("fate-core-official.TokenSkillEditor")} ${this.object.name}`                    
-                } else {
-                    this.options.title=`${game.i18n.localize("fate-core-official.GMSkillEditor")} ${this.object.name}`
-                }
+                return `${game.i18n.localize("fate-core-official.GMSkillEditor")} ${this.object.name}`
             }
-            this.player_skills=foundry.utils.duplicate(this.object.system.skills);
+        }
     }
 
     //Set up the default options for instances of this class
-    static get defaultOptions() {
-        const options = super.defaultOptions; //begin with the super's default options
-        //The HTML file used to render this window
-        options.template = "systems/fate-core-official/templates/EditGMSkills.html"; 
-        options.width = "auto";
-        options.height = "auto";
-        options.title = game.i18n.localize("fate-core-official.GMSkillEditor2");
-        options.closeOnSubmit = false;
-        options.id = "GMSkillSetup"; // CSS id if you want to override default behaviors
-        options.resizable = true;
-        return options;
+
+    static DEFAULT_OPTIONS = {
+        tag: "form",
+        id: "GMSkillSetup",
+        window: {
+            icon: "fas fa-scroll",
+            title: this.title
+        }
+    }
+
+    static PARTS = {
+        editGMSkillsForm: {
+            template: "systems/fate-core-official/templates/EditGMSkills.html"
+        }
     }
 
      //Here are the action listeners
-     activateListeners(html) {
-        super.activateListeners(html);
-        const add_ad_hoc = html.find("button[id='add_ah_button']");
-        add_ad_hoc.on("click", event => this._adHocButton(event, html));
-        const confirm = html.find("button[id='add_remove_button']")
-        confirm.on("click", event => this._confirm(event, html));
+     _onRender (context, options) {
+        const add_ad_hoc = this.element.querySelector("button[name='add_ah_button']");
+        add_ad_hoc?.addEventListener("click", event => this._adHocButton(event));
+        const confirm = this.element.querySelector("button[name='add_remove_button']")
+        confirm?.addEventListener("click", event => this._confirm(event));
 
-        const selectAll = html.find("button[id='select_all_skills_button']");
-        selectAll.on("click", event => {
-            const boxes = $("input[class='skill_check_box']");
-    
+        const selectAll = this.element.querySelector("button[name='select_all_skills_button']");
+        selectAll?.addEventListener("click", event => {
+            const boxes = this.element.querySelectorAll("input[class='skill_check_box']");
             for (let box of boxes){
-                box.checked = true;
+                box.checked = "checked";
             }
         })
 
-        const deSelectAll = html.find("button[id='deselect_all_skills_button']");
-        deSelectAll.on("click", event => {
-            const boxes = $("input[class='skill_check_box']");
-            
+        const deSelectAll = this.element.querySelector("button[name='deselect_all_skills_button']");
+        deSelectAll?.addEventListener("click", event => {
+            const boxes = this.element.querySelectorAll("input[class='skill_check_box']");
             for (let box of boxes){
-                box.checked = false;
+                box.checked = "";
             }
         })
 
-        const asn = $('input[name="adhoc_skill_name"]');
-        asn.on('blur', async (event, html)=>{
+        const asn = this.element.querySelectorAll('input[name="adhoc_skill_name"]');
+        asn.forEach(skill => skill?.addEventListener('blur', async (event)=>{
             let oldSkill = event.target.getAttribute("data-oldName");
             let newSkill = event.target.value;
             if (oldSkill != newSkill){
@@ -435,18 +402,16 @@ class EditGMSkills extends FormApplication{
                     this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill, [`-=${oldSkillKey}`]:null}}).then(() => this.render(false));
                 }
             }
-        })
+        }))
     }
 
-    async _confirm(event,html){
-        let actor=undefined;
+    async _confirm(event){
         let updateObject = {};
         for (let s in this.player_skills){
             let cbox;
             let name = this.player_skills[s].name;
             try{
-                cbox = html.find(`input[id="${name}"]`)[0];
-                if (!cbox) cbox = html.find(`input[id='${name}']`)[0];
+                cbox = this.element.querySelector(`input[name="${name}"]`);
             } catch {
 
             }
@@ -456,13 +421,12 @@ class EditGMSkills extends FormApplication{
         } 
         
         //Now we need to add skills that have checks and which aren't already checked.
-        let world_skills=game.settings.get("fate-core-official","skills")
+        let world_skills=fcoConstants.wd().system.skills
         for (let w in world_skills){
             let name = world_skills[w].name;
             let cbox;
             try{
-                cbox = html.find(`input[id="${name}"]`)[0];
-                if (!cbox) cbox = html.find(`input[id='${name}']`)[0];
+                cbox = this.element.querySelector(`input[name="${name}"]`);
             } catch {
         
             }  
@@ -479,8 +443,8 @@ class EditGMSkills extends FormApplication{
         this.close();
     }
 
-    async _adHocButton(event, html){
-        let name = html.find("input[id='ad_hoc_input']")[0].value
+    async _adHocButton(event){
+        let name = this.element.querySelector("input[name='ad_hoc_input']").value
         var newSkill=undefined;
         if (name!= undefined && name !=""){
             newSkill= new fcoSkill({
@@ -500,13 +464,9 @@ class EditGMSkills extends FormApplication{
         }
     }
 
-    async _updateObject(event, html){
-    }
-
-    async getData(){
+    async _prepareContext(){
         this.player_skills=foundry.utils.duplicate(this.object.system.skills);
-
-        let world_skills=foundry.utils.duplicate(game.settings.get("fate-core-official","skills"));
+        let world_skills=foundry.utils.duplicate(fcoConstants.wd().system.skills);
         let present = [];
         let absent = [];
         let non_pc_world_skills=[];
@@ -543,7 +503,7 @@ class EditGMSkills extends FormApplication{
         if (orphaned.length > 0) fcoConstants.sort_name(orphaned);
 
         const templateData = {
-            skill_list:game.settings.get("fate-core-official","skills"),
+            skill_list:fcoConstants.wd().system.skills,
             character_skills:this.player_skills,
             present_skills:present,
             absent_skills:absent,

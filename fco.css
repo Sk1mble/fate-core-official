@@ -11,14 +11,40 @@
   height:100%;
 }
 
+.fate button:disabled {
+  opacity:0.5;
+}
+h1.window-title br {
+  display: none;
+}
+
 .rolls h1,
 .rolls h2,
 .rolls h3 {
   border-bottom:2px solid var(--fco-foundry-interactable-color);
+  font-size:2em;
+  padding-bottom:5px;
+  color:var(--fco-sheet-text-colour);
 }
 
-#FateUtilities .window-content{
+option {
+  background-color: inherit;
+}
+
+#FateUtilities {
   padding: 0;
+}
+
+#FateUtilities h1:not(.window-title), 
+#FateUtilities h2:not(.window-title), 
+#FateUtilities h3:not(.window-title) {
+  margin:0;
+  margin-bottom:0.5em;
+  color:var(--fco-sheet-text-colour);
+}
+
+#FateUtilities td, #FateUtilities th {
+  padding: 5px;
 }
 
 #EditEntityTrack .window-content {
@@ -53,8 +79,20 @@ input[type="number"]::-webkit-inner-spin-button {
     appearance: auto;
 }
 
-body, button, label, select, input {
+body, h1, h2, h3, h4, h5, button:not(.fas, .fa, .icon, .control-icon), label:not(.fas, .fa, .icon), select:not(.fas, .fa, .icon), input:not(.fas, .fa, .icon) {
   font-family:var(--fco-foundry-font-family);
+}
+
+button[name="fco_chat_roll_button"]  {
+  display:table-row;
+}
+
+.flavor-text h1 {
+  font-size:1.5rem;
+}
+
+button.fas{
+  font-family: "Font Awesome 6 Pro";
 }
 
 textarea:not([name="command"]){
@@ -101,18 +139,20 @@ textarea [name="command"] {
   background-color:var(--fco-foundry-interactable-color) !important;
 }
 
-.fu_uncontrolled {
-  background-color:var(--fco-sheet-background-colour) !important;
+#fu_conflict_tracker tr {
+  background-color:transparent
 }
 
 .fu_button:hover {
   filter: drop-shadow(0px 0px 3px red) !important;
-  box-shadow:none !important;
+}
+
+.fu_button:disabled {
+  opacity:50%
 }
 
 .fu_button:focus {
   filter: drop-shadow(0px 0px 3px red) !important;
-  box-shadow:none !important;
 }
 
 .mf_item {
@@ -161,10 +201,11 @@ textarea [name="command"] {
 }
 
 .fu_item_1 {
-  width:60px;
+  width:120px;
   text-align:center;
   font-size:x-large; 
-  padding: 15px; 
+  padding: 15px;
+  padding-bottom:18px; 
   float:left; 
   color:var(--fco-sheet-text-colour);
   border-bottom: 1px solid var(--fco-accent-colour);
@@ -184,10 +225,11 @@ textarea [name="command"] {
 }
 
 .fu_item_2 {
-  width:60px;
+  width:120px;
   font-size:x-large; 
   text-align:center;
   padding: 15px; 
+  padding-bottom:18px;
   float:left; 
   color:var(--fco-sheet-text-colour);
   border-bottom: 1px solid var(--fco-accent-colour);
@@ -207,10 +249,11 @@ textarea [name="command"] {
 }
 
 .fu_item_3 {
-  width:60px;
+  width:120px;
   text-align:center;
   font-size:x-large; 
   padding: 15px; 
+  padding-bottom:18px;
   float:left; 
   color:var(--fco-sheet-text-colour);
   border-bottom: 1px solid var(--fco-accent-colour);
@@ -220,7 +263,6 @@ textarea [name="command"] {
 }
 
 .fu_item_3.active {
-  color:var(--fco-sheet-text-colour);
   border: solid; 
   border-width: 1px 1px 0px 1px;
   border-color:var(--fco-accent-colour);
@@ -231,9 +273,10 @@ textarea [name="command"] {
 
 .fu_item_4 {
   text-align:center;
-  width:60px;
+  width:120px;
   font-size:x-large; 
   padding: 15px; 
+  padding-bottom:18px;
   float:left; 
   color:var(--fco-sheet-text-colour);
   border-bottom: 1px solid var(--fco-accent-colour);
@@ -254,9 +297,10 @@ textarea [name="command"] {
 
 .fu_item_5 {
   text-align:center;
-  width:60px;
+  width:120px;
   font-size:x-large; 
   padding: 15px; 
+  padding-bottom:18px;
   float:left; 
   color:var(--fco-sheet-text-colour);
   border-bottom: 1px solid var(--fco-accent-colour);
@@ -273,6 +317,15 @@ textarea [name="command"] {
   box-shadow:none;
   text-shadow: 0 0 8px var(--fco-accent-colour);
   opacity:1;
+}
+
+.fate input[type="checkbox"]:checked::before, .mfate-sheet input[type="checkbox"]:checked::before {
+  background-color:var(--fco-accent-colour);
+  width:100%;
+  content:"✔";
+  text-align:center;
+  font-size:1em;
+  font-weight:bold;
 }
 
 /* The container */
@@ -335,6 +388,18 @@ textarea [name="command"] {
 
 .cd_datum_rich:hover {
   background-color: var(--fco-foundry-interactable-color);
+}
+
+.cd_datum_rich {
+  padding:5px;
+}
+
+.cd_datum {
+  padding:5px;
+}
+
+#fu_conflict_name_input:hover {
+  text-shadow: 0 0 8px red;
 }
 
 /* Countdown Checkbox - The container */
@@ -413,9 +478,11 @@ textarea [name="command"] {
   font-size:small; 
   min-width:100px !important;
   margin-top:5px !important; 
+  margin-right:5px;
+  margin-left:2px;
   margin-bottom:5px !important; 
   border-style:solid !important; 
-  height:25px !important; 
+  height:32px !important; 
   float:left !important; 
   padding:5px !important; 
   color:var(--fco-sheet-text-colour) !important; 
@@ -430,6 +497,7 @@ textarea [name="command"] {
   min-width:100px !important;
   max-width:75% !important; 
   margin-top:5px !important; 
+  margin-right:5px;
   margin-bottom:5px !important; 
   border-style:solid !important; 
   height:25px !important; 
@@ -455,7 +523,7 @@ textarea [name="command"] {
 }
 
 .long_text {
-  min-height:50px !important; 
+  min-height:2em !important; 
   background-color:var(--fco-sheet-input-colour) !important;
   color:var(--fco-sheet-text-colour) !important;
   font-family:var(--fco-font-family) !important;
@@ -463,10 +531,17 @@ textarea [name="command"] {
   overflow-y:auto;
   padding-left:5px;
   cursor:text;
+  scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+  scrollbar-width:thin;
+}
+
+.application.fcoExtra {
+  color:var(--fco-sheet-text-colour);
+  font-family:var(--fco-font-family) ;
 }
 
 .long_text_rich {
-  min-height:50px !important; 
+  min-height:2em !important; 
   background-color:var(--fco-sheet-input-colour) !important;
   color:var(--fco-sheet-text-colour) !important;
   font-family:var(--fco-font-family) !important;
@@ -474,6 +549,8 @@ textarea [name="command"] {
   overflow-y:auto;
   padding-left:5px;
   cursor:text;
+  scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+  scrollbar-width:thin;
 }
 
 .long_text_rich:hover {

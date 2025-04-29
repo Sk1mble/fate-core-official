@@ -1,46 +1,43 @@
-Hooks.on('getSceneControlButtons', function(hudButtons)
-{
-    if (game.user.isGM){
-        let hud = hudButtons.find(val => {return val.name == "token";})
-        if (hud){
-            hud.tools.push({
-                name:"ImportCharacter",//Completed
-                title:game.i18n.localize("fate-core-official.ImportCharacter"),
-                icon:"fas fa-download",
-                onClick: async ()=> {
-                    let fci = new FateCharacterImporter();
-                    let data = await fci.getFCI_JSON();
-                    fci.import(data);
-                },
-                button:true
-            });
+//v13This is now for v13 only!
+Hooks.on('getSceneControlButtons', controls => {
+    if ( !game.user.isGM ) return;
+    controls.tokens.tools.importCharacter = {
+      name: "importCharacter",
+      title: game.i18n.localize("fate-core-official.ImportCharacter"),
+      icon: "fas fa-download",
+      onChange: async (event, active) => {
+        if ( active ) {
+            let fci = new FateCharacterImporter();
+            let data = await fci.getFCI_JSON();
+            fci.import(data);
         }
-    }
-})
+      },
+      button: true
+    };
+  });
 
 class FateCharacterImporter {
     async getFCI_JSON(){
-        return new Promise(resolve => {
-            new Dialog({
-                title: game.i18n.localize("fate-core-official.PasteCharacterData"),
-                content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:var(--fco-font-family); width:382px; background-color:white; border:1px solid var(--fco-foundry-interactable-color); color:black;" id="import_fate_character"></textarea></div>`,
-                buttons: {
-                    ok: {
-                        label: "Save",
-                        callback: () => {
-                            resolve (document.getElementById("import_fate_character").value);
-                        }
-                    }
-                },
-            }).render(true)
-        });
+        return await fcoConstants.getImportDialog(game.i18n.localize("fate-core-official.PasteCharacterData"));
     }
 
     async import (data){
         try {
-            data = JSON.parse(data);    
-        } catch {
-            ui.notifications.error(game.i18n.localize("fate-core-official.couldnotparse"));
+            if (data.startsWith('`')){ //This is pasted data from a stringified actor.
+                // Remove backticks
+                data = data.replace(/`/g,'');
+
+                // Replace double escapes with single escapes.
+                data = data.replace(/\\\\/g, '\\');
+
+                // Then we can parse the data normally.
+                data = JSON.parse(data);
+            } else {
+                data = JSON.parse(data);
+            }
+        } catch (error) {
+            console.error(error);
+            ui.notifications.error(game.i18n.localize("fate-core-official.couldnotparse")+": "+(error));
             return;
         }
         

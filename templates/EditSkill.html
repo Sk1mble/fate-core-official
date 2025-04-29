@@ -1,74 +1,77 @@
-<form onsubmit="event.preventDefault();">
-    <table style="width:800" "height:750" cellspacing ="4" cellpadding="4">
-        <tr>
-            <td width="100">
-                {{localize 'fate-core-official.Skill'}}:
-            </td>
-            <td>
-                <input type="text" id ="edit_skill_name" name="name" style="background: white; color: black; font-family: var(--fco-font-family);" value="{{skill.name}}"></input>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{localize 'fate-core-official.Description'}}:
-            </td>
-            <td>
-                <div name="description" id="edit_skill_description_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family: var(--fco-font-family);">{{{rich.description}}}</div>
-                <div name="description" data-edit="description" id="edit_skill_description" style="display: none; background: white; color: black; font-family: var(--fco-font-family);">{{{skill.description}}}</div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{localize 'fate-core-official.Overcome'}}:
-            </td>
-            <td>
-                <div name="overcome" id="edit_skill_overcome_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family: var(--fco-font-family);">{{{rich.overcome}}}</div>
-                <div name="overcome" data-edit="overcome" id="edit_skill_overcome" style="display:none; background: white; color: black; font-family: var(--fco-font-family);">{{{skill.overcome}}}</div>
-            </td>   
-        </tr>
-        <tr>
-            <td>
-                {{localize 'fate-core-official.CAA'}}:
-            </td>
-            <td>
-                <div name="caa" id="edit_skill_caa_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family: var(--fco-font-family);">{{{rich.caa}}}</div>
-                <div name="caa" data-edit="caa" id="edit_skill_caa" style="display:none; background: white; color: black; font-family: var(--fco-font-family);">{{{skill.caa}}}</div>
-            </td>   
-        </tr>
-        <tr>
-            <td>
-                {{localize 'fate-core-official.Attack'}}:
-            </td>
-            <td>
-                <div name="attack" id="edit_skill_attack_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family: var(--fco-font-family);">{{{rich.attack}}}</div>
-                <div name="attack" data-edit="attack" id="edit_skill_attack" style="display:none; background: white; color: black; font-family: var(--fco-font-family);">{{{skill.attack}}}</div>
-            </td>   
-        </tr>
-        <tr>
-            <td>
-                {{localize 'fate-core-official.Defend'}}:
-            </td>
-            <td>
-                <div name="defend" id="edit_skill_defend_rich" tabindex = "0" style="min-height:1.5em; background: white; color: black; font-family: var(--fco-font-family);">{{{rich.defend}}}</div>
-                <div name="defend" data-edit="defend" id="edit_skill_defend" style="display:none; background: white; color: black; font-family: var(--fco-font-family);">{{{skill.defend}}}</div>
-            </td>   
-        </tr>
-        <tr>
-            <td>
-                {{localize 'fate-core-official.PCSkill'}}:
-            </td>
-            <td>
-                {{#if skill.pc}}
-                <input name="pc" type="checkbox" id="edit_pc" checked></input>
-                {{else}}
-                <input type="checkbox" id="edit_pc"></input>
-                {{/if}}
-            </td>   
-        </tr>
-        <tr>
-            <td colspan="2">
-                <button type="button" id="edit_save_changes">{{localize 'fate-core-official.SaveChanges'}}</button>
-            </td>
-        </tr>
-    </table>
-</form>
+<div>
+    <div style="display:flex; flex-direction:column; max-height:70vh; overflow-y:auto; scrollbar-color:var(--fco-accent-colour) #FFFFFF00;">
+        <table style="width:95%;" cellspacing ="4" cellpadding="4">
+            <tr>
+                <td width="100px">
+                    {{localize 'fate-core-official.Skill'}}:
+                </td>
+                <td>
+                    <input type="text" id ="edit_skill_name" name="name" style="background: white; color: black; font-family: var(--fco-font-family);" value="{{skill.name}}"></input>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{localize 'fate-core-official.Description'}}:
+                </td>
+                <td>
+                    <prose-mirror toggled="true" class="fco_prose_mirror editSkill" name="description" data-edit="description" value="{{skill.description}}">
+                        {{{rich.description}}}
+                    </prose-mirror>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{localize 'fate-core-official.Overcome'}}:
+                </td>
+                <td>
+                    <prose-mirror toggled="true" class="fco_prose_mirror editSkill" name="overcome" data-edit="overcome" value="{{skill.overcome}}">
+                        {{{rich.overcome}}}
+                    </prose-mirror>
+                </td>   
+            </tr>
+            <tr>
+                <td>
+                    {{localize 'fate-core-official.CAA'}}:
+                </td>
+                <td>
+                    <prose-mirror toggled="true" class="fco_prose_mirror editSkill" name="caa" data-edit="caa" value="{{skill.caa}}">
+                        {{{rich.caa}}}
+                    </prose-mirror>
+                </td>   
+            </tr>
+            <tr>
+                <td>
+                    {{localize 'fate-core-official.Attack'}}:
+                </td>
+                <td>
+                    <prose-mirror toggled="true" class="fco_prose_mirror editSkill" name="attack" data-edit="attack" value="{{skill.attack}}">
+                        {{{rich.attack}}}
+                    </prose-mirror>
+                </td>   
+            </tr>
+            <tr>
+                <td>
+                    {{localize 'fate-core-official.Defend'}}:
+                </td>
+                <td>
+                    <prose-mirror toggled="true" class="fco_prose_mirror editSkill" name="defend" data-edit="defend" value="{{skill.defend}}">
+                        {{{rich.defend}}}
+                    </prose-mirror>
+                </td>   
+            </tr>
+            <tr>
+                <td>
+                    {{localize 'fate-core-official.PCSkill'}}:
+                </td>
+                <td>
+                    {{#if skill.pc}}
+                    <input name="pc" type="checkbox" id="edit_pc" checked></input>
+                    {{else}}
+                    <input type="checkbox" id="edit_pc"></input>
+                    {{/if}}
+                </td>   
+            </tr>
+            <tr>
+        </table>
+    </div>
+</div>
