@@ -343,6 +343,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
     static DEFAULT_OPTIONS = {
         tag: "form",
         id: "GMSkillSetup",
+        classes:["fate"],
         window: {
             icon: "fas fa-scroll",
             title: this.title

@@ -1,6 +1,6 @@
 <div>
     <table style="background-color:none; border:none; margin-left:10px; margin-right:10px; max-width:90vh">
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.sheetHeaderColour'}}</strong><br/>
                 <div>{{localize 'fate-core-official.sheetHeaderColourHint'}}</div>
@@ -9,7 +9,7 @@
                 <color-Picker name="sheet_header_colour" value="{{this.sheet_header_colour}}"></color-Picker> 
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.sheetAccentColour'}}</strong><br/>
                 <div>{{localize 'fate-core-official.sheetAccentColourHint'}}</div>
@@ -18,7 +18,7 @@
                 <color-picker name="sheet_accent_colour" value = {{this.sheet_accent_colour}}></color-picker>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.sheetBackgroundColour'}}</strong><br/>
                 <div>{{localize 'fate-core-official.sheetBackgroundColourHint'}}</div>
@@ -27,7 +27,7 @@
                 <color-picker name="backgroundColour" value = {{this.backgroundColour}}></color-picker>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.sheetInputColour'}}</strong><br/>
                 <div>{{localize 'fate-core-official.sheetInputColourHint'}}</div>
@@ -36,7 +36,7 @@
                 <color-picker name="inputColour" value = {{this.inputColour}}></color-picker>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.sheetTextColour'}}</strong><br/>
                 <div>{{localize 'fate-core-official.sheetTextColourHint'}}</div>
@@ -45,7 +45,7 @@
                 <color-picker name="textColour" value = {{this.textColour}}></color-picker>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.sheetInteractableColour'}}</strong><br/>
                 <div>{{localize 'fate-core-official.sheetInteractableColourHint'}}</div>
@@ -54,7 +54,7 @@
                 <color-picker name="interactableColour" value = {{this.interactableColour}}></color-picker>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.sheetLabelColour'}}</strong><br/>
                 <div>{{localize 'fate-core-official.sheetLabelColourHint'}}</div>
@@ -63,7 +63,7 @@
                 <color-picker name="sheet_label_colour" value = {{this.sheet_label_colour}}></color-picker>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.notched-headers'}}</strong><br/>
                 <div>{{localize 'fate-core-official.notched-headers-hint'}}</div>
@@ -72,7 +72,7 @@
                 <input name="use_notched" type="checkbox" {{#if this.use_notched}}checked = "checked"{{/if}}></input>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.fcoAspectPaneHeight'}}</strong><br/>
                 <div>{{localize 'fate-core-official.fcoAspectPaneHeightHint'}}</div>
@@ -81,7 +81,7 @@
                 <range-picker name="fco_aspects_panel_height" value = "{{this.fco_aspects_panel_height}}" max = "90" min = "10" step = "5">
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="2">
                 <strong>{{localize 'fate-core-official.fcoSkillsPaneHeight'}}</strong><br/>
                 <div>{{localize 'fate-core-official.fcoSkillsPaneHeightHint'}}</div>
@@ -90,13 +90,13 @@
                 <range-picker name="fco_skills_panel_height" value = "{{this.fco_skills_panel_height}}" max = "90" min = "10" step = "5">
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan = "3">
                 <strong>{{localize 'fate-core-official.sheet-logo'}}</strong><br/>
                 <div>{{localize 'fate-core-official.user-sheet-logo-hint'}}</div>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan = "3">
                 <div style="display:flex; flex-direction:row; gap:10px">
                     <file-picker style="width: 500px" name = "fco_user_sheet_logo" value="{{fco_user_sheet_logo}}"></file-picker>
@@ -104,7 +104,7 @@
                 </div>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td colspan="3" style="text-align:center">
                 <div style="display:flex; flex-direction:row; gap:10px;">
                     <button name="save_sheet_settings" style="width:5em;">{{localize 'fate-core-official.Save'}}</button>

@@ -6,7 +6,7 @@
     {{#if (eq aspects undefined)}}{{else}}<h2>{{localize 'fate-core-official.Aspects'}}</h2>
     <table style="border:none; background:none; max-width:95%">
     {{#each aspects}}
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{this.name}}
             </td>
@@ -21,7 +21,7 @@
         <h2>{{localize 'fate-core-official.Skills'}}</h2>
         <table style="border:none; background:none; padding:10px; max-width:95%">
             {{#each skills}}
-            <tr>
+            <tr style="background-color:transparent">
                 <td style="width:50px">
                     {{this.rank}}
                 </td>
@@ -36,7 +36,7 @@
         <h2>{{localize 'fate-core-official.Tracks'}}</h2>
         <table style="background:none; border:none; padding:10px; max-width:95%">
             {{#each tracks}}{{#if this.enabled}}
-            <tr>
+            <tr style="background-color:transparent">
                 <td style="padding-bottom:10px; width:120px">
                     <div name="track_name" style="font-family:var(--fco-font-family)" title="{{localize 'fate-core-official.ClickHereToEditTrackNotes'}} {{this.name}}"><i style="font-style:normal; font-weight:bold; font-family: var(--fco-font-family)">{{this.name}}</i></div>
                 </td>
@@ -56,7 +56,7 @@
     <h2>{{localize 'fate-core-official.Stunts'}}:</h2>
     <table style="border:none; background:none; padding:10px; max-width:95%">
     {{#each stunts}}
-        <tr>
+        <tr style="background-color:transparent">
             <td width = 25%>{{this.name}}</td>
             <td>{{{this.richDesc}}}</td>
         </tr>
@@ -67,7 +67,7 @@
     <h2>{{localize 'fate-core-official.Extras'}}:</h2>
     <table style="border:none; background:none; padding:10px; max-width:95%">
     {{#each extras}}
-        <tr>
+        <tr style="background-color:transparent">
             <td width = "25%">{{this.name}}</td>
             <td>{{{this.richDesc}}}</td>
         </tr>

@@ -1545,6 +1545,7 @@ class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin
     static DEFAULT_OPTIONS = {
         tag: "form",
         id: "CustomiseSheet",
+        classes:["fate"],
         window: {
             icon: "fas fa-palette",
             title: this.title

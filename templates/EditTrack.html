@@ -27,7 +27,7 @@
 
     
     <table style="width:95%" cellspacing ="4" cellpadding="4">
-        <tr>
+        <tr style="background-color:transparent">
             <td width="200">
                 {{localize 'fate-core-official.Name'}}:
             </td>
@@ -35,7 +35,7 @@
                 <input type="text" id ="edit_track_name" style="background: white; color: black; font-family: var(--fco-font-family);" value="{{track.name}}"></input>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Description'}}:
             </td>
@@ -45,14 +45,14 @@
                 </prose-mirror>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Universal'}}<p/><p/>
             <td>
                 <input type="checkbox" id="edit_track_universal" {{#if track.universal}} checked="checked" {{/if}} ></input>{{localize 'fate-core-official.TrueIfFromSkillRating'}}<br/>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Unique'}}
             </td>
@@ -60,7 +60,7 @@
                 <input type="checkbox" id="edit_track_unique" {{#if track.unique}} checked = "checked"{{/if}}></input>{{localize 'fate-core-official.TrueIfOnlyOneCopy'}} 
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Paid'}}
             </td>
@@ -68,7 +68,7 @@
                 <input type="checkbox" id="edit_track_paid" {{#if track.paid}}checked = "checked"{{/if}}></input>{{localize 'fate-core-official.TrueIfCostsOneRefresh'}} 
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.RecoveryType'}}
             </td>
@@ -80,7 +80,7 @@
                 </select>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Aspect'}}:
             </td>
@@ -92,7 +92,7 @@
                 </select>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.WhenMarked'}}
             </td>
@@ -102,7 +102,7 @@
                 </prose-mirror>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.HowRecover'}}
             </td>
@@ -112,7 +112,7 @@
                 </prose-mirror>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Boxes'}}
             </td>
@@ -120,7 +120,7 @@
                 <input type="number" id="edit_track_boxes" value="{{track.boxes}}" style="background: white; color: black; font-family: var(--fco-font-family); width: 300px; height: 25px"> 
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.BoxLabels'}}:
             </td>
@@ -139,7 +139,7 @@
                 <input type="text" id="track_custom_label" maxlength="1" minlength="1" title="{{localize 'fate-core-official.EnterASingleCharacter'}}" {{#if (eq track.label "none")}} hidden="hidden"{{/if}} {{#if (eq track.label "escalating")}} hidden="hidden"{{/if}} style="margin-top:5px; color:black; background:white; width:50px" value="{{this.track.label}}"/> <span style="margin-top:5px">{{localize 'fate-core-official.LabelOverrides'}}</span>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Harm'}}:
             </td>
@@ -149,7 +149,7 @@
                 </div>
             </td>
         </tr>
-        <tr>
+        <tr style="background-color:transparent">
             <td>
                 {{localize 'fate-core-official.Rollable'}}
             </td>

@@ -550,7 +550,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                         <th>
                             ${game.i18n.localize("fate-core-official.Contents")}
                         </th>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                 ${game.i18n.localize("fate-core-official.avatar")}
                             </td>
@@ -558,7 +558,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                                 <img style="width:50px; height:auto" title="${presentation.img}" src="${presentation.img}"/> 
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                 ${game.i18n.localize("fate-core-official.token")}
                             </td>
@@ -566,7 +566,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                             <img style="width:50px; height:auto" title = "${presentation.img}" src="${presentation.token_img}"/>
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                 ${game.i18n.localize("fate-core-official.actorLink")}
                             </td>
@@ -574,7 +574,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                                 ${actorLink}
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                  ${game.i18n.localize("fate-core-official.Skills")}
                             </td>
@@ -582,7 +582,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                                 ${presentation.skills}
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                  ${game.i18n.localize("fate-core-official.Tracks")}
                             </td>
@@ -590,7 +590,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                                 ${presentation.tracks}
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                  ${game.i18n.localize("fate-core-official.Aspects")}
                             </td>
@@ -598,7 +598,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                                 ${presentation.aspects}
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                  ${game.i18n.localize("fate-core-official.Stunts")}
                             </td>
@@ -606,7 +606,7 @@ class ManageDefaults extends foundry.applications.api.HandlebarsApplicationMixin
                                 ${presentation.stunts}
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td>
                                  ${game.i18n.localize("fate-core-official.Extras")}
                             </td>

@@ -891,7 +891,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                     <th style="text-align:left; padding-left:5px">
                         Description
                     </th>
-                    <tr>
+                    <tr style="background-color:transparent">
                         <td style="text-align:left; padding-left:5px"> 
                             <input type="number" style="background-color:white; max-width:5em" name="fco_manual_modifier" value="0">
                             </input>
@@ -1499,17 +1499,17 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
         }
         let formulaeContent = "";
         if (showFormulae){
-            formulaeContent = `<tr><td>${game.i18n.localize("fate-core-official.diceFormula")}:</td><td><select style="background-color:white" type="text" id="fco-gmadhr-formula">`;
+            formulaeContent = `<tr style="background-color:transparent"><td>${game.i18n.localize("fate-core-official.diceFormula")}:</td><td><select style="background-color:white" type="text" id="fco-gmadhr-formula">`;
             for (let formula of formulae) formulaeContent += `<option value="${formula}">${formula}</option>`;
             formulaeContent += `</select></td></tr>`;
         }
         
         let content = `<table style="border:none;">
         ${formulaeContent}
-        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-actor-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-name"></input></td></tr>
-        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-skill-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-skill"></input></td></tr>
-        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-modifier")}</td><td><input style="background-color:white" type="number" id="fco-gmadhr-modifier"></input></td></tr>
-        <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-description")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-flavour"></input></td></tr>
+        <tr style="background-color:transparent"><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-actor-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-name"></input></td></tr>
+        <tr style="background-color:transparent"><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-skill-name")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-skill"></input></td></tr>
+        <tr style="background-color:transparent"><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-modifier")}</td><td><input style="background-color:white" type="number" id="fco-gmadhr-modifier"></input></td></tr>
+        <tr style="background-color:transparent"><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-description")}</td><td><input style="background-color:white" type="text" id="fco-gmadhr-flavour"></input></td></tr>
         </tr></table>`;
         let width = 500;
 
@@ -2564,13 +2564,13 @@ class TimedEvent {
             let pendingEvents = game.combat.getFlag("fate-core-official","timedEvents");
             if (pendingEvents != null || pendingEvents != undefined){
                 peText=
-                `<tr>
+                `<tr style="background-color:transparent">
                     <td style="font-weight:bold">${game.i18n.localize("fate-core-official.Exchange")}</td>
                     <td style="font-weight:bold">${game.i18n.localize("fate-core-official.PendingEvent")}</td>
                 </tr>`
                 pendingEvents.forEach(event => {
                     if (event.complete === false){
-                        peText+=`<tr><td>${event.round}</td><td>${event.event}</td></tr>`
+                        peText+=`<tr style="background-color:transparent"><td>${event.round}</td><td>${event.event}</td></tr>`
                     }
                 });
             }
@@ -2582,11 +2582,11 @@ class TimedEvent {
                                 ${peText}
                             </table>
                             <table style="background:none; border:none">
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td>${game.i18n.localize("fate-core-official.WhatIsYourEvent")}:</td>
                                     <td><input type="text" id="eventToCreate" name="eventToCreate" style="background: white; color: black;" autofocus></input></td>
                                 </tr>
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td>${game.i18n.localize("fate-core-official.TriggerEventOnExchange")}:</td>
                                     <td><input type="number" value="${game.combat.round+1}" id="eventExchange" name="eventExchange"></input></td>
                                 </tr>

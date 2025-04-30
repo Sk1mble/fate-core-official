@@ -128,10 +128,10 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
         catText += '</select>'
 
         let content = 
-        `<div>
+        `<div class="fate">
         <h1>${game.i18n.localize("fate-core-official.AddAnAdHocTrack")}</h1>
         <table border="0" cellpadding="4" cellspacing="4">
-            <tr>
+            <tr style="background-color:transparent">
                 <td width = "200px">
                     ${game.i18n.localize("fate-core-official.Category")}:
                 </td>
@@ -139,7 +139,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     ${catText}
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.Name")}:
                 </td>
@@ -147,7 +147,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input style="color:black; background:white;" name = "name" type="text" value="${game.i18n.localize("fate-core-official.NewTrack")}"></input>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.Description")}:
                 </td>
@@ -155,7 +155,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input style="color:black; background:white;" name = "description" type="text"></input>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.Universal")}
                 </td>
@@ -163,7 +163,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     ${game.i18n.localize("fate-core-official.AdHocTracksNotUniversal")}
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.Unique")}
                 </td>
@@ -171,7 +171,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input type="checkbox" name="unique" checked></input>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.RecoveryType")}:
                 </td>
@@ -179,7 +179,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <select style="color:black; background:white;" name = "recovery_type"><option value="Fleeting" selected="selected">${game.i18n.localize("fate-core-official.Fleeting")}</option><option value="Sticky">${game.i18n.localize("fate-core-official.Sticky")}</option><option value="Lasting">${game.i18n.localize("fate-core-official.Lasting")}</option></Select>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.AspectWhenMarked")}:
                 </td>
@@ -187,7 +187,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                      <input name = "aspect_when_marked" type="checkbox">
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.AspectAsName?")}
                 </td>
@@ -195,7 +195,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input name = "aspect_as_name" type="checkbox"></input>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                 ${game.i18n.localize("fate-core-official.Boxes")}:
                 </td>
@@ -203,7 +203,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input style="color:black; background:white;" name = "boxes" type="number" min = "0" value="0">
                 <td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
             <td>
                 ${game.i18n.localize("fate-core-official.BoxLabels")}:
             </td>
@@ -222,7 +222,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                 <input type="text" name="player_track_custom_label" maxlength="1" minlength="1" title="${game.i18n.localize("fate-core-official.EnterASingleCharacter")}" style="color:black; background:white; width:50px"/>
             </td>
         </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.Harm")}:
                 </td>
@@ -230,7 +230,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input style="color:black; background:white;" name = "harm" type="number" min = "0" value="0">
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
             <td>
                 ${game.i18n.localize('fate-core-official.Rollable')}
             </td>
@@ -242,7 +242,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                 </select>
             </td>
         </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.WhenMarked")}
                 </td>
@@ -250,7 +250,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input style="color:black; background:white;" name="when_marked" type="text"></input>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.HowRecover")}
                 </td>
@@ -258,7 +258,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     <input style="color:black; background:white;" name="recovery_conditions" type="text"></input>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.LinkedSkills")}:
                 </td>
@@ -469,7 +469,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
         let content = 
         `<h1>${game.i18n.localize("fate-core-official.DetailsFor")} ${track.name}</h1>
         <table border="1" cellpadding="4" cellspacing="4" style="width:950px">
-            <tr>
+            <tr style="background-color:transparent">
                 <td width = "200px">
                     ${game.i18n.localize("fate-core-official.Description")}:
                 </td>
@@ -477,7 +477,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     ${track.description}
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.Universal")}<br>
                     ${game.i18n.localize("fate-core-official.Unique")}<br>
@@ -489,7 +489,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     ${track.paid ? game.i18n.localize("fate-core-official.Yes"):game.i18n.localize("fate-core-official.No")}<br>
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.RecoveryType")}:<br>
                     ${game.i18n.localize("fate-core-official.AspectWhenMarked")}:<br>
@@ -509,7 +509,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     ${rollable}
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.WhenMarked")}:
                 </td>
@@ -518,7 +518,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                 </td>
 
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                     ${game.i18n.localize("fate-core-official.HowRecover")}:
                 </td>
@@ -526,7 +526,7 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                     ${track.recovery_conditions}
                 </td>
             </tr>
-            <tr>
+            <tr style="background-color:transparent">
                 <td>
                 ${game.i18n.localize("fate-core-official.LinkedSkills")}:
                 </td>

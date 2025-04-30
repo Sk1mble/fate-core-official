@@ -387,7 +387,7 @@
                     {{#each countdowns}}
                     
                     {{#if (eq this.visible 'visible')}}
-                    <tr>
+                    <tr style="background-color:transparent">
                         <td style="width:30%; padding-right:2px;">
                             {{#if ../GM}}
                                 <prose-mirror toggled="true" style="font-size:{{../fontSize}}pt" class = "fco_prose_mirror fu_cd" data-name="{{this.name}}" data-field="name" value="{{this.name}}">
@@ -436,7 +436,7 @@
 
                     {{#if (eq this.visible 'hidden')}}
                     {{#unless ../GM}}
-                    <tr>
+                    <tr style="background-color:transparent">
                         <td style="width:30%; vertical-align:top">
                             Mysterious Countdown
                         </td>
@@ -450,7 +450,7 @@
                     {{/unless}}
 
                     {{#if ../GM}}
-                    <tr>
+                    <tr style="background-color:transparent">
                         <td style="width:30%; padding-right:2px;">
                             <prose-mirror toggled="true" style="font-size:{{../fontSize}}pt" class = "fco_prose_mirror fu_cd" data-name="{{this.name}}" data-field="name" value="{{this.name}}">
                                 {{{this.richName}}}
@@ -486,7 +486,7 @@
 
                     {{#if (eq this.visible 'show_boxes')}}
                     {{#unless ../GM}}
-                    <tr>
+                    <tr style="background-color:transparent">
                         <td style="width:30%"> Mysterious Countdown </td>
                         <td style="width: 50%; padding-right:10px; vertical-align:top">
                         </td>
@@ -506,7 +506,7 @@
                     {{/unless}}
 
                     {{#if ../GM}}
-                    <tr>
+                    <tr style="background-color:transparent">
                         <td style="width:30%; padding-right:2px;">
                             <prose-mirror toggled="true" style="font-size:{{../fontSize}}pt" class = "fco_prose_mirror fu_cd" data-name="{{this.name}}" data-field="name" value="{{this.name}}">
                                 {{{this.richName}}}
@@ -641,7 +641,7 @@
                                 {{/if}}
                                 {{#if (eq this.fullSpeaker.actor ../user.character.id)}}{{#if ../GM}}{{else}}
                                <table style="background:transparent; border:none; margin:0px">
-                                        <tr>
+                                        <tr style="background-color:transparent">
                                             </tr>
                                             <tr style="background:transparent;">
                                                 <td>

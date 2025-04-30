@@ -321,6 +321,28 @@ textarea [name="command"] {
 
 .fate input[type="checkbox"]:checked::before, .mfate-sheet input[type="checkbox"]:checked::before {
   background-color:var(--fco-accent-colour);
+  color:var(--fco-label-colour);
+  width:100%;
+  content:"✔";
+  text-align:center;
+  font-size:1em;
+  font-weight:bold;
+}
+
+
+.fate input[type="checkbox"]::before {
+  color:var(--fco-accent-colour);
+  width:100%;
+}
+
+.mfate-sheet input[type="checkbox"]::before {
+  color:var(--fco-accent-colour);
+  width:100%;
+}
+
+#edit_entity_track_paid:checked::before {
+  background-color:var(--fco-accent-colour);
+  color:var(--fco-label-colour);
   width:100%;
   content:"✔";
   text-align:center;
@@ -538,6 +560,10 @@ textarea [name="command"] {
 .application.fcoExtra {
   color:var(--fco-sheet-text-colour);
   font-family:var(--fco-font-family) ;
+}
+
+.application.fate tr{
+  background-color:transparent;
 }
 
 .long_text_rich {

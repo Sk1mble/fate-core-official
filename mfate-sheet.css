@@ -82,6 +82,7 @@
     margin-left:10px;
     margin-right:10px;
     margin-bottom:5px;
+    color:var(--fco-sheet-text-colour);
 }
 
 .fco_prose_mirror {
@@ -482,6 +483,11 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
 
 .mfate-sheet__tabs-nav-link.mfate-sheet__tabs-nav-link.mfate-sheet__tabs-nav-link.active {
     border-bottom: none;
+}
+
+.mfate-sheet__tabs-nav-link.item
+{
+    color:var(--fco-sheet-text-color)
 }
 
 .mfate-sheet__tabs-nav-icon {

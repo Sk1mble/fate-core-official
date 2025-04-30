@@ -395,8 +395,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
             quick_add_skill?.addEventListener("click", event => {
                 // Get name of skill and rank in a dialog (default to 0 if not defined)
                 let content = `<table style="border:none;">
-                <tr><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-skill-name")}</td><td><input style="background-color:white" type="text" id="fco-qaskillname"></input></td></tr>
-                <tr><td>${game.i18n.localize("fate-core-official.Skill_Rank")}</td><td><input style="background-color:white" type="number" value = 0 id="fco-qaskillrank"></input></td></tr>
+                <tr style="background-color:transparent"><td>${game.i18n.localize("fate-core-official.fu-adhoc-roll-skill-name")}</td><td><input style="background-color:white" type="text" id="fco-qaskillname"></input></td></tr>
+                <tr style="background-color:transparent"><td>${game.i18n.localize("fate-core-official.Skill_Rank")}</td><td><input style="background-color:white" type="number" value = 0 id="fco-qaskillrank"></input></td></tr>
                 </tr></table>`;
                 let width = 400;
                 let height = "auto";
@@ -490,7 +490,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                     `<div>
                     <h1 style="padding: 10px">${track.name} (${track.recovery_type})</h1>
                     <table border="1" cellpadding="4" cellspacing="4" style="width:950px">
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td width = "200px" style="padding:10px">
                                 ${game.i18n.localize("fate-core-official.Description")}:
                             </td>
@@ -498,8 +498,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                             ${await fcoConstants.fcoEnrich(track.description)}
                             </td>
                         </tr>
-                        <tr>
-                        <tr>
+                        <tr style="background-color:transparent">
+                        <tr style="background-color:transparent">
                             <td style="padding:10px">
                                 ${game.i18n.localize("fate-core-official.Boxes")}:<br>
                                 ${game.i18n.localize("fate-core-official.Harm")}:
@@ -509,7 +509,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                 ${track.harm_can_absorb}
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td style="padding:10px">
                                 ${game.i18n.localize("fate-core-official.WhenMarked")}:
                             </td>
@@ -518,7 +518,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                             </td>
             
                         </tr>
-                        <tr>
+                        <tr style="background-color:transparent">
                             <td style="padding:10px">
                                 ${game.i18n.localize("fate-core-official.HowRecover")}:
                             </td>
@@ -827,7 +827,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                 <th style="width:40%; text-align:left">
                                     ${game.i18n.localize("fate-core-official.applyFromDefault")}
                                 </th>
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td style="width:60%; text-align:left">
                                         ${game.i18n.localize("fate-core-official.avatar")}
                                     </td>
@@ -835,7 +835,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                         <i id="${this.document.id}_def_avatar" class="def_toggle fas fa-toggle-on"></i>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td style="width:60%; text-align:left">
                                         ${game.i18n.localize("fate-core-official.tracks")}
                                     </td>
@@ -843,7 +843,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                         <i id="${this.document.id}_def_tracks" class="def_toggle fas fa-toggle-on"></i>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td style="width:60%; text-align:left">
                                         ${game.i18n.localize("fate-core-official.aspects")}
                                     </td>
@@ -851,7 +851,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                         <i id="${this.document.id}_def_aspects" class="def_toggle fas fa-toggle-on"></i>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td style="width:60%; text-align:left">
                                         ${game.i18n.localize("fate-core-official.stunts")}
                                     </td>
@@ -859,7 +859,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                         <i id="${this.document.id}_def_stunts" class="def_toggle fas fa-toggle-on"></i>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td style="width:60%; text-align:left">
                                         ${game.i18n.localize("fate-core-official.extras")}
                                     </td>
@@ -867,7 +867,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                         <i id="${this.document.id}_def_extras" class="def_toggle fas fa-toggle-on"></i>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="background-color:transparent">
                                     <td style="width:60%; text-align:left">
                                         ${game.settings.get("fate-core-official","skillsLabel")}
                                     </td>
