@@ -322,32 +322,31 @@ textarea [name="command"] {
 .fate input[type="checkbox"]:checked::before, .mfate-sheet input[type="checkbox"]:checked::before {
   background-color:var(--fco-accent-colour);
   color:var(--fco-label-colour);
-  width:100%;
   content:"✔";
   text-align:center;
   font-size:1em;
+  width:var(--checkbox-size);
   font-weight:bold;
 }
 
 
 .fate input[type="checkbox"]::before {
   color:var(--fco-accent-colour);
-  width:100%;
 }
 
 .mfate-sheet input[type="checkbox"]::before {
   color:var(--fco-accent-colour);
-  width:100%;
+  width:var(--checkbox-size);
 }
 
 #edit_entity_track_paid:checked::before {
   background-color:var(--fco-accent-colour);
   color:var(--fco-label-colour);
-  width:100%;
   content:"✔";
   text-align:center;
   font-size:1em;
   font-weight:bold;
+  width:var(--checkbox-size);
 }
 
 /* The container */

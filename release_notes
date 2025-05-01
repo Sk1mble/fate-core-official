@@ -1,3 +1,6 @@
+# 4.7.13.2
+* Additional minor tweaks to CSS and other cosmetics, mostly for checkboxes.
+
 # 4.7.13.1
 * CSS tweaks and a few other minor changes to make the Foundry dark mode play more nicely with existing sheets set up with a lighter look (i.e. the Fate sheets etc. will use the fate sheet text colour and background colour as set in the sheet settings)
 
