@@ -349,6 +349,10 @@ textarea [name="command"] {
   width:var(--checkbox-size);
 }
 
+#edit_entity_track_paid::before {
+  color:var(--fco-accent-colour);
+}
+
 /* The container */
 .box {
   font-family:"Montserrat";

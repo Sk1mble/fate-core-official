@@ -83,6 +83,8 @@
     margin-right:10px;
     margin-bottom:5px;
     color:var(--fco-sheet-text-colour);
+    scrollbar-color:var(--fco-accent-colour) #FFFFFF00; 
+    scrollbar-width:thin;
 }
 
 .fco_prose_mirror {
