@@ -1,3 +1,6 @@
+# 4.7.13.3
+* Changed the way the 'disable token ruler' setting works: it is now false by default (so players can at least try the new token ruler tool before turning it off) and it will now also prevent the movement history of a token from being recorded during a conflict (note, if you already have a history on tokens when this setting is changed, it won't be cleared until you advance to the next exchange).
+
 # 4.7.13.2
 * Additional minor tweaks to CSS and other cosmetics, mostly for checkboxes.
 

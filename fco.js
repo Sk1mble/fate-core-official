@@ -273,6 +273,13 @@ Hooks.once("i18nInit", async () => {
 })
 
 Hooks.once('ready', async () => {
+
+    if (game.settings.get("fate-core-official","disableAutoShowRuler")){
+        TokenDocument.prototype._shouldRecordMovementHistory = function () {
+            return false;
+        }
+    }
+    
     Hooks.on("preMoveToken", (document, movement, operation) => {
         if (game.settings.get("fate-core-official","disableAutoShowRuler")){
             movement.showRuler = false;
@@ -617,9 +624,11 @@ Hooks.once('init', async function () {
         name: game.i18n.localize("fate-core-official.disableAutoShowRuler"),
         scope: "world",
         type: Boolean,
-        default: true,
+        default: false,
         config: true,
         restricted: true,
+        hint:game.i18n.localize("fate-core-official.disableAutoShowRulerHint"),
+        requiresReload:true
     });
 
     
