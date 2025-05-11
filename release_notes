@@ -1,4 +1,4 @@
-# 4.7.13.4 (Unreleased)
+# 4.7.13.4
 * Increased the height of prosemirror elements on the Extra sheet as the existing heights were a bit tight for multi-line entries.
 * Minor bug fix on deleting the extra from a non-container Thing.
 * Minor bug fixes relating to rendering an Extra's sheet from the plug icon on a character sheet
