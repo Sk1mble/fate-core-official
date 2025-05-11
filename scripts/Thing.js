@@ -353,11 +353,9 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
     async render(...args){
         if (!this.actor?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
-                    this.renderPending = true;
-                    setTimeout(async () => {
-                        await super.render(...args);
-                        this.renderPending = false;
-                    }, 50);
+                this.renderPending = true;
+                await super.render(...args);
+                this.renderPending = false;
             }
         } else this.renderBanked = true;
     }
@@ -404,10 +402,10 @@ Hooks.on('deleteItem', async (item) => {
             await actor.sheet.close({"force":true});
             if (game.user == game.users.find(e => e.isGM && e.active)){
                 let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id);
-                game.scenes.viewed.deleteEmbeddedDocuments("Token", [t.id])
+                if (t) game.scenes.viewed.deleteEmbeddedDocuments("Token", [t.id]);
             } else {
                 let t = game.scenes.viewed.tokens.contents.find(token => token?.actor?.id === actor.id); //game.scenes.viewed.tokens.contents is the no-canvas safe alternative to game.scenes.viewed.tokens.contents.
-                game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "token":[t.id]});
+                if (t) game.socket.emit("system.fate-core-official",{"action":"delete_token", "scene":game.scenes.viewed, "token":[t.id]});
             }
         }
     }

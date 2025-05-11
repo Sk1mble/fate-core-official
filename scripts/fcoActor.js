@@ -802,25 +802,31 @@ export class fcoActor extends Actor {
         if (stunt){   
             let skill = stunt.linked_skill;
             let bonus = parseInt(stunt.bonus);
+            let name = stunt.linked_skill;
     
             let fcoc = new fcoConstants();
             let ladder = fcoc.getFateLadder();
             let rank = 0;
             if (skill == "Special"){
                 // We need to pop up a dialog to get a skill to roll.
-                //TODO: Consider whether should be able to select a 'No Skill option' to roll at Mediocre.
                 let skills = [];
+                skills.push(game.i18n.localize("fate-core-official.None"));
                 for (let x in this.system.skills){
                     skills.push(this.system.skills[x].name);
                 }
                 let sk = await fcoConstants.getInputFromList (game.i18n.localize("fate-core-official.select_a_skill"), skills);
                 skill = fcoConstants.gbn(this.system.skills, sk);
                 rank = skill?.rank;
+                name = sk;
+                if (sk == game.i18n.localize("fate-core-official.None")) rank = 0;
             } else {
-                //TODO: Consider whether should be able to roll a skill they don't have at Mediocre.
                 skill = fcoConstants.gbn(this.system.skills, skill);
-                if (!skill) return;
-                rank = skill?.rank;
+                if (!skill){
+                    rank = 0;
+                } 
+                else { 
+                    rank = skill?.rank;
+                }
             }
     
             let rankS = rank.toString();
@@ -834,7 +840,7 @@ export class fcoActor extends Actor {
             msg.alias = this.name;
     
             roll.toMessage({
-                flavor: `<h1>${skill.name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
+                flavor: `<h1>${name}</h1>${game.i18n.localize("fate-core-official.RolledBy")}: ${game.user.name}<br>
                 ${game.i18n.localize("fate-core-official.SkillRank")}: ${rank} (${rung})<br> 
                 ${game.i18n.localize("fate-core-official.Stunt")}: ${stunt.name} (+${bonus})`,
                 speaker: msg

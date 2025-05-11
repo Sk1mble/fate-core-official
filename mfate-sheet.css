@@ -158,8 +158,8 @@
 }
 
 .fco_prose_mirror.extra_pm, .fco_ro_rich.extra_ro {
-    min-height:7em;
-    max-height:12em;
+    min-height:12em;
+    max-height:24em;
     width:100%;
     margin:0px;
 }

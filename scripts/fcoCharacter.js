@@ -1081,10 +1081,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
                     this.renderPending = true;
-                    setTimeout(async () => {
-                        await super.render(...args);
-                        this.renderPending = false;
-                    }, 50);
+                    await super.render(...args);
+                    this.renderPending = false;
             }
         } else this.renderBanked = true;
     }

@@ -8,45 +8,43 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
     async render(...args){
         if (!this.object?.parent?.sheet?.editing && !this.editing && !window.getSelection().toString()){
             if (!this.renderPending) {
-                    this.renderPending = true;
-                    setTimeout(async () => {
-                        await super.render(...args);
-                        let avatar = this.element.querySelector('.mfate-sheet_extra-avatar');
-                        let doc = this.document;
-                        let newsrc;
-                        let target_id;
-                        let this_id = this.document.id;
+                this.renderPending = true;
+                    await super.render(...args);
+                    let avatar = this.element.querySelector('.mfate-sheet_extra-avatar');
+                    let doc = this.document;
+                    let newsrc;
+                    let target_id;
+                    let this_id = this.document.id;
 
-                        new MutationObserver(async function onSrcChange(MutationRecord){
-                            // Code to update avatar goes here
-                            target_id = MutationRecord[0].target.id.split("_")[0];
+                    new MutationObserver(async function onSrcChange(MutationRecord){
+                        // Code to update avatar goes here
+                        target_id = MutationRecord[0].target.id.split("_")[0];
 
-                            // If we strip the absolute path, it will break the link for a Foundry installation hosted on The Forge, plus images directly hosted on websites etc. won't work. 
-                            // So let's not do that for remotely hosted installations.
-                            // Otherwise though we want a local link, to prevent a file set on localhost from breaking if connecting from outside, or a move of dynamic DNS service breaking it.
+                        // If we strip the absolute path, it will break the link for a Foundry installation hosted on The Forge, plus images directly hosted on websites etc. won't work. 
+                        // So let's not do that for remotely hosted installations.
+                        // Otherwise though we want a local link, to prevent a file set on localhost from breaking if connecting from outside, or a move of dynamic DNS service breaking it.
 
-                            let src = MutationRecord[0].target.src;
-                            if (src.startsWith(window.location.origin)){
-                                newsrc = "/" + (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
-                            } else {
-                                newsrc = src;
+                        let src = MutationRecord[0].target.src;
+                        if (src.startsWith(window.location.origin)){
+                            newsrc = "/" + (MutationRecord[0].target.src.replace(/^(?:\/\/|[^/]+)*\//, ''));
+                        } else {
+                            newsrc = src;
+                        }
+                
+                        if (target_id == this_id){
+                            await doc.update({"img":newsrc});
+                            if (doc?.parent?.type == "Thing" && !doc?.parent?.system?.container?.isContainer){
+                                await doc.parent.update({"img":newsrc});  
+                                let tokens=game.scenes.viewed.tokens.contents;
+                                let token = tokens.find(tk => {
+                                    if (tk.actorId == doc.parent._id) return tk;
+                                })
+                                game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":newsrc}]);
+
                             }
-                    
-                            if (target_id == this_id){
-                                await doc.update({"img":newsrc});
-                                if (doc?.parent?.type == "Thing" && !doc?.parent?.system?.container?.isContainer){
-                                    await doc.parent.update({"img":newsrc});  
-                                    let tokens=game.scenes.viewed.tokens.contents;
-                                    let token = tokens.find(tk => {
-                                        if (tk.actorId == doc.parent._id) return tk;
-                                    })
-                                    game.scenes.viewed.updateEmbeddedDocuments("Token",[{_id:token.id, "texture.src":newsrc}]);
-
-                                }
-                            }
-                        }).observe(avatar,{attributes:true,attributeFilter:["src"]})
-                        this.renderPending = false;
-                    }, 50);
+                        }
+                    }).observe(avatar,{attributes:true,attributeFilter:["src"]})
+                    this.renderPending = false;
             }
         } else this.renderBanked = true;
     }

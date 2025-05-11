@@ -1,3 +1,9 @@
+# 4.7.13.4 (Unreleased)
+* Increased the height of prosemirror elements on the Extra sheet as the existing heights were a bit tight for multi-line entries.
+* Minor bug fix on deleting the extra from a non-container Thing.
+* Minor bug fixes relating to rendering an Extra's sheet from the plug icon on a character sheet
+* You can now use the roll button on a stunt where you don't have the skill on your sheet - it will be treated as mediocre. You can also select 'none' from the dialog that opens when you roll a 'Special' skill stunt to roll without a skill at mediocre.
+
 # 4.7.13.3
 * Changed the way the 'disable token ruler' setting works: it is now false by default (so players can at least try the new token ruler tool before turning it off) and it will now also prevent the movement history of a token from being recorded during a conflict (note, if you already have a history on tokens when this setting is changed, it won't be cleared until you advance to the next exchange).
 

@@ -2371,11 +2371,9 @@ async render(...args){
     if (!this.editing && !window.getSelection().toString()){
         await super.render(...args);
         if (!this.renderPending) {
-                this.renderPending = true;
-                await setTimeout(async () => {
-                    await super.render(...args);
-                    this.renderPending = false;
-                }, 50);
+            this.renderPending = true;
+            await super.render(...args);
+            this.renderPending = false;
         }
     } else this.renderBanked = true;
 }
@@ -2417,11 +2415,9 @@ async renderMe(...args){
     //The following code debounces the render, preventing multiple renders when multiple simultaneous update requests are received.
     if (!this.renderPending) {
         this.renderPending = true;
-        setTimeout(async () => {
-          await this.render(false);
-          this.delayedRender = false;
-          this.renderPending = false;
-        }, 50);
+        await this.render(false);
+        this.delayedRender = false;
+        this.renderPending = false;
       } 
     }
 }

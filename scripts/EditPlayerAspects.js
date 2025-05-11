@@ -180,17 +180,12 @@ class EditPlayerAspects extends foundry.applications.api.HandlebarsApplicationMi
     //This function is called when an actor or item update is called.
 
     async renderMe(id){
-        await setTimeout(async () => {
-                if (this?.actor?.id == id || this?.actor?.parent?.id == id){
-                    if (!this.renderPending) {
-                        this.renderPending = true;
-                        setTimeout(() => {
-                        this.render(false);
-                        this.renderPending = false;
-                        }, 50);
-                    }
-                }    
-            }, 50);
-        
+        if (this?.actor?.id == id || this?.actor?.parent?.id == id){
+            if (!this.renderPending) {
+                this.renderPending = true;
+                await this.render(false);
+                this.renderPending = false;
+            }
+        } 
     }
 }
