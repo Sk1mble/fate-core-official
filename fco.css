@@ -79,7 +79,7 @@ input[type="number"]::-webkit-inner-spin-button {
     appearance: auto;
 }
 
-body, h1, h2, h3, h4, h5, button:not(.fas, .fa, .icon, .control-icon), label:not(.fas, .fa, .icon), select:not(.fas, .fa, .icon), input:not(.fas, .fa, .icon) {
+a.button, body, h1, h2, h3, h4, h5, button:not(.fas, .fa, .icon, .control-icon), label:not(.fas, .fa, .icon), select:not(.fas, .fa, .icon), input:not(.fas, .fa, .icon) {
   font-family:var(--fco-foundry-font-family);
 }
 

@@ -63,39 +63,39 @@
                         {{#unless this.system.override.active}}
                             <div class="mfate-sheet__meta-item">
                                 <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.GameRefresh'}}: </div>
-                                <input class="mfate-sheet__meta-value" style="width:3em; height: 1.5em; padding:2px" type="number " name="gameRefresh " disabled value="{{gameRefresh}}"></input>
+                                <input class="mfate-sheet__meta-value" style="width:4rem; height: 1.5em; padding:2px" type="number " name="gameRefresh " disabled value="{{gameRefresh}}"></input>
                             </div>
                         {{/unless}}
 
                         {{#if this.system.override.active}}
                              <div class="mfate-sheet__meta-item">
                                 <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.allowedRefresh'}}: </div>
-                                <input class="cs_box" style="height: 1.5em; width:3em; padding:2px;" type="number " name="system.override.refresh" {{#unless GM}}disabled{{/unless}} value="{{this.system.override.refresh}}"></input>
+                                <input class="cs_box" style="height: 1.5em; width:4rem; padding:2px;" type="number " name="system.override.refresh" {{#unless GM}}disabled{{/unless}} value="{{this.system.override.refresh}}"></input>
                             </div>
                         {{/if}}
                         
                         <div class="mfate-sheet__meta-item">
                             <div class="mfate-sheet__meta-label" style="margin-left:5px; height:1.5em;">{{localize 'fate-core-official.SkillPoints'}}: </div>
-                            <input class="mfate-sheet__meta-value" style="height:1.5em; width:3em; padding:2px" type="number" name="skillTotal" disabled value="{{skillTotal}}"></input>
+                            <input class="mfate-sheet__meta-value" style="height:1.5em; width:4rem; padding:2px" type="number" name="skillTotal" disabled value="{{skillTotal}}"></input>
                         </div>
 
                         {{#unless this.system.override.active}}
                             <div class="mfate-sheet__meta-item">
                                 <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.GameSkillTotal'}}: </div>
-                                <input class="mfate-sheet__meta-value" style="height: 1.5em; width:3em; padding:2px" type="number" name="gameSkillPoints" disabled value="{{gameSkillPoints}}"></input>
+                                <input class="mfate-sheet__meta-value" style="height: 1.5em; width:4rem; padding:2px" type="number" name="gameSkillPoints" disabled value="{{gameSkillPoints}}"></input>
                             </div>
                         {{/unless}}
 
                         {{#if this.system.override.active}}
                             <div class="mfate-sheet__meta-item">
                                 <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.allowedSkillTotal'}}: </div>
-                                <input class="cs_box" style="height:1.5em; width:3em; padding:2px;" type="number " name="system.override.skillPoints" {{#unless GM}}disabled{{/unless}} value="{{this.system.override.skillPoints}}"></input>
+                                <input class="cs_box" style="height:1.5em; width:4rem; padding:2px;" type="number " name="system.override.skillPoints" {{#unless GM}}disabled{{/unless}} value="{{this.system.override.skillPoints}}"></input>
                             </div>
                         {{/if}}
                         
                         <div class="mfate-sheet__meta-item">
                             <div class="mfate-sheet__meta-label">{{localize 'fate-core-official.RefreshSpent'}}: </div>
-                            <input class="mfate-sheet__meta-value" style="height:1.5em; width:3em; padding:2px" type="number " name="refreshSpent " disabled style="width:75px " value="{{refreshSpent}} " title="{{localize 'fate-core-official.SpentOnStunts'}}: {{paidStunts}} ({{localize 'fate-core-official.TheGames'}} {{freeStunts}} {{localize 'fate-core-official.FreeStuntsDeducted'}}); {{localize 'fate-core-official.SpentOnTracks'}}: {{paidTracks}}; {{localize 'fate-core-official.SpentOnExtras'}}: {{paidExtras}}"></input>
+                            <input class="mfate-sheet__meta-value" style="height:1.5em; width:4rem; padding:2px" type="number " name="refreshSpent " disabled style="width:75px " value="{{refreshSpent}} " title="{{localize 'fate-core-official.SpentOnStunts'}}: {{paidStunts}} ({{localize 'fate-core-official.TheGames'}} {{freeStunts}} {{localize 'fate-core-official.FreeStuntsDeducted'}}); {{localize 'fate-core-official.SpentOnTracks'}}: {{paidTracks}}; {{localize 'fate-core-official.SpentOnExtras'}}: {{paidExtras}}"></input>
                         </div>
                         <div class="mfate-sheet__meta-item">
                             {{#if GM}}

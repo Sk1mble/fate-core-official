@@ -164,6 +164,11 @@
     margin:0px;
 }
 
+.fco_prose_mirror.fco_stunt_desc {
+    min-height:24em;
+    max-height:24em;
+}
+
 .fco_prose_mirror.editAspect {
     margin:0px;
     background-color:white;

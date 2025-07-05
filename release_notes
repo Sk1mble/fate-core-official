@@ -1,3 +1,8 @@
+# 4.7.13.5
+* Increased the height of the stunt description box in the stunt editor.
+* Increased the width of some of the metadata boxes to 4rem to make sure numerical values fully displayed at all font sizes
+* Changed CSS so it now overrides the core menu buttons that are actuall <a class="button"> to use the font assigned by the system.
+
 # 4.7.13.4
 * Increased the height of prosemirror elements on the Extra sheet as the existing heights were a bit tight for multi-line entries.
 * Minor bug fix on deleting the extra from a non-container Thing.
