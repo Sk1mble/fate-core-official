@@ -2370,11 +2370,6 @@ static async createCountdown (data){
 async render(...args){
     if (!this.editing && !window.getSelection().toString()){
         await super.render(...args);
-        if (!this.renderPending) {
-            this.renderPending = true;
-            await super.render(...args);
-            this.renderPending = false;
-        }
     } else this.renderBanked = true;
 }
 
