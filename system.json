@@ -46,6 +46,12 @@
       "path": "lang/en.json",
       "flags": {}
     },
+	{
+      "lang": "cs",
+      "name": "Čeština",
+      "path": "lang/cs.json",
+      "flags": {}
+    },  
     {
       "lang": "de",
       "name": "Deutsch",
