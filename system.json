@@ -87,7 +87,7 @@
   ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.13.5.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.13.6.zip",
   "grid":{
     "distance":1
   },
