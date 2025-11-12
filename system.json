@@ -11,9 +11,9 @@
   "url": "https://github.com/Sk1mble/fate-core-official",
   "compatibility": {
     "minimum": "13.340",
-    "verified": "13.346"
+    "verified": "13.350"
   },
-  "version": "4.7.13.5",
+  "version": "4.7.13.6",
   "scripts": [
     "scripts/fcoConstants.js",
     "scripts/ManageSkills.js",

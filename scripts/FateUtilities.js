@@ -748,6 +748,8 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             let macroID = sk.value.split("_")[1];
             let macro = await fromUuid(macroID);
             await macro.execute({actor:token.actor, token:token});
+            this.selectingSkill = false;
+            await this.render(false);
             return;   
         }
 

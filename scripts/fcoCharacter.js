@@ -1067,7 +1067,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         let stunt = this.object.system.stunts[event.target.getAttribute("data-stunt")];
         let macrouuid = stunt.macro;
         let macro = await fromUuid(macrouuid);
-        await macro.execute({actor:this.object.actor});
+        await macro.execute({actor:this.object});
     }
 
     async _on_stunt_macro_contextmenu(event){

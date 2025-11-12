@@ -1,3 +1,7 @@
+# 4.7.13.6
+* Bug fix in code for running a macro (actor was not being passed correctly to the macro context when run from a character sheet)
+* Bug fix in Fate Utilities 'roll a macro' function - it now refreshes the selection box after rolling as it should.
+
 # 4.7.13.5
 * Increased the height of the stunt description box in the stunt editor.
 * Increased the width of some of the metadata boxes to 4rem to make sure numerical values fully displayed at all font sizes
