@@ -65,7 +65,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
             let stuntKey = fcoConstants.gkfn(stunts, this.stunt.name);
 
             if (formData["name"]!=this.stunt.name && !this.new) {
-                update_object[`system.stunts.-=${stuntKey}`] = null;
+                update_object[`system.stunts.${stuntKey}`] = _del;
             }
             for (let t in formData){
                 this.stunt[t]=formData[t];
@@ -84,7 +84,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
 
             if (formData["name"] != this.stunt.name && !this.new) {
                 let stuntKey = fcoConstants.gkfn(this.actor.system.stunts, this.stunt.name);
-                await this.actor.update({"system.stunts":{[`-=${stuntKey}`]:null}});
+                await this.actor.update({"system.stunts":{[`${stuntKey}`]:_del}});
             }
             
             for (let t in formData){
@@ -518,7 +518,7 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
             let stunts = foundry.utils.duplicate(fcoConstants.wd().system.stunts);
             let key = fcoConstants.gkfn(stunts, event.target.id.split("_")[0]);
             let update_object = {};
-            update_object[`system.stunts.-=${key}`] = null;
+            update_object[`system.stunts.${key}`] = _del;
             await fcoConstants.wd().update(update_object);
             await this.render(false);
         }

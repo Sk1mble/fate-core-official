@@ -217,10 +217,6 @@
     margin: 0px;
 }
 
-.fco_prose_mirror.fu_cd.editor.prosemirror .editor-menu {
-    min-height:4em;
-}
-
 .fco_prose_mirror.editor .icon.toggle {
     transition: opacity 1s; 
     opacity:0;
@@ -249,7 +245,6 @@
 }
 
 .fco_prose_mirror.editor.prosemirror .editor-menu {
-    height:2em;
     padding-top:0px;
     padding-bottom:0px;
     border-radius:0;

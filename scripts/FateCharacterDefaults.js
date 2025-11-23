@@ -69,7 +69,7 @@ class FateCharacterDefaults {
         if (key){
             await fcoConstants.wd().update({
                 "system.defaults":{
-                    [`-=${key}`]:null
+                    [`${key}`]:_del
                 }
             });
             ui.sidebar.render(false);

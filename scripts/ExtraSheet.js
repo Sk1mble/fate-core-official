@@ -523,7 +523,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
         if (del){
             let name = event.target.dataset.stuntname;
             let key = fcoConstants.gkfn(this.object.system.stunts, name)
-            await this.object.update({"system.stunts":{[`-=${key}`]:null}});
+            await this.object.update({"system.stunts":{[`${key}`]:_del}});
         }
     }
 

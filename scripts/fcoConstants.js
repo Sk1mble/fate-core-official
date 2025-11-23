@@ -509,9 +509,9 @@ class fcoConstants {
         let current_defaults = fcoConstants.wd().system.defaults;
         let defaults = input?.defaults;
 
-        await fcoConstants.wd().update({"system.==skills":input?.skills});      
-        await fcoConstants.wd().update({"system.==tracks":input?.tracks});
-        await fcoConstants.wd().update({"system.==aspects":input?.aspects});
+        await fcoConstants.wd().update({"system.skills":_replace(input?.skills)});      
+        await fcoConstants.wd().update({"system.tracks":_replace(input?.tracks)});
+        await fcoConstants.wd().update({"system.aspects":_replace(input?.aspects)});
 
         // Give option to merge stunts, if there are stunts in the new settings AND stunts in the existing settings.
 
@@ -522,7 +522,7 @@ class fcoConstants {
                     let final_stunts = foundry.utils.mergeObject(current_stunts, stunts);
                     await fcoConstants.wd().update({"system.stunts":final_stunts});
                 } else {
-                    await fcoConstants.wd().update({"system.==stunts":stunts});
+                    await fcoConstants.wd().update({"system.stunts":_replace(stunts)});
                 }
             }   
         } else {
@@ -536,13 +536,13 @@ class fcoConstants {
                 let confirm = await fcoConstants.awaitYesNoDialog(game.i18n.localize("fate-core-official.mergeDefaultsTitle"), `<p>${game.i18n.localize("fate-core-official.mergeDefaults")}</p>`);
                 if ( confirm ) {
                     let final_defaults = foundry.utils.mergeObject(current_defaults, defaults);
-                    await fcoConstants.wd().update({"system.==defaults":final_defaults});
+                    await fcoConstants.wd().update({"system.defaults":_replace(final_defaults)});
                 } else {
-                    await fcoConstants.wd().update({"system.==defaults":defaults});
+                    await fcoConstants.wd().update({"system.defaults":_replace(defaults)});
                 }
             }   
         } else {
-            await fcoConstants.wd().update({"system.==defaults":defaults});
+            await fcoConstants.wd().update({"system.defaults":_replace(defaults)});
         }
 
         await game.settings.set("fate-core-official","track_categories",input?.track_categories);   

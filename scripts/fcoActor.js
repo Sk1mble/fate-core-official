@@ -31,7 +31,7 @@ export class fcoActor extends Actor {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    await this.update({"system":{[`==${type}`]:output}})
+                    await this.update({"system":{[`${type}`]:_replace(output)}})
                 }    
             }
             for (let extra of this.items) {
@@ -60,7 +60,7 @@ export class fcoActor extends Actor {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    this.updateSource({"system":{[`==${type}`]:output}})
+                    this.updateSource({"system":{[`${type}`]:_replace(output)}})
                 }
             }
         }
@@ -556,7 +556,7 @@ export class fcoActor extends Actor {
                 if (track.extra_id != undefined && track.extra_id == extra_id){
                     let tr = fcoConstants.gbn(tracks_output, track.name);
                     if (!tr){
-                        update_object[`system.tracks.-=${t}`] = null;
+                        update_object[`system.tracks.${t}`] = _del;
                     }
                 }
             }
@@ -580,7 +580,7 @@ export class fcoActor extends Actor {
                 if (aspect != undefined && aspect.extra_id != undefined && aspect.extra_id == extra_id){
                     let as = fcoConstants.gbn(aspects_output, aspect.name);
                     if (!as){
-                        update_object[`system.aspects.-=${a}`] = null;
+                        update_object[`system.aspects.${a}`] = _del;
                     }
                 }
             }
@@ -593,7 +593,7 @@ export class fcoActor extends Actor {
                 if (skill != undefined && skill.extra_id != undefined && skill.extra_id == extra_id){
                     let sk = fcoConstants.gbn(skills_output, skill.name);
                     if (!sk){
-                        update_object[`system.skills.-=${s}`] = null;
+                        update_object[`system.skills.${s}`] = _del;
                     }
                 }
             }
@@ -604,7 +604,7 @@ export class fcoActor extends Actor {
                 if (stunt != undefined && stunt.extra_id != undefined && stunt.extra_id == extra_id){
                     let st = fcoConstants.gbn(stunts_output, stunt.name);
                     if (!st){
-                        update_object[`system.stunts.-=${s}`] = null;;
+                        update_object[`system.stunts.${s}`] = _del;;
                     }
                 }
             }
@@ -678,7 +678,7 @@ export class fcoActor extends Actor {
         for(let aspect in actor_aspects)
         {
             if ( actor_aspects[aspect]?.extra_id == itemData._id){
-                updateObject[`system.aspects.-=${aspect}`] = null;
+                updateObject[`system.aspects.${aspect}`] = _del;
             }
         }
         
@@ -686,7 +686,7 @@ export class fcoActor extends Actor {
     
         for (let stunt in actor_stunts){
             if (actor_stunts[stunt]?.extra_id == itemData._id){
-                updateObject[`system.stunts.-=${stunt}`] = null;
+                updateObject[`system.stunts.${stunt}`] = _del;
             }
         }
     
@@ -694,7 +694,7 @@ export class fcoActor extends Actor {
     
         for (let track in actor_tracks){
             if (actor_tracks[track]?.extra_id == itemData._id){
-                updateObject[`system.tracks.-=${track}`] = null;
+                updateObject[`system.tracks.${track}`] = _del;
             }
         }
     
@@ -702,7 +702,7 @@ export class fcoActor extends Actor {
     
         for (let skill in actor_skills){
             if (actor_skills[skill]?.extra_id == itemData._id){
-                updateObject[`system.skills.-=${skill}`] = null;
+                updateObject[`system.skills.${skill}`] = _del;
             }
         }      
 
@@ -874,6 +874,11 @@ export class fcoActor extends Actor {
             }
         }
     }
+
+    applyActiveEffects(...args){
+        // Do nothing. This system doesn't use active effects. Required to fix a bug in Foundry version 14 that threw an error every time one updated a character.
+    }
+
 
     setupTracks (skills, tracks) {
         // This method takes skill and track data and returns corrected tracks enabled and disabled etc. according to the values of those skills

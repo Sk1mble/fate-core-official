@@ -23,7 +23,7 @@ export class fcoExtra extends Item {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    this.updateSource({"system":{[`==${type}`]:output}})
+                    this.updateSource({"system":{[`${type}`]:_replace(output)}})
                 }
             }
         }
@@ -45,7 +45,7 @@ export class fcoExtra extends Item {
                 let oldKeys = JSON.stringify(Object.keys(block));
                 let newKeys = JSON.stringify(Object.keys(output));
                 if (oldKeys != newKeys){
-                    await this.update({"system":{[`==${type}`]:output}})
+                    await this.update({"system":{[`${type}`]:_replace(output)}})
                 }
             }
         }

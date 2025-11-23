@@ -168,7 +168,7 @@ class SkillSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
             if (skills[key] != undefined){
                 await fcoConstants.wd().update({
                     "system.skills":{
-                        [`-=${key}`]:null
+                        [`${key}`]:_del
                     }
                 });
                 this.render(true);
@@ -286,7 +286,7 @@ class EditSkill extends foundry.applications.api.HandlebarsApplicationMixin(foun
                     //That means the name has been changed. Delete the original skill and replace it with this one.
                     await fcoConstants.wd().update({
                         "system.skills":{
-                            [`-=${fcoConstants.tob64(this.skill.name)}`]:null
+                            [`${fcoConstants.tob64(this.skill.name)}`]:_del
                         }
                     });
                 }                      

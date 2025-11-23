@@ -104,7 +104,7 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
                 ui.notifications.error(game.i18n.localize("fate-core-official.UnableToSave"));
             } else {
                 let tracks = this.object.setupTracks (foundry.utils.duplicate(this.player_skills), foundry.utils.duplicate(this.object.system.tracks));
-                await this.object.update({"system.==tracks":tracks,"system.==skills":this.player_skills}); 
+                await this.object.update({"system.tracks":_replace(tracks),"system.skills":_replace(this.player_skills)}); 
                 ui.notifications.info(game.i18n.localize("fate-core-official.SkillsSaved"));
                 this.changed = false;
                 this.close();
@@ -400,7 +400,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
                 if (newSkill != undefined){
                     newSkill.name=newSkill.name;
                     let oldSkillKey = fcoConstants.gkfn(this.object.system.skills, oldSkill);
-                    this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill, [`-=${oldSkillKey}`]:null}}).then(() => this.render(false));
+                    this.object.update({"system.skills": {[fcoConstants.tob64(newSkill.name)]:newSkill, [`${oldSkillKey}`]:_del}}).then(() => this.render(false));
                 }
             }
         }))
@@ -417,7 +417,7 @@ class EditGMSkills  extends foundry.applications.api.HandlebarsApplicationMixin(
 
             }
             if (cbox != undefined && !cbox.checked){
-                updateObject[`system.skills.-=${s}`] = null;
+                updateObject[`system.skills.${s}`] = _del;
             }
         } 
         

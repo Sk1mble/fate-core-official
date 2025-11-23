@@ -1111,7 +1111,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         let del = await fcoConstants.confirmDeletion();
         if (del){
             let key = fcoConstants.gkfn(this.object.system.stunts, event.target.dataset.stuntname);
-            await this.object.update({"system.stunts":{[`-=${key}`]:null}});
+            await this.object.update({"system.stunts":{[`${key}`]:_del}});
         }
     }
 

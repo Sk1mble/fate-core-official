@@ -1,3 +1,6 @@
+# 4.7.14
+* Adopt the new syntax for replacing and deleting keys from Foundry version 14. With this change, this version is not compatible with Foundry versions 13 or earlier.
+
 # 4.7.13.6
 * Bug fix in code for running a macro (actor was not being passed correctly to the macro context when run from a character sheet)
 * Bug fix in Fate Utilities 'roll a macro' function - it now refreshes the selection box after rolling as it should.

@@ -176,7 +176,7 @@ class AspectSetup extends foundry.applications.api.HandlebarsApplicationMixin(fo
                 let key = fcoConstants.gkfn(aspects, aspect.name);
                 await fcoConstants.wd().update({
                     "system.aspects":{
-                        [`-=${key}`]:null
+                        [`${key}`]:_del
                     }
                 });
                 this.render(true);
@@ -235,7 +235,7 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
                     await fcoConstants.wd().update({
                         "system.aspects":{
-                            [`-=${key}`]:null
+                            [`${key}`]:_del
                         }
                     });        
                 }  
@@ -380,8 +380,8 @@ class OrderAspects extends foundry.applications.api.HandlebarsApplicationMixin(f
             for (let i = 0; i < this.data.length; i++){
                 aspects[fcoConstants.tob64(this.data[i].name)] = this.data[i];
             }
-            await fcoConstants.wd().update({"system.==aspects":{}},{noHook:true, renderSheet:false});
-            await fcoConstants.wd().update({"system.==aspects":aspects});
+            await fcoConstants.wd().update({"system.aspects":_replace({})},{noHook:true, renderSheet:false});
+            await fcoConstants.wd().update({"system.aspects":_replace(aspects)});
             this.close();
         })
     }
