@@ -13,7 +13,7 @@
     "minimum": "14.352",
     "verified": "14.352"
   },
-  "version": "4.7.14",
+  "version": "4.7.14.1",
   "scripts": [
     "scripts/fcoConstants.js",
     "scripts/ManageSkills.js",
@@ -87,7 +87,7 @@
   ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.14.zip",
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.14.1.zip",
   "grid":{
     "distance":1
   },

@@ -92,12 +92,12 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
             container.system.contents = {
               locked: this.actor.system.container.locked,
               security: this.actor.system.container.security,
-              extras: this.actor.items.contents
+              extras: foundry.utils.duplicate(this.actor.items.contents)
             };
           
             // Create the container item on the character
             await character.createEmbeddedDocuments("Item",[container]);
-          
+
             // Delete tokens
             const tokens = this.actor.getActiveTokens();
             const tokenIds = tokens.map(t => t.id);
