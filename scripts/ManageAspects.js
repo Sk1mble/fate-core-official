@@ -271,7 +271,7 @@ class EditAspect extends foundry.applications.api.HandlebarsApplicationMixin(fou
     //Here are the event listener functions.
     async _onSaveButton(){
         //Get the name and description of the aspect
-        let name = document.getElementById("edit_aspect_name").value;
+        let name = this.element.querySelector("#edit_aspect_name").value;
         let description = this.element.querySelector('.fco_prose_mirror.editAspect').value;
         this._updateObject({"name":name, "description":description});
         game.system.manageAspects.render(true);

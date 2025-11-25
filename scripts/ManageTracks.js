@@ -74,12 +74,12 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
 
     async _on_track_label_select(event){
         if (event.target.value != "escalating" && event.target.value != "none"){
-            document.getElementById("entity_track_custom_label").hidden = false
-            document.getElementById("entity_track_custom_label").value = "";
+            this.element.querySelector("#entity_track_custom_label").hidden = false
+            this.element.querySelector("#entity_track_custom_label").value = "";
         }
         else {
-            document.getElementById("entity_track_custom_label").hidden = true
-            document.getElementById("entity_track_custom_label").value = "";
+            this.element.querySelector("#entity_track_custom_label").hidden = true
+            this.element.querySelector("#entity_track_custom_label").value = "";
         }
     }
 
@@ -117,19 +117,19 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
     }
 
     async updateData () {
-        this.data.track.name = document.getElementById("edit_entity_track_name").value;
+        this.data.track.name = this.element.querySelector("#edit_entity_track_name").value;
         this.data.track.description = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_desc').value);
-        this.data.track.recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
-        this.data.track.aspect = document.getElementById("edit_entity_track_aspect").value;
+        this.data.track.recovery_type = this.element.querySelector("#edit_entity_track_recovery_type").value;
+        this.data.track.aspect = this.element.querySelector("#edit_entity_track_aspect").value;
         this.data.track.when_marked = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_when_marked').value);
         this.data.track.when_recovers = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_recovery_conditions').value);
-        this.data.track.boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
-        this.data.track.harm = parseInt(document.getElementById("edit_entity_track_harm").value);
-        this.data.track.paid = document.getElementById("edit_entity_track_paid").checked;
-        this.data.track.label = document.getElementById("entity_track_label_select").value;
-        this.data.track.custom_label = document.getElementById("entity_track_custom_label").value;
-        this.data.track.rollable = document.getElementById("entity_track_rollable").value;
-        this.data.track.category = document.getElementById("edit_entity_track_category").value;
+        this.data.track.boxes = parseInt(this.element.querySelector("#edit_entity_track_boxes").value);
+        this.data.track.harm = parseInt(this.element.querySelector("#edit_entity_track_harm").value);
+        this.data.track.paid = this.element.querySelector("#edit_entity_track_paid").checked;
+        this.data.track.label = this.element.querySelector("#entity_track_label_select").value;
+        this.data.track.custom_label = this.element.querySelector("#entity_track_custom_label").value;
+        this.data.track.rollable = this.element.querySelector("#entity_track_rollable").value;
+        this.data.track.category = this.element.querySelector("#edit_entity_track_category").value;
 
         let rich = {};
         for (let part in this.data.track){
@@ -139,19 +139,19 @@ class EditEntityTrack extends foundry.applications.api.HandlebarsApplicationMixi
     }
 
     async _onSaveTrackButton(event){
-        let name = document.getElementById("edit_entity_track_name").value;
+        let name = this.element.querySelector("#edit_entity_track_name").value;
         let description = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_desc').value);
-        let recovery_type = document.getElementById("edit_entity_track_recovery_type").value;
-        let aspect = document.getElementById("edit_entity_track_aspect").value;
+        let recovery_type = this.element.querySelector("#edit_entity_track_recovery_type").value;
+        let aspect = this.element.querySelector("#edit_entity_track_aspect").value;
         let when_marked = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_when_marked').value);
         let when_recovers = DOMPurify.sanitize(this.element.querySelector('.fco_prose_mirror.edit_track_recovery_conditions').value);
-        let boxes = parseInt(document.getElementById("edit_entity_track_boxes").value);
-        let harm = parseInt(document.getElementById("edit_entity_track_harm").value);
-        let paid = document.getElementById("edit_entity_track_paid").checked;
-        let label = document.getElementById("entity_track_label_select").value;
-        let custom_label = document.getElementById("entity_track_custom_label").value;
-        let rollable = document.getElementById("entity_track_rollable").value;
-        let category = document.getElementById("edit_entity_track_category").value;
+        let boxes = parseInt(this.element.querySelector("#edit_entity_track_boxes").value);
+        let harm = parseInt(this.element.querySelector("#edit_entity_track_harm").value);
+        let paid = this.element.querySelector("#edit_entity_track_paid").checked;
+        let label = this.element.querySelector("#entity_track_label_select").value;
+        let custom_label = this.element.querySelector("#entity_track_custom_label").value;
+        let rollable = this.element.querySelector("#entity_track_rollable").value;
+        let category = this.element.querySelector("#edit_entity_track_category").value;
 
         if (label!="escalating" && label != "none") {
             label=custom_label;
@@ -279,7 +279,7 @@ class EditEntityLinkedSkills extends foundry.applications.api.HandlebarsApplicat
     async _onDeleteLinkedSkillButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-            let toDelete = document.getElementById("linked_skills").value;
+            let toDelete = this.element.querySelector("#linked_skills").value;
             let track = this.track;
             let linked_skills = track.linked_skills;
     
@@ -294,10 +294,10 @@ class EditEntityLinkedSkills extends foundry.applications.api.HandlebarsApplicat
     }
 
     async _onAddLinkedSkillButton(){
-        let linked_skill = document.getElementById("skill_list").value;
-            let rank = parseInt(document.getElementById("skill_rank").value);
-            let boxes = parseInt(document.getElementById("added_boxes").value);
-            let enables = document.getElementById("edit_enables").checked;
+        let linked_skill = this.element.querySelector("#skill_list").value;
+            let rank = parseInt(this.element.querySelector("#skill_rank").value);
+            let boxes = parseInt(this.element.querySelector("#added_boxes").value);
+            let enables = this.element.querySelector("#edit_enables").checked;
             
             if (this.track.linked_skills==undefined){
                 this.track.linked_skills = []
@@ -359,7 +359,7 @@ class EditLinkedSkills extends foundry.applications.api.HandlebarsApplicationMix
     async _onDeleteLinkedSkillButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-             let toDelete = document.getElementById("linked_skills").value;
+             let toDelete = this.element.querySelector("#linked_skills").value;
             let track = this.track;
             let tracks = fcoConstants.wd().system.tracks;
             let linked_skills = track.linked_skills;
@@ -382,10 +382,10 @@ class EditLinkedSkills extends foundry.applications.api.HandlebarsApplicationMix
     }
 
     async _onAddLinkedSkillButton(){
-        let linked_skill = document.getElementById("skill_list").value;
-            let rank = parseInt(document.getElementById("skill_rank").value);
-            let boxes = parseInt(document.getElementById("added_boxes").value);
-            let enables = document.getElementById("edit_enables").checked;
+        let linked_skill = this.element.querySelector("#skill_list").value;
+            let rank = parseInt(this.element.querySelector("#skill_rank").value);
+            let boxes = parseInt(this.element.querySelector("#added_boxes").value);
+            let enables = this.element.querySelector("#edit_enables").checked;
             
             if (this.track.linked_skills==undefined){
                 this.track.linked_skills = []
@@ -511,7 +511,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
                 if (event.target.id != "track_select"){
                     if (event.target.id == "track_label_select") {
                         if (event.target.value == "custom"){
-                            document.getElementById("track_custom_label").value = "";
+                            this.element.querySelector("#track_custom_label").value = "";
                         }
                     }
                     await this._onSaveTrackButton();
@@ -560,16 +560,16 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         let name = event.target.value;
         let track = fcoConstants.gbn(this.tracks, name);
         if (track == undefined){
-            document.getElementById("edit_linked_skills").disabled="disabled";
+            this.element.querySelector("#edit_linked_skills").disabled="disabled";
         } else {
-            document.getElementById("edit_linked_skills").disabled="";
+            this.element.querySelector("#edit_linked_skills").disabled="";
         }
     }
 
     async _onDeleteTrackButton(event){
         let del = await fcoConstants.confirmDeletion();
         if (del){
-             let name = document.getElementById("track_select").value;
+             let name = this.element.querySelector("#track_select").value;
             try {
                     let key = fcoConstants.gkfn(this.tracks, name);
                     await fcoConstants.wd().update({
@@ -587,7 +587,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         }
     }
     async _edit_linked_skillsButtonClick(event){
-        let name = document.getElementById("track_select").value;
+        let name = this.element.querySelector("#track_select").value;
         if (name=="New Track"){
             ui.notifications.error(game.i18n.localize("fate-core-official.SelectTrackBeforeAddingLinkedSkill"));
         }
@@ -609,20 +609,20 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
     }
 
     async _onSaveTrackButton(event,html){
-        let name = document.getElementById("edit_track_name").value;
+        let name = this.element.querySelector("#edit_track_name").value;
         let description = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_desc").value);
-        let universal = document.getElementById("edit_track_universal").checked;
-        let unique = document.getElementById("edit_track_unique").checked;
-        let recovery_type = document.getElementById("edit_track_recovery_type").value;
-        let aspect = document.getElementById("edit_track_aspect").value;
+        let universal = this.element.querySelector("#edit_track_universal").checked;
+        let unique = this.element.querySelector("#edit_track_unique").checked;
+        let recovery_type = this.element.querySelector("#edit_track_recovery_type").value;
+        let aspect = this.element.querySelector("#edit_track_aspect").value;
         let when_marked = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_when_marked").value);
         let when_recovers = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_recovery_conditions").value);
-        let boxes = parseInt(document.getElementById("edit_track_boxes").value);
-        let harm = parseInt(document.getElementById("edit_track_harm").value);
-        let paid = document.getElementById("edit_track_paid").checked;
-        let label = document.getElementById("track_label_select").value;
-        let custom_label = document.getElementById("track_custom_label").value;
-        let rollable = document.getElementById("edit_track_rollable").value;
+        let boxes = parseInt(this.element.querySelector("#edit_track_boxes").value);
+        let harm = parseInt(this.element.querySelector("e#dit_track_harm").value);
+        let paid = this.element.querySelector("#edit_track_paid").checked;
+        let label = this.element.querySelector("#track_label_select").value;
+        let custom_label = this.element.querySelector("#track_custom_label").value;
+        let rollable = this.element.querySelector("#edit_track_rollable").value;
 
         if (label=="custom") {
             label=custom_label;
@@ -896,7 +896,7 @@ class TrackSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
         let del = await fcoConstants.confirmDeletion();
         if (del){
                     let track_categories = game.settings.get("fate-core-official","track_categories");
-                    let category  = document.getElementById("track_categories_select").value;
+                    let category  = this.element.querySelector("#track_categories_select").value;
 
                     for (let cat in track_categories){
                         if (track_categories[cat].toUpperCase() == category.toUpperCase()){

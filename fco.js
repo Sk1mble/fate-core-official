@@ -1666,8 +1666,8 @@ class CustomiseSheet extends foundry.applications.api.HandlebarsApplicationMixin
                     buttons: [{
                             action: "Populate",
                             label: game.i18n.localize("fate-core-official.PopulateFromPasted"),
-                            callback: () => {
-                                resolve (document.getElementById("fatecoreofficial_custom_sheet_value").value);
+                            callback: (event, button, dialog) => {
+                                resolve (button.form.elements.fatecoreofficial_custom_sheet_value.value);
                             },
                             default: true
                         }]

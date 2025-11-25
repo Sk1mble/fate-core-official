@@ -136,7 +136,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
             let search = `${this.stunt.name}_macroName`;
             if (event.target.value == ''){
                 event.target.value = null;
-                document.getElementById(search).textContent = '';
+                this.element.querySelector(`#${search}`).textContent - '';
                 return;
             } 
             let field = new foundry.data.fields.DocumentUUIDField({required:true, nullable:true, initial:null});
@@ -156,7 +156,7 @@ class EditPlayerStunts extends foundry.applications.api.HandlebarsApplicationMix
                     }
                 }
             }
-            document.getElementById(search).textContent = fromUuidSync(event.target.value)?.name;
+            this.element.querySelector(`#${search}`).textContent = fromUuidSync(event.target.value)?.name;
         })
     } //End _onRender
 

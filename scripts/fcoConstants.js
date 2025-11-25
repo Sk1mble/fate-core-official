@@ -114,22 +114,6 @@ class fcoConstants {
         return (ladder[r])
     }
 
-    static getPen (id){
-        let editor = document.getElementById(id);
-        if (editor){
-            var options = {
-                editor: editor, // {DOM Element} [required]
-                stay: false,
-                class: 'pen', // {String} class of the editor,
-                debug: false, // {Boolean} false by default
-                textarea: '<textarea name="content"></textarea>', // fallback for old browsers
-                linksInNewWindow: false // open hyperlinks in a new windows/tab
-            }
-            let p = new Pen (options);
-            return p;
-        }
-    }
-
     static awaitOKDialog(prompt, content, width, height){
         if (width === undefined){
             width = "500";
@@ -235,8 +219,8 @@ class fcoConstants {
                 buttons:[{
                     action: "setColour",
                     label: game.i18n.localize("fate-core-official.OK"),
-                    callback: () => {
-                        resolve(document.getElementById("mf_cp").value)
+                    callback: (event, button, dialog) => {
+                        resolve(dialog.element.querySelector("#mf_cp").value)
                     },
                     default: true
                 }],

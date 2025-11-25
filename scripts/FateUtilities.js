@@ -346,7 +346,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             await this.render(false);
         }))
 
-        const fu_combatants_toggle = document.querySelector("i[id='toggle_fu_combatants']");
+        const fu_combatants_toggle = this.element.querySelector("i[id='toggle_fu_combatants']");
         fu_combatants_toggle?.addEventListener("click", async (event) => {
             let toggle = game.settings.get("fate-core-official","fu_combatants_only");
             if (toggle) {
@@ -612,9 +612,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
 
         if (aspect.name == "") {
             // As the aspect is blank, disable the free invokes field, pan to aspect button, and add note to canvas button.
-            document.getElementById(`${index}_free_invokes`).disabled = "disabled";
-            document.getElementById(`addToScene_${index}`).disabled = "disabled";
-            document.getElementById(`panToAspect_${index}`).disabled = "disabled";
+            this.element.ownerDocument.getElementById(`${index}_free_invokes`).disabled = "disabled";
+            this.element.ownerDocument.getElementById(`addToScene_${index}`).disabled = "disabled";
+            this.element.ownerDocument.getElementById(`panToAspect_${index}`).disabled = "disabled";
             
             // If there's a drawing for this aspect, delete it now that the name is blank.
             if (drawing != undefined){
@@ -622,9 +622,9 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                 return;
             }
         } else {
-            document.getElementById(`${index}_free_invokes`).disabled = "";
-            document.getElementById(`addToScene_${index}`).disabled = "";
-            document.getElementById(`panToAspect_${index}`).disabled = "";
+            this.element.ownerDocument.getElementById(`${index}_free_invokes`).disabled = "";
+            this.element.ownerDocument.getElementById(`addToScene_${index}`).disabled = "";
+            this.element.ownerDocument.getElementById(`panToAspect_${index}`).disabled = "";
         }
 
         if (drawing != undefined){
@@ -1791,7 +1791,8 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     async _add_sit_aspect_from_track(event){
-        let aspect = event.target.dataset.trackaspectbutton.split("_")[1];
+        console.log(event.target.dataset);
+        let aspect = event.target.id.split("_")[1];
         let name = event.target.id.split("_")[0];
         let text = name + " ("+aspect+")";
         let situation_aspects = [];
@@ -1856,7 +1857,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
     }
 
     async _on_aspect_change(event){
-        let data = event.target.dataset.tokenaspect;
+        let data = event.target.id;
         let parts = data.split("_");
         let t_id = parts[0];
         let name = parts[1];
@@ -2284,10 +2285,10 @@ async _prepareContext(){
     data.rich_game_notes = await fcoConstants.fcoEnrich (game.settings.get("fate-core-official","gameNotes"))
     data.fontSize = game.settings.get("fate-core-official","fuFontSize");
     data.height = this.position.height;
-    data.actualGameAspectsHeight = document.getElementById("fu_game_aspects_container")?.offsetHeight;
-    data.dateTimeHeight = document.getElementById("fu_date_and_time_container")?.offsetHeight;
-    data.aspectsHeight = document.getElementById("fu_scene_sit_aspects_container")?.offsetHeight;
-    data.cdHeight = document.getElementById("fu_scene_countdowns_container")?.offsetHeight;
+    data.actualGameAspectsHeight = this?.element?.querySelector("#fu_game_aspects_container")?.offsetHeight;
+    data.dateTimeHeight = this?.element?.querySelector("#fu_date_and_time_container")?.offsetHeight;
+    data.aspectsHeight = this?.element?.querySelector("#fu_scene_sit_aspects_container")?.offsetHeight;
+    data.cdHeight = this.element?.querySelector("fu_scene_countdowns_container")?.offsetHeight;
     data.combatants_only = game.settings.get("fate-core-official","fu_combatants_only");
 
     if (data.combatants_only && data.conflict){
@@ -2569,7 +2570,8 @@ class TimedEvent {
             }
             var dp = {
                 window:{"title":game.i18n.localize("fate-core-official.TimedEvent")},
-                "content":`<h3>${game.i18n.localize("fate-core-official.CreateATimedEvent")}</h3>
+                "position":{height:700},
+                "content":`<div style="height:500px; overflow-y:scroll"><h3>${game.i18n.localize("fate-core-official.CreateATimedEvent")}</h3>
                             ${game.i18n.localize("fate-core-official.TheCurrentExchangeIs")} ${game.combat.round}.<p></p>
                             <table style="background:none; border:none">
                                 ${peText}
@@ -2583,7 +2585,7 @@ class TimedEvent {
                                     <td>${game.i18n.localize("fate-core-official.TriggerEventOnExchange")}:</td>
                                     <td><input type="number" value="${game.combat.round+1}" id="eventExchange" name="eventExchange"></input></td>
                                 </tr>
-                            </table>`,
+                            </table></div>`,
                     "buttons":[{
                         action:"create",
                         label:game.i18n.localize("fate-core-official.Create"), 
@@ -2609,8 +2611,8 @@ class TimedEvent {
                                 
                                 }
 
-                            triggerRound=document.getElementById("eventExchange").value;
-                            triggerText=document.getElementById("eventToCreate").value;
+                            triggerRound=dialog.element.querySelector("#eventExchange").value;
+                            triggerText=dialog.element.querySelector("#eventToCreate").value;
                         },
                         default:true,
                     }]
@@ -2921,8 +2923,9 @@ async function updateRolls (rolls) {
     }
 }
 
-Hooks.on("renderFateUtilities", async function(){
-    let numAspects = document.getElementsByName("sit_aspect").length;
+Hooks.on("renderFateUtilities", async function(app, html){
+    let numAspects = html.querySelectorAll("[name=sit_aspect]").length;
+    console.log(numAspects);
     if (numAspects == undefined){
         numAspects = 0;
     }
@@ -2931,7 +2934,7 @@ Hooks.on("renderFateUtilities", async function(){
     }
     
     if (numAspects > game.system.sit_aspects){
-        let pane = document.getElementById("fu_aspects_pane");
+        let pane = html.querySelector("#fu_aspects_pane");
         await setTimeout(async () => {
             pane.scrollTop=pane.scrollHeight;
             game.system.sit_aspects = numAspects;
@@ -2942,7 +2945,7 @@ Hooks.on("renderFateUtilities", async function(){
         game.system.sit_aspects = numAspects;
     }
 
-    let numRolls = document.getElementsByName("fu_roll").length;
+    let numRolls = html.querySelectorAll("[name=fu_roll]").length;
     if (numRolls == undefined){
         numRolls = 0;
     }
@@ -2951,7 +2954,7 @@ Hooks.on("renderFateUtilities", async function(){
     }
     
     if (numRolls > game.system.num_rolls){
-        let pane = document.getElementById("fu_rolls_tab")
+        let pane = html.querySelector("#fu_rolls_tab")
         await setTimeout(async () => {
             pane.scrollTop=pane.scrollHeight;
             game.system.num_rolls = numRolls;

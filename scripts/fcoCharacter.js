@@ -410,9 +410,9 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                             // Do the stuff here
                                             // Construct a new skill
                                             let name = undefined// Get name from dialog
-                                            name = document.getElementById("fco-qaskillname").value;
+                                            name = dialog.element.querySelector("#fco-qaskillname").value;
                                             let rank = 0; // get rank from dialog
-                                            rank = document.getElementById("fco-qaskillrank").value;
+                                            rank = dialog.element.querySelector("#fco-qaskillrank").value;
                                             var newSkill=undefined;
                                             if (name!= undefined && name !=""){
                                                 newSkill= new fcoSkill({
@@ -765,13 +765,14 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                                 </form>`
                     let d = new foundry.applications.api.DialogV2({
                     window:{title: game.i18n.localize("fate-core-official.pickADefaultName")},
+                    position:{height:380},
                     content: content,
                     buttons: [{
                         action:"ok",
                         label:"OK",
                         callback: async (event, button, dialog) => {
-                            let name = document.getElementById(`${this.document.id}_choose_default_name`).value;
-                            let desc = document.getElementById(`${this.document.id}_choose_default_description`).value;
+                            let name = dialog.element.querySelector(`#${this.document.id}_choose_default_name`).value;
+                            let desc = dialog.element.querySelector(`#${this.document.id}_choose_default_description`).value;
                             if (!name) name = this.document.name;
                             let f = new FateCharacterDefaults();
                             let options = {
@@ -936,7 +937,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                 })
                 await d.render(true);
             
-                let toggles = document.querySelectorAll(`.def_toggle`);
+                let toggles = this.element.querySelectorAll(`.def_toggle`);
                 for (let toggle of toggles){
                     toggle?.addEventListener("click", event => {
                         event.target.classList.toggle("fa-toggle-on");

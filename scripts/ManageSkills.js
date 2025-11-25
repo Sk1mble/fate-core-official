@@ -130,8 +130,8 @@ class SkillSetup extends foundry.applications.api.HandlebarsApplicationMixin(fou
     }
     
     _onLabelEdit(event, skillsLabelEdit) {
-        const input_id = document.getElementById("skillsLabelEdit").dataset.editElement;
-        const skillsLabelInput = document.getElementById(input_id);
+        const input_id = this.element.querySelector("#skillsLabelEdit").dataset.editElement;
+        const skillsLabelInput = this.element.querySelector(`#${input_id}`);
         const is_editing = skillsLabelEdit.classList.contains('inactive');
         if (skillsLabelInput && ! is_editing) {
             skillsLabelInput.classList.add('inactive');

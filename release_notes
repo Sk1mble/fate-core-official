@@ -1,3 +1,7 @@
+# 4.7.14.2
+* Multiple bug fixes for Fate Utilities and other apps to ensure working smoothly with detached windows.
+* Fixed error in Fate Utilities that meant updating a track's aspect wasn't flowing through to the relevant character sheet.
+
 # 4.7.14.1
 * Bugfix; with the changes to v14 of Foundry the 'take container' button was no longer working.
 
