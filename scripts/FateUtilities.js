@@ -940,7 +940,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         let sign = ""
                         if (m >= 0) sign = "+"; 
                         roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
-                        if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                         if (message) {
                             let mrolls = foundry.utils.duplicate(message.rolls)
                             let mroll = mroll[0];
@@ -963,7 +963,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         if (m >= 0) sign = "+"; 
                         roll.flavor+=`<br>Paid Modifier: ${sign}${modification.modifier} (${modification.description})`
                         if (game.user.isGM){
-                            if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                            if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                             if (message) {
                                 let mrolls = foundry.utils.duplicate(message.rolls);
                                 let mroll = mrolls[0];
@@ -985,7 +985,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             }
 
             if (game.user.isGM){
-                if (game.scenes.viewed) await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                if (game.scenes.viewed) await game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                 if (message) {
                     let mrolls = foundry.utils.duplicate(message.rolls);
                     let mroll = mrolls[0];
@@ -1004,7 +1004,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             roll.flavor+=`<br>${game.i18n.localize("fate-core-official.PlusOne")}`
             if (game.user.isGM){
                 if (game.scenes.viewed) {
-                    await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    await game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                 }
                 if (message) {
                     let mrolls = foundry.utils.duplicate(message.rolls);
@@ -1143,7 +1143,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
                     } 
                     if (game.scenes.viewed) {
-                        await game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        await game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                     }
                 }
                 else {
@@ -1294,7 +1294,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         mroll.total = roll.total;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                     }
-                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                 } else {
                     //Create a socket call to update the scene's roll data
                     game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
@@ -1362,7 +1362,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         roll.roll = mroll;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
                     }
-                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                 }
             } else {
                 let char = gp.actor;
@@ -1381,7 +1381,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                             roll.roll = mroll;
                             await message.update({flavor:roll.flavor, content:roll.total, rolls:mrolls})
                         }
-                        if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                     } else {
                         game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
                     }
@@ -1439,7 +1439,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                         mroll.total = roll.total;
                         await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                     }
-                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                    if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                 }
             } else {
                 let char = gp.actor;
@@ -1471,7 +1471,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
                             mroll.total = roll.total;
                             await message.update({flavor:roll.flavor, content:roll.total, rolls:[mroll]})
                         }
-                        if (games.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", rolls);
+                        if (game.scenes.viewed) game.scenes.viewed.setFlag("fate-core-official", "rolls", foundry.utils.duplicate(rolls));
                     } else {
                         game.socket.emit("system.fate-core-official",{"rolls":rolls, "scene":game.scenes.viewed})
                     }

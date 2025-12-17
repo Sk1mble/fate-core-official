@@ -1,3 +1,6 @@
+# 4.7.14.3
+* Fixed a Fate Utilities bug that could prevent the reroll buttons on the roll history items from updating the scene's roll history.
+
 # 4.7.14.2
 * Multiple bug fixes for Fate Utilities and other apps to ensure working smoothly with detached windows.
 * Fixed error in Fate Utilities that meant updating a track's aspect wasn't flowing through to the relevant character sheet.
