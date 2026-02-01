@@ -512,6 +512,8 @@ async function createThing (canvas_scene, data, user_id, shiftDown, x, y, actord
         hidden: false,
         actorId: itemActor.id,
         actorLink: true,
+        level:canvas.level,
+        elevation:canvas.level.elevation.bottom
         //actorData: {}
       }
 

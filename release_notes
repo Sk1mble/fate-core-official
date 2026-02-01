@@ -1,3 +1,6 @@
+# 4.7.14.4
+* Added code to ensure that Things are created on the currently viewed level rather than the default level, and with the same elevation as the bottom of the currently viewed level.
+
 # 4.7.14.3
 * Fixed a Fate Utilities bug that could prevent the reroll buttons on the roll history items from updating the scene's roll history.
 
