@@ -15,7 +15,7 @@
     {{/each}}
     </div>
     <div style="margin-top: 20px; display:flex; flex-direction:row; gap:10px"><button name="save_player_skills" i icon class="fas fa-save" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); float:left; width:50px; height:35px" title="{{localize 'fate-core-official.Save'}}" tabindex="-1"></button><button type="button" name='fatecoreofficial_sort_skills' i icon class="fas fa-sort" title="{{localize 'fate-core-official.Toggle'}}" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1"></button>
-        {{#if isGM}}
+        {{#if canEdit}}
         {{#if isExtra}}<button type="button" name="edit_p_skills" i icon class="fas fa-edit" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyExtraSkills'}}"></button>
         {{else}}
         <button type="button" name="edit_p_skills" i icon class="fas fa-edit" style="border:2px groove var(--fco-foundry-interactable-color); background-color:var(--fco-sheet-input-colour); color:var(--fco-sheet-text-colour); width:35px; height:35px" tabindex="-1" title="{{localize 'fate-core-official.manuallyEditPlayerSkills'}}"></button>

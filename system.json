@@ -11,9 +11,9 @@
   "url": "https://github.com/Sk1mble/fate-core-official",
   "compatibility": {
     "minimum": "14.354",
-    "verified": "14.354"
+    "verified": "14.357"
   },
-  "version": "4.7.14.4",
+  "version": "4.7.14.5",
   "scripts": [
     "scripts/fcoConstants.js",
     "scripts/ManageSkills.js",
@@ -36,8 +36,12 @@
     "fco.js"
   ],
   "styles": [
-    "fco.css",
-    "mfate-sheet.css"
+    {
+      "src": "fco.css"
+    },
+    {
+      "src": "mfate-sheet.css"
+    }
   ],
   "languages": [
     {
@@ -60,8 +64,8 @@
     },
     {
       "lang": "pt-BR",
-      "name":"Português (Brasil)",
-      "path":"lang/pb.json",
+      "name": "Português (Brasil)",
+      "path": "lang/pb.json",
       "flags": {}
     }
   ],
@@ -69,57 +73,71 @@
     {
       "name": "macros",
       "label": "Fate Core Official Macros",
-      "path": "/packs/macros.db",
+      "path": "/packs/macros",
       "type": "Macro",
       "system": "fate-core-official",
       "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     },
     {
       "name": "documentation",
       "label": "Fate Core Official Documentation",
-      "path": "/packs/documentation.db",
+      "path": "/packs/documentation",
       "type": "JournalEntry",
       "system": "fate-core-official",
       "private": false,
-      "flags": {}
+      "flags": {},
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "socket": true,
   "manifest": "https://raw.githubusercontent.com/Sk1mble/fate-core-official/main/system.json",
-  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.14.4.zip",
-  "grid":{
-    "distance":1
-  },
-	"flags": {
-		"hotReload": {
-		  "extensions": ["css", "html", "hbs", "json"],
-		  "paths": ["system/templates", "css", "lang/en.json"]
-		  }
-	  },
-    "documentTypes": {
-        "Actor": {
-            "fate-core-official": {
-              "htmlFields": [
-                "details.description.value",
-                "details.biography.value",
-                "details.notes.value"
-              ]
-            },
-            "Thing": {}
-        },
-        "Item": {
-            "Extra": {
-              "htmlFields": [
-                "description.value",
-                "permissions",
-                "costs",
-                "actions.overcome",
-                "actions.create",
-                "actions.attack",
-                "actions.defend"
-              ]
-            }
-        }
+  "download": "https://github.com/Sk1mble/fate-core-official/archive/refs/tags/4.7.14.5.zip",
+  "flags": {
+    "hotReload": {
+      "extensions": [
+        "css",
+        "html",
+        "hbs",
+        "json"
+      ],
+      "paths": [
+        "system/templates",
+        "css",
+        "lang/en.json"
+      ]
     }
+  },
+  "documentTypes": {
+    "Actor": {
+      "fate-core-official": {
+        "htmlFields": [
+          "details.description.value",
+          "details.biography.value",
+          "details.notes.value"
+        ]
+      },
+      "Thing": {}
+    },
+    "Item": {
+      "Extra": {
+        "htmlFields": [
+          "description.value",
+          "permissions",
+          "costs",
+          "actions.overcome",
+          "actions.create",
+          "actions.attack",
+          "actions.defend"
+        ]
+      }
+    }
+  }
 }

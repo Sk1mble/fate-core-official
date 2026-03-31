@@ -280,7 +280,7 @@
                 <div id="{{this.document.id}}_aspects" class="mfate-panel mfate-panel--aspects">
                     <div class="mfate-panel__header">
                         <div class="mfate-panel__header-label">{{localize 'fate-core-official.aspects'}}</div>
-                        {{#if GM}}
+                        {{#if canEdit}}
                         <div title="{{localize 'fate-core-official.OpenTheAspectEditor'}}" name="edit_player_aspects" i icon class="fas fa-cog mfate-panel__header-button"></div>
                         {{/if}}
                     </div>

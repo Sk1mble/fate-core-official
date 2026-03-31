@@ -1,3 +1,6 @@
+# 4.7.14.5
+* Added a new option which will allow players full edit control over the tracks, stunts, skills, and aspects ON THEIR OWNED CHARACTERS as if they were the GM. Edited the track edit options available to players WITHOUT this setting turned on so that they are only permitted to add or remove from the list of tracks set up by the GM, not edit the tracks on their sheet.
+
 # 4.7.14.4
 * Added code to ensure that Things are created on the currently viewed level rather than the default level, and with the same elevation as the bottom of the currently viewed level.
 

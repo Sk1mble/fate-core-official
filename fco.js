@@ -620,6 +620,17 @@ Hooks.once('init', async function () {
         onUp: (...args) => { if (args[0].event.isTrusted == true) {game.system["fco-shifted"] = false;}}
     })
 
+    game.settings.register("fate-core-official", "playersCanEditTheirCharacters" , {
+        name: game.i18n.localize("fate-core-official.playersCanEditTheirCharacters"),
+        scope: "world",
+        type: Boolean,
+        default: false,
+        config: true,
+        restricted: true,
+        hint:game.i18n.localize("fate-core-official.playersCanEditTheirCharactersHint"),
+        requiresReload:true
+    });
+
     game.settings.register("fate-core-official", "disableAutoShowRuler" , {
         name: game.i18n.localize("fate-core-official.disableAutoShowRuler"),
         scope: "world",

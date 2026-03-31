@@ -3,6 +3,8 @@
    "TYPES.Actor.Thing":"Thing",
    "fate.ExtraSheet":"Fate Extra Sheet",
    "TYPES.Item.Extra":"Fate Extra",
+   "fate-core-official.playersCanEditTheirCharacters":"Owned character editing?",
+   "fate-core-official.playersCanEditTheirCharactersHint":"Should players be allowed the freedom to edit the tracks, aspects, and skills on their owned characters?",
    "fate-core-official.disableAutoShowRuler":"Disable token ruler display?",
    "fate-core-official.disableAutoShowRulerHint":"If this setting is enabled only you will see the token ruler as you're dragging your token to move it and setting waypoints with the ruler. The ruler won't be shown during movement. Movement history will not be recorded during conflicts.",
    "fate-core-official.newCharacter":"New Character",

@@ -631,10 +631,15 @@ class EditPlayerTracks extends foundry.applications.api.HandlebarsApplicationMix
                 }
         }
             
+        let canEdit = false;
+        if (game.user.isGM) canEdit = true;
+        if (game.settings.get("fate-core-official","playersCanEditTheirCharacters") && this.object.isOwner) canEdit = true;
+
         //TemplateData is returned to the form for use with HandleBars.
         const templateData = {
                 tracks_by_category:this.tracks_by_category,
                 GM:game.user.isGM,
+                canEdit:canEdit,
                 character_tracks:this.tracks,
                 cat:this.selected_category
         }

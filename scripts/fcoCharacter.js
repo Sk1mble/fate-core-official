@@ -7,6 +7,9 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
         this.editing = false;
         this.track_category="All";
         this.object = this.actor;
+        this.canEdit = false;
+        if (game.user.isGM) this.canEdit = true;
+        if (game.settings.get("fate-core-official","playersCanEditTheirCharacters") && this.object.isOwner) this.canEdit = true;
     }
     
     async close(options){
@@ -1197,7 +1200,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
     }
 
        async _onAspectClick(event) {
-        if (game.user.isGM) {
+        if (this.canEdit) {
             let av = new EditPlayerAspects(this.actor);
             av.render(true);
             try {
@@ -1269,6 +1272,8 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
 
         let origin = await super._prepareContext (options);
         const sheetData = foundry.utils.duplicate(origin.source);
+
+        sheetData.canEdit = this.canEdit;
 
         if (game.user.expanded == undefined){
                 game.user.expanded = {};

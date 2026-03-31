@@ -17,6 +17,9 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
             this.changed = false;
             game.system.apps["actor"].push(this);
             game.system.apps["item"].push(this);
+            this.canEdit = false;
+            if (game.user.isGM) this.canEdit = true;
+            if (game.settings.get("fate-core-official","playersCanEditTheirCharacters") && this.object.isOwner) this.canEdit = true;
     }
 
     static DEFAULT_OPTIONS = {
@@ -246,7 +249,8 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
             skill_list:fcoConstants.wd().system.skills,
             character_skills:presentation_skills,
             isGM:game.user.isGM,
-            isExtra:this.object.type=="Extra"
+            isExtra:this.object.type=="Extra",
+            canEdit:this.canEdit
          }
         return templateData;
     }
@@ -295,7 +299,7 @@ class EditPlayerSkills extends foundry.applications.api.HandlebarsApplicationMix
     }
 
     async _onEditButton (event){
-        if (game.user.isGM || this.object.type=="Extra"){
+        if (this.canEdit || this.object.type=="Extra"){
             let e = new EditGMSkills (this.object);
             await e.render(true);
             e.skillsWindow = this;
