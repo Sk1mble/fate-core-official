@@ -1,3 +1,6 @@
+# 4.7.14.7
+* Added ability for players to quickly add an ad-hoc skill from their character sheet if the option allowing players to edit all elements on owned characters is selected.
+
 # 4.7.14.6
 * Tweaks for CSS and update to Font Awesome 7 that had caused some character sheet breakage.
 
