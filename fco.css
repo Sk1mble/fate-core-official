@@ -92,7 +92,7 @@ button[name="fco_chat_roll_button"]  {
 }
 
 button.fas{
-  font-family: "Font Awesome 6 Pro";
+  font-family: "Font Awesome 7 Pro";
 }
 
 textarea:not([name="command"]){

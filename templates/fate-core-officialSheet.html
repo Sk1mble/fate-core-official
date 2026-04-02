@@ -37,17 +37,14 @@
                 <button type="button" name="changeSheetMode" style="width:35px; height:35px; float:left; border:none; color:var(--fco-sheet-text-color); background-color:transparent" title="{{localize 'fate-core-official.changeSheetMode'}}"><i class="fas fa-eye"></i></button>{{/if}}
                 {{#if (eq this.sheetMode 'full')}}
                 <a class="{{tabs.sheet.cssClass}} mfate-sheet__tabs-nav-link item" data-group="fcoSheet" data-action="tab" data-tab="sheet">
-                    <span class="sr-only">{{localize 'fate-core-official.CharacterSheet'}}</span>
                     <b title="{{localize 'fate-core-official.CharacterSheet'}}" class="fas fa-clipboard mfate-sheet__tabs-nav-icon"></b>
                 </a>
                 <a class="{{tabs.biography.cssClass}} mfate-sheet__tabs-nav-link item" data-group="fcoSheet" data-action="tab" data-tab="biography">
-                    <span class="sr-only">{{localize 'fate-core-official.BiographyAndExtras'}}</span>
                     <b title="{{localize 'fate-core-official.BiographyAndExtras'}}" class="fas fa-portrait mfate-sheet__tabs-nav-icon"></b>
                 </a>
                 {{/if}}
                 <a class="{{tabs.notes.cssClass}} mfate-sheet__tabs-nav-link item" data-group="fcoSheet" data-action="tab" data-tab="notes">
-                    <span class="sr-only">{{localize 'fate-core-official.Notes'}}</span>
-                    <b title="{{localize 'fate-core-official.Notes'}}" class="fas fa-file-alt mfate-sheet__tabs-nav-icon"></b>
+                    <b style="text-align:center" title="{{localize 'fate-core-official.Notes'}}" class="fas fa-file-alt mfate-sheet__tabs-nav-icon"></b>
                 </a>
             </nav>
         </div>
