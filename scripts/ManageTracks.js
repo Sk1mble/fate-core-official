@@ -618,7 +618,7 @@ class EditTracks extends foundry.applications.api.HandlebarsApplicationMixin(fou
         let when_marked = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_when_marked").value);
         let when_recovers = DOMPurify.sanitize(this.element.querySelector(".fco_prose_mirror.fco_edit_track_recovery_conditions").value);
         let boxes = parseInt(this.element.querySelector("#edit_track_boxes").value);
-        let harm = parseInt(this.element.querySelector("e#dit_track_harm").value);
+        let harm = parseInt(this.element.querySelector("#edit_track_harm").value);
         let paid = this.element.querySelector("#edit_track_paid").checked;
         let label = this.element.querySelector("#track_label_select").value;
         let custom_label = this.element.querySelector("#track_custom_label").value;
