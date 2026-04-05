@@ -1,3 +1,6 @@
+# 4.7.13.7
+* Fixed a bug which was preventing tracks from saving when edited in the Edit Tracks tool (e#dit_track_harm typoed in place of #edit_track_harm) - was already fixed in v14 branch.
+
 # 4.7.13.6
 * Bug fix in code for running a macro (actor was not being passed correctly to the macro context when run from a character sheet)
 * Bug fix in Fate Utilities 'roll a macro' function - it now refreshes the selection box after rolling as it should.
