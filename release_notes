@@ -1,3 +1,8 @@
+# 4.7.14.9 
+* Added 10px padding to the stunt row right hand side on character sheets so plug icons from extras showing properly
+* Added code on changing shape to use the token's current Level rather than using the stored level.
+* Changed a localisation string from "fate-core-official.combineSkills":"Combine ranks for all existing skills?" to "fate-core-official.combineSkills":"Combine ranks for all skills of this name on extras?" to make it clear that skills are only added from extras and not to the character's base copy if they have one.
+
 # 4.7.14.8
 * Fixed a bug which was preventing tracks from saving when edited in the Edit Tracks tool (e#dit_track_harm typoed in place of #edit_track_harm)
 

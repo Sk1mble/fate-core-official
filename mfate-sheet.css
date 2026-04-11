@@ -838,6 +838,7 @@ div.tab.notes.mfate-sheet__tab.mfate-sheet__tab--secondary.active > div.mfate-no
 
 .mfate-stunts__row {
     padding: 10px 0;
+    padding-right:10px;
     border-bottom: 1px solid var(--fco-foundry-interactable-color);
     background-color:transparent;
     z-index:1;
