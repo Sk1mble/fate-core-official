@@ -630,7 +630,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                     content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
                     content += `<strong>${activeIndicator}</strong><br/>`;
 
-                    ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
+                    ChatMessage.create({content: content, speaker : {user}, style: CONST.CHAT_MESSAGE_STYLES.OOC })
                 })
             });
 
@@ -705,7 +705,7 @@ export class fcoCharacter extends foundry.applications.api.HandlebarsApplication
                         }
                     }
     
-                    ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
+                    ChatMessage.create({content: content, speaker : {user}, style: CONST.CHAT_MESSAGE_STYLES.OOC })
                 })
             })
 

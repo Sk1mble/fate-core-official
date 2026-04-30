@@ -409,7 +409,7 @@ class StuntDB extends foundry.applications.api.HandlebarsApplicationMixin(foundr
                     if (entity.attack) actions += 'A '
                     if (entity.defend) actions += 'D';
                     content += actions;
-                    ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
+                    ChatMessage.create({content: content, speaker : {user}, style: CONST.CHAT_MESSAGE_STYLES.OOC })
                 }
             });
         })

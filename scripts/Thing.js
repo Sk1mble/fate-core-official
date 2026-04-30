@@ -250,7 +250,7 @@ export class Thing extends foundry.applications.api.HandlebarsApplicationMixin(f
                 }
                 content += `<strong>${game.i18n.localize("fate-core-official.tracks")}: </strong>${items.join(", ")}<br/>`;
     
-                ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
+                ChatMessage.create({content: content, speaker : {user}, style: CONST.CHAT_MESSAGE_STYLES.OOC })
             })
         }
 

@@ -228,7 +228,7 @@ export class ExtraSheet extends foundry.applications.api.HandlebarsApplicationMi
                         content += `<\em>`
                     }
                 }
-                ChatMessage.create({content: content, speaker : {user}, type: CONST.CHAT_MESSAGE_STYLES.OOC })
+                ChatMessage.create({content: content, speaker : {user}, style: CONST.CHAT_MESSAGE_STYLES.OOC })
             }))
 
         this.element.querySelector('.fcoExtraSheetForm')?.addEventListener('drop', async event => await this.onDrop(event));

@@ -1,3 +1,6 @@
+# 4.7.14.10
+* Fixed a bug caused by ChatMessage.type changing to ChatMessage.style; double clicking stunts etc. was not sending a message to chat due to this.
+
 # 4.7.14.9 
 * Added 10px padding to the stunt row right hand side on character sheets so plug icons from extras showing properly
 * Added code on changing shape to use the token's current Level rather than using the stored level.
