@@ -1,3 +1,6 @@
+# 4.7.14.11
+* Foundry now supports naming combats again, so I changed the handling of conflict names in Fate Utilities to also update the name of the conflict in Foundry's combats tab.
+
 # 4.7.14.10
 * Fixed a bug caused by ChatMessage.type changing to ChatMessage.style; double clicking stunts etc. was not sending a message to chat due to this.
 

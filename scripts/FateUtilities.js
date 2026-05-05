@@ -172,6 +172,7 @@ class FateUtilities extends foundry.applications.api.HandlebarsApplicationMixin(
             id_conflict?.addEventListener("change", async event => {
                 let new_name = event.currentTarget.value;
                 await game.combat.setFlag("fate-core-official","name",new_name);
+                if('name' in game?.combat) await game.combat.update({name:new_name});
             });
 
             const game_notes_rich = this.element.querySelector('.fco_prose_mirror.fu_game_notes');
@@ -2118,7 +2119,13 @@ async _prepareContext(){
         data.conflict = false;
     } else {
         data.conflict = true;
-        data.conflictName = game.combat.getFlag("fate-core-official","name");
+        let conflictName = '';
+        if ('name' in game?.combat) {
+            conflictName = game.combat.name;
+        } else {
+            conflictName = game.combat.getFlag("fate-core-official","name")
+        }
+        data.conflictName = conflictName;
         data.conflictExchange = game.combat.round;
         if (!data.conflictName) {
             let conflictNum = game.combats.combats.indexOf(game.combat)+1;
