@@ -1,5 +1,6 @@
 .fcoSheet .window-content {
     padding: 0;
+    font-family:var(--fco-font-family);
 }
 
 .fcoSheet h1:not(.window-title), 
@@ -29,6 +30,10 @@
     height: 100%;
     border: none !important;
     max-height: 100%;
+}
+
+.mfate-sheet.contenteditable {
+    font-family:var(-fco-font-family);
 }
 
 .fate * {
@@ -277,8 +282,7 @@
     --fco-sheet-input-colour:#FFFFFF;
     --fco-header-notch: polygon(0% 0px, 0px 0%, 100% 0%, 100% 0px, 100% 100%, 100% 100%, 0px 100%, 0 100%); /*Done*/
     --fco-border-radius:15px;    
-    --fco-font-family:Montserrat;   
-    --fco-foundry-font-family:var(--font-primary);                                                                     /*Done*/
+    --fco-font-family:Montserrat;                                                                    /*Done*/
     --fco-foundry-interactable-color:lightsteelblue;
 }
 

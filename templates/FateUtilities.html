@@ -597,13 +597,13 @@
                                 {{#each this.dice}}
                                     {{#if (lt this 2)}}
                                         {{#if (eq this 1)}}
-                                            <i icon class="fas fa-plus-square"></i>
+                                            <i icon class="fas fa-plus-square" style="width:0.75em"></i>
                                         {{/if}}
                                         {{#if (eq this -1)}}
-                                            <i icon class="fas fa-minus-square"></i>
+                                            <i icon class="fas fa-minus-square" style="width:0.75em"></i>
                                         {{/if}}
                                         {{#if (eq this 0)}}
-                                            <i icon class="fas fa-square"></i>
+                                            <i icon class="fas fa-square" style="width:0.75em"></i>
                                         {{/if}}
                                     {{else}}
                                         <i style="font-style:normal; font-size:{{../../fontSize}}pt; margin:2px">{{this}}</i>

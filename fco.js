@@ -174,13 +174,36 @@ function setupFont(){
         // What we have here is a numerical value (or font not found in config list; nothing we can do about that).
         val = foundry.applications.settings.menus.FontConfig.getAvailableFonts()[game.settings.get("fate-core-official","fco-font-family")]
     }
-    let override = game.settings.get("fate-core-official", "override-foundry-font");
+    let override = !game.settings.get("fate-core-official", "override-foundry-font");
+    
     if (override) {
-        document.documentElement.style.setProperty('--fco-foundry-font-family', "")
         document.documentElement.style.setProperty('--fco-font-family', `${val}`);
+        document.documentElement.style.setProperty('--fco-title-size', `1.25rem`);
+        document.documentElement.style.setProperty('--fco-divider-size', '1rem');
+        document.body.style.setProperty('--font-sans', `${val}`);
+        document.body.style.setProperty('--font-serif', `${val}`)
+        document.body.style.setProperty('--font-body', `${val}`);
+        document.body.style.setProperty('--font-blockquote', `${val}`);
+        document.body.style.setProperty('--font-h1', `${val}`);
+        document.body.style.setProperty('--font-h2', `${val}`);
+        document.body.style.setProperty('--font-h3', `${val}`);
+        document.body.style.setProperty('--font-h4', `${val}`);
+        document.body.style.setProperty('--font-h5', `${val}`);
+        document.body.style.setProperty('--font-h6', `${val}`);        
     } else {
         document.documentElement.style.setProperty('--fco-font-family', `${val}`);
-        document.documentElement.style.setProperty('--fco-foundry-font-family', `${val}`);
+        document.documentElement.style.setProperty('--fco-title-size', '2rem');
+        document.documentElement.style.setProperty('--fco-divider-size', '1.5rem');
+        document.body.style.setProperty('--font-sans', "");
+        document.body.style.setProperty('--font-serif', "")
+        document.body.style.setProperty('--font-body', "");
+        document.body.style.setProperty('--font-blockquote', "");
+        document.body.style.setProperty('--font-h1', "");
+        document.body.style.setProperty('--font-h2', "");
+        document.body.style.setProperty('--font-h3', "");
+        document.body.style.setProperty('--font-h4', "");
+        document.body.style.setProperty('--font-h5', "");
+        document.body.style.setProperty('--font-h6', "");
     }
 }
 

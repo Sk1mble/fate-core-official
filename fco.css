@@ -6,6 +6,16 @@
   font-family: var(--fco-font-family);
   text-transform: uppercase;
 }
+#settings > section.info.flexcol > h1 {
+  font-size:var(--fco-title-size);
+}
+
+#settings > section.settings.flexcol > h4,
+#settings > section.documentation.flexcol > h4,
+#settings > section.access.flexcol > h4
+{
+  font-size:var(--fco-divider-size);
+}
 
 .journal-entry-page.pdf {
   height:100%;
@@ -37,10 +47,12 @@ option {
 
 #FateUtilities h1:not(.window-title), 
 #FateUtilities h2:not(.window-title), 
-#FateUtilities h3:not(.window-title) {
+#FateUtilities h3:not(.window-title),
+#FateUtilities h4:not(.window-title) {
   margin:0;
   margin-bottom:0.5em;
   color:var(--fco-sheet-text-colour);
+  font-family:var(--fco-font-family);
 }
 
 #FateUtilities td, #FateUtilities th {
@@ -79,9 +91,9 @@ input[type="number"]::-webkit-inner-spin-button {
     appearance: auto;
 }
 
-a.button, body, h1, h2, h3, h4, h5, button:not(.fas, .fa, .icon, .control-icon), label:not(.fas, .fa, .icon), select:not(.fas, .fa, .icon), input:not(.fas, .fa, .icon) {
+/*a.button, body, h1:not(.title), h2, h3, h4:not(.divider), h5, button:not(.fas, .fa, .icon, .control-icon), label:not(.fas, .fa, .icon), select:not(.fas, .fa, .icon), input:not(.fas, .fa, .icon) {
   font-family:var(--fco-foundry-font-family);
-}
+}*/
 
 button[name="fco_chat_roll_button"]  {
   display:table-row;
@@ -95,19 +107,19 @@ button.fas{
   font-family: "Font Awesome 7 Pro";
 }
 
-textarea:not([name="command"]){
+/*textarea:not([name="command"]){
   font-family:var(--fco-foundry-font-family);
-}
+}*/
 
-textarea [name="command"] {
+/*textarea [name="command"] {
   font-family: var(--font-mono);
-}
+}*/
 
 #chat-log .message {
   border: 2px solid black;
   border-radius: 0;
   background: #c8c8c8;
-  font-family: var(--fco-foundry-font-family);
+  /*font-family: var(--fco-foundry-font-family);*/
 }
 #chat-log .message .message-header {
   color: black;
@@ -567,6 +579,10 @@ textarea [name="command"] {
 
 .application.fate tr{
   background-color:transparent;
+}
+
+.application.fate {
+  font-family:var(--fco-font-family);
 }
 
 .long_text_rich {
