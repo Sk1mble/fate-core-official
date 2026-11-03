@@ -41,7 +41,7 @@ class fcoConstants {
         async function getFiles(target, extensions = ``, source = `user`)
         {
             extensions = extensions instanceof Array ? extensions : [extensions];
-            let filePicker = await FilePicker.browse(source, target);
+            let filePicker = await foundry.applications.apps.FilePicker.implementation.browse(source, target);
             if(filePicker.files)
                 return [...filePicker.files];
             return [];
@@ -51,13 +51,14 @@ class fcoConstants {
             let playmats = await getFiles(`/modules/${module}/art/playmats/`)
             let min = 0;
             let max = playmats.length - 1;
-            let rand = Math.floor(twist.random() * (max - min + 1) + min);    
+            let rand =  Math.floor(foundry.dice.MersenneTwister.random() * (max - min + 1) + min);   
+            console.log(rand);
             return (playmats[rand]);
         }
 
         let newImage = false;
         let img = "";
-        let pmImg = game.scenes.getName("Playmat").background.src;
+        let pmImg = game.scenes.getName("Playmat").firstLevel.background.src;
         let loopCounter = 0;
 
         while (newImage == false){
@@ -67,15 +68,16 @@ class fcoConstants {
         if (loopCounter >= 100) newImage = true;
         }
         let pm = game.scenes.getName("Playmat")
-        let thumb = await pm.createThumbnail({img});
-        await game.scenes.getName("Playmat").update({"background.src":img, thumb:thumb.thumb});
+        await pm.firstLevel.update({"background.src":img})
+        let thumb = await pm.createThumbnail();
+        await pm.update({"thumb":thumb.thumb});    
     }
 
     static async choosePlaymatBG (module){
         async function getFiles(target, extensions = ``, source = `user`)
         {
             extensions = extensions instanceof Array ? extensions : [extensions];
-            let filePicker = await FilePicker.browse(source, target);
+            let filePicker = await foundry.applications.apps.FilePicker.implementation.browse(source, target);
             if(filePicker.files)
                 return [...filePicker.files];
             return [];
@@ -90,7 +92,7 @@ class fcoConstants {
             
             scenes += `</div>`
 
-        let dia = new foundry.applications.api.DialogV2({
+        let dia = await new foundry.applications.api.DialogV2({
                         window:{title: "Pick an image"},
                         content: scenes,
                         buttons: [{
@@ -103,9 +105,10 @@ class fcoConstants {
         $(document).on('click', '.playmat-image', async event => {
         let img = event.target.getAttribute("data-img")
             let pm = game.scenes.getName("Playmat")
-            let thumb = await pm.createThumbnail({img});
-            await game.scenes.getName("Playmat").update({"background.src":img, thumb:thumb.thumb});
-            dia.close()
+            await pm.firstLevel.update({"background.src":img})
+            let thumb = await pm.createThumbnail();
+            await pm.update({"thumb":thumb.thumb});
+            dia.close();
         })
     }
 

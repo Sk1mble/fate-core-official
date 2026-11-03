@@ -1,3 +1,6 @@
+# 4.7.14.13
+* Changed the code on which the Evil Hat Foundry modules rely to bring their macros back into compatibility with Foundry version 14. This was necessary due to the change from a single background texture to Levels, and because the twist function has been moved to a new namespace.
+
 # 4.7.14.12
 * Made significant improvements to the way the system font override option works. Electing not to override the core Foundry fonts will now result in all fonts being set correctly to the Foundry defaults. I have also tweaked the settings for the width of the title and divider headings in the Options sidebar to not overflow the edges of the sidebar.
 
